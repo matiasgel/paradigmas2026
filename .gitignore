@@ -1,0 +1,17 @@
+# Editor / OS
+.DS_Store
+.vscode/settings.json
+*.swp
+*~
+
+# Python
+__pycache__/
+*.pyc
+.env
+
+# Node
+node_modules/
+
+# Temporales
+*.tmp
+*.bak

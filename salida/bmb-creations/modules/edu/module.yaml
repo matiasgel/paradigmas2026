@@ -1,0 +1,64 @@
+# EDU: Academic Course Production Suite
+# EDU: Academic Course Production Suite — Configuración
+# Generated: 2026-03-06
+# Version: 1.0.0
+
+code: edu
+name: "EDU: Academic Course Production Suite"
+header: "Pipeline completo de producción docente universitaria con inteligencia pedagógica"
+subheader: "Desde la ingesta del programa oficial hasta el cierre de cursada con validación automática y memoria acumulada año a año"
+default_selected: false
+
+# --- Custom Variables ---
+# Core config variables (user_name, communication_language, document_output_language, output_folder)
+# are injected automatically — no redefinir aquí.
+
+course_output_folder:
+  prompt: "¿En qué carpeta se guardará el material de las cursadas? (relativa a output_folder)"
+  default: "{output_folder}/cursadas"
+  result: "{value}"
+
+default_professor_profile:
+  prompt: "¿Perfil docente por defecto para nuevas cursadas?"
+  default: "profesor-practico"
+  options:
+    - profesor-teorico
+    - profesor-practico
+    - profesor-socratico
+    - profesor-flipped
+    - profesor-investigador
+  result: "{value}"
+
+default_class_duration:
+  prompt: "¿Duración de clase por defecto (en minutos)?"
+  default: "90"
+  options:
+    - "60"
+    - "90"
+    - "120"
+  result: "{value}"
+
+lms_provider:
+  prompt: "¿LMS que usás en tu institución?"
+  default: "none"
+  options:
+    - none
+    - moodle
+    - google-classroom
+  result: "{value}"
+
+academic_guardrail_enabled:
+  prompt: "¿Activar guardrail académico? (bloquea fuentes no verificables: Wikipedia, blogs, redes sociales)"
+  default: "true"
+  options:
+    - "true"
+    - "false"
+  result: "{value}"
+
+command_aliases:
+  prompt: "¿Activar aliases de comandos en español? (ej. /edu-cerrar-tema además de /edu-close-topic)"
+  default: "true"
+  options:
+    - "true"
+    - "false"
+  result: "{value}"
