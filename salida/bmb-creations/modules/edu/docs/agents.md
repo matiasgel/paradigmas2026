@@ -10,7 +10,7 @@ El módulo EDU incluye **16 agentes especializados** en 5 capas. Los agentes mar
 
 **Rol:** Convierte material docente existente (PDFs, PPTX, DOCX) a Markdown estructurado.
 **Invocado por:** Elena en `/edu-build-course-from-materials`
-**MCP:** herramienta de archivos
+**Herramienta:** acceso a sistema de archivos
 
 ---
 
@@ -27,7 +27,7 @@ El módulo EDU incluye **16 agentes especializados** en 5 capas. Los agentes mar
 **Rol:** Investigación académica en fuentes verificables. Provee fuentes con DOI para el plan, las referencias del material, y propuestas curriculares.
 **Lista blanca estricta:** arXiv, ACM, IEEE, Springer, CrossRef, Semantic Scholar, ERIC, OpenLibrary. Prohibido: Wikipedia, blogs, Medium.
 **Catchphrase:** Solo habla con DOIs. *"Wikipedia no figura en mi lista."*
-**MCP:** herramienta de búsqueda web con lista blanca
+**Herramienta:** búsqueda web académica (lista blanca)
 
 ---
 

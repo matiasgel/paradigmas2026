@@ -10,7 +10,7 @@ Roadmap de desarrollo del módulo `edu`.
 
 ## Agentes a construir
 
-Usar: `edu:agent-builder` → Spec: `agents/{agente}.spec.md`
+Implementar con tu editor de IA preferido → Spec: `agents/{agente}.spec.md`
 
 ### Prioridad 1 — Camino feliz core
 
@@ -60,7 +60,7 @@ Usar: `edu:agent-builder` → Spec: `agents/{agente}.spec.md`
 
 ## Workflows a construir
 
-Usar: `edu:workflow-builder` → Spec: `workflows/{wf}/{wf}.spec.md`
+Implementar con tu editor de IA preferido → Spec: `workflows/{wf}/{wf}.spec.md`
 
 ### Prioridad 1 — Core (camino feliz)
 
@@ -108,7 +108,7 @@ Usar: `edu:workflow-builder` → Spec: `workflows/{wf}/{wf}.spec.md`
 
 ## Testing de instalación
 
-- [ ] Verificar instalación con `bmad install edu`
+- [ ] Verificar instalación copiando `_edu/` al workspace
 - [ ] Verificar que los prompts de `module.yaml` funcionen correctamente
 - [ ] Verificar que todos los agentes y workflows sean descubribles
 - [ ] Probar flujo completo: load-official-plan → topic-cycle → quality-loops → close-course

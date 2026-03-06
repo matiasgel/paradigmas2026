@@ -20,7 +20,7 @@ EDU es el departamento de producción docente de tu cátedra. Cubre todo el cicl
 ## Instalación
 
 ```bash
-bmad install edu
+copiá la carpeta `_edu/` a tu workspace
 ```
 
 O copiá la carpeta `_edu/` a tu workspace y seguí los prompts de `module.yaml`.

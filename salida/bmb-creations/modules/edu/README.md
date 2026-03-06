@@ -25,7 +25,7 @@ EDU es un **sistema de producción docente universitaria** con inteligencia peda
 ## Instalación
 
 ```bash
-bmad install edu
+copiá la carpeta `_edu/` a tu workspace
 ```
 
 Seguí los prompts para configurar el módulo. Alternativamente, instalá este módulo copiando la carpeta `_edu/` a tu workspace.
@@ -167,10 +167,10 @@ Para guías de usuario detalladas, ver la carpeta **[docs/](docs/)**:
 
 ## Estado de desarrollo
 
-Este módulo está en desarrollo activo a partir del brief `module-brief-edu.md`.
+Este módulo está en desarrollo activo.
 
-- [ ] Agentes: 16 (specs listas — pendiente implementación via `create-agent`)
-- [ ] Workflows: 15 (specs listas — pendiente implementación via `create-workflow`)
+- [ ] Agentes: 16 (specs listas — pendiente implementación)
+- [ ] Workflows: 15 (specs listas — pendiente implementación)
 
 Ver [TODO.md](TODO.md) para el roadmap detallado.
 
@@ -178,6 +178,4 @@ Ver [TODO.md](TODO.md) para el roadmap detallado.
 
 ## Creado por
 
-Matiasgel — 2026-03-06 2026-03-06
-
-**
+Matiasgel — EDU Framework, 2026

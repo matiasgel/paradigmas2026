@@ -1,7 +1,6 @@
 # EDU: Academic Course Production Suite
 # EDU: Academic Course Production Suite — Configuración
-# Generated: 2026-03-06
-# Version: 1.0.0
+# Versión: 1.0.0  |  Fecha: 2026-03-06
 
 code: edu
 name: "EDU: Academic Course Production Suite"
@@ -9,9 +8,7 @@ header: "Pipeline completo de producción docente universitaria con inteligencia
 subheader: "Desde la ingesta del programa oficial hasta el cierre de cursada con validación automática y memoria acumulada año a año"
 default_selected: false
 
-# --- Custom Variables ---
-# Core config variables (user_name, communication_language, document_output_language, output_folder)
-# are injected automatically — no redefinir aquí.
+# --- Variables de configuración ---
 
 course_output_folder:
   prompt: "¿En qué carpeta se guardará el material de las cursadas? (relativa a output_folder)"
