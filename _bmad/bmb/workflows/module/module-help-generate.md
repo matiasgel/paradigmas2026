@@ -162,10 +162,12 @@ Scan the agents directory:
 ```
 
 For each agent found:
-- Read the `.agent.yaml` file
-- Extract: metadata (name, title), persona, menu triggers
+- Read the `.md` file (agent files use `.md` extension, NOT `.yaml`)
+- Extract: metadata (name, title, icon), persona role, menu triggers
 - Identify agent-only triggers (no workflow route)
 - Identify workflow-routing triggers
+
+**File format note:** Module agents are implemented as `.md` files (e.g. `course-planner.md`). The `.github/agents/` files for Copilot use the `.agent.md` extension. When scanning `_{module_code}/agents/`, look for `.md` files.
 
 ### Step 6: Determine Phasing Strategy
 

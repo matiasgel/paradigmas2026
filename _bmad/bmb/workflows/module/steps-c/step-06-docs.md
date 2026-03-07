@@ -358,32 +358,131 @@ This section provides practical examples for using {module_display_name}.
 - Verify all agents and workflows are properly installed
 ```
 
-### 4. Update Build Tracking
+### 4. For Standalone Modules: Generate Standalone Package Docs
+
+**ONLY if moduleType == Standalone:** Generate the user-facing documentation for the deployable standalone package.
+
+#### 4.1. Standalone README.md
+
+Create `{standalone_package_location}/README.md` — user-facing, minimal, orientado al docente/usuario final:
+
+```markdown
+# {module_display_name}
+
+{module_header}
+
+## Quick Start
+
+1. Cloná o copiá este directorio como raíz de tu proyecto
+2. Abrí VS Code
+3. Configurá el módulo editando `_{module_code}/config.yaml`
+4. Usá `/{module_code}-start` para comenzar
+
+## Estructura del Proyecto
+
+```
+tu-proyecto/
+├── .github/
+│   ├── copilot-instructions.md    ← Contexto para Copilot
+│   ├── agents/                    ← Agentes (@{module_code}-agent-nombre)
+│   └── prompts/                   ← Slash commands (/{module_code}-*)
+├── .vscode/
+│   └── settings.json              ← Habilita prompt files
+├── _{module_code}/
+│   ├── config.yaml                ← Configuración del módulo
+│   ├── module-help.csv            ← Índice de comandos
+│   ├── agents/                    ← Definiciones completas de agentes
+│   └── workflows/                 ← Definiciones de workflows
+└── {module_output_folder}/        ← Output generado (creado en runtime)
+```
+
+## Agentes Disponibles
+
+{agent_table_from_brief}
+
+## Slash Commands
+
+Escribí `/{module_code}-` para ver los comandos disponibles.
+
+{slash_commands_by_phase_from_brief}
+```
+
+#### 4.2. Standalone `.github/copilot-instructions.md`
+
+Create `{standalone_package_location}/.github/copilot-instructions.md` — SOLO el bloque del módulo (sin BMAD):
+
+```markdown
+<!-- {MODULE_CODE_UPPER}:START -->
+# {module_display_name}
+
+## Descripción
+
+{module_header}
+{module_subheader}
+
+## Configuración del Proyecto
+
+- Cargar siempre `_{module_code}/config.yaml` antes de cualquier activación de agente o ejecución de workflow
+- Almacenar todos los campos como variables de sesión
+- La variable `{project-root}` se resuelve a la raíz del workspace en runtime
+
+## Estructura
+
+- **Configuración**: `_{module_code}/config.yaml`
+- **Agentes**: `_{module_code}/agents/`
+- **Workflows**: `_{module_code}/workflows/`
+- **Comandos**: `_{module_code}/module-help.csv`
+
+{phases_section_from_brief}
+
+## Agentes Disponibles
+
+{agents_summary_from_brief}
+
+## Slash Commands
+
+Escribí `/{module_code}-` en Copilot Chat para ver todos los comandos disponibles.
+Los agentes están disponibles como `@{module_code}-agent-nombre` en el dropdown de agentes.
+
+## Restricciones Críticas
+
+{critical_restrictions_from_brief}
+<!-- {MODULE_CODE_UPPER}:END -->
+```
+
+#### 4.3. Standalone `.vscode/settings.json`
+
+Create `{standalone_package_location}/.vscode/settings.json`:
+
+```json
+{
+  "chat.promptFiles": true,
+  "chat.promptFilesLocations": {
+    ".github/prompts": true
+  }
+}
+```
+
+### 5. Update Build Tracking
 
 Update `{buildTrackingFile}`:
 - Add 'step-06-docs' to stepsCompleted
-- Note: README.md, TODO.md, and docs/ folder created
+- Note: README.md, TODO.md, docs/ folder, and standalone package docs created (if Standalone)
 
-### 5. Report Success
+### 6. Report Success
 
 "**✓ Documentation created:**"
 
-- README.md — module overview and navigation
-- TODO.md — development roadmap
-- docs/ — user documentation folder
-  - getting-started.md — quick start guide
-  - agents.md — agent reference
-  - workflows.md — workflow reference
-  - examples.md — practical examples
+- `{targetLocation}/README.md` — module development overview
+- `{targetLocation}/TODO.md` — development roadmap
+- `{targetLocation}/docs/` — developer documentation folder
 
-"**User documentation is valuable even with placeholder agent/workflow specs — users will understand what each component does and how to use them.**"
+If Standalone also:
+- `{standalone_package_location}/README.md` — user-facing standalone README
+- `{standalone_package_location}/.github/copilot-instructions.md` — module-only Copilot context
+- `{standalone_package_location}/.vscode/settings.json` — prompt files enablement
 
-"**TODO.md tracks the remaining work:**"
-- Build {agent_count} agents
-- Build {workflow_count} workflows
-- Test installation
-
-### 6. MENU OPTIONS
+### 7. MENU OPTIONS
 
 **Select an Option:** [C] Continue
 
@@ -394,7 +493,8 @@ Update `{buildTrackingFile}`:
 
 ## Success Metrics
 
-✅ README.md created with all sections
+✅ README.md created with all sections (dev artifacts)
 ✅ TODO.md created with agent/workflow checklist
 ✅ docs/ folder created with user documentation
+✅ For Standalone: standalone package docs generated at `{standalone_package_location}`
 ✅ Build tracking updated

@@ -38,33 +38,51 @@ Create the module directory structure based on the module type (Standalone/Exten
 Load `{moduleStandardsFile}` and determine location:
 
 **IF Standalone:**
-- Target: `src/modules/{module_code}/`
+- Target (dev artifacts): `{bmb_creations_output_folder}/modules/{module_code}/`
+- Standalone package: `{bmb_creations_output_folder}/{module_code}-standalone/`
+- Store `standalone_package_location = {bmb_creations_output_folder}/{module_code}-standalone/`
 
 **IF Extension:**
-- Target: `src/modules/{base_module_code}/extensions/{extension_folder_name}/`
+- Target: `{bmb_creations_output_folder}/modules/{base_module_code}/extensions/{extension_folder_name}/`
 - Get base_module_code from brief
 - extension_folder_name: unique name (e.g., `{base_module}-{feature}`)
 
 **IF Global:**
-- Target: `src/modules/{module_code}/`
+- Target: `{bmb_creations_output_folder}/modules/{module_code}/`
 - Will add `global: true` to module.yaml
 
 ### 2. Present Structure Plan
 
 "**I'll create this directory structure:**"
 
+For Standalone:
 ```
-{target_location}/
+{bmb_creations_output_folder}/modules/{module_code}/  ← dev artifacts
 ├── module.yaml
 ├── README.md
 ├── agents/
 │   └── {agent files}
 └── workflows/
     └── {workflow folders}
+
+{bmb_creations_output_folder}/{module_code}-standalone/  ← deployable package (step 7)
+├── .github/
+│   ├── copilot-instructions.md
+│   ├── agents/                    ← {module_code}-agent-*.agent.md
+│   └── prompts/                   ← {module_code}-*.prompt.md
+├── .vscode/
+│   └── settings.json
+├── README.md                      ← user-facing
+└── _{module_code}/
+    ├── config.yaml
+    ├── module-help.csv
+    ├── agents/
+    └── workflows/
 ```
 
-"**Location:** {target_location}"
-"**Module type:** {Standalone/Extension/Global}"
+"**Dev artifacts location:** {bmb_creations_output_folder}/modules/{module_code}/"
+"**Standalone package location:** {standalone_package_location}"
+"**Module type:** Standalone"
 
 ### 3. Confirm and Create
 
@@ -72,16 +90,24 @@ Load `{moduleStandardsFile}` and determine location:
 
 **IF confirmed:**
 
-Create folders:
+Create folders for dev artifacts:
 - `{target_location}/agents/`
 - `{target_location}/workflows/`
+
+For Standalone, also create the package skeleton:
+- `{standalone_package_location}/.github/agents/`
+- `{standalone_package_location}/.github/prompts/`
+- `{standalone_package_location}/.vscode/`
+- `{standalone_package_location}/_{module_code}/agents/`
+- `{standalone_package_location}/_{module_code}/workflows/`
 
 ### 4. Update Build Tracking
 
 Update `{buildTrackingFile}`:
 - Add 'step-02-structure' to stepsCompleted
-- Set targetLocation
-- Update status
+- Set `targetLocation: {bmb_creations_output_folder}/modules/{module_code}/`
+- If Standalone, set `standalonePackageLocation: {standalone_package_location}`
+- Update status to IN_PROGRESS
 
 ### 5. Report Success
 

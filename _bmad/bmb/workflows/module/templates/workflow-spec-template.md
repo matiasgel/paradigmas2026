@@ -25,9 +25,11 @@
 name: {workflow_name}
 description: {workflow_description}
 web_bundle: true
-installed_path: '{project-root}/_bmad/{module_code}/workflows/{workflow_folder_name}'
+installed_path: '{project-root}/_{module_code}/workflows/{workflow_folder_name}'
 ---
 ```
+
+> **Nota:** Para módulos Standalone el prefijo es `_{module_code}` (ej. `_edu`). Para módulos instalados vía bmad installer el prefijo es `_bmad/{module_code}`. Usar siempre `_{module_code}` para compatibilidad standalone.
 
 ### Mode
 
