@@ -56,3 +56,31 @@
 
 Type `/bmad-` in Copilot Chat to see all available BMAD workflows and agent activators. Agents are also available in the agents dropdown.
 <!-- BMAD:END -->
+
+<!-- EDU:START -->
+## EDU Module — Output Rules
+
+The EDU module lives **exclusively** in `salida/edu-standalone/`. There is no root `_edu/` folder.
+
+### REGLA CRÍTICA DE RUTAS — Sin excepciones
+
+Cuando cualquier agente (BMAD o EDU) crea o modifica artefactos del módulo EDU, las rutas de destino son:
+
+| Tipo de artefacto | Ruta de destino |
+|---|---|
+| Agentes EDU | `salida/edu-standalone/_edu/agents/` |
+| Workflows EDU | `salida/edu-standalone/_edu/workflows/` |
+| Tasks EDU | `salida/edu-standalone/_edu/tasks/` |
+| Prompts EDU (`/edu-*`) | `salida/edu-standalone/.github/prompts/` |
+| Agent files EDU | `salida/edu-standalone/.github/agents/` |
+| Config EDU | `salida/edu-standalone/_edu/config.yaml` |
+| Module help EDU | `salida/edu-standalone/_edu/module-help.csv` |
+
+### Qué va a `salida/planning-artifacts/` o `salida/implementation-artifacts/`
+
+Solo artefactos del framework BMAD (PRDs, epics, stories, arquitectura, etc.) que NO sean parte del módulo EDU.
+
+### Deploy
+
+`/goproduction` despliega `salida/edu-standalone/` → rama `production`. GitHub Actions lo ejecuta automáticamente al hacer push a `main` si se modificó algún path dentro de `salida/edu-standalone/`.
+<!-- EDU:END -->
