@@ -52,3 +52,7 @@ Ciclo completo de producción de un tema: diseño → clase → TP → calidad �
 - **Agent:** course-planner (Elena)
 - **Gate:** All loops resolved
 - **Action:** Git commit + merge, update coverage matrix
+
+### Step 9: Push Both Branches
+- **Action:** `git pushall` — push `main` and `production` to origin
+- **Condition:** Run always after Step 8
