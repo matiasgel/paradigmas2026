@@ -118,12 +118,17 @@ else
 fi
 ```
 
-#### 4.0.5 — Sync `.github/` desde rama de trabajo
+#### 4.0.5 — Sync `.github/` desde rama de trabajo (excepto agents/)
 
 ```bash
 cd "$WORKTREE_PATH"
-git checkout $CURRENT_BRANCH -- .github/
-echo "✅ .github/ sincronizado desde $CURRENT_BRANCH"
+# Sync todo .github/ EXCEPTO agents/ (los agentes los pone el standalone en 4.5)
+git checkout $CURRENT_BRANCH -- .github/prompts/
+git checkout $CURRENT_BRANCH -- .github/workflows/
+git checkout $CURRENT_BRANCH -- .github/copilot-instructions.md 2>/dev/null || true
+# Limpiar agentes BMAD que pudieran haber quedado de deploys anteriores
+rm -f "$WORKTREE_PATH/.github/agents/bmad-"*.agent.md
+echo "✅ .github/ sincronizado desde $CURRENT_BRANCH (agents/ excluido — solo edu-*)"
 ```
 
 #### 4.1 — Deploy `_edu/agents/`
