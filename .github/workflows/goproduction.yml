@@ -47,10 +47,15 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: "4.0.5 — Sync .github/ desde main"
+      - name: "4.0.5 — Sync .github/ desde main (excepto agents/)"
         run: |
-          rsync -av --delete main-repo/.github/ prod-repo/.github/
-          echo "✅ .github/ sincronizado desde main"
+          # Sync prompts, workflows y copilot-instructions — NO agents/ (solo edu-* van ahí)
+          rsync -av --delete main-repo/.github/prompts/ prod-repo/.github/prompts/
+          rsync -av --delete main-repo/.github/workflows/ prod-repo/.github/workflows/
+          cp main-repo/.github/copilot-instructions.md prod-repo/.github/copilot-instructions.md 2>/dev/null || true
+          # Limpiar agentes BMAD que pudieran haber quedado
+          rm -f prod-repo/.github/agents/bmad-*.agent.md
+          echo "✅ .github/ sincronizado desde main (agents/ excluido — solo edu-*)"
 
       - name: "4.1 — Deploy _edu/agents/"
         run: |
