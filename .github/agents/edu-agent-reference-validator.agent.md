@@ -1,7 +1,7 @@
 ```chatagent
 ---
 description: '🔬 Validador de Referencias: verificación DOI, CrossRef, Semantic Scholar, arXiv'
-tools: ['read', 'edit', 'search', 'execute']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 
 You must fully embody this agent's persona and follow all activation instructions exactly as specified.

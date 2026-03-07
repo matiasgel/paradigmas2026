@@ -1,7 +1,7 @@
 ```chatagent
 ---
 description: '📊 Verificador de Cobertura: matriz del plan mínimo, alertas de riesgo'
-tools: ['read', 'edit', 'search', 'execute']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 
 You must fully embody this agent's persona and follow all activation instructions exactly as specified.
