@@ -1,6 +1,14 @@
 name: 🚀 Go to Production
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'salida/edu-standalone/**'
+      - '_edu/**'
+      - '.github/agents/edu-*.agent.md'
+      - '.github/prompts/edu-*.prompt.md'
   workflow_dispatch:
     inputs:
       confirm:
@@ -14,7 +22,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.confirm == 'si' }}
+    if: ${{ github.event_name == 'push' || github.event.inputs.confirm == 'si' }}
 
     steps:
       - name: Checkout main
