@@ -1,0 +1,131 @@
+name: 🚀 Go to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: '¿Deployar edu-standalone → rama production? Escribí "si" para confirmar'
+        required: true
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.confirm == 'si' }}
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main-repo
+          fetch-depth: 0
+
+      - name: Checkout production
+        id: checkout-prod
+        uses: actions/checkout@v4
+        with:
+          ref: production
+          path: prod-repo
+          fetch-depth: 0
+        continue-on-error: true
+
+      - name: Crear rama production si no existe
+        if: steps.checkout-prod.outcome == 'failure'
+        run: |
+          cd main-repo
+          git checkout -b production
+          git push origin production
+          cd ..
+          git clone --branch production "$(git -C main-repo remote get-url origin)" prod-repo
+
+      - name: Configurar git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: "4.0.5 — Sync .github/ desde main"
+        run: |
+          rsync -av --delete main-repo/.github/ prod-repo/.github/
+          echo "✅ .github/ sincronizado desde main"
+
+      - name: "4.1 — Deploy _edu/agents/"
+        run: |
+          rm -rf prod-repo/_edu/agents
+          mkdir -p prod-repo/_edu
+          cp -r main-repo/salida/edu-standalone/_edu/agents prod-repo/_edu/agents
+          echo "✅ _edu/agents/ → $(ls prod-repo/_edu/agents/ | wc -l) archivos"
+
+      - name: "4.2 — Deploy _edu/workflows/"
+        run: |
+          rm -rf prod-repo/_edu/workflows
+          cp -r main-repo/salida/edu-standalone/_edu/workflows prod-repo/_edu/workflows
+          echo "✅ _edu/workflows/ → $(ls prod-repo/_edu/workflows/ | wc -l) carpetas"
+
+      - name: "4.3 — Deploy _edu/module-help.csv"
+        run: |
+          cp main-repo/salida/edu-standalone/_edu/module-help.csv prod-repo/_edu/module-help.csv
+          echo "✅ _edu/module-help.csv actualizado"
+
+      - name: "4.4 — Deploy _edu/config.yaml (solo primer deploy)"
+        run: |
+          if [ ! -f prod-repo/_edu/config.yaml ]; then
+            cp main-repo/salida/edu-standalone/_edu/config.yaml prod-repo/_edu/config.yaml
+            echo "✅ _edu/config.yaml copiado del standalone (primer deploy)"
+          else
+            echo "⏭️  _edu/config.yaml PRESERVADO — ya estaba configurado"
+          fi
+
+      - name: "4.5 — Deploy .github/agents/edu-*"
+        run: |
+          mkdir -p prod-repo/.github/agents
+          rm -f prod-repo/.github/agents/edu-*.md
+          cp main-repo/salida/edu-standalone/.github/agents/edu-*.agent.md prod-repo/.github/agents/
+          echo "✅ .github/agents/ edu-* → $(ls prod-repo/.github/agents/edu-*.agent.md | wc -l) archivos"
+
+      - name: "4.6 — Deploy .github/prompts/edu-*"
+        run: |
+          mkdir -p prod-repo/.github/prompts
+          rm -f prod-repo/.github/prompts/edu-*.prompt.md
+          cp main-repo/salida/edu-standalone/.github/prompts/edu-*.prompt.md prod-repo/.github/prompts/
+          echo "✅ .github/prompts/ edu-* → $(ls prod-repo/.github/prompts/edu-*.prompt.md | wc -l) archivos"
+
+      - name: "4.7 — Actualizar bloque EDU en copilot-instructions.md"
+        run: |
+          sed -i '/<!-- EDU:START -->/,/<!-- EDU:END -->/d' prod-repo/.github/copilot-instructions.md || true
+          echo "" >> prod-repo/.github/copilot-instructions.md
+          cat main-repo/salida/edu-standalone/.github/copilot-instructions.md >> prod-repo/.github/copilot-instructions.md
+          echo "✅ copilot-instructions.md — bloque EDU actualizado"
+
+      - name: "4.8 — Commit y push a production"
+        run: |
+          cd prod-repo
+          git add -A
+          DEPLOY_DATE=$(date +"%Y-%m-%d %H:%M UTC")
+          git commit -m "deploy: edu-standalone → production [$DEPLOY_DATE]" --allow-empty
+          git push origin production
+          echo "✅ Deploy completado:"
+          git log --oneline -1
+
+      - name: Reporte final
+        run: |
+          echo "=== DEPLOY COMPLETADO ==="
+          echo "  _edu/agents/:          $(ls prod-repo/_edu/agents/ | wc -l) archivos"
+          echo "  _edu/workflows/:       $(ls prod-repo/_edu/workflows/ | wc -l) carpetas"
+          echo "  .github/agents edu-*:  $(ls prod-repo/.github/agents/edu-*.agent.md | wc -l) archivos"
+          echo "  .github/prompts edu-*: $(ls prod-repo/.github/prompts/edu-*.prompt.md | wc -l) archivos"
+          echo ""
+          echo "=== PRODUCCIÓN PRESERVADA ==="
+          [ -d prod-repo/_edu-memory ]       && echo "  ✅ _edu-memory/" || echo "  ℹ️  _edu-memory/ (se crea en runtime)"
+          [ -d prod-repo/salida/cursadas ]   && echo "  ✅ salida/cursadas/" || echo "  ℹ️  salida/cursadas/ (se crea al usar el módulo)"
+          [ -f prod-repo/_edu/config.yaml ]  && echo "  ✅ _edu/config.yaml presente"
+
+  cancelled:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.confirm != 'si' }}
+    steps:
+      - name: Deploy cancelado
+        run: echo "Deploy cancelado — escribí 'si' para confirmar."
