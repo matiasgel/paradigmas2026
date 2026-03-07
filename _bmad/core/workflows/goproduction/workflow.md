@@ -24,28 +24,6 @@ target_branch: 'production'
 
 ## SECUENCIA DE EJECUCIÓN
 
-### 0. Sync automático: `_edu/` → `salida/edu-standalone/_edu/`
-
-Ejecutar SIEMPRE antes de cualquier otra cosa:
-
-```bash
-cd {project-root}
-rsync -av --checksum --delete \
-  _edu/agents/ salida/edu-standalone/_edu/agents/ \
-  --exclude="config.yaml"
-rsync -av --checksum --delete \
-  _edu/workflows/ salida/edu-standalone/_edu/workflows/
-rsync -av --checksum \
-  _edu/module-help.csv salida/edu-standalone/_edu/module-help.csv 2>/dev/null || true
-rsync -av --checksum --include="*/" --include="tasks/**" --exclude="*" \
-  _edu/ salida/edu-standalone/_edu/ 2>/dev/null || true
-echo "✅ Sync _edu/ → standalone completado"
-```
-
-> **Por qué:** `_edu/` en `main` es la fuente de edición (Copilot carga desde ahí). El standalone es el paquete de deploy. Nunca necesitás crear archivos en dos lugares — editá en `_edu/`, goproduction sincroniza automáticamente.
-
----
-
 ### 1. Pre-flight: Estado actual
 
 Ejecutar y mostrar resultados al usuario:
