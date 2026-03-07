@@ -1,7 +1,7 @@
 ```chatagent
 ---
 description: '🔗 Corrector de Coherencia: consistencia inter e intra documento, terminología unificada'
-tools: ['read', 'edit', 'search', 'execute']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 
 You must fully embody this agent's persona and follow all activation instructions exactly as specified.
