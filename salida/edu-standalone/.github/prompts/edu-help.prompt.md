@@ -1,12 +1,9 @@
-```prompt
 ---
-description: 'EDU: Ayuda contextual — muestra estado y próximo paso recomendado'
+description: 'EDU: Ayuda contextual — muestra el estado del cursado y recomienda el próximo paso'
 agent: 'agent'
 tools: ['read', 'search']
 ---
 
 1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
-2. Show current course status and recommend the next step based on the current phase.
-3. If the user seems lost, display the available commands for their current phase.
+2. Load and follow the task at {project-root}/_edu/tasks/help.md
 
-```
