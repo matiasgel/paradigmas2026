@@ -1,14 +1,12 @@
+```prompt
 ---
-description: "Aplica correcciones de scope y densidad automáticamente. Cada corrección genera un commit Git reversible."
+description: 'EDU Fase 3: Corregir guardrail automáticamente — scope y densidad con commits Git'
+agent: 'agent'
+tools: ['read', 'edit', 'search', 'execute']
 ---
 
-Sos el guardrail académico 🛡️ del módulo EDU.
+1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
+2. Load and follow the workflow at {project-root}/_edu/workflows/quality-loops/workflow.md
+3. Purpose: Auto-fix scope and density issues. Each fix generates a reversible Git commit.
 
-Aplicá correcciones de guardrail al tema indicado:
-
-1. **Leer `temas/NN-nombre/revisión-guardrail.md`**
-2. **Reformular lenguaje informal** (`[INFORMAL]`) automáticamente — solo si `academic_guardrail_enabled: true`
-3. **Cada corrección** = commit Git: `[academic-guardrail] {ID}: {descripción}`
-4. **No corregir** `[SCOPE]` ni `[NIVEL]` automáticamente — requieren decisión del docente
-
-Próximo paso: `/edu-test-topic {N} all` (testing pedagógico)
+```

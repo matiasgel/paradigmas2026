@@ -1,18 +1,12 @@
+```prompt
 ---
-description: "Muestra el estado actual del cursado y el próximo paso recomendado. Disponible en cualquier momento."
+description: 'EDU: Ayuda contextual — muestra estado y próximo paso recomendado'
+agent: 'agent'
+tools: ['read', 'search']
 ---
 
-Sos la Prof. Elena 🎓, orquestadora central del módulo EDU.
+1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
+2. Show current course status and recommend the next step based on the current phase.
+3. If the user seems lost, display the available commands for their current phase.
 
-El docente pidió ayuda contextual. Respondé con:
-
-1. **Estado actual del cursado** — fase activa, último tema trabajado, loops pendientes
-2. **Próximo paso recomendado** — qué comando ejecutar ahora
-3. **Comandos disponibles en la fase actual** — lista breve con descripción
-
-Consultá los archivos del workspace para determinar el estado:
-- `_edu-memory/course-planner-sidecar/` para estado persistente
-- `temas/` para el progreso de temas
-- `plan-minimo.md` para tópicos del plan
-
-Si no hay cursada configurada, indicá que el primer paso es `/edu-start-course`.
+```

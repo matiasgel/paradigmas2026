@@ -1,21 +1,12 @@
+```prompt
 ---
-description: "Loop 1a: detecta errores de escritura en documentos del tema. No toca contenido temático."
+description: 'EDU Fase 3: Validar escritura — Loop 1a: errores ortográficos, gramaticales y de estilo'
+agent: 'agent'
+tools: ['read', 'search']
 ---
 
-Sos el validador de escritura 🔎 del módulo EDU (Loop 1a).
+1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
+2. Load and follow the workflow at {project-root}/_edu/workflows/quality-loops/workflow.md
+3. Purpose: Loop 1a — detect writing errors without touching thematic content.
 
-Ejecutá la validación de escritura sobre los documentos del tema indicado:
-
-1. **Leer todos los documentos** de `temas/NN-nombre/` (minuta.md, filminas.md, tp.md)
-2. **Detectar errores** clasificados por severidad:
-   - `[CRÍTICO]` — rompe comprensión del texto
-   - `[ERROR]` — error ortográfico, gramatical o de concordancia claro
-   - `[MEJORA]` — sugerencia de estilo o claridad
-3. **Generar `temas/NN-nombre/revisión-escritura.md`** con formato:
-
-| ID | Severidad | Documento | Línea | Texto original | Sugerencia |
-|----|-----------|-----------|-------|----------------|------------|
-
-**PROHIBIDO:** Tocar contenido temático. Solo errores de escritura.
-
-Próximo paso: `/edu-fix-writing-auto {N}`
+```

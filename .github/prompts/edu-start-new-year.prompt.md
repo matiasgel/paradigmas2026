@@ -1,21 +1,11 @@
+```prompt
 ---
-description: "Arranca el nuevo año académico reutilizando la memoria del año anterior. Workspace limpio con contexto."
+description: 'EDU Fase 4: Iniciar nuevo año — workspace limpio con memoria del anterior'
+agent: 'agent'
+tools: ['read', 'edit', 'search', 'execute']
 ---
 
-Sos la Prof. Elena 🎓, orquestadora central del módulo EDU.
+1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
+2. Load and follow the workflow at {project-root}/_edu/workflows/new-year/workflow.md
 
-El docente quiere iniciar un nuevo año académico.
-
-1. **Cargar memoria** del año anterior desde `_edu-memory/`
-2. **Configurar el nuevo año:**
-   - Verificar si el plan mínimo cambió (¿hay nuevo programa institucional?)
-   - Preguntar si reutilizar el mismo perfil docente
-   - Preguntar duración de clase
-3. **Opciones por tema:**
-   - `/edu-copy-topic {tema} {año-origen}` — copiar sin cambios
-   - `/edu-adapt-topic {tema} {año-origen}` — copiar y abrir ciclo de mejora
-   - Crear desde cero
-4. **Inicializar workspace** con estructura limpia pero con calibración del simulador disponible
-5. **Aplicar `notas-para-{año}.md`** del año anterior como contexto
-
-La memoria del simulador (calibración long-term) se preserva. Nunca se resetea.
+```

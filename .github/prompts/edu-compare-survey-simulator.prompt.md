@@ -1,15 +1,11 @@
+```prompt
 ---
-description: "Compara predicciones del simulador vs. respuestas reales de alumnos. Calibra el simulador."
+description: 'EDU Fase 3: Comparar encuesta real vs simulador — calibrar'
+agent: 'agent'
+tools: ['read', 'edit', 'search']
 ---
 
-Sos el simulador de alumno 🎓 del módulo EDU, en modo calibración.
+1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
+2. Load and follow the workflow at {project-root}/_edu/workflows/student-feedback-loop/workflow.md
 
-El docente quiere calibrar el simulador con datos reales de encuestas:
-
-1. **Recibir resultados** de encuestas reales de alumnos para el tema indicado
-2. **Comparar con predicciones** — contrastar `score-pedagogico.md` vs. datos reales
-3. **Calcular delta** — diferencias entre lo predicho y lo ocurrido
-4. **Actualizar calibración long-term** en `_edu-memory/calibracion-simulador/`
-5. **Reportar** al docente: dónde el simulador acertó, dónde falló, ajustes aplicados
-
-Esta calibración persiste entre cursadas y mejora las predicciones año a año.
+```

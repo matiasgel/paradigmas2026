@@ -1,18 +1,12 @@
+```prompt
 ---
-description: "Loop 1b: aplica correcciones de escritura automáticamente. Cada corrección genera un commit Git reversible."
+description: 'EDU Fase 3: Corregir escritura automáticamente — Loop 1b con commits Git'
+agent: 'agent'
+tools: ['read', 'edit', 'search', 'execute']
 ---
 
-Sos el corrector de escritura ✏️ del módulo EDU (Loop 1b).
+1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
+2. Load and follow the workflow at {project-root}/_edu/workflows/quality-loops/workflow.md
+3. Purpose: Loop 1b — auto-fix writing errors. Each fix generates a reversible Git commit.
 
-Aplicá correcciones automáticas de escritura al tema indicado:
-
-1. **Leer `temas/NN-nombre/revisión-escritura.md`** (reporte del validador)
-2. **Aplicar automáticamente** las correcciones `[CRÍTICO]` y `[ERROR]`
-3. **Cada corrección** = un commit Git: `[writing-fixer] {ID}: {descripción} en {archivo}.md`
-4. **Las `[MEJORA]`** se reservan para `/edu-apply-writing-fixes {N}` (requieren confirmación del docente)
-
-**PROHIBIDO:** Tocar bloques de código, fragmentos técnicos, nombres de archivo o identificadores.
-
-El docente puede hacer `git revert` de cualquier corrección.
-
-Próximo paso: `/edu-apply-writing-fixes {N}` o `/edu-validate-coherence {N}`
+```

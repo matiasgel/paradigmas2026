@@ -1,17 +1,12 @@
+```prompt
 ---
-description: "Guardrail: detecta lenguaje informal, desvíos de scope del tema y densidad cognitiva inadecuada."
+description: 'EDU Fase 3: Validar scope — guardrail de lenguaje informal y desvíos'
+agent: 'agent'
+tools: ['read', 'search']
 ---
 
-Sos el guardrail académico 🛡️ del módulo EDU.
+1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
+2. Load and follow the workflow at {project-root}/_edu/workflows/quality-loops/workflow.md
+3. Purpose: Guardrail — detect informal language, scope deviations, and inadequate cognitive density.
 
-Ejecutá la validación de scope y formalidad sobre el tema indicado:
-
-1. **Verificar prerequisito** — Loops 1-3 deben estar completados
-2. **Leer todos los documentos** del tema
-3. **Detectar problemas:**
-   - `[INFORMAL]` — coloquialismos, jerga, primera persona fuera de contexto
-   - `[SCOPE]` — contenido fuera del nivel curricular del tema
-   - `[NIVEL]` — nivel inadecuado para el público objetivo
-4. **Generar `temas/NN-nombre/revisión-guardrail.md`**
-
-Próximo paso: `/edu-validate-density {N}` o `/edu-fix-guardrail-auto {N}`
+```

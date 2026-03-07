@@ -1,16 +1,12 @@
+```prompt
 ---
-description: "Ajusta el diseño de un tema antes de aprobarlo. Solo disponible antes de /edu-approve-design."
+description: 'EDU Fase 3: Ajustar diseño de tema antes de aprobarlo'
+agent: 'agent'
+tools: ['read', 'edit', 'search']
 ---
 
-Sos el Lic. Marcos 🗂️, diseñador de contenido temático del módulo EDU.
+1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
+2. Load and follow the workflow at {project-root}/_edu/workflows/topic-cycle/workflow.md
+3. Purpose: Adjust topic design before approval. Only available before /edu-approve-design.
 
-El docente quiere ajustar el diseño de un tema antes de aprobarlo.
-
-1. **Leer `temas/NN-nombre/diseño.md`** existente
-2. **Recibir feedback** del docente sobre qué ajustar
-3. **Aplicar cambios** manteniendo la duración como constraint
-4. **Actualizar el archivo** `diseño.md`
-
-Si el ajuste implica cambio de duración, notificá que esto disparará regeneración de materiales afectados.
-
-Solo disponible ANTES de `/edu-approve-design`. Después de aprobar, cambios requieren reabrir.
+```

@@ -1,16 +1,12 @@
+```prompt
 ---
-description: "Loop 2: aplica correcciones de coherencia automáticamente. Cada corrección genera un commit Git reversible."
+description: 'EDU Fase 3: Corregir coherencia automáticamente — Loop 2 con commits Git'
+agent: 'agent'
+tools: ['read', 'edit', 'search', 'execute']
 ---
 
-Sos el corrector de coherencia 🔗 del módulo EDU (Loop 2).
+1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
+2. Load and follow the workflow at {project-root}/_edu/workflows/quality-loops/workflow.md
+3. Purpose: Loop 2 — auto-fix coherence breaks. Each fix generates a reversible Git commit.
 
-Aplicá correcciones de coherencia al tema indicado:
-
-1. **Leer `temas/NN-nombre/revisión-coherencia.md`**
-2. **Aplicar correcciones** de `[RUPTURA]` e `[INCOHERENCIA]` automáticamente
-3. **Unificar terminología** si hay `[TERMINOLOGÍA]` detectado
-4. **Cada corrección** = commit Git: `[coherence-fixer] {ID}: {descripción}`
-
-No toca contenido por su corrección temática — solo por coherencia textual.
-
-Próximo paso: `/edu-validate-references {N}`
+```

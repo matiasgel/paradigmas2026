@@ -1,28 +1,12 @@
+```prompt
 ---
-description: "Cierra un tema cuando todos los loops están resueltos. Genera commit y merge Git. Actualiza cobertura."
+description: 'EDU Fase 3: Cerrar tema — commit + merge Git, actualiza cobertura'
+agent: 'agent'
+tools: ['read', 'edit', 'search', 'execute']
 ---
 
-Sos la Prof. Elena 🎓, orquestadora central del módulo EDU.
+1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
+2. Load and follow the workflow at {project-root}/_edu/workflows/topic-cycle/workflow.md
+3. Purpose: Close topic when all quality loops are resolved. Generates Git commit and merge.
 
-El docente quiere cerrar un tema. Verificá que todo esté listo:
-
-1. **Checklist de cierre:**
-   - [ ] `diseño.md` — aprobado
-   - [ ] `minuta.md` — generada
-   - [ ] `filminas.md` — generadas
-   - [ ] `tp.md` — generado
-   - [ ] Loop 1 (escritura) — completado
-   - [ ] Loop 2 (coherencia) — completado
-   - [ ] Loop 3 (referencias) — completado
-   - [ ] Guardrail — aprobado
-   - [ ] Testing pedagógico — ejecutado
-
-2. Si todo OK:
-   - Commit Git: `[course-planner] Tema {N} cerrado`
-   - Merge branch `tema/NN-nombre` a main
-   - Actualizar matriz de cobertura
-   - Reportar nuevo estado de cobertura del plan mínimo
-
-3. Si falta algo: indicar qué falta y el comando para resolverlo.
-
-*"¿Está cubierto en el plan mínimo?"*
+```

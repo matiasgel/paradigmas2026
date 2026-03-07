@@ -1,118 +1,136 @@
-# EDU: Academic Course Production Suite — Copilot Instructions
+<!-- BMAD:START -->
+# BMAD Method — Project Instructions
 
-Sos parte del sistema **EDU**, un pipeline completo de producción docente universitaria con inteligencia pedagógica. Este workspace gestiona la materia **Paradigmas de Programación 2026**.
+## Project Configuration
 
----
+- **Project**: paradigmas2026
+- **User**: Matiasgel
+- **Communication Language**: spanish
+- **Document Output Language**: spanish
+- **User Skill Level**: intermediate
+- **Output Folder**: {project-root}/salida
+- **Planning Artifacts**: {project-root}/salida/planning-artifacts
+- **Implementation Artifacts**: {project-root}/salida/implementation-artifacts
+- **Project Knowledge**: {project-root}/docs
 
-## Principios fundamentales
+## BMAD Runtime Structure
 
-1. **El `plan-minimo.md` es INMUTABLE** desde `/edu-confirm-official-plan`. NUNCA puede modificarse, relajarse ni eliminarse ningún tópico.
-2. **Guardrail académico universal:** Toda investigación se restringe a fuentes académicas verificables (arXiv, ACM, IEEE, Springer, CrossRef, Semantic Scholar, ERIC, OpenLibrary, Google Scholar). PROHIBIDO: Wikipedia, Medium, blogs, redes sociales.
-3. **Cada corrección automática = commit Git reversible** con mensaje estandarizado.
-4. **El docente es siempre el usuario humano** — los agentes orquestan, no deciden.
-5. **La duración de clase es un constraint de producción**, no una sugerencia.
+- **Agent definitions**: `_bmad/bmm/agents/` (BMM module) and `_bmad/core/agents/` (core)
+- **Workflow definitions**: `_bmad/bmm/workflows/` (organized by phase)
+- **Core tasks**: `_bmad/core/tasks/` (help, editorial review, indexing, sharding, adversarial review)
+- **Core workflows**: `_bmad/core/workflows/` (brainstorming, party-mode, advanced-elicitation)
+- **Workflow engine**: `_bmad/core/tasks/workflow.xml` (executes YAML-based workflows)
+- **Module configuration**: `_bmad/bmm/config.yaml`
+- **Core configuration**: `_bmad/core/config.yaml`
+- **Agent manifest**: `_bmad/_config/agent-manifest.csv`
+- **Workflow manifest**: `_bmad/_config/workflow-manifest.csv`
+- **Help manifest**: `_bmad/_config/bmad-help.csv`
+- **Agent memory**: `_bmad/_memory/`
 
----
+## Key Conventions
 
-## Arquitectura de agentes (16)
+- Always load `_bmad/bmm/config.yaml` before any agent activation or workflow execution
+- Store all config fields as session variables: `{user_name}`, `{communication_language}`, `{output_folder}`, `{planning_artifacts}`, `{implementation_artifacts}`, `{project_knowledge}`
+- MD-based workflows execute directly — load and follow the `.md` file
+- YAML-based workflows require the workflow engine — load `workflow.xml` first, then pass the `.yaml` config
+- Follow step-based workflow execution: load steps JIT, never multiple at once
+- Save outputs after EACH step when using the workflow engine
+- The `{project-root}` variable resolves to the workspace root at runtime
 
-### Capa 1 — Ingesta e investigación
-| Agente | Persona | Rol | Visibilidad |
-|--------|---------|-----|-------------|
-| `material-ingester` | (motor interno) | Convierte PDFs/PPTX/DOCX a Markdown | Interno |
-| `plan-extractor` | (motor interno) | Extrae tópicos del programa oficial → `plan-minimo.md` | Interno |
-| `academic-researcher` | Bib. Carlos 📚 | Investigación en fuentes académicas verificables | Interno |
+## Available Agents
 
-### Capa 2 — Análisis y diseño pedagógico
-| Agente | Persona | Rol | Visibilidad |
-|--------|---------|-----|-------------|
-| `course-planner` | Prof. Elena 🎓 | Orquestadora central de todos los flujos | Principal |
-| `topic-designer` | Lic. Marcos 🗂️ | Diseña contenido con duración como constraint | Visible |
-| `curriculum-reviewer` | Prof. Ana 🔍 | Propone cambios curriculares con fuentes académicas | Visible |
+| Agent | Persona | Title | Capabilities |
+|---|---|---|---|
+| bmad-master | BMad Master | BMad Master Executor, Knowledge Custodian, and Workflow Orchestrator | runtime resource management, workflow orchestration, task execution, knowledge custodian |
+| analyst | Mary | Business Analyst | market research, competitive analysis, requirements elicitation, domain expertise |
+| architect | Winston | Architect | distributed systems, cloud infrastructure, API design, scalable patterns |
+| dev | Amelia | Developer Agent | story execution, test-driven development, code implementation |
+| pm | John | Product Manager | PRD creation, requirements discovery, stakeholder alignment, user interviews |
+| qa | Quinn | QA Engineer | test automation, API testing, E2E testing, coverage analysis |
+| quick-flow-solo-dev | Barry | Quick Flow Solo Dev | rapid spec creation, lean implementation, minimum ceremony |
+| sm | Bob | Scrum Master | sprint planning, story preparation, agile ceremonies, backlog management |
+| tech-writer | Paige | Technical Writer | agent capabilities |
+| ux-designer | Sally | UX Designer | user research, interaction design, UI patterns, experience strategy |
 
-### Capa 3 — Producción documental
-| Agente | Persona | Rol | Visibilidad |
-|--------|---------|-----|-------------|
-| `class-writer` | Dr. Roberto ✍️ | Genera `minuta.md` y `filminas.md` | Visible |
-| `tp-designer` | Aux. Valeria 📝 | Genera `tp.md` trazable a la minuta | Visible |
+## Slash Commands
 
-### Capa 4 — Calidad (secuencia obligatoria: Loop 1 → 2 → 3 → Guardrail)
+Type `/bmad-` in Copilot Chat to see all available BMAD workflows and agent activators. Agents are also available in the agents dropdown.
+<!-- BMAD:END -->
+
+<!-- EDU:START -->
+# EDU — Academic Course Production Suite
+
+## Descripción
+
+Pipeline completo de producción docente universitaria con inteligencia pedagógica.
+Desde la ingesta del programa oficial hasta el cierre de cursada con validación automática y memoria acumulada año a año.
+
+## Configuración del Proyecto
+
+- Cargar siempre `_edu/config.yaml` antes de cualquier activación de agente o ejecución de workflow
+- Almacenar todos los campos como variables de sesión
+- La variable `{project-root}` se resuelve a la raíz del workspace en runtime
+
+## Estructura
+
+- **Configuración**: `_edu/config.yaml`
+- **Agentes**: `_edu/agents/` (16 agentes — 6 persona + 5 calidad + 2 testing + 3 internos)
+- **Workflows**: `_edu/workflows/` (15 workflows organizados por fase)
+- **Comandos**: `_edu/module-help.csv` (35 comandos en 4 fases + anytime)
+- **Memoria**: `_edu-memory/` (persistente entre sesiones)
+
+## Fases del Cursado
+
+| Fase | Nombre | Descripción |
+|------|--------|-------------|
+| 1 | Configuración Inicial | Cargar programa oficial, generar plan-minimo.md inmutable |
+| 2 | Planificación | Construir plan-borrador.md (desde material o investigación) |
+| 3 | Producción de Temas | Ciclo: diseño → clase → TP → calidad → testing → cierre |
+| 4 | Cierre | Retrospectiva, traspaso de memoria al año siguiente |
+
+## Agentes Disponibles
+
+### Capa 1 — Persona (visibles al docente)
 | Agente | Persona | Rol |
 |--------|---------|-----|
-| `writing-validator` 🔎 | Loop 1a | Detecta errores de escritura |
-| `writing-fixer` ✏️ | Loop 1b | Aplica correcciones de escritura |
-| `coherence-fixer` 🔗 | Loop 2 | Detecta/repara rupturas de coherencia |
-| `reference-validator` 🔬 | Loop 3 | Verifica referencias académicas |
-| `academic-guardrail` 🛡️ | Guardrail final | Formalidad, scope, densidad cognitiva |
+| course-planner | Prof. Elena 🎓 | Planificadora y orquestadora del cursado |
+| topic-designer | Lic. Marcos 🗂️ | Diseñador de contenidos por tema |
+| class-writer | Dr. Roberto ✍️ | Escritor de minutas y filminas |
+| tp-designer | Aux. Valeria 📝 | Diseñadora de trabajos prácticos |
+| curriculum-reviewer | Prof. Ana 🔍 | Revisora curricular con evidencia académica |
+| academic-researcher | Bib. Carlos 📚 | Investigador bibliográfico |
 
-### Capa 5 — Testing pedagógico
-| Agente | Persona | Rol |
-|--------|---------|-----|
-| `student-simulator` 🎓 | Estudiante (dinámico) | Simula alumnos con perfiles empíricos |
-| `plan-coverage-checker` 📊 | (verificador) | Mantiene matriz de cobertura del plan mínimo |
-| `test-runner` 🧪 | (motor interno) | Genera score pedagógico y FAQ anticipado |
+### Capa 2 — Calidad (motores automáticos)
+| Agente | Rol |
+|--------|-----|
+| writing-validator 🔎 | Detecta errores ortográficos, gramaticales y de estilo |
+| writing-fixer ✏️ | Aplica correcciones automáticas con commits Git |
+| coherence-fixer 🔗 | Unifica coherencia inter e intra documento |
+| reference-validator 🔬 | Verifica referencias contra bases académicas |
+| academic-guardrail 🛡️ | Control de formalidad, scope y densidad cognitiva |
 
----
+### Capa 3 — Testing
+| Agente | Rol |
+|--------|-----|
+| student-simulator 🎓 | Simula alumnos con perfiles empíricos |
+| plan-coverage-checker 📊 | Verifica cobertura del plan mínimo |
 
-## Workflows (15)
+### Capa 4 — Internos (no invocables directamente)
+| Agente | Rol |
+|--------|-----|
+| material-ingester 📥 | Convierte PDFs/PPTX/DOCX a Markdown |
+| plan-extractor 📋 | Extrae tópicos del programa institucional |
+| test-runner 🧪 | Ejecuta baterías de simulación y genera scores |
 
-### Core
-- `load-official-plan` — Cargar programa institucional → `plan-minimo.md`
-- `topic-cycle` — Diseño → clase → TP → calidad → testing → cierre
-- `quality-loops` — 3 loops de calidad + guardrail
-- `close-course` — Cierre formal del año académico
+## Slash Commands
 
-### Feature
-- `build-course-from-materials` — Construir plan desde material existente
-- `build-course-from-research` — Construir plan desde investigación académica
-- `pedagogical-testing` — Simulación de experiencia del alumno
-- `new-year` — Iniciar nuevo año reutilizando memoria anterior
-- `curriculum-change` — Proponer cambios curriculares justificados
-- `reopen-topic` — Reabrir tema cerrado para correcciones
-- `adaptive-replan` — Re-planificación dinámica post-clase
-- `student-feedback-loop` — Calibrar simulador con encuestas reales
+Escribí `/edu-` en Copilot Chat para ver todos los comandos disponibles.
+Los agentes están disponibles como `@edu-agent-nombre` en el dropdown de agentes.
 
-### Utility
-- `manage-student-profiles` — Gestionar perfiles de alumno
-- `check-coverage` — Verificar cobertura del plan mínimo
-- `update-copilot-context` — Actualizar contexto activo
+## Restricciones Críticas
 
----
-
-## Fases del flujo docente
-
-| Fase | Descripción | Comandos clave |
-|------|-------------|----------------|
-| **Fase 1** | Configuración inicial | `/edu-start-course`, `/edu-load-official-plan`, `/edu-confirm-official-plan` |
-| **Fase 2** | Construcción del plan | `/edu-build-course-from-materials`, `/edu-research-plan`, `/edu-propose-curriculum-change` |
-| **Fase 3** | Producción por tema | `/edu-design-topic`, `/edu-create-class`, `/edu-create-tp`, loops de calidad, testing, `/edu-close-topic` |
-| **Fase 4** | Cierre y transición | `/edu-close-course`, `/edu-start-new-year` |
-| **Anytime** | Disponibles siempre | `/edu-help`, `/edu-status`, `/edu-check-coverage`, `/edu-manage-profiles`, `/edu-update-context` |
-
----
-
-## Estructura de archivos del proyecto
-
-```
-paradigmas2026/
-├── .github/
-│   ├── copilot-instructions.md    ← este archivo
-│   ├── agents/                    ← agentes Copilot (@nombre)
-│   └── prompts/                   ← slash commands (/edu-*)
-├── agents/                        ← especificaciones detalladas de agentes
-├── workflows/                     ← especificaciones detalladas de workflows
-├── docs/                          ← documentación de usuario
-├── module.yaml                    ← configuración del módulo
-├── edu-commands.csv               ← tabla completa de comandos
-└── README.md                      ← overview del sistema
-```
-
----
-
-## Convenciones
-
-- Los archivos de salida se generan en `temas/NN-nombre/` (un subdirectorio por tema).
-- Cada tema tiene su branch Git: `tema/NN-nombre`.
-- Los commits automáticos siguen el formato: `[agente] ID: descripción en archivo.md`.
-- La memoria persistente se almacena en `_edu-memory/`.
-- Los perfiles de alumno están calibrados con literatura académica (Mayer, Miller, ERIC).
+1. **plan-minimo.md es INMUTABLE** — Una vez confirmado, ningún agente puede modificarlo
+2. **Loops de calidad son secuenciales** — Loop 1 (escritura) → Loop 2 (coherencia) → Loop 3 (referencias) → Guardrail
+3. **La memoria del simulador NUNCA se resetea** — `_edu-memory/calibracion-simulador/` acumula año a año
+4. **Fuentes prohibidas** — Wikipedia, blogs y fuentes no peer-reviewed son rechazadas automáticamente
+<!-- EDU:END -->

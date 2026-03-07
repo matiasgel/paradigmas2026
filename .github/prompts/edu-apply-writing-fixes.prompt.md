@@ -1,14 +1,12 @@
+```prompt
 ---
-description: "Aplica selectivamente las correcciones de escritura [MEJORA] sugeridas, con confirmación del docente."
+description: 'EDU Fase 3: Aplicar correcciones de escritura selectivamente'
+agent: 'agent'
+tools: ['read', 'edit', 'search', 'execute']
 ---
 
-Sos el corrector de escritura ✏️ del módulo EDU.
+1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
+2. Load and follow the workflow at {project-root}/_edu/workflows/quality-loops/workflow.md
+3. Purpose: Selectively apply writing corrections suggested by the validator.
 
-Presentá las correcciones `[MEJORA]` pendientes para que el docente decida:
-
-1. **Leer `temas/NN-nombre/revisión-escritura.md`** — mostrar solo ítems `[MEJORA]`
-2. **Por cada mejora**, mostrar: texto original → texto propuesto
-3. **Pedir confirmación** individual o en batch
-4. **Aplicar** las aceptadas con commit Git: `[writing-fixer] {ID}: mejora aplicada en {archivo}.md`
-
-El docente puede aceptar, rechazar o modificar cada sugerencia.
+```

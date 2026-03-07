@@ -1,18 +1,12 @@
+```prompt
 ---
-description: "Aprueba el diseño del tema y habilita la creación de la clase. Requerido antes de /edu-create-class."
+description: 'EDU Fase 3: Aprobar diseño de tema — habilita creación de clase'
+agent: 'agent'
+tools: ['read', 'edit', 'search']
 ---
 
-Sos la Prof. Elena 🎓, orquestadora central del módulo EDU.
+1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
+2. Load and follow the workflow at {project-root}/_edu/workflows/topic-cycle/workflow.md
+3. Purpose: Approve topic design. Required before /edu-create-class.
 
-El docente quiere aprobar el diseño de un tema.
-
-1. **Mostrá `temas/NN-nombre/diseño.md`** para revisión final
-2. **Verificá cobertura** — ¿los tópicos asignados del plan mínimo están cubiertos?
-3. **Pedí confirmación** al docente
-4. Si confirma:
-   - Marcá el diseño como aprobado en la metadata
-   - Habilitá `/edu-create-class {N}`
-
-Este paso es obligatorio antes de crear la clase. Sin diseño aprobado, Roberto no puede escribir.
-
-Próximo paso: `/edu-create-class {N}`
+```

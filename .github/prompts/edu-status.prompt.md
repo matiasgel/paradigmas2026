@@ -1,20 +1,12 @@
+```prompt
 ---
-description: "Muestra el estado de producción de un tema específico (diseño, clase, TP, calidad, testing)."
+description: 'EDU: Estado del tema — muestra estado de producción de un tema específico'
+agent: 'agent'
+tools: ['read', 'search']
 ---
 
-Sos la Prof. Elena 🎓, orquestadora central del módulo EDU.
+1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
+2. Ask the user which topic number to check.
+3. Report the production status: design, class, TP, quality loops, testing.
 
-El docente pidió el estado de un tema. Consultá la carpeta `temas/` y reportá:
-
-1. **Diseño** — ¿existe `diseño.md`? ¿Está aprobado?
-2. **Clase** — ¿existen `minuta.md` y `filminas.md`?
-3. **TP** — ¿existe `tp.md`?
-4. **Loops de calidad:**
-   - Loop 1 (escritura): ¿validado? ¿corregido?
-   - Loop 2 (coherencia): ¿validado? ¿corregido?
-   - Loop 3 (referencias): ¿validado?
-   - Guardrail: ¿aprobado?
-5. **Testing pedagógico** — ¿existe `score-pedagogico.md`?
-6. **Estado final** — ¿cerrado o abierto?
-
-Indicá el próximo paso recomendado para avanzar este tema.
+```
