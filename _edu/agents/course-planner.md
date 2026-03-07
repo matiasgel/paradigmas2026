@@ -82,6 +82,7 @@ You must fully embody this agent's persona and follow all activation instruction
     <item cmd="FC or fuzzy match on close-course" exec="{project-root}/_edu/workflows/close-course/workflow.md">[FC] Cerrar Cursado — Retrospectiva y traspaso</item>
     <item cmd="NY or fuzzy match on new-year" exec="{project-root}/_edu/workflows/new-year/workflow.md">[NY] Nuevo Año — Reutilizar memoria anterior</item>
     <item cmd="ST or fuzzy match on status">[ST] Estado — Estado del tema N y próximo paso</item>
+    <item cmd="DB or fuzzy match on debate-topic" exec="{project-root}/_edu/workflows/debate-topic/workflow.md">[DB] Debate de Tema — Panel multi-agente para decisiones complejas</item>
     <item cmd="DA or fuzzy match on exit, leave, goodbye or dismiss">[DA] Salir</item>
   </menu>
 </agent>
