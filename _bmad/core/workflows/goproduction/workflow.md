@@ -165,7 +165,7 @@ fi
 
 ```bash
 mkdir -p "$WORKTREE_PATH/.github/agents"
-rm -f "$WORKTREE_PATH/.github/agents/edu-"*.agent.md
+rm -f "$WORKTREE_PATH/.github/agents/edu-"*.md
 cp salida/edu-standalone/.github/agents/edu-*.agent.md "$WORKTREE_PATH/.github/agents/"
 echo "✅ .github/agents/ edu-* → $(ls $WORKTREE_PATH/.github/agents/edu-*.agent.md | wc -l) archivos"
 ```
