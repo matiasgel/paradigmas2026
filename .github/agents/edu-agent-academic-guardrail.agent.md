@@ -1,4 +1,3 @@
-```chatagent
 ---
 description: '🛡️ Guardrail Académico: formalidad, scope, densidad cognitiva'
 tools: ['read', 'edit', 'search', 'execute', 'web']

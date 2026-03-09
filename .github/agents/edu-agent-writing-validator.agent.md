@@ -1,4 +1,3 @@
-```chatagent
 ---
 description: '🔎 Validador de Escritura: detección de errores ortográficos, gramaticales y de estilo'
 tools: ['read', 'edit', 'search', 'execute', 'web']

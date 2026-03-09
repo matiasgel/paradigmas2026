@@ -1,4 +1,3 @@
-```chatagent
 ---
 description: '🔬 Validador de Referencias: verificación DOI, CrossRef, Semantic Scholar, arXiv'
 tools: ['read', 'edit', 'search', 'execute', 'web']

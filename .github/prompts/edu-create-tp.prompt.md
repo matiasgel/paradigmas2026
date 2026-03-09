@@ -1,5 +1,4 @@
-```prompt
----
+
 description: 'EDU Fase 3: Crear TP — genera tp.md trazable a la minuta del tema'
 agent: 'agent'
 tools: ['read', 'edit', 'search']
@@ -9,4 +8,4 @@ tools: ['read', 'edit', 'search']
 2. Load and follow the workflow at {project-root}/_edu/workflows/topic-cycle/workflow.md
 3. Purpose: Generate tp.md traceable to the topic's minuta. Requires class created.
 
-```
+

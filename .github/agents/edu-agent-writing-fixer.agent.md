@@ -1,4 +1,3 @@
-```chatagent
 ---
 description: '✏️ Corrector de Escritura: correcciones automáticas con commits Git reversibles'
 tools: ['read', 'edit', 'search', 'execute', 'web']

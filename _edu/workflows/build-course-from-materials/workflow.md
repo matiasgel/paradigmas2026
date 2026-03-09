@@ -16,7 +16,7 @@ Construye el plan del cursado procesando material docente existente (PDFs, PPTX,
 - **Agent:** material-ingester (internal)
 - **Input:** Folder with existing course materials
 - **Action:** Convert all files to structured Markdown
-- **Output:** Ingested materials in `salida/ingestado/`
+- **Output:** Ingested materials in `{course_output_folder}/_ingestado/`
 
 ### Step 2: Analyze & Propose Plan
 - **Agent:** course-planner (Elena)
@@ -28,3 +28,4 @@ Construye el plan del cursado procesando material docente existente (PDFs, PPTX,
 - **Agent:** course-planner (Elena)
 - **Gate:** Professor reviews and adjusts the draft plan
 - **Output:** Approved `plan-borrador.md`
+

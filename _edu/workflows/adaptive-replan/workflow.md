@@ -34,3 +34,4 @@ Ajusta el cronograma del cursado cuando hay temas atrasados, respetando SIEMPRE 
 
 ### Step 4: Professor Approval
 - **Gate:** Professor reviews and approves the updated plan
+

@@ -1,4 +1,3 @@
-```chatagent
 ---
 description: 'Aux. Valeria 📝 — Diseñadora de Trabajos Prácticos: TPs trazables a la minuta del tema'
 tools: ['read', 'edit', 'search', 'execute', 'web']

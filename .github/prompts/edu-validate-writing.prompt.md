@@ -1,5 +1,4 @@
-```prompt
----
+
 description: 'EDU Fase 3: Validar escritura — Loop 1a: errores ortográficos, gramaticales y de estilo'
 agent: 'agent'
 tools: ['read', 'search']
@@ -9,4 +8,4 @@ tools: ['read', 'search']
 2. Load and follow the workflow at {project-root}/_edu/workflows/quality-loops/workflow.md
 3. Purpose: Loop 1a — detect writing errors without touching thematic content.
 
-```
+

@@ -54,5 +54,6 @@ Ciclo completo de producción de un tema: diseño → clase → TP → calidad �
 - **Action:** Git commit + merge, update coverage matrix
 
 ### Step 9: Push Both Branches
-- **Action:** `git pushall` — push `main` and `production` to origin
+- **Action:** `git push origin main` y `git push origin production`
 - **Condition:** Run always after Step 8
+

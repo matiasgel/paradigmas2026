@@ -29,6 +29,13 @@ You must fully embody this agent's persona and follow all activation instruction
             1. Read fully and follow the file at that path
             2. Process the complete file and follow all instructions within it
           </handler>
+          <handler type="action">
+            When menu item has action="...":
+            1. action="show-menu" -> redisplay the full numbered menu
+            2. action="chat" -> stay in contextual chat mode without loading workflows
+            3. action="status" -> summarize course/topic status and recommend the next step
+            4. action="exit" -> confirm exit and end agent session
+          </handler>
         </handlers>
       </menu-handlers>
 
@@ -64,8 +71,8 @@ You must fully embody this agent's persona and follow all activation instruction
   </persona>
 
   <menu>
-    <item cmd="MH or fuzzy match on menu or help">[MH] Redisplay Menu / Ayuda</item>
-    <item cmd="CH or fuzzy match on chat">[CH] Chat — Hablar sobre la cursada</item>
+    <item cmd="MH or fuzzy match on menu or help" action="show-menu">[MH] Redisplay Menu / Ayuda</item>
+    <item cmd="CH or fuzzy match on chat" action="chat">[CH] Chat — Hablar sobre la cursada</item>
     <item cmd="SC or fuzzy match on start-course" exec="{project-root}/_edu/workflows/load-official-plan/workflow.md">[SC] Iniciar Curso — Configurar materia, perfil, duración</item>
     <item cmd="LP or fuzzy match on load-plan" exec="{project-root}/_edu/workflows/load-official-plan/workflow.md">[LP] Cargar Programa Oficial — Extraer tópicos del PDF institucional</item>
     <item cmd="CP or fuzzy match on confirm-plan" exec="{project-root}/_edu/workflows/load-official-plan/workflow.md">[CP] Confirmar Plan — Bloquear plan-minimo.md como inmutable</item>
@@ -81,9 +88,9 @@ You must fully embody this agent's persona and follow all activation instruction
     <item cmd="AR or fuzzy match on adaptive-replan" exec="{project-root}/_edu/workflows/adaptive-replan/workflow.md">[AR] Replanificación Adaptativa — Ajustar cronograma</item>
     <item cmd="FC or fuzzy match on close-course" exec="{project-root}/_edu/workflows/close-course/workflow.md">[FC] Cerrar Cursado — Retrospectiva y traspaso</item>
     <item cmd="NY or fuzzy match on new-year" exec="{project-root}/_edu/workflows/new-year/workflow.md">[NY] Nuevo Año — Reutilizar memoria anterior</item>
-    <item cmd="ST or fuzzy match on status">[ST] Estado — Estado del tema N y próximo paso</item>
+    <item cmd="ST or fuzzy match on status" action="status">[ST] Estado — Estado del tema N y próximo paso</item>
     <item cmd="DB or fuzzy match on debate-topic" exec="{project-root}/_edu/workflows/debate-topic/workflow.md">[DB] Debate de Tema — Panel multi-agente para decisiones complejas</item>
-    <item cmd="DA or fuzzy match on exit, leave, goodbye or dismiss">[DA] Salir</item>
+    <item cmd="DA or fuzzy match on exit, leave, goodbye or dismiss" action="exit">[DA] Salir</item>
   </menu>
 </agent>
 ```

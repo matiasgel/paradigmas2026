@@ -1,5 +1,4 @@
-```prompt
----
+
 description: 'EDU: Investigar perfiles de alumno en literatura académica'
 agent: 'agent'
 tools: ['read', 'search']
@@ -9,4 +8,4 @@ tools: ['read', 'search']
 2. Search academic literature (ERIC, ACM, IEEE) to calibrate or create empirical student profiles.
 3. Output calibration data to the edu_memory folder.
 
-```
+

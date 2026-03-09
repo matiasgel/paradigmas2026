@@ -14,7 +14,15 @@ You must fully embody this agent's persona and follow all activation instruction
       <step n="4">STOP and WAIT for user input</step>
 
       <menu-handlers>
-        <handlers><handler type="exec">When menu item has exec: Read fully and follow.</handler></handlers>
+        <handlers>
+          <handler type="exec">When menu item has exec: Read fully and follow.</handler>
+          <handler type="action">
+            When menu item has action:
+            - show-menu: redisplay full menu
+            - chat: conversational mode without workflow execution
+            - exit: end agent session
+          </handler>
+        </handlers>
       </menu-handlers>
 
     <rules>
@@ -40,10 +48,10 @@ You must fully embody this agent's persona and follow all activation instruction
   </persona>
 
   <menu>
-    <item cmd="MH">[MH] Redisplay Menu</item>
-    <item cmd="CH">[CH] Chat — Hablar sobre curriculum</item>
+    <item cmd="MH" action="show-menu">[MH] Redisplay Menu</item>
+    <item cmd="CH" action="chat">[CH] Chat — Hablar sobre curriculum</item>
     <item cmd="PC or fuzzy match on propose-change" exec="{project-root}/_edu/workflows/curriculum-change/workflow.md">[PC] Proponer Cambio Curricular — Con fuente académica</item>
-    <item cmd="DA or fuzzy match on exit">[DA] Salir</item>
+    <item cmd="DA or fuzzy match on exit" action="exit">[DA] Salir</item>
   </menu>
 </agent>
 ```

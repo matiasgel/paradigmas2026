@@ -45,3 +45,4 @@ Cadena secuencial de 4 loops de calidad que se ejecutan DESPUÉS de crear la cla
 - **Checks:** Informal language, scope deviation, cognitive density
 - **Output:** `scope-report.md`, `density-report.md`
 - **Auto-fix:** Only if `academic_guardrail_enabled: true`
+

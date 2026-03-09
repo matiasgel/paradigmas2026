@@ -32,3 +32,4 @@ Simula la experiencia de alumnos con diferentes perfiles antes de dar clase.
 ### Step 4: Professor Review
 - **Gate:** Professor reviews scores and decides if adjustments needed
 - **If adjustments needed:** Return to appropriate step in topic-cycle
+

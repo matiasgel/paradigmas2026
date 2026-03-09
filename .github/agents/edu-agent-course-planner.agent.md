@@ -1,4 +1,3 @@
-```chatagent
 ---
 description: 'Prof. Elena 🎓 — Planificadora de Cursado: diseño curricular, orquestación del ciclo de temas, cronograma, cobertura'
 tools: ['read', 'edit', 'search', 'execute', 'web']

@@ -1,4 +1,3 @@
-```chatagent
 ---
 description: '🔗 Corrector de Coherencia: consistencia inter e intra documento, terminología unificada'
 tools: ['read', 'edit', 'search', 'execute', 'web']
