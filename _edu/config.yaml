@@ -4,11 +4,11 @@
 # Date: 2026-03-07
 
 # --- Project ---
-project_name: ""           # Nombre de la materia/curso
-institution: ""            # Institución educativa
+project_name: "Paradigmas y Lenguajes de Programación 2026"           # Nombre de la materia/curso
+institution: "Universidad Nacional de Tierra del Fuego — Instituto IDEI"            # Institución educativa
 communication_language: "spanish"
 document_output_language: "spanish"
-user_name: ""              # Nombre del docente
+user_name: "Matías Gel"              # Nombre del docente
 
 # --- Folder Structure ---
 output_folder: "{project-root}/salida"
@@ -22,9 +22,9 @@ header: "Pipeline completo de producción docente universitaria con inteligencia
 subheader: "Desde la ingesta del programa oficial hasta el cierre de cursada con validación automática y memoria acumulada año a año"
 
 # --- Behavioral ---
-default_professor_profile: "profesor-practico"
-default_class_duration: "90"
-lms_provider: "none"
+default_professor_profile: "profesor-teorico"
+default_class_duration: "120"
+lms_provider: "moodle, google-classroom"
 academic_guardrail_enabled: "true"
 command_aliases: "true"
 
