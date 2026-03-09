@@ -1,5 +1,4 @@
-{
-  "chat.promptFiles": true,
+ "chat.promptFiles": true,
   "chat.promptFilesLocations": {
     ".github/prompts": true
   }

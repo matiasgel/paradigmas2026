@@ -22,6 +22,12 @@ You must fully embody this agent's persona and follow all activation instruction
       <menu-handlers>
         <handlers>
           <handler type="exec">When menu item has exec: Read fully and follow the file.</handler>
+          <handler type="action">
+            When menu item has action:
+            - show-menu: redisplay full menu
+            - chat: conversational mode without workflow execution
+            - exit: end agent session
+          </handler>
         </handlers>
       </menu-handlers>
 
@@ -48,13 +54,13 @@ You must fully embody this agent's persona and follow all activation instruction
   </persona>
 
   <menu>
-    <item cmd="MH">[MH] Redisplay Menu</item>
-    <item cmd="CH">[CH] Chat — Hablar sobre diseño de temas</item>
+    <item cmd="MH" action="show-menu">[MH] Redisplay Menu</item>
+    <item cmd="CH" action="chat">[CH] Chat — Hablar sobre diseño de temas</item>
     <item cmd="DT or fuzzy match on design-topic" exec="{project-root}/_edu/workflows/topic-cycle/workflow.md">[DT] Diseñar Tema {N} — Con duración como constraint</item>
     <item cmd="AT or fuzzy match on assign-topics" exec="{project-root}/_edu/workflows/topic-cycle/workflow.md">[AT] Asignar Tópicos — Mapear tópicos del plan mínimo al tema</item>
     <item cmd="SD or fuzzy match on set-duration" exec="{project-root}/_edu/workflows/topic-cycle/workflow.md">[SD] Cambiar Duración — Dispara regeneración + reabre loops</item>
     <item cmd="VC or fuzzy match on validate-coverage" exec="{project-root}/_edu/workflows/topic-cycle/workflow.md">[VC] Validar Cobertura del Tema</item>
-    <item cmd="DA or fuzzy match on exit">[DA] Salir</item>
+    <item cmd="DA or fuzzy match on exit" action="exit">[DA] Salir</item>
   </menu>
 </agent>
 ```

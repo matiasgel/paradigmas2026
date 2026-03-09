@@ -1,4 +1,3 @@
-```chatagent
 ---
 description: 'Dr. Roberto ✍️ — Escritor de Clases: minuta, filminas, contenido proporcional a la duración'
 tools: ['read', 'edit', 'search', 'execute', 'web']

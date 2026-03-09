@@ -1,4 +1,3 @@
-```chatagent
 ---
 description: 'Prof. Ana 🔍 — Revisora Curricular: evidencia académica, propuestas de cambio curricular'
 tools: ['read', 'edit', 'search', 'execute', 'web']

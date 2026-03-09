@@ -1,4 +1,3 @@
-```chatagent
 ---
 description: '📊 Verificador de Cobertura: matriz del plan mínimo, alertas de riesgo'
 tools: ['read', 'edit', 'search', 'execute', 'web']

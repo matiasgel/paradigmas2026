@@ -6,9 +6,6 @@ on:
       - main
     paths:
       - 'salida/edu-standalone/**'
-      - '_edu/**'
-      - '.github/agents/edu-*.agent.md'
-      - '.github/prompts/edu-*.prompt.md'
   workflow_dispatch:
     inputs:
       confirm:

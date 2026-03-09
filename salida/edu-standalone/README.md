@@ -1,4 +1,4 @@
-# EDU — Academic Course Production Suite
+U — Academic Course Production Suite
 
 Pipeline completo de producción docente universitaria con inteligencia pedagógica.
 
@@ -58,7 +58,7 @@ En Copilot Chat, usá `@` para invocar agentes:
 
 ## Slash Commands
 
-Escribí `/edu-` para ver los 35 comandos organizados por fase:
+Escribí `/edu-` para ver los 36 comandos organizados por fase:
 
 ### Anytime
 - `/edu-help` — Estado y próximo paso recomendado
@@ -97,6 +97,7 @@ Escribí `/edu-` para ver los 35 comandos organizados por fase:
 - `/edu-fix-guardrail-auto` — Corregir guardrail automáticamente
 - `/edu-test-topic` — Testing pedagógico
 - `/edu-compare-survey-simulator` — Calibrar simulador con encuestas
+- `/edu-debate-topic` — Panel multi-agente para decisiones complejas de tema
 - `/edu-close-topic` — Cerrar tema
 - `/edu-reopen-topic` — Reabrir tema
 - `/edu-adaptive-replan` — Replanificar cronograma

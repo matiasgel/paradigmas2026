@@ -55,6 +55,27 @@
 ## Slash Commands
 
 Type `/bmad-` in Copilot Chat to see all available BMAD workflows and agent activators. Agents are also available in the agents dropdown.
+
+## Commit & Push at Session End
+
+**MANDATORY RULE for all agents:** At the end of a session where files have been created or modified and the user has accepted the changes, the agent MUST automatically execute the following steps:
+
+1. Check for changes with `git status`
+2. Stage all changes: `git add -A`
+3. Create a descriptive commit with the format:
+   `git commit -m "agent: <brief summary of changes made>"`
+   - Use the active agent name as prefix (e.g. `dev:`, `pm:`, `analyst:`, `sm:`, `architect:`, `qa:`)
+   - The message must clearly summarize what artifacts were created or modified
+4. Push to the current branch: `git push`
+
+**When to commit:**
+- After successfully completing a workflow or task
+- When the user confirms the changes are correct
+- At the end of the session if there are new or modified uncommitted files
+
+**When NOT to commit:**
+- If the user explicitly indicates they don't want a commit yet
+- If there are errors or incomplete changes pending
 <!-- BMAD:END -->
 
 <!-- EDU:START -->

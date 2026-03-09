@@ -92,3 +92,4 @@ Sesión de debate multi-agente sobre el diseño o contenido de un tema. Elena co
 - **Agent:** course-planner (Elena)
 - **Action:** Guardar síntesis del debate en `temas/NN-nombre/debate-[fecha].md`
 - **Output:** Archivo de registro para trazabilidad de la decisión docente
+

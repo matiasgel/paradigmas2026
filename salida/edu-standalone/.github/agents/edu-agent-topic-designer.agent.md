@@ -1,4 +1,3 @@
-```chatagent
 ---
 description: 'Lic. Marcos 🗂️ — Diseñador de Temas: estructura de contenidos, duración, alcance'
 tools: ['read', 'edit', 'search', 'execute', 'web']

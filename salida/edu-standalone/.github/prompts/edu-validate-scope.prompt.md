@@ -1,5 +1,4 @@
-```prompt
----
+
 description: 'EDU Fase 3: Validar scope — guardrail de lenguaje informal y desvíos'
 agent: 'agent'
 tools: ['read', 'search']
@@ -9,4 +8,4 @@ tools: ['read', 'search']
 2. Load and follow the workflow at {project-root}/_edu/workflows/quality-loops/workflow.md
 3. Purpose: Guardrail — detect informal language, scope deviations, and inadequate cognitive density.
 
-```
+

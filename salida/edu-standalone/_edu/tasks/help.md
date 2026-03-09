@@ -1,4 +1,4 @@
----
+
 name: edu-help
 description: 'Analiza el estado del cursado y recomienda el próximo paso. Usar cuando el docente pregunta qué hacer a continuación.'
 ---
@@ -10,8 +10,13 @@ description: 'Analiza el estado del cursado y recomienda el próximo paso. Usar 
 - **`anytime`** — Disponible en cualquier fase del cursado
 - **Fases numeradas** — `phase-1` → `phase-2` → `phase-3` → `phase-4` en orden
 - **`required=true`** — Bloquea el avance a la siguiente fase si no está completo
-- **Los artefactos revelan completitud** — Buscar en `{edu_output}` archivos que matcheen la columna `outputs`
+- **Los artefactos revelan completitud** — Buscar en `{course_output_folder}` archivos que matcheen la columna `outputs`
 - **Flujo del módulo**: Configuración → Plan → Producción de temas (ciclo) → Cierre
+
+## MAPEO DE VARIABLES
+
+- `{course_output_folder}` = ruta de salida del cursado (nomenclatura nueva)
+- `{memory_folder}` = ruta de memoria persistente (nomenclatura nueva)
 
 ## REGLAS DE DISPLAY
 
@@ -28,7 +33,7 @@ Descripción breve.
 ## DETECCIÓN DEL ESTADO
 
 1. **Cargar catálogo** — Leer `{project-root}/_edu/module-help.csv`
-2. **Resolver rutas** — Leer `{project-root}/_edu/config.yaml` para obtener `{edu_output}`, `{edu_memory}`, `{user_name}`, `{communication_language}`
+2. **Resolver rutas** — Leer `{project-root}/_edu/config.yaml` para obtener `{course_output_folder}`, `{memory_folder}`, `{user_name}`, `{communication_language}`
 3. **Detectar fase activa** — Buscar artefactos clave:
    - `plan-minimo.md` existe → phase-1 completada
    - `plan-borrador.md` existe → phase-2 en curso o completada

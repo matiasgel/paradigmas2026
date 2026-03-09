@@ -38,5 +38,6 @@ Cierre formal del año académico con retrospectiva y traspaso de memoria al añ
 - **Preserve:** All memory sidecars for continuity
 
 ### Step 5: Push Both Branches
-- **Action:** `git pushall` — push `main` and `production` to origin
+- **Action:** `git push origin main` y `git push origin production`
 - **Condition:** Run always after Step 4
+
