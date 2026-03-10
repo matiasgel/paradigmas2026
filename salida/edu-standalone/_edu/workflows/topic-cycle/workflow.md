@@ -21,9 +21,26 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
   4. Resolve all artifact paths as `{project-root}/{topic_folder}/{artifact}` (e.g. `diseno.md`, `minuta.md`, `filminas.md`, `guia-estudio.md`, `tp.md`)
 - **Error:** If `active-topic.yaml` is missing → STOP and instruct: "Primero iniciá un tema con /edu-design-topic"
 
+### Step 0.5: Ingest Reference PDFs
+- **Precondition:** `{project-root}/material/` debe existir
+- **Actions:**
+  1. Listar todos los archivos `.pdf` en `{project-root}/material/`
+  2. Para cada PDF, verificar si ya existe `{project-root}/material/txt/{nombre}.txt`
+  3. Si **todos** los PDFs tienen su `.txt` → continuar al Step 1
+  4. Si **algún PDF falta su `.txt`** → indicar al docente que ejecute:
+     ```
+     python scripts/pdf-to-text.py material/
+     ```
+     y esperar confirmación antes de continuar
+  5. Una vez confirmada la conversión, almacenar la lista de paths `.txt` como variable de sesión `{material_texts}` (e.g. `material/txt/lab.txt`, `material/txt/para.txt`)
+- **Script:** `{project-root}/scripts/pdf-to-text.py` — requiere `pip install pdfminer.six`
+- **Idempotente:** El script omite archivos ya convertidos; es seguro ejecutarlo múltiples veces
+- **Error — script faltante:** Si `scripts/pdf-to-text.py` no existe, el agente lo crea copiando el template canónico del repo antes de indicar su ejecución
+- **Note:** Los pasos subsiguientes (especialmente Step 4.5) leen desde `material/txt/` — NO directamente de los `.pdf`
+
 ### Step 1: Design Topic
 - **Agent:** topic-designer (Marcos)
-- **Input:** Topic number from plan-borrador.md
+- **Input:** Topic number from plan-borrador.md + textos en `{material_texts}` como contexto de referencia
 - **Output:** `temas/NN-nombre/diseno.md`
 - **Gate:** Professor approval required
 
@@ -50,7 +67,7 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
 - **Purpose:** Documento completo para estudio autónomo del alumno. Más profundo que la minuta — incluye desarrollo teórico expandido (integrando los PDFs fuente), ejemplos trabajados paso a paso, glosario y autoevaluación.
 - **Structure:** Portada → Objetivos → Conceptos previos → Desarrollo teórico (con referencias a filminas y PDFs) → Ejemplos trabajados → Puntos clave → Autoevaluación → Glosario → Referencias
 - **Constraint:** Scope estrictamente definido por `diseno.md`. La guía NO debe incluir contenido fuera de los tópicos del diseño aprobado.
-- **PDF integration:** Sofía intenta leer los PDFs en `{project-root}/material/` para integrar contenido relevante al tema. Los fragmentos no accesibles se marcan con `<!-- PENDIENTE: integrar contenido de {archivo}.pdf -->`.
+- **PDF integration:** Sofía lee los textos extraídos en `{project-root}/material/txt/` (generados por `scripts/pdf-to-text.py` en el Step 0.5). Si `material/txt/` no existe o algún `.txt` falta, NO continuar: indicar al docente que ejecute `python scripts/pdf-to-text.py material/` primero. Los fragmentos que aún resulten vacíos o ilegibles se marcan con `<!-- PENDIENTE: revisar manualmente {archivo}.txt -->`.
 - **Gate:** Professor review after generation — same as minuta/filminas.
 - **Note:** Recuperable con `/edu-create-study-guide` si se necesita regenerar de forma aislada. Exportable a PDF final con `/edu-export-pdf`.
 
