@@ -35,6 +35,21 @@ Si `guia-estudio.md` no existe aún, omitirla de los loops y notificar al docent
 - **Confirm:** [IMPROVEMENT] requires professor approval
 - **Output:** Git commits: `[writing-fixer] {ID}: {description}`
 
+#### Auto-fix de referencias pendientes (sin confirmación)
+Antes de procesar el report, el writing-fixer ejecuta el siguiente sub-paso:
+
+1. Buscar en todos los documentos del tema marcadores de la forma:
+   ```
+   <!-- PENDIENTE: revisar manualmente {archivo}.txt -->
+   ```
+2. Para cada marcador encontrado, verificar si existe `{material_folder}/txt/{archivo}.txt`
+3. Si **existe** → leer el `.txt`, extraer el fragmento relevante al contexto inmediato del marcador (párrafo o sección donde aparece), reemplazar el marcador por el contenido extraído y hacer commit automático:
+   ```
+   [writing-fixer] REF-AUTO: integrado contenido de {archivo}.txt en {documento}
+   ```
+4. Si **no existe** → dejar el marcador intacto y reportarlo como `[ERROR]` en el writing-report para que el docente lo resuelva manualmente
+5. Este sub-paso se ejecuta **antes** del resto del auto-fix y **no requiere confirmación del docente**
+
 ### Loop 2a: Validate Coherence
 - **Agent:** coherence-fixer (detect mode)
 - **Prerequisite:** Loop 1 completed
