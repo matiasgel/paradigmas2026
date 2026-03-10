@@ -20,7 +20,8 @@ tools: ['read', 'edit', 'search', 'execute']
    - No diseno.md → próximo: /edu-design-topic
    - diseno.md sin APROBADO → próximo: /edu-design-topic (ajustar) o /edu-approve-design
    - diseno.md APROBADO, sin minuta.md → próximo: /edu-create-class
-   - minuta.md existe, sin tp.md → próximo: /edu-create-tp
+   - minuta.md existe, sin guia-estudio.md → próximo: /edu-create-study-guide
+   - guia-estudio.md existe, sin tp.md → próximo: /edu-create-tp
    - tp.md existe, sin reporte de calidad → próximo: /edu-quality
    - Reportes de validación existen sin fixes → próximo: /edu-quality
    - Fixes aplicados, sin testing → próximo: /edu-test-topic
