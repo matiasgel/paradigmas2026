@@ -10,10 +10,18 @@
 ## Overview
 
 Genera la estructura completa de un **repo plantilla para GitHub Classroom** con autograding
-configurado por consigna. Cada test del `autograding.json` tiene trazabilidad directa al `tp.md`.
+configurado por consigna. Cada test tiene trazabilidad directa al `tp.md`.
 
 El output es un directorio `{topic_folder}/autograde-repo/` listo para subir como template repo
 a GitHub y configurar como assignment en GitHub Classroom.
+
+> **Acciones modernas (2024+):** El workflow usa las acciones oficiales del org `classroom-resources`:
+> - `classroom-resources/autograding-command-grader@v1` — test por exit code
+> - `classroom-resources/autograding-python-grader@v1` — test con pytest
+> - `classroom-resources/autograding-io-grader@v1` — test input/output
+> - `classroom-resources/autograding-grading-reporter@v1` — reporte final
+>
+> La acción `education/autograding@v1` es **obsoleta** y no debe usarse.
 
 ---
 
@@ -52,7 +60,7 @@ Preguntar al docente (en orden, esperar respuesta antes de continuar):
    - Automática (proporcional a dificultad indicada en tp.md, si existe)
    - Manual (el docente especifica puntos por consigna)
 5. **Nombre del repo** (sugerido: `tp{topic_number}-{topic_name}-template`, slug en kebab-case)
-6. **Tiempo máximo de ejecución por test** (sugerido: 10 segundos)
+6. **Tiempo máximo de ejecución por test en minutos** (sugerido: 10 minutos; máximo: 360 minutos = 6 horas)
 
 Mostrar resumen de configuración y pedir confirmación antes de generar.
 
@@ -87,14 +95,18 @@ autograde-repo/
   - Cada archivo tiene al menos 2 casos de test: caso borde + caso normal.
   - Los tests son funcionales pero NO revelan la solución completa.
 - `README.md`: En español. Secciones: Objetivo / Consignas / Cómo ejecutar los tests localmente / Cómo entregar.
-- `autograding.json`: Un objeto de test por consigna. Puntos configurados según Step 1.
-- `classroom.yml`: Usa `education/autograding@v1` (acción oficial).
+- `classroom.yml`: Usa las acciones modernas de `classroom-resources/*@v1` — un step por consigna + reporter final.
+- `autograding.json` (referencia): Solo se genera como hoja de ruta para configurar los presets en la UI de GitHub Classroom si el docente prefiere ese flujo. El `classroom.yml` es la fuente de verdad para el repo template.
 
 ---
 
-### Step 3: Generar `autograding.json`
+### Step 3: Generar `autograding.json` (referencia para UI de GitHub Classroom)
 
-Formato oficial GitHub Classroom:
+Este archivo describe los tests en el formato que GitHub Classroom espera cuando se configuran
+los tests vía la **UI de Classroom** (presets). Es opcional si se usa el `classroom.yml` custom.
+Útil como referencia para el docente y como documentación de la trazabilidad.
+
+Formato oficial GitHub Classroom (timeout en **minutos**):
 
 ```json
 {
@@ -106,51 +118,95 @@ Formato oficial GitHub Classroom:
       "input": "",
       "output": "",
       "comparison": "included",
-      "timeout": <timeout_segundos>,
+      "timeout": <timeout_minutos>,
       "points": <puntos_consigna>
     }
   ]
 }
 ```
 
+Valores válidos para `comparison`: `included` (output aparece en algún lugar), `exact` (idéntico), `regex` (expresión regular).
+
 **Trazabilidad obligatoria:** El campo `"name"` de cada test DEBE incluir el número de consigna
-tal como aparece en `tp.md`. Documentar la trazabilidad como comentario en `autograde-setup.md`.
+tal como aparece en `tp.md`. Documentar la trazabilidad en `autograde-setup.md`.
 
 ---
 
 ### Step 4: Generar `classroom.yml`
 
+Estructura moderna (2024+): **un step por consigna** usando las acciones de `classroom-resources`,
+más un step final de `autograding-grading-reporter` que sincroniza los resultados con GitHub Classroom.
+
 ```yaml
-name: GitHub Classroom Autograding
+name: Autograding Tests
 
 on:
-  push:
-    branches: ['*']
-  pull_request:
-    branches: ['*']
+  - push
+  - workflow_dispatch
 
 permissions:
-  checks: write
   actions: read
   contents: read
 
 jobs:
   autograding:
-    name: Autograding
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
-      - name: Setup (lenguaje específico)
-        # <agregar setup específico: pip install, mvn, gcc, npm, etc.>
-      - name: Autograding
-        uses: education/autograding@v1
+
+      # ── Un step por consigna ───────────────────────────────────────────────
+      # PYTHON: usa autograding-python-grader (corre pytest automáticamente)
+      - name: Ejercicio 1 — <descripción>
+        id: ej1
+        uses: classroom-resources/autograding-python-grader@v1
+        with:
+          max-score: <puntos_ej1>
+          setup-command: 'pip install -r requirements.txt'
+          timeout: '10'          # minutos (máx 360)
+
+      # COMMAND: usa autograding-command-grader (evalúa exit code)
+      - name: Ejercicio 2 — <descripción>
+        id: ej2
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: 'Ejercicio 2'
+          setup-command: '<setup si aplica>'
+          command: '<comando de test>'
+          timeout: '10'          # minutos (máx 360)
+          max-score: <puntos_ej2>
+
+      # IO: usa autograding-io-grader (stdin/stdout comparison)
+      # - name: Ejercicio 3 — <descripción>
+      #   id: ej3
+      #   uses: classroom-resources/autograding-io-grader@v1
+      #   with:
+      #     test-name: 'Ejercicio 3'
+      #     command: '<comando ejecutable>'
+      #     input: '<stdin>'
+      #     expected-output: '<stdout esperado>'
+      #     comparison-method: 'included'  # included | exact | regex
+      #     timeout: '10'
+      #     max-score: <puntos_ej3>
+
+      # ── Reporter (siempre al final) ────────────────────────────────────────
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
         env:
-          FORCE_COLOR: 1
+          EJ1_RESULTS: "${{steps.ej1.outputs.result}}"
+          EJ2_RESULTS: "${{steps.ej2.outputs.result}}"
+          # EJ3_RESULTS: "${{steps.ej3.outputs.result}}"
+        with:
+          runners: ej1,ej2  # lista separada por coma, must match los step ids
 ```
 
-Adaptar el step "Setup" al lenguaje elegido en Step 1.
+**Reglas de generación del `classroom.yml`:**
+- Adaptar el tipo de grader según el lenguaje y tipo de test de cada consigna
+- El `id` de cada step determina el nombre de la env var en el reporter (`{ID_UPPERCASE}_RESULTS`)
+- El `runners:` del reporter debe listar todos los ids en el mismo orden
+- Timeout siempre en **minutos** — default 10, máximo 360 (6 horas)
+- NO usar `education/autograding@v1` — es obsoleto
+- Adaptar `setup-command` al lenguaje: Python→`pip install`, Java→`mvn install`, Node→`npm install`, C→`make`
 
 ---
 
@@ -214,14 +270,17 @@ el assignment en GitHub Classroom. Incluir:
 3. Título: "TP {topic_number} — {topic_name}"
 4. Template repository: buscar `{repo_name}-template`
 5. Fecha límite: configurar según el cursado
-6. Autograding: seleccionar ✅ "Add autograding"
-   - GitHub detecta automáticamente el `autograding.json` del template
+6. Autograding: el `classroom.yml` en el template se activa automáticamente con cada push del alumno.
+   - Opcionalmente, ir a "Grading and feedback" para revisar o ajustar tests via UI
+   - Para usar presets UI en vez de `classroom.yml`: seleccionar "Add autograding test" → elegir preset
+     (los tests del `autograding.json` de referencia sirven como guía)
 7. Copiar el **Assignment Link** y compartirlo con los alumnos
 
 ## Paso 3: Monitoreo
 - Panel de classroom.github.com → ver progreso por alumno en tiempo real
-- Los tests corren automáticamente en cada push del alumno
-- Puntos se calculan automáticamente según `autograding.json`
+- Los tests corren automáticamente en cada push del alumno (y manualmente si se configura `workflow_dispatch`)
+- Ver logs individuales: Assignments → alumno → ícono de checklist → GitHub Actions logs
+- Descargar CSV con puntajes: botón "Download" en la página del assignment
 
 ## Trazabilidad de tests → consignas
 | Test | Consigna tp.md | Puntos |

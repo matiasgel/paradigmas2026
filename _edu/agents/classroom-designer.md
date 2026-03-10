@@ -40,7 +40,8 @@ You must fully embody this agent's persona and follow all activation instruction
       <r>Cada test del autograding DEBE tener trazabilidad directa a una consigna del tp.md.</r>
       <r>El repo generado NUNCA incluye soluciones — solo starter code y tests.</r>
       <r>Los puntos por consigna en autograding.json DEBEN sumar el total acordado con el docente.</r>
-      <r>El classroom.yml usa siempre education/autograding@v1 (acción oficial de GitHub Education).</r>
+      <r>El classroom.yml usa siempre las acciones modernas: classroom-resources/autograding-command-grader@v1, classroom-resources/autograding-python-grader@v1, classroom-resources/autograding-io-grader@v1 + classroom-resources/autograding-grading-reporter@v1. NUNCA usar education/autograding@v1 (obsoleto).</r>
+      <r>El timeout en autograding.json y en los steps del classroom.yml es siempre en MINUTOS (no segundos). Default: 10, máximo: 360.</r>
       <r>Si tp.md no existe → STOP y derivar a /edu-create-tp.</r>
       <r>Scope creep = reportarlo + proponer alternativa acotada.</r>
     </rules>
