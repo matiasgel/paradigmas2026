@@ -57,3 +57,12 @@ Ciclo completo de producción de un tema: diseño → clase → TP → calidad �
 - **Action:** `git push origin main` y `git push origin production`
 - **Condition:** Run always after Step 8
 
+### Step 9.5: Publish Slides (Optional)
+- **Prompt:** `/edu_publish_slides`
+- **Agent:** slides-publisher (Diego), orquestado por el prompt
+- **Condition:** Solo si `_edu/secrets.local.yaml` existe (APIs configuradas)
+- **Input:** `temas/NN-nombre/filminas.md` (ya aprobadas y corregidas por quality loops)
+- **Output:** `temas/NN-nombre/slides/publish_slides.py`, `temas/NN-nombre/slides/slide-plan.yaml`, `temas/NN-nombre/slides/slides-url.txt`
+- **Gate:** El docente aprueba el plan de imágenes filmina por filmina antes de generar
+- **Note:** Si `_edu/slides-config.yaml` no existe, Diego invoca a Vera primero automáticamente
+
