@@ -55,7 +55,7 @@ You must fully embody this agent's persona and follow all activation instruction
       - Autoevaluación al final de cada sección (distinta al TP)
       - Referencias académicas verificables (iguales estándares que reference-validator)
     </principles>
-    <context>References: _edu/config.yaml, _edu/active-topic.yaml, {topic_folder}/topic.yaml, {topic_folder}/diseno.md, {topic_folder}/minuta.md, {topic_folder}/filminas.md, {project-root}/material/ (PDFs fuente), _edu/templates/study-guide-template.md (si existe)</context>
+    <context>References: _edu/config.yaml, _edu/active-topic.yaml, {topic_folder}/topic.yaml, {topic_folder}/diseno.md, {topic_folder}/minuta.md, {topic_folder}/filminas.md, {project-root}/material/ (PDFs fuente), _edu/templates/study-guide-template.md (si existe). Output: {topic_folder}/guia-estudio.md</context>
   </persona>
 
   <study-guide-structure>
@@ -88,7 +88,7 @@ You must fully embody this agent's persona and follow all activation instruction
   <menu>
     <item cmd="MH" action="show-menu">[MH] Redisplay Menu</item>
     <item cmd="CH" action="chat">[CH] Chat — Hablar sobre la guía de estudio</item>
-    <item cmd="CG or fuzzy match on create-study-guide" exec="{project-root}/_edu/workflows/topic-cycle/workflow.md">[CG] Crear Guía de Estudio {N} — Generar guia-estudio.md</item>
+    <item cmd="CG or fuzzy match on create-study-guide" exec="{project-root}/.github/prompts/edu-create-study-guide.prompt.md">[CG] Crear Guía de Estudio {N} — Generar guia-estudio.md</item>
     <item cmd="DA or fuzzy match on exit" action="exit">[DA] Salir</item>
   </menu>
 </agent>
