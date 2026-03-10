@@ -35,9 +35,11 @@
 
 ## BLOQUE 1 — ¿Por qué estudiar lenguajes de programación? (20 min)
 
+> 📽 **Filminas de este bloque:** F-01 · F-02 · F-03 · F-04 · F-05
+
 **Objetivo del bloque:** Justificar el valor de la materia desde un ángulo práctico y provocador.
 
-### Entrada al bloque (2 min)
+### Entrada al bloque *(📽 F-01)* (2 min)
 
 Plantear la pregunta disparadora directamente:
 
@@ -48,7 +50,7 @@ Dejar que respondan. La respuesta real: más de 700 con uso documentado, miles d
 
 Transición: *"La respuesta corta es: cada lenguaje resuelve un problema que los otros no resolvían bien. Hoy vamos a ver cuáles son esos problemas y cómo los lenguajes los abordan."*
 
-### El costo de elegir mal (5 min)
+### El costo de elegir mal *(📽 F-02)* (5 min)
 
 Presentar el argumento económico con un caso real o hipotético:
 
@@ -57,7 +59,7 @@ Presentar el argumento económico con un caso real o hipotético:
 
 > *"No es solo sobre sintaxis. Es sobre cómo pensás el problema. Eso es un paradigma."*
 
-### Perspectiva histórica express (7 min)
+### Perspectiva histórica express *(📽 F-03)* (7 min)
 
 Guiar rápidamente la línea de tiempo — usar la filmina de timeline:
 
@@ -73,7 +75,7 @@ Guiar rápidamente la línea de tiempo — usar la filmina de timeline:
 
 > *"Cada punto en esta línea resuelve un problema del anterior. No es evolución lineal — es diversificación."*
 
-### Criterios de evaluación de lenguajes (6 min)
+### Criterios de evaluación de lenguajes *(📽 F-04)* (6 min)
 
 > *"Si yo les pido que evalúen un lenguaje, ¿qué mirarían? Sebesta sistematizó esto."*
 
@@ -89,7 +91,7 @@ Presentar los 6 criterios (filmina):
 Ejemplo de tensión:
 > *"Python tiene alta legibilidad y escribibilidad, pero baja eficiencia. C tiene alta eficiencia pero menor legibilidad. No hay lenguaje perfecto — hay trade-offs."*
 
-**Punto de tensión para discusión rápida (2 min):**
+**Punto de tensión para discusión rápida *(📽 F-05)* (2 min):**
 > *"¿Importa el lenguaje si la IA puede escribir en cualquiera? ¿O precisamente por eso importa más saber evaluarlos?"*
 No resolver — dejar abierto para el Bloque 5.
 
@@ -97,15 +99,17 @@ No resolver — dejar abierto para el Bloque 5.
 
 ## BLOQUE 2 — Los paradigmas: mapa general (25 min)
 
+> 📽 **Filminas de este bloque:** F-06 · F-07 · F-08 · F-09 · F-10
+
 **Objetivo del bloque:** Dar el vuelo de 10.000 pies sobre el mapa de paradigmas con base teórica sólida.
 
-### ¿Qué es un paradigma? (4 min)
+### ¿Qué es un paradigma? *(📽 F-06)* (4 min)
 
 > *"Un paradigma de programación es una forma de pensar el cómputo. Es el modelo mental que estructura cómo describís la solución."*
 
 No es solo sintaxis — dos lenguajes con sintaxis muy distintas pueden compartir paradigma (Java y C# son ambos OO). Un lenguaje puede implementar varios paradigmas (TypeScript).
 
-### Los factores históricos que formaron los paradigmas (6 min)
+### Los factores históricos que formaron los paradigmas *(📽 F-07)* (6 min)
 
 > *"Los paradigmas no surgieron de la nada — fueron respuestas a restricciones de hardware y metodología."*
 
@@ -123,7 +127,7 @@ No es solo sintaxis — dos lenguajes con sintaxis muy distintas pueden comparti
 - OO (Smalltalk) — objetos que intercambian mensajes
 - Multiparadigma (Python, TypeScript, Scala) — lo mejor de todos
 
-### El cuello de botella de Von Neumann (5 min)
+### El cuello de botella de Von Neumann *(📽 F-08)* (5 min)
 
 > *"Louden y Lambert plantean algo interesante en el Cap. 1: la ejecución secuencial instrucción a instrucción no es una verdad universal — es una restricción del hardware."*
 
@@ -132,7 +136,7 @@ No es solo sintaxis — dos lenguajes con sintaxis muy distintas pueden comparti
 - **Pregunta disparadora:** *"¿Se puede describir cómputo sin depender de Von Neumann?"*
 - Respuesta: sí — y de ahí nacen el funcional (lambda calculus) y el lógico (lógica simbólica)
 
-### Los 4 paradigmas fundamentales (8 min)
+### Los 4 paradigmas fundamentales *(📽 F-09)* (8 min)
 
 Presentar la tabla comparativa (filmina dedicada):
 
@@ -147,7 +151,7 @@ Presentar la tabla comparativa (filmina dedicada):
 
 **Multiparadigma:** TypeScript, Python, Scala, F# — no eligen uno, los combinan. Esto tiene ventajas (flexibilidad) y desventajas (inconsistencia de estilo en equipos).
 
-### Lenguajes puros vs. multiparadigma + dominios de aplicación (2 min)
+### Lenguajes puros vs. multiparadigma + dominios de aplicación *(📽 F-10)* (2 min)
 
 Rápido, para conectar con el tema que viene:
 - Haskell: funcional puro → finanzas de alta confiabilidad, compiladores
@@ -159,9 +163,11 @@ Rápido, para conectar con el tema que viene:
 
 ## BLOQUE 3 — Paradigma imperativo y máquina abstracta (20 min)
 
+> 📽 **Filminas de este bloque:** F-11 · F-12 · F-13 · F-14
+
 **Objetivo del bloque:** Conectar la teoría de máquinas abstractas con código real. Dar rigor sin perder claridad.
 
-### La escalera de abstracciones (5 min)
+### La escalera de abstracciones *(📽 F-11)* (5 min)
 
 > *"Gabbrielli plantea esto con precisión: todo lenguaje define una máquina abstracta. No hay lenguaje sin máquina."*
 
@@ -179,7 +185,7 @@ React, Django, Rails     — Nivel 3: frameworks — abstracción de la platafor
 
 > *"Al subir, gano expresividad y legibilidad. Al bajar, gano control y eficiencia. La pregunta clave: ¿qué abstraje y qué perdí?"*
 
-### La conexión Von Neumann → código imperativo (5 min)
+### La conexión Von Neumann → código imperativo *(📽 F-12)* (5 min)
 
 Conectar concretamente:
 - Cada **variable** = celda de memoria con nombre
@@ -190,7 +196,7 @@ Conectar concretamente:
 
 > *"El paradigma imperativo no es una convención de programadores — es una abstracción directa de cómo funciona el hardware."*
 
-### Ejemplo comparativo: el mismo algoritmo en 3 niveles (8 min)
+### Ejemplo comparativo: el mismo algoritmo en 3 niveles *(📽 F-13)* (8 min)
 
 **Enunciado:** Calcular la suma de los valores absolutos de un array de 10 enteros.
 
@@ -228,7 +234,7 @@ int suma_abs(int arr[], int n) {
 
 **Discusión (2 min):** ¿qué haría TypeScript diferente? (anticipación del Bloque 4)
 
-### Máquina abstracta, interpretación y compilación (2 min)
+### Máquina abstracta, interpretación y compilación *(📽 F-14)* (2 min)
 
 Sintetizar el concepto de Gabbrielli Cap. 1:
 
@@ -243,9 +249,11 @@ Sintetizar el concepto de Gabbrielli Cap. 1:
 
 ## BLOQUE 4 — Intro a TypeScript como lenguaje multiparadigma (30 min)
 
+> 📽 **Filminas de este bloque:** F-15 · F-16 · F-17 · F-18 · F-19 · F-20
+
 **Objetivo del bloque:** TypeScript como ejemplo vivo de los conceptos teóricos. Primera escritura de código de la cursada.
 
-### ¿Por qué TypeScript en 2026? (4 min)
+### ¿Por qué TypeScript en 2026? *(📽 F-15)* (4 min)
 
 Argumentos rápidos:
 - **Ecosistema:** npm + 2.3 millones de paquetes, frontend + backend (Node/Deno/Bun)
@@ -255,7 +263,7 @@ Argumentos rápidos:
 
 Mencionar el cambio curricular: *"Antes usábamos Kotlin. TypeScript cumple los mismos objetivos conceptuales y tiene mayor adopción en el mercado 2025-2026."*
 
-### TypeScript como ejemplo de máquina intermedia (8 min)
+### TypeScript como ejemplo de máquina intermedia *(📽 F-16)* (8 min)
 
 > *"¿Recuerdan lo que dijo Gabbrielli sobre lenguajes intermedios? Acá está en vivo."*
 
@@ -281,11 +289,19 @@ Python: .py   → [CPython] → bytecode → [CPython VM] → ejecución
 - El compilador `tsc` hace verificación de tipos **antes** de ejecutar → más confiabilidad
 - El lenguaje intermedio (JS) es el que realmente ejecuta la CPU (via V8) → el runtime es diferente del lenguaje que leen
 
-### Demo: el mismo problema en TypeScript funcional (10 min)
+### Demo: el mismo problema en TypeScript *(📽 F-17 · F-18)* (10 min)
 
-**Abrir Deno Playground** (https://playground.deno.land)
+> 🛠 **Setup Deno Playground — paso a paso:**
+> 1. Abrir **https://playground.deno.land** en el navegador del proyector
+> 2. El editor tiene código de ejemplo por defecto — borrarlo todo con `Ctrl+A` → `Delete`
+> 3. Pegar (o tipear) el código de abajo — tipear es más didáctico si el tiempo lo permite
+> 4. Ejecutar con el botón ▶ **Run** en la barra superior, o `Ctrl+Enter`
+> 5. El output aparece en el panel inferior derecho
+>
+> **Fallback si Deno Playground no carga:** https://www.typescriptlang.org/play (TypeScript Playground oficial — mismo resultado para estos ejemplos)
 
-**Versión imperativa primero** (para comparar con C):
+**Paso 1 — Versión imperativa** *(📽 F-17)* (para comparar directamente con C):
+
 ```typescript
 function sumaAbs(arr: number[]): number {
     let acc = 0;
@@ -295,19 +311,24 @@ function sumaAbs(arr: number[]): number {
     return acc;
 }
 
-console.log(sumaAbs([3, -1, 4, -1, 5])); // 14
+console.log(sumaAbs([3, -1, 4, -1, 5]));
 ```
 
-> *"¿Qué cambió respecto de C? Tipos anotados, pero el estilo es imperativo — mismo paradigma."*
+> 📤 **Output esperado:** `14`
 
-**Versión funcional:**
+> *"¿Qué cambió respecto de C? Tipos anotados (`: number[]`, `: number`), pero el esqueleto es idéntico — variable `acc` mutable, loop con índice. Mismo paradigma imperativo."*
+
+**Paso 2 — Versión funcional** *(📽 F-18)* (sin mutación, sin loop explícito):
+
 ```typescript
 const sumaAbs = (arr: number[]): number =>
     arr.map(x => Math.abs(x))
        .reduce((acc, x) => acc + x, 0);
 
-console.log(sumaAbs([3, -1, 4, -1, 5])); // 14
+console.log(sumaAbs([3, -1, 4, -1, 5]));
 ```
+
+> 📤 **Output esperado:** `14`
 
 > *"¿Qué cambió? Sin `let`, sin mutación, sin loop. `map` y `reduce` son funciones de orden superior — reciben funciones como argumento. Esto es programación funcional."*
 
@@ -316,9 +337,11 @@ console.log(sumaAbs([3, -1, 4, -1, 5])); // 14
 
 **Pregunta para los alumnos:** *"¿Cuál les resulta más legible? ¿Cuál les parece más fácil de escribir? ¿Coinciden?"* — Registrar respuestas brevemente en pizarrón.
 
-### Sistema de tipos básico de TypeScript (8 min)
+### Sistema de tipos básico de TypeScript *(📽 F-19)* (8 min)
 
 > *"TypeScript agrega una capa que JavaScript no tiene: **tipos estáticos**. Esto cambia la confiabilidad."*
+
+> 🛠 **Continuar en Deno Playground** — pegar este código en un nuevo archivo o agregar debajo del ejemplo anterior.
 
 Tipado básico en vivo:
 ```typescript
@@ -351,9 +374,14 @@ interface Alumno {
 sumaAbs(["hola", "mundo"]); // tsc detecta esto antes de ejecutar
 ```
 
+> 📤 **Output esperado en el editor:** subrayado rojo en `["hola", "mundo"]` con el mensaje:
+> `Argument of type 'string[]' is not assignable to parameter of type 'number[]'`
+>
+> En Deno Playground el error aparece en el panel inferior al intentar ejecutar.
+
 > *"El compilador actúa como primer revisor. Esto es confiabilidad — criterio #3 de Sebesta."*
 
-**Acelerador de paradigma:**
+**Acelerador de paradigma** *(📽 F-20)*:
 - TypeScript no obliga a un paradigma — pode escribirse de forma imperativa, funcional u OO
 - La elección es del programador → más responsabilidad, más libertad
 - A lo largo de la materia van a ver los tres estilos con este mismo lenguaje
@@ -362,9 +390,11 @@ sumaAbs(["hola", "mundo"]); // tsc detecta esto antes de ejecutar
 
 ## BLOQUE 5 — IA Generativa y los paradigmas (15 min)
 
+> 📽 **Filminas de este bloque:** F-21 · F-22 · F-23 · F-24 · F-25 · F-26
+
 **Objetivo del bloque:** Conectar los fundamentos de la materia con el contexto actual de la IA. Motivar desde lo relevante para su futuro profesional.
 
-### El cambio de rol del programador (4 min)
+### El cambio de rol del programador *(📽 F-21)* (4 min)
 
 Presentar los datos de Schmidt & Runfola (2025) — filmina con el split de tiempo:
 
@@ -381,7 +411,7 @@ Presentar los datos de Schmidt & Runfola (2025) — filmina con el split de tiem
 
 > *"Lo que cambió no es que la IA escriba código — es que ahora el trabajo intelectual es decirle qué problema tiene que resolver y verificar que lo resolvió bien. Para eso necesitás saber paradigmas."*
 
-### La jerarquía de proficiencia en IA (3 min)
+### La jerarquía de proficiencia en IA *(📽 F-22)* (3 min)
 
 Filmina con los 3 niveles (Schmidt & Runfola, Fig. 12):
 
@@ -391,33 +421,59 @@ Filmina con los 3 niveles (Schmidt & Runfola, Fig. 12):
 
 > *"Ustedes apuntan a AI Fluency. No llegan sin conocer paradigmas y semántica — la IA genera código en múltiples estilos y si no sabés distinguir uno de otro, no podés verificar lo que te da."*
 
-### Demo en vivo — La IA elige paradigmas (6 min)
+### Demo en vivo — La IA elige paradigmas *(📽 F-23 · F-24 · F-25)* (6 min)
 
-**Abrir Copilot (o Claude) y hacer el prompt:**
+> 🛠 **Setup:** Abrir **Copilot Chat** (VS Code, panel lateral) o **Claude** (https://claude.ai) en el navegador del proyector. No hace falta configuración previa — basta con una sesión abierta.
+
+**Prompt 1** *(📽 F-23)* — sin restricción de paradigma:
 
 ```
-"Escribí una función que devuelva la suma de los valores absolutos de una lista de números"
+Escribí en TypeScript una función que devuelva la suma
+de los valores absolutos de una lista de números
 ```
 
-Observar el output:
-- ¿Usó `for`? ¿`reduce`? ¿`map`? ¿Mezcló estilos?
-- Identificar en vivo: *"¿Qué paradigma eligió la IA por defecto?"*
+> 📤 **Output típico (la IA tiende al imperativo):**
+> ```typescript
+> function sumAbsoluteValues(numbers: number[]): number {
+>     let sum = 0;
+>     for (const num of numbers) {
+>         sum += Math.abs(num);
+>     }
+>     return sum;
+> }
+> ```
+> 🔍 Señalar en vivo: `let sum` mutable + loop `for...of` = **paradigma imperativo**. La IA por defecto tiende al paradigma más difundido entre la mayoría de usuarios.
 
-**Reformular el prompt:**
+**Prompt 2** *(📽 F-24)* — restricción funcional explícita:
+
 ```
-"Implementá lo mismo en estilo funcional puro, sin mutación de estado, sin variables intermedias"
+Implementá lo mismo en estilo funcional puro,
+sin mutación de estado, sin variables intermedias
 ```
 
-Observar el cambio — *"¿La IA entendió la restricción? ¿Lo hizo bien?"*
+> 📤 **Output esperado (funcional correcto):**
+> ```typescript
+> const sumAbsoluteValues = (numbers: number[]): number =>
+>     numbers.reduce((acc, num) => acc + Math.abs(num), 0);
+> ```
+> ✅ Verificar: sin `let`, sin loop, `reduce` como función de orden superior.
+> ⚠️ Si la IA usa `let` igual → señalarlo como ejemplo de que la IA no siempre respeta las restricciones del prompt — requiere conocimiento de dominio para detectarlo.
 
-**Tercer prompt:**
+**Prompt 3** *(📽 F-25)* — verificación de comprensión de máquinas abstractas:
+
 ```
-"Explicá qué máquina abstracta ejecuta este código TypeScript"
+Explicá qué máquina abstracta ejecuta este código TypeScript
 ```
 
-Verificar: ¿puede la IA explicar el pipeline `.ts → .js → V8`? ¿Lo hace correctamente?
+> 📤 **Respuesta correcta esperada** (verificar estos puntos en vivo):
+> - `tsc` compila `.ts` → `.js` (lenguaje intermedio)
+> - V8 / Node.js / Deno ejecuta el `.js` resultante vía JIT
+> - TypeScript no se ejecuta directamente — siempre hay máquina intermedia
+> - Comparación con JVM (Java) o CPython (Python)
+>
+> Si la IA omite alguno de estos puntos → señalarlo como gap concreto del "trust but verify" en acción.
 
-### El loop "trust but verify" (2 min)
+### El loop "trust but verify" *(📽 F-26)* (2 min)
 
 Esquema rápido (filmina):
 1. Formular el problema con precisión
@@ -432,7 +488,9 @@ Esquema rápido (filmina):
 
 ## CIERRE (10 min)
 
-### Mapa conceptual de la materia (4 min)
+> 📽 **Filminas de este bloque:** F-27 · F-28
+
+### Mapa conceptual de la materia *(📽 F-27)* (4 min)
 
 Mostrar cómo se conectan los 15 temas del plan (filmina de mapa):
 - **Tema 1-2:** Fundamentos — lenguajes, paradigmas, sintaxis, semántica
@@ -444,7 +502,7 @@ Mostrar cómo se conectan los 15 temas del plan (filmina de mapa):
 
 > *"Todo lo que vimos hoy es el mapa. Las próximas 15 clases son el territorio."*
 
-### Adelanto Clase 2 — Sintaxis y Semántica (4 min)
+### Adelanto Clase 2 — Sintaxis y Semántica *(📽 F-28)* (4 min)
 
 > *"La próxima clase respondemos una pregunta que parece simple pero no lo es: ¿qué es un programa correcto?"*
 
