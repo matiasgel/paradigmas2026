@@ -15,12 +15,14 @@ tools: ['read', 'search']
    - `{topic_folder}/diseno.md`
    - `{topic_folder}/minuta.md`
    - `{topic_folder}/filminas.md`
+   - `{topic_folder}/guia-estudio.md`
+   - `{topic_folder}/guia-estudio.pdf`
    - `{topic_folder}/tp.md`
    - `{topic_folder}/score-pedagogico.md`
    - `{topic_folder}/faq-anticipado.md`
    - `{topic_folder}/quality-reports/` (scan for any `*.md` report files)
    - `{topic_folder}/slides/slides-url.txt`
    - `{topic_folder}/topic.yaml` (status field)
-5. Report production status: design, class, TP, quality loops, testing, slides.
+5. Report production status: design, class, study guide (+ PDF exportado si existe), TP, quality loops, testing, slides.
 6. Recommend next step based on what is missing.
 

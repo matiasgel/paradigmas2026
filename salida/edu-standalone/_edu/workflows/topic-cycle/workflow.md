@@ -2,13 +2,13 @@
 
 **Module:** edu
 **Phase:** 3 — Producción de Temas
-**Owner Agent:** course-planner (orchestrator), topic-designer, class-writer, tp-designer
+**Owner Agent:** course-planner (orchestrator), topic-designer, class-writer, study-guide-writer, tp-designer
 
 ---
 
 ## Overview
 
-Ciclo completo de producción de un tema: diseño → clase → TP → calidad → testing → cierre.
+Ciclo completo de producción de un tema: diseño → clase → **guía de estudio** → TP → calidad → testing → cierre.
 
 ## Steps
 
@@ -18,7 +18,7 @@ Ciclo completo de producción de un tema: diseño → clase → TP → calidad �
   1. Read `{project-root}/_edu/active-topic.yaml` → store `{topic_folder}`, `{topic_number}`, `{topic_name}` as session variables
   2. Read `{project-root}/{topic_folder}/topic.yaml` → store all fields (`class_duration`, `git_branch`, `status`, `artifacts` map)
   3. Use `{class_duration}` from `topic.yaml` as the duration constraint for ALL subsequent steps
-  4. Resolve all artifact paths as `{project-root}/{topic_folder}/{artifact}` (e.g. `diseno.md`, `minuta.md`, `filminas.md`, `tp.md`)
+  4. Resolve all artifact paths as `{project-root}/{topic_folder}/{artifact}` (e.g. `diseno.md`, `minuta.md`, `filminas.md`, `guia-estudio.md`, `tp.md`)
 - **Error:** If `active-topic.yaml` is missing → STOP and instruct: "Primero iniciá un tema con /edu-design-topic"
 
 ### Step 1: Design Topic
@@ -56,7 +56,7 @@ Ciclo completo de producción de un tema: diseño → clase → TP → calidad �
 
 ### Step 5: Create TP
 - **Agent:** tp-designer (Valeria)
-- **Input:** `minuta.md`
+- **Input:** `minuta.md` + `guia-estudio.md` (para que Valeria pueda verificar que las consignas del TP no dupliquen la autoevaluación de la guía)
 - **Gate — Tipo de TP:** Antes de generar, preguntar al docente:
   > "¿Qué tipo de entrega es este TP?"
   > 1. **Desarrollo** — preguntas abiertas / ejercicios a resolver (tp.md clásico)

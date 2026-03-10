@@ -10,7 +10,7 @@ tools: ['read', 'edit', 'search', 'execute']
 3. Load `{project-root}/{topic_folder}/topic.yaml` and store all fields as session variables.
 4. Load and follow the workflow at `{project-root}/_edu/workflows/topic-cycle/workflow.md`.
 5. Purpose: Close topic when all quality loops are resolved. Updates `{topic_folder}/topic.yaml` status to "closed".
-   Generates Git commit and merge on branch `{git_branch}`. Updates coverage matrix.
+   Generates Git commit and merge on branch `{git_branch}`. El commit debe incluir TODOS los artefactos del tema: `diseno.md`, `minuta.md`, `filminas.md`, `guia-estudio.md` (si existe), `guia-estudio.pdf` (si existe), `tp.md`, todos los reportes de calidad y scores de testing. Updates coverage matrix.
 6. After successful close:
    - Clear `{project-root}/_edu/active-topic.yaml` (delete or set all fields to empty)
      so that the next `/edu-topic` or `/edu-design-topic` starts fresh.
