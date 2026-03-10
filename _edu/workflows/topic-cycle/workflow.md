@@ -12,6 +12,15 @@ Ciclo completo de producción de un tema: diseño → clase → TP → calidad �
 
 ## Steps
 
+### Step 0: Initialize Topic Directory
+- **Precondition:** `_edu/active-topic.yaml` must exist (written by /edu-design-topic or /edu-topic)
+- **Actions:**
+  1. Read `{project-root}/_edu/active-topic.yaml` → store `{topic_folder}`, `{topic_number}`, `{topic_name}` as session variables
+  2. Read `{project-root}/{topic_folder}/topic.yaml` → store all fields (`class_duration`, `git_branch`, `status`, `artifacts` map)
+  3. Use `{class_duration}` from `topic.yaml` as the duration constraint for ALL subsequent steps
+  4. Resolve all artifact paths as `{project-root}/{topic_folder}/{artifact}` (e.g. `diseno.md`, `minuta.md`, `filminas.md`, `tp.md`)
+- **Error:** If `active-topic.yaml` is missing → STOP and instruct: "Primero iniciá un tema con /edu-design-topic"
+
 ### Step 1: Design Topic
 - **Agent:** topic-designer (Marcos)
 - **Input:** Topic number from plan-borrador.md
