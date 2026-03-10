@@ -1,4 +1,4 @@
-
+---
 description: 'EDU Fase 4: Cerrar cursado — retrospectiva y traspaso de memoria al año siguiente'
 agent: 'agent'
 tools: ['read', 'edit', 'search', 'execute']

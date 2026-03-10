@@ -7,8 +7,13 @@ tools: ['read', 'edit', 'search']
 1. Load `{project-root}/_edu/config.yaml` and store ALL fields as session variables.
 
 2. Resolve topic directory:
-   - If `{project-root}/_edu/active-topic.yaml` exists AND the user did not specify a different topic number → load it, store `{topic_folder}`, `{topic_number}`, `{topic_name}` as session variables
-   - Otherwise (no active-topic.yaml, or user specified a topic number):
+   - If `{project-root}/_edu/active-topic.yaml` exists:
+     - Load it, store `{topic_folder}`, `{topic_number}`, `{topic_name}` as session variables
+     - Load `{topic_folder}/topic.yaml` and check `status`
+     - If `status == "closed"` OR the user specified a different topic number → treat as new topic (go to else branch)
+     - Otherwise → confirm: "¿Continuar con el tema activo: [{topic_number}] {topic_name}? (s/n)"
+       If n → ask for new topic number and go to else branch
+   - Otherwise (no active-topic.yaml, closed, or different topic number specified):
      - Ask: "¿Qué número de tema vas a diseñar? (ej: 01)"
      - Look up the topic name for that number in `plan-borrador.md` to derive `{topic_slug}`
      - Set `{topic_folder}` = `temas/{topic_number}-{topic_slug}/`

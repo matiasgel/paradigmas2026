@@ -1,4 +1,4 @@
-
+---
 description: 'EDU: Ayuda contextual — muestra el estado del cursado y recomienda el próximo paso'
 agent: 'agent'
 tools: ['read', 'search']

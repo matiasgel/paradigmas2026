@@ -1,4 +1,4 @@
-
+---
 description: 'EDU: Actualizar contexto Copilot — útil al retomar sesión'
 agent: 'agent'
 tools: ['read', 'search']
