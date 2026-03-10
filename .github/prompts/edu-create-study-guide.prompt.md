@@ -18,7 +18,8 @@ tools: ['read', 'edit', 'search', 'execute', 'web']
    - Check `{project-root}/material/` for PDF files
    - Check `{topic_folder}/` for any PDF files or additional reference material
    - Inform Sofía of all found files so she can integrate them
-7. Load and follow the study guide creation step in `{project-root}/_edu/workflows/topic-cycle/workflow.md` (Step 4.5).
+7. Load and follow the workflow at `{project-root}/_edu/workflows/topic-cycle/workflow.md`.
+   Punto de entrada: Step 4.5 (Create Study Guide). El contexto de los pasos 1-6 ya está cargado — no re-inicializar.
 8. Purpose: Generate `{topic_folder}/guia-estudio.md` — documento completo de estudio para el alumno.
    - Sigue la estructura de minuta.md y filminas.md como base
    - Integra contenido de los PDFs fuente de material/

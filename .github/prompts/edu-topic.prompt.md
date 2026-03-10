@@ -20,8 +20,9 @@ tools: ['read', 'edit', 'search', 'execute']
    - No diseno.md → próximo: /edu-design-topic
    - diseno.md sin APROBADO → próximo: /edu-design-topic (ajustar) o /edu-approve-design
    - diseno.md APROBADO, sin minuta.md → próximo: /edu-create-class
-   - minuta.md existe, sin guia-estudio.md → próximo: /edu-create-study-guide
-   - guia-estudio.md existe, sin tp.md → próximo: /edu-create-tp
+   - minuta.md existe, sin guia-estudio.md y sin tp.md → próximo: /edu-create-study-guide
+   - minuta.md existe, sin guia-estudio.md pero tp.md ya existe → ⚠️ aviso al docente: "La guía de estudio no fue generada. Se recomienda /edu-create-study-guide — o podés avanzar con el estado actual indicando cuál es el próximo paso."
+   - guia-estudio.md existe (o docente elige avanzar sin ella), sin tp.md → próximo: /edu-create-tp
    - tp.md existe, sin reporte de calidad → próximo: /edu-quality
    - Reportes de validación existen sin fixes → próximo: /edu-quality
    - Fixes aplicados, sin testing → próximo: /edu-test-topic
