@@ -15,9 +15,9 @@ Desde la ingesta del programa oficial hasta el cierre de cursada con validación
 ## Estructura
 
 - **Configuración**: `_edu/config.yaml`
-- **Agentes**: `_edu/agents/` (16 agentes — 6 persona + 5 calidad + 2 testing + 3 internos)
+- **Agentes**: `_edu/agents/` (17 agentes — 7 persona + 5 calidad + 2 testing + 3 internos)
 - **Workflows**: `_edu/workflows/` (15 workflows organizados por fase)
-- **Comandos**: `_edu/module-help.csv` (26 comandos en 4 fases + anytime)
+- **Comandos**: `_edu/module-help.csv` (28 comandos en 4 fases + anytime)
 - **Memoria**: `_edu-memory/` (persistente entre sesiones)
 
 ## Fases del Cursado
@@ -26,7 +26,7 @@ Desde la ingesta del programa oficial hasta el cierre de cursada con validación
 |------|--------|-------------|
 | 1 | Configuración Inicial | Cargar programa oficial, generar plan-minimo.md inmutable |
 | 2 | Planificación | Construir plan-borrador.md (desde material o investigación) |
-| 3 | Producción de Temas | Ciclo: diseño → clase → TP → calidad → testing → cierre |
+| 3 | Producción de Temas | Ciclo: diseño → clase → **guía de estudio** → TP → calidad → testing → cierre |
 | 4 | Cierre | Retrospectiva, traspaso de memoria al año siguiente |
 
 ## Agentes Disponibles
@@ -37,6 +37,7 @@ Desde la ingesta del programa oficial hasta el cierre de cursada con validación
 | course-planner | Prof. Elena 🎓 | Planificadora y orquestadora del cursado |
 | topic-designer | Lic. Marcos 🗂️ | Diseñador de contenidos por tema |
 | class-writer | Dr. Roberto ✍️ | Escritor de minutas y filminas |
+| study-guide-writer | Dra. Sofía 📖 | Escritora de guías de estudio completas para alumnos |
 | tp-designer | Aux. Valeria 📝 | Diseñadora de trabajos prácticos |
 | curriculum-reviewer | Prof. Ana 🔍 | Revisora curricular con evidencia académica |
 | academic-researcher | Bib. Carlos 📚 | Investigador bibliográfico |

@@ -40,8 +40,10 @@ tu-materia/
 │               ├── diseno.md
 │               ├── minuta.md
 │               ├── filminas.md
+│               ├── guia-estudio.md  ← Material de estudio del alumno
+│               ├── guia-estudio.pdf ← PDF exportado para cátedra
 │               ├── tp.md
-│               └── slides/        ← Scripts y link de Google Slides
+│               └── slides/          ← Scripts y link de Google Slides
 └── material/                      ← Material docente existente (opcional)
 ```
 
@@ -53,8 +55,7 @@ Usá `@` en Copilot Chat para invocar agentes directamente:
 |--------|---------|----------|
 | `@edu-agent-course-planner` | Elena 🎓 | Orquesta todo el cursado |
 | `@edu-agent-topic-designer` | Marcos �️ | Diseña contenidos del tema |
-| `@edu-agent-class-writer` | Roberto ✍️ | Escribe minutas y filminas |
-| `@edu-agent-tp-designer` | Valeria 📝 | Diseña trabajos prácticos |
+| `@edu-agent-class-writer` | Roberto ✍️ | Escribe minutas y filminas || `@edu-agent-study-guide-writer` | Sofía 📖 | Escribe guías de estudio completas para alumnos || `@edu-agent-tp-designer` | Valeria 📝 | Diseña trabajos prácticos |
 | `@edu-agent-curriculum-reviewer` | Ana 🔍 | Revisa cambios curriculares |
 | `@edu-agent-academic-researcher` | Carlos 📚 | Investiga bibliografía |
 | `@edu-agent-student-simulator` | Simulador 🎓 | Simula alumnos por perfil |
@@ -69,6 +70,8 @@ Usá `@` en Copilot Chat para invocar agentes directamente:
 ## Slash Commands (28)
 
 Escribí `/edu-` en Copilot Chat para ver todos los comandos disponibles.
+
+> **Nuevo:** `/edu-create-study-guide` genera la guía de estudio para el alumno. `/edu-export-pdf` la convierte a PDF listo para distribuir como material de cátedra.
 
 ### En cualquier momento
 | Comando | Qué hace |
@@ -98,6 +101,7 @@ Escribí `/edu-` en Copilot Chat para ver todos los comandos disponibles.
 | `/edu-design-topic` | Diseñar o ajustar el tema (antes de aprobar) |
 | `/edu-approve-design` | Aprobar el diseño — habilita la creación de clase |
 | `/edu-create-class` | Generar minuta.md y filminas.md |
+| `/edu-create-study-guide` | **Nuevo** Generar guia-estudio.md — documento completo para estudio autónomo del alumno, integra PDFs fuente |
 | `/edu-create-tp` | Generar trabajo práctico trazable a la minuta |
 | `/edu-create-autograde-repo` | Regenerar output de TP (autograde-repo, quiz) |
 | `/edu-quality` | Calidad unificada — valida y/o corrige escritura, coherencia, referencias y scope |
@@ -107,6 +111,11 @@ Escribí `/edu-` en Copilot Chat para ver todos los comandos disponibles.
 | `/edu-adaptive-replan` | Replanificar cronograma respetando plan mínimo |
 | `/edu-close-topic` | Cerrar tema — commit + merge Git |
 | `/edu-reopen-topic` | Reabrir tema cerrado para correcciones |
+
+### Exportación PDF
+| Comando | Cuándo usarlo |
+|---------|---------------|
+| `/edu-export-pdf` | Convierte guia-estudio.md a PDF con portada institucional y formato de cátedra (requiere pandoc + LaTeX) |
 
 ### Publicación en Google Slides
 | Comando | Cuándo usarlo |
@@ -131,12 +140,14 @@ Escribí `/edu-` en Copilot Chat para ver todos los comandos disponibles.
   └→ /edu-design-topic
   └→ /edu-approve-design
   └→ /edu-create-class
+  └→ /edu-create-study-guide     ← Guía de estudio completa (integra PDFs fuente)
   └→ /edu-create-tp
   └→ /edu-create-autograde-repo  ← Solo si el TP tiene autograde o quiz
   └→ /edu-quality
   └→ /edu-test-topic
   └→ /edu-adaptive-replan   ← Opcional: ajustar cronograma si hubo desvíos
   └→ /edu-close-topic
+  └→ /edu-export-pdf         ← Opcional: exporta guia-estudio.md a PDF para cátedra
   └→ /edu-publish-slides    ← Opcional: genera presentación en Google Slides
 ```
 

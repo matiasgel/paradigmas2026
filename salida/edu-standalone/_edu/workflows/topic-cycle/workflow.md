@@ -43,6 +43,17 @@ Ciclo completo de producción de un tema: diseño → clase → TP → calidad �
 - **Output:** `temas/NN-nombre/minuta.md`, `temas/NN-nombre/filminas.md`
 - **Constraint:** Content proportional to `default_class_duration`
 
+### Step 4.5: Create Study Guide
+- **Agent:** study-guide-writer (Sofía)
+- **Input:** `minuta.md` + `filminas.md` + `diseno.md` + PDFs fuente de `{project-root}/material/` + cualquier material en `{topic_folder}/`
+- **Output:** `temas/NN-nombre/guia-estudio.md`
+- **Purpose:** Documento completo para estudio autónomo del alumno. Más profundo que la minuta — incluye desarrollo teórico expandido (integrando los PDFs fuente), ejemplos trabajados paso a paso, glosario y autoevaluación.
+- **Structure:** Portada → Objetivos → Conceptos previos → Desarrollo teórico (con referencias a filminas y PDFs) → Ejemplos trabajados → Puntos clave → Autoevaluación → Glosario → Referencias
+- **Constraint:** Scope estrictamente definido por `diseno.md`. La guía NO debe incluir contenido fuera de los tópicos del diseño aprobado.
+- **PDF integration:** Sofía intenta leer los PDFs en `{project-root}/material/` para integrar contenido relevante al tema. Los fragmentos no accesibles se marcan con `<!-- PENDIENTE: integrar contenido de {archivo}.pdf -->`.
+- **Gate:** Professor review after generation — same as minuta/filminas.
+- **Note:** Recuperable con `/edu-create-study-guide` si se necesita regenerar de forma aislada. Exportable a PDF final con `/edu-export-pdf`.
+
 ### Step 5: Create TP
 - **Agent:** tp-designer (Valeria)
 - **Input:** `minuta.md`
