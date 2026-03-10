@@ -1,6 +1,7 @@
 ---
-mode: agent
-description: Flujo completo — verifica setup, diseño y publica filminas en Google Slides
+description: 'EDU: Publicar slides — flujo completo orquestado: verifica setup → diseño → exporta a Google Slides'
+agent: 'agent'
+tools: ['read', 'edit', 'search', 'execute']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store all fields as session variables

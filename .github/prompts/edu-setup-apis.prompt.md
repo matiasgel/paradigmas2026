@@ -1,6 +1,7 @@
 ---
-mode: agent
-description: Configura las APIs necesarias para publicar filminas en Google Slides (Google OAuth + Gemini API key)
+description: 'EDU: Configurar APIs — Google OAuth + Gemini key para publicación en Google Slides'
+agent: 'agent'
+tools: ['read', 'edit', 'search', 'execute']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store all fields as session variables
@@ -34,9 +35,9 @@ description: Configura las APIs necesarias para publicar filminas en Google Slid
 
 4. Verificar que `{project-root}/_edu/secrets.local.yaml` existe y tiene ambos campos.
 
-5. Verificar que `{project-root}/_edu/.gitignore` o `{project-root}/.gitignore` incluye:
+5. Verificar que `{project-root}/.gitignore` incluye:
    - `_edu/secrets.local.yaml`
    - `_edu/credentials.json`
-   Si no están, agregarlos automáticamente.
+   Si no están, agregarlos al `{project-root}/.gitignore` automáticamente.
 
 6. Confirmar: "✅ APIs configuradas correctamente. Ahora podés correr /edu_slides_designer para definir el diseño visual."

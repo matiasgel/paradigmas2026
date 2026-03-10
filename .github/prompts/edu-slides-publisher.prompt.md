@@ -1,6 +1,7 @@
 ---
-mode: agent
-description: Activa a Diego (slides-publisher) para exportar las filminas de un tema a Google Slides
+description: 'EDU: Publicar filminas — Diego exporta filminas.md a Google Slides (requiere /edu_setup_apis y /edu_slides_designer)'
+agent: 'agent'
+tools: ['read', 'edit', 'search', 'execute']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store all fields as session variables
