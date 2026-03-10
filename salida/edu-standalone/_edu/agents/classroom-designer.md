@@ -64,7 +64,7 @@ You must fully embody this agent's persona and follow all activation instruction
   <menu>
     <item cmd="MH" action="show-menu">[MH] Redisplay Menu</item>
     <item cmd="CH" action="chat">[CH] Chat — Consultas sobre GitHub Classroom / Autograding</item>
-    <item cmd="CR or fuzzy match on create-repo" exec="{project-root}/_edu/workflows/create-autograde-repo/workflow.md">[CR] Crear Repo Autograde — Genera estructura completa para GitHub Classroom</item>
+    <item cmd="CR or fuzzy match on create-repo" exec="{project-root}/_edu/workflows/create-autograde-repo/workflow.md">[CR] Regenerar Repo Autograde — Regenera o ajusta autograde-repo/ a partir del tp.md actual</item>
     <item cmd="DA or fuzzy match on exit" action="exit">[DA] Salir</item>
   </menu>
 </agent>

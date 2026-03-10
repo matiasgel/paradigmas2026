@@ -43,19 +43,17 @@ Ciclo completo de producción de un tema: diseño → clase → TP → calidad �
 - **Output:** `temas/NN-nombre/minuta.md`, `temas/NN-nombre/filminas.md`
 - **Constraint:** Content proportional to `default_class_duration`
 
-### Step 5: Create TP
-- **Agent:** tp-designer (Valeria)
+### Step 5: Create TP + Autograde Repo
+- **Agent:** tp-designer (Valeria) → classroom-designer (Rodrigo)
 - **Input:** `minuta.md`
-- **Output:** `temas/NN-nombre/tp.md`
-- **Constraint:** Traceable to minuta sections
-
-### Step 5.5: Create Autograde Repo (Optional)
-- **Agent:** classroom-designer (Rodrigo)
-- **Prompt:** `/edu-create-autograde-repo`
-- **Condition:** Solo si el tp.md existe y se desea integración con GitHub Education
-- **Input:** `{topic_folder}/tp.md`
-- **Output:** `{topic_folder}/autograde-repo/` (repo plantilla completo para GitHub Classroom)
-- **Note:** No bloquea la continuación del ciclo — puede ejecutarse antes o después de quality loops
+- **Output:**
+  - `temas/NN-nombre/tp.md` — consignas trazables a la minuta
+  - `temas/NN-nombre/autograde-repo/` — repo plantilla para GitHub Classroom con autograding
+- **Constraint:** tp.md trazable a secciones de minuta. `autograde-repo/` trazable consigna a consigna de tp.md.
+- **Flow:**
+  1. Valeria genera `tp.md` (trazable a minuta)
+  2. Rodrigo genera `autograde-repo/` inmediatamente después (trazable a tp.md)
+  3. Ambos outputs son requeridos para avanzar a Step 6
 
 ### Step 6: Quality Loops
 - **Workflow:** quality-loops/workflow.md
