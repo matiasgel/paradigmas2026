@@ -36,7 +36,7 @@ Este quiz evalúa los conceptos trabajados en la Clase 1. Algunas preguntas requ
 
 ### P01 — Criterio Sebesta aplicado al error de TypeScript en clase
 
-**Trazabilidad:** Bloque 4 — F-18, demo en vivo de error de tipos
+**Trazabilidad:** Bloque 4 — F-19, demo en vivo de error de tipos
 
 **Enunciado:**
 En clase vimos en vivo este error de TypeScript al pasar `["hola", "mundo"]` a la función `sumaAbs`:
