@@ -17,7 +17,7 @@ Desde la ingesta del programa oficial hasta el cierre de cursada con validación
 - **Configuración**: `_edu/config.yaml`
 - **Agentes**: `_edu/agents/` (16 agentes — 6 persona + 5 calidad + 2 testing + 3 internos)
 - **Workflows**: `_edu/workflows/` (15 workflows organizados por fase)
-- **Comandos**: `_edu/module-help.csv` (35 comandos en 4 fases + anytime)
+- **Comandos**: `_edu/module-help.csv` (26 comandos en 4 fases + anytime)
 - **Memoria**: `_edu-memory/` (persistente entre sesiones)
 
 ## Fases del Cursado
