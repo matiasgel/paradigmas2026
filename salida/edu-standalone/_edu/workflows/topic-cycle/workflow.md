@@ -22,21 +22,24 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
 - **Error:** If `active-topic.yaml` is missing → STOP and instruct: "Primero iniciá un tema con /edu-design-topic"
 
 ### Step 0.5: Ingest Reference PDFs
-- **Precondition:** `{project-root}/material/` debe existir
+- **Precondition:** `{project-root}/material/{topic_number}-{topic_name}/` debe existir (subcarpeta del tema activo)
+- **Material folder:** `{material_folder}` = `{project-root}/material/{topic_number}-{topic_name}/`  ← almacenar como variable de sesión
 - **Actions:**
-  1. Listar todos los archivos `.pdf` en `{project-root}/material/`
-  2. Para cada PDF, verificar si ya existe `{project-root}/material/txt/{nombre}.txt`
-  3. Si **todos** los PDFs tienen su `.txt` → continuar al Step 1
-  4. Si **algún PDF falta su `.txt`** → indicar al docente que ejecute:
+  1. Construir `{material_folder}` = `{project-root}/material/{topic_number}-{topic_name}/`
+  2. Si la carpeta no existe → avisarle al docente y continuar sin material de referencia (no es bloqueante)
+  3. Listar todos los archivos `.pdf` en `{material_folder}`
+  4. Para cada PDF, verificar si ya existe `{material_folder}/txt/{nombre}.txt`
+  5. Si **todos** los PDFs tienen su `.txt` → continuar al Step 1
+  6. Si **algún PDF falta su `.txt`** → indicar al docente que ejecute:
      ```
-     python scripts/pdf-to-text.py material/
+     python scripts/pdf-to-text.py material/{topic_number}-{topic_name}/
      ```
      y esperar confirmación antes de continuar
-  5. Una vez confirmada la conversión, almacenar la lista de paths `.txt` como variable de sesión `{material_texts}` (e.g. `material/txt/lab.txt`, `material/txt/para.txt`)
+  7. Una vez confirmada la conversión, almacenar la lista de paths `.txt` como variable de sesión `{material_texts}` (e.g. `material/01-intro/txt/ref1.txt`)
 - **Script:** `{project-root}/scripts/pdf-to-text.py` — requiere `pip install pdfminer.six`
 - **Idempotente:** El script omite archivos ya convertidos; es seguro ejecutarlo múltiples veces
 - **Error — script faltante:** Si `scripts/pdf-to-text.py` no existe, el agente lo crea copiando el template canónico del repo antes de indicar su ejecución
-- **Note:** Los pasos subsiguientes (especialmente Step 4.5) leen desde `material/txt/` — NO directamente de los `.pdf`
+- **Note:** Los pasos subsiguientes (especialmente Step 4.5) leen desde `{material_folder}/txt/` — NO directamente de los `.pdf`
 
 ### Step 1: Design Topic
 - **Agent:** topic-designer (Marcos)
@@ -67,7 +70,7 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
 - **Purpose:** Documento completo para estudio autónomo del alumno. Más profundo que la minuta — incluye desarrollo teórico expandido (integrando los PDFs fuente), ejemplos trabajados paso a paso, glosario y autoevaluación.
 - **Structure:** Portada → Objetivos → Conceptos previos → Desarrollo teórico (con referencias a filminas y PDFs) → Ejemplos trabajados → Puntos clave → Autoevaluación → Glosario → Referencias
 - **Constraint:** Scope estrictamente definido por `diseno.md`. La guía NO debe incluir contenido fuera de los tópicos del diseño aprobado.
-- **PDF integration:** Sofía lee los textos extraídos en `{project-root}/material/txt/` (generados por `scripts/pdf-to-text.py` en el Step 0.5). Si `material/txt/` no existe o algún `.txt` falta, NO continuar: indicar al docente que ejecute `python scripts/pdf-to-text.py material/` primero. Los fragmentos que aún resulten vacíos o ilegibles se marcan con `<!-- PENDIENTE: revisar manualmente {archivo}.txt -->`.
+- **PDF integration:** Sofía lee los textos extraídos en `{material_folder}/txt/` (generados por `scripts/pdf-to-text.py` en el Step 0.5). Si esa carpeta no existe o algún `.txt` falta, NO continuar: indicar al docente que ejecute `python scripts/pdf-to-text.py material/{topic_number}-{topic_name}/` primero. Los fragmentos que aún resulten vacíos o ilegibles se marcan con `<!-- PENDIENTE: revisar manualmente {archivo}.txt -->`.
 - **Gate:** Professor review after generation — same as minuta/filminas.
 - **Note:** Recuperable con `/edu-create-study-guide` si se necesita regenerar de forma aislada. Exportable a PDF final con `/edu-export-pdf`.
 

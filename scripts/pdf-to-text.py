@@ -2,13 +2,25 @@
 """
 pdf-to-text.py — Convierte PDFs de material/ a texto plano (UTF-8).
 
+Estructura esperada:
+    material/
+        01-intro/
+            ref1.pdf
+            ref2.pdf
+            txt/          ← generado automáticamente
+                ref1.txt
+                ref2.txt
+        02-poo/
+            ...
+
 Uso:
-    python scripts/pdf-to-text.py                   # procesa toda la carpeta material/
-    python scripts/pdf-to-text.py material/          # ídem, explícito
-    python scripts/pdf-to-text.py material/lab.pdf   # convierte un PDF específico
+    python scripts/pdf-to-text.py                        # procesa todas las subcarpetas de material/
+    python scripts/pdf-to-text.py material/              # ídem, explícito
+    python scripts/pdf-to-text.py material/01-intro/     # solo la subcarpeta de ese tema
+    python scripts/pdf-to-text.py material/01-intro/ref1.pdf  # convierte un PDF específico
 
 Salida:
-    Los archivos .txt se guardan en material/txt/<nombre>.txt
+    Los archivos .txt se guardan en <subcarpeta-tema>/txt/<nombre>.txt
     Si el .txt ya existe, el archivo se omite (operación idempotente).
 
 Dependencias:
@@ -59,10 +71,15 @@ def convert_pdf(pdf_path: Path, output_dir: Path) -> tuple[Path, str]:
     return output_path, "converted"
 
 
-def resolve_targets(arg: str) -> tuple[list[Path], Path]:
+def resolve_targets(arg: str) -> list[tuple[Path, Path]]:
     """
     Dado un argumento de línea de comandos (carpeta o archivo .pdf),
-    devuelve (lista_de_pdfs, directorio_de_salida).
+    devuelve una lista de pares (pdf_path, output_dir).
+
+    Lógica:
+    - Archivo .pdf    → [(pdf, carpeta-padre/txt)]
+    - Carpeta hoja    → PDFs directamente dentro → [(pdf, carpeta/txt) ...]
+    - Carpeta raíz    → subcarpetas con PDFs    → [(pdf, subdir/txt) ...] por cada subdir
     """
     target = Path(arg)
 
@@ -74,11 +91,21 @@ def resolve_targets(arg: str) -> tuple[list[Path], Path]:
         if target.suffix.lower() != ".pdf":
             print(f"ERROR: El archivo no es un PDF: {target}")
             sys.exit(1)
-        return [target], target.parent / "txt"
+        return [(target, target.parent / "txt")]
 
     if target.is_dir():
-        pdfs = sorted(target.glob("*.pdf"))
-        return pdfs, target / "txt"
+        # PDFs directamente en esta carpeta → carpeta hoja (ej: material/01-intro/)
+        direct_pdfs = sorted(target.glob("*.pdf"))
+        if direct_pdfs:
+            return [(pdf, target / "txt") for pdf in direct_pdfs]
+
+        # Sin PDFs directos → carpeta raíz con subcarpetas de tema (ej: material/)
+        pairs: list[tuple[Path, Path]] = []
+        subdirs = sorted(d for d in target.iterdir() if d.is_dir() and d.name != "txt")
+        for subdir in subdirs:
+            for pdf in sorted(subdir.glob("*.pdf")):
+                pairs.append((pdf, subdir / "txt"))
+        return pairs
 
     print(f"ERROR: La ruta debe ser un PDF o una carpeta: {target}")
     sys.exit(1)
@@ -88,31 +115,34 @@ def main():
     _ensure_pdfminer()
 
     arg = sys.argv[1] if len(sys.argv) > 1 else "material"
-    pdfs, output_dir = resolve_targets(arg)
+    pairs = resolve_targets(arg)
 
-    if not pdfs:
+    if not pairs:
         print("No se encontraron archivos .pdf en la ruta indicada.")
         return
 
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    print(f"PDFs encontrados : {len(pdfs)}")
-    print(f"Directorio salida: {output_dir}/\n")
+    print(f"PDFs encontrados : {len(pairs)}\n")
 
     converted_count = 0
     skipped_count = 0
+    current_dir: Path | None = None
 
-    for pdf in pdfs:
+    for pdf, output_dir in pairs:
+        # Imprimir encabezado de carpeta cuando cambia
+        if output_dir != current_dir:
+            current_dir = output_dir
+            output_dir.mkdir(parents=True, exist_ok=True)
+            print(f"  [{output_dir.parent.name}/]")
+
         out_path, status = convert_pdf(pdf, output_dir)
         if status == "converted":
-            print(f"  ✓ Convertido : {pdf.name}  →  {out_path.name}")
+            print(f"    ✓ Convertido : {pdf.name}  →  txt/{out_path.name}")
             converted_count += 1
         else:
-            print(f"  - Omitido    : {pdf.name}  (ya existe {out_path.name})")
+            print(f"    - Omitido    : {pdf.name}  (ya existe txt/{out_path.name})")
             skipped_count += 1
 
     print(f"\nResumen: {converted_count} convertido(s), {skipped_count} omitido(s).")
-    print(f"Textos disponibles en: {output_dir}/")
 
 
 if __name__ == "__main__":
