@@ -1,5 +1,5 @@
 ---
-description: 'Técnico Rodrigo 🎓 — GitHub Classroom Designer: genera repos con autograding trazables al tp.md'
+description: 'Técnico Rodrigo 🎓 — GitHub Classroom Designer: regenera o ajusta autograde-repo/ cuando el tp.md cambia. La creación inicial ocurre automáticamente con /edu-create-tp.'
 tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 

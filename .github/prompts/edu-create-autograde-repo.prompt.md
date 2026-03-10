@@ -1,5 +1,5 @@
 ---
-description: 'EDU Fase 3: Crear Repo Autograde — genera estructura completa de GitHub Classroom con autograding trazable al tp.md'
+description: 'EDU: Regenerar Repo Autograde — regenera o ajusta autograde-repo/ a partir del tp.md actual. La creación inicial es automática con /edu-create-tp.'
 agent: 'agent'
 tools: ['read', 'edit', 'search', 'execute']
 ---
