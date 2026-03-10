@@ -1,6 +1,6 @@
 # Diseño — Tema 01: Conceptos Introductorios + Intro a TypeScript
 
-> **Estado:** PENDIENTE DE APROBACIÓN DOCENTE
+> **Estado:** APROBADO
 > **Agente:** Lic. Marcos (topic-designer)
 > **Fecha:** 2026-03-09 — actualizado con material de `temas/tema1/` (ingesta PDFs)
 > **Workflow:** topic-cycle / Step 1
