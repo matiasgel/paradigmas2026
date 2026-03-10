@@ -51,7 +51,7 @@ La cantidad de lenguajes existentes es alta (más de 700 con uso documentado, mi
 La elección del lenguaje de un proyecto tiene consecuencias económicas y técnicas reales:
 
 - Un equipo que elige Node.js para procesamiento numérico intensivo puede terminar reescribiendo todo en Python+NumPy dos años después, con pérdida de código, tiempo y dinero.
-- Que pase esto no es incompetencia individual: es falta de conocimiento de paradigmas. Quien eligió Node.js no sabía que el procesamiento vectorial masivo tiene un match natural con el paradigma funcional y las bibliotecas especializadas del ecosistema científico de Python.
+- Que pase esto no es incompetencia individual: es falta de conocimiento de paradigmas. Quien eligió Node.js no sabía que el procesamiento vectorial masivo tiene una correspondencia natural con el paradigma funcional y las bibliotecas especializadas del ecosistema científico de Python.
 
 > **Idea central:** La elección del lenguaje determina el modelo mental con el que pensás el problema. No es solo sobre sintaxis — es sobre cómo estructurás la solución.
 
