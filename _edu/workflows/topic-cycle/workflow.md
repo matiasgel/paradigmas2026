@@ -49,6 +49,14 @@ Ciclo completo de producción de un tema: diseño → clase → TP → calidad �
 - **Output:** `temas/NN-nombre/tp.md`
 - **Constraint:** Traceable to minuta sections
 
+### Step 5.5: Create Autograde Repo (Optional)
+- **Agent:** classroom-designer (Rodrigo)
+- **Prompt:** `/edu-create-autograde-repo`
+- **Condition:** Solo si el tp.md existe y se desea integración con GitHub Education
+- **Input:** `{topic_folder}/tp.md`
+- **Output:** `{topic_folder}/autograde-repo/` (repo plantilla completo para GitHub Classroom)
+- **Note:** No bloquea la continuación del ciclo — puede ejecutarse antes o después de quality loops
+
 ### Step 6: Quality Loops
 - **Workflow:** quality-loops/workflow.md
 - **Sequential:** Loop 1 (writing) → Loop 2 (coherence) → Loop 3 (references) → Guardrail
