@@ -24,6 +24,7 @@
 
 ## APERTURA — Bienvenida a la materia (5 min, fuera del tiempo de bloques)
 
+> 📽 **Filmina en pantalla durante la apertura:** F-00 (portada)
 > *Tono: cálido, situador. No empezar con teoría todavía.*
 
 - Presentarse brevemente: nombre, cómo prefieren que le digan, años en la cátedra.
@@ -93,7 +94,7 @@ Ejemplo de tensión:
 
 **Punto de tensión para discusión rápida *(📽 F-05)* (2 min):**
 > *"¿Importa el lenguaje si la IA puede escribir en cualquiera? ¿O precisamente por eso importa más saber evaluarlos?"*
-No resolver — dejar abierto para el Bloque 5.
+No resolver ahora — dejar abierto. **Retomar explícitamente al inicio del Bloque 5:** *"¿Se acuerdan de la pregunta que dejamos abierta? Ahora la respondemos."*
 
 ---
 
@@ -279,8 +280,8 @@ Ejecución en CPU
 
 Comparar con otros:
 ```
-Java:   .java → [javac] → .class (bytecode) → [JVM] → ejecución
-Python: .py   → [CPython] → bytecode → [CPython VM] → ejecución
+Java:   .java → [javac] → .class (bytecode) → [JVM]         → ejecución
+Python: .py   → [CPython (implícito)] → bytecode (.pyc) → [CPython VM] → ejecución
 ```
 
 > *"No es 'interpretado' ni 'compilado' en sentido puro. Usa **máquina intermedia** — exactamente como predice Gabbrielli Cap. 1."*
@@ -333,7 +334,7 @@ console.log(sumaAbs([3, -1, 4, -1, 5]));
 > *"¿Qué cambió? Sin `let`, sin mutación, sin loop. `map` y `reduce` son funciones de orden superior — reciben funciones como argumento. Esto es programación funcional."*
 
 **Conectar con Louden & Lambert:**
-> *"El mismo patrón existe en Scheme (LISP): `(reduce + (map abs lista))`. La idea tiene 60 años. TypeScript la adopta como ciudadano de primera clase."*
+> *"El mismo patrón existe en Scheme (dialecto de LISP): `(reduce + (map abs lista))`. La idea tiene 60 años. TypeScript la adopta como ciudadano de primera clase."*
 
 **Pregunta para los alumnos:** *"¿Cuál les resulta más legible? ¿Cuál les parece más fácil de escribir? ¿Coinciden?"* — Registrar respuestas brevemente en pizarrón.
 
@@ -382,7 +383,7 @@ sumaAbs(["hola", "mundo"]); // tsc detecta esto antes de ejecutar
 > *"El compilador actúa como primer revisor. Esto es confiabilidad — criterio #3 de Sebesta."*
 
 **Acelerador de paradigma** *(📽 F-20)*:
-- TypeScript no obliga a un paradigma — pode escribirse de forma imperativa, funcional u OO
+- TypeScript no obliga a un paradigma — puede escribirse de forma imperativa, funcional u OO
 - La elección es del programador → más responsabilidad, más libertad
 - A lo largo de la materia van a ver los tres estilos con este mismo lenguaje
 
@@ -395,6 +396,8 @@ sumaAbs(["hola", "mundo"]); // tsc detecta esto antes de ejecutar
 **Objetivo del bloque:** Conectar los fundamentos de la materia con el contexto actual de la IA. Motivar desde lo relevante para su futuro profesional.
 
 ### El cambio de rol del programador *(📽 F-21)* (4 min)
+
+> **Cierre de F-05:** *"En el Bloque 1 dejamos una pregunta abierta: ¿importa el lenguaje si la IA puede escribir en cualquiera? Ahora la respondemos — y la respuesta es que importa más que nunca, pero por razones distintas a las de antes."*
 
 Presentar los datos de Schmidt & Runfola (2025) — filmina con el split de tiempo:
 

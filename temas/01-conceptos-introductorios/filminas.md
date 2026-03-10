@@ -3,7 +3,7 @@
 > **Estado:** GENERADA
 > **Agente:** Dr. Roberto (class-writer)
 > **Fecha:** 2026-03-09
-> **Duración total:** 120 minutos · 6 bloques · 28 filminas
+> **Duración total:** 120 minutos · 6 bloques · 29 filminas (F-00 portada + F-01 a F-28)
 > **Formato:** Markdown estructurado para exportar a presentación
 > **Input:** `temas/01-conceptos-introductorios/diseno.md` (aprobado)
 
@@ -154,15 +154,18 @@ CPU ←───bus───→ Memoria
 
 ### [F-09] Los 4 paradigmas fundamentales
 
-# Mapa de paradigmas
+# Los 4 paradigmas fundamentales
 
 | Paradigma | Base formal | Unidad | Estado | Ejemplos |
 |-----------|-------------|--------|--------|----------|
 | **Imperativo** | Máquina de Von Neumann | Instrucción | Mutable | C, Go, Pascal |
 | **OO** | Imperativo + encapsulamiento | Objeto / mensaje | Mutable (encapsulado) | Java, C#, Dart |
-| **Funcional** | Cálculo lambda (1936) | Función | **Inmutable** | Haskell, Clojure, LISP |
-| **Lógico** | Lógica simbólica | Relación / hecho | Sin estado | Prolog |
-| **Multiparadigma** | Combinación | Variable | Variable | TypeScript, Python, Scala |
+| **Funcional** | Cálculo lambda (Church, 1936) | Función | **Inmutable** | Haskell, Clojure, LISP |
+| **Lógico** | Lógica simbólica (resolución) | Relación / hecho | Sin estado | Prolog |
+
+> *"El OO es una extensión del imperativo — no nació de cero. El funcional y el lógico tienen raíces matemáticas pre-computadoras."*
+
+**Nota:** Los lenguajes *multiparadigma* (TypeScript, Python, Scala) combinan varios de estos — ver F-10.
 
 ---
 
@@ -229,16 +232,18 @@ LC-3, ensamblador               ← Nivel 0: registros, saltos, direcciones
 
 **Ensamblador LC-3** (13 líneas, opaco):
 ```
-AND R0, R0, #0  ; acc = 0
-LEA R1, DATA    ; puntero
-LOOP LDR R3, R1, #0
-     BRzp POS
-     NOT R3, R3
-     ADD R3, R3, #1
-POS  ADD R0, R0, R3
-     ADD R1, R1, #1
-     ADD R2, R2, #-1
-     BRp LOOP
+        AND R0, R0, #0    ; acc = 0
+        LEA R1, DATA      ; puntero al inicio del array
+        AND R2, R2, #0
+        ADD R2, R2, #10   ; contador = 10
+LOOP    LDR R3, R1, #0    ; cargar elemento
+        BRzp POS          ; si >= 0, saltar
+        NOT R3, R3        ; negar (complemento a 2)
+        ADD R3, R3, #1
+POS     ADD R0, R0, R3    ; acc += abs
+        ADD R1, R1, #1    ; avanzar puntero
+        ADD R2, R2, #-1   ; contador--
+        BRp LOOP          ; repetir si queda
 ```
 
 **C — imperativo de alto nivel** (5 líneas, legible):
@@ -257,7 +262,7 @@ int suma_abs(int arr[], int n) {
 
 ### [F-14] Máquina abstracta, interpretación y compilación
 
-# Todo lenguaje define una "máquina abstracta"  — Gabbrielli & Martini, Cap. 1
+# Todo lenguaje define una "máquina abstracta" — Gabbrielli & Martini, Cap. 1
 
 **Dos formas puras de implementar un lenguaje:**
 
@@ -314,7 +319,7 @@ archivo.js  ←── LENGUAJE INTERMEDIO
 |----------|--------|---------------|---------|
 | TypeScript | tsc | .js | V8 / Node / Deno |
 | Java | javac | .class (bytecode) | JVM |
-| Python | — | bytecode | CPython VM |
+| Python | CPython (implícito) | bytecode (.pyc) | CPython VM |
 
 > No es "interpretado" ni "compilado" en sentido puro.
 > Usa **máquina intermedia** — exactamente como predice Gabbrielli.
@@ -399,17 +404,21 @@ sumaAbs(["hola", "mundo"]);
 
 ### [F-20] TypeScript como "acelerador de paradigma"
 
-# TypeScript: ¿qué paradigma es?
+# TypeScript: ¿qué paradigma usamos?
+
+*Mismo problema — tres estilos válidos:*
 
 ```typescript
-// ← imperativo
+const datos = [3, -1, 4, -1, 5];
+
+// ← imperativo: variable mutable + loop
 let acc = 0;
-for (const x of arr) acc += Math.abs(x);
+for (const x of datos) acc += Math.abs(x);
 
-// ← funcional
-const result = arr.map(Math.abs).reduce((a, b) => a + b, 0);
+// ← funcional: sin estado, composición de funciones
+const result = datos.map(Math.abs).reduce((a, b) => a + b, 0);
 
-// ← OO
+// ← OO: dato + comportamiento encapsulados
 class Calculadora {
     sumaAbs(arr: number[]): number {
         return arr.reduce((a, x) => a + Math.abs(x), 0);
@@ -417,9 +426,9 @@ class Calculadora {
 }
 ```
 
-> **Todos son TypeScript válido.**
-> La elección de paradigma es del programador.
-> A lo largo de la materia: vamos a escribir los tres estilos.
+> **Los tres producen `14`. La elección es del programador.**
+> La elección de paradigma determina la legibilidad, testabilidad y mantenibilidad.
+> A lo largo de la materia: vamos a escribir y comparar los tres estilos.
 
 ---
 
