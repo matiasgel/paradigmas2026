@@ -190,10 +190,10 @@ Además de las limitaciones de hardware, los paradigmas evolucionaron con las me
 | Período | Hito | Consecuencia |
 |---------|------|-------------|
 | Hasta 1970 | Programación "artesanal" | Sin metodología sistemática — código espagueti, GOTO ubicuo |
-| Anos 70 | Análisis y diseño estructurado | Modularización, eliminación del GOTO, funciones y procedimientos |
-| Anos 80 | Abstracción de datos (Simula, Ada) | El dato y sus operaciones juntos — precursor del OO |
-| Anos 80 | Programación funcional madura (ML, Haskell) | Sin estado mutable, basado en lambda calculus |
-| Anos 90 | OO mainstream (Smalltalk → Java) | Objetos como unidad fundamental del programa |
+| Años 70 | Análisis y diseño estructurado | Modularización, eliminación del GOTO, funciones y procedimientos |
+| Años 80 | Abstracción de datos (Simula, Ada) | El dato y sus operaciones juntos — precursor del OO |
+| Años 80 | Programación funcional madura (ML, Haskell) | Sin estado mutable, basado en lambda calculus |
+| Años 90 | OO mainstream (Smalltalk → Java) | Objetos como unidad fundamental del programa |
 | 2000s+ | Multiparadigma (Python, TypeScript, Scala) | Sin compromiso obligatorio con un solo modelo |
 
 ### 2.5 Los 4 paradigmas fundamentales
@@ -226,7 +226,7 @@ El paradigma correcto depende del dominio del problema:
 | Paradigma | Dominio de aplicación ideal | Lenguajes típicos |
 |-----------|----------------------------|--------------------|
 | Imperativo | Sistemas operativos, drivers, embebidos, rendimiento crítico | C, Go, Rust |
-| OO | Aplicaciones empresariales, GUIs, modelado de dominio complejo | Java, C#, Kt |
+| OO | Aplicaciones empresariales, GUIs, modelado de dominio complejo | Java, C#, Kotlin |
 | Funcional | Finanzas de alta confiabilidad, compiladores, transformaciones de datos, IA | Haskell, Clojure, Scala |
 | Lógico | IA simbólica, sistemas expertos, NLP, verificación formal | Prolog, Mercury |
 | Multiparadigma | Web full-stack, APIs, scripts, ciencia de datos | TypeScript, Python |
@@ -557,7 +557,7 @@ sumaAbs(["hola", "mundo"]);
 
 TypeScript no obliga a ningún paradigma — puede usar los tres. Esta flexibilidad tiene consecuencias:
 
-- **Ventaja:** each project can choose the most appropriate style for each problem.
+- **Ventaja:** cada proyecto puede elegir el estilo más apropiado para cada problema.
 - **Desventaja:** sin disciplina de equipo o linting, el mismo codebase puede mezclar estilos de forma inconsistente.
 
 A lo largo de la materia vamos a escribir el mismo tipo de problema en diferentes estilos para comparar las consecuencias prácticas de cada elección.
