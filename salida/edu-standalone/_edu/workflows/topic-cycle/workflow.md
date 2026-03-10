@@ -46,20 +46,45 @@ Ciclo completo de producción de un tema: diseño → clase → TP → calidad �
 ### Step 5: Create TP
 - **Agent:** tp-designer (Valeria)
 - **Input:** `minuta.md`
-- **Output:** `temas/NN-nombre/tp.md` — consignas trazables a la minuta
-- **Constraint:** tp.md trazable a secciones de minuta.
-- **Gate:** Una vez generado el `tp.md`, preguntar al docente:
-  > “¿Este TP se entrega vía GitHub Classroom con autograding? (sí / no)”
-  - **Sí** → continuar con Step 5.5
-  - **No** → saltar directamente al Step 6
+- **Gate — Tipo de TP:** Antes de generar, preguntar al docente:
+  > "¿Qué tipo de entrega es este TP?"
+  > 1. **Desarrollo** — preguntas abiertas / ejercicios a resolver (tp.md clásico)
+  > 2. **Repo** — entrega como repositorio de código
+  > 3. **Quiz Moodle** — múltiple opción exportable a Moodle (formato GIFT)
+  > 4. **Quiz Google** — múltiple opción para Google Forms / Google Classroom
+  > 5. **Mixto** — combinación de tipos (el docente especifica cuáles)
 
-### Step 5.5: Create Autograde Repo (Opcional — solo si el docente lo confirma)
+  Guardar el tipo elegido en `{topic_folder}/topic.yaml` bajo la clave `tp_type`.
+
+- **Output base (todos los tipos):** `temas/NN-nombre/tp.md` — consignas trazables a la minuta
+- **Constraint:** tp.md trazable a secciones de minuta. Scope creep = eliminarlo.
+
+### Step 5.5: TP Type-Specific Output (Opcional por tipo)
+
+Según `tp_type` guardado en Step 5, ejecutar el sub-paso correspondiente:
+
+#### Tipo: `repo`
 - **Agent:** classroom-designer (Rodrigo)
-- **Condition:** Solo si el docente respondió “sí” en Step 5
-- **Input:** `{topic_folder}/tp.md`
-- **Output:** `{topic_folder}/autograde-repo/` — repo plantilla para GitHub Classroom con autograding
-- **Constraint:** `autograde-repo/` trazable consigna a consigna de tp.md.
-- **Note:** Si se omite aquí, puede ejecutarse después con `/edu-create-autograde-repo`.
+- **Condition:** Solo si el docente confirma “sí” cuando se le pregunta
+- **Output:** `{topic_folder}/autograde-repo/` — repo plantilla con GitHub Actions autograding
+- **Workflow:** `_edu/workflows/create-autograde-repo/workflow.md`
+- **Note:** Omitible aquí; recuperable con `/edu-create-autograde-repo`
+
+#### Tipo: `quiz-moodle`
+- **Agent:** tp-designer (Valeria)
+- **Output:** `{topic_folder}/tp-quiz.gift` — importable directo en Moodle
+- **Workflow:** `_edu/workflows/create-tp-quiz/workflow.md`
+
+#### Tipo: `quiz-google`
+- **Agent:** tp-designer (Valeria)
+- **Output:** `{topic_folder}/tp-quiz-forms.md` + `{topic_folder}/tp-quiz-forms-script.js`
+- **Workflow:** `_edu/workflows/create-tp-quiz/workflow.md`
+
+#### Tipo: `desarrollo` o no requiere output adicional
+- Continuar directamente al Step 6.
+
+#### Tipo: `mixto`
+- Ejecutar los sub-pasos correspondientes a cada tipo incluido, en secuencia.
 
 ### Step 6: Quality Loops
 - **Workflow:** quality-loops/workflow.md
