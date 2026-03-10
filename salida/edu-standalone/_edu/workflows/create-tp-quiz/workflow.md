@@ -139,6 +139,7 @@ Generar dos archivos:
 function createQuiz() {
   const form = FormApp.create("TP {topic_number}: {topic_name}");
   form.setIsQuiz(true);
+  form.setCollectEmail(true);       // requerido para identificar al alumno en el panel de respuestas
   form.setLimitOneResponsePerUser(true);
   {si tiempo_limite > 0: // Nota: Google Forms no tiene límite de tiempo nativo — usar timer externo}
 

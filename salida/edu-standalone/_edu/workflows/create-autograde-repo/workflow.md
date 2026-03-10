@@ -71,19 +71,22 @@ Mostrar resumen de configuración y pedir confirmación antes de generar.
 Crear el directorio `{topic_folder}/autograde-repo/` con la siguiente estructura:
 
 ```
-autograde-repo/
-├── .github/
-│   ├── classroom/
-│   │   └── autograding.json          ← config oficial de GitHub Classroom
-│   └── workflows/
-│       └── classroom.yml             ← GitHub Actions para autograding
-├── src/
-│   └── (starter code según lenguaje) ← scaffolding mínimo, SIN solución
-├── tests/
-│   └── (un archivo de test por consigna)
-├── README.md                          ← instrucciones para el alumno
-└── autograde-setup.md                ← guía de publicación para el docente (NO va al repo público)
+{topic_folder}/
+├── autograde-setup.md                ← guía de publicación (SOLO para el docente, NO sube a GitHub)
+└── autograde-repo/                   ← este directorio es el repo template que sube a GitHub
+    ├── .github/
+    │   ├── classroom/
+    │   │   └── autograding.json      ← config oficial de GitHub Classroom
+    │   └── workflows/
+    │       └── classroom.yml         ← GitHub Actions para autograding
+    ├── src/
+    │   └── (starter code según lenguaje) ← scaffolding mínimo, SIN solución
+    ├── tests/
+    │   └── (un archivo de test por consigna)
+    └── README.md                     ← instrucciones para el alumno
 ```
+
+> ⚠️ `autograde-setup.md` se genera en `{topic_folder}/` (fuera de `autograde-repo/`) para que nunca sea subido al template repo ni sea visible para los alumnos.
 
 **Reglas de generación:**
 
@@ -163,6 +166,7 @@ jobs:
         with:
           max-score: <puntos_ej1>
           setup-command: 'pip install -r requirements.txt'
+          test-path: 'tests/test_ej1.py'  # archivo específico del ejercicio — evita correr todos los tests
           timeout: '10'          # minutos (máx 360)
 
       # COMMAND: usa autograding-command-grader (evalúa exit code)
@@ -298,15 +302,15 @@ Mostrar al docente:
 ✅ Repo Autograde generado en: {topic_folder}/autograde-repo/
 
 Archivos creados:
-  .github/classroom/autograding.json  → {N} tests configurados ({total} puntos)
-  .github/workflows/classroom.yml     → GitHub Actions autograding
-  src/                                → Starter code ({lenguaje})
-  tests/                              → {N} archivos de test
-  README.md                           → Instrucciones para alumnos
-  autograde-setup.md                  → Guía de publicación (solo para docente)
+  autograde-repo/.github/classroom/autograding.json  → {N} tests configurados ({total} puntos)
+  autograde-repo/.github/workflows/classroom.yml     → GitHub Actions autograding
+  autograde-repo/src/                               → Starter code ({lenguaje})
+  autograde-repo/tests/                             → {N} archivos de test
+  autograde-repo/README.md                          → Instrucciones para alumnos
+  autograde-setup.md                                → Guía de publicación (solo docente — NO sube a GitHub)
 
 Próximos pasos:
-1. Revisá los tests en tests/ y ajustalos si necesario
+1. Revisá los tests en autograde-repo/tests/ y ajustalos si necesario
 2. Seguí las instrucciones en autograde-setup.md para publicar en GitHub Classroom
 3. Compartí el Assignment Link con tus alumnos
 ```
@@ -324,4 +328,4 @@ Preguntar: "¿Querés ajustar algún test o configuración antes de publicar?"
 | `autograde-repo/src/*` | Starter code sin solución |
 | `autograde-repo/tests/*` | Un archivo de test por consigna |
 | `autograde-repo/README.md` | Instrucciones para alumnos |
-| `autograde-repo/autograde-setup.md` | Guía de publicación (solo docente) |
+| `autograde-setup.md` | Guía de publicación (en `{topic_folder}/`, fuera del repo — NO sube a GitHub) |

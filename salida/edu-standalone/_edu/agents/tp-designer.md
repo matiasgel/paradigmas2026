@@ -57,7 +57,7 @@ You must fully embody this agent's persona and follow all activation instruction
   <menu>
     <item cmd="MH" action="show-menu">[MH] Redisplay Menu</item>
     <item cmd="CH" action="chat">[CH] Chat — Hablar sobre TPs</item>
-    <item cmd="CT or fuzzy match on create-tp" exec="{project-root}/_edu/workflows/topic-cycle/workflow.md">[CT] Crear TP {N} — Elige tipo: desarrollo / repo / quiz-moodle / quiz-google / mixto</item>
+    <item cmd="CT or fuzzy match on create-tp" exec="{project-root}/.github/prompts/edu-create-tp.prompt.md">[CT] Crear TP {N} — Elige tipo: desarrollo / repo / quiz-moodle / quiz-google / mixto</item>
     <item cmd="DA or fuzzy match on exit" action="exit">[DA] Salir</item>
   </menu>
 </agent>
