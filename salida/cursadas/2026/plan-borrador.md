@@ -23,7 +23,7 @@
 
 | # | Nombre | Módulo | Semana | Clase | Duración | Estado | Carpeta |
 |---|--------|--------|--------|-------|----------|--------|---------|
-| 01 | Conceptos Introductorios + Intro a TypeScript | I | 1 | 1 | 120 min | 🔲 pendiente | `temas/01-conceptos-introductorios/` |
+| 01 | Conceptos Introductorios + Intro a TypeScript | I | 1 | 1 | 120 min | � en-curso (clase generada) | `temas/01-conceptos-introductorios/` |
 | 02 | Sintaxis y Semántica de Lenguajes | V | 1 | 2 | 120 min | 🔲 pendiente | `temas/02-sintaxis-semantica/` |
 | 03 | Introducción a Programación Funcional con TypeScript | II | 2 | 1 | 120 min | 🔲 pendiente | `temas/03-intro-funcional-ts/` |
 | 04 | Aspectos Avanzados de Programación Funcional | II | 3 | 1 | 120 min | 🔲 pendiente | `temas/04-funcional-avanzado/` |
