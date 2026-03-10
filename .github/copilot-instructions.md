@@ -27,6 +27,10 @@
 - **Help manifest**: `_bmad/_config/bmad-help.csv`
 - **Agent memory**: `_bmad/_memory/`
 
+## Propósito del Proyecto
+
+> **REGLA FUNDAMENTAL:** Todo pedido al usuario o cualquier instrucción dirigida a BMAD en este proyecto tiene como **único objetivo desarrollar el módulo `edu-standalone`**. Los agentes y workflows de BMAD se usan como herramientas de trabajo, pero **NUNCA se modifican los archivos de BMAD** (`_bmad/`). Cualquier artefacto generado debe depositarse en `salida/edu-standalone/` según las reglas del módulo EDU.
+
 ## Key Conventions
 
 - Always load `_bmad/bmm/config.yaml` before any agent activation or workflow execution
@@ -36,6 +40,7 @@
 - Follow step-based workflow execution: load steps JIT, never multiple at once
 - Save outputs after EACH step when using the workflow engine
 - The `{project-root}` variable resolves to the workspace root at runtime
+- **NUNCA modificar archivos dentro de `_bmad/`** — BMAD es solo el framework de trabajo, no el producto final
 
 ## Available Agents
 

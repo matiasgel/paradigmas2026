@@ -1,6 +1,7 @@
 ---
-mode: agent
-description: Activa a Vera (slides-designer) para definir el sistema de diseño visual del cursado
+description: 'EDU: Diseño visual — Vera define paleta, tipografía y layouts del cursado (una vez por cursada)'
+agent: 'agent'
+tools: ['read', 'edit', 'search']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store all fields as session variables
