@@ -65,10 +65,9 @@ Según `tp_type` guardado en Step 5, ejecutar el sub-paso correspondiente:
 
 #### Tipo: `repo`
 - **Agent:** classroom-designer (Rodrigo)
-- **Condition:** Solo si el docente confirma “sí” cuando se le pregunta
 - **Output:** `{topic_folder}/autograde-repo/` — repo plantilla con GitHub Actions autograding
 - **Workflow:** `_edu/workflows/create-autograde-repo/workflow.md`
-- **Note:** Omitible aquí; recuperable con `/edu-create-autograde-repo`
+- **Note:** Si el docente eligió `repo` en Step 5, este sub-paso se ejecuta directamente. Recuperable con `/edu-create-autograde-repo` si se necesita regenerar.
 
 #### Tipo: `quiz-moodle`
 - **Agent:** tp-designer (Valeria)

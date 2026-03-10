@@ -9,7 +9,13 @@ tools: ['read', 'edit', 'search', 'execute']
    If not found → "Primero iniciá un tema con /edu-topic" → STOP.
 3. Verify `{project-root}/{topic_folder}/tp.md` exists.
    If not → "Primero creá el TP con /edu-create-tp" → STOP.
-4. Load and follow the workflow at `{project-root}/_edu/workflows/create-autograde-repo/workflow.md`.
-5. Purpose: Generate `{topic_folder}/autograde-repo/` with the complete GitHub Classroom template repo.
-   Each test in `autograding.json` must be directly traceable to a consigna in `{topic_folder}/tp.md`.
+4. Read `tp_type` from `{project-root}/{topic_folder}/topic.yaml`.
+   Route based on type:
+   - `repo` → load and follow `{project-root}/_edu/workflows/create-autograde-repo/workflow.md`
+     (Purpose: regenerar `{topic_folder}/autograde-repo/` con el template de GitHub Classroom)
+   - `quiz-moodle` → load and follow `{project-root}/_edu/workflows/create-tp-quiz/workflow.md`
+     (Purpose: regenerar `{topic_folder}/tp-quiz.gift`)
+   - `quiz-google` → load and follow `{project-root}/_edu/workflows/create-tp-quiz/workflow.md`
+     (Purpose: regenerar `{topic_folder}/tp-quiz-forms.md` + `{topic_folder}/tp-quiz-forms-script.js`)
+   - Any other value → inform "Tipo '{tp_type}' no requiere output adicional" → STOP.
 
