@@ -11,4 +11,8 @@ tools: ['read', 'edit', 'search', 'execute']
 4. Load and follow the workflow at `{project-root}/_edu/workflows/topic-cycle/workflow.md`.
 5. Purpose: Close topic when all quality loops are resolved. Updates `{topic_folder}/topic.yaml` status to "closed".
    Generates Git commit and merge on branch `{git_branch}`. Updates coverage matrix.
+6. After successful close:
+   - Clear `{project-root}/_edu/active-topic.yaml` (delete or set all fields to empty)
+     so that the next `/edu-topic` or `/edu-design-topic` starts fresh.
+   - Inform: "✅ Tema {topic_name} cerrado. `active-topic.yaml` limpiado. Cuando quieras continuar, usá /edu-topic."
 

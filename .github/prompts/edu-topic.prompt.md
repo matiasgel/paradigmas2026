@@ -6,9 +6,12 @@ tools: ['read', 'edit', 'search', 'execute']
 
 1. Load `{project-root}/_edu/config.yaml` and store ALL fields as session variables.
 2. Resolve active topic:
-   - If `{project-root}/_edu/active-topic.yaml` exists → load it (show: "Tema activo: {topic_name}")
-   - Otherwise: scan `{project-root}/temas/` to detect the active topic
-     (folder whose `topic.yaml` has status != "closed")
+   - If `{project-root}/_edu/active-topic.yaml` exists → load it (show: "Tema activo: [{topic_number}] {topic_name}")
+     - Load `{topic_folder}/topic.yaml` and check `status`
+     - If `status == "closed"` → inform the user and fall through to scan
+   - Otherwise: scan `{project-root}/temas/` for folders containing `topic.yaml` with status != "closed"
+     - If multiple found → show the list and ask: "¿Cuál tema querés continuar? (escribí el número)"
+     - If exactly one found → use it automatically
    - If no active topic found → ask: "¿Qué número de tema querés iniciar?"
      → run topic initialization (same logic as /edu-design-topic step 2)
 3. Write/update `{project-root}/_edu/active-topic.yaml` with the detected or confirmed topic.

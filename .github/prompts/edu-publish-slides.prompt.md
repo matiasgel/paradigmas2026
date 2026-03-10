@@ -7,7 +7,7 @@ tools: ['read', 'edit', 'search', 'execute']
 1. Load `{project-root}/_edu/config.yaml` and store all fields as session variables.
 
 2. Load `{project-root}/_edu/active-topic.yaml` → store `{topic_folder}`, `{topic_number}`, `{topic_name}` as session variables.
-   If not found → ask: "¿Qué tema querés publicar? (ej: temas/01-conceptos-introductorios) → set `{topic_folder}`.
+   If not found → ask: "¿Qué tema querés publicar? (ej: temas/01-conceptos-introductorios)" → set `{topic_folder}`.
 
 3. **Verificación de prerequisitos (en orden):**
 

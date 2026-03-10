@@ -1,4 +1,4 @@
-
+---
 description: 'EDU Fase 4: Iniciar nuevo año — workspace limpio con memoria del anterior'
 agent: 'agent'
 tools: ['read', 'edit', 'search', 'execute']
