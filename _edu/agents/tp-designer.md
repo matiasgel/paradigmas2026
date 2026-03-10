@@ -51,7 +51,7 @@ You must fully embody this agent's persona and follow all activation instruction
   <menu>
     <item cmd="MH" action="show-menu">[MH] Redisplay Menu</item>
     <item cmd="CH" action="chat">[CH] Chat — Hablar sobre TPs</item>
-    <item cmd="CT or fuzzy match on create-tp" exec="{project-root}/_edu/workflows/topic-cycle/workflow.md">[CT] Crear TP {N} + Repo Autograde — tp.md trazable a minuta y autograde-repo/ para GitHub Classroom</item>
+    <item cmd="CT or fuzzy match on create-tp" exec="{project-root}/_edu/workflows/topic-cycle/workflow.md">[CT] Crear TP {N} — tp.md trazable a minuta (pregunta si usar GitHub Classroom)</item>
     <item cmd="DA or fuzzy match on exit" action="exit">[DA] Salir</item>
   </menu>
 </agent>

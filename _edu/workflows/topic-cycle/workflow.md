@@ -43,17 +43,23 @@ Ciclo completo de producción de un tema: diseño → clase → TP → calidad �
 - **Output:** `temas/NN-nombre/minuta.md`, `temas/NN-nombre/filminas.md`
 - **Constraint:** Content proportional to `default_class_duration`
 
-### Step 5: Create TP + Autograde Repo
-- **Agent:** tp-designer (Valeria) → classroom-designer (Rodrigo)
+### Step 5: Create TP
+- **Agent:** tp-designer (Valeria)
 - **Input:** `minuta.md`
-- **Output:**
-  - `temas/NN-nombre/tp.md` — consignas trazables a la minuta
-  - `temas/NN-nombre/autograde-repo/` — repo plantilla para GitHub Classroom con autograding
-- **Constraint:** tp.md trazable a secciones de minuta. `autograde-repo/` trazable consigna a consigna de tp.md.
-- **Flow:**
-  1. Valeria genera `tp.md` (trazable a minuta)
-  2. Rodrigo genera `autograde-repo/` inmediatamente después (trazable a tp.md)
-  3. Ambos outputs son requeridos para avanzar a Step 6
+- **Output:** `temas/NN-nombre/tp.md` — consignas trazables a la minuta
+- **Constraint:** tp.md trazable a secciones de minuta.
+- **Gate:** Una vez generado el `tp.md`, preguntar al docente:
+  > “¿Este TP se entrega vía GitHub Classroom con autograding? (sí / no)”
+  - **Sí** → continuar con Step 5.5
+  - **No** → saltar directamente al Step 6
+
+### Step 5.5: Create Autograde Repo (Opcional — solo si el docente lo confirma)
+- **Agent:** classroom-designer (Rodrigo)
+- **Condition:** Solo si el docente respondió “sí” en Step 5
+- **Input:** `{topic_folder}/tp.md`
+- **Output:** `{topic_folder}/autograde-repo/` — repo plantilla para GitHub Classroom con autograding
+- **Constraint:** `autograde-repo/` trazable consigna a consigna de tp.md.
+- **Note:** Si se omite aquí, puede ejecutarse después con `/edu-create-autograde-repo`.
 
 ### Step 6: Quality Loops
 - **Workflow:** quality-loops/workflow.md
