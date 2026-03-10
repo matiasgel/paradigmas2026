@@ -14,7 +14,7 @@ tools: ['read', 'edit', 'execute']
    Pre-export checks (ejecutar ANTES de generar el PDF, en este orden):
    - Escanear `guia-estudio.md` en busca de marcadores `<!-- PENDIENTE:` → si se encuentran, advertir: "⚠️ La guía contiene marcadores de contenido pendiente. Revisalos antes de distribuir. ¿Continuar igual? [S/N]" → Si N → STOP.
    - Verificar si existe `{topic_folder}/writing-report.md` → si NO existe, advertir: "⚠️ Los loops de calidad no se ejecutaron. Recomendado: /edu-quality antes de exportar. ¿Continuar igual? [S/N]" → Si N → STOP.
-5. Determine the current academic year dynamically (use system date).
+5. Determine the current academic year dynamically (use system date) and store it as `{year}` session variable.
 6. Generate the YAML front-matter header for pandoc and prepend it to a working copy of guia-estudio.md.
    The front-matter must include:
    ```yaml
