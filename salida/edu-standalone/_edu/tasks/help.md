@@ -1,4 +1,5 @@
 
+---
 name: edu-help
 description: 'Analiza el estado del cursado y recomienda el próximo paso. Usar cuando el docente pregunta qué hacer a continuación.'
 ---
@@ -20,94 +21,55 @@ description: 'Analiza el estado del cursado y recomienda el próximo paso. Usar 
 
 ## REGLAS DE DISPLAY
 
-Todo comando se muestra con prefijo `/edu_` (ej: `/edu_design_topic`).
+Todo comando se muestra con prefijo `/edu-` (ej: `/edu-design-topic`).
 
 Formato por ítem:
 ```
 **Nombre (CODE)**
-`/edu_comando`
+`/edu-comando`
 Agente: 🎓 Nombre del agente
 Descripción breve.
 ```
 
-## CONJUNTO DE COMANDOS ACTIVOS (27)
+## CONJUNTO DE COMANDOS ACTIVOS (28)
 
-Comentará solo los comandos relevantes al estado detectado.
-Nunca mostrar todos los 27 a la vez — presentar los 3-5 más relevantes según el contexto.
+Comentar solo los comandos relevantes al estado detectado.
+Nunca mostrar todos los 28 a la vez — presentar los 3-5 más relevantes según el contexto.
 
 ### Anytime
-- `edu_help`, `edu_status`, `edu_check_coverage`, `edu_manage_profiles`, `edu_update_context`
+- `edu-help`, `edu-status`, `edu-check-coverage`, `edu-student-profiles`, `edu-update-context`, `edu-edit-class-template`
 
 ### Phase 1
-- `edu_start_course` — Fase 1 completa (configura + carga plan + congela)
+- `edu-start-course` — Fase 1 completa (configura + carga plan + congela)
 
 ### Phase 2
-- `edu_build_course_from_materials`, `edu_research_plan`, `edu_propose_curriculum_change`
+- `edu-build-course`, `edu-propose-curriculum-change`
 
 ### Phase 3 — ciclo de tema
-- `edu_topic` — punto de entrada recomendado (detecta estado y guía)
-- `edu_design_topic` — diseñar o ajustar (antes de aprobar)
-- `edu_approve_design` — aprobar diseño
-- `edu_create_class` — crear minuta + filminas
-- `edu_create_tp` — crear TP
-- `edu_quality_validate` — validar calidad (todos los loops)
-- `edu_quality_fix` — corregir calidad (todos los fixes)
-- `edu_test_topic` — testing pedagógico
-- `edu_debate_topic` — panel multi-agente
-- `edu_compare_survey_simulator` — calibrar simulador
-- `edu_close_topic` — cerrar tema
-- `edu_reopen_topic` — reabrir tema
-- `edu_adaptive_replan` — replanificar
+- `edu-topic` — punto de entrada recomendado (detecta estado y guía)
+- `edu-design-topic` — diseñar o ajustar (antes de aprobar)
+- `edu-approve-design` — aprobar diseño
+- `edu-create-class` — crear minuta + filminas
+- `edu-create-tp` — crear TP
+- `edu-create-autograde-repo` — regenerar output de TP (autograde, quiz)
+- `edu-quality` — validar y/o corregir calidad (todos los loops)
+- `edu-test-topic` — testing pedagógico
+- `edu-debate-topic` — panel multi-agente
+- `edu-compare-survey-simulator` — calibrar simulador
+- `edu-adaptive-replan` — replanificar cronograma
+- `edu-close-topic` — cerrar tema
+- `edu-reopen-topic` — reabrir tema
 
 ### Phase 3 — slides (opcional)
-- `edu_setup_apis` — configurar APIs (una vez)
-- `edu_slides_designer` — diseño visual (una vez por cursada)
-- `edu_publish_slides` — publicar filminas en Google Slides
-- `edu_slides_publisher` — re-exportar sin rediseñar
+- `edu-setup-apis` — configurar APIs (una vez)
+- `edu-slides-designer` — diseño visual (una vez por cursada)
+- `edu-publish-slides` — publicar filminas en Google Slides
+- `edu-slides-publisher` — re-exportar sin rediseñar
 
 ### Phase 4
-- `edu_close_course`, `edu_start_new_year`
+- `edu-close-course`, `edu-start-new-year`
 
 ## DETECCIÓN DEL ESTADO
-
-1. **Cargar catálogo** — Leer `{project-root}/_edu/module-help.csv`
-2. **Resolver rutas** — Leer `{project-root}/_edu/config.yaml` para obtener `{course_output_folder}`, `{memory_folder}`, `{user_name}`, `{communication_language}`
-3. **Detectar fase activa** — Buscar artefactos clave:
-   - `plan-minimo.md` existe → phase-1 completada
-   - `plan-borrador.md` existe → phase-2 en curso o completada
-   - `temas/*/diseno.md` existe → phase-3 en curso
-   - `retrospectiva.md` existe → phase-4 en curso o completada
-4. **Detectar tema activo** — si hay `temas/NN-*/` sin `git-merge`, ese es el tema en producción
-5. **Si no hay artefactos** → sugerir comenzar por `/edu_start_course`
-
-## ANÁLISIS DEL INPUT
-
-Determinar qué se acaba de completar:
-- Frase explícita del docente ("terminé el diseño", "cerré el tema 3")
-- Artefactos encontrados en disco
-- Contexto de la conversación actual
-- Si no está claro → preguntar: "¿Qué fue lo último que completaste?"
-
-## EJECUCIÓN
-
-1. **Cargar catálogo** `{project-root}/_edu/module-help.csv`
-2. **Resolver config** `{project-root}/_edu/config.yaml`
-3. **Detectar estado** usando los criterios anteriores
-4. **Presentar recomendaciones** — máximo 5 comandos, ordenados por relevancia:
-   - Si hay tema activo: `edu_topic` como primera recomendación
-   - Si no hay tema: siguiente paso del flujo general
-   - Incluir siempre `edu_help` y `edu_status` si el docente parece desorientado
-5. **Formato de respuesta:**
-   ```
-   📍 Estado actual: [fase] — [descripción]
-   
-   ⭐ Próximo paso recomendado:
-   /edu_COMANDO — descripción
-   
-   Otros comandos disponibles:
-   /edu_X — descripción
-   /edu_Y — descripción
-   ```
 
 1. **Cargar catálogo** — Leer `{project-root}/_edu/module-help.csv`
 2. **Resolver rutas** — Leer `{project-root}/_edu/config.yaml` para obtener `{course_output_folder}`, `{memory_folder}`, `{user_name}`, `{communication_language}`
