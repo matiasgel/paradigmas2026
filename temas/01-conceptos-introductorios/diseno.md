@@ -2,7 +2,7 @@
 
 > **Estado:** APROBADO
 > **Agente:** Lic. Marcos (topic-designer)
-> **Fecha:** 2026-03-09 — actualizado con material de `temas/tema1/` (ingesta PDFs)
+> **Fecha:** 2026-03-09 — actualizado con material de `material/01-conceptos-introductorios/` (ingesta PDFs)
 > **Workflow:** topic-cycle / Step 1
 
 ---
@@ -200,14 +200,14 @@ Al finalizar la clase, el alumno podrá:
 
 ## Recursos y Bibliografía del Tema
 
-- **Sebesta, R.W.** (2018). *Concepts of Programming Languages*, 12th ed. Pearson. Cap. 1 — "Preliminaries" *(temas/tema1/025-184.pdf)*
-- **Louden & Lambert** (2011). *Programming Languages: Principles and Practice*, 3rd ed. Cap. 1 — "Introduction" *(temas/tema1/012-034.pdf)* — cubre abstracciones, paradigmas, sintaxis/semántica, traducción
-- **Gabbrielli & Martini** (2023). *Programming Languages: Principles and Paradigms*, 2nd ed. Cap. 1 — "Abstract Machines" *(temas/tema1/021-044.pdf)* — cubre máquina abstracta, intérprete vs compilador, máquina intermedia (JVM, Python bytecode)
+- **Sebesta, R.W.** (2018). *Concepts of Programming Languages*, 12th ed. Pearson. Cap. 1 — "Preliminaries" *(material/01-conceptos-introductorios/025-184.pdf)*
+- **Louden & Lambert** (2011). *Programming Languages: Principles and Practice*, 3rd ed. Cap. 1 — "Introduction" *(material/01-conceptos-introductorios/012-034.pdf)* — cubre abstracciones, paradigmas, sintaxis/semántica, traducción
+- **Gabbrielli & Martini** (2023). *Programming Languages: Principles and Paradigms*, 2nd ed. Cap. 1 — "Abstract Machines" *(material/01-conceptos-introductorios/021-044.pdf)* — cubre máquina abstracta, intérprete vs compilador, máquina intermedia (JVM, Python bytecode)
 - **Schmidt, D.C. & Runfola, D.** (2025). *Liberating Logic in the Age of AI: Going Beyond Programming with Computational Thinking*. arXiv:2511.17696 *(temas/2511.17696v1.pdf)* — para el Bloque 5: cambio de rol del programador, jerarquía de proficiencia en IA, loop "trust but verify"
 
 ### Material base 2024
 
-> Las diapositivas de `temas/tema1/01 introduccion.pdf` (UNTDF, 2024) constituyen el material de partida para esta clase. La estructura de bloques fue diseñada para alinear y expandir ese material, actualizando las referencias de Kotlin a TypeScript y sumando el Bloque 5 de IA generativa.
+> Las diapositivas de `material/01-conceptos-introductorios/01 introduccion.pdf` (UNTDF, 2024) constituyen el material de partida para esta clase. La estructura de bloques fue diseñada para alinear y expandir ese material, actualizando las referencias de Kotlin a TypeScript y sumando el Bloque 5 de IA generativa.
 
 ---
 

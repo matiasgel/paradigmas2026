@@ -4,7 +4,7 @@
 > **Fecha:** 2026-03-10
 > **Estado:** GENERADA
 > **Basada en:** `diseno.md` (APROBADO) · `minuta.md` · `filminas.md`
-> **Material fuente:** `temas/tema1/01 introduccion.pdf` · `temas/tema1/012-034.pdf` · `temas/tema1/021-044.pdf` · `temas/tema1/025-184.pdf`
+> **Material fuente:** `material/01-conceptos-introductorios/01 introduccion.pdf` · `material/01-conceptos-introductorios/012-034.pdf` · `material/01-conceptos-introductorios/021-044.pdf` · `material/01-conceptos-introductorios/025-184.pdf`
 > **Materia:** Paradigmas y Lenguajes de Programación 2026 — UNTDF / IDEI
 > **Semana:** 1 · Clase 1 de 2
 
@@ -18,7 +18,7 @@ Esta guía es tu material de referencia para el **Tema 01**. Está organizada si
 - **Durante y después de clase:** para profundizar lo visto y aclarar dudas.
 - **Para preparar el TP1:** las preguntas del quiz están diseñadas sobre el contenido de esta guía y de la clase.
 
-> **Materiales fuente complementarios:** Durante la preparación de esta guía se utilizaron los siguientes PDFs de referencia bibliográfica que se encuentran en `temas/tema1/`:
+> **Materiales fuente complementarios:** Durante la preparación de esta guía se utilizaron los siguientes PDFs de referencia bibliográfica que se encuentran en `material/01-conceptos-introductorios/`:
 > - `01 introduccion.pdf` — Capítulo introductorio (Louden & Lambert)
 > - `012-034.pdf` — Páginas 12–34 del material de Sebesta: criterios de evaluación de lenguajes
 > - `021-044.pdf` — Páginas 21–44: historia y evolución de los LP, paradigmas
@@ -71,7 +71,7 @@ Los lenguajes no evolucionaron en línea recta. Cada hito respondió a una neces
 
 > **Patrón:** Cada punto en esta línea resuelve un problema del anterior. No es una evolución lineal hacia un lenguaje "perfecto" — es diversificación hacia soluciones especializadas.
 
-*Fuente de referencia: `temas/tema1/021-044.pdf` (Louden & Lambert, Cap. 1 — historia y evolución de los LP)*
+*Fuente de referencia: `material/01-conceptos-introductorios/021-044.pdf` (Louden & Lambert, Cap. 1 — historia y evolución de los LP)*
 
 ### 1.4 Criterios de evaluación de lenguajes — Robert Sebesta
 
@@ -127,7 +127,7 @@ Velocidad de ejecución y consumo de memoria. C gana en benchmarks, pero Python 
 
 **La tensión fundamental de Sebesta:** No hay lenguaje perfecto. Siempre hay trade-offs entre estos criterios. Python sacrifica eficiencia por legibilidad y escritura; C sacrifica legibilidad por eficiencia. Conocer estos trade-offs es la habilidad central de este tema.
 
-*Fuente de referencia: `temas/tema1/012-034.pdf` (Sebesta, Cap. 1 §1.3 — criterios de evaluación, pp. 12–34)*
+*Fuente de referencia: `material/01-conceptos-introductorios/012-034.pdf` (Sebesta, Cap. 1 §1.3 — criterios de evaluación, pp. 12–34)*
 
 ### 1.5 El punto de tensión central: ¿la IA hace obsoletos los lenguajes?
 
@@ -181,7 +181,7 @@ Esta restricción generó preguntas que dieron origen a otros paradigmas:
 - ¿Se puede describir cómputo **sin depender de instrucciones secuenciales**? → Sí: el **cálculo lambda** (Church, 1936), base del paradigma funcional.
 - ¿Se puede describir cómputo como **relaciones y deducciones**? → Sí: la **lógica simbólica** (Robinson, 1965), base del paradigma lógico.
 
-*Fuente de referencia: `temas/tema1/01 introduccion.pdf` (Louden & Lambert, Cap. 1 — cuello de botella de Von Neumann y surgimiento de los paradigmas)*
+*Fuente de referencia: `material/01-conceptos-introductorios/01 introduccion.pdf` (Louden & Lambert, Cap. 1 — cuello de botella de Von Neumann y surgimiento de los paradigmas)*
 
 ### 2.4 La evolución metodológica
 
@@ -217,7 +217,7 @@ Además de las limitaciones de hardware, los paradigmas evolucionaron con las me
 
 **Multiparadigma:** TypeScript, Python, Scala, F# no se comprometen con un solo modelo. El mismo archivo puede tener código imperativo, funcional y OO. La flexibilidad es poderosa, pero también implica más responsabilidad de estilo en equipos.
 
-*Fuente de referencia: `temas/tema1/021-044.pdf` y `temas/tema1/025-184.pdf` (Louden & Lambert + Gabbrielli & Martini — paradigmas fundamentales)*
+*Fuente de referencia: `material/01-conceptos-introductorios/021-044.pdf` y `material/01-conceptos-introductorios/025-184.pdf` (Louden & Lambert + Gabbrielli & Martini — paradigmas fundamentales)*
 
 ### 2.6 Dominios de aplicación
 
@@ -264,7 +264,7 @@ Al **bajar** se gana:
 >
 > Cuando escribís `arr.map(x => Math.abs(x))` en TypeScript, abstraíste el loop, el índice, la variable acumuladora, los saltos condicionales. Lo que "perdiste" es visibilidad del estado intermedio. Puede importar o no, según el contexto.
 
-*Fuente de referencia: `temas/tema1/01 introduccion.pdf` (Louden & Lambert, Cap. 1 — Fig. 1.4 y 1.5, escalera de abstracciones)*
+*Fuente de referencia: `material/01-conceptos-introductorios/01 introduccion.pdf` (Louden & Lambert, Cap. 1 — Fig. 1.4 y 1.5, escalera de abstracciones)*
 
 ### 3.2 La correspondencia Von Neumann → código imperativo
 
@@ -381,7 +381,7 @@ Compilación pura:
 
 **En la práctica:** siempre existe un **lenguaje intermedio** entre el lenguaje de alto nivel y la máquina física. La realidad de la implementación es una combinación de los dos modelos puros.
 
-*Fuente de referencia: `temas/tema1/025-184.pdf` (Gabbrielli & Martini, Cap. 1 — máquinas abstractas, pp. 25–44)*
+*Fuente de referencia: `material/01-conceptos-introductorios/025-184.pdf` (Gabbrielli & Martini, Cap. 1 — máquinas abstractas, pp. 25–44)*
 
 ---
 
@@ -910,21 +910,21 @@ Sin `let`, sin mutación, sin loop explícito. Esta es exactamente la situación
 
 ## Referencias bibliográficas
 
-Los contenidos de este tema están basados en los siguientes materiales, disponibles como PDF en `temas/tema1/`:
+Los contenidos de este tema están basados en los siguientes materiales, disponibles como PDF en `material/01-conceptos-introductorios/`:
 
 ### Libros de texto principales
 
 **Sebesta, Robert W.** *Concepts of Programming Languages*, 12th edition. Pearson, 2018.
 — Sección cubierta: Capítulo 1 (criterios de evaluación de lenguajes, historia de los LP).
-— Archivo: `temas/tema1/012-034.pdf` (pp. 12–34)
+— Archivo: `material/01-conceptos-introductorios/012-034.pdf` (pp. 12–34)
 
 **Louden, Kenneth C. y Lambert, Kenneth A.** *Programming Languages: Principles and Practice*, 3rd edition. Course Technology, 2012.
 — Secciones cubiertas: Capítulo 1 (paradigmas, cuello de botella Von Neumann, escalera de abstracciones, funciones de orden superior).
-— Archivos: `temas/tema1/01 introduccion.pdf` (Cap. 1 completo) · `temas/tema1/021-044.pdf` (pp. 21–44)
+— Archivos: `material/01-conceptos-introductorios/01 introduccion.pdf` (Cap. 1 completo) · `material/01-conceptos-introductorios/021-044.pdf` (pp. 21–44)
 
 **Gabbrielli, Maurizio y Martini, Simone.** *Programming Languages: Principles and Paradigms*, 2nd edition. Springer, 2010.
 — Secciones cubiertas: Capítulo 1 (máquinas abstractas, interpretación pura, compilación pura, lenguajes intermedios).
-— Archivo: `temas/tema1/025-184.pdf` (pp. 25–44 del Cap. 1)
+— Archivo: `material/01-conceptos-introductorios/025-184.pdf` (pp. 25–44 del Cap. 1)
 
 ### Artículo de investigación
 
