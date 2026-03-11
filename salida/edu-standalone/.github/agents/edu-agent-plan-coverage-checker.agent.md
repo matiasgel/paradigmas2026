@@ -1,6 +1,6 @@
 ---
 description: '📊 Verificador de Cobertura: matriz del plan mínimo, alertas de riesgo'
-tools: ['read', 'search']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 model: "Claude Haiku 4.5 (copilot)"
 handoffs:
   - label: "🎓 Corregir gaps en la planificación"

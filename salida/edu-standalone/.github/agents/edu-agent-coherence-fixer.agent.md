@@ -1,6 +1,6 @@
 ---
 description: '🔗 Corrector de Coherencia: consistencia inter e intra documento, terminología unificada'
-tools: ['read', 'edit', 'search']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 model: "Claude Haiku 4.5 (copilot)"
 handoffs:
   - label: "🔎 Validar escritura tras corrección"

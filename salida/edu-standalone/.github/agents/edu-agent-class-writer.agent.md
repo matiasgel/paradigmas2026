@@ -1,6 +1,6 @@
 ---
 description: 'Dr. Roberto ✍️ — Escritor de Clases: minuta, filminas, contenido proporcional a la duración'
-tools: ['read', 'edit', 'search']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 model: "Claude Sonnet 4.6 (copilot)"
 handoffs:
   - label: "📖 Crear guía de estudio"
