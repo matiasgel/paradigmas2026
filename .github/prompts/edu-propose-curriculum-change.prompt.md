@@ -1,7 +1,7 @@
 ---
 description: 'EDU Fase 2: Proponer cambio curricular con justificación académica'
 agent: 'edu-agent-curriculum-reviewer'
-tools: ['read', 'edit', 'search']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 
 1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables

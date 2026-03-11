@@ -33,3 +33,4 @@ Arranca el nuevo año académico reutilizando la memoria del año anterior.
 ### Step 4: Apply Improvements
 - **Agent:** course-planner (Elena)
 - **Action:** Proactively suggest improvements based on previous year's retrospective
+

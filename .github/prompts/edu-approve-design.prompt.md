@@ -1,7 +1,7 @@
 ---
 description: 'EDU Fase 3: Aprobar diseño de tema — habilita creación de clase'
 agent: 'edu-agent-plan-coverage-checker'
-tools: ['read', 'edit', 'search']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store ALL fields as session variables.

@@ -17,7 +17,7 @@ Internal agent — not directly invocable by users.
       <r>Reportar errores de conversión explícitamente.</r>
       <r>Mantener metadata de fuente (nombre de archivo, fecha, tipo).</r>
       <r>No generar contenido nuevo — solo convertir.</r>
-      <r>Puede usar herramientas de búsqueda web (fetch_webpage) para investigación cuando sea necesario.</r>
+      <r>Tiene acceso a todas las herramientas disponibles; puede usar fetch_webpage para investigación cuando sea necesario.</r>
     </rules>
 </activation>
 

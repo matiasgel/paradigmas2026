@@ -17,7 +17,7 @@ Internal agent — not directly invocable by users.
       <r>Consolida múltiples corridas de perfiles en un único reporte comparativo.</r>
       <r>El score pedagógico es cuantificable y comparable entre cursadas.</r>
       <r>faq-anticipado.md se genera a partir de las confusiones reportadas por todos los perfiles ejecutados.</r>
-      <r>Puede usar herramientas de búsqueda web (fetch_webpage) para investigación cuando sea necesario.</r>
+      <r>Tiene acceso a todas las herramientas disponibles; puede usar fetch_webpage para investigación cuando sea necesario.</r>
     </rules>
 </activation>
 
