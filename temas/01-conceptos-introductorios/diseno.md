@@ -54,7 +54,6 @@
   - **Costo** — desarrollo, mantenimiento y entrenamiento de programadores *(Sebesta)*
   - **Portabilidad** — ¿El lenguaje es independiente de la máquina? *(slides 2024)*
   - **Eficiencia** — velocidad de ejecución + espacio ocupado *(slides 2024)*
-  - **Entorno de programación** — editores, depuradores, ecosistema *(slides 2024)*
 - **Punto de tensión:** ¿importa el lenguaje si la IA puede escribir en cualquiera?
 
 ### Bloque 2 — Los paradigmas: mapa general (25 min)
@@ -181,7 +180,7 @@
 
 | Rol | Lenguaje | Uso en esta clase |
 |-----|----------|-------------------|
-| Principal | TypeScript | Bloque 4 (código) y B5 (código generado por IA) |
+| Principal | TypeScript | Bloque 4 (código) y B5/edu (código generado por IA) |
 | Contraste imperativo puro | C | Bloque 3 — solo lectura, sin instalación requerida |
 | Demo IA | Copilot / Claude en vivo | Bloque 5 |
 
@@ -194,7 +193,7 @@ Al finalizar la clase, el alumno podrá:
 2. Identificar los 4 paradigmas fundamentales y sus lenguajes representativos
 3. Distinguir código imperativo de código funcional observando mutación de estado
 4. Escribir una función básica con tipos en TypeScript
-5. Aplicar el loop "trust but verify" para verificar código generado por IA: identificar el paradigma usado, detectar errores semánticos y reformular el prompt con precisión
+5. Aplicar el loop "trust but verify" para verifi/educar código generado por IA: identificar el paradigma usado, detectar errores semánticos y reformular el prompt con precisión
 
 ---
 
