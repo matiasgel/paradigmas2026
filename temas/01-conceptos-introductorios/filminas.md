@@ -159,7 +159,7 @@ CPU ←───bus───→ Memoria
 | Paradigma | Base formal | Unidad | Estado | Ejemplos |
 |-----------|-------------|--------|--------|----------|
 | **Imperativo** | Máquina de Von Neumann | Instrucción | Mutable | C, Go, Pascal |
-| **OO** | Imperativo + encapsulamiento | Objeto / mensaje | Mutable (encapsulado) | Java, C#, Dart |
+| **OO** | Imperativo + encapsulamiento | Objeto / mensaje | Mutable (encapsulado) | Java, C#, Smalltalk, Dart |
 | **Funcional** | Cálculo lambda (Church, 1936) | Función | **Inmutable** | Haskell, Clojure, LISP |
 | **Lógico** | Lógica simbólica (resolución) | Relación / hecho | Sin estado | Prolog |
 
@@ -201,7 +201,7 @@ C, Pascal, Go                   ← Nivel 1: estructura, funciones, tipos básic
 LC-3, ensamblador               ← Nivel 0: registros, saltos, direcciones
 ```
 
-**Al subir:** más legibilidad, más escribibilidad
+**Al subir:** más legibilidad, más escribibilidad, más portabilidad
 **Al bajar:** más control, más eficiencia
 
 > *"¿Qué abstraje? ¿Qué perdí?"* — La pregunta que guía esta materia

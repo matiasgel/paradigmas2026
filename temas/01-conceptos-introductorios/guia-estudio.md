@@ -928,7 +928,7 @@ Los contenidos de este tema están basados en los siguientes materiales, disponi
 
 ### Artículo de investigación
 
-**Schmidt, John y Runfola, Ryan.** *Liberating Logic in the Age of AI: Re-designing Computer Science Education for an AI-Augmented World*. arXiv:2511.17696, 2025.
+**Schmidt, Douglas C. y Runfola, Dan.** *Liberating Logic in the Age of AI: Going Beyond Programming with Computational Thinking*. arXiv:2511.17696, 2025.
 — Usado en: Bloque 5 (cambio de rol del programador, jerarquía de proficiencia AI Literacy/Fluency/Mastery, loop trust-but-verify, Fig. 8, 12 y 14).
 
 ---

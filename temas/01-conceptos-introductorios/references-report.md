@@ -81,29 +81,23 @@
 
 ### REF-04 — Schmidt & Runfola (2025), arXiv:2511.17696
 
-**Referencia completa citada:**
-> Schmidt, Eric & Runfola, Dan. *Liberating Logic in the Age of AI*. arXiv:2511.17696, 2025.
+**Referencia completa verificada contra `material/txt/2511.17696v1.txt`:**
+> Schmidt, Douglas C. & Runfola, Dan. *Liberating Logic in the Age of AI: Going Beyond Programming with Computational Thinking*. arXiv:2511.17696, 2025.
 
-**Estado:** ⚠️ **[VERIFICAR MANUALMENTE]**
+**Estado:** ✅ **VERIFICADA — contra archivo txt del paper (2511.17696v1.txt)**
 
-**Análisis:**
-- El ID arXiv `2511.17696` sigue el formato `YYMM.NNNNN`, correspondiendo a **noviembre de 2025** — fecha que está **fuera del período de entrenamiento del agente** para verificación directa.
-- El título "Liberating Logic in the Age of AI" y los autores "Schmidt & Runfola" **no pueden ser verificados** con certeza desde el conocimiento de entrenamiento.
-- Las citas específicas son:
-  - `§2`: cambio de rol del programador (porcentajes de tareas: 70%→20% codificación, etc.)
-  - `Fig. 8`: el "loop trust but verify"
-  - `Fig. 12`: jerarquía AI Literacy → AI Fluency → AI Mastery
-  - `Fig. 14`: "sweet spot" entre autonomía y dependencia de IA
-  - Cita textual: *"Natural language has become the new compiler, and developer's focus is migrating from syntax and semantics to strategy"*
-- La cita textual es internamente consistente con el resto del documento y temáticamente plausible para la era de IA generativa.
-- Si el paper existe en arXiv, está accesible gratuitamente en `https://arxiv.org/abs/2511.17696`.
+**Resultado de la verificación (2026-03-10):**
+- **Autores:** Douglas C. Schmidt y Dan Runfola, William & Mary, Williamsburg, VA, USA. ✓
+  - ⚠️ **Corrección aplicada:** El nombre "Eric Schmidt" en el report anterior era incorrecto — el autor es **Douglas C. Schmidt**. La referencia en `guia-estudio.md` fue corregida.
+- **Subtítulo completo:** "Going Beyond Programming with Computational Thinking" ✓ (la guía usaba un subtítulo erróneo — fue corregido).
+- **§2** ("From Coding to Natural Language"): Porcentajes 70% manual coding → 20% confirmados (líneas 202 y 206 del txt). ✓
+- **Fig. 4** (Redefining Developer Roles): figura donde aparecen los porcentajes de tiempo. ✓
+- **Fig. 8** ("AI-Augmented Development Requires Iteration"): el loop iterativo + "trust but verify" confirmados (líneas 400–411). ✓
+- **Fig. 12** ("Hierarchy of AI Proficiency"): jerarquía AI Literacy → AI Fluency → AI Mastery confirmada (línea 512). ✓
+- **Fig. 14** ("The Sweet Spot of AI Reliance"): confirmada (línea 603). ✓
+- **Cita textual:** *"Natural language has become the new compiler, and developer's focus is migrating from syntax and semantics to strategy"* — confirmada en línea 218. ✓
 
-**Acción requerida:** 🔴 **VERIFICACIÓN MANUAL OBLIGATORIA por el docente.**
-1. Acceder a `https://arxiv.org/abs/2511.17696`
-2. Confirmar: título, autores, año.
-3. Verificar que la cita textual existe en §2
-4. Verificar que las Figs. 8, 12 y 14 corresponden a los conceptos citados.
-5. Si el paper no existe o los datos son incorrectos: **reemplazar o eliminar la referencia** antes de la clase y actualizar las filminas F-21 a F-26 y la sección 5 de la guía de estudio.
+**Acción requerida:** Ninguna. ✅
 
 ---
 
@@ -112,7 +106,7 @@
 | ID | Urgencia | Acción |
 |----|----------|--------|
 | REF-02-fig | Baja | Confirmar que Figs. 1.4 y 1.5 de Louden & Lambert corresponden a la escalera de abstracciones |
-| REF-04 | **Alta** | Verificar existencia y contenido de arXiv:2511.17696 (Schmidt & Runfola 2025) antes de la clase |
+| REF-04 | ~~**Alta**~~ ✅ Verificada | Verificación completada contra `material/txt/2511.17696v1.txt` — todo correcto |
 
 ---
 
