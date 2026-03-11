@@ -5,5 +5,5 @@ module: "I"
 semana: 1
 clase: "1 de 2"
 duracion: 120
-estado: "en-curso"
+estado: "cerrado"
 tp_type: "quiz-moodle"
