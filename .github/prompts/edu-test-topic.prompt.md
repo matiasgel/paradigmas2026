@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Testing pedagógico — simula experiencia de alumnos por perfil'
-agent: 'agent'
+agent: 'edu-agent-student-simulator'
 tools: ['read', 'edit', 'search']
 ---
 

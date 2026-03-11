@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 1: Iniciar curso — configura materia, carga programa oficial y congela plan mínimo (flujo completo de Fase 1)'
-agent: 'agent'
+agent: 'edu-agent-course-planner'
 tools: ['read', 'edit', 'search']
 ---
 

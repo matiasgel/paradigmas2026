@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Ciclo de tema — detecta el estado actual, escribe active-topic.yaml y guía el próximo paso'
-agent: 'agent'
+agent: 'edu-agent-topic-designer'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

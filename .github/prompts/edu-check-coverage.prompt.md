@@ -1,6 +1,6 @@
 ---
 description: 'EDU: Verificar cobertura del plan mínimo'
-agent: 'agent'
+agent: 'edu-agent-plan-coverage-checker'
 tools: ['read', 'search']
 ---
 

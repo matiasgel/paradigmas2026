@@ -1,6 +1,6 @@
 ---
 description: 'EDU: Perfiles de alumno — gestiona perfiles del simulador e investiga en literatura académica (ERIC, ACM, IEEE)'
-agent: 'agent'
+agent: 'edu-agent-student-simulator'
 tools: ['read', 'edit', 'search']
 ---
 

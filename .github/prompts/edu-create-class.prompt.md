@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Crear clase — genera minuta.md y filminas.md en el directorio del tema'
-agent: 'agent'
+agent: 'edu-agent-class-writer'
 tools: ['read', 'edit', 'search']
 ---
 

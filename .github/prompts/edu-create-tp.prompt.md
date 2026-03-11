@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Crear TP — elige tipo (desarrollo / repo / quiz-moodle / quiz-google / mixto), genera tp.md trazable a la minuta y el output específico del tipo.'
-agent: 'agent'
+agent: 'edu-agent-tp-designer'
 tools: ['read', 'edit', 'search']
 ---
 

@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Debate de Tema — Panel multi-agente para decisiones complejas de diseño'
-agent: 'agent'
+agent: 'edu-agent-topic-designer'
 tools: ['read', 'edit', 'execute', 'search']
 ---
 

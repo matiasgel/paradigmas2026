@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Comparar encuesta real vs simulador — calibrar'
-agent: 'agent'
+agent: 'edu-agent-student-simulator'
 tools: ['read', 'edit', 'search']
 ---
 

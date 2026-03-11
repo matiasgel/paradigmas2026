@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Reabrir tema cerrado para correcciones mayores'
-agent: 'agent'
+agent: 'edu-agent-topic-designer'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 
