@@ -29,4 +29,3 @@ Verifica el porcentaje de cobertura del plan mínimo en el estado actual del cur
 ### Step 3: Alert if Critical
 - **Condition:** If any mandatory topic has zero coverage and course is > 50% through
 - **Action:** Display critical alert
-

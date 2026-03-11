@@ -25,4 +25,3 @@ Gestionar los perfiles de alumno disponibles para el simulador pedagógico.
 
 ### Step 3: Persist
 - **Output:** Updated profile data in `_edu-memory/calibracion-simulador/`
-

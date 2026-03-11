@@ -28,4 +28,3 @@ Procesa resultados de encuestas reales de alumnos y calibra el long-term del sim
 - **Action:** Adjust long-term calibration parameters based on real data
 - **Output:** Updated `_edu-memory/calibracion-simulador/` — NEVER reset
 - **Note:** This data accumulates year over year for improved accuracy
-

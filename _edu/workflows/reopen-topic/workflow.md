@@ -28,4 +28,3 @@ Reabre un tema cerrado para aplicar correcciones mayores.
 ### Step 4: Resume Topic Cycle
 - **Action:** Topic returns to the appropriate step in topic-cycle workflow
 - **Note:** All previous quality loop results are preserved for reference
-

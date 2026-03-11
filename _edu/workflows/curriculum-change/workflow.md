@@ -33,4 +33,3 @@ Propone cambios curriculares con justificación académica. Solo puede modificar
 ### Step 4: Professor Decision
 - **Gate:** Professor approves/rejects
 - **If approved:** Apply changes to `plan-borrador.md`
-

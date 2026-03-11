@@ -30,4 +30,3 @@ Actualiza el contexto activo de Copilot. Útil al retomar sesión o después de 
 
 ### Step 3: Display to Professor
 - **Action:** Present context summary and await instructions
-

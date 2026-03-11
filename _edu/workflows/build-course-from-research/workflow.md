@@ -28,4 +28,3 @@ Construye el plan del cursado desde investigación académica pura. Alternativa 
 - **Agent:** course-planner (Elena)
 - **Gate:** Professor reviews and adjusts
 - **Output:** Approved `plan-borrador.md`
-

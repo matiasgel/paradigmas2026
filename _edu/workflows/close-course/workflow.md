@@ -36,8 +36,3 @@ Cierre formal del año académico con retrospectiva y traspaso de memoria al añ
 ### Step 4: Archive
 - **Action:** Tag Git repository with `cursado-{año}`
 - **Preserve:** All memory sidecars for continuity
-
-### Step 5: Push Both Branches
-- **Action:** `git push origin main` y `git push origin production`
-- **Condition:** Run always after Step 4
-
