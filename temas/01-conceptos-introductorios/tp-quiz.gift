@@ -159,6 +159,39 @@ int suma_abs(int arr[], int n) {
 // Requiere haber seguido la clase de principio a fin
 // ------------------------------------------------------------
 
+// ------------------------------------------------------------
+// P11 — OA3: mutación de estado — imperativo vs funcional (sin referencia de clase)
+// Trazabilidad: Bloques 3 y 4 — comprensión transferible de paradigmas
+// ------------------------------------------------------------
+
+::P11 — Mutación de estado\: ¿cuál fragmento es imperativo?::[html]
+<p>Analizá los siguientes cuatro fragmentos TypeScript. ¿Cuál es un ejemplo <strong>inequívoco del paradigma imperativo</strong>, independientemente del resultado que produce?</p>
+<pre>
+// Fragmento A
+const doble = (arr: number[]): number[] =&gt; arr.map(x =&gt; x * 2);
+
+// Fragmento B
+function doble(arr: number[]): number[] {
+    let result: number[] = [];
+    for (const x of arr) result.push(x * 2);
+    return result;
+}
+
+// Fragmento C
+const doble = (arr: number[]): number[]) =&gt; arr.map(x =&gt; x * 2);
+
+// Fragmento D
+const doble = (arr: number[]): number[] =&gt;
+    arr.reduce((acc: number[], x) =&gt; [...acc, x * 2], []);
+</pre>
+{
+  =Fragmento B — declara <code>let result = []</code> y la muta con <code>push</code> dentro del loop: estado que cambia instrucción a instrucción {#Correcto. La señal del paradigma imperativo es la mutación de estado: let result comienza vacío y se modifica en cada iteración. Esto es exactamente el patrón Von Neumann — un valor en memoria que se transforma secuencialmente.}
+  ~Fragmento A — por usar sintaxis <code>function</code> en lugar de arrow function {#Incorrecto. La sintaxis function vs arrow function no determina el paradigma. Ambas pueden usarse en código funcional o imperativo.}
+  ~Fragmento C — por usar convención de nombre en mayúsculas {#Incorrecto. Las convenciones de nombres no tienen relación con el paradigma de programación.}
+  ~Fragmento D — porque <code>reduce</code> usa un acumulador <code>acc</code>, que internamente mantiene estado mutable {#Casi, pero incorrecto. El acumulador acc en reduce es el valor de retorno de cada invocación de la función — no una variable que se reasigna externamente. El estilo funcional se mantiene: no hay let, no hay push, no hay mutación observable.}
+}
+
+// ------------------------------------------------------------
 ::P10 — ¿Importa el lenguaje si la IA puede escribir en cualquiera?::[html]
 <p>En el Bloque 1 (F-05) dejamos abierta la pregunta: <em>"¿Importa el lenguaje si la IA puede escribir en cualquiera?"</em>. En el Bloque 5 (F-21) el docente la retomó y respondió usando datos de Schmidt &amp; Runfola (2025). ¿Cuál fue la respuesta?</p>
 {

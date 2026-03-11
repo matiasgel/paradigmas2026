@@ -235,6 +235,8 @@ El paradigma correcto depende del dominio del problema:
 
 ## Bloque 3 — Paradigma imperativo y máquina abstracta
 
+> ⚠️ **Antes de continuar:** Si saltaste las secciones 2.2 y 2.3 (Von Neumann y el cuello de botella), volvé a leerlas antes de seguir con esta sección. Sin ese marco, los ejemplos de código de abajo pierden su sentido pedagógico — no se trata de aprender C, sino de ver cómo el hardware de los años 40 determina el paradigma imperativo que usamos hoy.
+
 ### 3.1 La escalera de abstracciones (Louden & Lambert, Gabbrielli)
 
 Todo lenguaje ocupa un nivel en una jerarquía de abstracción:
@@ -818,6 +820,8 @@ Esto motivó la pregunta: ¿se puede describir cómputo sin depender de instrucc
 ---
 
 ### Q7 — Trust but verify
+
+> 📌 **Nota:** Esta pregunta ejercita el mismo razonamiento que **P05 del TP1**. Hay preguntas del quiz que requieren recordar lo que ocurrió en la demo en vivo de clase — no alcanzan la guía sola. Si no estuviste en clase, asegurate de leer bien la sección 5.3 de esta guía.
 
 Un compañero usa este prompt y obtiene el resultado de abajo. ¿Es correcto el resultado? Si hay un problema, ¿cuál es?
 

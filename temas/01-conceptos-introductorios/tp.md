@@ -15,7 +15,7 @@
 | Título | TP 01 — Conceptos Introductorios + Intro a TypeScript |
 | Tiempo límite | 30 minutos |
 | Intentos permitidos | 1 |
-| Puntaje por pregunta | 1 punto (10 pts total) |
+| Puntaje por pregunta | 1 punto (11 pts total) |
 | Penalización por respuesta incorrecta | 0 |
 | Mostrar respuestas correctas al alumno | Sí, al completar |
 | Categoría Moodle | TP01-ConceptosIntroductorios |
@@ -214,6 +214,42 @@ En el Bloque 1 (F-05) se dejó abierta la pregunta: *"¿Importa el lenguaje si l
 - ~ No, el lenguaje dejó de importar — la IA abstrae completamente esa decisión por el programador
 - ~ Solo importa para lenguajes de sistemas (C, Rust); para TypeScript la IA es autónoma y confiable sin supervisión
 - ~ Importa menos que antes, pero todavía es relevante solo para optimización de performance
+
+---
+
+### P11 — Mutación de estado: ¿cuál de estos fragmentos es imperativo?
+
+**Trazabilidad:** Bloque 3 + Bloque 4 — OA3 (distinguir imperativo vs funcional por mutación de estado)
+
+**Enunciado:**
+Analizar los siguientes cuatro fragmentos TypeScript. ¿Cuál de ellos es un ejemplo **inequívoco de paradigma imperativo**, independientemente del resultado que produce?
+
+```typescript
+// Fragmento A
+const doble = (arr: number[]): number[] => arr.map(x => x * 2);
+
+// Fragmento B
+function doble(arr: number[]): number[] {
+    let result: number[] = [];
+    for (const x of arr) result.push(x * 2);
+    return result;
+}
+
+// Fragmento C
+const doble = (arr: number[]): number[] => arr.map(x => x * 2);
+
+// Fragmento D
+const doble = (arr: number[]): number[] =>
+    arr.reduce((acc: number[], x) => [...acc, x * 2], []);
+```
+
+**Opciones:**
+- ✅ **Fragmento B** — declara `let result = []` (variable mutable) y la muta instrucción a instrucción con `push` dentro del loop
+- ~ Fragmento A — por usar sintaxis `function` en lugar de arrow function
+- ~ Fragmento C — por nombrar la función en mayúsculas, convención del paradigma OO
+- ~ Fragmento D — por usar `reduce` con acumulador, que internamente mantiene estado mutable
+
+> 🎯 **NOTA DOCENTE:** Esta pregunta no tiene referencia a un momento específico de clase — evalúa comprensión transferible de OA3. El distractor D es efectivo porque `reduce` recibe un acumulador `acc`, que *parece* una variable mutable, pero la inmutabilidad del estilo funcional se mantiene: `acc` es el valor que devuelve la función en cada paso, no una variable que se reasigna externamente. A y C son distractores para quienes confunden paradigma con sintaxis.
 
 ---
 
