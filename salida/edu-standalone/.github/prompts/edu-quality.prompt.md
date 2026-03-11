@@ -1,7 +1,7 @@
 ---
 description: 'EDU Fase 3: Calidad — valida y/o corrige escritura, coherencia, referencias, scope y densidad con commits Git'
 agent: 'edu-agent-writing-validator'
-tools: ['read', 'edit', 'search', 'execute']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store ALL fields as session variables.

@@ -1,7 +1,7 @@
 ---
 description: 'EDU: Publicar slides — flujo completo orquestado: verifica setup → diseño → exporta a Google Slides'
 agent: 'agent'
-tools: ['read', 'edit', 'search', 'execute']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store all fields as session variables.

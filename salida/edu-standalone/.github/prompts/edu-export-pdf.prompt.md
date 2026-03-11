@@ -1,7 +1,7 @@
 ---
 description: 'EDU Fase 3: Exportar guía de estudio a PDF — genera material de cátedra imprimible con portada, índice y formato académico usando pandoc'
 agent: 'agent'
-tools: ['read', 'edit', 'execute']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store ALL fields as session variables:

@@ -1,7 +1,7 @@
 ---
 description: 'EDU: Verificar cobertura del plan mínimo'
 agent: 'edu-agent-plan-coverage-checker'
-tools: ['read', 'search']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store ALL fields as session variables.

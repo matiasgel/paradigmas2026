@@ -1,7 +1,7 @@
 ---
 description: 'EDU Fase 3: Crear TP — elige tipo (desarrollo / repo / quiz-moodle / quiz-google / mixto), genera tp.md trazable a la minuta y el output específico del tipo.'
 agent: 'edu-agent-tp-designer'
-tools: ['read', 'edit', 'search']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store ALL fields as session variables.
