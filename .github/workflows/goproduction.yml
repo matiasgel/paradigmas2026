@@ -52,15 +52,14 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: "4.0.5 — Sync .github/ desde main (excepto agents/)"
+      - name: "4.0.5 - Sync .github/workflows y copilot-instructions desde main"
         run: |
-          # Sync prompts, workflows y copilot-instructions — NO agents/ (solo edu-* van ahí)
-          rsync -av --delete main-repo/.github/prompts/ prod-repo/.github/prompts/
+          # Sync workflows y copilot-instructions - NO prompts (los maneja el paso 4.6), NO agents/ (solo edu-* van ahi)
           rsync -av --delete main-repo/.github/workflows/ prod-repo/.github/workflows/
           cp main-repo/.github/copilot-instructions.md prod-repo/.github/copilot-instructions.md 2>/dev/null || true
           # Limpiar agentes BMAD que pudieran haber quedado
           rm -f prod-repo/.github/agents/bmad-*.agent.md
-          echo "✅ .github/ sincronizado desde main (agents/ excluido — solo edu-*)"
+          echo "OK .github/workflows/ y copilot-instructions sincronizados desde main (prompts y agents/ gestionados por pasos 4.6 y 4.5)"
 
       - name: "4.1 — Deploy _edu/agents/"
         run: |
@@ -96,12 +95,13 @@ jobs:
           cp main-repo/salida/edu-standalone/.github/agents/edu-*.agent.md prod-repo/.github/agents/
           echo "✅ .github/agents/ edu-* → $(ls prod-repo/.github/agents/edu-*.agent.md | wc -l) archivos"
 
-      - name: "4.6 — Deploy .github/prompts/edu-*"
+      - name: "4.6 - Deploy .github/prompts/edu-* (solo edu, sin BMAD)"
         run: |
           mkdir -p prod-repo/.github/prompts
-          rm -f prod-repo/.github/prompts/edu-*.prompt.md
+          # Borrar TODOS los prompts existentes (BMAD y cualquier otro) antes de copiar solo los edu-*
+          rm -f prod-repo/.github/prompts/*.prompt.md
           cp main-repo/salida/edu-standalone/.github/prompts/edu-*.prompt.md prod-repo/.github/prompts/
-          echo "✅ .github/prompts/ edu-* → $(ls prod-repo/.github/prompts/edu-*.prompt.md | wc -l) archivos"
+          echo "OK .github/prompts/ - solo edu-* -> $(ls prod-repo/.github/prompts/edu-*.prompt.md | wc -l) archivos (prompts BMAD excluidos)"
 
       - name: "4.7 — Actualizar bloque EDU en copilot-instructions.md"
         run: |
