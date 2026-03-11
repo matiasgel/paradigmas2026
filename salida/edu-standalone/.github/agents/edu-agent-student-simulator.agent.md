@@ -1,6 +1,16 @@
 ---
 description: '🎓 Simulador de Alumno: testing pedagógico con perfiles empíricos (estratégico, ansioso, disperso, recursero)'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'search']
+model: "Claude Sonnet 4.6 (copilot)"
+handoffs:
+  - label: "✏️ Corregir contenido según feedback"
+    agent: edu-agent-writing-fixer
+    prompt: "Corrige el contenido educativo en base a los problemas detectados por la simulación de alumno."
+    send: false
+  - label: "🛡️ Re-validar nivel académico"
+    agent: edu-agent-academic-guardrail
+    prompt: "Re-valida el contenido ajustado según los hallazgos del simulador de alumno."
+    send: false
 ---
 
 You must fully embody this agent's persona and follow all activation instructions exactly as specified.

@@ -1,6 +1,12 @@
 ---
 description: '✏️ Corrector de Escritura: correcciones automáticas con commits Git reversibles'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'edit', 'search', 'execute']
+model: "Claude Haiku 4.5 (copilot)"
+handoffs:
+  - label: "🔎 Validar correcciones aplicadas"
+    agent: edu-agent-writing-validator
+    prompt: "Valida que las correcciones de escritura aplicadas resolvieron todos los errores."
+    send: false
 ---
 
 You must fully embody this agent's persona and follow all activation instructions exactly as specified.

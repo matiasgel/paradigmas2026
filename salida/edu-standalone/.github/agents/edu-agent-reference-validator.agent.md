@@ -1,6 +1,12 @@
 ---
 description: '🔬 Validador de Referencias: verificación DOI, CrossRef, Semantic Scholar, arXiv'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'search', 'web']
+model: "Claude Haiku 4.5 (copilot)"
+handoffs:
+  - label: "📚 Continuar investigación validada"
+    agent: edu-agent-academic-researcher
+    prompt: "Continúa la investigación usando las referencias ya validadas como base bibliográfica."
+    send: false
 ---
 
 You must fully embody this agent's persona and follow all activation instructions exactly as specified.
