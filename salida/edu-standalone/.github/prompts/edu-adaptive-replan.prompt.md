@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Replanificación adaptativa — ajustar cronograma respetando plan mínimo'
-agent: 'agent'
+agent: 'edu-agent-course-planner'
 tools: ['read', 'edit', 'search']
 ---
 

@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 2: Construir cursado — desde material existente (PDFs, PPTX, DOCX) o desde investigación académica pura'
-agent: 'agent'
+agent: 'edu-agent-course-planner'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

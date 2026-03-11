@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Diseñar o ajustar tema — inicializa directorio del tema y genera diseno.md'
-agent: 'agent'
+agent: 'edu-agent-topic-designer'
 tools: ['read', 'edit', 'search']
 ---
 

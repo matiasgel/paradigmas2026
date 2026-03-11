@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 2: Proponer cambio curricular con justificación académica'
-agent: 'agent'
+agent: 'edu-agent-curriculum-reviewer'
 tools: ['read', 'edit', 'search']
 ---
 

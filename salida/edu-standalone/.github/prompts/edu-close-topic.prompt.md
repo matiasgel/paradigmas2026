@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Cerrar tema — commit + merge Git, actualiza cobertura y topic.yaml'
-agent: 'agent'
+agent: 'edu-agent-topic-designer'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

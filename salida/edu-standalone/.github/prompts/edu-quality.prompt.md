@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Calidad — valida y/o corrige escritura, coherencia, referencias, scope y densidad con commits Git'
-agent: 'agent'
+agent: 'edu-agent-writing-validator'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Crear guía de estudio — genera guia-estudio.md completo para estudio autónomo del alumno, integrando clase y PDFs fuente'
-agent: 'agent'
+agent: 'edu-agent-study-guide-writer'
 tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 

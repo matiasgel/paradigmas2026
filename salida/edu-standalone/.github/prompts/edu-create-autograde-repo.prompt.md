@@ -1,6 +1,6 @@
 ---
 description: 'EDU: Regenerar Repo Autograde — regenera o ajusta autograde-repo/ a partir del tp.md actual. La creación inicial es automática con /edu-create-tp.'
-agent: 'agent'
+agent: 'edu-agent-classroom-designer'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

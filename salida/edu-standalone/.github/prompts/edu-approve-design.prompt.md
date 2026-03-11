@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Aprobar diseño de tema — habilita creación de clase'
-agent: 'agent'
+agent: 'edu-agent-plan-coverage-checker'
 tools: ['read', 'edit', 'search']
 ---
 

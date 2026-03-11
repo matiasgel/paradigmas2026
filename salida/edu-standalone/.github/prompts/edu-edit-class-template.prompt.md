@@ -1,6 +1,6 @@
 ---
 description: 'EDU: Editar template de clase — personaliza la estructura de minuta.md y filminas.md generadas por Roberto'
-agent: 'agent'
+agent: 'edu-agent-class-writer'
 tools: ['read', 'edit', 'search']
 ---
 
