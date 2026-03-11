@@ -1,6 +1,6 @@
 ---
 description: '🔎 Validador de Escritura: detección de errores ortográficos, gramaticales y de estilo'
-tools: ['read', 'search']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 model: "Claude Haiku 4.5 (copilot)"
 handoffs:
   - label: "✏️ Corregir errores encontrados"

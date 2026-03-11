@@ -1,6 +1,6 @@
 ---
 description: 'Técnico Rodrigo 🎓 — GitHub Classroom Designer: regenera o ajusta autograde-repo/ cuando el tp.md cambia. La creación inicial ocurre automáticamente con /edu-create-tp.'
-tools: ['read', 'edit', 'search', 'execute']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 model: "Claude Sonnet 4.6 (copilot)"
 handoffs:
   - label: "🔎 Validar escritura del TP generado"

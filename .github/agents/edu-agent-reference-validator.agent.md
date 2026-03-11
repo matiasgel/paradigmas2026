@@ -1,6 +1,6 @@
 ---
 description: '🔬 Validador de Referencias: verificación DOI, CrossRef, Semantic Scholar, arXiv'
-tools: ['read', 'search', 'web']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 model: "Claude Haiku 4.5 (copilot)"
 handoffs:
   - label: "📚 Continuar investigación validada"

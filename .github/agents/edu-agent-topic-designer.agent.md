@@ -1,6 +1,6 @@
 ---
 description: 'Lic. Marcos 🗂️ — Diseñador de Temas: estructura de contenidos, duración, alcance'
-tools: ['read', 'edit', 'search']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 model: "Claude Sonnet 4.6 (copilot)"
 handoffs:
   - label: "✍️ Escribir clase de este tema"
