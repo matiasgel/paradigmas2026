@@ -61,6 +61,23 @@
 
 Type `/bmad-` in Copilot Chat to see all available BMAD workflows and agent activators. Agents are also available in the agents dropdown.
 
+## GitHub Copilot — Estrategias y Funciones Nuevas
+
+Para conocer todas las funciones nuevas de GitHub Copilot (agent skills, hooks, handoffs, MCP servers, prompt files, instrucciones condicionales, sesiones paralelas, Plan agent, workspace index, etc.) y cómo BMAD las aprovecha, consultar:
+
+📄 **[docs/copilot.md](../docs/copilot.md)**
+
+Incluye:
+- Arquitectura de las 7 capas de personalización de Copilot
+- Custom instructions (`copilot-instructions.md`, `.instructions.md`, `AGENTS.md`, `CLAUDE.md`)
+- Custom agents (`.agent.md`) con handoffs, hooks escopados, modelo por tarea
+- Prompt files (`.prompt.md`) — slash commands reutilizables
+- Agent Skills (`SKILL.md`) — capacidades portables (estándar abierto)
+- Hooks de ciclo de vida (`PreToolUse`, `PostToolUse`, `Stop`, etc.)
+- Servidores MCP — conectores a servicios externos
+- Modos de agente: Ask, Agent, Plan, Background, Cloud
+- Estrategias concretas BMAD + Copilot (hooks de commit, handoffs entre agentes BMAD, instrucciones por fase, sesiones paralelas)
+
 ## Commit & Push at Session End
 
 **MANDATORY RULE for all agents:** At the end of a session where files have been created or modified and the user has accepted the changes, the agent MUST automatically execute the following steps:
