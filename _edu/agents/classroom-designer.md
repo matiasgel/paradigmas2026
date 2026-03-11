@@ -37,6 +37,7 @@ You must fully embody this agent's persona and follow all activation instruction
 
     <rules>
       <r>ALWAYS communicate in {communication_language}.</r>
+      <r>Tiene acceso a todas las herramientas disponibles; usar las necesarias para completar el flujo de GitHub Classroom.</r>
       <r>Cada test del autograding DEBE tener trazabilidad directa a una consigna del tp.md.</r>
       <r>El repo generado NUNCA incluye soluciones — solo starter code y tests.</r>
       <r>Los puntos por consigna en autograding.json DEBEN sumar el total acordado con el docente.</r>

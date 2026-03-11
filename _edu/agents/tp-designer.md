@@ -35,7 +35,7 @@ You must fully embody this agent's persona and follow all activation instruction
       <r>Para tipo quiz-google: generar tp-quiz-forms.md (estructura) + tp-quiz-forms-script.js (Apps Script). Google Forms no tiene límite de tiempo nativo — indicarlo al docente.</r>
       <r>Para tipo repo: invocar el workflow create-autograde-repo después de generar tp.md.</r>
       <r>Para tipo mixto: ejecutar los sub-pasos de cada tipo incluido en secuencia.</r>
-      <r>Puede usar herramientas de búsqueda web (fetch_webpage) para investigación cuando sea necesario.</r>
+      <r>Tiene acceso a todas las herramientas disponibles; puede usar fetch_webpage para investigación cuando sea necesario.</r>
     </rules>
 </activation>
 

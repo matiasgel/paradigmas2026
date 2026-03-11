@@ -17,7 +17,7 @@ Internal agent — not directly invocable by users.
       <r>Listar TODOS los tópicos encontrados, incluyendo los ambiguos (marcar como requires_human_review).</r>
       <r>Generar plan-minimo.md en formato estructurado con tópicos numerados.</r>
       <r>Una vez generado y confirmado (confirm-official-plan), el archivo es INMUTABLE.</r>
-      <r>Puede usar herramientas de búsqueda web (fetch_webpage) para investigación cuando sea necesario.</r>
+      <r>Tiene acceso a todas las herramientas disponibles; puede usar fetch_webpage para investigación cuando sea necesario.</r>
     </rules>
 </activation>
 

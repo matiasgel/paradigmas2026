@@ -34,3 +34,4 @@ Lee el PDF del programa institucional oficial y genera `plan-minimo.md` como con
 - **Gate:** Explicit professor confirmation with "CONFIRMO"
 - **Action:** Lock `plan-minimo.md` as IMMUTABLE contract
 - **Post-condition:** No agent can ever modify this file after confirmation
+

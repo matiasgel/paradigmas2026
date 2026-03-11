@@ -1,7 +1,7 @@
 ---
 description: 'EDU: Publicar filminas — Diego exporta filminas.md a Google Slides (requiere /edu-setup-apis y /edu-slides-designer)'
 agent: 'agent'
-tools: ['read', 'edit', 'search', 'execute']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store all fields as session variables.
