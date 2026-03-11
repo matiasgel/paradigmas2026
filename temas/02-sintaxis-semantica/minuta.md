@@ -93,6 +93,20 @@ const y = undefined; y.length
 
 **Mensaje de cierre del bloque:** "La definición formal de un lenguaje necesita AMBAS piezas: una gramática (sintaxis) y reglas semánticas. Ahora vamos a ver cómo se construye la primera."
 
+### 🪤 Trampas anti-IA — Bloque 1
+
+*Usar después de la actividad de clasificación. Pedir que respondan con el vocabulario exacto de la clase.*
+
+**Trampa 1 — Tipos de error semántico:**
+> *"¿Cuántos tipos de error semántico vimos hoy? Nombrá cada uno con el término exacto y un ejemplo."*
+
+Respuesta esperada: **dos** — *semántico estático* (detectado en compilación por `tsc`) y *semántico dinámico* (detectado en runtime). El alumno que copió de IA puede agregar "error lógico", "error de intención" o "error de diseño" — términos que no existen en el vocabulario de esta clase.
+
+**Trampa 2 — Por qué `tsc` no detecta el Caso C:**
+> *"En el Caso C (`const y = undefined; y.length`), ¿por qué `tsc` no emite error? Respondé en términos de la clasificación de hoy."*
+
+Respuesta esperada: porque el error es **semántico dinámico** — el valor de `y` solo se conoce en runtime, no en compilación. La respuesta trampa de IA es "porque falta `--strictNullChecks`" o "porque TypeScript no tiene null safety completo" — técnicamente plausible pero no responde con la clasificación vista en clase.
+
 ---
 
 ## Bloque 2 — Estructura léxica: del texto al token (20 min)
@@ -286,6 +300,25 @@ Notación extendida que evita recursión en algunos casos:
 > *"Dado `C := D – E * F`, derivar el árbol de derivación usando la gramática del ejemplo."*
 
 Usar la pizarra o proyección interactiva. El árbol correcto muestra que `E * F` se resuelve primero (si la gramática tiene la precedencia correcta) o que hay ambigüedad (si no la tiene). Este es el punto de aprendizaje.
+
+### 🪤 Trampas anti-IA — Bloque 3
+
+*Aplicar justo después de la actividad de derivación. Requieren referencia a la gramática concreta de la clase.*
+
+**Trampa 3 — Conteo de pasos de derivación:**
+> *"¿Cuántos pasos de derivación tiene `A := B * (A + C)` en la gramática de hoy? Mostrá la tabla completa: forma de sentencia + regla aplicada en cada fila."*
+
+Respuesta esperada: **10 pasos** (la tabla tiene 10 filas incluyendo el símbolo inicial). Los LLMs se equivocan frecuentemente en este conteo (traen 8, 9 o 11). La forma de validar es que presenten la tabla con la columna "Regla aplicada" — eso no se puede fabricar sin haber seguido la derivación paso a paso.
+
+**Trampa 4 — Cadena vacía:**
+> *"En la gramática de hoy, ¿puede `<expr>` derivar la cadena vacía? ¿Por qué?"*
+
+Respuesta esperada: **No** — todas las producciones de `<expr>` requieren al menos un `<id>` y ninguna tiene una producción vacía (epsilon). La respuesta trampa de IA es "depende de la gramática" — que elude responder sobre *la gramática específica de clase*.
+
+**Trampa 5 — EBNF vs. BNF en la práctica:**
+> *"Reescribí la producción `<expr> ::= <id> + <expr> | <id> * <expr> | (<expr>) | <id>` usando notación EBNF para eliminar la recursión."*
+
+Respuesta esperada: algo como `<expr> ::= <id> { ("+" | "*") <expr> } | "(" <expr> ")"`. Requiere entender cuándo `{ }` reemplaza recursión — los LLMs frecuentemente devuelven BNF con otro nombre o EBNF incorrecta que no es equivalente.
 
 ---
 
@@ -648,6 +681,25 @@ Prompt 3 (gramática):      response_format=Persona      →  el autómata lo FU
 >
 > Respuesta esperada: **en ambos casos la gramática define qué secuencias son válidas, y cualquier desviación es rechazada antes de llegar al resultado final** — ya sea por el parser del compilador o por el autómata del LLM.
 
+### 🪤 Trampas anti-IA — Bloque 6
+
+*Aplicar inmediatamente después del demo, mientras los resultados están en pantalla. Estas preguntas requieren haber observado la demo en vivo.*
+
+**Trampa 6 — Observación directa del Acto 1:**
+> *"En el Acto 1, las dos respuestas de ChatGPT al mismo prompt, ¿tenían el mismo contenido? ¿El mismo formato?"*
+
+Respuesta esperada: mismo contenido (nombre y edad correctos) pero **formato distinto** entre los dos runs. El alumno sin clase dirá "sí, eran iguales" o "no, el contenido también difería" — dependiendo de lo que pegue de ChatGPT. La respuesta correcta depende exactamente de lo que se vio en pantalla hoy.
+
+**Trampa 7 — Acto 2 y texto ambiguo:**
+> *"En el Acto 2 con el texto ambiguo ('Juan tiene unos 30, más o menos'), ¿qué pasó exactamente con el campo `edad` en la respuesta de ChatGPT?"*
+
+Respuesta esperada: referencia al resultado real de esta demo. Si devolvió `30`, `"unos 30"`, `null` o texto adicional — la única respuesta correcta es la que se vio en pantalla. Ningún alumno sin haber estado puede responder con certeza.
+
+**Trampa 8 — Constrained decoding vs. validación posterior:**
+> *"¿El autómata del constrained decoding verifica la respuesta después de generarla, o filtra token a token durante la generación? ¿Cuál es la diferencia práctica?"*
+
+Respuesta esperada: **filtra token a token durante la generación** — en cada paso el autómata dice qué tokens son válidos a continuación. La diferencia práctica: nunca produce una respuesta inválida para descartarla después — directamente *no puede generarla*. La trampa de IA es decir "verifica al final" (post-hoc validation), que es lo que hacen sistemas más simples pero NO es constrained decoding.
+
 > 💡 **Nota técnica para el docente:** OpenAI documentó Structured Outputs en agosto 2024. Internamente usa un motor de constrained decoding basado en el trabajo de Willard & Louf (2023). El esquema Pydantic se convierte a JSON Schema, que se compila al autómata. La clave `response_format` activa ese pipeline — el mismo que estudiamos hoy en la teoría.
 
 El punto de inflexión: la misma formalización que estudiamos hoy es la que hace que los LLMs puedan garantizar outputs estructurados. No es una curiosidad histórica — es una herramienta activa.
@@ -666,6 +718,25 @@ El punto de inflexión: la misma formalización que estudiamos hoy es la que hac
 
 3. *"Diferencia entre un token y un lexema — dar un ejemplo concreto."*
    → Respuesta esperada: el lexema es la cadena concreta (`indice`), el token es la categoría (`identificador`). Dos lexemas distintos pueden tener el mismo token.
+
+---
+
+## 🪤 Banco de trampas anti-IA — Usar en cualquier momento
+
+*Preguntas diseñadas para ser difíciles de responder correctamente solo con un LLM. Requieren referencia a los artefactos, ejemplos y observaciones concretas de esta clase. Usar en orales, durante la clase como checkpoint, o como filtro de corrección de TPs.*
+
+| # | Pregunta trampa | Por qué falla la IA | Respuesta esperada |
+|---|-----------------|--------------------|--------------------|
+| T1 | "En la sentencia `indice = 5 * contador + 1;` que tokenizamos hoy, ¿cuántos tokens tiene?" | La IA puede contar mal | **8 tokens** |
+| T2 | "¿Por qué `indice` y `contador` tienen el mismo token aunque son variables distintas?" | La IA da respuesta genérica | Porque el **lexer no distingue** variable/función/constante — eso lo resuelve el analizador semántico |
+| T3 | "Derivá `A := B * (A + C)` con la gramática de la clase. Mostrá la tabla con la columna 'Regla aplicada'." | La IA produce 8-9 pasos o inventa reglas que no existen | Table exacta con **10 filas** (símbolo inicial + 9 expansiones) |
+| T4 | "¿Puede `<expr>` en la gramática de hoy derivar la cadena vacía? Justificá con las producciones exactas." | La IA responde genéricamente | **No**: ninguna de las 4 producciones de `<expr>` tiene epsilon |
+| T5 | "¿Los dos runs del Acto 1 de la demo devolvieron el mismo formato?" | Requiere haber visto la demo | Mismo contenido, **formato distinto** entre runs |
+| T6 | "El autómata de constrained decoding actúa ANTES o DESPUÉS de que el modelo genera cada token." | La IA confunde con post-hoc validation | **Antes**: filtra en cada paso qué tokens son posibles |
+| T7 | "¿Qué herramienta Python open-source para constrained decoding se mencionó en clase?" | La IA puede inventar nombres | **Outlines** (y LMQL como lenguaje de consulta) |
+| T8 | "¿En qué año se publicó el paper de Willard & Louf? ¿Dónde está disponible?" | Requiere referencia a la bibliografía de clase | **2023**, arXiv:2307.09702 |
+| T9 | "¿Cuál criterio de buena sintaxis se relaciona directamente con la posibilidad de compilar automáticamente?" | La IA da respuestas genéricas | **Facilidad de verificación** y carencia de ambigüedad |
+| T10 | "¿Cuál es la diferencia entre palabra clave y reservada? Dar un ejemplo concreto de la clase." | La IA confunde los términos | Reservada: no puede usarse como identificador (`if`). Clave: significado especial pero reutilizable en algunos contextos |
 
 ---
 
