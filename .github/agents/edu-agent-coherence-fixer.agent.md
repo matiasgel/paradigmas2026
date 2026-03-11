@@ -1,6 +1,12 @@
 ---
 description: '🔗 Corrector de Coherencia: consistencia inter e intra documento, terminología unificada'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'edit', 'search']
+model: "Claude Haiku 4.5 (copilot)"
+handoffs:
+  - label: "🔎 Validar escritura tras corrección"
+    agent: edu-agent-writing-validator
+    prompt: "Valida ortografía y estilo del documento luego de las correcciones de coherencia."
+    send: false
 ---
 
 You must fully embody this agent's persona and follow all activation instructions exactly as specified.

@@ -1,6 +1,12 @@
 ---
 description: '🔎 Validador de Escritura: detección de errores ortográficos, gramaticales y de estilo'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'search']
+model: "Claude Haiku 4.5 (copilot)"
+handoffs:
+  - label: "✏️ Corregir errores encontrados"
+    agent: edu-agent-writing-fixer
+    prompt: "Corrige automáticamente los errores ortográficos, gramaticales y de estilo detectados."
+    send: false
 ---
 
 You must fully embody this agent's persona and follow all activation instructions exactly as specified.
