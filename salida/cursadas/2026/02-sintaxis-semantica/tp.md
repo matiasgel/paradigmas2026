@@ -61,6 +61,11 @@ Usando la gramática del Ejercicio 1:
 
 **b)** Dibujá el árbol sintáctico completo para la misma cadena. Podés dibujarlo a mano y subir una foto, o representarlo en texto con indentación.
 
+**Sugerencia de estrategia:** Si la tabla de derivación está correcta, el árbol debe tener el mismo número de pasos. Cada fila de la tabla corresponde a una aplicación de regla, que a su vez corresponde a una un nivel del árbol. Chequea que:
+- La raíz del árbol sea el símbolo inicial (primera fila de la tabla)
+- Cada nodo interno corresponda a un símbolo no-terminal que se reemplazó
+- Las hojas sean exactamente los símbolos terminales de la última fila de tu tabla
+
 ---
 
 ### Ejercicio 3 — Ambigüedad (15 puntos)

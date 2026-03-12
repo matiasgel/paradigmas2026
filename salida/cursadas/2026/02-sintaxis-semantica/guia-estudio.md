@@ -259,6 +259,9 @@ La derivación tiene **10 pasos** (incluyendo el símbolo inicial como punto de 
 
 #### 4.3.5 Árboles sintácticos
 
+> 📦 **Definición — Árbol de análisis sintáctico (parse tree)**
+> Estructura jerárquica que representa cómo se derivó una cadena aplicando las reglas de la gramática. Cada nodo interno es un no-terminal, cada hoja es un terminal.
+
 El árbol de derivación (*parse tree*) para `A := B * (A + C)`:
 
 ```
@@ -277,9 +280,22 @@ El árbol de derivación (*parse tree*) para `A := B * (A + C)`:
                                C
 ```
 
-- **Nodos internos** = no terminales
-- **Hojas** = terminales (los tokens del código fuente)
-- La **jerarquía** del árbol define qué se evalúa primero: los nodos más profundos se procesan antes.
+**Cómo leer este árbol — guía paso a paso:**
+
+1. **Raíz (arriba):** El símbolo inicial `<assign>`. Siempre es el punto de partida.
+
+2. **Primer nivel de hijos:** `<id>`, `:=`, `<expr>` — estos son los tres componentes de `<assign>` según la regla `<assign> ::= <id> := <expr>`.
+
+3. **Nodos terminales (hojas):** Son los símbolos sin más expansión: `A`, `:=`, `B`, `*`, `(`, `)`, `+`, `C`. Estos son los tokens reales del código.
+
+4. **Profundidad:** Los nodos más profundos corresponden a los últimos pasos de la derivación.
+
+5. **Significado de la jerarquía:**
+   - Los operadores más arriba tienen **menor precedencia** (se aplican después).
+   - Los operadores más profundos tienen **mayor precedencia** (se aplican primero).  
+   - En este árbol, `+` está más profundo que `*`, lo que significa `+` se evalúa adentro del paréntesis.
+
+**Truco de lectura:** Si el árbol ASCII confunde, dibujalo vos manual en papel con círculos y líneas. Transcribir es un excelente ejercicio de comprensión.
 
 #### 4.3.6 Ambigüedad
 
@@ -526,6 +542,105 @@ response = client.beta.chat.completions.parse(
 ```
 
 > 💡 **La analogía directa:** el constrained decoding hace con el LLM lo que el parser hace con el compilador — en cada paso, consulta la gramática para saber qué es válido a continuación y descarta el resto.
+
+---
+
+## 4.5 PRÁCTICA INTERMEDIA — Derivación paso a paso
+
+**¿Por qué esta sección?** La derivación de gramáticas es la habilidad más difícil del tema. Estos ejercicios te preparan para el TP dándote casos más simples que puedas resolver completamente.
+
+### Ejercicio 1A — Derivación mínima (1 sola regla)
+
+**Gramática:**
+```
+<expr> ::= a | b | c
+```
+
+**Pregunta:** Derivá la cadena `b`.
+
+**Solución guiada:**
+
+| Paso | Forma de sentencia | Regla |
+|------|-------------------|-------|
+| 0 | `<expr>` | — (símbolo inicial) |
+| 1 | `b` | `expr → b` |
+
+✓ **Listo.** La forma `b` es completamente terminal, terminó la derivación. El árbol es:
+```
+  <expr>
+    |
+    b
+```
+
+**Conclusión:** Cuando el símbolo inicial es una producción con una sola alternativa simple, toda la derivación es un paso.
+
+---
+
+### Ejercicio 1B — Derivación con 2 pasos
+
+**Gramática:**
+```
+<asign> ::= <var> = <const>
+<var>   ::= x | y | z
+<const> ::= 1 | 2 | 3
+```
+
+**Pregunta:** Derivá la cadena `y = 2`.
+
+**Solución guiada:**
+
+| Paso | Forma de sentencia | Regla — ¿Cuál no-terminal reemplazo? |
+|------|-------------------|--------------------------------------|
+| 0 | `<asign>` | — (símbolo inicial) |
+| 1 | `<var> = <const>` | `asign → var = const` — Reemplacé `<asign>` |
+| 2 | `y = <const>` | `var → y` — Reemplacé `<var>` |
+| 3 | `y = 2` | `const → 2` — Reemplacé `<const>` |
+
+✓ Terminales solamente. Árbol:
+```
+      <asign>
+     /   |   \
+  <var> = <const>
+    |      |
+    y      2
+```
+
+**Clave para recordar:** En cada paso, reemplazas **UN SOLO** no-terminal. Si hay múltiples no-terminales en la forma de sentencia actual, elegís uno y aplicas una regla. Usualmente se reemplaza el izquierdo primero (derivación a izquierda, *leftmost*).
+
+---
+
+### Ejercicio 1C — Derivación con alternativas
+
+**Gramática:**
+```
+<expr>  ::= <term> | <term> + <expr>
+<term>  ::= a | b | (expr)
+```
+
+**Pregunta:** Derivá la cadena `a + b`. (Hint: usa la segunda opción de `<expr>`.)
+
+**Solución:**
+
+| Paso | Forma de sentencia | Regla |
+|------|-------------------|-------|
+| 0 | `<expr>` | — |
+| 1 | `<term> + <expr>` | `expr → term + expr` ← Elegimos la **segunda** alternativa |
+| 2 | `a + <expr>` | `term → a` ← Reemplazamos primer `<term>` |
+| 3 | `a + <term>` | `expr → term` ← Reemplazamos `<expr>` con la **primera** alternativa |
+| 4 | `a + b` | `term → b` |
+
+✓ Árbol:
+```
+       <expr>
+      /   |   \
+   <term> + <expr>
+    |        |
+    a     <term>
+           |
+           b
+```
+
+**Lección:** Hay múltiples caminos para derivar una cadena. El que elegimos depende de cuál alternativa (`|`) tomamos en cada paso. Si la cadena pertenece a la gramática, siempre existe al menos una derivación válida.
 
 ---
 

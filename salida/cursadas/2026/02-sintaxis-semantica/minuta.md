@@ -217,7 +217,33 @@ Regla: el lado izquierdo (LHS) es el no terminal a definir; el lado derecho (RHS
 ```
 
 Ejercicio de lectura: ¿qué dice la segunda regla? Que un `<enunc_if>` puede ser un `if` simple O un `if-else`. Ambas formas son válidas.
-y
+
+### PAUSA PEDAGÓGICA: ¿Qué es una derivación? (5 min)
+
+Antes de la derivación completa, conviene entender qué significa "aplicar una regla". En una derivación, hacemos reemplazos sucesivos de no-terminales por sus definiciones. 
+
+**Un paso de derivación — ejemplo visual:**
+
+Tenemos esta regla: `<expr> ::= <id> + <expr> | <id> * <expr> | (<expr>) | <id>`
+
+Si en nuestra forma de sentencia actual tenemos `A := <expr>`, y queremos "aplicar la regla", elegimos una de las opciones a la derecha del `::=` y hacemos el reemplazo:
+
+```
+Opción 1: <expr> se reemplaza por <id> + <expr>
+   Antes:  A := <expr>
+   Después: A := <id> + <expr>
+
+Opción 2: <expr> se reemplaza por <id> * <expr>
+   Antes:  A := <expr>
+   Después: A := <id> * <expr>
+
+Opción 3: <expr> se reemplaza por <id>
+   Antes:  A := <expr>
+   Después: A := <id>
+```
+
+En cada paso, reemplazas **exactamente un** no-terminal por el lado derecho de alguna regla que lo define. La derivación es la secuencia de pasos que te lleva del símbolo inicial a una cadena completamente terminal (sin `< >`).
+
 **Gramática de ejemplo completa** (para derivación):
 
 ```
