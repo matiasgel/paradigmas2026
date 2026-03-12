@@ -16,3 +16,7 @@ node_modules/
 *.tmp
 *.bak
 .venv/
+
+# EDU secrets
+_edu/secrets.local.yaml
+_edu/credentials.json
