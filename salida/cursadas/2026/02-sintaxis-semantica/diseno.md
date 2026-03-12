@@ -1,7 +1,7 @@
 # Diseño — Tema 02: Sintaxis y Semántica de Lenguajes
 
 > **Estado:** APROBADO
-> **Agrobado por:** Matías Gel (docente)
+> **Aprobado por:** Matías Gel (docente)
 > **Fecha de aprobación:** 2026-03-10
 > **Agente:** Lic. Marcos (topic-designer)
 > **Fecha:** 2026-03-10
