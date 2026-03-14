@@ -102,30 +102,40 @@ Establecer los tres pilares conceptuales del paradigma. Que el alumno pueda iden
 ### 2.2 — Funciones puras
 
 **Definición:** Una función es *pura* si:
-1. Para los mismos argumentos, siempre devuelve el mismo resultado.
-2. No produce efectos secundarios (no modifica estado global, no hace I/O).
+1. Para los mismos argumentos, siempre devuelve el **mismo resultado**.
+2. No produce efectos secundarios (no modifica estado global, no hace I/O, no depende de variables que pueden cambiar).
 
 ```typescript
-// PURA — devuelve siempre el mismo resultado, sin efectos laterales
+// ✅ PURA — devuelve siempre el mismo resultado, sin efectos laterales
 const doble = (n: number): number => n * 2;
+double(5); // 10 — siempre
+double(5); // 10 — siempre (2 minutos después, sigue siendo 10)
 
-// IMPURA — depende de estado externo (puede cambiar entre llamadas)
+// ❌ IMPURA — el resultado depende de estado externo (puede cambiar entre llamadas)
 let factor = 2;
 const dobleExterno = (n: number): number => n * factor;
 
-// IMPURA — modifica estado externo (efecto secundario)
+dobleExterno(5); // 10 (factor=2)
+factor = 3;      // ← cambiamos factor
+dobleExterno(5); // 15 (factor=3) — ¡diferente resultado con el MISMO argumento!
+```
+
+**Concepto clave:** La pureza se define por **el contrato de la función**, no solo por cómo la usamos en este momento. Si alguien *puede* cambiar las variables del entorno (variables globales, estado de objetos compartidos), la función es impura.
+
+```typescript
+// ❌ IMPURA — modifica estado externo (efecto secundario)
 const nums: number[] = [];
 const agregarYDoble = (n: number): number => {
-  nums.push(n);   // ← efecto secundario
+  nums.push(n);   // ← modifica array global — efecto secundario
   return n * 2;
 };
 ```
 
 **¿Por qué importa?** Las funciones puras son:
-- **Testeables**: no requieren mocks ni setup.
+- **Testeables**: no requieren mocks ni setup — `doble(5)` siempre vale `10`.
 - **Componibles**: se pueden encadenar sin sorpresas.
 - **Paralelizables**: sin estado compartido, no hay condiciones de carrera.
-- **Memoizables**: el resultado puede cachearse de forma segura.
+- **Memoizables**: el resultado puede cachearse de forma segura — si `doble(5)` = 10 hoy, valdrá 10 siempre.
 
 ### 2.3 — Inmutabilidad
 
@@ -294,14 +304,34 @@ gritar("  hola mundo  "); // "HOLA MUNDO!"
 
 **Currificación:** transformar una función de múltiples argumentos en una cadena de funciones de un argumento.
 
-```typescript
-// Función binaria
-const add = (a: number, b: number) => a + b;
+#### Paso 1 — Función binaria tradicional
 
-// Versión currificada manual
+```typescript
+const add = (a: number, b: number) => a + b;
+add(5, 3);  // 8
+```
+
+#### Paso 2 — Separar los argumentos manualmente (forma explícita)
+
+```typescript
+const addStep = (a: number) => {
+  return function(b: number) {
+    return a + b;
+  };
+};
+
+const add5 = addStep(5);  // ← retorna una FUNCIÓN
+console.log(add5);        // [Function: (b) => ...]
+add5(3);                  // 8 — ahora aplicamos la segunda parte
+```
+
+**Concepto clave:** `addStep(5)` NO devuelve `8`. Devuelve **una función que espera `b`**. Solo cuando hacemos `add5(3)` se ejecuta la adición.
+
+#### Paso 3 — Versión currificada compacta (arrow functions)
+
+```typescript
 const addCurried = (a: number) => (b: number) => a + b;
 
-// Aplicación parcial
 const add5 = addCurried(5);
 add5(3);  // 8
 add5(10); // 15
@@ -310,6 +340,8 @@ add5(10); // 15
 const nums = [1, 2, 3, 4, 5];
 const resultado = nums.map(addCurried(10)); // [11, 12, 13, 14, 15]
 ```
+
+**Lectura de tipos en IDE:** Si posicionás el cursor en `add5` en TypeScript, verás: `add5: (b: number) => number` — es decir, `add5` es una función que toma un `b` y retorna un número. Eso confirma que una currificación devuelve funciones, no resultados directos.
 
 #### 🔧 Ejercicio rápido (5 min)
 
@@ -373,15 +405,40 @@ Intuición de mónada como patrón para encadenar cálculos con contexto. Ver `M
 
 ### 6.1 — El problema que resuelven las mónadas
 
+En muchos lenguajes, manejar opcionalidad y errores requiere verificaciones constantes:
+
 ```typescript
-// Sin protección: null pointer exception esperando suceder
+// ❌ Estilo imperativo — verificación en cada paso
+const usuario = obtenerUsuario(1);
+if (!usuario) {
+  console.error("Usuario no existe");
+}
+
+const direccion = usuario?.direccion; // ← vuelvo a verificar
+if (!direccion) {
+  console.error("No tiene dirección");
+}
+
+const ciudad = direccion?.ciudad;     // ← y otra vez
+if (!ciudad) {
+  console.error("No tiene ciudad");
+}
+
+const resultado = ciudad?.toUpperCase(); // ← y una más
+console.log(resultado);
+```
+
+O el temido null pointer exception (si olvidás una verificación):
+
+```typescript
+// ❌ Fácil de olvidar — crash esperando suceder
 const obtenerCiudad = (usuario: any) =>
   usuario.direccion.ciudad.toUpperCase();
 
-// ¿Qué pasa si usuario.direccion es null?
+// Si usuario == null → TypeError no capturado
 ```
 
-Las mónadas son un patrón para encadenar operaciones que pueden fallar (o tener contexto), sin que cadapaso necesite verificar manualmente el estado.
+Las **mónadas** son un patrón para encadenar operaciones que pueden fallar **sin verificar manualmente en cada paso**. El contexto (presente/ausente, éxito/error, etc.) se propaga automáticamente.
 
 ### 6.2 — Maybe / Option
 

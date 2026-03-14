@@ -380,27 +380,41 @@ f(a, b) → f(a)(b)
 
 En ML/Haskell, todas las funciones son currificadas por defecto. En TypeScript es una elección de diseño:
 
+**Paso 1: Función tradicional de dos argumentos**
 ```typescript
-// Sin currificación
 const add = (a: number, b: number): number => a + b;
 add(3, 4); // 7
+```
 
-// Con currificación manual
+**Paso 2: Explícita — función que retorna función**
+```typescript
+const addExplicita = (a: number) => {
+  return (b: number): number => a + b;
+};
+addExplicita(3)(4); // 7 — primero aplicas a 3, obtienes función de 1 arg, luego aplicas a 4
+```
+
+**Paso 3: Compacta — notación arrow moderna**
+```typescript
 const addCurried = (a: number) => (b: number): number => a + b;
 addCurried(3)(4); // 7
 
-// Aplicación parcial — fijamos el primer argumento
-const add5 = addCurried(5);
+// ⚠️ Aquí está la clave: addCurried(5) NO devuelve un número
+// sino UNA FUNCIÓN que espera el segundo argumento:
+const add5: (b: number) => number = addCurried(5);
+// Verifica en VS Code: `add5` tiene tipo `(b: number) => number`
+
 add5(3);  // 8
 add5(10); // 15
 ```
 
-**Nota de Gabbrielli & Martini (§11.1.1):** la definición `val add = fn x => (fn y => y + x)` en ML es exactamente currificación: primero se aplica `add` a `x`, obteniendo una función que espera `y`.
+**Nota de Gabbrielli & Martini (§11.1.1):** la definición `val add = fn x => (fn y => y + x)` en ML es exactamente currificación: primero se aplica `add` a `x`, obteniendo una función que espera `y`. El acto de "aplicar parcialmente" un argumento NO consume el argumento completamente, sino que retorna una nueva función esperando los restantes.
 
 ```typescript
 // Currificación en pipelines
 const nums = [1, 2, 3, 4, 5];
 nums.map(addCurried(10)); // [11, 12, 13, 14, 15]
+// Aquí addCurried(10) se evalúa a una función parcial que luego map aplica a cada número.
 
 // Más expresivo que:
 nums.map(n => add(n, 10)); // equivalente pero menos componible
@@ -490,12 +504,15 @@ Las **mónadas** son un patrón de diseño para encadenar cálculos que tienen *
 
 Sin mónadas, manejar estos contextos genera código verboso y frágil:
 
+**Código sin protección — falla al primer null:**
 ```typescript
-// Sin protección: puede explotar en cualquier paso
 const obtenerCiudad = (datos: any): string =>
   datos.usuario.direccion.ciudad.toUpperCase();
+// Si datos es null, o datos.usuario es undefined, esto explota.
+```
 
-// Con verificaciones manuales: tedioso y propenso a olvidos
+**Código con verificaciones manuales — tedioso y propenso a olvidos:**
+```typescript
 const obtenerCiudadSeguro = (datos: any): string | null => {
   if (!datos) return null;
   if (!datos.usuario) return null;
@@ -504,6 +521,23 @@ const obtenerCiudadSeguro = (datos: any): string | null => {
   return datos.usuario.direccion.ciudad.toUpperCase();
 };
 ```
+
+**El problema real:**
+- ¿Qué pasa si olvidás una verificación? → Crash en producción.
+- ¿Qué pasa si agregás un nuevo campo anidado? → Tenés que agregar otra verificación manual.
+- ¿Cómo testeas cada rama de null? → Tests tedioso y propenso a falsos negativos.
+
+**La solución monádica:** Encadenar las transformaciones, y si en cualquier paso obtenés `null`, toda la cadena se colapsa a `null` automáticamente. Sin verificaciones anidadas.
+
+```typescript
+// Con mónada Option: seguro, conciso, imposible olvidar una verificación
+const resultado = flatMapOpt(u => u.direccion)
+  .flatMapOpt(d => d.ciudad)
+  .map(c => c.toUpperCase());
+// Si algún paso retorna null, el resultado es null. Fin.
+```
+
+> 📌 Las mónadas transforman el "flujo de control" manual (if-null) en un patrón declarativo que el compilador puede verificar.
 
 ---
 
