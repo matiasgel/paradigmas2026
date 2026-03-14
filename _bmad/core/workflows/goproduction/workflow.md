@@ -83,6 +83,7 @@ Mostrar la siguiente tabla al usuario:
 | REEMPLAZAR | `.github/agents/edu-*.agent.md` en production | `salida/edu-standalone/.github/agents/` |
 | REEMPLAZAR | `.github/prompts/edu-*.prompt.md` en production | `salida/edu-standalone/.github/prompts/` |
 | ACTUALIZAR | Bloque EDU en `.github/copilot-instructions.md` | `salida/edu-standalone/.github/copilot-instructions.md` |
+| REEMPLAZAR | `scripts/` en production | `scripts/` |
 | ⏭️ PRESERVAR | `_edu/config.yaml` | si ya existe en production |
 | 🛡️ PRESERVAR | `_edu-memory/` | siempre |
 | 🛡️ PRESERVAR | `salida/cursadas/` | siempre |
@@ -184,7 +185,15 @@ cp salida/edu-standalone/.github/prompts/edu-*.prompt.md "$WORKTREE_PATH/.github
 echo "✅ .github/prompts/ edu-* → $(ls $WORKTREE_PATH/.github/prompts/edu-*.prompt.md | wc -l) archivos"
 ```
 
-#### 4.7 — Actualizar bloque EDU en `copilot-instructions.md`
+#### 4.7 — Deploy `scripts/`
+
+```bash
+rm -rf "$WORKTREE_PATH/scripts"
+cp -r scripts "$WORKTREE_PATH/scripts"
+echo "✅ scripts/ → $(ls $WORKTREE_PATH/scripts | wc -l) archivos"
+```
+
+#### 4.8 — Actualizar bloque EDU en `copilot-instructions.md`
 
 ```bash
 if [ -f "$WORKTREE_PATH/.github/copilot-instructions.md" ]; then
