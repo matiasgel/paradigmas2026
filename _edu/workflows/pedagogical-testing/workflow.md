@@ -27,8 +27,8 @@ Simula la experiencia de alumnos con diferentes perfiles antes de dar clase.
 ### Step 3: Generate Reports
 - **Agent:** test-runner (internal)
 - **Output:**
-  - `temas/NN-nombre/score-pedagogico.md` — quantifiable pedagogical score (includes separate sub-scores for class materials and study guide if both are present)
-  - `temas/NN-nombre/faq-anticipado.md` — anticipated student questions/confusions (grouped by source: "En clase" vs "Estudiando solos")
+  - `{topic_folder}/score-pedagogico.md` — quantifiable pedagogical score (includes separate sub-scores for class materials and study guide if both are present)
+  - `{topic_folder}/faq-anticipado.md` — anticipated student questions/confusions (grouped by source: "En clase" vs "Estudiando solos")
 
 ### Step 4: Professor Review
 - **Gate:** Professor reviews scores and decides if adjustments needed

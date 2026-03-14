@@ -15,11 +15,14 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
 ### Step 0: Initialize Topic Directory
 - **Precondition:** `_edu/active-topic.yaml` must exist (written by /edu-design-topic or /edu-topic)
 - **Actions:**
-  1. Read `{project-root}/_edu/active-topic.yaml` → store `{topic_folder}`, `{topic_number}`, `{topic_name}` as session variables
-  2. Read `{project-root}/{topic_folder}/topic.yaml` → store all fields (`class_duration`, `git_branch`, `status`, `artifacts` map)
-  3. Use `{class_duration}` from `topic.yaml` as the duration constraint for ALL subsequent steps
-  4. Resolve all artifact paths as `{project-root}/{topic_folder}/{artifact}` (e.g. `diseno.md`, `minuta.md`, `filminas.md`, `guia-estudio.md`, `tp.md`)
-- **Error:** If `active-topic.yaml` is missing → STOP and instruct: "Primero iniciá un tema con /edu-design-topic"
+  1. Read `{project-root}/_edu/config.yaml` → store `{topics_folder}` como variable de sesión (ej: `salida/cursadas/2026/temas`)
+  2. Read `{project-root}/_edu/active-topic.yaml` → store `{topic_folder}`, `{topic_number}`, `{topic_name}` as session variables
+     - **⚠️ VALIDACIÓN DE RUTA:** `topic_folder` DEBE ser ruta bajo `{topics_folder}` (ej: `salida/cursadas/2026/temas/01-intro`). Si es una ruta bare como `temas/NN-nombre`, corregir automáticamente a `{topics_folder}/NN-nombre` y actualizar `active-topic.yaml`.
+  3. Read `{project-root}/{topic_folder}/topic.yaml` → store all fields (`class_duration`, `git_branch`, `status`, `artifacts` map)
+  4. Use `{class_duration}` from `topic.yaml` as the duration constraint for ALL subsequent steps
+  5. Resolve all artifact paths as `{project-root}/{topic_folder}/{artifact}` (e.g. `diseno.md`, `minuta.md`, `filminas.md`, `guia-estudio.md`, `tp.md`)
+- **Crear si falta:** Si `active-topic.yaml` no existe Y se dispone de número/nombre del tema → CREAR con `topic_folder: {topics_folder}/NN-nombre` y continuar.
+- **Error:** If `active-topic.yaml` is missing AND no topic info available → STOP and instruct: "Primero iniciá un tema con /edu-design-topic"
 
 ### Step 0.5: Ingest Reference PDFs
 - **Precondition:** `{project-root}/material/{topic_number}-{topic_name}/` debe existir (subcarpeta del tema activo)
@@ -44,7 +47,7 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
 ### Step 1: Design Topic
 - **Agent:** topic-designer (Marcos)
 - **Input:** Topic number from plan-borrador.md + textos en `{material_texts}` como contexto de referencia
-- **Output:** `temas/NN-nombre/diseno.md`
+- **Output:** `{topics_folder}/NN-nombre/diseno.md`
 - **Gate:** Professor approval required
 
 ### Step 2: (Optional) Adjust Design
@@ -60,13 +63,13 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
 ### Step 4: Create Class
 - **Agent:** class-writer (Roberto)
 - **Input:** Approved `diseno.md`
-- **Output:** `temas/NN-nombre/minuta.md`, `temas/NN-nombre/filminas.md`
+- **Output:** `{topic_folder}/minuta.md`, `{topic_folder}/filminas.md`
 - **Constraint:** Content proportional to `default_class_duration`
 
 ### Step 4.5: Create Study Guide
 - **Agent:** study-guide-writer (Sofía)
 - **Input:** `minuta.md` + `filminas.md` + `diseno.md` + PDFs fuente de `{project-root}/material/` + cualquier material en `{topic_folder}/`
-- **Output:** `temas/NN-nombre/guia-estudio.md`
+- **Output:** `{topic_folder}/guia-estudio.md`
 - **Purpose:** Documento completo para estudio autónomo del alumno. Más profundo que la minuta — incluye desarrollo teórico expandido (integrando los PDFs fuente), ejemplos trabajados paso a paso, glosario y autoevaluación.
 - **Structure:** Portada → Objetivos → Conceptos previos → Desarrollo teórico (con referencias a filminas y PDFs) → Ejemplos trabajados → Puntos clave → Autoevaluación → Glosario → Referencias
 - **Constraint:** Scope estrictamente definido por `diseno.md`. La guía NO debe incluir contenido fuera de los tópicos del diseño aprobado.
@@ -87,7 +90,7 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
 
   Guardar el tipo elegido en `{topic_folder}/topic.yaml` bajo la clave `tp_type`.
 
-- **Output base (todos los tipos):** `temas/NN-nombre/tp.md` — consignas trazables a la minuta
+- **Output base (todos los tipos):** `{topic_folder}/tp.md` — consignas trazables a la minuta
 - **Constraint:** tp.md trazable a secciones de minuta. Scope creep = eliminarlo.
 
 ### Step 5.5: TP Type-Specific Output (Opcional por tipo)
@@ -137,8 +140,8 @@ Según `tp_type` guardado en Step 5, ejecutar el sub-paso correspondiente:
 - **Prompt:** `/edu_publish_slides`
 - **Agent:** slides-publisher (Diego), orquestado por el prompt
 - **Condition:** Solo si `_edu/secrets.local.yaml` existe (APIs configuradas)
-- **Input:** `temas/NN-nombre/filminas.md` (ya aprobadas y corregidas por quality loops)
-- **Output:** `temas/NN-nombre/slides/publish_slides.py`, `temas/NN-nombre/slides/slide-plan.yaml`, `temas/NN-nombre/slides/slides-url.txt`
+- **Input:** `{topic_folder}/filminas.md` (ya aprobadas y corregidas por quality loops)
+- **Output:** `{topic_folder}/slides/publish_slides.py`, `{topic_folder}/slides/slide-plan.yaml`, `{topic_folder}/slides/slides-url.txt`
 - **Gate:** El docente aprueba el plan de imágenes filmina por filmina antes de generar
 - **Note:** Si `_edu/slides-config.yaml` no existe, Diego invoca a Vera primero automáticamente
 

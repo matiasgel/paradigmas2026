@@ -90,6 +90,6 @@ Sesión de debate multi-agente sobre el diseño o contenido de un tema. Elena co
 
 ### Step 7: Registro
 - **Agent:** course-planner (Elena)
-- **Action:** Guardar síntesis del debate en `temas/NN-nombre/debate-[fecha].md`
+- **Action:** Guardar síntesis del debate en `{topic_folder}/debate-[fecha].md`
 - **Output:** Archivo de registro para trazabilidad de la decisión docente
 
