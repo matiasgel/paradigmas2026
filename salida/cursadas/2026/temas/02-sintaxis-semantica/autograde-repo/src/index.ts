@@ -25,3 +25,12 @@ export function esAmbigua(): boolean {
   // La gramática dada en clase es ambigua para `a + b * c`.
   return true;
 }
+
+/**
+ * Dada una cadena, devuelve true si es una expresión válida simple del tipo
+ * `<id> + <id> * <id>` según la gramática ambigua de clase.
+ */
+export function esExpresionValida(expr: string): boolean {
+  const regex = /^\s*[abc]\s*\+\s*[abc]\s*\*\s*[abc]\s*$/;
+  return regex.test(expr);
+}
