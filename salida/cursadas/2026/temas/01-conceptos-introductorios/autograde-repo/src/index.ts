@@ -30,12 +30,75 @@ export function sumaArray(arr: number[]): number {
 
 /**
  * Dado un array de números, devuelve la suma usando recursión.
+ * Implementado como expresión utilizando operador ternario para evitar statements.
  */
-export function sumaArrayRecursiva(arr: number[]): number {
-  if (arr.length === 0) return 0;
-  const [head, ...tail] = arr;
-  return head + sumaArrayRecursiva(tail);
-}
+export const sumaArrayRecursiva = (arr: number[]): number =>
+  arr.length === 0 ? 0 : arr[0] + sumaArrayRecursiva(arr.slice(1));
+
+/**
+ * Divide `a` entre `b` y lanza un error si `b` es 0.
+ * Se usa una IIFE en la rama ternaria para lanzar el error sin usar `if`.
+ */
+export const dividir = (a: number, b: number): number =>
+  b === 0
+    ? (() => {
+        throw new Error('División por cero');
+      })()
+    : a / b;
+
+/**
+ * Calcula factorial de n (n >= 0) usando recursión expresiva.
+ */
+export const factorial = (n: number): number =>
+  n < 0
+    ? (() => {
+        throw new Error('n debe ser no negativo');
+      })()
+    : n <= 1
+    ? 1
+    : n * factorial(n - 1);
+
+/**
+ * Devuelve el máximo y mínimo de un array de números.
+ */
+export const maxMin = (arr: number[]): { max: number; min: number } =>
+  arr.length === 0
+    ? (() => {
+        throw new Error('El array no puede estar vacío');
+      })()
+    : arr.reduce(
+        (acc, n) => ({
+          max: Math.max(acc.max, n),
+          min: Math.min(acc.min, n),
+        }),
+        { max: arr[0], min: arr[0] }
+      );
+
+/**
+ * Agrupa los elementos por la clave devuelta por `keyFn`.
+ * Implementado en estilo funcional (sin mutaciones explícitas fuera del reduce).
+ */
+export const agruparPor = <T, K extends string | number | symbol>(
+  arr: T[],
+  keyFn: (item: T) => K
+): Record<K, T[]> =>
+  arr.reduce((acc, item) => {
+    const key = keyFn(item);
+    return {
+      ...acc,
+      [key]: [...(acc[key] ?? []), item],
+    };
+  }, {} as Record<K, T[]>);
+
+/**
+ * Simula un error de ejecución; lanza un Error si el parámetro es `null` o `undefined`.
+ */
+export const lanzarSiNulo = (x: unknown): string =>
+  x === null || x === undefined
+    ? (() => {
+        throw new Error('Valor nulo o indefinido');
+      })()
+    : String(x);
 
 /**
  * Convierte un string a número. Devuelve `null` si no es un número válido.
@@ -43,16 +106,6 @@ export function sumaArrayRecursiva(arr: number[]): number {
 export function parseNumber(text: string): number | null {
   const n = Number(text);
   return Number.isFinite(n) ? n : null;
-}
-
-/**
- * Divide `a` entre `b` y lanza un error si `b` es 0.
- */
-export function dividir(a: number, b: number): number {
-  if (b === 0) {
-    throw new Error('División por cero');
-  }
-  return a / b;
 }
 
 /**
@@ -67,14 +120,6 @@ export function filtrarPares(arr: number[]): number[] {
  */
 export function range(n: number): number[] {
   return Array.from({ length: n }, (_, i) => i + 1);
-}
-
-/**
- * Calcula factorial de n (n >= 0).
- */
-export function factorial(n: number): number {
-  if (n < 0) throw new Error('n debe ser no negativo');
-  return n <= 1 ? 1 : n * factorial(n - 1);
 }
 
 /**
@@ -100,17 +145,6 @@ export function contarPalabras(text: string): number {
 }
 
 /**
- * Devuelve el máximo y mínimo de un array de números.
- */
-export function maxMin(arr: number[]): { max: number; min: number } {
-  if (arr.length === 0) throw new Error('El array no puede estar vacío');
-  return {
-    max: Math.max(...arr),
-    min: Math.min(...arr),
-  };
-}
-
-/**
  * Aplana un arreglo de profundidad 1 (concatena los sub-arrays).
  */
 export function aplanar<T>(arr: T[][]): T[] {
@@ -125,33 +159,8 @@ export function unico<T>(arr: T[]): T[] {
 }
 
 /**
- * Agrupa los elementos por la clave devuelta por `keyFn`.
- */
-export function agruparPor<T, K extends string | number | symbol>(
-  arr: T[],
-  keyFn: (item: T) => K
-): Record<K, T[]> {
-  return arr.reduce((acc, item) => {
-    const key = keyFn(item);
-    if (!acc[key]) acc[key] = [];
-    acc[key].push(item);
-    return acc;
-  }, {} as Record<K, T[]>);
-}
-
-/**
  * Suma los cuadrados de los números del arreglo.
  */
 export function sumaCuadrados(arr: number[]): number {
   return arr.reduce((acc, n) => acc + n * n, 0);
-}
-
-/**
- * Simula un error de ejecución; lanza un Error si el parámetro es `null` o `undefined`.
- */
-export function lanzarSiNulo(x: unknown): string {
-  if (x === null || x === undefined) {
-    throw new Error('Valor nulo o indefinido');
-  }
-  return String(x);
 }
