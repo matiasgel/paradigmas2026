@@ -94,18 +94,17 @@ def resolve_targets(arg: str) -> list[tuple[Path, Path]]:
         return [(target, target.parent / "txt")]
 
     if target.is_dir():
+        # PDFs directamente en esta carpeta → carpeta hoja (ej: material/01-intro/)
+        direct_pdfs = sorted(target.glob("*.pdf"))
+        if direct_pdfs:
+            return [(pdf, target / "txt") for pdf in direct_pdfs]
+
+        # Sin PDFs directos → carpeta raíz con subcarpetas de tema (ej: material/)
         pairs: list[tuple[Path, Path]] = []
-
-        # PDFs directamente en esta carpeta → van a target/txt/
-        for pdf in sorted(target.glob("*.pdf")):
-            pairs.append((pdf, target / "txt"))
-
-        # PDFs en subcarpetas de tema → cada una tiene su propio subdir/txt/
         subdirs = sorted(d for d in target.iterdir() if d.is_dir() and d.name != "txt")
         for subdir in subdirs:
             for pdf in sorted(subdir.glob("*.pdf")):
                 pairs.append((pdf, subdir / "txt"))
-
         return pairs
 
     print(f"ERROR: La ruta debe ser un PDF o una carpeta: {target}")
