@@ -6,4 +6,6 @@ semana: 1
 clase: "1 de 2"
 duracion: 120
 estado: "cerrado"
-tp_type: "quiz-moodle"
+tp_type: "repo"
+artifacts:
+  autograde_repo: "autograde-repo/"

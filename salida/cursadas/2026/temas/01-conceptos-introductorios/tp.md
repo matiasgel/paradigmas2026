@@ -1,10 +1,10 @@
 # TP — Tema 01: Conceptos Introductorios + Intro a TypeScript
 
-> **Tipo:** Quiz Moodle (GIFT)
+> **Tipo:** Repo GitHub Classroom (autograding)
 > **Agente:** Aux. Valeria (tp-designer)
 > **Fecha:** 2026-03-10
 > **Trazado desde:** `temas/01-conceptos-introductorios/minuta.md` · `filminas.md`
-> **Output asociado:** `temas/01-conceptos-introductorios/tp-quiz.gift`
+> **Output asociado:** `temas/01-conceptos-introductorios/autograde-repo/`
 
 ---
 

@@ -1,7 +1,7 @@
 # Trabajo Práctico — Tema 02: Sintaxis y Semántica de Lenguajes
 
 > **Estado:** BORRADOR
-> **Tipo:** Quiz Moodle (GIFT)
+> **Tipo:** Repo GitHub Classroom (autograding)
 > **Agente:** Aux. Valeria 📝 (tp-designer)
 > **Fecha:** 2026-03-10
 > **Tema Nº:** 02 — Sintaxis y Semántica de Lenguajes
