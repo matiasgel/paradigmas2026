@@ -461,21 +461,22 @@ const mostrarDescuento = (precio: number, pct: number): void => {
 En lenguajes funcionales puros como Haskell, la evaluación es **perezosa** (*lazy*) por defecto: los valores se calculan solo cuando se necesitan. En TypeScript esto se logra de forma explícita con **generadores**:
 
 ```typescript
-// Generador lazy: produce el stream infinito de naturales
+// Caso especial: function* no tiene sintaxis arrow — única excepción al estilo expresivo.
+// Su estado interno (n) es invisible para el exterior → la interfaz sigue siendo pura.
 function* naturales(): Generator<number> {
   let n = 0;
   while (true) yield n++;
 }
 
-// Tomar los primeros N sin evaluar todo el stream
-function tomar<T>(n: number, gen: Generator<T>): T[] {
+// const arrow — consumir un generador con for-of es idiomático en TS/JS.
+const tomar = <T>(n: number, gen: Generator<T>): T[] => {
   const res: T[] = [];
   for (const v of gen) {
     res.push(v);
     if (res.length >= n) break;
   }
   return res;
-}
+};
 
 tomar(5, naturales()); // [0, 1, 2, 3, 4]
 // El generador produce solo 5 valores, sin calcular los infinitos restantes

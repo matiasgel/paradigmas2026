@@ -61,12 +61,16 @@ function promedioPositivos(nums: number[]): number {
   return cantidad === 0 ? 0 : suma / cantidad;
 }
 
-// Versión funcional
+// Versión funcional pura — solo expresiones, sin if
 const promedioPositivos = (nums: number[]): number => {
   const positivos = nums.filter(n => n > 0);
-  if (positivos.length === 0) return 0;
-  return positivos.reduce((acc, n) => acc + n, 0) / positivos.length;
+  return positivos.length === 0
+    ? 0
+    : positivos.reduce((acc, n) => acc + n, 0) / positivos.length;
 };
+
+// 💡 Expresión vs sentencia: el operador ternario `? :` es una *expresión* (tiene valor).
+// `if` es una *sentencia* (ejecuta acciones). En funcional puro, preferimos expresiones.
 ```
 
 **Preguntas para el aula:**
@@ -314,16 +318,16 @@ add(5, 3);  // 8
 #### Paso 2 — Separar los argumentos manualmente (forma explícita)
 
 ```typescript
-const addStep = (a: number) => {
-  return function(b: number) {
-    return a + b;
-  };
-};
+// La función interna también es arrow — mantenemos estilo expresivo
+const addStep = (a: number) => (b: number) => a + b;
 
-const add5 = addStep(5);  // ← retorna una FUNCIÓN
-console.log(add5);        // [Function: (b) => ...]
+const add5 = addStep(5);  // ← retorna una FUNCIÓN: (b: number) => a + b
+console.log(add5);        // [Function (anonymous)]
 add5(3);                  // 8 — ahora aplicamos la segunda parte
 ```
+
+> **Cómo leerlo:** `addStep` es una función que toma `a` y *devuelve otra función* que toma `b`.
+> `addStep(5)` devuelve `(b: number) => 5 + b`. Solo cuando ejecutamos `add5(3)` se completa el cómputo.
 
 **Concepto clave:** `addStep(5)` NO devuelve `8`. Devuelve **una función que espera `b`**. Solo cuando hacemos `add5(3)` se ejecuta la adición.
 
@@ -375,21 +379,22 @@ Un programa real necesita I/O: leer archivos, llamar APIs, escribir en pantalla.
 En JavaScript/TypeScript, los generadores permiten crear pipelines *lazy*: los valores se producen solo cuando se consumen.
 
 ```typescript
-// Generador lazy — produce números naturales sin límite
+// Caso especial: function* no tiene sintaxis arrow — es la única excepción al estilo expresivo.
+// El estado interno (n) es puramente local e invisible para el exterior.
 function* naturales(): Generator<number> {
   let n = 0;
   while (true) yield n++;
 }
 
-// Tomar los primeros N elementos de un generador
-function tomar<T>(n: number, gen: Generator<T>): T[] {
+// const arrow: consumir un generador con for-of es el único mecanismo idiomático en TS/JS.
+const tomar = <T>(n: number, gen: Generator<T>): T[] => {
   const resultado: T[] = [];
   for (const valor of gen) {
     resultado.push(valor);
     if (resultado.length >= n) break;
   }
   return resultado;
-}
+};
 
 tomar(5, naturales()); // [0, 1, 2, 3, 4]
 ```

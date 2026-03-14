@@ -17,10 +17,10 @@ Agrupadas por bloque. Ordenadas de más a menos probable.
 ### 🔵 Bloque 1 — Motivación (10 min)
 
 **P1.1** *(🔵 Estratégico — alta probabilidad)*
-> *"Profe, en el ejemplo de `promedioPositivos`, la versión funcional usa `if (positivos.length === 0)` — ¿eso no es control de flujo imperativo dentro de la función funcional?"*
+> *"Profe, en la versión funcional de `promedioPositivos` usaron `? 0 :` en vez de `if (...) return 0`. ¿Hay alguna diferencia real o es solo estilo?"*
 
 **Respuesta sugerida:**  
-El controlde flujo (`if`) está permitido. La clave es que no hay *estado mutable* — `positivos` es un nuevo valor, no una variable modificada. Funcional no prohíbe condicionales; prohíbe la mutación.
+Es una diferencia conceptual importante: `if` es una *sentencia* — ejecuta acciones sin producir un valor por sí misma. El operador ternario `? :` es una *expresión* — siempre produce un valor y puede aparecer en cualquier lugar donde se espere un valor. En programación funcional pura, el cómputo se define como la **evaluación de expresiones**, no como la **ejecución de sentencias**. Por eso: `if (cond) return x;` es imperativo; `cond ? x : y` es funcional. Funcional no prohíbe condicionales — los expresa como expresiones, no como sentencias.
 
 ---
 

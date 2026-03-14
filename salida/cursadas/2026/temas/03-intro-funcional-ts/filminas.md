@@ -68,13 +68,17 @@ function promedioPositivos(nums: number[]): number {
 ```
 
 ```typescript
-// Funcional
+// Funcional puro — solo expresiones, sin if
 const promedioPositivos = (nums: number[]): number => {
   const positivos = nums.filter(n => n > 0);
-  if (positivos.length === 0) return 0;
-  return positivos.reduce((acc, n) => acc + n, 0) / positivos.length;
+  return positivos.length === 0
+    ? 0
+    : positivos.reduce((acc, n) => acc + n, 0) / positivos.length;
 };
 ```
+
+> 💡 **Expresión vs sentencia:** el operador ternario `? :` es una *expresión* (tiene valor).
+> `if` es una *sentencia* (ejecuta acciones). En funcional puro, preferimos expresiones.
 
 > ❓ ¿Cuál es más legible? ¿Cuál es más fácil de testear? ¿Cuál tiene menos lugares donde puede fallar?
 
@@ -436,21 +440,22 @@ procesarPares([1, 2, 3, 4, 5, 6]); // (2+4+6)*3 = 36
 ## Lazy en TypeScript
 
 ```typescript
-// Generador lazy — produce infinitos naturales
+// Caso especial: function* no tiene sintaxis arrow — es la única excepción al estilo expresivo.
+// El estado interno (n) es invisible para el exterior → la interfaz sigue siendo pura.
 function* naturales(): Generator<number> {
   let n = 0;
   while (true) yield n++;
 }
 
-// Tomar los primeros N — sin evaluar todo el stream
-function tomar<T>(n: number, gen: Generator<T>): T[] {
+// tomar: const arrow. for-of sobre generadores es el único mecanismo idiomático en TS.
+const tomar = <T>(n: number, gen: Generator<T>): T[] => {
   const res: T[] = [];
   for (const v of gen) {
     res.push(v);
     if (res.length >= n) break;
   }
   return res;
-}
+};
 
 tomar(5, naturales()); // [0, 1, 2, 3, 4]
 ```

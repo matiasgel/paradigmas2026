@@ -297,14 +297,10 @@ La notación `(a: number) => (b: number): number` es el punto de mayor abandono 
 // Paso 1: función normal
 const add = (a: number, b: number) => a + b;
 
-// Paso 2: separar argumentos manualmente
-const addStep = (a: number) => {
-  return function(b: number) {
-    return a + b;
-  };
-};
+// Paso 2: separar argumentos — estilo funcional puro (arrow en todos los niveles)
+const addStep = (a: number) => (b: number) => a + b;
 
-// Paso 3: versión arrow equivalente
+// Paso 3: versión currificada compacta (equivalente a addStep)
 const addCurried = (a: number) => (b: number) => a + b;
 ```
 
