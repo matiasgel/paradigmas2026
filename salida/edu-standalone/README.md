@@ -32,18 +32,19 @@ tu-materia/
 │   └── workflows/                 ← Definiciones de workflows
 ├── _edu-memory/                   ← Memoria persistente (creada en runtime)
 ├── salida/
-│   └── cursadas/                  ← Output del cursado (creado en runtime)
-│       ├── plan-minimo.md
-│       ├── plan-borrador.md
-│       └── temas/
-│           └── NN-nombre/
-│               ├── diseno.md
-│               ├── minuta.md
-│               ├── filminas.md
-│               ├── guia-estudio.md  ← Material de estudio del alumno
-│               ├── guia-estudio.pdf ← PDF exportado para cátedra
-│               ├── tp.md
-│               └── slides/          ← Scripts y link de Google Slides
+│   └── cursadas/
+│       └── {course_year}/         ← Año de cursada activo (ej: 2026) — creado en runtime
+│           ├── plan-minimo.md
+│           ├── plan-borrador.md
+│           └── temas/
+│               └── NN-nombre/
+│                   ├── diseno.md
+│                   ├── minuta.md
+│                   ├── filminas.md
+│                   ├── guia-estudio.md  ← Material de estudio del alumno
+│                   ├── guia-estudio.pdf ← PDF exportado para cátedra
+│                   ├── tp.md
+│                   └── slides/          ← Scripts y link de Google Slides
 └── material/                      ← Material docente existente (opcional)
 ```
 

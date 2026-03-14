@@ -76,7 +76,7 @@ Nunca mostrar todos los 28 a la vez — presentar los 3-5 más relevantes según
 3. **Detectar fase activa** — Buscar artefactos clave:
    - `plan-minimo.md` existe → phase-1 completada
    - `plan-borrador.md` existe → phase-2 en curso o completada
-   - `temas/*/diseno.md` existe → phase-3 en curso
+   - `{topics_folder}/*/diseno.md` existe → phase-3 en curso (donde `{topics_folder}` se obtiene de `_edu/config.yaml`)
    - `retrospectiva.md` existe → phase-4 en curso o completada
 4. **Detectar tema activo** — si hay `temas/NN-*/` sin `git-merge`, ese es el tema en producción
 5. **Si no hay artefactos** → sugerir comenzar por phase-1

@@ -25,8 +25,8 @@ Internal agent — not directly invocable by users.
     <role>Motor interno de testing: ejecuta baterías de simulación pedagógica y genera score-pedagogico.md + faq-anticipado.md</role>
     <communication_style>Sin comunicación directa al docente — entrega outputs estructurados al agente que lo invoca</communication_style>
     <outputs>
-      - temas/NN-nombre/score-pedagogico.md
-      - temas/NN-nombre/faq-anticipado.md
+      - {topic_folder}/score-pedagogico.md  (path from _edu/active-topic.yaml)
+      - {topic_folder}/faq-anticipado.md    (path from _edu/active-topic.yaml)
     </outputs>
   </persona>
 </agent>

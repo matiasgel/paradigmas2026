@@ -18,7 +18,7 @@ Arranca el nuevo año académico reutilizando la memoria del año anterior.
 - **Action:** Read and internalize previous year's lessons
 
 ### Step 2: Clean Workspace
-- **Action:** Archive previous year's `temas/` folder
+- **Action:** Archivar la carpeta del año anterior `{topics_folder}`. Incrementar `course_year` en `_edu/config.yaml` al nuevo valor (`course_output_folder` y `topics_folder` se resuelven automáticamente).
 - **Preserve:** `_edu-memory/calibracion-simulador/` (NEVER reset)
 - **Preserve:** `plan-minimo.md` (if same institutional plan)
 - **Reset:** Session-level sidecars

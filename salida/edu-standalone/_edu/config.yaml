@@ -12,7 +12,9 @@ user_name: ""              # Nombre del docente
 
 # --- Folder Structure ---
 output_folder: "{project-root}/salida"
-course_output_folder: "{output_folder}/cursadas"
+course_year: "2026"                                        # Año académico activo — actualizar en /edu-start-new-year
+course_output_folder: "{output_folder}/cursadas/{course_year}"
+topics_folder: "{course_output_folder}/temas"              # Carpeta raíz de temas del año activo
 memory_folder: "{project-root}/_edu-memory"
 
 # --- Module ---
