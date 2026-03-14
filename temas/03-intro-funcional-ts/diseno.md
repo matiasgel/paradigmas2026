@@ -80,7 +80,7 @@
 
 ## Link con el plan mínimo
 
-- Este tema cubre los ítems de **“Paradigma funcional”** del plan mínimo, específicamente:
+- Este tema cubre los siguientes tópicos del **plan mínimo (Bloque Programación Funcional)**, específicamente:
   - Funciones puras, inmutabilidad, recursividad.
   - Funciones de orden superior, clausuras y ámbito léxico.
   - Composición de funciones, aplicación parcial, currificación.
