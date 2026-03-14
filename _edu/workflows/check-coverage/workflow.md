@@ -14,7 +14,7 @@ Verifica el porcentaje de cobertura del plan mínimo en el estado actual del cur
 
 ### Step 1: Load Coverage Matrix
 - **Agent:** plan-coverage-checker
-- **Input:** `plan-minimo.md` + all topic folders in `temas/`
+- **Input:** `plan-minimo.md` + all topic folders in `{topics_folder}` (leer de `_edu/config.yaml`)
 - **Action:** Cross-reference mandatory topics with produced content
 
 ### Step 2: Generate Report
