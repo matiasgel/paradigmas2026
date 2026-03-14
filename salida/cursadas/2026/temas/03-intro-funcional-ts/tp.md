@@ -1,10 +1,10 @@
 # TP 03 — Introducción a Programación Funcional con TypeScript
 
-> **Tipo:** Quiz Moodle (múltiple opción)
+> **Tipo:** Repo GitHub Classroom (autograding)
 > **Agente:** Aux. Valeria 📝 (tp-designer)
-> **Fecha de generación:** 2026-03-13
+> **Fecha de generación:** 2026-03-14
 > **Trazabilidad:** minuta.md — Bloques 1 a 7
-> **Workflow:** create-tp / Part A
+> **Workflow:** create-tp / Part A + autograde-repo
 
 ---
 

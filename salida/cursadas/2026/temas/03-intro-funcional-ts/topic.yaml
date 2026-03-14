@@ -16,6 +16,8 @@ pedagogical_testing_completed_at: "2026-03-13"
 pedagogical_testing_profiles: [estrategico, ansioso, disperso, recursero]
 content_corrections_applied_at: "2026-03-13"
 content_corrections_targets: ["B2-Pureza-Visual", "B4-Currificacion-Scaffold", "B6-Monadas-Problema-first"]
+tp_type: "repo"
+
 artifacts:
   diseno: "diseno.md"
   minuta: "minuta.md"
@@ -25,3 +27,4 @@ artifacts:
   score: "score-pedagogico.md"
   faq: "faq-anticipado.md"
   slides_url: "slides/slides-url.txt"
+  autograde_repo: "autograde-repo/"
