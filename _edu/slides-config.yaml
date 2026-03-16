@@ -17,7 +17,7 @@ palette:
 typography:
   title:
     font: "Roboto"
-    size: 44
+    size: 36
     weight: "bold"
   subtitle:
     font: "Roboto"
@@ -25,7 +25,7 @@ typography:
     weight: "regular"
   body:
     font: "Roboto"
-    size: 20
+    size: 16
     weight: "regular"
   code:
     font: "Roboto Mono"
