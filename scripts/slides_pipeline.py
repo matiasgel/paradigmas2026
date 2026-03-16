@@ -125,6 +125,9 @@ def find_project_root(start: Path) -> Path:
     while True:
         if (cur / ".git").exists() or (cur / "module.yaml").exists():
             return cur
+        # Modo standalone: edu-standalone/ tiene su propio _edu/
+        if (cur / "_edu").exists() and (cur / "scripts").exists():
+            return cur
         if cur == cur.parent:
             break
         cur = cur.parent
@@ -191,6 +194,8 @@ def _strip_markdown(text: str) -> str:
     text = re.sub(r'_(.+?)_', r'\1', text)
     # Eliminar `inline code`
     text = re.sub(r'`([^`]+)`', r'\1', text)
+    # Eliminar links [texto](url) → solo texto
+    text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)
     # Eliminar > blockquotes
     text = re.sub(r'^>\s*', '', text, flags=re.MULTILINE)
     # Eliminar ## headings al inicio de línea
@@ -552,7 +557,7 @@ def _render_table_png(table_md: str, output_path: Path, config: dict) -> bool:
             clean = line.replace("|", "").strip()
             if re.match(r"^[\-:\s]+$", clean):
                 continue
-            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+            cells = [_strip_markdown(c.strip()) for c in line.strip().strip("|").split("|")]
             rows.append(cells)
 
         if not rows:
@@ -768,7 +773,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         "updatePageProperties": {
             "objectId": page_id,
             "pageProperties": {
-                "pageBackgroundFill": {"solidFill": {"color": _color(bg_color)}}
+                "pageBackgroundFill": {"solidFill": {"color": _rgb_color(bg_color)}}
             },
             "fields": "pageBackgroundFill",
         }
@@ -1011,17 +1016,17 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
                     },
                 }
             })
-        reqs.append({
-            "updateShapeProperties": {
-                "objectId": bg_id,
-                "shapeProperties": {
-                    "shapeBackgroundFill": {
-                        "solidFill": {"color": _rgb_color("#F4F4F4")}
-                    }
-                },
-                "fields": "shapeBackgroundFill",
-            }
-        })
+            reqs.append({
+                "updateShapeProperties": {
+                    "objectId": bg_id,
+                    "shapeProperties": {
+                        "shapeBackgroundFill": {
+                            "solidFill": {"color": _rgb_color("#F4F4F4")}
+                        }
+                    },
+                    "fields": "shapeBackgroundFill",
+                }
+            })
         # Solo el contenido del código, sin marcadores de lenguaje
         code_text = "\n\n".join(cb['content'] for cb in code_blocks)
         c_size = typo.get("code", {}).get("size", 14)
@@ -1064,16 +1069,24 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
 
     BATCH = 50
     total = len(all_reqs)
+    failed_batches: list[str] = []
     print(f"  Enviando {total} requests en lotes de {BATCH} …")
     for i in range(0, total, BATCH):
         batch = all_reqs[i : i + BATCH]
+        label = f"Lote {i // BATCH + 1}/{(total + BATCH - 1) // BATCH}"
         try:
             slides_svc.presentations().batchUpdate(
                 presentationId=pres_id, body={"requests": batch}
             ).execute()
-            print(f"  Lote {i // BATCH + 1}/{(total + BATCH - 1) // BATCH} ✓")
+            print(f"  {label} ✓")
         except Exception as exc:
-            print(f"  ⚠️  Error en lote {i // BATCH + 1}: {exc}")
+            print(f"  ⚠️  Error en {label}: {exc}")
+            failed_batches.append(f"{label}: {exc}")
+
+    if failed_batches:
+        print(f"  ⚠️  {len(failed_batches)} lote(s) fallaron — la presentación puede estar incompleta:")
+        for msg in failed_batches:
+            print(f"     • {msg}")
 
     url      = f"https://docs.google.com/presentation/d/{pres_id}/edit"
     url_path = topic_folder / "slides" / "slides-url.txt"
