@@ -478,33 +478,31 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
 # ═══════════════════════════════════════════════════════════════════════
 
 def _gemini_image(prompt: str, output_path: Path, api_key: str) -> bool:
-    """Genera una imagen con Gemini (gemini-2.0-flash) y la guarda en output_path."""
-    model   = "gemini-2.0-flash-exp-image-generation"
+    """Genera una imagen con Imagen 4.0 y la guarda en output_path."""
+    model   = "imagen-4.0-generate-001"
     url     = (
         f"https://generativelanguage.googleapis.com/v1beta/models/"
-        f"{model}:generateContent?key={api_key}"
+        f"{model}:predict?key={api_key}"
     )
     payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"responseModalities": ["IMAGE"]},
+        "instances": [{"prompt": prompt}],
+        "parameters": {"sampleCount": 1},
     }
     try:
         resp = requests.post(url, json=payload, timeout=90)
         resp.raise_for_status()
-        candidates = resp.json().get("candidates", [])
-        if not candidates:
-            raise ValueError("Sin candidatos en la respuesta")
-        parts = candidates[0].get("content", {}).get("parts", [])
-        for part in parts:
-            inline = part.get("inlineData", {})
-            if inline.get("mimeType", "").startswith("image/"):
-                img_bytes = base64.b64decode(inline["data"])
-                output_path.parent.mkdir(parents=True, exist_ok=True)
-                output_path.write_bytes(img_bytes)
-                return True
-        raise ValueError("No se encontró imagen inline en la respuesta")
+        predictions = resp.json().get("predictions", [])
+        if not predictions:
+            raise ValueError("Sin predicciones en la respuesta")
+        img_b64 = predictions[0].get("bytesBase64Encoded")
+        if not img_b64:
+            raise ValueError("No se encontró imagen en la respuesta")
+        img_bytes = base64.b64decode(img_b64)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_bytes(img_bytes)
+        return True
     except Exception as exc:
-        print(f"    ⚠️  Gemini imagen falló para {output_path.name}: {exc}")
+        print(f"    ⚠️  Imagen 4.0 falló para {output_path.name}: {exc}")
         return False
 
 

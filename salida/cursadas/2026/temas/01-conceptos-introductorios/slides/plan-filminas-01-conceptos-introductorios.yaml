@@ -2,7 +2,7 @@ meta:
   topic_id: 01-conceptos-introductorios
   title: Portada
   source: filminas.md
-  generated_at: '2026-03-16T14:04:51'
+  generated_at: '2026-03-16T14:22:52'
   template_id: 1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI
   total_slides: 29
   images_planned: 6
@@ -35,7 +35,7 @@ slides:
       sin palabras, sin letras, paleta #A9191B y gris oscuro sobre fondo blanco, alta
       resolución'
     local_asset: slides/assets/F-00-bg.png
-    drive_id: null
+    drive_id: 1hzYY2GhEk3x1wsfPDYsZqsmLDvfKNnJw
   content_image:
     strategy: none
     prompt: ''
@@ -68,7 +68,7 @@ slides:
       texto, sin palabras, sin letras, paleta #A9191B y gris oscuro sobre fondo blanco,
       alta resolución'
     local_asset: slides/assets/F-01-bg.png
-    drive_id: null
+    drive_id: 1TUFIfGRvSQb2tc3-YJWn7QP8SQz5D980
   content_image:
     strategy: none
     prompt: ''
@@ -110,7 +110,7 @@ slides:
       numérico intensivo. flat design académico, sin texto, sin palabras, sin letras,
       paleta #A9191B y gris oscuro sobre fondo blanco, alta resolución'
     local_asset: slides/assets/F-02-content.png
-    drive_id: null
+    drive_id: 1Aqz8TjAzKwA_b-CxIaA8n9u3DZcikqYf
   table_assets: []
 - id: F-03
   type: tabla
@@ -174,7 +174,7 @@ slides:
 
       | 2012 | TypeScript | Tipos estáticos sobre JavaScript |'
     local_asset: slides/assets/F-03-table-1.png
-    drive_id: 1WgnGU0O5ry5TmMQh3mzn8RMV_Tvw_QCf
+    drive_id: 123n4wWkh6AotDTbA8qcZo-5xUeB645Qb
 - id: F-04
   type: tabla
   title: Criterios de evaluación de lenguajes
@@ -230,7 +230,7 @@ slides:
 
       | **Eficiencia** | ¿Qué tan rápido y cuánta memoria? | C vs. Python |'
     local_asset: slides/assets/F-04-table-1.png
-    drive_id: 1V5OI9FxNH88TqtXcveBGQFKWdIIyjyiz
+    drive_id: 1r-Xsi_3aMr__NgaKGGWWs_DaRnqh2AYH
 - id: F-05
   type: socratica
   title: Pregunta abierta
@@ -251,7 +251,7 @@ slides:
       texto, sin palabras, sin letras, paleta #A9191B y gris oscuro sobre fondo blanco,
       alta resolución'
     local_asset: slides/assets/F-05-bg.png
-    drive_id: null
+    drive_id: 1X0za3mi5acxt6NkKm1YTu1nhNfcxKYtP
   content_image:
     strategy: none
     prompt: ''
@@ -280,7 +280,7 @@ slides:
       texto, sin palabras, sin letras, paleta #A9191B y gris oscuro sobre fondo blanco,
       alta resolución'
     local_asset: slides/assets/F-06-bg.png
-    drive_id: null
+    drive_id: 1MCLqFru5ebjpXJljKvY1B0zQgf2lp-0s
   content_image:
     strategy: none
     prompt: ''
@@ -322,7 +322,7 @@ slides:
       palabras, sin letras, paleta #A9191B y gris oscuro sobre fondo blanco, alta
       resolución'
     local_asset: slides/assets/F-07-content.png
-    drive_id: null
+    drive_id: 11gassAmB5-AL7ejYhDsMdbqrE3STrjcR
   table_assets: []
 - id: F-08
   type: codigo
@@ -425,7 +425,7 @@ slides:
       | **Lógico** | Lógica simbólica (resolución) | Relación / hecho | Sin estado
       | Prolog |'
     local_asset: slides/assets/F-09-table-1.png
-    drive_id: 1DYAc5y1tCGwL-a-9j0Ky8dmzXm1SrFmv
+    drive_id: 107SPpNEkyOf56O-aKeDI5Grpvj14HIO1
 - id: F-10
   type: tabla
   title: Dominios de aplicación
@@ -479,7 +479,7 @@ slides:
       | Multiparadigma | Web full-stack, APIs, datos, IA aplicada | TypeScript, Python
       |'
     local_asset: slides/assets/F-10-table-1.png
-    drive_id: 1Uc6MX2GU5-9aln7-2X6Adr5n-X99UGVH
+    drive_id: 1JspcwqFwDWTQeMQHB61m6P_tdzpCJ3h1
 - id: F-11
   type: codigo
   title: La escalera de abstracciones
@@ -564,7 +564,7 @@ slides:
 
       | Sucesión de instrucciones | **Cómputo** = sucesión de estados |'
     local_asset: slides/assets/F-12-table-1.png
-    drive_id: 1GHrOEmJP1pUR2ybu893HatCGm8ZPFOB0
+    drive_id: 1P52vng21JD50Ro1XDk_VV6xqTiQLiVC_
 - id: F-13
   type: codigo
   title: Mismo algoritmo — 3 niveles
@@ -691,7 +691,7 @@ slides:
       | **Relevancia** | Lenguaje #1 o #2 en encuestas de desarrolladores 2023–2025
       |'
     local_asset: slides/assets/F-15-table-1.png
-    drive_id: 1tz_jWe9FQwqDcWD8DqBW84fw6sITERIR
+    drive_id: 17FhuM3wOfUgcwHC0UXfUd8LW3ZSgZlBB
 - id: F-16
   type: codigo
   title: TypeScript como máquina intermedia (el pipeline)
@@ -742,7 +742,7 @@ slides:
 
       | Python | CPython (implícito) | bytecode (.pyc) | CPython VM |'
     local_asset: slides/assets/F-16-table-1.png
-    drive_id: 1AEzrmLZCBvfXygBVjl95-4uV4KSgCoed
+    drive_id: 1qS_lPSUlnXt4xhgZImsro9pG69U3tbNE
 - id: F-17
   type: codigo
   title: 'El mismo problema: imperativo en TypeScript'
@@ -1191,4 +1191,4 @@ slides:
 
       | **Total** | | **29 filminas** | **120 min** |'
     local_asset: slides/assets/F-28-table-1.png
-    drive_id: 14XMqCKWzJsHmfX2JDkiQJ3a4XrlgzC_f
+    drive_id: 1mROaeg8BJ2teLGgv4EaQPwpBeWIrG__J
