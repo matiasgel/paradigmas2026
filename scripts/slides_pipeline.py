@@ -159,7 +159,25 @@ def _hex_rgb(color: str) -> dict:
 
 
 def _color(hex_color: str) -> dict:
+    # Para estilos de texto (foregroundColor) Google Slides usa OpaqueColor.
     return {"opaqueColor": {"rgbColor": _hex_rgb(hex_color)}}
+
+
+def _rgb_color(hex_color: str) -> dict:
+    # Para fondos y rellenos (pageBackgroundFill, solidFill) usa rgbColor directo.
+    return {"rgbColor": _hex_rgb(hex_color)}
+
+
+def _normalize_alignment(align: str) -> str:
+    """Map human-friendly alignment values to Google Slides API enums."""
+    a = (align or "").strip().upper()
+    if a in ("LEFT", "START"):
+        return "START"
+    if a in ("RIGHT", "END"):
+        return "END"
+    if a in ("CENTER", "MIDDLE"):
+        return "CENTER"
+    return "START"
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -725,7 +743,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         "updatePageProperties": {
             "objectId": page_id,
             "pageProperties": {
-                "pageBackgroundFill": {"solidFill": {"color": _color(bg_color)}}
+                "pageBackgroundFill": {"solidFill": {"color": _rgb_color(bg_color)}}
             },
             "fields": "pageBackgroundFill",
         }
@@ -792,7 +810,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         reqs.append({
             "updateParagraphStyle": {
                 "objectId": tb_id,
-                "style":    {"alignment": align},
+                "style":    {"alignment": _normalize_alignment(align)},
                 "textRange": {"type": "ALL"},
                 "fields":   "alignment",
             }
@@ -864,7 +882,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
                             },
                             "tableCellProperties": {
                                 "tableCellBackgroundFill": {
-                                    "solidFill": {"color": _color(primary)}
+                                    "solidFill": {"color": _rgb_color(primary)}
                                 }
                             },
                             "fields": "tableCellBackgroundFill",
@@ -918,6 +936,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     if stype == "portada":
         t_size = 48
     t_align    = "CENTER" if "center" in str(title_zone) else "LEFT"
+    t_align    = _normalize_alignment(t_align)
     add_textbox(title, title_zone, t_size, bold=True, color=primary, align=t_align)
 
     # ── 7. Subtítulo (portada) ──────────────────────────────────────────
@@ -961,7 +980,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
                     "objectId": bg_id,
                     "shapeProperties": {
                         "shapeBackgroundFill": {
-                            "solidFill": {"color": _color("#F4F4F4")}
+                            "solidFill": {"color": _rgb_color("#F4F4F4")}
                         }
                     },
                     "fields": "shapeBackgroundFill",
