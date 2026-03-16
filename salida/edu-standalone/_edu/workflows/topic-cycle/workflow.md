@@ -77,6 +77,19 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
 - **Gate:** Professor review after generation — same as minuta/filminas.
 - **Note:** Recuperable con `/edu-create-study-guide` si se necesita regenerar de forma aislada. Exportable a PDF final con `/edu-export-pdf`.
 
+### Step 4.6: Create Teacher Guide (Guía del Profesor)
+- **Agent:** class-writer (Roberto) o study-guide-writer (Sofía)
+- **Input:** `diseno.md`, `minuta.md`, `filminas.md`, `guia-estudio.md`, y cualquier material de `{project-root}/material/{topic_number}-{topic_name}/` (PDFs + txt extraídos)
+- **Output:** `{topic_folder}/guiaprofesor.md`
+- **Purpose:** Documento único de revisión para el docente. Contiene:
+  - Plan de clase detallado (por bloques/tiempo)
+  - Resumen de los recursos creados (minuta, filminas, guía de estudio)
+  - Extractos clave de los PDFs fuente (texto importante/ejemplos)
+  - Sugerencias para uso en clase, debate y evaluaciones
+  - Referencias y ruta hacia cada recurso del repo
+- **Constraint:** Debe ser autosuficiente para repasar el tema sin necesidad de abrir otros archivos (aunque apunta a ellos).
+- **Tip:** Ejecutar `/edu-create-teacher-guide` para regenerar esta guía cuando el contenido de la clase cambie.
+
 ### Step 5: Create TP
 - **Agent:** tp-designer (Valeria)
 - **Input:** `minuta.md` + `guia-estudio.md` (para que Valeria pueda verificar que las consignas del TP no dupliquen la autoevaluación de la guía)
