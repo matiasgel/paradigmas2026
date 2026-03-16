@@ -1,0 +1,17 @@
+# EDU Slides Pipeline — Dependencias
+# Instalación: pip install -r requirements.txt
+
+# Google APIs
+google-api-python-client>=2.100.0
+google-auth-oauthlib>=1.1.0
+google-auth-httplib2>=0.1.1
+
+# Config y serialización
+pyyaml>=6.0.1
+
+# HTTP para Gemini REST
+requests>=2.31.0
+
+# Renderizado de tablas como imágenes
+matplotlib>=3.7.0
+Pillow>=10.0.0

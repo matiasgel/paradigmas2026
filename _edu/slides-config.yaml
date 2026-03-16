@@ -1,0 +1,126 @@
+# Sistema de diseño para la exportación de filminas (Google Slides)
+# Generado por /edu_slides_designer
+
+# --- Template Google Slides ---
+# 0 = "Simple Light" (default). Cambiar por el ID de un template propio si tenés.
+template_id: "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI"
+
+# --- Paleta de colores ---
+palette:
+  primary: "#8B0000"
+  secondary: "#FFFFFF"
+  accent: "#000000"
+  background: "#FFFFFF"
+  text: "#1A1A1A"
+
+# --- Tipografía (Google Fonts recomendadas) ---
+typography:
+  title:
+    font: "Roboto"
+    size: 44
+    weight: "bold"
+  subtitle:
+    font: "Roboto"
+    size: 28
+    weight: "regular"
+  body:
+    font: "Roboto"
+    size: 20
+    weight: "regular"
+  code:
+    font: "Roboto Mono"
+    size: 18
+    weight: "regular"
+
+# --- Layouts por tipo de filmina ---
+# Cada layout define cómo se estructura el contenido para ese tipo de slide.
+layouts:
+  portada:
+    title:
+      font: title
+      align: center
+      color: primary
+    subtitle:
+      font: subtitle
+      align: center
+      color: secondary
+    logo_position: bottom-right
+
+  "concepto-abstracto":
+    title:
+      font: title
+      align: left
+      color: primary
+    body:
+      font: body
+      align: left
+      color: text
+    image:
+      position: right
+      size: medium
+
+  codigo:
+    title:
+      font: title
+      align: left
+      color: primary
+    code_block:
+      font: code
+      background: "#F4F4F4"
+      border: true
+
+  "tabla-comparativa":
+    title:
+      font: title
+      align: left
+      color: primary
+    table:
+      header_color: secondary
+      row_even: "#F9F9F9"
+      row_odd: "#FFFFFF"
+
+  "pregunta-socrática":
+    title:
+      font: title
+      align: center
+      color: primary
+    body:
+      font: body
+      align: center
+      color: text
+
+  timeline:
+    title:
+      font: title
+      align: left
+      color: primary
+    body:
+      font: body
+      align: left
+      color: text
+
+  cierre:
+    title:
+      font: title
+      align: center
+      color: primary
+    body:
+      font: body
+      align: center
+      color: text
+
+  "demo-herramienta":
+    title:
+      font: title
+      align: left
+      color: primary
+    steps:
+      font: body
+      align: left
+      color: text
+
+# --- Estrategia de imágenes (Gemini) ---
+gemini_image_strategy:
+  default: "diagram"
+  max_images_per_presentation: 4
+  fallback: "none"

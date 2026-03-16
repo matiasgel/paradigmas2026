@@ -1,0 +1,200 @@
+# Plan de imágenes y estructura para la exportación de filminas
+# Tema 01 — Conceptos Introductorios + Intro a TypeScript
+# 29 filminas: F-00 (portada) + F-01 a F-28
+
+presentation:
+  title: "Tema 01 — Conceptos Introductorios + Intro a TypeScript"
+  template_id: "1vGtLw6IyDWOF-uA1eGd4_pI2OXZtTVuhUQVg_JeoNbg"
+  max_images: 8
+
+slides:
+  # ── PORTADA ──────────────────────────────────────────────────────────────
+  - id: "F-00"
+    type: "portada"
+    title: "Conceptos Introductorios + Intro a TypeScript"
+    image:
+      strategy: "gemini"
+      prompt: "Portada institucional UNTDF estilo académico moderno, fondo blanco, franja borravino (#8B0000), logo de la Universidad Nacional de Tierra del Fuego, texto elegante en gris oscuro"
+
+  # ── BLOQUE 1 — ¿Por qué estudiar LP? ─────────────────────────────────────
+  - id: "F-01"
+    type: "concepto-abstracto"
+    title: "La pregunta incómoda"
+    image:
+      strategy: "gemini"
+      prompt: "Estudiante universitario frente a múltiples logos de lenguajes de programación (Python, TypeScript, Java, Haskell) con expresión de duda, estilo ilustración académica flat design, paleta gris y borravino"
+
+  - id: "F-02"
+    type: "concepto-abstracto"
+    title: "El costo de elegir mal"
+    image:
+      strategy: "gemini"
+      prompt: "Iceberg laboral: la punta visible dice 'elegir un lenguaje', la parte sumergida lista costos ocultos (migración, tiempo, frustración). Estilo infografía limpia, colores borravino y gris"
+
+  - id: "F-03"
+    type: "tabla"
+    title: "Perspectiva histórica"
+    image:
+      strategy: "none"
+
+  - id: "F-04"
+    type: "tabla"
+    title: "Criterios de evaluación de lenguajes"
+    image:
+      strategy: "none"
+
+  - id: "F-05"
+    type: "socratica"
+    title: "Pregunta abierta"
+    image:
+      strategy: "gemini"
+      prompt: "Robot IA escribiendo código en una pantalla mientras un programador humano observa con lupa y pensamiento crítico. Estilo ilustración flat, paleta borravino/blanco/gris"
+
+  # ── BLOQUE 2 — Los paradigmas: mapa general ───────────────────────────────
+  - id: "F-06"
+    type: "concepto-abstracto"
+    title: "¿Qué es un paradigma?"
+    image:
+      strategy: "gemini"
+      prompt: "Diagrama conceptual: un mismo problema ('orden una lista') resuelto con tres lentes distintos (imperativo, funcional, OO). Flechas y etiquetas en estilo flat académico, colores borravino y gris"
+
+  - id: "F-07"
+    type: "concepto-abstracto"
+    title: "Los factores que formaron los paradigmas"
+    image:
+      strategy: "none"
+
+  - id: "F-08"
+    type: "diagrama"
+    title: "El cuello de botella de Von Neumann"
+    image:
+      strategy: "gemini"
+      prompt: "Diagrama técnico: CPU ↔ bus de datos ↔ Memoria RAM con un cuello de botella resaltado en rojo. Estilo diagrama académico limpio, fondo blanco, líneas grises y borravino"
+
+  - id: "F-09"
+    type: "tabla"
+    title: "Los 4 paradigmas fundamentales"
+    image:
+      strategy: "none"
+
+  - id: "F-10"
+    type: "tabla"
+    title: "Dominios de aplicación"
+    image:
+      strategy: "none"
+
+  # ── BLOQUE 3 — Paradigma imperativo y máquina abstracta ───────────────────
+  - id: "F-11"
+    type: "diagrama"
+    title: "La escalera de abstracciones"
+    image:
+      strategy: "none"
+
+  - id: "F-12"
+    type: "tabla"
+    title: "Von Neumann → código imperativo"
+    image:
+      strategy: "none"
+
+  - id: "F-13"
+    type: "codigo"
+    title: "Mismo algoritmo — 3 niveles"
+    image:
+      strategy: "none"
+
+  - id: "F-14"
+    type: "codigo"
+    title: "Máquina abstracta, interpretación y compilación"
+    image:
+      strategy: "gemini"
+      prompt: "Pipeline de compilación e interpretación: código fuente → compilador → lenguaje objeto → ejecución, y código fuente → intérprete → ejecución. Estilo diagrama de flujo académico, borravino y gris"
+
+  # ── BLOQUE 4 — Intro a TypeScript ─────────────────────────────────────────
+  - id: "F-15"
+    type: "tabla"
+    title: "¿Por qué TypeScript en 2026?"
+    image:
+      strategy: "none"
+
+  - id: "F-16"
+    type: "diagrama"
+    title: "TypeScript como máquina intermedia (el pipeline)"
+    image:
+      strategy: "none"
+
+  - id: "F-17"
+    type: "codigo"
+    title: "El mismo problema: imperativo en TypeScript"
+    image:
+      strategy: "none"
+
+  - id: "F-18"
+    type: "codigo"
+    title: "El mismo problema: funcional en TypeScript"
+    image:
+      strategy: "none"
+
+  - id: "F-19"
+    type: "codigo"
+    title: "Sistema de tipos básico"
+    image:
+      strategy: "none"
+
+  - id: "F-20"
+    type: "codigo"
+    title: "TypeScript como acelerador de paradigma"
+    image:
+      strategy: "none"
+
+  # ── BLOQUE 5 — IA Generativa y los paradigmas ─────────────────────────────
+  - id: "F-21"
+    type: "concepto-abstracto"
+    title: "El cambio de rol del programador"
+    image:
+      strategy: "gemini"
+      prompt: "Infografía comparativa: programador 'antes' rodeado de código (70% codificación), vs programador 'hoy' orquestando IA (50% supervisión). Estilo flat académico, paleta borravino/gris/blanco"
+
+  - id: "F-22"
+    type: "diagrama"
+    title: "La jerarquía de proficiencia en IA"
+    image:
+      strategy: "none"
+
+  - id: "F-23"
+    type: "demo"
+    title: "Demo en vivo — La IA elige paradigmas"
+    image:
+      strategy: "none"
+
+  - id: "F-24"
+    type: "demo"
+    title: "Demo en vivo — Restricción de paradigma"
+    image:
+      strategy: "none"
+
+  - id: "F-25"
+    type: "demo"
+    title: "Demo en vivo — Máquinas abstractas"
+    image:
+      strategy: "none"
+
+  - id: "F-26"
+    type: "diagrama"
+    title: "El loop trust but verify"
+    image:
+      strategy: "none"
+
+  # ── CIERRE ────────────────────────────────────────────────────────────────
+  - id: "F-27"
+    type: "diagrama"
+    title: "Mapa de la materia — los 15 temas"
+    image:
+      strategy: "none"
+
+  - id: "F-28"
+    type: "cierre"
+    title: "Adelanto — Clase 2: Sintaxis y Semántica"
+    image:
+      strategy: "none"
+
+# Nota: ajustá strategy a "gemini" para agregar imagen en cualquier filmina.
