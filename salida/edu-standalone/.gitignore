@@ -1,0 +1,27 @@
+# EDU Standalone — Ignorar en git
+# =================================
+
+# Credenciales y secretos OAuth (NUNCA commitear)
+_edu/credentials.json
+_edu/token_slides.json
+_edu/token*.json
+_edu/secrets.local.yaml
+
+# Variables de entorno con rutas locales
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Assets generados localmente (imágenes/tablas = artefactos, no código)
+salida/cursadas/*/temas/*/slides/assets/
+salida/cursadas/*/temas/*/slides/slides-url.txt
+
+# IDE
+.vscode/
+.idea/
