@@ -54,5 +54,6 @@ Estos prompts pueden corresponder a acciones compuestas o a workflows internos.
 | /edu-status | (no hay workflow `status`) |
 | /edu-student-profiles | (no hay workflow `student-profiles`) |
 | /edu-test-topic | (no hay workflow `test-topic`) |
+| /edu-test-pipeline | scripts/test_pipeline.py — test de integración end-to-end del pipeline de filminas |
 | /edu-topic | (no hay workflow `topic`) |
 | /edu-update-context | (no hay workflow `update-context`) |

@@ -15,3 +15,6 @@ node_modules/
 # Temporales
 *.tmp
 *.bak
+
+# Test runs (reporte/ generado por test_pipeline.py)
+reporte/

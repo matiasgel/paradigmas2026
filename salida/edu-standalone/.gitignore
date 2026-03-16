@@ -22,6 +22,9 @@ env/
 salida/cursadas/*/temas/*/slides/assets/
 salida/cursadas/*/temas/*/slides/slides-url.txt
 
+# Test runs (generados por test_pipeline.py)
+reporte/
+
 # IDE
 .vscode/
 .idea/
