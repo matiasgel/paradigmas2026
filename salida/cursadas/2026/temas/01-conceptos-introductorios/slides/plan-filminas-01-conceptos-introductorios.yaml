@@ -1,0 +1,1194 @@
+meta:
+  topic_id: 01-conceptos-introductorios
+  title: Portada
+  source: filminas.md
+  generated_at: '2026-03-16T14:04:51'
+  template_id: 1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI
+  total_slides: 29
+  images_planned: 6
+slides:
+- id: F-00
+  type: portada
+  title: Portada
+  subtitle: Conceptos Introductorios + Intro a TypeScript
+  body_blocks:
+  - type: list
+    items:
+    - '**Paradigmas y Lenguajes de Programación 2026**'
+    - Universidad Nacional de Tierra del Fuego — IDEI
+  - type: text
+    content: Semana 1 · Clase 1 de 2 · 120 minutos
+  - type: text
+    content: '## BLOQUE 1 — ¿Por qué estudiar lenguajes de programación? (20 min)'
+  code_blocks: []
+  tables: []
+  layout:
+    title: center-middle
+    body: center-bottom
+    image: background
+    code: none
+    table: none
+  background_image:
+    strategy: gemini
+    prompt: 'Composición visual abstracta: paradigmas de programación, código, lenguajes
+      de software, fondo institucional elegante. flat design académico, sin texto,
+      sin palabras, sin letras, paleta #A9191B y gris oscuro sobre fondo blanco, alta
+      resolución'
+    local_asset: slides/assets/F-00-bg.png
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-01
+  type: socratica
+  title: La pregunta incómoda
+  subtitle: ¿Para qué estudiar lenguajes si ya saben programar?
+  body_blocks:
+  - type: text
+    content: '> *"La elección del lenguaje determina el modelo mental con el que pensás
+      el problema."*'
+  - type: list
+    items:
+    - '**Hoy respondemos esta pregunta.**'
+  code_blocks: []
+  tables: []
+  layout: &id002
+    title: center-top
+    body: center-middle
+    image: background
+    code: none
+    table: none
+  background_image:
+    strategy: gemini
+    prompt: 'Imagen minimalista evocadora para reflexión sobre: «La pregunta incómoda».
+      Mucho espacio negativo, composición centralizada. flat design académico, sin
+      texto, sin palabras, sin letras, paleta #A9191B y gris oscuro sobre fondo blanco,
+      alta resolución'
+    local_asset: slides/assets/F-01-bg.png
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-02
+  type: concepto-abstracto
+  title: El costo de elegir mal
+  subtitle: Elegir el lenguaje equivocado tiene consecuencias reales
+  body_blocks:
+  - type: list
+    items:
+    - '**Caso típico:**'
+    - '- Startup elige Node.js para procesamiento numérico intensivo'
+    - '- 2 años después → migración masiva a Python + NumPy'
+    - '- Costo: código descartado, tiempo perdido, equipo frustrado'
+  - type: list
+    items:
+    - '**¿Por qué pasa?**'
+    - Quien eligió el lenguaje no conocía los paradigmas ni sus trade-offs.
+  code_blocks: []
+  tables: []
+  layout: &id003
+    title: left-top
+    body: left-middle
+    image: right-half
+    code: none
+    table: none
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: 'Ilustración académica que representa conceptualmente: «El costo de elegir
+      mal». Contexto: **Caso típico:** — - Startup elige Node.js para procesamiento
+      numérico intensivo. flat design académico, sin texto, sin palabras, sin letras,
+      paleta #A9191B y gris oscuro sobre fondo blanco, alta resolución'
+    local_asset: slides/assets/F-02-content.png
+    drive_id: null
+  table_assets: []
+- id: F-03
+  type: tabla
+  title: Perspectiva histórica
+  subtitle: La línea de tiempo de los lenguajes
+  body_blocks:
+  - type: text
+    content: '> Cada lenguaje resuelve un problema que el anterior no resolvía bien.'
+  code_blocks: []
+  tables:
+  - '| Año | Lenguaje | Aporte clave |
+
+    |-----|----------|-------------|
+
+    | 1957 | FORTRAN | El primero de alto nivel |
+
+    | 1960 | LISP | Funciones como datos, recursión |
+
+    | 1972 | C | Imperativo estructurado, portabilidad |
+
+    | 1980 | Smalltalk | Orientación a objetos pura |
+
+    | 1995 | Java | OO + máquina virtual |
+
+    | 2008 | Python 3 | Multiparadigma, ecosistema IA |
+
+    | 2012 | TypeScript | Tipos estáticos sobre JavaScript |'
+  layout: &id001
+    title: left-top
+    body: none
+    image: none
+    code: none
+    table: full-bottom
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Año | Lenguaje | Aporte clave |
+
+      |-----|----------|-------------|
+
+      | 1957 | FORTRAN | El primero de alto nivel |
+
+      | 1960 | LISP | Funciones como datos, recursión |
+
+      | 1972 | C | Imperativo estructurado, portabilidad |
+
+      | 1980 | Smalltalk | Orientación a objetos pura |
+
+      | 1995 | Java | OO + máquina virtual |
+
+      | 2008 | Python 3 | Multiparadigma, ecosistema IA |
+
+      | 2012 | TypeScript | Tipos estáticos sobre JavaScript |'
+    local_asset: slides/assets/F-03-table-1.png
+    drive_id: 1WgnGU0O5ry5TmMQh3mzn8RMV_Tvw_QCf
+- id: F-04
+  type: tabla
+  title: Criterios de evaluación de lenguajes
+  subtitle: ¿Cómo evaluamos un lenguaje? — Sebesta (2018)
+  body_blocks:
+  - type: text
+    content: '> No hay lenguaje perfecto — hay **trade-offs**.'
+  code_blocks: []
+  tables:
+  - '| Criterio | Pregunta clave | Ejemplo de tensión |
+
+    |----------|---------------|-------------------|
+
+    | **Legibilidad** | ¿Se puede leer código ajeno? | Python vs. Perl |
+
+    | **Escribibilidad** | ¿El lenguaje facilita la expresión? | SQL vs. ensamblador
+    |
+
+    | **Confiabilidad** | ¿Los tipos reducen bugs? | TypeScript vs. JS puro |
+
+    | **Costo** | ¿Cuánto cuesta desarrollar y mantener? | — |
+
+    | **Portabilidad** | ¿Funciona en distintas plataformas? | Java vs. C |
+
+    | **Eficiencia** | ¿Qué tan rápido y cuánta memoria? | C vs. Python |'
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Criterio | Pregunta clave | Ejemplo de tensión |
+
+      |----------|---------------|-------------------|
+
+      | **Legibilidad** | ¿Se puede leer código ajeno? | Python vs. Perl |
+
+      | **Escribibilidad** | ¿El lenguaje facilita la expresión? | SQL vs. ensamblador
+      |
+
+      | **Confiabilidad** | ¿Los tipos reducen bugs? | TypeScript vs. JS puro |
+
+      | **Costo** | ¿Cuánto cuesta desarrollar y mantener? | — |
+
+      | **Portabilidad** | ¿Funciona en distintas plataformas? | Java vs. C |
+
+      | **Eficiencia** | ¿Qué tan rápido y cuánta memoria? | C vs. Python |'
+    local_asset: slides/assets/F-04-table-1.png
+    drive_id: 1V5OI9FxNH88TqtXcveBGQFKWdIIyjyiz
+- id: F-05
+  type: socratica
+  title: Pregunta abierta
+  subtitle: ¿Importa el lenguaje si la IA puede escribir en cualquiera?
+  body_blocks:
+  - type: list
+    items:
+    - '*(Respuesta al final de la clase — Bloque 5)*'
+  - type: text
+    content: '## BLOQUE 2 — Los paradigmas: mapa general (25 min)'
+  code_blocks: []
+  tables: []
+  layout: *id002
+  background_image:
+    strategy: gemini
+    prompt: 'Imagen minimalista evocadora para reflexión sobre: «Pregunta abierta».
+      Mucho espacio negativo, composición centralizada. flat design académico, sin
+      texto, sin palabras, sin letras, paleta #A9191B y gris oscuro sobre fondo blanco,
+      alta resolución'
+    local_asset: slides/assets/F-05-bg.png
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-06
+  type: socratica
+  title: ¿Qué es un paradigma?
+  subtitle: Un paradigma de programación es una forma de pensar el cómputo
+  body_blocks:
+  - type: list
+    items:
+    - '- No es solo sintaxis'
+    - '- Es el **modelo mental** que estructura cómo describís la solución'
+    - '- Dos lenguajes con sintaxis muy distintas pueden compartir paradigma (Java
+      ≈ C#)'
+    - '- Un lenguaje puede implementar varios paradigmas (TypeScript)'
+  code_blocks: []
+  tables: []
+  layout: *id002
+  background_image:
+    strategy: gemini
+    prompt: 'Imagen minimalista evocadora para reflexión sobre: «¿Qué es un paradigma?».
+      Mucho espacio negativo, composición centralizada. flat design académico, sin
+      texto, sin palabras, sin letras, paleta #A9191B y gris oscuro sobre fondo blanco,
+      alta resolución'
+    local_asset: slides/assets/F-06-bg.png
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-07
+  type: concepto-abstracto
+  title: Los factores que formaron los paradigmas
+  subtitle: Los paradigmas no surgieron de la nada
+  body_blocks:
+  - type: list
+    items:
+    - '**Arquitectura de Von Neumann → paradigma imperativo**'
+    - '- CPU + Memoria + Bus de datos'
+    - '- "Variables" = celdas de memoria'
+    - '- Ejecución secuencial instrucción a instrucción'
+  - type: list
+    items:
+    - '**La evolución metodológica:**'
+    - '- `70s` → análisis y diseño estructurado, eliminación del GOTO'
+    - '- `80s` → abstracción de datos (Simula, Ada)'
+    - '- `80s` → programación funcional madura (LISP, ML)'
+    - '- `90s` → OO mainstream (Smalltalk → Java)'
+    - '- `2000s+` → multiparadigma (Python, TypeScript, Scala)'
+  code_blocks: []
+  tables: []
+  layout: *id003
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: 'Ilustración académica que representa conceptualmente: «Los factores que
+      formaron los paradigmas». Contexto: **Arquitectura de Von Neumann → paradigma
+      imperativo** — - CPU + Memoria + Bus d. flat design académico, sin texto, sin
+      palabras, sin letras, paleta #A9191B y gris oscuro sobre fondo blanco, alta
+      resolución'
+    local_asset: slides/assets/F-07-content.png
+    drive_id: null
+  table_assets: []
+- id: F-08
+  type: codigo
+  title: El cuello de botella de Von Neumann
+  subtitle: La ejecución secuencial es una restricción del hardware, no una verdad
+    universal
+  body_blocks:
+  - type: list
+    items:
+    - '**Consecuencias:**'
+    - '- Limita el paralelismo natural'
+    - '- Limita el cómputo no determinista'
+  - type: list
+    items:
+    - '**Pregunta que generó nuevos paradigmas:**'
+    - '> *¿Se puede describir cómputo **sin** depender de Von Neumann?*'
+  - type: text
+    content: '→ **Funcional:** cálculo lambda (Church, 1936)
+
+      → **Lógico:** lógica simbólica y resolución (Robinson, 1965)'
+  - type: list
+    items:
+    - '*Fuente: Louden & Lambert, Cap. 1*'
+  code_blocks:
+  - lang: text
+    content: "CPU ←───bus───→ Memoria\n         ↑\n    cuello de botella"
+  tables: []
+  layout: &id004
+    title: left-top
+    body: subtitle-only
+    image: none
+    code: full-bottom
+    table: none
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-09
+  type: tabla
+  title: Los 4 paradigmas fundamentales
+  subtitle: Los 4 paradigmas fundamentales
+  body_blocks:
+  - type: text
+    content: '> *"El OO es una extensión del imperativo — no nació de cero. El funcional
+      y el lógico tienen raíces matemáticas pre-computadoras."*'
+  - type: list
+    items:
+    - '**Nota:** Los lenguajes *multiparadigma* (TypeScript, Python, Scala) combinan
+      varios de estos — ver F-10.'
+  code_blocks: []
+  tables:
+  - '| Paradigma | Base formal | Unidad | Estado | Ejemplos |
+
+    |-----------|-------------|--------|--------|----------|
+
+    | **Imperativo** | Máquina de Von Neumann | Instrucción | Mutable | C, Go, Pascal
+    |
+
+    | **OO** | Imperativo + encapsulamiento | Objeto / mensaje | Mutable (encapsulado)
+    | Java, C#, Smalltalk, Dart |
+
+    | **Funcional** | Cálculo lambda (Church, 1936) | Función | **Inmutable** | Haskell,
+    Clojure, LISP |
+
+    | **Lógico** | Lógica simbólica (resolución) | Relación / hecho | Sin estado |
+    Prolog |'
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Paradigma | Base formal | Unidad | Estado | Ejemplos |
+
+      |-----------|-------------|--------|--------|----------|
+
+      | **Imperativo** | Máquina de Von Neumann | Instrucción | Mutable | C, Go, Pascal
+      |
+
+      | **OO** | Imperativo + encapsulamiento | Objeto / mensaje | Mutable (encapsulado)
+      | Java, C#, Smalltalk, Dart |
+
+      | **Funcional** | Cálculo lambda (Church, 1936) | Función | **Inmutable** |
+      Haskell, Clojure, LISP |
+
+      | **Lógico** | Lógica simbólica (resolución) | Relación / hecho | Sin estado
+      | Prolog |'
+    local_asset: slides/assets/F-09-table-1.png
+    drive_id: 1DYAc5y1tCGwL-a-9j0Ky8dmzXm1SrFmv
+- id: F-10
+  type: tabla
+  title: Dominios de aplicación
+  subtitle: ¿Cuándo usar cada paradigma?
+  body_blocks:
+  - type: text
+    content: '## BLOQUE 3 — Paradigma imperativo y máquina abstracta (20 min)'
+  code_blocks: []
+  tables:
+  - '| Paradigma | Dominio ideal | Lenguaje representativo |
+
+    |-----------|--------------|------------------------|
+
+    | Imperativo | Sistemas operativos, drivers, embebidos | C |
+
+    | OO | Aplicaciones empresariales, GUIs | Java, C# |
+
+    | Funcional | Finanzas de alta confiabilidad, compiladores, IA | Haskell, Clojure
+    |
+
+    | Lógico | IA simbólica, sistemas expertos, NLP | Prolog |
+
+    | Multiparadigma | Web full-stack, APIs, datos, IA aplicada | TypeScript, Python
+    |'
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Paradigma | Dominio ideal | Lenguaje representativo |
+
+      |-----------|--------------|------------------------|
+
+      | Imperativo | Sistemas operativos, drivers, embebidos | C |
+
+      | OO | Aplicaciones empresariales, GUIs | Java, C# |
+
+      | Funcional | Finanzas de alta confiabilidad, compiladores, IA | Haskell, Clojure
+      |
+
+      | Lógico | IA simbólica, sistemas expertos, NLP | Prolog |
+
+      | Multiparadigma | Web full-stack, APIs, datos, IA aplicada | TypeScript, Python
+      |'
+    local_asset: slides/assets/F-10-table-1.png
+    drive_id: 1Uc6MX2GU5-9aln7-2X6Adr5n-X99UGVH
+- id: F-11
+  type: codigo
+  title: La escalera de abstracciones
+  subtitle: Todo lenguaje ocupa un nivel en la escalera de abstracción
+  body_blocks:
+  - type: list
+    items:
+    - '**Al subir:** más legibilidad, más escribibilidad, más portabilidad'
+    - '**Al bajar:** más control, más eficiencia'
+  - type: text
+    content: '> *"¿Qué abstraje? ¿Qué perdí?"* — La pregunta que guía esta materia'
+  - type: list
+    items:
+    - '*Fuente: Louden & Lambert, Cap. 1 — Fig. 1.4 y 1.5*'
+  code_blocks:
+  - lang: text
+    content: "Frameworks (React, Django)     ← Nivel 3: abstracción de plataforma\n\
+      \        ↑\nJava, Python, TypeScript        ← Nivel 2: GC, tipos, ecosistema\n\
+      \        ↑\nC, Pascal, Go                   ← Nivel 1: estructura, funciones,\
+      \ tipos básicos\n        ↑\nLC-3, ensamblador               ← Nivel 0: registros,\
+      \ saltos, direcciones"
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-12
+  type: tabla
+  title: Von Neumann → código imperativo (correspondencia directa)
+  subtitle: El paradigma imperativo abstrae el hardware
+  body_blocks:
+  - type: text
+    content: '> El paradigma imperativo no es convención — es abstracción directa
+      del hardware.'
+  code_blocks: []
+  tables:
+  - '| Hardware (Von Neumann) | Concepto en lenguaje imperativo |
+
+    |------------------------|--------------------------------|
+
+    | Celda de memoria con dirección | Variable con nombre |
+
+    | Transferencia CPU ↔ memoria | Instrucción de asignación (`x = 5`) |
+
+    | Salto condicional del procesador | `if`, `while`, `for` |
+
+    | Conjunto de celdas en un instante | **Estado** del programa |
+
+    | Sucesión de instrucciones | **Cómputo** = sucesión de estados |'
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Hardware (Von Neumann) | Concepto en lenguaje imperativo |
+
+      |------------------------|--------------------------------|
+
+      | Celda de memoria con dirección | Variable con nombre |
+
+      | Transferencia CPU ↔ memoria | Instrucción de asignación (`x = 5`) |
+
+      | Salto condicional del procesador | `if`, `while`, `for` |
+
+      | Conjunto de celdas en un instante | **Estado** del programa |
+
+      | Sucesión de instrucciones | **Cómputo** = sucesión de estados |'
+    local_asset: slides/assets/F-12-table-1.png
+    drive_id: 1GHrOEmJP1pUR2ybu893HatCGm8ZPFOB0
+- id: F-13
+  type: codigo
+  title: Mismo algoritmo — 3 niveles
+  subtitle: 'Suma de valores absolutos: LC-3 vs. C'
+  body_blocks:
+  - type: list
+    items:
+    - '**Ensamblador LC-3** (13 líneas, opaco):'
+  - type: list
+    items:
+    - '**C — imperativo de alto nivel** (5 líneas, legible):'
+  - type: list
+    items:
+    - '*(¿Qué haría TypeScript diferente? → Bloque 4)*'
+  code_blocks:
+  - lang: text
+    content: "        AND R0, R0, #0    ; acc = 0\n        LEA R1, DATA      ; puntero\
+      \ al inicio del array\n        AND R2, R2, #0\n        ADD R2, R2, #10   ; contador\
+      \ = 10\nLOOP    LDR R3, R1, #0    ; cargar elemento\n        BRzp POS      \
+      \    ; si >= 0, saltar\n        NOT R3, R3        ; negar (complemento a 2)\n\
+      \        ADD R3, R3, #1\nPOS     ADD R0, R0, R3    ; acc += abs\n        ADD\
+      \ R1, R1, #1    ; avanzar puntero\n        ADD R2, R2, #-1   ; contador--\n\
+      \        BRp LOOP          ; repetir si queda"
+  - lang: c
+    content: "int suma_abs(int arr[], int n) {\n    int acc = 0;\n    for (int i =\
+      \ 0; i < n; i++)\n        acc += (arr[i] < 0) ? -arr[i] : arr[i];\n    return\
+      \ acc;\n}"
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-14
+  type: codigo
+  title: Máquina abstracta, interpretación y compilación
+  subtitle: Todo lenguaje define una "máquina abstracta" — Gabbrielli & Martini, Cap.
+    1
+  body_blocks:
+  - type: list
+    items:
+    - '**Dos formas puras de implementar un lenguaje:**'
+  - type: list
+    items:
+    - '**En la práctica:** siempre existe un **lenguaje intermedio**'
+    - → JVM, Python bytecode, JavaScript (de TypeScript)
+  - type: text
+    content: '## BLOQUE 4 — Intro a TypeScript como lenguaje multiparadigma (30 min)'
+  code_blocks:
+  - lang: text
+    content: "Interpretación pura:\n  Programa → [Intérprete en runtime] → Ejecución\n\
+      \  Flexible, más lento\n\nCompilación pura:\n  Programa → [Compilador] → Lenguaje\
+      \ objeto → Ejecución\n  Rápido, menos flexible"
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-15
+  type: tabla
+  title: ¿Por qué TypeScript en 2026?
+  subtitle: TypeScript como lenguaje del cursado
+  body_blocks:
+  - type: text
+    content: '> Reemplaza Kotlin en el cursado 2026 — mismos objetivos conceptuales,
+      mayor adopción.'
+  code_blocks: []
+  tables:
+  - '| Razón | Detalle |
+
+    |-------|---------|
+
+    | **Ecosistema** | npm + 2.3M paquetes · frontend + backend · Node/Deno/Bun |
+
+    | **Tipos** | Sistema de tipos más expresivo de los lenguajes mainstream |
+
+    | **IA** | Los modelos generan TS con alta fidelidad → más fácil auditar |
+
+    | **Multiparadigma** | Imperativo + Funcional + OO en el mismo archivo |
+
+    | **Relevancia** | Lenguaje #1 o #2 en encuestas de desarrolladores 2023–2025
+    |'
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Razón | Detalle |
+
+      |-------|---------|
+
+      | **Ecosistema** | npm + 2.3M paquetes · frontend + backend · Node/Deno/Bun
+      |
+
+      | **Tipos** | Sistema de tipos más expresivo de los lenguajes mainstream |
+
+      | **IA** | Los modelos generan TS con alta fidelidad → más fácil auditar |
+
+      | **Multiparadigma** | Imperativo + Funcional + OO en el mismo archivo |
+
+      | **Relevancia** | Lenguaje #1 o #2 en encuestas de desarrolladores 2023–2025
+      |'
+    local_asset: slides/assets/F-15-table-1.png
+    drive_id: 1tz_jWe9FQwqDcWD8DqBW84fw6sITERIR
+- id: F-16
+  type: codigo
+  title: TypeScript como máquina intermedia (el pipeline)
+  subtitle: TypeScript = ejemplo vivo de Gabbrielli Cap. 1
+  body_blocks:
+  - type: list
+    items:
+    - '**Comparación:**'
+  - type: text
+    content: '> No es "interpretado" ni "compilado" en sentido puro.
+
+      > Usa **máquina intermedia** — exactamente como predice Gabbrielli.'
+  code_blocks:
+  - lang: text
+    content: "archivo.ts\n     ↓  [tsc — compilador TypeScript]       ← verificación\
+      \ de tipos\narchivo.js  ←── LENGUAJE INTERMEDIO\n     ↓  [V8 / Node.js / Deno\
+      \ — JIT]\n   Ejecución en CPU"
+  tables:
+  - '| Lenguaje | Paso 1 | Intermediario | Runtime |
+
+    |----------|--------|---------------|---------|
+
+    | TypeScript | tsc | .js | V8 / Node / Deno |
+
+    | Java | javac | .class (bytecode) | JVM |
+
+    | Python | CPython (implícito) | bytecode (.pyc) | CPython VM |'
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Lenguaje | Paso 1 | Intermediario | Runtime |
+
+      |----------|--------|---------------|---------|
+
+      | TypeScript | tsc | .js | V8 / Node / Deno |
+
+      | Java | javac | .class (bytecode) | JVM |
+
+      | Python | CPython (implícito) | bytecode (.pyc) | CPython VM |'
+    local_asset: slides/assets/F-16-table-1.png
+    drive_id: 1AEzrmLZCBvfXygBVjl95-4uV4KSgCoed
+- id: F-17
+  type: codigo
+  title: 'El mismo problema: imperativo en TypeScript'
+  subtitle: TypeScript — estilo imperativo
+  body_blocks:
+  - type: list
+    items:
+    - '**Diferencias respecto de C:**'
+    - '- Tipos anotados (`: number[]`, `: number`)'
+    - '- Sin gestión manual de punteros'
+    - '- Mismo paradigma — **imperativo**'
+  code_blocks:
+  - lang: typescript
+    content: "function sumaAbs(arr: number[]): number {\n    let acc = 0;\n    for\
+      \ (let i = 0; i < arr.length; i++) {\n        acc += arr[i] < 0 ? -arr[i] :\
+      \ arr[i];\n    }\n    return acc;\n}\n\nconsole.log(sumaAbs([3, -1, 4, -1, 5]));\
+      \ // → 14"
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-18
+  type: codigo
+  title: 'El mismo problema: funcional en TypeScript'
+  subtitle: TypeScript — estilo funcional
+  body_blocks:
+  - type: list
+    items:
+    - '**¿Qué cambió?**'
+    - '- Sin `let` → sin mutación de estado'
+    - '- Sin loop explícito'
+    - '- `map` y `reduce` son **funciones de orden superior** (reciben funciones como
+      argumento)'
+  - type: text
+    content: '> En Scheme (LISP, 1960): `(reduce + (map abs lista))`
+
+      > La misma idea tiene 60 años. TypeScript la adopta en 2012.'
+  - type: list
+    items:
+    - '*Fuente: Louden & Lambert, Cap. 1*'
+  code_blocks:
+  - lang: typescript
+    content: "const sumaAbs = (arr: number[]): number =>\n    arr.map(x => Math.abs(x))\n\
+      \       .reduce((acc, x) => acc + x, 0);\n\nconsole.log(sumaAbs([3, -1, 4, -1,\
+      \ 5])); // → 14"
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-19
+  type: codigo
+  title: Sistema de tipos básico
+  subtitle: 'TypeScript: tipos estáticos que aumentan la confiabilidad'
+  body_blocks:
+  - type: text
+    content: '> **Confiabilidad** (criterio Sebesta #3): el compilador como primer
+      revisor.'
+  code_blocks:
+  - lang: typescript
+    content: "// Anotaciones explícitas\nlet nombre: string = \"Paradigmas\";\nlet\
+      \ año: number = 2026;\n\n// Inferencia automática\nlet materia = \"Paradigmas\"\
+      ;  // tipo: string\n\n// Interfaces\ninterface Alumno {\n    nombre: string;\n\
+      \    legajo: number;\n    notas: number[];\n}\n\n// El compilador detecta errores\
+      \ ANTES de ejecutar:\nsumaAbs([\"hola\", \"mundo\"]);\n// ❌ Error: Argument\
+      \ of type 'string[]' is not\n//    assignable to parameter of type 'number[]'"
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-20
+  type: codigo
+  title: TypeScript como "acelerador de paradigma"
+  subtitle: 'TypeScript: ¿qué paradigma usamos?'
+  body_blocks:
+  - type: list
+    items:
+    - '*Mismo problema — tres estilos válidos:*'
+  - type: text
+    content: '> **Los tres producen `14`. La elección es del programador.**
+
+      > La elección de paradigma determina la legibilidad, testabilidad y mantenibilidad.
+
+      > A lo largo de la materia: vamos a escribir y comparar los tres estilos.'
+  - type: text
+    content: '## BLOQUE 5 — IA Generativa y los paradigmas (15 min)'
+  code_blocks:
+  - lang: typescript
+    content: "const datos = [3, -1, 4, -1, 5];\n\n// ← imperativo: variable mutable\
+      \ + loop\nlet acc = 0;\nfor (const x of datos) acc += Math.abs(x);\n\n// ← funcional:\
+      \ sin estado, composición de funciones\nconst result = datos.map(Math.abs).reduce((a,\
+      \ b) => a + b, 0);\n\n// ← OO: dato + comportamiento encapsulados\nclass Calculadora\
+      \ {\n    sumaAbs(arr: number[]): number {\n        return arr.reduce((a, x)\
+      \ => a + Math.abs(x), 0);\n    }\n}"
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-21
+  type: codigo
+  title: El cambio de rol del programador
+  subtitle: El trabajo del programador cambió radicalmente
+  body_blocks:
+  - type: list
+    items:
+    - '**Antes (pre-IA generativa):**'
+  - type: list
+    items:
+    - '**Hoy (con IA generativa):**'
+  - type: text
+    content: '> *"Natural language has become the new compiler,*
+
+      > *and developer''s focus is migrating from syntax*
+
+      > *and semantics to **strategy**."*'
+  - type: list
+    items:
+    - '*Fuente: Schmidt & Runfola (2025), arXiv:2511.17696*'
+  code_blocks:
+  - lang: text
+    content: '70% codificación manual + depuración
+
+      30% comprensión del problema'
+  - lang: text
+    content: '20% codificación manual
+
+      50% prompting, supervisión y orquestación de IA    ← nuevo
+
+      30% formulación del problema'
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-22
+  type: codigo
+  title: La jerarquía de proficiencia en IA
+  subtitle: ¿Dónde apuntan los graduados de esta materia?
+  body_blocks:
+  - type: text
+    content: '> AI Fluency sin paradigmas = imposible verificar lo que genera la IA.'
+  - type: list
+    items:
+    - '*Fuente: Schmidt & Runfola (2025), Fig. 12*'
+  code_blocks:
+  - lang: text
+    content: '┌─────────────────────────────────────────────────────┐
+
+      │  AI MASTERY   — construir, optimizar y auditar IA   │
+
+      │               — investigadores e ingenieros de IA   │
+
+      ├─────────────────────────────────────────────────────┤
+
+      │  AI FLUENCY   — diseñar prompts, criticar modelos,  │  ← USTEDES
+
+      │               — construir soluciones                │
+
+      │               — requiere pensamiento computacional  │
+
+      ├─────────────────────────────────────────────────────┤
+
+      │  AI LITERACY  — leer e interpretar output de IA     │
+
+      │               — cualquier usuario                   │
+
+      └─────────────────────────────────────────────────────┘'
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-23
+  type: codigo
+  title: Demo en vivo — La IA elige paradigmas
+  subtitle: 'Prompt 1: versión base'
+  body_blocks:
+  - type: list
+    items:
+    - '**Observar:** ¿Qué paradigma eligió la IA por defecto?'
+  code_blocks:
+  - lang: text
+    content: '"Escribí una función que devuelva la suma
+
+      de los valores absolutos de una lista de números"'
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-24
+  type: codigo
+  title: Demo en vivo — Restricción de paradigma
+  subtitle: 'Prompt 2: paradigma funcional explícito'
+  body_blocks:
+  - type: list
+    items:
+    - '**Verificar:**'
+    - '- ¿Entendió la restricción?'
+    - '- ¿Usó `reduce` / `map`?'
+    - '- ¿Hay `let` o mutación oculta?'
+  code_blocks:
+  - lang: text
+    content: '"Implementá lo mismo en estilo funcional puro,
+
+      sin mutación de estado, sin variables intermedias"'
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-25
+  type: codigo
+  title: Demo en vivo — Máquinas abstractas
+  subtitle: 'Prompt 3: verificación de comprensión'
+  body_blocks:
+  - type: list
+    items:
+    - '**Verificar:**'
+    - '- ¿Explica el pipeline `.ts → .js → V8`?'
+    - '- ¿Distingue el compilador (`tsc`) del runtime (`V8`)?'
+    - '- ¿Menciona el lenguaje intermedio?'
+  code_blocks:
+  - lang: text
+    content: '"Explicá qué máquina abstracta ejecuta
+
+      este código TypeScript"'
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-26
+  type: codigo
+  title: El loop "trust but verify"
+  subtitle: Cómo trabajar con IA en programación — Schmidt & Runfola, Fig. 8
+  body_blocks:
+  - type: text
+    content: '> ⚠️ Demasiada dependencia en IA atrofia habilidades cognitivas.
+
+      > Los fundamentos son el antídoto.'
+  - type: text
+    content: '## CIERRE (10 min)'
+  code_blocks:
+  - lang: text
+    content: "1. Formular el problema con precisión\n         ↓\n2. Hacer el prompt\
+      \ a la IA\n         ↓\n3. Revisar con conocimiento de dominio\n   • ¿Qué paradigma\
+      \ usó?\n   • ¿Es correcto semánticamente?\n         ↓\n4. Testear con casos\
+      \ borde\n         ↓\n5. Refinar el prompt o escribir manualmente\n         ↑\n\
+      \   (repetir si es necesario)"
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-27
+  type: codigo
+  title: Mapa de la materia — los 15 temas
+  subtitle: Cómo se conectan los temas del cursado
+  body_blocks:
+  - type: text
+    content: '> *"Lo que vimos hoy es el mapa. Las próximas 15 clases son el territorio."*'
+  code_blocks:
+  - lang: text
+    content: "Temas 1–2      Fundamentos: lenguajes, paradigmas, sintaxis, semántica\n\
+      \    ↓\nTemas 3–6      Paradigma funcional (TypeScript + Python)\n    ↓\nTema\
+      \ 7          Paradigma lógico (Prolog)\n    ↓\nTema 8          Paradigma OO\
+      \ (TypeScript)\n    ↓\nTemas 9–14     Conceptos transversales:\n           \
+      \     variables · tipos · control · módulos · polimorfismo\n    ↓\nTema 15 \
+      \        Concurrencia y paralelismo"
+  tables: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-28
+  type: codigo
+  title: 'Adelanto — Clase 2: Sintaxis y Semántica'
+  subtitle: 'Próxima clase: ¿qué hace un programa **válido**?'
+  body_blocks:
+  - type: list
+    items:
+    - '**¿Qué pasa si no hay `else`?**'
+  - type: list
+    items:
+    - '- **Sintaxis:** ¿es un programa bien formado? SÍ'
+    - '- **Semántica:** ¿qué hace exactamente? → lo define el lenguaje'
+  - type: text
+    content: '> La diferencia entre "esto compila" y "esto hace lo que quiero"
+
+      > es la diferencia entre sintaxis y semántica.'
+  - type: list
+    items:
+    - '**Para la próxima clase:**'
+    - '- Instalar TypeScript → `npm install -g typescript`'
+    - '- O acceder a: [playground.deno.land](https://playground.deno.land) / [typescriptlang.org/play](https://www.typescriptlang.org/play)'
+  - type: list
+    items:
+    - '*Fuente: Louden & Lambert, Cap. 1 §1.4*'
+  - type: text
+    content: '## Resumen de filminas'
+  code_blocks:
+  - lang: typescript
+    content: if (x !== 0) y = 1 / x;
+  tables:
+  - '| Rango | Bloque | Filminas | Minutos |
+
+    |-------|--------|----------|---------|
+
+    | F-00 | Portada | 1 | — |
+
+    | F-01 a F-05 | Bloque 1: ¿Por qué LP? | 5 | 20 |
+
+    | F-06 a F-10 | Bloque 2: Paradigmas | 5 | 25 |
+
+    | F-11 a F-14 | Bloque 3: Imperativo + Máquina Abstracta | 4 | 20 |
+
+    | F-15 a F-20 | Bloque 4: TypeScript | 6 | 30 |
+
+    | F-21 a F-26 | Bloque 5: IA Generativa | 6 | 15 |
+
+    | F-27 a F-28 | Cierre | 2 | 10 |
+
+    | **Total** | | **29 filminas** | **120 min** |'
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Rango | Bloque | Filminas | Minutos |
+
+      |-------|--------|----------|---------|
+
+      | F-00 | Portada | 1 | — |
+
+      | F-01 a F-05 | Bloque 1: ¿Por qué LP? | 5 | 20 |
+
+      | F-06 a F-10 | Bloque 2: Paradigmas | 5 | 25 |
+
+      | F-11 a F-14 | Bloque 3: Imperativo + Máquina Abstracta | 4 | 20 |
+
+      | F-15 a F-20 | Bloque 4: TypeScript | 6 | 30 |
+
+      | F-21 a F-26 | Bloque 5: IA Generativa | 6 | 15 |
+
+      | F-27 a F-28 | Cierre | 2 | 10 |
+
+      | **Total** | | **29 filminas** | **120 min** |'
+    local_asset: slides/assets/F-28-table-1.png
+    drive_id: 14XMqCKWzJsHmfX2JDkiQJ3a4XrlgzC_f

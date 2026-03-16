@@ -84,4 +84,8 @@ layouts:
 template_id: "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI"
 
 # Estrategia de imágenes Gemini (dónde colocar imágenes generadas)
-gemini_image_strategy: "right"
+# Nota: Se usa para controlar el presupuesto de imágenes en la presentación.
+# El campo "max_per_presentation" indica cuántas imágenes generar como máximo.
+gemini_image_strategy:
+  max_per_presentation: 8
+  default: "right"

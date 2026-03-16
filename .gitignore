@@ -20,3 +20,4 @@ node_modules/
 # EDU secrets
 _edu/secrets.local.yaml
 _edu/credentials.json
+_edu/token_slides.json
