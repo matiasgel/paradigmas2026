@@ -845,15 +845,6 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
                 "fields":   "alignment",
             }
         })
-        reqs.append({
-            "updateShapeProperties": {
-                "objectId": tb_id,
-                "shapeProperties": {
-                    "autoFit": {"autoFitType": "SHAPE_AUTO_FIT"}
-                },
-                "fields": "autoFit",
-            }
-        })
 
     def add_native_table(table_md: str, zone: str) -> None:
         geo = ZONES.get(zone)

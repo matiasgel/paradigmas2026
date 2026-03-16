@@ -61,22 +61,27 @@
 
 Type `/bmad-` in Copilot Chat to see all available BMAD workflows and agent activators. Agents are also available in the agents dropdown.
 
-## GitHub Copilot — Estrategias y Funciones Nuevas
+## GitHub Copilot — Manual Completo (actualizado marzo 2026)
 
-Para conocer todas las funciones nuevas de GitHub Copilot (agent skills, hooks, handoffs, MCP servers, prompt files, instrucciones condicionales, sesiones paralelas, Plan agent, workspace index, etc.) y cómo BMAD las aprovecha, consultar:
+Para conocer todas las funciones de GitHub Copilot, mejores prácticas, novedades 2026 y cómo BMAD las aprovecha, consultar:
 
 📄 **[docs/copilot.md](../docs/copilot.md)**
 
-Incluye:
-- Arquitectura de las 7 capas de personalización de Copilot
-- Custom instructions (`copilot-instructions.md`, `.instructions.md`, `AGENTS.md`, `CLAUDE.md`)
-- Custom agents (`.agent.md`) con handoffs, hooks escopados, modelo por tarea
-- Prompt files (`.prompt.md`) — slash commands reutilizables
-- Agent Skills (`SKILL.md`) — capacidades portables (estándar abierto)
-- Hooks de ciclo de vida (`PreToolUse`, `PostToolUse`, `Stop`, etc.)
-- Servidores MCP — conectores a servicios externos
-- Modos de agente: Ask, Agent, Plan, Background, Cloud
-- Estrategias concretas BMAD + Copilot (hooks de commit, handoffs entre agentes BMAD, instrucciones por fase, sesiones paralelas)
+Incluye (actualizado):
+- Arquitectura de las **8 capas** de personalización de Copilot
+- Custom instructions (`copilot-instructions.md`, `.instructions.md` con `applyTo`, `AGENTS.md`, `CLAUDE.md`)
+- Custom agents (`.agent.md`) — campos nuevos: `icon`, `temperature`, `max-tokens`, tool `fetch`
+- Prompt files (`.prompt.md`) — variable `${file:ruta}` nueva, `${changes}`, `${problems}`
+- Agent Skills (`SKILL.md`) — capacidades portables (estándar abierto agentskills.io)
+- Hooks de ciclo de vida (GA) — campo `condition` nuevo, variables `$WORKSPACE_ROOT`, `$SESSION_ID`
+- Servidores MCP — config en `.vscode/mcp.json`, tipos stdio/http/sse, 9+ servidores populares
+- Modos de agente: Ask, Agent, Plan (GA), Background, Cloud — llamadas paralelas de herramientas
+- Variables de contexto: `#changes`, `#problems`, `#testFailure`, `#sym`, `#searchResults`
+- Modelos disponibles: Claude Sonnet 4.7, o3-mini, Gemini 2.0 Flash, GPT-4.5 y más
+- Copilot Coding Agent (Cloud) — asignar issues de GitHub a Copilot para PRs automáticos
+- Copilot Extensions — `@docker`, `@azure`, `@sentry`, etc.
+- Estrategias BMAD + Copilot (7 estrategias actualizadas)
+- Mejores prácticas, anti-patrones y checklist de deploy para agentes/prompts
 
 ## Commit & Push at Session End
 
