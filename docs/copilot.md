@@ -527,6 +527,8 @@ Invocar el modo **Plan** para romper una epic grande en stories antes de pasar a
 /bmad-help           → ayuda de BMAD
 /bmad-dev            → activa Dev workflow
 /bmad-qa             → activa QA workflow
+/goproduction        → despliega edu-standalone a la rama production (via workflow)
+/edu-*              → comandos del módulo EDU (filminas, plan, etc.)
 /init                → regenera copilot-instructions.md
 /create-agent        → crea nuevo agente con IA
 /create-skill        → crea nuevo Agent Skill con IA
