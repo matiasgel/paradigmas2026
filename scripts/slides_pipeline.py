@@ -62,8 +62,9 @@ SCOPES = [
 # Dimensiones estándar 16:9 en EMU (English Metric Units)
 SLIDE_W = 9_144_000
 SLIDE_H = 5_143_500
-MARGIN = 457_200    # ~0.5 pulgada
-TITLE_H = 1_400_000  # alto reservado para título (2 líneas de 46pt)
+MARGIN = 457_200      # ~0.5 pulgada
+TITLE_H = 1_300_000  # alto reservado para título (2 líneas de 36pt)
+LOGO_CLEAR = 700_000  # y mínimo para no solapar el logo institucional del template
 
 # Estrategia de imagen por tipo de filmina
 IMAGE_STRATEGY: dict[str, str] = {
@@ -96,12 +97,12 @@ LAYOUT_MAP: dict[str, dict] = {
 # Geometría de zonas en EMU: (x, y, width, height)
 def _zones(w: int = SLIDE_W, h: int = SLIDE_H, m: int = MARGIN, th: int = TITLE_H) -> dict[str, tuple]:
     half_w = w // 2
-    body_y = m + th + 80_000
+    body_y = LOGO_CLEAR + th + 80_000
     body_h = h - body_y - m
     return {
-        "full-title":    (m,            m,            w - 2 * m,       th),        # ancho completo
-        "left-top":      (m,            m,            half_w - m,      th),        # media anchura
-        "center-top":    (m,            m,            w - 2 * m,       th),
+        "full-title":    (m,            LOGO_CLEAR,   w - 2 * m,       th),        # ancho completo
+        "left-top":      (m,            LOGO_CLEAR,   half_w - m,      th),        # media anchura
+        "center-top":    (m,            LOGO_CLEAR,   w - 2 * m,       th),
         "center-middle": (m,            h // 3,       w - 2 * m,       h // 3),
         "center-bottom": (m,            h * 2 // 3,   w - 2 * m,       h // 3 - m),
         "left-middle":   (m,            body_y,       half_w - m,      body_h),
@@ -360,54 +361,49 @@ def _detect_type(slide_id: str, title: str, body_blocks, code_blocks, tables) ->
 
 def _image_prompt(slide: dict, config: dict) -> str:
     """Genera un prompt Gemini para imagen de fondo o contenido."""
-    title     = slide.get("title", "")
-    stype     = slide.get("type", "concepto-abstracto")
-    palette   = config.get("palette", {})
-    primary   = palette.get("primary", "#8B0000")
+    stype = slide.get("type", "concepto-abstracto")
 
-    # Resumen del cuerpo (primeras 150 chars)
-    body_text = ""
-    for b in slide.get("body_blocks", []):
-        if b["type"] == "text":
-            body_text += " " + b["content"]
-        elif b["type"] == "list":
-            body_text += " " + " — ".join(b["items"][:3])
-    body_text = body_text.strip()[:150]
-
-    style = (
-        "flat design académico, sin texto, sin palabras, sin letras, sin números, "
-        "sin código, sin captions, sin watermarks, sin labels, "
-        "no text, no words, no letters, no numbers, no captions, no watermarks, no labels, "
-        "paleta rojo granate institucional y gris oscuro sobre fondo blanco, alta resolución"
+    style_bg = (
+        "flat design académico, paleta rojo granate institucional y gris oscuro, "
+        "composición puramente pictórica, alta resolución"
+    )
+    style_icon = (
+        "pintura digital abstracta, paleta rojo granate y gris oscuro, "
+        "fondo blanco limpio, alta resolución"
     )
 
     if stype == "portada":
         return (
-            f"Composición visual abstracta: paradigmas de programación, código, "
-            f"lenguajes de software, fondo institucional elegante. {style}"
+            "Composición abstracta de íconos de programación: engranajes, "
+            "bifurcaciones de flujo, nodos conectados, código como grafo visual. "
+            f"Solo formas y colores institucionales. {style_bg}"
         )
     if stype == "cierre":
-        return f"Imagen motivacional académica de finalización y aprendizaje. {style}"
+        return (
+            "Composición motivacional académica: diploma geométrico, estrella, "
+            "trayectoria ascendente de flechas, íconos de logro. "
+            f"Solo formas y colores. {style_bg}"
+        )
     if stype == "socratica":
         return (
-            f"Imagen minimalista evocadora para reflexión sobre: «{title}». "
-            f"Mucho espacio negativo, composición centralizada. {style}"
+            "Ilustración minimalista: signo de interrogación geométrico grande, "
+            "formas circulares concéntricas, amplio espacio negativo. "
+            f"Solo formas y colores. {style_bg}"
         )
     if stype == "diagrama":
         return (
-            f"Diagrama abstracto conceptual representando: «{title}». "
-            f"Flechas, nodos, conexiones. {style}"
+            "Tres círculos rojos grandes conectados por líneas con flechas. "
+            f"Arte minimalista geométrico. {style_icon}"
         )
     if stype == "timeline":
         return (
-            f"Fondo abstracto representando evolución temporal en computación. "
-            f"Décadas, hitos, tecnología. {style}"
+            "Línea horizontal con cinco puntos marcados en rojo. "
+            f"Arte minimalista de evolución temporal. {style_icon}"
         )
-    # concepto-abstracto, default
-    context = body_text[:80] if body_text else title
+    # concepto-abstracto / default
     return (
-        f"Ilustración académica que representa conceptualmente: «{title}». "
-        f"Contexto: {context}. {style}"
+        "Composición abstracta de círculos y líneas interconectadas en rojo granate y gris. "
+        f"Arte geométrico minimalista. {style_icon}"
     )
 
 
@@ -796,6 +792,40 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
             }
         })
 
+    def add_bg_overlay(zone: str, opacity: float = 0.6) -> None:
+        """Rectángulo blanco semitransparente encima de la imagen de fondo."""
+        geo = ZONES.get(zone)
+        if not geo:
+            return
+        x, y, w, h = geo
+        ov_id = nid("overlay")
+        reqs.append({
+            "createShape": {
+                "objectId":  ov_id,
+                "shapeType": "RECTANGLE",
+                "elementProperties": {
+                    "pageObjectId": page_id,
+                    "size":         _emu_size(w, h),
+                    "transform":    _transform(x, y),
+                },
+            }
+        })
+        reqs.append({
+            "updateShapeProperties": {
+                "objectId": ov_id,
+                "shapeProperties": {
+                    "shapeBackgroundFill": {
+                        "solidFill": {
+                            "color": {"rgbColor": {"red": 1.0, "green": 1.0, "blue": 1.0}},
+                            "alpha": opacity,
+                        }
+                    },
+                    "outline": {"propertyState": "NOT_RENDERED"},
+                },
+                "fields": "shapeBackgroundFill,outline",
+            }
+        })
+
     def add_textbox(
         text:    str,
         zone:    str,
@@ -938,6 +968,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     bg = slide.get("background_image") or {}
     if bg.get("drive_id"):
         add_image(_drive_url(bg["drive_id"]), "background")
+        add_bg_overlay("background", opacity=0.6)
 
     # ── 4. Imagen de contenido ──────────────────────────────────────────
     ci = slide.get("content_image") or {}
@@ -966,7 +997,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     title_zone = layout.get("title", "left-top")
     t_size     = typo.get("title", {}).get("size", 36)
     if stype == "portada":
-        t_size = 48
+        t_size = 36
     t_align    = "CENTER" if "center" in str(title_zone) else "LEFT"
     t_align    = _normalize_alignment(t_align)
     add_textbox(title, title_zone, t_size, bold=True, color=primary, align=t_align)
@@ -1078,6 +1109,33 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
         print(f"  ⚠️  {len(failed_batches)} lote(s) fallaron — la presentación puede estar incompleta:")
         for msg in failed_batches:
             print(f"     • {msg}")
+
+    # ── Limpieza: elimina textos del template que quedaron en los slides ─
+    _TEMPLATE_TEXTS = {
+        "portada", "the uncomfortable question",
+        "the uncomfistable question", "what is a paradigmm?",
+        "the factors that shaped poradgms",
+    }
+    try:
+        pres = slides_svc.presentations().get(presentationId=pres_id).execute()
+        del_reqs: list[dict] = []
+        for s in pres.get("slides", []):
+            for el in s.get("pageElements", []):
+                txt_data = (el.get("shape") or {}).get("text") or {}
+                content = "".join(
+                    e.get("textRun", {}).get("content", "")
+                    for e in txt_data.get("textElements", [])
+                    if "textRun" in e
+                ).strip().lower()
+                if content in _TEMPLATE_TEXTS:
+                    del_reqs.append({"deleteObject": {"objectId": el["objectId"]}})
+        if del_reqs:
+            slides_svc.presentations().batchUpdate(
+                presentationId=pres_id, body={"requests": del_reqs}
+            ).execute()
+            print(f"  🗑️  Eliminados {len(del_reqs)} textos residuales del template.")
+    except Exception as exc:
+        print(f"  ⚠️  No se pudo limpiar textos del template: {exc}")
 
     url      = f"https://docs.google.com/presentation/d/{pres_id}/edit"
     url_path = topic_folder / "slides" / "slides-url.txt"
