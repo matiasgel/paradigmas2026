@@ -62,8 +62,8 @@ SCOPES = [
 # Dimensiones estándar 16:9 en EMU (English Metric Units)
 SLIDE_W = 9_144_000
 SLIDE_H = 5_143_500
-MARGIN = 457_200   # ~0.5 pulgada
-TITLE_H = 820_000  # alto reservado para título
+MARGIN = 457_200    # ~0.5 pulgada
+TITLE_H = 1_400_000  # alto reservado para título (2 líneas de 46pt)
 
 # Estrategia de imagen por tipo de filmina
 IMAGE_STRATEGY: dict[str, str] = {
@@ -82,15 +82,15 @@ IMAGE_STRATEGY: dict[str, str] = {
 # Directrices de layout por tipo
 LAYOUT_MAP: dict[str, dict] = {
     "portada":            {"title": "center-middle",  "body": "center-bottom", "image": "background", "code": "none", "table": "none"},
-    "concepto-abstracto": {"title": "left-top",       "body": "left-middle",   "image": "right-half", "code": "none", "table": "none"},
-    "codigo":             {"title": "left-top",        "body": "subtitle-only", "image": "none",       "code": "full-bottom", "table": "none"},
-    "tabla":              {"title": "left-top",        "body": "none",          "image": "none",       "code": "none", "table": "full-bottom"},
-    "tabla-comparativa":  {"title": "left-top",        "body": "none",          "image": "none",       "code": "none", "table": "full-bottom"},
-    "diagrama":           {"title": "left-top",        "body": "left-middle",   "image": "right-half", "code": "none", "table": "none"},
-    "socratica":          {"title": "center-top",      "body": "center-middle", "image": "background", "code": "none", "table": "none"},
-    "demo":               {"title": "left-top",        "body": "left-middle",   "image": "none",       "code": "right-half", "table": "none"},
-    "cierre":             {"title": "center-middle",   "body": "center-bottom", "image": "background", "code": "none", "table": "none"},
-    "timeline":           {"title": "left-top",        "body": "full-center",   "image": "none",       "code": "none", "table": "none"},
+    "concepto-abstracto": {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none", "table": "none"},
+    "codigo":             {"title": "full-title",     "body": "subtitle-only", "image": "none",       "code": "full-bottom", "table": "none"},
+    "tabla":              {"title": "full-title",     "body": "none",          "image": "none",       "code": "none", "table": "full-bottom"},
+    "tabla-comparativa":  {"title": "full-title",     "body": "none",          "image": "none",       "code": "none", "table": "full-bottom"},
+    "diagrama":           {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none", "table": "none"},
+    "socratica":          {"title": "center-top",     "body": "center-middle", "image": "background", "code": "none", "table": "none"},
+    "demo":               {"title": "full-title",     "body": "left-middle",   "image": "none",       "code": "right-half", "table": "none"},
+    "cierre":             {"title": "center-middle",  "body": "center-bottom", "image": "background", "code": "none", "table": "none"},
+    "timeline":           {"title": "full-title",     "body": "full-center",   "image": "none",       "code": "none", "table": "none"},
 }
 
 # Geometría de zonas en EMU: (x, y, width, height)
@@ -99,7 +99,8 @@ def _zones(w: int = SLIDE_W, h: int = SLIDE_H, m: int = MARGIN, th: int = TITLE_
     body_y = m + th + 80_000
     body_h = h - body_y - m
     return {
-        "left-top":      (m,            m,            half_w - m,      th),
+        "full-title":    (m,            m,            w - 2 * m,       th),        # ancho completo
+        "left-top":      (m,            m,            half_w - m,      th),        # media anchura
         "center-top":    (m,            m,            w - 2 * m,       th),
         "center-middle": (m,            h // 3,       w - 2 * m,       h // 3),
         "center-bottom": (m,            h * 2 // 3,   w - 2 * m,       h // 3 - m),
@@ -108,7 +109,7 @@ def _zones(w: int = SLIDE_W, h: int = SLIDE_H, m: int = MARGIN, th: int = TITLE_
         "right-half":    (half_w + m,   body_y,       half_w - 2 * m,  body_h),
         "full-bottom":   (m,            body_y,       w - 2 * m,       body_h),
         "full-center":   (m,            m,            w - 2 * m,       h - 2 * m),
-        "subtitle-only": (m,            body_y,       w - 2 * m,       th),
+        "subtitle-only": (m,            body_y,       w - 2 * m,       th // 2),
         "background":    (0,            0,            w,               h),
         "none":          None,
     }
@@ -159,7 +160,42 @@ def _hex_rgb(color: str) -> dict:
 
 
 def _color(hex_color: str) -> dict:
+    # Para estilos de texto (foregroundColor) Google Slides usa OpaqueColor.
     return {"opaqueColor": {"rgbColor": _hex_rgb(hex_color)}}
+
+
+def _rgb_color(hex_color: str) -> dict:
+    # Para fondos y rellenos (pageBackgroundFill, solidFill) usa rgbColor directo.
+    return {"rgbColor": _hex_rgb(hex_color)}
+
+
+def _normalize_alignment(align: str) -> str:
+    """Map human-friendly alignment values to Google Slides API enums."""
+    a = (align or "").strip().upper()
+    if a in ("LEFT", "START"):
+        return "START"
+    if a in ("RIGHT", "END"):
+        return "END"
+    if a in ("CENTER", "MIDDLE"):
+        return "CENTER"
+    return "START"
+
+
+def _strip_markdown(text: str) -> str:
+    """Elimina marcado Markdown del texto para display limpio en Google Slides."""
+    # Eliminar **bold** y __bold__
+    text = re.sub(r'\*\*(.+?)\*\*', r'\1', text, flags=re.DOTALL)
+    text = re.sub(r'__(.+?)__', r'\1', text, flags=re.DOTALL)
+    # Eliminar *italic* y _italic_
+    text = re.sub(r'\*(.+?)\*', r'\1', text)
+    text = re.sub(r'_(.+?)_', r'\1', text)
+    # Eliminar `inline code`
+    text = re.sub(r'`([^`]+)`', r'\1', text)
+    # Eliminar > blockquotes
+    text = re.sub(r'^>\s*', '', text, flags=re.MULTILINE)
+    # Eliminar ## headings al inicio de línea
+    text = re.sub(r'^#{1,6}\s+', '', text, flags=re.MULTILINE)
+    return text.strip()
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -234,6 +270,11 @@ def _finalize_slide(raw: dict) -> dict:
             tables.append("\n".join(tbl_lines))
             continue
 
+        # ── Saltar secciones del documento (## BLOQUE …, ### etc.) ────────
+        if re.match(r'^#{2,}', line):
+            i += 1
+            continue
+
         # ── Subtitle (# heading) ────────────────────────────────────────
         m_h = re.match(r"^#\s+(.+)$", line)
         if m_h and not subtitle:
@@ -264,7 +305,9 @@ def _finalize_slide(raw: dict) -> dict:
         if re.match(r"^[-*•]|\d+\.", first):
             items = []
             for bl in block_lines:
-                stripped = re.sub(r"^\s*[-*•\d]+[.)]\s*", "", bl).strip()
+                # Strip bullet prefix correctamente: "- text", "* text", "• text", "1. text"
+                stripped = re.sub(r'^\s*[-*•]\s+', '', bl)
+                stripped = re.sub(r'^\s*\d+[.)]\s+', '', stripped).strip()
                 if stripped:
                     items.append(stripped)
             if items:
@@ -327,8 +370,10 @@ def _image_prompt(slide: dict, config: dict) -> str:
     body_text = body_text.strip()[:150]
 
     style = (
-        f"flat design académico, sin texto, sin palabras, sin letras, "
-        f"paleta {primary} y gris oscuro sobre fondo blanco, alta resolución"
+        "flat design académico, sin texto, sin palabras, sin letras, sin números, "
+        "sin código, sin captions, sin watermarks, sin labels, "
+        "no text, no words, no letters, no numbers, no captions, no watermarks, no labels, "
+        "paleta rojo granate institucional y gris oscuro sobre fondo blanco, alta resolución"
     )
 
     if stype == "portada":
@@ -460,33 +505,31 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
 # ═══════════════════════════════════════════════════════════════════════
 
 def _gemini_image(prompt: str, output_path: Path, api_key: str) -> bool:
-    """Genera una imagen con Gemini (gemini-2.0-flash) y la guarda en output_path."""
-    model   = "gemini-2.0-flash-exp-image-generation"
+    """Genera una imagen con Imagen 4.0 y la guarda en output_path."""
+    model   = "imagen-4.0-generate-001"
     url     = (
         f"https://generativelanguage.googleapis.com/v1beta/models/"
-        f"{model}:generateContent?key={api_key}"
+        f"{model}:predict?key={api_key}"
     )
     payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"responseModalities": ["IMAGE"]},
+        "instances": [{"prompt": prompt}],
+        "parameters": {"sampleCount": 1},
     }
     try:
         resp = requests.post(url, json=payload, timeout=90)
         resp.raise_for_status()
-        candidates = resp.json().get("candidates", [])
-        if not candidates:
-            raise ValueError("Sin candidatos en la respuesta")
-        parts = candidates[0].get("content", {}).get("parts", [])
-        for part in parts:
-            inline = part.get("inlineData", {})
-            if inline.get("mimeType", "").startswith("image/"):
-                img_bytes = base64.b64decode(inline["data"])
-                output_path.parent.mkdir(parents=True, exist_ok=True)
-                output_path.write_bytes(img_bytes)
-                return True
-        raise ValueError("No se encontró imagen inline en la respuesta")
+        predictions = resp.json().get("predictions", [])
+        if not predictions:
+            raise ValueError("Sin predicciones en la respuesta")
+        img_b64 = predictions[0].get("bytesBase64Encoded")
+        if not img_b64:
+            raise ValueError("No se encontró imagen en la respuesta")
+        img_bytes = base64.b64decode(img_b64)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_bytes(img_bytes)
+        return True
     except Exception as exc:
-        print(f"    ⚠️  Gemini imagen falló para {output_path.name}: {exc}")
+        print(f"    ⚠️  Imagen 4.0 falló para {output_path.name}: {exc}")
         return False
 
 
@@ -792,9 +835,18 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         reqs.append({
             "updateParagraphStyle": {
                 "objectId": tb_id,
-                "style":    {"alignment": align},
+                "style":    {"alignment": _normalize_alignment(align)},
                 "textRange": {"type": "ALL"},
                 "fields":   "alignment",
+            }
+        })
+        reqs.append({
+            "updateShapeProperties": {
+                "objectId": tb_id,
+                "shapeProperties": {
+                    "autoFit": {"autoFitType": "SHAPE_AUTO_FIT"}
+                },
+                "fields": "autoFit",
             }
         })
 
@@ -832,12 +884,14 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
             for c_idx, cell in enumerate(row):
                 if not cell:
                     continue
+                # Limpiar markdown de las celdas de tabla
+                clean_cell = _strip_markdown(cell)
                 reqs.append({
                     "insertText": {
                         "objectId":       tbl_id,
                         "cellLocation":   {"rowIndex": r_idx, "columnIndex": c_idx},
                         "insertionIndex": 0,
-                        "text":           cell,
+                        "text":           clean_cell,
                     }
                 })
                 if r_idx == 0:
@@ -864,7 +918,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
                             },
                             "tableCellProperties": {
                                 "tableCellBackgroundFill": {
-                                    "solidFill": {"color": _color(primary)}
+                                    "solidFill": {"color": _rgb_color(primary)}
                                 }
                             },
                             "fields": "tableCellBackgroundFill",
@@ -918,6 +972,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     if stype == "portada":
         t_size = 48
     t_align    = "CENTER" if "center" in str(title_zone) else "LEFT"
+    t_align    = _normalize_alignment(t_align)
     add_textbox(title, title_zone, t_size, bold=True, color=primary, align=t_align)
 
     # ── 7. Subtítulo (portada) ──────────────────────────────────────────
@@ -956,21 +1011,19 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
                     },
                 }
             })
-            reqs.append({
-                "updateShapeProperties": {
-                    "objectId": bg_id,
-                    "shapeProperties": {
-                        "shapeBackgroundFill": {
-                            "solidFill": {"color": _color("#F4F4F4")}
-                        }
-                    },
-                    "fields": "shapeBackgroundFill",
-                }
-            })
-        code_text = "\n\n".join(
-            f"// {cb.get('lang', '').upper() or 'CODE'}\n{cb['content']}"
-            for cb in code_blocks
-        )
+        reqs.append({
+            "updateShapeProperties": {
+                "objectId": bg_id,
+                "shapeProperties": {
+                    "shapeBackgroundFill": {
+                        "solidFill": {"color": _rgb_color("#F4F4F4")}
+                    }
+                },
+                "fields": "shapeBackgroundFill",
+            }
+        })
+        # Solo el contenido del código, sin marcadores de lenguaje
+        code_text = "\n\n".join(cb['content'] for cb in code_blocks)
         c_size = typo.get("code", {}).get("size", 14)
         add_textbox(code_text, code_zone, c_size, font="Roboto Mono", color="#222222")
 
@@ -981,9 +1034,9 @@ def _blocks_to_text(blocks: list[dict]) -> str:
     lines = []
     for b in blocks:
         if b.get("type") == "text":
-            lines.append(b["content"])
+            lines.append(_strip_markdown(b["content"]))
         elif b.get("type") == "list":
-            lines.extend(f"• {item}" for item in b.get("items", []))
+            lines.extend(f"• {_strip_markdown(item)}" for item in b.get("items", []))
     return "\n".join(lines)
 
 
