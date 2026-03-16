@@ -137,11 +137,14 @@ Según `tp_type` guardado en Step 5, ejecutar el sub-paso correspondiente:
 - **Condition:** Run always after Step 8
 
 ### Step 9.5: Publish Slides (Optional)
-- **Prompt:** `/edu_publish_slides`
-- **Agent:** slides-publisher (Diego), orquestado por el prompt
-- **Condition:** Solo si `_edu/secrets.local.yaml` existe (APIs configuradas)
-- **Input:** `{topic_folder}/filminas.md` (ya aprobadas y corregidas por quality loops)
-- **Output:** `{topic_folder}/slides/publish_slides.py`, `{topic_folder}/slides/slide-plan.yaml`, `{topic_folder}/slides/slides-url.txt`
-- **Gate:** El docente aprueba el plan de imágenes filmina por filmina antes de generar
-- **Note:** Si `_edu/slides-config.yaml` no existe, Diego invoca a Vera primero automáticamente
+- **Prompt:** `/edu-publish-slides`
+- **Script:** `salida/edu-standalone/scripts/slides_pipeline.py`
+- **Condition:** Solo si `_edu/secrets.local.yaml` y `_edu/slides-config.yaml` existen
+- **Input:** `{topic_folder}/filminas.md` (aprobadas y corregidas)
+- **Output:**
+  - `{topic_folder}/slides/plan-filminas-{tema}.yaml` — plan completo con contenido + prompts de imagen
+  - `{topic_folder}/slides/assets/` — imágenes generadas localmente (Gemini + matplotlib)
+  - `{topic_folder}/slides/slides-url.txt` — URL de la presentación publicada
+- **Ejecución automática:** sin preguntas al usuario; el pipeline completo corre de una sola vez
+- **Note:** Si `_edu/slides-config.yaml` no existe, activar `/edu-slides-designer` primero (una sola vez por cursada)
 

@@ -1,33 +1,67 @@
 ---
-description: 'EDU: Publicar slides — flujo completo orquestado: verifica setup → diseño → exporta a Google Slides'
+description: 'EDU: Publicar filminas — pipeline completo: plan → imágenes Gemini → Google Slides (sin preguntas)'
 agent: 'agent'
 tools: ['read', 'edit', 'search', 'execute', 'web']
 ---
 
-1. Load `{project-root}/_edu/config.yaml` and store all fields as session variables.
+## edu-publish-slides — Pipeline unificado
 
-2. Load `{project-root}/_edu/active-topic.yaml` → store `{topic_folder}`, `{topic_number}`, `{topic_name}` as session variables.
-   If not found → ask: "¿Qué tema querés publicar? (ej: temas/01-conceptos-introductorios)" → set `{topic_folder}`.
+> **Sin preguntas al usuario.** Todo el proceso es automático desde que se invoca.
 
-3. **Verificación de prerequisitos (en orden):**
+### Prerequisitos mínimos
 
-   a. Verificar `{project-root}/_edu/secrets.local.yaml`:
-      - Si NO existe → "Primero configurá las APIs con /edu-setup-apis" → STOP
+1. `_edu/secrets.local.yaml` debe existir → si no: informar al usuario que ejecute `/edu-setup-apis` → STOP.
+2. `_edu/slides-config.yaml` debe existir → si no: activar `/edu-slides-designer` automáticamente antes de continuar.
+3. `filminas.md` del tema activo debe existir → si no: informar que ejecute `/edu-create-class` → STOP.
 
-   b. Verificar `{project-root}/_edu/slides-config.yaml`:
-      - Si NO existe → "No hay sistema de diseño configurado. Activando Vera..."
-        - Load `{project-root}/_edu/agents/slides-designer.md`
-        - Follow ALL activation instructions
-        - After Vera completes, continue to step c
-      - Si existe → continuar
+### Resolución del tema activo
 
-   c. Verificar que `{project-root}/{topic_folder}/filminas.md` existe.
-      Si no existe → "No se encontró filminas.md en {topic_folder}. ¿Corriste /edu-create-class primero?" → STOP
+- Leer `active-topic.yaml` si existe → extraer `topic_folder`.
+- Si no existe → usar el primer argumento del usuario (ej: `01-conceptos-introductorios`) para construir la ruta:
+  `{topics_folder}/{tema}` según `_edu/config.yaml`.
 
-4. **Activar Diego:**
-   - Load `{project-root}/_edu/agents/slides-publisher.md`
-   - Follow ALL activation instructions
-   - Pass `{topic_folder}` as active context
-   - Execute [PB] Publish automatically since prerequisites are confirmed
+### Ejecución del pipeline
 
-5. Wait for Diego to complete and surface the Google Slides link to the user.
+Una vez validados los prerequisitos, ejecutar en terminal **sin preguntas**:
+
+```bash
+python {project-root}/salida/edu-standalone/scripts/slides_pipeline.py \
+       {topic_folder}
+```
+
+El script realiza automáticamente:
+
+| Fase | Descripción | Salida |
+|------|-------------|--------|
+| 1. Plan | Lee `filminas.md` → genera `slides/plan-filminas-{tema}.yaml` con contenido completo, directrices de layout e instrucciones de imágenes | `slides/plan-filminas-{tema}.yaml` |
+| 2. Assets | Genera imágenes con Gemini API, renderiza tablas como PNG con matplotlib, sube todo a Google Drive | `slides/assets/` + Drive IDs en el plan |
+| 3. Publish | Copia plantilla, crea cada filmina con layout correcto, inserta imágenes, tablas y código, guarda URL | `slides/slides-url.txt` |
+
+### Opciones de ejecución parcial
+
+```bash
+# Solo generar el plan YAML (para revisar antes de publicar)
+python slides_pipeline.py {topic_folder} --plan-only
+
+# Solo generar assets (si el plan ya fue revisado)
+python slides_pipeline.py {topic_folder} --assets-only
+
+# Solo publicar (si plan y assets ya existen)
+python slides_pipeline.py {topic_folder} --publish-only
+```
+
+### Output final
+
+Mostrar al usuario:
+```
+✅ Pipeline completado
+URL: https://docs.google.com/presentation/d/{id}/edit
+Plan: {topic_folder}/slides/plan-filminas-{tema}.yaml
+```
+
+### Instalación de dependencias
+
+Si las dependencias no están instaladas:
+```bash
+pip install -r {project-root}/salida/edu-standalone/scripts/requirements.txt
+```
