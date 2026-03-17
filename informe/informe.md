@@ -99,7 +99,7 @@ Script principal del pipeline EDU. Ubicación original: `scripts/slides_pipeline
 | # | ID | Tipo | Título | Assets |
 |---|----|----|--------|--------|
 | 01 | F-00 | portada | Portada | — |
-| 02 | F-01 | socratica | La pregunta incómoda | F-01-bg.png (IA) |
+| 02 | F-01 | socratica | ¿Para qué estudiar lenguajes de programación? | F-01-bg.png (IA) |
 | 03 | F-02 | concepto-abstracto | El costo de elegir mal | F-02-content.png (IA) |
 | 04 | F-03 | tabla | Perspectiva histórica | F-03-table-1.png |
 | 05 | F-04 | tabla | Criterios de evaluación de lenguajes | F-04-table-1.png |
@@ -170,7 +170,7 @@ Obtenidas via `presentations.pages.getThumbnail` (tamaño LARGE) de la Google Sl
 | Filmina | Archivo | Tipo |
 |---------|---------|------|
 | 01 – Portada | [filminas/filmina01.png](filminas/filmina01.png) | portada |
-| 02 – La pregunta incómoda | [filminas/filmina02.png](filminas/filmina02.png) | socratica |
+| 02 – ¿Para qué estudiar lenguajes de programación? | [filminas/filmina02.png](filminas/filmina02.png) | socratica |
 | 03 – El costo de elegir mal | [filminas/filmina03.png](filminas/filmina03.png) | concepto-abstracto |
 | 04 – Perspectiva histórica | [filminas/filmina04.png](filminas/filmina04.png) | tabla |
 | 05 – Criterios de evaluación | [filminas/filmina05.png](filminas/filmina05.png) | tabla |

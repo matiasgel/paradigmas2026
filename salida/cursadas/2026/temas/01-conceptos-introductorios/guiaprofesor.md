@@ -79,7 +79,7 @@ Al concluir esta clase el alumno debe poder:
 
 ### APERTURA — Bienvenida a la materia (5 min, fuera del tiempo de bloques)
 
-**Filmina activa:** F-00 (portada)
+**Filmina activa:** 1 (portada)
 **Tono:** cálido y situador — no empezar con teoría todavía
 
 - Presentarse: nombre, años en la cátedra, cómo prefieren que le digan.
@@ -91,21 +91,21 @@ Al concluir esta clase el alumno debe poder:
 
 ### BLOQUE 1 — ¿Por qué estudiar lenguajes de programación? (20 min)
 
-**Filminas:** F-01 · F-02 · F-03 · F-04 · F-05
+**Filminas:** 2 · 4 · 5 · 6 · 13
 **Objetivo:** Justificar el valor de la materia desde un ángulo práctico y provocador.
 
 | Subbloque | Duración | Filmina | Actividad |
 |-----------|----------|---------|-----------|
-| ¿Para qué estudiar lenguajes de programación? | 2 min | F-01 | Preguntar cuántos lenguajes existen; dejar que respondan |
-| El costo de elegir mal | 5 min | F-02 | Narrar caso startup Node.js → Python; conectar con modelo mental |
-| Perspectiva histórica express | 7 min | F-03 | Recorrer timeline FORTRAN→TypeScript con justificación por cada hito |
-| Criterios de evaluación (Sebesta) | 6 min | F-04 | Presentar los 6 criterios; ejemplo de tensión Python vs. C |
-| Punto de tensión IA (dejar abierto) | 2 min | F-05 | Plantear sin resolver — retomar en Bloque 5 |
+| ¿Para qué estudiar lenguajes de programación? | 2 min | 2 | Preguntar cuántos lenguajes existen; dejar que respondan |
+| El costo de elegir mal | 5 min | 4 | Narrar caso startup Node.js → Python; conectar con modelo mental |
+| Perspectiva histórica express | 7 min | 5 | Recorrer timeline FORTRAN→TypeScript con justificación por cada hito |
+| Criterios de evaluación (Sebesta) | 6 min | 6 | Presentar los 6 criterios; ejemplo de tensión Python vs. C |
+| Punto de tensión IA (dejar abierto) | 2 min | 13 | Plantear sin resolver — retomar en Bloque 5 |
 
-**Frase clave de apertura del bloque (F-01):**
+**Frase clave de apertura del bloque (2):**
 > *"¿Cuántos lenguajes de programación existen hoy?"* — Respuesta real: más de 700 con uso documentado.
 
-**Tensión a sembrar en F-05 (no resolver todavía):**
+**Tensión a sembrar en 13 (no resolver todavía):**
 > *"¿Importa el lenguaje si la IA puede escribir en cualquiera? ¿O precisamente por eso importa más saber evaluarlos?"*
 > — Retomar explícitamente al abrir el Bloque 5.
 
@@ -113,16 +113,16 @@ Al concluir esta clase el alumno debe poder:
 
 ### BLOQUE 2 — Los paradigmas: mapa general (25 min)
 
-**Filminas:** F-06 · F-07 · F-08 · F-09 · F-10
+**Filminas:** 14 · 15 · 16 · 19 · 20
 **Objetivo:** Dar el mapa completo de paradigmas con base teórica sólida.
 
 | Subbloque | Duración | Filmina | Actividad |
 |-----------|----------|---------|-----------|
-| ¿Qué es un paradigma? | 4 min | F-06 | Definición conceptual; Java vs. C# (mismo paradigma, sintaxis diferente) |
-| Factores históricos que formaron los paradigmas | 6 min | F-07 | Von Neumann → imperativo; cronología metodológica comprimida |
-| El cuello de botella de Von Neumann | 5 min | F-08 | Pregunta disparadora sobre cómputo no-Von Neumann |
-| Los 4 paradigmas fundamentales (tabla) | 8 min | F-09 | Tabla comparativa en filmina dedicada |
-| Lenguajes puros vs. multiparadigma + dominios | 2 min | F-10 | Rápido; conectar con temas 03–07 |
+| ¿Qué es un paradigma? | 4 min | 14 | Definición conceptual; Java vs. C# (mismo paradigma, sintaxis diferente) |
+| Factores históricos que formaron los paradigmas | 6 min | 15 | Von Neumann → imperativo; cronología metodológica comprimida |
+| El cuello de botella de Von Neumann | 5 min | 16 | Pregunta disparadora sobre cómputo no-Von Neumann |
+| Los 4 paradigmas fundamentales (tabla) | 8 min | 19 | Tabla comparativa en filmina dedicada |
+| Lenguajes puros vs. multiparadigma + dominios | 2 min | 20 | Rápido; conectar con temas 03–07 |
 
 **Tabla a presentar en F-09:**
 
@@ -139,15 +139,15 @@ Al concluir esta clase el alumno debe poder:
 
 ### BLOQUE 3 — Paradigma imperativo y máquina abstracta (20 min)
 
-**Filminas:** F-11 · F-12 · F-13 · F-14
+**Filminas:** 21 · 22 · 23 · 24
 **Objetivo:** Conectar máquinas abstractas con código real. Dar rigor sin perder claridad.
 
 | Subbloque | Duración | Filmina | Actividad |
 |-----------|----------|---------|-----------|
-| La escalera de abstracciones | 5 min | F-11 | Diagrama en filmina: LC-3 → C → Java/TS → Frameworks |
-| La conexión Von Neumann → código imperativo | 5 min | F-12 | Variable = celda de memoria; asignación = transferencia CPU→mem |
-| Ejemplo comparativo LC-3 / C / TypeScript | 8 min | F-13 | Mostrar LC-3 brevemente; detenerse en C; anticipar TypeScript |
-| Máquina abstracta, interpretación y compilación | 2 min | F-14 | Síntesis Gabbrielli Cap. 1 — anticipar Bloque 4 |
+| La escalera de abstracciones | 5 min | 21 | Diagrama en filmina: LC-3 → C → Java/TS → Frameworks |
+| La conexión Von Neumann → código imperativo | 5 min | 22 | Variable = celda de memoria; asignación = transferencia CPU→mem |
+| Ejemplo comparativo LC-3 / C / TypeScript | 8 min | 23 | Mostrar LC-3 brevemente; detenerse en C; anticipar TypeScript |
+| Máquina abstracta, interpretación y compilación | 2 min | 24 | Síntesis Gabbrielli Cap. 1 — anticipar Bloque 4 |
 
 **⚠️ Aclaración explícita a dar en F-13:**
 > *"Este código LC-3 NO entra al TP. Está para que vean lo que C ya les abstrae."*
