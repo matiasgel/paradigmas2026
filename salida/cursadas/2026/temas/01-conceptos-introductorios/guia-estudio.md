@@ -228,8 +228,8 @@ Además de las limitaciones de hardware, los paradigmas evolucionaron con las me
 |-----------|-------------|----------------------|-----------------|--------------------------|
 | **Imperativo** | Arquitectura Von Neumann | Instrucción | Mutable (explícito) | C, Go, Pascal, FORTRAN |
 | **Orientado a Objetos** | Imperativo + encapsulamiento | Objeto / mensaje | Mutable (encapsulado) | Java, C#, Dart |
-| **Funcional** | Cálculo lambda (Church, 1936) | Función matemática | Inmutable (sin efectos laterales) | Haskell, Clojure, LISP/Scheme, F# |
-| **Lógico** | Lógica simbólica (Robinson, 1965) | Relación / hecho / consulta | Sin concepto de estado | Prolog |
+| **Declarativo (Funcional)** | Cálculo lambda (Church, 1936) | Función matemática | Inmutable (sin efectos laterales) | Haskell, Clojure, LISP/Scheme, F# |
+| **Declarativo (Lógico)** | Lógica simbólica (Robinson, 1965) | Relación / hecho / consulta | Sin concepto de estado | Prolog |
 
 #### Notas sobre cada paradigma:
 
@@ -237,9 +237,9 @@ Además de las limitaciones de hardware, los paradigmas evolucionaron con las me
 
 **Orientado a Objetos:** Es una extensión del imperativo, no una ruptura. Agrega encapsulamiento (el objeto oculta su estado interno) y paso de mensajes (los objetos se comunican llamando a sus métodos). El estado sigue siendo mutable, pero está encapsulado dentro de los objetos.
 
-**Funcional:** Se basa en el cálculo lambda de Alonzo Church (1936) — antes de que existieran las computadoras. Un programa es una composición de funciones matemáticas puras. No hay variables mutables ni efectos laterales. El mismo input siempre produce el mismo output.
+**Funcional (declarativo):** Se basa en el cálculo lambda de Alonzo Church (1936) — antes de que existieran las computadoras. Un programa describe *qué* transformar (funciones matemáticas puras), no *cómo* ejecutar los pasos; no hay variables mutables ni efectos laterales. El mismo input siempre produce el mismo output.
 
-**Lógico:** Un programa es un conjunto de hechos y reglas. La ejecución es una búsqueda de pruebas. No se "programa" en el sentido imperativo — se declaran relaciones y se hacen consultas.
+**Lógico (declarativo):** Un programa declara hechos y reglas. La ejecución es una búsqueda de pruebas. En lugar de decirle al computador cómo resolver algo, se expresa qué condiciones deben cumplirse y el motor de inferencia encuentra las soluciones.
 
 **Multiparadigma:** TypeScript, Python, Scala, F# no se comprometen con un solo modelo. El mismo archivo puede tener código imperativo, funcional y OO. La flexibilidad es poderosa, pero también implica más responsabilidad de estilo en equipos.
 

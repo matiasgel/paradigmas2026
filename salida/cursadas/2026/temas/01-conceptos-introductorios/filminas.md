@@ -243,8 +243,8 @@ CPU ←───bus───→ Memoria
 - Paradigmas alternativos proponen reducir la dependencia de la memoria compartida.
 
 **Ejemplos contemporáneos:**
-- **Funcional:** lenguajes como Haskell o Clojure adoptan un modelo donde el cómputo es una evaluación de expresiones, minimizando el estado mutable.
-- **Lógico:** lenguajes como Prolog usan un modelo de resolución basada en hechos y reglas, reduciendo la dependencia de memoria compartida.
+- **Funcional (declarativo):** lenguajes como Haskell o Clojure adoptan un modelo donde el cómputo es una evaluación de expresiones, minimizando el estado mutable. Describe *qué* se quiere calcular en lugar de *cómo* hacerlo.
+- **Lógico (declarativo):** lenguajes como Prolog usan un modelo de resolución basada en hechos y reglas, reduciendo la dependencia de memoria compartida. Describe relaciones y deja que el motor inferencial determine el cómo.
 
 > **Directive:** generar gráfico comparativo (imperativo vs. funcional vs. lógico) en relación al acceso a memoria.
 
@@ -260,8 +260,8 @@ CPU ←───bus───→ Memoria
 |-----------|-------------|--------|--------|----------|
 | **Imperativo** | Máquina de Von Neumann | Instrucción | Mutable | C, Go, Pascal |
 | **OO** | Imperativo + encapsulamiento | Objeto / mensaje | Mutable (encapsulado) | Java, C#, Dart |
-| **Funcional** | Cálculo lambda (Church, 1936) | Función | **Inmutable** | Haskell, Clojure, LISP |
-| **Lógico** | Lógica simbólica (resolución) | Relación / hecho | Sin estado | Prolog |
+| **Declarativo (Funcional)** | Cálculo lambda (Church, 1936) | Función | **Inmutable** | Haskell, Clojure, LISP |
+| **Declarativo (Lógico)** | Lógica simbólica (resolución) | Relación / hecho | Sin estado | Prolog |
 
 > *"El OO es una extensión del imperativo — no nació de cero. El funcional y el lógico tienen raíces matemáticas pre-computadoras."*
 
