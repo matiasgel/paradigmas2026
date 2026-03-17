@@ -96,7 +96,7 @@ Quien eligió el lenguaje no conocía los paradigmas ni sus trade-offs.
 | Criterio | Pregunta clave | Ejemplo de tensión |
 |----------|---------------|-------------------|
 | **Legibilidad** | ¿Se puede leer código ajeno? | Python vs. Perl |
-| **Escribibilidad** | ¿El lenguaje facilita la expresión? | SQL vs. ensamblador |
+| **Expresividad** | ¿El lenguaje facilita la expresión? | SQL vs. ensamblador |
 | **Confiabilidad** | ¿Los tipos reducen bugs? | TypeScript vs. JS puro |
 | **Costo** | ¿Cuánto cuesta desarrollar y mantener? | — |
 | **Portabilidad** | ¿Funciona en distintas plataformas? | Java vs. C |
@@ -220,7 +220,7 @@ C, Pascal, Go                   ← Nivel 1: estructura, funciones, tipos básic
 LC-3, ensamblador               ← Nivel 0: registros, saltos, direcciones
 ```
 
-**Al subir:** más legibilidad, más escribibilidad, más portabilidad
+**Al subir:** más legibilidad, más expresividad, más portabilidad
 **Al bajar:** más control, más eficiencia
 
 > *"¿Qué abstraje? ¿Qué perdí?"* — La pregunta que guía esta materia

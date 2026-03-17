@@ -116,14 +116,14 @@ Factores que afectan la legibilidad:
 - Tipos de datos expresivos
 - Buena elección de palabras clave
 
-#### 1.4.2 Escribibilidad
+#### 1.4.2 Expresividad
 
 ¿El lenguaje facilita expresar lo que querés sin pelear con la sintaxis?
 
-- **Alta escribibilidad:** SQL para consultas en bases de datos — `SELECT nombre FROM alumnos WHERE nota > 7` es casi lenguaje natural.
-- **Baja escribibilidad:** ensamblador para el mismo tipo de consulta — tenés que manejar punteros, registros y direcciones de memoria.
+- **Alta expresividad:** SQL para consultas en bases de datos — `SELECT nombre FROM alumnos WHERE nota > 7` es casi lenguaje natural.
+- **Baja expresividad:** ensamblador para el mismo tipo de consulta — tenés que manejar punteros, registros y direcciones de memoria.
 
-Hay una tensión frecuente: los lenguajes muy expresivos (alta escribibilidad) a veces sacrifican legibilidad al escribir código compacto.
+Hay una tensión frecuente: los lenguajes muy expresivos a veces sacrifican legibilidad al escribir código compacto.
 
 #### 1.4.3 Confiabilidad
 
