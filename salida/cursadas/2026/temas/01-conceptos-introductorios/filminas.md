@@ -294,7 +294,7 @@ CPU ←───bus───→ Memoria
 ```
 Frameworks (React, Django)     ← Nivel 3: abstracción sobre el lenguaje y la plataforma
         ↑
-Java, Python, TypeScript        ← Nivel 2: GC, tipos, ecosistema
+Java, Python, TypeScript        ← Nivel 2: GC, tipos, ecosistema, runtime/VM (abstracción de plataforma)
         ↑
 C, Pascal, Go                   ← Nivel 1: estructura, funciones, tipos básicos
         ↑
@@ -306,7 +306,7 @@ LC-3, ensamblador               ← Nivel 0: registros, saltos, direcciones
 
 > *"¿Qué abstrae? ¿Qué perdí?"* — La pregunta que guía esta materia
 
-**Nota:** los frameworks no son la plataforma en sí, sino abstracciones construidas sobre el lenguaje y sus herramientas (runtime, librerías, convenciones).
+**Nota:** los lenguajes modernos también ofrecen abstracción de plataforma (JVM, CLR, runtime), y los frameworks construyen una capa adicional de abstracciones sobre ese entorno.
 *Fuente: Louden & Lambert, Cap. 1 — Fig. 1.4 y 1.5*
 
 ---
