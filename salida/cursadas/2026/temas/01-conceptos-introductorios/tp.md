@@ -36,7 +36,7 @@ Este quiz evalúa los conceptos trabajados en la Clase 1. Algunas preguntas requ
 
 ### P01 — Criterio Sebesta aplicado al error de TypeScript en clase
 
-**Trazabilidad:** Bloque 4 — 30, demo en vivo de error de tipos
+**Trazabilidad:** Bloque 4 — F-38, demo en vivo de error de tipos
 
 **Enunciado:**
 En clase vimos en vivo este error de TypeScript al pasar `["hola", "mundo"]` a la función `sumaAbs`:
@@ -45,7 +45,7 @@ En clase vimos en vivo este error de TypeScript al pasar `["hola", "mundo"]` a l
 Argument of type 'string[]' is not assignable to parameter of type 'number[]'
 ```
 
-El compilador (`tsc`) detectó este problema **antes de ejecutar el programa**. Según los criterios de Sebesta (F-04), ¿cuál es el criterio que mejor describe esta capacidad del lenguaje?
+El compilador (`tsc`) detectó este problema **antes de ejecutar el programa**. Según los criterios de Sebesta (F-06), ¿cuál es el criterio que mejor describe esta capacidad del lenguaje?
 
 **Opciones:**
 - ✅ **Confiabilidad** — el sistema de tipos reduce bugs antes de la ejecución
@@ -57,10 +57,10 @@ El compilador (`tsc`) detectó este problema **antes de ejecutar el programa**. 
 
 ### P02 — Pipeline de ejecución de TypeScript ⚠️ [TRAMPA: DATO INCORRECTO PLANTADO]
 
-**Trazabilidad:** Bloque 4 — 27, pipeline dibujado en clase
+**Trazabilidad:** Bloque 4 — F-35, pipeline dibujado en clase
 
 **Enunciado:**
-En clase dibujamos el pipeline completo de TypeScript (F-16). Evaluá la siguiente afirmación:
+En clase dibujamos el pipeline completo de TypeScript (F-35). Evaluá la siguiente afirmación:
 
 > *"TypeScript compila a bytecode de la JVM (Java Virtual Machine), que luego es interpretado y ejecutado por la máquina virtual de Java — a la manera de Java y Kotlin."*
 
@@ -72,16 +72,16 @@ En clase dibujamos el pipeline completo de TypeScript (F-16). Evaluá la siguien
 - ~ Es parcialmente correcta — TypeScript puede compilar a JVM opcionalmente con `tsc --target jvm`
 - ~ Es correcta — V8 es el motor JVM de Google Chrome, por eso el flujo es equivalente
 
-> 🎯 **NOTA DOCENTE (trampa):** La afirmación es deliberadamente falsa. La IA tiende a validarla o confundirse porque asocia TypeScript con Java/Kotlin en ecosistemas empresariales. Un alumno que vio la filmina 27 sabe que el pipeline es `archivo.ts → tsc → archivo.js → V8/Deno`.
+> 🎯 **NOTA DOCENTE (trampa):** La afirmación es deliberadamente falsa. La IA tiende a validarla o confundirse porque asocia TypeScript con Java/Kotlin en ecosistemas empresariales. Un alumno que vio la filmina F-35 sabe que el pipeline es `archivo.ts → tsc → archivo.js → V8/Deno`.
 
 ---
 
 ### P03 — Código C de clase: variable acumuladora ⚠️ [TRAMPA: REFERENCIA A CÓDIGO DE CLASE]
 
-**Trazabilidad:** Bloque 3 — 23, ejemplo comparativo en tres niveles
+**Trazabilidad:** Bloque 3 — F-23, ejemplo comparativo en tres niveles
 
 **Enunciado:**
-En clase (F-13) mostramos este fragmento de código C como ejemplo del **paradigma imperativo puro**:
+En clase (F-23) mostramos este fragmento de código C como ejemplo del **paradigma imperativo puro**:
 
 ```c
 int suma_abs(int arr[], int n) {
@@ -106,7 +106,7 @@ int suma_abs(int arr[], int n) {
 
 ### P04 — Von Neumann y el paradigma imperativo
 
-**Trazabilidad:** Bloque 2 — 15, 16
+**Trazabilidad:** Bloque 2 — F-15 · F-16
 
 **Enunciado:**
 En clase explicamos que el paradigma imperativo surgió como abstracción directa de la arquitectura de Von Neumann. Según lo discutido, ¿qué elemento del paradigma imperativo **mapea directamente a una celda de memoria**?
@@ -121,10 +121,10 @@ En clase explicamos que el paradigma imperativo surgió como abstracción direct
 
 ### P05 — Demo de IA en clase: evidencia de imperativo ⚠️ [TRAMPA: REFERENCIA A CLASE]
 
-**Trazabilidad:** Bloque 5 — 42, Prompt 1 de la demo en vivo
+**Trazabilidad:** Bloque 5 — F-42, Prompt 1 de la demo en vivo
 
 **Enunciado:**
-En la demo de IA (F-23), el docente usó este prompt **sin restricción de paradigma**:
+En la demo de IA (F-42), el docente usó este prompt **sin restricción de paradigma**:
 
 > *"Escribí en TypeScript una función que devuelva la suma de los valores absolutos de una lista de números"*
 
@@ -142,10 +142,10 @@ La IA generó código con la variable `sum` declarada con `let` y un loop `for..
 
 ### P06 — Cuello de botella de Von Neumann: ¿qué bus? ⚠️ [TRAMPA: TÉRMINO INCORRECTO PLANTADO]
 
-**Trazabilidad:** Bloque 2 — 16, Louden & Lambert Cap. 1
+**Trazabilidad:** Bloque 2 — F-16 · F-18, Louden & Lambert Cap. 1
 
 **Enunciado:**
-Según Louden & Lambert (Capítulo 1), discutido en la filmina F-08, el **cuello de botella de Von Neumann** surge de la limitación de velocidad de un bus específico. ¿Entre qué componentes está ese bus?
+Según Louden & Lambert (Capítulo 1), discutido en la filmina F-16, el **cuello de botella de Von Neumann** surge de la limitación de velocidad de un bus específico. ¿Entre qué componentes está ese bus?
 
 **Opciones:**
 - ✅ Entre la **CPU** y la **memoria** (RAM)
@@ -153,16 +153,16 @@ Según Louden & Lambert (Capítulo 1), discutido en la filmina F-08, el **cuello
 - ~ Entre la CPU y el disco rígido (almacenamiento secundario)
 - ~ Entre los núcleos del procesador en sistemas multicore
 
-> 🎯 **NOTA DOCENTE (trampa):** Las opciones incorrectas suenan plausibles. La GPU es un distractor efectivo porque la IA moderna asocia cómputo paralelo con GPU. La respuesta correcta es explícita en la filmina F-08 y en el texto de Louden & Lambert Cap. 1.
+> 🎯 **NOTA DOCENTE (trampa):** Las opciones incorrectas suenan plausibles. La GPU es un distractor efectivo porque la IA moderna asocia cómputo paralelo con GPU. La respuesta correcta es explícita en la filmina F-16 y en el texto de Louden & Lambert Cap. 1.
 
 ---
 
 ### P07 — LISP 1960: aporte al paradigma funcional
 
-**Trazabilidad:** Bloque 1 — 5, timeline histórico
+**Trazabilidad:** Bloque 1 — F-05, timeline histórico
 
 **Enunciado:**
-La perspectiva histórica de F-03 ubicó a **LISP (1960)** como un hito clave. ¿Cuál fue el concepto que LISP introdujo y que se convirtió en la base del paradigma funcional?
+La perspectiva histórica de F-05 ubicó a **LISP (1960)** como un hito clave. ¿Cuál fue el concepto que LISP introdujo y que se convirtió en la base del paradigma funcional?
 
 **Opciones:**
 - ✅ Las **funciones como datos de primera clase** y la **recursión** — base del cálculo lambda
@@ -174,10 +174,10 @@ La perspectiva histórica de F-03 ubicó a **LISP (1960)** como un hito clave. �
 
 ### P08 — Escalera de abstracciones: ¿qué se pierde al subir?
 
-**Trazabilidad:** Bloque 3 — 21, metáfora de la escalera de Gabbrielli
+**Trazabilidad:** Bloque 3 — F-21, metáfora de la escalera de Gabbrielli
 
 **Enunciado:**
-En la "escalera de abstracciones" presentada en F-11 (Gabbrielli), el docente planteó un trade-off central. Al **subir** niveles de abstracción (de ensamblador → C → TypeScript → frameworks), ¿qué se **pierde**?
+En la "escalera de abstracciones" presentada en F-21 (Gabbrielli), el docente planteó un trade-off central. Al **subir** niveles de abstracción (de ensamblador → C → TypeScript → frameworks), ¿qué se **pierde**?
 
 **Opciones:**
 - ✅ **Control y eficiencia** de ejecución — menor acceso directo al hardware
@@ -189,10 +189,10 @@ En la "escalera de abstracciones" presentada en F-11 (Gabbrielli), el docente pl
 
 ### P09 — TypeScript multiparadigma: ¿existe un paradigma predeterminado?
 
-**Trazabilidad:** Bloque 4 — 31, cierre del bloque TypeScript
+**Trazabilidad:** Bloque 4 — F-39, cierre del bloque TypeScript
 
 **Enunciado:**
-Al cerrar el Bloque 4 (F-20), el docente afirmó algo sobre TypeScript como lenguaje multiparadigma. ¿Cuál de las siguientes opciones refleja **lo que se dijo en clase**?
+Al cerrar el Bloque 4 (F-39), el docente afirmó algo sobre TypeScript como lenguaje multiparadigma. ¿Cuál de las siguientes opciones refleja **lo que se dijo en clase**?
 
 **Opciones:**
 - ✅ TypeScript **no obliga** a ningún paradigma — la elección es del programador, lo que implica mayor responsabilidad de consistencia de estilo en equipos
@@ -204,10 +204,10 @@ Al cerrar el Bloque 4 (F-20), el docente afirmó algo sobre TypeScript como leng
 
 ### P10 — Cierre de la clase: ¿importa el lenguaje si la IA puede escribir en cualquiera?
 
-**Trazabilidad:** Bloque 1 — 13 (pregunta abierta) + Bloque 5 — 40 (cierre)
+**Trazabilidad:** Bloque 1 — F-13 (pregunta abierta) + Bloque 5 — F-40 (cierre)
 
 **Enunciado:**
-En el Bloque 1 (F-05) se dejó abierta la pregunta: *"¿Importa el lenguaje si la IA puede escribir en cualquiera?"*. En el Bloque 5 (F-21) se retomó y se respondió usando datos de Schmidt & Runfola (2025). ¿Cuál fue la respuesta del docente?
+En el Bloque 1 (F-13) se dejó abierta la pregunta: *"¿Importa el lenguaje si la IA puede escribir en cualquiera?"*. En el Bloque 5 (F-40) se retomó y se respondió usando datos de Schmidt & Runfola (2025). ¿Cuál fue la respuesta del docente?
 
 **Opciones:**
 - ✅ **Sí, importa más que nunca** — porque el trabajo actual es supervisar, criticar y verificar el código de la IA, y para eso se necesitan conocimientos de paradigmas y semántica
@@ -253,7 +253,7 @@ const doble = (arr: number[]): number[] =>
 
 ### P12 — Loop "trust but verify" con IA
 
-**Trazabilidad:** Bloque 5 — 40 (loop "trust but verify")
+**Trazabilidad:** Bloque 5 — F-45 (loop "trust but verify")
 
 **Enunciado:**
 En la clase se presentó el loop "trust but verify" como una forma de usar IA generativa de manera responsable. ¿Cuál es el paso que sigue inmediatamente después de pedirle algo a la IA (prompt)?
@@ -263,39 +263,6 @@ En la clase se presentó el loop "trust but verify" como una forma de usar IA ge
 - ~ Volver a escribir el prompt sin revisar el resultado, confiando en la IA
 - ~ Compartir el output directamente con el equipo sin validarlo
 - ~ Usar la IA para generar un prompt mejor sin leer el output original
-
-
-**Trazabilidad:** Bloque 3 + Bloque 4 — OA3 (distinguir imperativo vs funcional por mutación de estado)
-
-**Enunciado:**
-Analizar los siguientes cuatro fragmentos TypeScript. ¿Cuál de ellos es un ejemplo **inequívoco de paradigma imperativo**, independientemente del resultado que produce?
-
-```typescript
-// Fragmento A
-const doble = (arr: number[]): number[] => arr.map(x => x * 2);
-
-// Fragmento B
-function doble(arr: number[]): number[] {
-    let result: number[] = [];
-    for (const x of arr) result.push(x * 2);
-    return result;
-}
-
-// Fragmento C
-const doble = (arr: number[]): number[] => arr.map(x => x * 2);
-
-// Fragmento D
-const doble = (arr: number[]): number[] =>
-    arr.reduce((acc: number[], x) => [...acc, x * 2], []);
-```
-
-**Opciones:**
-- ✅ **Fragmento B** — declara `let result = []` (variable mutable) y la muta instrucción a instrucción con `push` dentro del loop
-- ~ Fragmento A — por usar sintaxis `function` en lugar de arrow function
-- ~ Fragmento C — por nombrar la función en mayúsculas, convención del paradigma OO
-- ~ Fragmento D — por usar `reduce` con acumulador, que internamente mantiene estado mutable
-
-> 🎯 **NOTA DOCENTE:** Esta pregunta no tiene referencia a un momento específico de clase — evalúa comprensión transferible de OA3. El distractor D es efectivo porque `reduce` recibe un acumulador `acc`, que *parece* una variable mutable, pero la inmutabilidad del estilo funcional se mantiene: `acc` es el valor que devuelve la función en cada paso, no una variable que se reasigna externamente. A y C son distractores para quienes confunden paradigma con sintaxis.
 
 ---
 

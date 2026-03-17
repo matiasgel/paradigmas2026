@@ -518,9 +518,17 @@ def parse_filminas(filminas_path: Path) -> list[dict]:
     text = filminas_path.read_text(encoding="utf-8")
     slides: list[dict] = []
     current: dict | None = None
+    current_section = ""
 
     for line in text.splitlines():
-        m = re.match(r"^###\s+\[F-(\d+)\]\s*(.*)$", line)
+        # Rastrear sección del documento (PORTADA, BLOQUE N, etc.)
+        m_sec = re.match(r'^##\s+(PORTADA|BLOQUE)\b', line, flags=re.IGNORECASE)
+        if m_sec:
+            current_section = m_sec.group(1).lower()
+            continue
+
+        # Acepta tanto `### [F-01]` como `### [1]` (las filminas deben permanecer inmutables)
+        m = re.match(r"^###\s+\[(?:F-)?(\d+)\]\s*(.*)$", line)
         if m:
             if current:
                 slides.append(_finalize_slide(current))
@@ -528,6 +536,7 @@ def parse_filminas(filminas_path: Path) -> list[dict]:
                 "id":          f"F-{m.group(1).zfill(2)}",
                 "raw_title":   m.group(2).strip(),
                 "raw_lines":   [],
+                "section":     current_section,
             }
         elif current is not None:
             current["raw_lines"].append(line)
@@ -636,11 +645,31 @@ def _finalize_slide(raw: dict) -> dict:
             combined = "\n".join(block_lines)
             body_blocks.append({"type": "text", "content": combined})
 
+    # En filminas.md el separador es `### [N]` y el título viene en `# Heading` en la línea siguiente.
+    # El primer heading se captura como subtitle; si raw_title está vacío, promoverlo a título real.
+    real_title = raw["raw_title"].strip()
+    real_subtitle = subtitle
+    if not real_title and real_subtitle:
+        real_title = real_subtitle
+        real_subtitle = ""
+
+    # Filtrar bloques Directive (notas de producción del docente, no van en la presentación)
+    body_blocks = [
+        b for b in body_blocks
+        if not (b.get("type") == "text" and "**Directive:**" in b.get("content", ""))
+    ]
+
+    # Detectar tipo: si la sección es PORTADA, forzar tipo portada
+    if raw.get("section") == "portada":
+        slide_type = "portada"
+    else:
+        slide_type = _detect_type(raw["id"], real_title, body_blocks, code_blocks, tables)
+
     return {
         "id":          raw["id"],
-        "type":        _detect_type(raw["id"], raw["raw_title"], body_blocks, code_blocks, tables),
-        "title":       raw["raw_title"],
-        "subtitle":    subtitle,
+        "type":        slide_type,
+        "title":       real_title,
+        "subtitle":    real_subtitle,
         "body_blocks": body_blocks,
         "code_blocks": code_blocks,
         "tables":      tables,
@@ -1499,7 +1528,10 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
                 add_native_table(tables[0], table_zone)
 
     # ── 6. Título ───────────────────────────────────────────────────────
-    title      = slide.get("title", "")
+    # Compatibilidad hacia atrás: en YAMLs generados con formato antiguo, subtitle puede
+    # contener el título real (cuando raw_title era vacío en filminas.md ### [N] format).
+    title = slide.get("title", "") or slide.get("subtitle", "")
+    _title_from_subtitle = not slide.get("title", "")  # para no duplicar en el cuerpo
     title_zone = layout.get("title", "left-top")
     t_size     = typo.get("title", {}).get("size", 36)
     if stype == "portada":
@@ -1514,6 +1546,12 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         t_size = _fit_text_font_size(title, title_geo, t_size, min_size=min_title_size)
     t_align    = "CENTER" if "center" in str(title_zone) else "LEFT"
     t_align    = _normalize_alignment(t_align)
+
+    # Si el título del slide está mal, hacer más evidente visualmente:
+    # + colorear con el primary (rojo institucional)
+    # + ubicar más arriba para que sea visible sin scroll.
+    if stype != "portada":
+        title_zone = "center-top"
     add_textbox(title, title_zone, t_size, bold=True, color=primary, align=t_align)
 
     # ── 7. Subtítulo (portada) ──────────────────────────────────────────
@@ -1524,7 +1562,8 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
 
     # ── 8. Cuerpo (texto + listas) ──────────────────────────────────────
     body_zone = layout.get("body", "left-middle")
-    body_subtitle = slide.get("subtitle", "") if stype != "portada" else ""
+    # No repetir el subtitle en el cuerpo si fue promovido como título
+    body_subtitle = slide.get("subtitle", "") if (stype != "portada" and not _title_from_subtitle) else ""
     if body_zone not in ("none", "subtitle-only"):
         body_blocks = slide.get("body_blocks") or []
         body_txt = _compose_body_text(body_subtitle, body_blocks)
