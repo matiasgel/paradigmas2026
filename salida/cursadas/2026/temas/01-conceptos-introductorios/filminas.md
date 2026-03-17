@@ -388,6 +388,128 @@ Compilación pura:
 
 ### [25]
 
+# Paradigma funcional: cálculos sin efectos secundarios
+
+- El cómputo se define como la evaluación de expresiones.
+- El estado no cambia: las funciones son mapeos de entrada → salida.
+- Ventajas: razonamiento matemático, paralelismo, tests más predecibles.
+
+> **Directive:** generar gráfico comparando función pura vs función con estado (mutación).
+
+---
+
+### [26]
+
+# Composición: construir programas como cadenas de funciones
+
+- Una función es pura si siempre devuelve el mismo resultado para los mismos argumentos.
+- Componer funciones pequeñas permite razonar localmente y reutilizar código.
+
+```typescript
+const doble = (x: number) => x * 2;
+const suma = (a: number, b: number) => a + b;
+const dobleYSuma = (x: number, y: number) => suma(doble(x), doble(y));
+```
+
+> **Directive:** generar gráfico de composición de funciones (f ∘ g).
+
+---
+
+### [27]
+
+# Cambiar sin mutar: estructuras inmutables
+
+- En vez de modificar datos, se crean nuevas versiones (copias con cambios).
+- Esto reduce errores y facilita la concurrencia.
+- TypeScript usa `const` y prácticas funcionales; lenguajes puramente funcionales usan estructuras persistentes (Clojure).
+
+```typescript
+const lista = [1, 2, 3];
+const nuevo = [...lista, 4]; // no muta la lista original
+```
+
+> **Directive:** generar gráfico “copia con cambios” vs “mutación en sitio”.
+
+---
+
+### [28]
+
+# TypeScript permite el estilo funcional, pero hay lenguajes más “puros”
+
+- **Clojure** (LISP sobre JVM) insiste en inmutabilidad y funciones puras.
+- **Haskell** es un lenguaje funcional puro: los efectos se manejan explícitamente con mónadas.
+- En este curso usaremos TypeScript para practicar ideas funcionales y veremos ejemplos de Clojure más adelante.
+
+> *Fuente: Louden & Lambert, Cap. 1; Hickey (2008) sobre Clojure.*
+
+> **Directive:** generar gráfico comparando TypeScript (híbrido) con Clojure (funcional puro).
+
+---
+
+### [29]
+
+# Paradigma lógico: programar declarando “qué” en lugar de “cómo”
+
+- El programa describe hechos y reglas; el motor (intérprete) hace la inferencia.
+- No se escribe el control: el sistema busca soluciones que satisfagan las restricciones.
+- Ideal para problemas de búsqueda, reglas, y consultas (bases de conocimiento).
+
+> **Directive:** generar gráfico de un motor de inferencia (hechos + reglas → solución).
+
+---
+
+### [30]
+
+# Programar con hechos y reglas
+
+```prolog
+padre(alan, bob).
+padre(bob, carla).
+ancestro(X, Y) :- padre(X, Y).
+ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
+```
+
+- `padre/2` son hechos.
+- `ancestro/2` es una regla recursiva que define la relación.
+
+> **Directive:** generar gráfico que muestre hechos + regla → cadena de inferencia.
+
+---
+
+### [31]
+
+# Hacer preguntas al sistema
+
+- Una consulta es una pregunta sobre los hechos y reglas.
+- El intérprete busca una combinación de hechos y reglas que responda la consulta.
+
+```prolog
+?- ancestro(alan, carla).
+% Sí: hay una cadena de hechos que conecta a alan con carla.
+```
+
+> **Directive:** generar gráfico mostrando una consulta y la respuesta del motor.
+
+---
+
+### [32]
+
+# ¿Para qué sirve la programación lógica?
+
+- Modelar conocimiento con hechos y reglas (sistemas expertos, diagnóstico).
+- Hacer consultas declarativas sobre una base de conocimiento.
+- Utilizada en IA simbólica para razonar sobre información.
+
+> **Directive:** generar gráfico de un sistema experto (reglas + hechos → decisión).
+
+---
+
+## BLOQUE 5 — IA Generativa y los paradigmas (15 min)
+
+---
+
+### [33]
+
 # TypeScript como lenguaje del cursado
 
 | Razón | Detalle |
@@ -401,7 +523,7 @@ Compilación pura:
 
 ---
 
-### [26]
+### [34]
 
 # La IA funciona mejor con TypeScript porque...
 
@@ -415,7 +537,7 @@ Compilación pura:
 
 ---
 
-### [27]
+### [35]
 
 # TypeScript = ejemplo vivo de Gabbrielli Cap. 1
 
@@ -442,7 +564,7 @@ archivo.js  ←── LENGUAJE INTERMEDIO
 
 ---
 
-### [28]
+### [36]
 
 # TypeScript — estilo imperativo
 
@@ -465,7 +587,7 @@ console.log(sumaAbs([3, -1, 4, -1, 5])); // → 14
 
 ---
 
-### [29]
+### [37]
 
 # TypeScript — estilo funcional
 
@@ -489,7 +611,7 @@ console.log(sumaAbs([3, -1, 4, -1, 5])); // → 14
 
 ---
 
-### [30]
+### [38]
 
 # TypeScript: tipos estáticos que aumentan la seguridad
 
@@ -518,7 +640,7 @@ sumaAbs(["hola", "mundo"]);
 
 ---
 
-### [31]
+### [39]
 
 # TypeScript: ¿qué paradigma usamos?
 
@@ -545,128 +667,6 @@ class Calculadora {
 > **Los tres producen `14`. La elección es del programador.**
 > La elección de paradigma determina la legibilidad, testabilidad y mantenibilidad.
 > A lo largo de la materia: vamos a escribir y comparar los tres estilos.
-
----
-
-### [32]
-
-# Paradigma funcional: cálculos sin efectos secundarios
-
-- El cómputo se define como la evaluación de expresiones.
-- El estado no cambia: las funciones son mapeos de entrada → salida.
-- Ventajas: razonamiento matemático, paralelismo, tests más predecibles.
-
-> **Directive:** generar gráfico comparando función pura vs función con estado (mutación).
-
----
-
-### [33]
-
-# Composición: construir programas como cadenas de funciones
-
-- Una función es pura si siempre devuelve el mismo resultado para los mismos argumentos.
-- Componer funciones pequeñas permite razonar localmente y reutilizar código.
-
-```typescript
-const doble = (x: number) => x * 2;
-const suma = (a: number, b: number) => a + b;
-const dobleYSuma = (x: number, y: number) => suma(doble(x), doble(y));
-```
-
-> **Directive:** generar gráfico de composición de funciones (f ∘ g).
-
----
-
-### [34]
-
-# Cambiar sin mutar: estructuras inmutables
-
-- En vez de modificar datos, se crean nuevas versiones (copias con cambios).
-- Esto reduce errores y facilita la concurrencia.
-- TypeScript usa `const` y prácticas funcionales; lenguajes puramente funcionales usan estructuras persistentes (Clojure).
-
-```typescript
-const lista = [1, 2, 3];
-const nuevo = [...lista, 4]; // no muta la lista original
-```
-
-> **Directive:** generar gráfico “copia con cambios” vs “mutación en sitio”.
-
----
-
-### [35]
-
-# TypeScript permite el estilo funcional, pero hay lenguajes más “puros”
-
-- **Clojure** (LISP sobre JVM) insiste en inmutabilidad y funciones puras.
-- **Haskell** es un lenguaje funcional puro: los efectos se manejan explícitamente con mónadas.
-- En este curso usaremos TypeScript para practicar ideas funcionales y veremos ejemplos de Clojure más adelante.
-
-> *Fuente: Louden & Lambert, Cap. 1; Hickey (2008) sobre Clojure.*
-
-> **Directive:** generar gráfico comparando TypeScript (híbrido) con Clojure (funcional puro).
-
----
-
-### [36]
-
-# Paradigma lógico: programar declarando “qué” en lugar de “cómo”
-
-- El programa describe hechos y reglas; el motor (intérprete) hace la inferencia.
-- No se escribe el control: el sistema busca soluciones que satisfagan las restricciones.
-- Ideal para problemas de búsqueda, reglas, y consultas (bases de conocimiento).
-
-> **Directive:** generar gráfico de un motor de inferencia (hechos + reglas → solución).
-
----
-
-### [37]
-
-# Programar con hechos y reglas
-
-```prolog
-padre(alan, bob).
-padre(bob, carla).
-ancestro(X, Y) :- padre(X, Y).
-ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
-```
-
-- `padre/2` son hechos.
-- `ancestro/2` es una regla recursiva que define la relación.
-
-> **Directive:** generar gráfico que muestre hechos + regla → cadena de inferencia.
-
----
-
-### [38]
-
-# Hacer preguntas al sistema
-
-- Una consulta es una pregunta sobre los hechos y reglas.
-- El intérprete busca una combinación de hechos y reglas que responda la consulta.
-
-```prolog
-?- ancestro(alan, carla).
-% Sí: hay una cadena de hechos que conecta a alan con carla.
-```
-
-> **Directive:** generar gráfico mostrando una consulta y la respuesta del motor.
-
----
-
-### [39]
-
-# ¿Para qué sirve la programación lógica?
-
-- Modelar conocimiento con hechos y reglas (sistemas expertos, diagnóstico).
-- Hacer consultas declarativas sobre una base de conocimiento.
-- Utilizada en IA simbólica para razonar sobre información.
-
-> **Directive:** generar gráfico de un sistema experto (reglas + hechos → decisión).
-
----
-
-## BLOQUE 5 — IA Generativa y los paradigmas (15 min)
 
 ---
 
@@ -848,7 +848,11 @@ if (x !== 0) y = 1 / x;
 | 1–13 | Bloque 1: ¿Por qué LP? | 13 | 20 |
 | 14–20 | Bloque 2: Paradigmas | 7 | 25 |
 | 21–24 | Bloque 3: Imperativo + Máquina Abstracta | 4 | 20 |
-| 25–39 | Bloque 4: TypeScript | 15 | 35 |
+| 25–39 | Bloque 4: TypeScript + paradigmas funcional/lógico | 15 | 35 |
 | 40–45 | Bloque 5: IA Generativa | 6 | 15 |
 | 46–47 | Cierre | 2 | 5 |
 | **Total** | | **47 filminas** | **120 min** |
+
+
+
+
