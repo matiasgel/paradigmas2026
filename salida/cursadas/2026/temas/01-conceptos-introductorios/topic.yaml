@@ -5,7 +5,10 @@ module: "I"
 semana: 1
 clase: "1 de 2"
 duracion: 120
-estado: "cerrado"
+estado: "reabierto"
+reopen_date: "2026-03-17"
+reopen_reason: "Modificación de minuta y filminas"
+reopen_branch: "reopen/tema-01-conceptos-introductorios"
 tp_type: "repo"
 artifacts:
   autograde_repo: "autograde-repo/"
