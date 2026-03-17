@@ -1,12 +1,6 @@
 # Guía de Estudio — Tema 01: Conceptos Introductorios + Intro a TypeScript
 
-> **Agente:** Dra. Sofía (study-guide-writer)
-> **Fecha:** 2026-03-10
-> **Estado:** GENERADA
-> **Basada en:** `diseno.md` (APROBADO) · `minuta.md` · `filminas.md`
-> **Material fuente:** `material/01-conceptos-introductorios/01 introduccion.pdf` · `material/01-conceptos-introductorios/012-034.pdf` · `material/01-conceptos-introductorios/021-044.pdf` · `material/01-conceptos-introductorios/025-184.pdf`
-> **Materia:** Paradigmas y Lenguajes de Programación 2026 — UNTDF / IDEI
-> **Semana:** 1 · Clase 1 de 2
+Guía de estudio para el Tema 01, alineada con las filminas y la minuta de clase.
 
 ---
 
