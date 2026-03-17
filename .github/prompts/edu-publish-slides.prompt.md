@@ -1,7 +1,7 @@
 ---
 description: 'EDU: Publicar filminas — pipeline completo: plan → imágenes Gemini → Google Slides (sin preguntas)'
 agent: 'agent'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'edit', 'search', 'execute', 'fetch']
 ---
 
 ## edu-publish-slides — Pipeline unificado

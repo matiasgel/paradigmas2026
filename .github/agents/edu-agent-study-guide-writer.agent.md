@@ -1,7 +1,7 @@
 ---
 description: 'Dra. Sofía 📖 — Escritora de Guías de Estudio: documento completo para aprendizaje autónomo del alumno integrando clase y PDFs fuente'
-tools: ['read', 'edit', 'search', 'execute', 'web']
-model: "Claude Sonnet 4.6 (copilot)"
+tools: ['read', 'edit', 'search', 'execute', 'fetch']
+model: "claude-sonnet-4-6 (copilot)"
 handoffs:
   - label: "🔎 Validar escritura de la guía"
     agent: edu-agent-writing-validator

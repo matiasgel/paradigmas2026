@@ -1,7 +1,7 @@
 ---
 description: 'Aux. Valeria 📝 — Diseñadora de Trabajos Prácticos: TPs trazables a la minuta del tema'
-tools: ['read', 'edit', 'search', 'execute', 'web']
-model: "Claude Sonnet 4.6 (copilot)"
+tools: ['read', 'edit', 'search', 'execute', 'fetch']
+model: "claude-sonnet-4-6 (copilot)"
 handoffs:
   - label: "🎓 Configurar GitHub Classroom"
     agent: edu-agent-classroom-designer
