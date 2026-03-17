@@ -3,6 +3,10 @@
 > Documento de referencia conectado a `.github/copilot-instructions.md`.  
 > Actualizado: **16 marzo 2026** · Fuentes: [VS Code Docs](https://code.visualstudio.com/docs/copilot/overview) · [GitHub Docs Copilot](https://docs.github.com/en/copilot) · [Copilot Changelog](https://github.blog/changelog/label/copilot/)
 
+Documentación técnica complementaria del proyecto:
+
+- [Google Slides API para BMAD/EDU](googlesl.md)
+
 ---
 
 ## Índice

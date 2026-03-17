@@ -17,7 +17,7 @@ palette:
 typography:
   title:
     font: "Roboto"
-    size: 36
+    size: 30
     weight: "bold"
   subtitle:
     font: "Roboto"
@@ -124,3 +124,12 @@ gemini_image_strategy:
   default: "diagram"
   max_images_per_presentation: 4
   fallback: "none"
+
+# --- Render semántico de Markdown en Google Slides ---
+markdown_rendering:
+  unordered_bullet_preset: "BULLET_DISC_CIRCLE_SQUARE"
+  ordered_bullet_preset: "NUMBERED_DIGIT_ALPHA_ROMAN"
+  inline_code_font: "Roboto Mono"
+  inline_code_color: "#8B0000"
+  lead_scale: 1.08
+  heading_scale: 1.12

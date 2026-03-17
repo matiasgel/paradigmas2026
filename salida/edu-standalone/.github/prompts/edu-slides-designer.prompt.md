@@ -1,5 +1,5 @@
 ---
-description: 'EDU: Diseño visual — Vera define paleta, tipografía y layouts del cursado (una vez por cursada)'
+description: 'EDU: UX de filminas — Vera define paleta, tipografía, layouts y render semántico Markdown (una vez por cursada)'
 agent: 'agent'
 tools: ['read', 'edit', 'search', 'execute', 'fetch']
 ---
