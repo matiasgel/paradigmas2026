@@ -1,7 +1,7 @@
 ---
 description: 'EDU Fase 3: Crear guía de estudio — genera guia-estudio.md completo para estudio autónomo del alumno, integrando clase y PDFs fuente'
 agent: 'edu-agent-study-guide-writer'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'edit', 'search', 'execute', 'fetch']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store ALL fields as session variables.

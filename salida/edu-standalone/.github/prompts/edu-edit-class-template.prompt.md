@@ -1,7 +1,7 @@
 ---
 description: 'EDU: Editar template de clase — personaliza la estructura de minuta.md y filminas.md generadas por Roberto'
 agent: 'edu-agent-class-writer'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'edit', 'search', 'execute', 'fetch']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store all fields as session variables.

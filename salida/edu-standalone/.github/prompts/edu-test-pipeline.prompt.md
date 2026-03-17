@@ -1,6 +1,7 @@
 ---
-mode: agent
 description: "Ejecuta el test de integración completo del pipeline de filminas. Usa informe/filminas.md como fuente de referencia y genera un reporte con capturas de cada slide en reporte/test{fecha}/"
+agent: 'agent'
+tools: ['read', 'edit', 'search', 'execute']
 ---
 
 Ejecutar el test de integración completo del pipeline de producción de filminas.

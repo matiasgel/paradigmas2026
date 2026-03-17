@@ -1,7 +1,7 @@
 ---
 description: 'EDU: Configurar APIs — Google OAuth + Gemini key para publicación en Google Slides'
 agent: 'agent'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'edit', 'search', 'execute', 'fetch']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store all fields as session variables

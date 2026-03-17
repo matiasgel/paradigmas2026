@@ -1,7 +1,7 @@
 ---
 description: 'EDU Fase 4: Iniciar nuevo año — workspace limpio con memoria del anterior'
 agent: 'edu-agent-course-planner'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'edit', 'search', 'execute', 'fetch']
 ---
 
 1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables
