@@ -844,11 +844,11 @@ if (x !== 0) y = 1 / x;
 
 | Rango | Bloque | Filminas | Minutos |
 |-------|--------|----------|---------|
-| F-00 | Portada | 1 | — |
-| F-01 a F-05 | Bloque 1: ¿Por qué LP? | 5 | 20 |
-| F-06 a F-10 | Bloque 2: Paradigmas | 5 | 25 |
-| F-11 a F-14 | Bloque 3: Imperativo + Máquina Abstracta | 4 | 20 |
-| F-15 a F-20h | Bloque 4: TypeScript | 15 | 40 |
-| F-21 a F-26 | Bloque 5: IA Generativa | 6 | 15 |
-| F-27 a F-28 | Cierre | 2 | 10 |
-| **Total** | | **37 filminas** | **145 min** |
+| 0 | Portada | 1 | — |
+| 1–5 | Bloque 1: ¿Por qué LP? | 13 | 20 |
+| 6–10 | Bloque 2: Paradigmas | 7 | 25 |
+| 11–14 | Bloque 3: Imperativo + Máquina Abstracta | 4 | 20 |
+| 15–20 | Bloque 4: TypeScript | 15 | 35 |
+| 21–26 | Bloque 5: IA Generativa | 6 | 15 |
+| 27–28 | Cierre | 2 | 5 |
+| **Total** | | **47 filminas** | **120 min** |
