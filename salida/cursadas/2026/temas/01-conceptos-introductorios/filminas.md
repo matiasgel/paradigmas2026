@@ -106,13 +106,62 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 > No hay lenguaje perfecto — hay **trade-offs**.
 
-### ¿Qué implica cada criterio?
-- **Legibilidad:** esfuerzo mental para entender código ajeno; impacta mantenimiento y colaboración.
-- **Expresividad:** cercanía de la sintaxis al problema real; reduce boilerplate y acelera desarrollo.
-- **Seguridad:** cuán pronto el lenguaje detecta errores (tipado estático, análisis estático, chequeos en runtime).
-- **Costo:** incluye tiempo de desarrollo, curva de aprendizaje, herramientas y soporte de la comunidad.
-- **Portabilidad:** facilidad para ejecutar el mismo código en distintas plataformas/hardware.
-- **Eficiencia:** rendimiento en tiempo y memoria; clave en sistemas críticos o de recursos limitados.
+---
+
+### [F-04a] Legibilidad
+
+# Legibilidad — el costo cognitivo de leer código
+
+- Es el esfuerzo mental necesario para entender código escrito por otro.
+- Impacta directamente el mantenimiento y la colaboración en equipos.
+- Lenguajes con sintaxis clara y pocas excepciones tienden a ser más legibles.
+
+---
+
+### [F-04b] Expresividad
+
+# Expresividad — qué tan cercano está el código al problema real
+
+- Refleja cuán fácil es traducir ideas del dominio a código.
+- Alta expresividad reduce boilerplate y acelera el desarrollo.
+- Puede llevar a sintaxis tersa, pero también a estilos difíciles de depurar.
+
+---
+
+### [F-04c] Seguridad
+
+# Seguridad — detección temprana de errores
+
+- Mide cuán pronto el lenguaje detecta errores (tipado estático, análisis estático, chequeos en runtime).
+- El tipado estático contribuye a la seguridad al eliminar clases de bugs antes de ejecutar.
+- La seguridad también incluye protección contra fallos y vulnerabilidades.
+
+---
+
+### [F-04d] Costo
+
+# Costo — desarrollo, mantenimiento y soporte
+
+- Incluye tiempo de desarrollo, curva de aprendizaje, herramientas y comunidad.
+- Lenguajes con ecosistema maduro pueden reducir costos debido a bibliotecas y soporte.
+
+---
+
+### [F-04e] Portabilidad
+
+# Portabilidad — ejecutar en distintas plataformas
+
+- Evalúa qué tan fácil es correr el mismo código en diferentes sistemas.
+- La independencia de plataforma puede ser una ventaja crítica en proyectos a gran escala.
+
+---
+
+### [F-04f] Eficiencia
+
+# Eficiencia — tiempo de ejecución y uso de memoria
+
+- Es relevante en sistemas críticos o con recursos limitados.
+- Un lenguaje más eficiente puede operar en hardware más modesto o escalar mejor.
 
 ---
 
