@@ -169,7 +169,6 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 # ¿Importa el lenguaje si la IA puede escribir en cualquiera?
 
-*(Respuesta al final de la clase — Bloque 5)*
 
 ---
 
@@ -193,9 +192,13 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 # Los paradigmas no surgieron de la nada
 
 **Arquitectura de Von Neumann → paradigma imperativo**
-- CPU + Memoria + Bus de datos
-- "Variables" = celdas de memoria
-- Ejecución secuencial instrucción a instrucción
+- El modelo propuesto por John von Neumann en los años 40 define una máquina con:
+  - **Memoria unificada** (datos + programa en el mismo espacio)
+  - **Unidad de control** que lee (fetch) una instrucción, la decodifica y la ejecuta
+  - **ALU** (unidad aritmético-lógica) y registros temporales
+  - **Bus de datos** compartido entre CPU y memoria
+- En este modelo, una **variable** en el programa corresponde a una celda de memoria y la **asignación** es una transferencias de datos entre CPU y memoria.
+- La ejecución es **secuencial**: cada instrucción se procesa una por una siguiendo el orden en memoria.
 
 **La evolución metodológica:**
 - `70s` → análisis y diseño estructurado, eliminación del GOTO
@@ -216,9 +219,15 @@ CPU ←───bus───→ Memoria
     cuello de botella
 ```
 
-**Consecuencias:**
-- Limita el paralelismo natural
-- Limita el cómputo no determinista
+**¿Por qué es un cuello de botella?**
+- El bus es el canal único que une CPU y memoria.
+- Cada instrucción necesita leer memoria (fetch) y/o escribirla (store).
+- Cuando CPU y memoria compiten por el bus, la velocidad de ejecución se ve limitada.
+
+**Consecuencias pedagógicas (por qué esto importa):**
+- Explica por qué los lenguajes imperativos enfocan en estado y asignación.
+- Justifica por qué la programación paralela es difícil: múltiples hilos comparten la misma memoria y el mismo bus.
+- Hace evidente por qué el estado mutable es “costoso” y por qué el functionalismo propone evitarlo.
 
 **Pregunta que generó nuevos paradigmas:**
 > *¿Se puede describir cómputo **sin** depender de Von Neumann?*
