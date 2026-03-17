@@ -427,6 +427,8 @@ archivo.js  ←── LENGUAJE INTERMEDIO
    Ejecución en CPU
 ```
 
+> **Directive:** generar gráfico de pipeline TS → JS → V8/Deno destacando el rol de la verificación de tipos antes de ejecutar.
+
 **Comparación:**
 
 | Lenguaje | Paso 1 | Intermediario | Tiempo de ejecución |
