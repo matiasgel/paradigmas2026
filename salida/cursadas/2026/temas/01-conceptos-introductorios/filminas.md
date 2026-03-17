@@ -104,6 +104,14 @@ Quien eligió el lenguaje no conocía los paradigmas ni sus trade-offs.
 
 > No hay lenguaje perfecto — hay **trade-offs**.
 
+**Notas rápidas (para el docente):**
+- **Legibilidad:** cuánto esfuerzo mental toma entender código ajeno. Afecta mantenimiento y colaboración.
+- **Expresividad:** qué tan cerca está la sintaxis del problema real. Aumenta velocidad de desarrollo y reduce boilerplate.
+- **Seguridad:** qué tan pronto el lenguaje detecta errores (tipado estático, análisis estático, chequeos en runtime).
+- **Costo:** incluye tiempo de desarrollo, curva de aprendizaje, herramientas y soporte de la comunidad.
+- **Portabilidad:** qué tan fácil es ejecutar el mismo código en diferentes plataformas/hardware.
+- **Eficiencia:** rendimiento en tiempo y memoria; relevante para sistemas críticos o con recursos limitados.
+
 ---
 
 ### [F-05] Pregunta abierta
