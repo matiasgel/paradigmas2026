@@ -560,7 +560,55 @@ class Calculadora {
 
 ---
 
-### [F-20b] Introducción al paradigma lógico
+### [F-20b] Funciones puras y composición
+
+# Composición: construir programas como cadenas de funciones
+
+- Una función es pura si siempre devuelve el mismo resultado para los mismos argumentos.
+- Componer funciones pequeñas permite razonar localmente y reutilizar código.
+
+```typescript
+const doble = (x: number) => x * 2;
+const suma = (a: number, b: number) => a + b;
+const dobleYSuma = (x: number, y: number) => suma(doble(x), doble(y));
+```
+
+> **Directive:** generar gráfico de composición de funciones (f ∘ g).
+
+---
+
+### [F-20c] Inmutabilidad y datos persistentes
+
+# Cambiar sin mutar: estructuras inmutables
+
+- En vez de modificar datos, se crean nuevas versiones (copias con cambios).
+- Esto reduce errores y facilita la concurrencia.
+- TypeScript usa `const` y prácticas funcionales; lenguajes puramente funcionales usan estructuras persistentes (Clojure).
+
+```typescript
+const lista = [1, 2, 3];
+const nuevo = [...lista, 4]; // no muta la lista original
+```
+
+> **Directive:** generar gráfico “copia con cambios” vs “mutación en sitio”.
+
+---
+
+### [F-20d] Lenguajes funcionales más puros
+
+# TypeScript permite el estilo funcional, pero hay lenguajes más “puros”
+
+- **Clojure** (LISP sobre JVM) insiste en inmutabilidad y funciones puras.
+- **Haskell** es un lenguaje funcional puro: los efectos se manejan explícitamente con mónadas.
+- En este curso usaremos TypeScript para practicar ideas funcionales y veremos ejemplos de Clojure más adelante.
+
+> *Fuente: Louden & Lambert, Cap. 1; Hickey (2008) sobre Clojure.*
+
+> **Directive:** generar gráfico comparando TypeScript (híbrido) con Clojure (funcional puro).
+
+---
+
+### [F-20e] Introducción al paradigma lógico
 
 # Paradigma lógico: programar declarando “qué” en lugar de “cómo”
 
@@ -569,6 +617,52 @@ class Calculadora {
 - Ideal para problemas de búsqueda, reglas, y consultas (bases de conocimiento).
 
 > **Directive:** generar gráfico de un motor de inferencia (hechos + reglas → solución).
+
+---
+
+### [F-20f] Hechos y reglas en Prolog
+
+# Programar con hechos y reglas
+
+```prolog
+padre(alan, bob).
+padre(bob, carla).
+ancestro(X, Y) :- padre(X, Y).
+ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
+```
+
+- `padre/2` son hechos.
+- `ancestro/2` es una regla recursiva que define la relación.
+
+> **Directive:** generar gráfico que muestre hechos + regla → cadena de inferencia.
+
+---
+
+### [F-20g] Backtracking y unificación
+
+# Cómo Prolog busca soluciones
+
+- El motor expande posibilidades y retrocede (backtracking) cuando no encuentra solución.
+- La unificación empareja variables con términos para hacer coincidir hechos y reglas.
+
+```prolog
+?- ancestro(alan, carla).
+% Sí: unifica y prueba caminos.
+```
+
+> **Directive:** generar gráfico de un árbol de búsqueda con backtracking.
+
+---
+
+### [F-20h] Aplicaciones del paradigma lógico
+
+# ¿Para qué sirve la programación lógica?
+
+- Sistemas expertos y motores de reglas (diagnóstico, planificación).
+- Consultas sobre bases de conocimiento (preguntas declarativas).
+- En IA simbólica se usa para modelar conocimiento y razonamiento.
+
+> **Directive:** generar gráfico de un sistema experto (reglas + hechos → decisión).
 
 ---
 
@@ -754,7 +848,7 @@ if (x !== 0) y = 1 / x;
 | F-01 a F-05 | Bloque 1: ¿Por qué LP? | 5 | 20 |
 | F-06 a F-10 | Bloque 2: Paradigmas | 5 | 25 |
 | F-11 a F-14 | Bloque 3: Imperativo + Máquina Abstracta | 4 | 20 |
-| F-15 a F-20b | Bloque 4: TypeScript | 9 | 35 |
+| F-15 a F-20h | Bloque 4: TypeScript | 15 | 40 |
 | F-21 a F-26 | Bloque 5: IA Generativa | 6 | 15 |
 | F-27 a F-28 | Cierre | 2 | 10 |
-| **Total** | | **31 filminas** | **125 min** |
+| **Total** | | **37 filminas** | **145 min** |
