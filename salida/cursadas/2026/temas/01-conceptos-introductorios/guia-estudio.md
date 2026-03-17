@@ -90,7 +90,7 @@ Los lenguajes no evolucionaron en línea recta. Cada hito respondió a una neces
 | 1957 | FORTRAN | Reemplazó el ensamblador para cómputo científico — primer lenguaje de alto nivel verdaderamente útil |
 | 1960 | LISP | Introdujo funciones como datos de primera clase, recursión y evaluación simbólica — base del paradigma funcional |
 | 1972 | C | Imperativo estructurado con portabilidad sin sacrificar eficiencia — reemplazó el ensamblador en sistemas |
-| 1980 | OO puro | Primera implementación pura de orientación a objetos: todo es un objeto, todo es un mensaje |
+| 1980 | Smalltalk | OO puro — Primera implementación pura de orientación a objetos: todo es un objeto, todo es un mensaje |
 | 1995 | Java | OO + máquina virtual → "write once, run anywhere" — desacopló el código del hardware |
 | 2008 | Python 3 | Multiparadigma + ecosistema científico → lenguaje de la IA y la ciencia de datos |
 | 2012 | TypeScript | Tipos estáticos sobre JavaScript — escalabilidad para proyectos grandes |
@@ -160,6 +160,17 @@ Velocidad de ejecución y consumo de memoria. C gana en benchmarks, pero Python 
 Pregunta provocadora que dejamos planteada al inicio: *"¿Importa el lenguaje si la IA puede escribir en cualquiera?"*
 
 La respuesta del Bloque 5 lo cierra, pero anticipemos la lógica: precisamente porque la IA puede escribir en cualquier lenguaje, quien la usa necesita saber **verificar** lo que produce. Para verificar código necesitás entender paradigmas. Para decirle a la IA qué querés necesitás el vocabulario correcto. La IA no hace obsoleto el conocimiento — lo transforma en una habilidad de auditoría.
+
+**Ejemplo (prompt + regla lógica):**
+
+```text
+Prompt: "Generá una cláusula de contrato que prohíba compartir datos de clientes fuera del país."
+Regla lógica (Prolog):
+  clausula(Contrato, 'no compartir datos fuera del país') :-
+      contiene(Contrato, 'clientes'), contiene(Contrato, 'no compartir').
+```
+
+En este esquema, el LLM genera texto y el motor lógico verifica que cumpla la regla; si no, se rechaza y pide reescribir.
 
 ---
 
@@ -641,44 +652,50 @@ En clase se realizó una demo con tres prompts a un modelo de IA (Copilot o Clau
 #### Prompt 1 — Sin restricción de paradigma
 
 ```
-"Escribí en TypeScript una función que devuelva la suma
-de los valores absolutos de una lista de números"
+"Escribí en TypeScript una función que calcule los primeros N números
+de la serie de Fibonacci."
 ```
 
 Output típico de la IA:
 
 ```typescript
-function sumAbsoluteValues(numbers: number[]): number {
-    let sum = 0;
-    for (const num of numbers) {
-        sum += Math.abs(num);
+function fibonacci(n: number): number[] {
+    let result: number[] = [];
+    let a = 0, b = 1;
+    for (let i = 0; i < n; i++) {
+        result.push(a);
+        [a, b] = [b, a + b];
     }
-    return sum;
+    return result;
 }
 ```
 
-**Análisis:** `let sum = 0` + loop `for...of` con mutación = **paradigma imperativo**. La IA tiende al paradigma más difundido entre sus datos de entrenamiento.
+**Análisis:** `let result`, `let a`, `let b` mutables + loop `for` = **paradigma imperativo**. La IA tiende al paradigma más difundido entre sus datos de entrenamiento.
 
 #### Prompt 2 — Restricción funcional explícita
 
 ```
-"Implementá lo mismo en estilo funcional puro,
-sin mutación de estado, sin variables intermedias"
+"Implementá lo mismo (serie de Fibonacci) en estilo funcional puro,
+sin mutación de estado, sin variables intermedias."
 ```
 
 Output esperado:
 
 ```typescript
-const sumAbsoluteValues = (numbers: number[]): number =>
-    numbers.reduce((acc, num) => acc + Math.abs(num), 0);
+const fib = (n: number): number =>
+    n <= 1 ? n : fib(n - 1) + fib(n - 2);
+const fibonacci = (n: number): number[] =>
+    Array.from({ length: n }, (_, i) => fib(i));
 ```
 
-**Análisis:** Sin `let`, sin loop, `reduce` como función de orden superior. Si la IA usa `let` igual después de esta instrucción, es evidencia de que no interpretó correctamente la restricción del prompt — y solo lo detectás si sabés qué es el paradigma funcional.
+**Análisis:** Sin `let`, sin loop, recursión pura. Si la IA usa `let` igual después de esta instrucción, es evidencia de que no interpretó correctamente la restricción del prompt — y solo lo detectás si sabés qué es el paradigma funcional.
 
 #### Prompt 3 — Verificación de comprensión de máquinas abstractas
 
 ```
-"Explicá qué máquina abstracta ejecuta este código TypeScript"
+"Escribí en TypeScript una función que calcule los primeros N números
+de la serie de Fibonacci usando `let` y un bucle.
+Luego explicá qué máquina abstracta ejecuta ese código."
 ```
 
 Respuesta correcta esperada (verificar estos puntos):

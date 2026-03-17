@@ -311,30 +311,22 @@ Sintetizar el concepto de Gabbrielli Cap. 1:
 ***(📽 F-30) — Hechos y reglas en Prolog:***
 
 ```prolog
-% Hechos: relaciones conocidas
-padre(juan, maria).
-padre(juan, pedro).
-madre(ana, maria).
-
-% Regla: X es progenitor de Y si X es padre o madre de Y
-progenitor(X, Y) :- padre(X, Y).
-progenitor(X, Y) :- madre(X, Y).
+padre(alan, bob).
+padre(bob, carla).
+ancestro(X, Y) :- padre(X, Y).
+ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
 ```
 
-> *"Este código no dice 'cómo buscar' — dice 'qué es verdad'. El motor deduce el resto."*
+> *"`padre/2` son hechos; `ancestro/2` es una regla recursiva. Este código no dice 'cómo buscar' — dice 'qué es verdad'. El motor deduce el resto."*
 
 ***(📽 F-31) — Hacer preguntas al sistema:***
 
 ```prolog
-?- progenitor(juan, maria).   % Consulta: ¿juan es progenitor de maria?
-true.
-
-?- progenitor(X, maria).      % Consulta: ¿quién es progenitor de maria?
-X = juan ;
-X = ana.
+?- ancestro(alan, carla).
+% Sí: hay una cadena de hechos que conecta a alan con carla.
 ```
 
-> *"Nota la inversión: en lugar de 'ejecutar una función', 'hacer una pregunta'. El sistema busca todas las respuestas posibles."*
+> *"Nota la inversión: en lugar de 'ejecutar una función', 'hacer una pregunta'. El sistema busca si existe una cadena de hechos que satisfaga la consulta."*
 
 ***(📽 F-32) — ¿Para qué sirve la programación lógica?***
 Pasar rápido — pregunta socrática para reflexión:
@@ -342,6 +334,9 @@ Pasar rápido — pregunta socrática para reflexión:
 - Sistemas expertos médicos: "si el paciente tiene fiebre Y tos → posible diagnóstico X"
 - NLP: razonamiento sobre gramáticas como reglas
 - Motores de reglas de negocio: compliance, seguros, legales
+- Hoy en combinación con **LLMs**: validar y reforzar la salida generada — enfoque **neuro-simbólico** (el modelo genera, la lógica comprueba)
+
+> *Ejemplo rápido: un LLM genera una cláusula de contrato; una regla Prolog verifica que contenga las restricciones requeridas. Si falla, el motor la rechaza y pide reescribir.*
 
 ### ¿Por qué TypeScript en 2026? *(📽 F-33 · F-34)* (4 min)
 
@@ -529,45 +524,51 @@ Filmina con los 3 niveles (Schmidt & Runfola, Fig. 12):
 **Prompt 1** *(📽 F-42)* — sin restricción de paradigma:
 
 ```
-Escribí en TypeScript una función que devuelva la suma
-de los valores absolutos de una lista de números
+Escribí en TypeScript una función que calcule los primeros N números
+de la serie de Fibonacci.
 ```
 
-> 📤 **Output típico (la IA tiende al imperativo):**
+> 📤 **Output típico (la IA tiende al imperativo por defecto):**
 >
 > ```typescript
-> function sumAbsoluteValues(numbers: number[]): number {
->     let sum = 0;
->     for (const num of numbers) {
->         sum += Math.abs(num);
+> function fibonacci(n: number): number[] {
+>     let result: number[] = [];
+>     let a = 0, b = 1;
+>     for (let i = 0; i < n; i++) {
+>         result.push(a);
+>         [a, b] = [b, a + b];
 >     }
->     return sum;
+>     return result;
 > }
 > ```
 >
-> 🔍 Señalar en vivo: `let sum` mutable + loop `for...of` = **paradigma imperativo**. La IA por defecto tiende al paradigma más difundido entre la mayoría de usuarios.
+> 🔍 Señalar en vivo: `let result`, `let a`, `let b` mutables + loop `for` = **paradigma imperativo**. La IA por defecto tiende al paradigma más difundido entre la mayoría de usuarios.
 
 **Prompt 2** *(📽 F-43)* — restricción funcional explícita:
 
 ```
-Implementá lo mismo en estilo funcional puro,
-sin mutación de estado, sin variables intermedias
+Implementá lo mismo (serie de Fibonacci) en estilo funcional puro,
+sin mutación de estado, sin variables intermedias.
 ```
 
 > 📤 **Output esperado (funcional correcto):**
 >
 > ```typescript
-> const sumAbsoluteValues = (numbers: number[]): number =>
->     numbers.reduce((acc, num) => acc + Math.abs(num), 0);
+> const fib = (n: number): number =>
+>     n <= 1 ? n : fib(n - 1) + fib(n - 2);
+> const fibonacci = (n: number): number[] =>
+>     Array.from({ length: n }, (_, i) => fib(i));
 > ```
 >
-> ✅ Verificar: sin `let`, sin loop, `reduce` como función de orden superior.
+> ✅ Verificar: sin `let`, sin loop, recursión pura.
 > ⚠️ Si la IA usa `let` igual → señalarlo como ejemplo de que la IA no siempre respeta las restricciones del prompt — requiere conocimiento de dominio para detectarlo.
 
 **Prompt 3** *(📽 F-44)* — verificación de comprensión de máquinas abstractas:
 
 ```
-Explicá qué máquina abstracta ejecuta este código TypeScript
+Escribí en TypeScript una función que calcule los primeros N números
+de la serie de Fibonacci usando `let` y un bucle.
+Luego explicá qué máquina abstracta ejecuta ese código.
 ```
 
 > 📤 **Respuesta correcta esperada** (verificar estos puntos en vivo):

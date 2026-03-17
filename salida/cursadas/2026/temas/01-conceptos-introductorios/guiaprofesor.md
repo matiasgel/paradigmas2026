@@ -124,7 +124,7 @@ Al concluir esta clase el alumno debe poder:
 | Los 4 paradigmas fundamentales (tabla) | 8 min | 19 | Tabla comparativa en filmina dedicada |
 | Lenguajes puros vs. multiparadigma + dominios | 2 min | 20 | Rápido; conectar con temas 03–07 |
 
-**Tabla a presentar en F-09:**
+**Tabla a presentar en F-19:**
 
 | Paradigma | Base formal | Unidad | Estado | Ejemplos |
 |-----------|-------------|--------|--------|----------|
@@ -149,11 +149,11 @@ Al concluir esta clase el alumno debe poder:
 | Ejemplo comparativo LC-3 / C / TypeScript | 8 min | 23 | Mostrar LC-3 brevemente; detenerse en C; anticipar TypeScript |
 | Máquina abstracta, interpretación y compilación | 2 min | 24 | Síntesis Gabbrielli Cap. 1 — anticipar Bloque 4 |
 
-**⚠️ Aclaración explícita a dar en F-13:**
+**⚠️ Aclaración explícita a dar en F-23:**
 > *"Este código LC-3 NO entra al TP. Está para que vean lo que C ya les abstrae."*
 Este punto es crítico para el perfil de alumno ansioso (ver FAQ F01 en `faq-anticipado.md`).
 
-**Escalera visual para pizarrón / F-11:**
+**Escalera visual para pizarrón / F-21:**
 ```
 LC-3 (ensamblador)      — Nivel 0: legibilidad nula, completo control
        ↕ abstracción
@@ -166,17 +166,34 @@ React, Django, Rails     — Nivel 3: frameworks
 
 ---
 
-### BLOQUE 4 — Intro a TypeScript como lenguaje multiparadigma (30 min)
+### BLOQUE 4 — Intro a TypeScript como lenguaje multiparadigma (35 min)
 
-**Filminas:** F-15 · F-16 · F-17 · F-18 · F-19 · F-20
-**Objetivo:** TypeScript como ejemplo vivo de los conceptos teóricos. Primera escritura de código.
+**Filminas:** F-25 · F-26 · F-27 · F-28 · F-29 · F-30 · F-31 · F-32 · F-33 · F-34 · F-35 · F-36 · F-37 · F-38 · F-39
+**Objetivo:** TypeScript como ejemplo vivo de los conceptos teóricos. Paradigmas funcional y lógico en acción. Primera escritura de código.
 
 | Subbloque | Duración | Filmina | Actividad |
 |-----------|----------|---------|-----------|
-| ¿Por qué TypeScript en 2026? | 4 min | F-15 | Argumentos: ecosistema, tipos, IA, multiparadigma |
-| Pipeline TS como máquina intermedia | 8 min | F-16 | Dibujar `.ts → tsc → .js → V8/Deno → CPU` en pizarrón |
-| Demo: versión imperativa + funcional | 10 min | F-17+F-18 | Deno Playground — tipear en vivo si el tiempo lo permite |
-| Sistema de tipos básico | 8 min | F-19 | Tipos básicos; mostrar error de tipo en vivo |
+| Paradigma funcional: conceptos | 4 min | F-25 a F-28 | Funciones puras, composición, inmutabilidad; TypeScript vs. Haskell/Clojure |
+| Paradigma lógico: introducción | 4 min | F-29 a F-32 | Prolog: hechos, reglas, consultas; aplicaciones + mención neuro-simbólico |
+| ¿Por qué TypeScript en 2026? | 4 min | F-33+F-34 | Argumentos: ecosistema, tipos, IA, multiparadigma |
+| Pipeline TS como máquina intermedia | 8 min | F-35 | Dibujar `.ts → tsc → .js → V8/Deno → CPU` en pizarrón |
+| Demo: versión imperativa + funcional | 10 min | F-36+F-37 | Deno Playground — tipear en vivo si el tiempo lo permite |
+| Sistema de tipos básico y multiparadigma | 5 min | F-38+F-39 | Tipos básicos; mostrar error de tipo en vivo; tres estilos |
+
+**Ejemplo central para Prolog (F-30 + F-31) — mostrar en filmina, no tipear:**
+```prolog
+padre(alan, bob).
+padre(bob, carla).
+ancestro(X, Y) :- padre(X, Y).
+ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
+
+?- ancestro(alan, carla).
+% Sí: hay una cadena de hechos que conecta a alan con carla.
+```
+→ Subrayar: no se escribe el algoritmo de búsqueda, se declaran las relaciones.
+
+**F-32 — neuro-simbólico (mención rápida):**
+> *"Hoy el paradigma lógico se usa en combinación con LLMs para verificar la salida generada — enfoque neuro-simbólico. El modelo genera, la lógica comprueba. Lo veremos en detalle en Tema 7."*
 
 **Setup Deno Playground (paso a paso):**
 1. Abrir https://playground.deno.land en el proyector
@@ -187,7 +204,7 @@ React, Django, Rails     — Nivel 3: frameworks
 
 **Fallback:** https://www.typescriptlang.org/play (si Deno Playground no carga)
 
-**Demo Paso 1 — Versión imperativa (F-17):**
+**Demo Paso 1 — Versión imperativa (F-36):**
 ```typescript
 function sumaAbs(arr: number[]): number {
     let acc = 0;
@@ -199,7 +216,7 @@ function sumaAbs(arr: number[]): number {
 console.log(sumaAbs([3, -1, 4, -1, 5])); // Output: 14
 ```
 
-**Demo Paso 2 — Versión funcional (F-18):**
+**Demo Paso 2 — Versión funcional (F-37):**
 ```typescript
 const sumaAbs = (arr: number[]): number =>
     arr.map(x => Math.abs(x))
@@ -212,7 +229,7 @@ console.log(sumaAbs([3, -1, 4, -1, 5])); // Output: 14
 - Funcional: sin `let`, sin loop, `map`+`reduce` como funciones de orden superior = paradigma funcional
 - Mismo resultado, distinto modelo mental
 
-**Demo error de tipos (F-19):**
+**Demo error de tipos (F-38):**
 ```typescript
 sumaAbs(["hola", "mundo"]);
 // Error: Argument of type 'string[]' is not assignable to parameter of type 'number[]'
@@ -225,20 +242,20 @@ sumaAbs(["hola", "mundo"]);
 
 ### BLOQUE 5 — IA Generativa y los paradigmas (15 min)
 
-**Filminas:** F-21 · F-22 · F-23 · F-24 · F-25 · F-26
+**Filminas:** F-40 · F-41 · F-42 · F-43 · F-44 · F-45
 **Objetivo:** Conectar los fundamentos de la materia con el contexto actual de la IA.
 
 | Subbloque | Duración | Filmina | Actividad |
 |-----------|----------|---------|-----------|
-| Cierre pregunta F-05 + cambio de rol del programador | 4 min | F-21 | Datos Schmidt & Runfola (2025): 20/50/30% |
-| La jerarquía de proficiencia en IA | 3 min | F-22 | Literacy → Fluency → Mastery |
-| Demo en vivo: 3 prompts con la IA | 6 min | F-23+F-24+F-25 | Copilot Chat o Claude — ver resultados en vivo |
-| El loop "trust but verify" | 2 min | F-26 | Esquema de 5 pasos |
+| Cierre pregunta F-13 + cambio de rol del programador | 4 min | F-40 | Datos Schmidt & Runfola (2025): 20/50/30% |
+| La jerarquía de proficiencia en IA | 3 min | F-41 | Literacy → Fluency → Mastery |
+| Demo en vivo: 3 prompts con la IA | 6 min | F-42+F-43+F-44 | Copilot Chat o Claude — ver resultados en vivo |
+| El loop "trust but verify" | 2 min | F-45 | Esquema de 5 pasos |
 
-**Apertura del bloque — retomar lo sembrado en F-05:**
+**Apertura del bloque — retomar lo sembrado en F-13:**
 > *"En el Bloque 1 dejamos una pregunta abierta: ¿importa el lenguaje si la IA puede escribir en cualquiera? Ahora la respondemos: importa más que nunca, pero por razones distintas."*
 
-**Split de tiempo antes/después de IA (F-21):**
+**Split de tiempo antes/después de IA (F-40):**
 | Rol | Antes (pre-IA) | Hoy (con IA generativa) |
 |-----|---------------|------------------------|
 | Codificación manual + depuración | 70% | 20% |
@@ -247,27 +264,29 @@ sumaAbs(["hola", "mundo"]);
 
 **Prompts para la demo en vivo:**
 
-*Prompt 1 (F-23) — sin restricción de paradigma:*
+*Prompt 1 (F-42) — sin restricción de paradigma:*
 ```
-Escribí en TypeScript una función que devuelva la suma
-de los valores absolutos de una lista de números
+Escribí en TypeScript una función que calcule los primeros N números
+de la serie de Fibonacci.
 ```
-→ La IA tenderá al imperativo. Señalar `let sum` mutable como evidencia de paradigma.
+→ La IA tenderá al imperativo. Señalar `let result`, `let a`, `let b` mutables + loop `for` como evidencia de paradigma.
 
-*Prompt 2 (F-24) — restricción funcional explícita:*
+*Prompt 2 (F-43) — restricción funcional explícita:*
 ```
-Implementá lo mismo en estilo funcional puro,
-sin mutación de estado, sin variables intermedias
+Implementá lo mismo (serie de Fibonacci) en estilo funcional puro,
+sin mutación de estado, sin variables intermedias.
 ```
 → Verificar que no use `let`. Si lo usa: el ejemplo *vivo* de que la IA no siempre respeta restricciones.
 
-*Prompt 3 (F-25) — máquinas abstractas:*
+*Prompt 3 (F-44) — máquinas abstractas:*
 ```
-Explicá qué máquina abstracta ejecuta este código TypeScript
+Escribí en TypeScript una función que calcule los primeros N números
+de la serie de Fibonacci usando `let` y un bucle.
+Luego explicá qué máquina abstracta ejecuta ese código.
 ```
 → Verificar que mencione: `tsc`, lenguaje intermedio JS, V8/Deno/Node, comparación con JVM.
 
-**El loop "trust but verify" (F-26) — esquema para el pizarrón:**
+**El loop "trust but verify" (F-45) — esquema para el pizarrón:**
 1. Formular el problema con precisión
 2. Hacer el prompt a la IA
 3. Revisar con conocimiento de dominio: ¿qué paradigma usó? ¿es correcto semánticamente?
@@ -278,7 +297,7 @@ Explicá qué máquina abstracta ejecuta este código TypeScript
 
 ### CIERRE (10 min, fuera del tiempo de bloques o absorbidos del Bloque 5)
 
-**Filminas:** F-27 · F-28
+**Filminas:** F-46 · F-47
 
 - Síntesis de los 5 bloques: los conceptos que deben quedarse del día.
 - Anunciar el TP1: quiz en formato GIFT, disponible en `tp.md` y aula virtual.
@@ -295,13 +314,13 @@ La minuta completa está en [`minuta.md`](minuta.md). Las filminas generadas est
 
 | Bloque | Filminas | Archivo fuente |
 |--------|----------|----------------|
-| Apertura | F-00 | `slides/` |
-| Bloque 1 — ¿Por qué estudiar LP? | F-01 a F-05 | `slides/` |
-| Bloque 2 — Mapa de paradigmas | F-06 a F-10 | `slides/` |
-| Bloque 3 — Imperativo y máquina abstracta | F-11 a F-14 | `slides/` |
-| Bloque 4 — Intro TypeScript | F-15 a F-20 | `slides/` |
-| Bloque 5 — IA y paradigmas | F-21 a F-26 | `slides/` |
-| Cierre | F-27 a F-28 | `slides/` |
+| Portada | F-1 | `slides/` |
+| Bloque 1 — ¿Por qué estudiar LP? | F-2 a F-13 | `slides/` |
+| Bloque 2 — Mapa de paradigmas | F-14 a F-20 | `slides/` |
+| Bloque 3 — Imperativo y máquina abstracta | F-21 a F-24 | `slides/` |
+| Bloque 4 — TypeScript + paradigmas funcional/lógico | F-25 a F-39 | `slides/` |
+| Bloque 5 — IA y paradigmas | F-40 a F-45 | `slides/` |
+| Cierre | F-46 a F-47 | `slides/` |
 
 **Guía del alumno:** [`guia-estudio.md`](guia-estudio.md) — disponible para los estudiantes antes, durante y después de clase.
 
@@ -356,7 +375,7 @@ Los siguientes extractos fueron tomados de los archivos de texto en `material/01
 > *"One of the most general concepts is the abstract machine. [...] Abstract machines allow describing what an implementation of a programming language is, without requiring us to go into the specific details of any particular implementation."*
 > — Gabbrielli & Martini, Cap. 1
 
-**Cita para usar al introducir el pipeline de TypeScript (Bloque 4, F-16):**
+**Cita para usar al introducir el pipeline de TypeScript (Bloque 4, F-35):**
 
 > *"In other words, the algorithms we want to execute must be represented using the instructions of a programming language, L. This language will be formally defined in terms of a specific syntax and a precise semantics."*
 > — Gabbrielli & Martini, Cap. 1
