@@ -123,7 +123,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 # Expresividad — qué tan cercano está el código al problema real
 
 - Refleja cuán fácil es traducir ideas del dominio a código.
-- Alta expresividad reduce boilerplate y acelera el desarrollo.
+- Alta expresividad reduce el código repetitivo y acelera el desarrollo.
 - Puede llevar a sintaxis tersa, pero también a estilos difíciles de depurar.
 
 ---
@@ -132,7 +132,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 # Seguridad — detección temprana de errores
 
-- Mide cuán pronto el lenguaje detecta errores (tipado estático, análisis estático, chequeos en runtime).
+- Mide cuán pronto el lenguaje detecta errores (tipado estático, análisis estático, chequeos en tiempo de ejecución).
 - El tipado estático contribuye a la seguridad al eliminar clases de bugs antes de ejecutar.
 - La seguridad también incluye protección contra fallos y vulnerabilidades.
 
@@ -346,7 +346,7 @@ int suma_abs(int arr[], int n) {
 
 ```
 Interpretación pura:
-  Programa → [Intérprete en runtime] → Ejecución
+  Programa → [Intérprete en tiempo de ejecución] → Ejecución
   Flexible, más lento
 
 Compilación pura:
@@ -393,7 +393,7 @@ archivo.js  ←── LENGUAJE INTERMEDIO
 
 **Comparación:**
 
-| Lenguaje | Paso 1 | Intermediario | Runtime |
+| Lenguaje | Paso 1 | Intermediario | Tiempo de ejecución |
 |----------|--------|---------------|---------|
 | TypeScript | tsc | .js | V8 / Node / Deno |
 | Java | javac | .class (bytecode) | JVM |
@@ -603,7 +603,7 @@ este código TypeScript"
 
 **Verificar:**
 - ¿Explica el pipeline `.ts → .js → V8`?
-- ¿Distingue el compilador (`tsc`) del runtime (`V8`)?
+- ¿Distingue el compilador (`tsc`) del tiempo de ejecución (`V8`)?
 - ¿Menciona el lenguaje intermedio?
 
 ---
