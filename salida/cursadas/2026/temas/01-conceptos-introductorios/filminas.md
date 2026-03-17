@@ -93,6 +93,8 @@ Quien eligió el lenguaje no conocía los paradigmas ni sus trade-offs.
 
 # ¿Cómo evaluamos un lenguaje? — Sebesta (2018)
 
+Sebesta propone un conjunto de criterios para comparar lenguajes de programación de manera sistemática. Cada criterio aborda un aspecto distinto del uso real del lenguaje (lectura, escritura, seguridad, costo, portabilidad y eficiencia).
+
 | Criterio | Pregunta clave | Ejemplo de tensión |
 |----------|---------------|-------------------|
 | **Legibilidad** | ¿Se puede leer código ajeno? | Python vs. Perl |
