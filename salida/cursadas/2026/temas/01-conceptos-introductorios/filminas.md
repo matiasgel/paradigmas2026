@@ -38,6 +38,25 @@ Semana 1 · Clase 1 de 2 · 120 minutos
 
 ---
 
+### [F-01b] ¿Qué es un lenguaje de programación?
+
+# Definición formal
+
+**Cómputo**
+> Una serie de operaciones estructuradas aplicadas a un conjunto de datos de entrada para obtener nuevos datos como resultado.
+
+**Programa**
+> Una colección definida y ordenada de cómputos diseñada para realizar una tarea específica o resolver un problema concreto.
+
+**Lenguaje de programación**
+> Un conjunto de **reglas sintácticas y semánticas** usadas para definir programas. Sistema de notación cuyas instrucciones son comprendidas y ejecutadas por máquinas.
+
+*(Slides cátedra UNTDF 2024 · Aaby, A. — citado en Louden & Lambert, Cap. 1)*
+
+> Una descripción completa incluye el **modelo computacional**, la **sintaxis**, la **semántica** y las **consideraciones pragmáticas** que dan forma al lenguaje.
+
+---
+
 ### [F-02] El costo de elegir mal
 
 # Elegir el lenguaje equivocado tiene consecuencias reales

@@ -40,6 +40,32 @@ Al finalizar el estudio de este tema, deberías poder:
 
 ## Bloque 1 — ¿Por qué estudiar lenguajes de programación?
 
+### 1.0 ¿Qué es un lenguaje de programación?
+
+Antes de preguntar *por qué* estudiar lenguajes, conviene precisar *qué* son. Tres conceptos se encadenan de lo más simple a lo más específico:
+
+**Cómputo**
+> Un proceso que consiste en aplicar una serie de operaciones estructuradas a un conjunto de valores o datos de entrada, con el objetivo de obtener nuevos valores o datos como resultado.
+
+**Programa**
+> Una colección definida y ordenada de cómputos diseñada para realizar una tarea específica o resolver un problema concreto. Es la expresión de uno o más cómputos escrita de manera que una máquina pueda ejecutarlos.
+
+**Lenguaje de programación**
+> Un conjunto de reglas sintácticas y semánticas usadas para definir programas. Este sistema de notación está compuesto por instrucciones que son comprendidas y ejecutadas por máquinas, usualmente computadoras.
+
+*Fuente: Slides cátedra UNTDF 2024 — `material/01-conceptos-introductorios/txt/01 introduccion.txt`*
+
+Aaby (citado en Louden & Lambert, Cap. 1) agrega una perspectiva más completa:
+
+> Una descripción completa de los lenguajes de programación incluye el **modelo computacional**, la **sintaxis** y **semántica** de programas, y las **consideraciones pragmáticas** que dan forma a los lenguajes.
+
+Esta triple dimensión — modelo, sintaxis, semántica — estructura todo el programa de la materia:
+- **Modelo computacional** → los paradigmas (Bloques 2–5 y los temas 02–07)
+- **Sintaxis** → cómo se escriben los programas válidamente (Tema 02)
+- **Semántica** → qué significan las construcciones y qué efectos producen (Tema 02 en adelante)
+
+---
+
 ### 1.1 La pregunta incómoda
 
 Si ya sabés programar en, digamos, Python o JavaScript, ¿para qué estudiar más lenguajes? La respuesta no es obvia al principio, pero se vuelve clara enseguida: **conocer distintos lenguajes no es saber su sintaxis — es adquirir diferentes modelos mentales para pensar problemas**.
