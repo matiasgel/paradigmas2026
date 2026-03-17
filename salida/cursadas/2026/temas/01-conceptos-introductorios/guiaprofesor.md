@@ -96,7 +96,7 @@ Al concluir esta clase el alumno debe poder:
 
 | Subbloque | Duración | Filmina | Actividad |
 |-----------|----------|---------|-----------|
-| Entrada: pregunta disparadora | 2 min | F-01 | Preguntar cuántos lenguajes existen; dejar que respondan |
+| ¿Para qué estudiar lenguajes de programación? | 2 min | F-01 | Preguntar cuántos lenguajes existen; dejar que respondan |
 | El costo de elegir mal | 5 min | F-02 | Narrar caso startup Node.js → Python; conectar con modelo mental |
 | Perspectiva histórica express | 7 min | F-03 | Recorrer timeline FORTRAN→TypeScript con justificación por cada hito |
 | Criterios de evaluación (Sebesta) | 6 min | F-04 | Presentar los 6 criterios; ejemplo de tensión Python vs. C |

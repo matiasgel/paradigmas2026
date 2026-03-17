@@ -66,7 +66,7 @@ Esta triple dimensión — modelo, sintaxis, semántica — estructura todo el p
 
 ---
 
-### 1.1 La pregunta incómoda
+### 1.1 ¿Para qué estudiar lenguajes de programación?
 
 Si ya sabés programar en, digamos, Python o JavaScript, ¿para qué estudiar más lenguajes? La respuesta no es obvia al principio, pero se vuelve clara enseguida: **conocer distintos lenguajes no es saber su sintaxis — es adquirir diferentes modelos mentales para pensar problemas**.
 
