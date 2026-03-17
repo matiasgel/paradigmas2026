@@ -59,6 +59,8 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive",
 ]
 
+DEFAULT_FILMINAS_SCHEMA = Path("_edu/templates/filminas-schema.yaml")
+
 # Dimensiones estándar 16:9 en EMU (English Metric Units)
 SLIDE_W = 9_144_000
 SLIDE_H = 5_143_500
@@ -156,6 +158,58 @@ def save_yaml(path: Path, data: dict) -> None:
         yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
 
 
+def _deep_merge_dict(base: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
+    merged = dict(base)
+    for key, value in incoming.items():
+        current = merged.get(key)
+        if isinstance(current, dict) and isinstance(value, dict):
+            merged[key] = _deep_merge_dict(current, value)
+        else:
+            merged[key] = value
+    return merged
+
+
+def _default_filminas_schema() -> dict[str, Any]:
+    return {
+        "version": "filminas/v1",
+        "template_path": "_edu/templates/filminas-template.md",
+        "markers": {
+            "slide_heading_pattern": r"^###\s+\[F-(\d+)\]\s*(.*)$",
+            "ignored_section_patterns": [
+                r"^##\s+PORTADA\b",
+                r"^##\s+BLOQUE\b",
+            ],
+            "separator": "---",
+        },
+        "headings": {
+            "subtitle_levels": [1],
+            "body_heading_levels": [2, 3, 4, 5, 6],
+        },
+        "directives": {
+            "type": "@tipo:",
+            "layout": "@layout:",
+            "image": "@imagen:",
+            "asset": "@asset:",
+        },
+        "allowed": {
+            "slide_types": sorted(LAYOUT_MAP.keys()),
+            "layout_presets": sorted(LAYOUT_MAP.keys()),
+            "image_strategies": ["background", "content", "none"],
+        },
+    }
+
+
+def load_filminas_schema(project_root: Path) -> dict[str, Any]:
+    schema = _default_filminas_schema()
+    schema_path = project_root / DEFAULT_FILMINAS_SCHEMA
+    if schema_path.exists():
+        schema = _deep_merge_dict(schema, load_yaml(schema_path))
+    schema["_path"] = str(
+        schema_path.relative_to(project_root) if schema_path.exists() else DEFAULT_FILMINAS_SCHEMA
+    )
+    return schema
+
+
 def _pt(v: float) -> dict:
     return {"magnitude": v, "unit": "PT"}
 
@@ -218,6 +272,28 @@ def _sanitize_markdown_paragraph(text: str) -> str:
     """Limpia marcadores de bloque que no deben quedar visibles en Slides."""
     clean = re.sub(r'^\s*>+\s?', '', text.strip())
     return clean.strip()
+
+
+def _parse_directive_pairs(text: str) -> dict[str, str]:
+    pairs = {}
+    for key, raw_value in re.findall(r'([A-Za-z_][\w-]*)=("[^"]*"|\S+)', text):
+        pairs[key] = raw_value.strip('"')
+    return pairs
+
+
+def _parse_schema_directive(line: str, schema: dict[str, Any]) -> dict[str, Any] | None:
+    stripped = line.strip()
+    directives = schema.get("directives", {})
+    for name, prefix in directives.items():
+        if stripped.lower().startswith(str(prefix).lower()):
+            value = stripped[len(prefix):].strip()
+            parsed: dict[str, Any] = {"name": name, "raw": value}
+            if name == "asset":
+                parsed["value"] = _parse_directive_pairs(value) or {"raw": value}
+            else:
+                parsed["value"] = value
+            return parsed
+    return None
 
 
 def _compose_body_text(subtitle: str, blocks: list[dict]) -> str:
@@ -513,17 +589,21 @@ def _centered_box(geo: tuple[int, int, int, int], width_ratio: float, height_rat
 # FASE 1 — PARSEO DE FILMINAS.MD
 # ═══════════════════════════════════════════════════════════════════════
 
-def parse_filminas(filminas_path: Path) -> list[dict]:
+def parse_filminas(filminas_path: Path, schema: dict[str, Any] | None = None) -> list[dict]:
     """Lee filminas.md y extrae cada slide como estructura semántica completa."""
+    if schema is None:
+        schema = load_filminas_schema(find_project_root(filminas_path.parent))
+
     text = filminas_path.read_text(encoding="utf-8")
     slides: list[dict] = []
     current: dict | None = None
+    slide_pattern = re.compile(schema["markers"]["slide_heading_pattern"])
 
     for line in text.splitlines():
-        m = re.match(r"^###\s+\[F-(\d+)\]\s*(.*)$", line)
+        m = slide_pattern.match(line)
         if m:
             if current:
-                slides.append(_finalize_slide(current))
+                slides.append(_finalize_slide(current, schema))
             current = {
                 "id":          f"F-{m.group(1).zfill(2)}",
                 "raw_title":   m.group(2).strip(),
@@ -533,18 +613,27 @@ def parse_filminas(filminas_path: Path) -> list[dict]:
             current["raw_lines"].append(line)
 
     if current:
-        slides.append(_finalize_slide(current))
+        slides.append(_finalize_slide(current, schema))
+
+    validate_filminas_contract(slides, schema, filminas_path)
 
     return slides
 
 
-def _finalize_slide(raw: dict) -> dict:
+def _finalize_slide(raw: dict, schema: dict[str, Any]) -> dict:
     """Parsea raw_lines en bloques semánticos: subtitle, body_blocks, code_blocks, tables."""
     lines       = raw["raw_lines"]
     subtitle    = ""
     body_blocks: list[dict] = []
     code_blocks: list[dict] = []
     tables:      list[str]  = []
+    directives: dict[str, Any] = {}
+    asset_hints: list[dict[str, Any]] = []
+    ignored_section_patterns = [
+        re.compile(pattern, flags=re.IGNORECASE)
+        for pattern in schema.get("markers", {}).get("ignored_section_patterns", [])
+    ]
+    subtitle_levels = set(schema.get("headings", {}).get("subtitle_levels", [1]))
 
     in_code    = False
     code_lang  = ""
@@ -571,6 +660,15 @@ def _finalize_slide(raw: dict) -> dict:
             i += 1
             continue
 
+        directive = _parse_schema_directive(line, schema)
+        if directive:
+            if directive["name"] == "asset":
+                asset_hints.append(directive["value"])
+            else:
+                directives[directive["name"]] = directive["value"]
+            i += 1
+            continue
+
         # ── Tabla Markdown ──────────────────────────────────────────────
         if line.strip().startswith("|"):
             tbl_lines = [line]
@@ -582,13 +680,13 @@ def _finalize_slide(raw: dict) -> dict:
             continue
 
         # ── Saltar secciones del documento que no pertenecen a la slide ───
-        if re.match(r'^##\s+(PORTADA|BLOQUE)\b', line, flags=re.IGNORECASE):
+        if any(pattern.match(line) for pattern in ignored_section_patterns):
             i += 1
             continue
 
         # ── Headings Markdown → subtítulo o texto destacado ─────────────
         m_h = re.match(r"^(#{1,6})\s+(.+)$", line)
-        if m_h and not subtitle:
+        if m_h and not subtitle and len(m_h.group(1)) in subtitle_levels:
             subtitle = m_h.group(2).strip()
             i += 1
             continue
@@ -621,7 +719,7 @@ def _finalize_slide(raw: dict) -> dict:
             i += 1
 
         first = block_lines[0].strip()
-        if re.match(r"^[-*•]|\d+\.", first):
+        if re.match(r"^(?:[-*•]|\d+\.)", first):
             ordered = bool(re.match(r"^\s*\d+[.)]\s+", first))
             items = []
             for bl in block_lines:
@@ -638,16 +736,61 @@ def _finalize_slide(raw: dict) -> dict:
 
     return {
         "id":          raw["id"],
-        "type":        _detect_type(raw["id"], raw["raw_title"], body_blocks, code_blocks, tables),
+        "type":        _detect_type(raw["id"], raw["raw_title"], code_blocks, tables, directives),
         "title":       raw["raw_title"],
         "subtitle":    subtitle,
         "body_blocks": body_blocks,
         "code_blocks": code_blocks,
         "tables":      tables,
+        "directives":  directives,
+        "asset_hints": asset_hints,
     }
 
 
-def _detect_type(slide_id: str, title: str, body_blocks, code_blocks, tables) -> str:
+def validate_filminas_contract(slides: list[dict], schema: dict[str, Any], filminas_path: Path) -> None:
+    errors: list[str] = []
+    if not slides:
+        errors.append("No se detectaron filminas con el patrón canónico ### [F-XX] Título")
+
+    seen_ids: set[str] = set()
+    allowed = schema.get("allowed", {})
+    allowed_types = set(allowed.get("slide_types", []))
+    allowed_layouts = set(allowed.get("layout_presets", []))
+    allowed_images = set(allowed.get("image_strategies", []))
+
+    for slide in slides:
+        slide_id = slide.get("id", "?")
+        if slide_id in seen_ids:
+            errors.append(f"{slide_id}: ID duplicado")
+        seen_ids.add(slide_id)
+
+        if not str(slide.get("title", "")).strip():
+            errors.append(f"{slide_id}: título vacío")
+
+        directives = slide.get("directives") or {}
+        forced_type = directives.get("type")
+        if forced_type and forced_type not in allowed_types:
+            errors.append(f"{slide_id}: @tipo inválido ({forced_type})")
+
+        layout_override = directives.get("layout")
+        if layout_override and layout_override not in allowed_layouts:
+            errors.append(f"{slide_id}: @layout inválido ({layout_override})")
+
+        image_override = directives.get("image")
+        if image_override and image_override not in allowed_images:
+            errors.append(f"{slide_id}: @imagen inválido ({image_override})")
+
+    if errors:
+        raise ValueError(
+            "Contrato de filminas inválido en "
+            f"{filminas_path}:\n- " + "\n- ".join(errors)
+        )
+
+
+def _detect_type(slide_id: str, title: str, code_blocks, tables, directives: dict[str, Any] | None = None) -> str:
+    forced_type = str((directives or {}).get("type", "")).strip()
+    if forced_type in LAYOUT_MAP:
+        return forced_type
     num = int(slide_id.split("-")[1])
     if num == 0:
         return "portada"
@@ -725,7 +868,9 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
     """Fase 1: filminas.md → plan-filminas-{tema}.yaml."""
     print("📋 Fase 1 — Generando plan desde filminas.md …")
 
-    slides      = parse_filminas(filminas_path)
+    project_root = find_project_root(filminas_path.parent)
+    schema = load_filminas_schema(project_root)
+    slides      = parse_filminas(filminas_path, schema)
     topic_id    = filminas_path.parent.name
     topic_title = topic_id.replace("-", " ").title()
     if slides:
@@ -754,8 +899,10 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
 
     plan_slides = []
     for slide in slides:
-        layout   = LAYOUT_MAP.get(slide["type"], LAYOUT_MAP["concepto-abstracto"])
-        strategy = assigned[slide["id"]]
+        directives = slide.get("directives") or {}
+        layout_key = directives.get("layout") or slide["type"]
+        layout   = LAYOUT_MAP.get(layout_key, LAYOUT_MAP[slide["type"]])
+        strategy = directives.get("image") or assigned[slide["id"]]
 
         bg_strategy = strategy if strategy == "background" else "none"
         ct_strategy = strategy if strategy == "content"    else "none"
@@ -786,6 +933,8 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
             "body_blocks": slide["body_blocks"],
             "code_blocks": slide["code_blocks"],
             "tables":      slide["tables"],
+            "directives":  directives,
+            "asset_hints": slide.get("asset_hints") or [],
             # Directrices de layout
             "layout": layout,
             # Imágenes
@@ -809,6 +958,8 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
             "topic_id":      topic_id,
             "title":         topic_title,
             "source":        "filminas.md",
+            "schema_version": schema.get("version", "filminas/v1"),
+            "schema_path": schema.get("_path", str(DEFAULT_FILMINAS_SCHEMA)),
             "generated_at":  datetime.now().isoformat(timespec="seconds"),
             "template_id":   template_id,
             "total_slides":  len(slides),
@@ -1697,15 +1848,22 @@ def main(argv: list[str] | None = None) -> None:
     plan_name     = f"plan-filminas-{topic_folder.name}.yaml"
     plan_path     = topic_folder / "slides" / plan_name
 
+    required_paths = [(config_path, "_edu/slides-config.yaml")]
+    if not args.plan_only:
+        required_paths.insert(0, (secrets_path, "_edu/secrets.local.yaml"))
+
     # Verificar prerequisitos
-    for p, label in [(secrets_path, "_edu/secrets.local.yaml"), (config_path, "_edu/slides-config.yaml")]:
+    for p, label in required_paths:
         if not p.exists():
             print(f"❌ Falta {label} en {p}")
-            print("   Ejecutar /edu-setup-apis y /edu-slides-designer primero.")
+            if label == "_edu/secrets.local.yaml":
+                print("   Ejecutar /edu-setup-apis y /edu-slides-designer primero.")
+            else:
+                print("   Ejecutar /edu-slides-designer primero.")
             sys.exit(1)
 
     config  = load_yaml(config_path)
-    secrets = load_yaml(secrets_path)
+    secrets = load_yaml(secrets_path) if secrets_path.exists() else {}
     gemini_key   = secrets.get("gemini_api_key", "")
     template_id  = config.get("template_id", "")
 

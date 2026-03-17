@@ -1,0 +1,68 @@
+# Sistema de diseño mínimo para pruebas de exportación de filminas
+
+template_id: "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI"
+
+palette:
+  primary: "#8B0000"
+  secondary: "#FFFFFF"
+  accent: "#000000"
+  background: "#FFFFFF"
+  text: "#1A1A1A"
+
+typography:
+  title:
+    font: "Roboto"
+    size: 30
+    weight: "bold"
+  subtitle:
+    font: "Roboto"
+    size: 28
+    weight: "regular"
+  body:
+    font: "Roboto"
+    size: 16
+    weight: "regular"
+  code:
+    font: "Roboto Mono"
+    size: 18
+    weight: "regular"
+
+layouts:
+  portada:
+    title:
+      font: title
+      align: center
+      color: primary
+  "concepto-abstracto":
+    title:
+      font: title
+      align: left
+      color: primary
+  codigo:
+    title:
+      font: title
+      align: left
+      color: primary
+  "tabla-comparativa":
+    title:
+      font: title
+      align: left
+      color: primary
+  cierre:
+    title:
+      font: title
+      align: center
+      color: primary
+
+gemini_image_strategy:
+  default: "diagram"
+  max_per_presentation: 4
+  fallback: "none"
+
+markdown_rendering:
+  unordered_bullet_preset: "BULLET_DISC_CIRCLE_SQUARE"
+  ordered_bullet_preset: "NUMBERED_DIGIT_ALPHA_ROMAN"
+  inline_code_font: "Roboto Mono"
+  inline_code_color: "#8B0000"
+  lead_scale: 1.08
+  heading_scale: 1.12

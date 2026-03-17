@@ -25,6 +25,10 @@ salida/cursadas/*/temas/*/slides/slides-url.txt
 # Test runs (generados por test_pipeline.py)
 reporte/
 
+# Temas de prueba / fixtures temporales
+salida/cursadas/*/temas/*prueba*/
+salida/cursadas/*/temas/*pruebas*/
+
 # IDE
 .vscode/
 .idea/
