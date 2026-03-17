@@ -189,7 +189,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 ### [F-07] Arquitectura de Von Neumann
 
-# La máquina de Von Neumann (1940s)
+# La máquina de Von Neumann (modelo conceptual)
 
 **Elementos clave:**
 - **Memoria unificada:** los datos y el programa conviven en el mismo espacio.
@@ -242,9 +242,9 @@ CPU ←───bus───→ Memoria
 - El paradigma imperativo lucha con paralelismo y efectos secundarios.
 - Paradigmas alternativos proponen reducir la dependencia de la memoria compartida.
 
-**Ejemplos históricos:**
-- **Funcional:** cálculo lambda (Church, 1936) — evita el estado mutable.
-- **Lógico:** lógica simbólica y resolución (Robinson, 1965) — evita dependencia de memoria compartida.
+**Ejemplos contemporáneos:**
+- **Funcional:** lenguajes como Haskell o Clojure adoptan un modelo donde el cómputo es una evaluación de expresiones, minimizando el estado mutable.
+- **Lógico:** lenguajes como Prolog usan un modelo de resolución basada en hechos y reglas, reduciendo la dependencia de memoria compartida.
 
 > **Directive:** generar gráfico comparativo (imperativo vs. funcional vs. lógico) en relación al acceso a memoria.
 
