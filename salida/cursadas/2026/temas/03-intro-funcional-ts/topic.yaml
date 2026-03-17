@@ -1,30 +1,39 @@
-topic_number: "03"
-topic_name: "Introducción a Programación Funcional con TypeScript"
-topic_slug: "intro-funcional-ts"
-topic_folder: "temas/03-intro-funcional-ts/"
-class_duration: "120"
-git_branch: "tema-03-intro-funcional-ts"
-created_at: "2026-03-13"
-status: "reopened"
-design_approved_at: "2026-03-13"
-study_guide_generated_at: "2026-03-13"
-design_approved_by: "Matías Gel"
-design_approved_note: "Debate realizado - opción [M] seleccionada (reducir lazy evaluation, enfoque en pipeline funcional)"
-quality_loops_completed_at: "2026-03-13"
-quality_loops_status: "all-passed"
-pedagogical_testing_completed_at: "2026-03-13"
-pedagogical_testing_profiles: [estrategico, ansioso, disperso, recursero]
-content_corrections_applied_at: "2026-03-13"
-content_corrections_targets: ["B2-Pureza-Visual", "B4-Currificacion-Scaffold", "B6-Monadas-Problema-first"]
-tp_type: "repo"
-
+topic_number: '03'
+topic_name: "Introducci\xF3n a Programaci\xF3n Funcional con TypeScript"
+topic_slug: intro-funcional-ts
+topic_folder: temas/03-intro-funcional-ts/
+class_duration: '120'
+git_branch: tema-03-intro-funcional-ts
+created_at: '2026-03-13'
+status: reopened
+design_approved_at: '2026-03-13'
+study_guide_generated_at: '2026-03-13'
+design_approved_by: "Mat\xEDas Gel"
+design_approved_note: "Debate realizado - opci\xF3n [M] seleccionada (reducir lazy\
+  \ evaluation, enfoque en pipeline funcional)"
+quality_loops_completed_at: '2026-03-13'
+quality_loops_status: all-passed
+pedagogical_testing_completed_at: '2026-03-13'
+pedagogical_testing_profiles:
+- estrategico
+- ansioso
+- disperso
+- recursero
+content_corrections_applied_at: '2026-03-13'
+content_corrections_targets:
+- B2-Pureza-Visual
+- B4-Currificacion-Scaffold
+- B6-Monadas-Problema-first
+tp_type: repo
 artifacts:
-  diseno: "diseno.md"
-  minuta: "minuta.md"
-  filminas: "filminas.md"
-  tp: "tp.md"
-  guia_estudio: "guia-estudio.md"
-  score: "score-pedagogico.md"
-  faq: "faq-anticipado.md"
-  slides_url: "slides/slides-url.txt"
-  autograde_repo: "autograde-repo/"
+  diseno: diseno.md
+  minuta: minuta.md
+  filminas: filminas.md
+  tp: tp.md
+  guia_estudio: guia-estudio.md
+  score: score-pedagogico.md
+  faq: faq-anticipado.md
+  slides_url: slides/slides-url.txt
+  autograde_repo: autograde-repo/
+pdf_exported: true
+pdf_path: salida/cursadas/2026/temas/03-intro-funcional-ts/guia-estudio.pdf

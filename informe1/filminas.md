@@ -499,21 +499,9 @@ ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
 - Modelar conocimiento con hechos y reglas (sistemas expertos, diagnóstico).
 - Hacer consultas declarativas sobre una base de conocimiento.
 - Utilizada en IA simbólica para razonar sobre información.
-- Hoy se usa en combinación con **LLMs** para validar y reforzar su salida:
-  - Los LLMs generan texto/código, y un motor lógico verifica que cumpla **constraints**.
-  - Esto mejora la exactitud en dominios regulados (compliance, contratos, reglas de negocio).
-  - El enfoque se conoce como **neuro-simbólico**: el modelo hace la generación, la lógica hace la comprobación.
-
-**Ejemplo corto (prompt + regla):**
-```text
-Prompt: "Generá una cláusula de contrato que prohíba compartir datos de clientes fuera del país."
-Regla lógica (Prolog):
-    clausula(Contrato, 'no compartir datos fuera del país') :-
-        contiene(Contrato, 'clientes') , contiene(Contrato, 'no compartir').
-```
-- Si la cláusula generada no cumple la regla, el motor la rechaza y pide reescribir.
 
 > **Directive:** generar gráfico de un sistema experto (reglas + hechos → decisión).
+
 ---
 
 ## BLOQUE 5 — IA Generativa y los paradigmas (15 min)
@@ -736,8 +724,8 @@ class Calculadora {
 # Prompt 1: versión base
 
 ```
-"Escribí en TypeScript una función que calcule los primeros N números
-de la serie de Fibonacci usando mutación de variables (`let`) y un bucle."
+"Escribí una función que devuelva la suma
+de los valores absolutos de una lista de números"
 ```
 
 **Observar:** ¿Qué paradigma eligió la IA por defecto?
@@ -749,13 +737,13 @@ de la serie de Fibonacci usando mutación de variables (`let`) y un bucle."
 # Prompt 2: paradigma funcional explícito
 
 ```
-"Implementá lo mismo (serie de Fibonacci) en estilo funcional puro,
-sin mutación de estado, sin variables intermedias."
+"Implementá lo mismo en estilo funcional puro,
+sin mutación de estado, sin variables intermedias"
 ```
 
 **Verificar:**
 - ¿Entendió la restricción?
-- ¿Usó recursión o funciones de orden superior?
+- ¿Usó `reduce` / `map`?
 - ¿Hay `let` o mutación oculta?
 
 ---
@@ -765,13 +753,11 @@ sin mutación de estado, sin variables intermedias."
 # Prompt 3: verificación de comprensión
 
 ```
-"Escribí en TypeScript una función que calcule los primeros N números
-de la serie de Fibonacci usando `let` y un bucle.
-Luego explicá qué máquina abstracta ejecuta ese código."
+"Explicá qué máquina abstracta ejecuta
+este código TypeScript"
 ```
 
 **Verificar:**
-- ¿Usó `let` + bucle (imperativo)?
 - ¿Explica el pipeline `.ts → .js → V8`?
 - ¿Distingue el compilador (`tsc`) del tiempo de ejecución (`V8`)?
 - ¿Menciona el lenguaje intermedio?

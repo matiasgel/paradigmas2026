@@ -1,14 +1,16 @@
-topic_number: "01"
-topic_name: "Conceptos Introductorios + Intro a TypeScript"
-topic_folder: "temas/01-conceptos-introductorios"
-module: "I"
+topic_number: '01'
+topic_name: Conceptos Introductorios + Intro a TypeScript
+topic_folder: temas/01-conceptos-introductorios
+module: I
 semana: 1
-clase: "1 de 2"
+clase: 1 de 2
 duracion: 120
-estado: "reabierto"
-reopen_date: "2026-03-17"
-reopen_reason: "Modificación de minuta y filminas"
-reopen_branch: "reopen/tema-01-conceptos-introductorios"
-tp_type: "repo"
+estado: reabierto
+reopen_date: '2026-03-17'
+reopen_reason: "Modificaci\xF3n de minuta y filminas"
+reopen_branch: reopen/tema-01-conceptos-introductorios
+tp_type: repo
 artifacts:
-  autograde_repo: "autograde-repo/"
+  autograde_repo: autograde-repo/
+pdf_exported: true
+pdf_path: salida/cursadas/2026/temas/01-conceptos-introductorios/guia-estudio.pdf

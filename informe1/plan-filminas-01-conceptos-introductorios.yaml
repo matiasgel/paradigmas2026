@@ -2,15 +2,15 @@ meta:
   topic_id: 01-conceptos-introductorios
   title: Conceptos Introductorios + Intro a TypeScript
   source: filminas.md
-  generated_at: '2026-03-17T15:03:56'
+  generated_at: '2026-03-17T14:49:39'
   template_id: 1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI
   total_slides: 47
   images_planned: 8
 slides:
 - id: F-01
-  type: portada
-  title: Conceptos Introductorios + Intro a TypeScript
-  subtitle: ''
+  type: concepto-abstracto
+  title: ''
+  subtitle: Conceptos Introductorios + Intro a TypeScript
   body_blocks:
   - type: list
     ordered: false
@@ -23,30 +23,29 @@ slides:
     content: Semana 1 · Clase 1 de 2 · 120 minutos
   code_blocks: []
   tables: []
-  layout:
-    title: center-middle
-    body: center-bottom
-    image: background
+  layout: &id001
+    title: full-title
+    body: left-middle
+    image: right-half
     code: none
     table: none
   background_image:
-    strategy: gemini
-    prompt: 'Composición abstracta de íconos de programación: engranajes, bifurcaciones
-      de flujo, nodos conectados, código como grafo visual. Solo formas y colores
-      institucionales. flat design académico, paleta rojo granate institucional y
-      gris oscuro, composición puramente pictórica, alta resolución'
-    local_asset: slides/assets/F-01-bg.png
-    drive_id: 16OhTb8kHR0gQUA_kjrWoeAB6xmIG1jn3
-  content_image:
     strategy: none
     prompt: ''
     local_asset: ''
     drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: Composición abstracta de círculos y líneas interconectadas en rojo granate
+      y gris. Arte geométrico minimalista. pintura digital abstracta, paleta rojo
+      granate y gris oscuro, fondo blanco limpio, alta resolución
+    local_asset: slides/assets/F-01-content.png
+    drive_id: 1eScljW-secTLV-S3lSHSxAQEIG2pCOC1
   table_assets: []
 - id: F-02
-  type: socratica
-  title: ¿Para qué estudiar lenguajes si ya saben programar?
-  subtitle: ''
+  type: concepto-abstracto
+  title: ''
+  subtitle: ¿Para qué estudiar lenguajes si ya saben programar?
   body_blocks:
   - type: text
     content: '> *"La elección del lenguaje determina el modelo mental con el que pensás
@@ -58,27 +57,24 @@ slides:
       level: 0
   code_blocks: []
   tables: []
-  layout: &id003
-    title: center-top
-    body: center-middle
-    image: background
-    code: none
-    table: none
+  layout: *id001
   background_image:
     strategy: none
     prompt: ''
     local_asset: ''
     drive_id: null
   content_image:
-    strategy: none
-    prompt: ''
-    local_asset: ''
-    drive_id: null
+    strategy: gemini
+    prompt: Composición abstracta de círculos y líneas interconectadas en rojo granate
+      y gris. Arte geométrico minimalista. pintura digital abstracta, paleta rojo
+      granate y gris oscuro, fondo blanco limpio, alta resolución
+    local_asset: slides/assets/F-02-content.png
+    drive_id: 1Gua_BMtKSBgWowkyPsYza3wpI5K0XYRj
   table_assets: []
 - id: F-03
   type: concepto-abstracto
-  title: Definición formal
-  subtitle: ''
+  title: ''
+  subtitle: Definición formal
   body_blocks:
   - type: list
     ordered: false
@@ -116,12 +112,7 @@ slides:
       la **semántica** y las **consideraciones pragmáticas** que dan forma al lenguaje.'
   code_blocks: []
   tables: []
-  layout: &id001
-    title: full-title
-    body: left-middle
-    image: right-half
-    code: none
-    table: none
+  layout: *id001
   background_image:
     strategy: none
     prompt: ''
@@ -133,12 +124,12 @@ slides:
       y gris. Arte geométrico minimalista. pintura digital abstracta, paleta rojo
       granate y gris oscuro, fondo blanco limpio, alta resolución
     local_asset: slides/assets/F-03-content.png
-    drive_id: 1XgQ5Tmuqsc3wet9CEo9MCLA7EA4FCLix
+    drive_id: 1NAecj6TxoTTgKbBSp-FVQrcTqRxxPp39
   table_assets: []
 - id: F-04
   type: concepto-abstracto
-  title: Elegir el lenguaje equivocado tiene consecuencias reales
-  subtitle: ''
+  title: ''
+  subtitle: Elegir el lenguaje equivocado tiene consecuencias reales
   body_blocks:
   - type: list
     ordered: false
@@ -172,12 +163,12 @@ slides:
       y gris. Arte geométrico minimalista. pintura digital abstracta, paleta rojo
       granate y gris oscuro, fondo blanco limpio, alta resolución
     local_asset: slides/assets/F-04-content.png
-    drive_id: 1QFVDTomrZgJC14GfAlb5GRCZLuPYOLsb
+    drive_id: 19QLkx8nwr74siuG13MZs3QbqzKeoHSLN
   table_assets: []
 - id: F-05
   type: tabla
-  title: La línea de tiempo de los lenguajes
-  subtitle: ''
+  title: ''
+  subtitle: La línea de tiempo de los lenguajes
   body_blocks:
   - type: text
     content: '> Cada lenguaje resuelve un problema que el anterior no resolvía bien.'
@@ -236,11 +227,11 @@ slides:
 
       | 2012 | TypeScript | Tipos estáticos sobre JavaScript |'
     local_asset: slides/assets/F-05-table-1.png
-    drive_id: 12lYSp7PklUTsZCHxZ-SnD1ZJKMBQ3BdM
+    drive_id: 149WXbD0oLGwFGIQteisBmogw1VQrB8Dy
 - id: F-06
   type: tabla
-  title: ¿Cómo evaluamos un lenguaje? — Sebesta (2018)
-  subtitle: ''
+  title: ''
+  subtitle: ¿Cómo evaluamos un lenguaje? — Sebesta (2018)
   body_blocks:
   - type: text
     content: Sebesta propone un conjunto de criterios para comparar lenguajes de programación
@@ -296,11 +287,11 @@ slides:
 
       | **Eficiencia** | ¿Qué tan rápido y cuánta memoria? | C vs. Python |'
     local_asset: slides/assets/F-06-table-1.png
-    drive_id: 1WRWAmQ_jHsmGX5wzgObtQbGqdonzEKB1
+    drive_id: 1450Q-F8ho2DHlloBmivY7cNOCi6BHOgV
 - id: F-07
   type: concepto-abstracto
-  title: Legibilidad — el costo cognitivo de leer código
-  subtitle: ''
+  title: ''
+  subtitle: Legibilidad — el costo cognitivo de leer código
   body_blocks:
   - type: list
     ordered: false
@@ -326,12 +317,12 @@ slides:
       y gris. Arte geométrico minimalista. pintura digital abstracta, paleta rojo
       granate y gris oscuro, fondo blanco limpio, alta resolución
     local_asset: slides/assets/F-07-content.png
-    drive_id: 1ocmh7fD6ggUFDDfDGLyyh8I9hQnDQ9Lr
+    drive_id: 1wBFlqrsFDDYQHW46sQwju6Z2BEW72Ohl
   table_assets: []
 - id: F-08
   type: concepto-abstracto
-  title: Expresividad — qué tan cercano está el código al problema real
-  subtitle: ''
+  title: ''
+  subtitle: Expresividad — qué tan cercano está el código al problema real
   body_blocks:
   - type: list
     ordered: false
@@ -357,12 +348,12 @@ slides:
       y gris. Arte geométrico minimalista. pintura digital abstracta, paleta rojo
       granate y gris oscuro, fondo blanco limpio, alta resolución
     local_asset: slides/assets/F-08-content.png
-    drive_id: 1ceSzdtdlONPQl0UCYDz5qcFN5mxAt-xL
+    drive_id: 1Y2N6BhnWpoYDb1xd0KEieVVEPNPIrUEL
   table_assets: []
 - id: F-09
   type: concepto-abstracto
-  title: Seguridad — detección temprana de errores
-  subtitle: ''
+  title: ''
+  subtitle: Seguridad — detección temprana de errores
   body_blocks:
   - type: list
     ordered: false
@@ -389,12 +380,12 @@ slides:
       y gris. Arte geométrico minimalista. pintura digital abstracta, paleta rojo
       granate y gris oscuro, fondo blanco limpio, alta resolución
     local_asset: slides/assets/F-09-content.png
-    drive_id: 1nwFI-FGXIIAHZoOyk4tvHa66jcXOje3z
+    drive_id: 1iS3Y0pBXDDcU0ph9WaFcXUqpxeFxE30W
   table_assets: []
 - id: F-10
   type: concepto-abstracto
-  title: Costo — desarrollo, mantenimiento y soporte
-  subtitle: ''
+  title: ''
+  subtitle: Costo — desarrollo, mantenimiento y soporte
   body_blocks:
   - type: list
     ordered: false
@@ -419,12 +410,12 @@ slides:
       y gris. Arte geométrico minimalista. pintura digital abstracta, paleta rojo
       granate y gris oscuro, fondo blanco limpio, alta resolución
     local_asset: slides/assets/F-10-content.png
-    drive_id: 1Oml68wMM3_PxZqBxOiRWIOJ42K5Raa1n
+    drive_id: 1McgnV_1KgdWggDVa9GVYb83qZsOhe1fE
   table_assets: []
 - id: F-11
   type: concepto-abstracto
-  title: Portabilidad — ejecutar en distintas plataformas
-  subtitle: ''
+  title: ''
+  subtitle: Portabilidad — ejecutar en distintas plataformas
   body_blocks:
   - type: list
     ordered: false
@@ -443,17 +434,15 @@ slides:
     local_asset: ''
     drive_id: null
   content_image:
-    strategy: gemini
-    prompt: Composición abstracta de círculos y líneas interconectadas en rojo granate
-      y gris. Arte geométrico minimalista. pintura digital abstracta, paleta rojo
-      granate y gris oscuro, fondo blanco limpio, alta resolución
-    local_asset: slides/assets/F-11-content.png
-    drive_id: 1U69TwhGTD6YFxH8-4wbFCR-mdQ87sOoW
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
   table_assets: []
 - id: F-12
   type: concepto-abstracto
-  title: Eficiencia — tiempo de ejecución y uso de memoria
-  subtitle: ''
+  title: ''
+  subtitle: Eficiencia — tiempo de ejecución y uso de memoria
   body_blocks:
   - type: list
     ordered: false
@@ -478,13 +467,13 @@ slides:
     drive_id: null
   table_assets: []
 - id: F-13
-  type: socratica
-  title: ¿Importa el lenguaje si la IA puede escribir en cualquiera?
-  subtitle: ''
+  type: concepto-abstracto
+  title: ''
+  subtitle: ¿Importa el lenguaje si la IA puede escribir en cualquiera?
   body_blocks: []
   code_blocks: []
   tables: []
-  layout: *id003
+  layout: *id001
   background_image:
     strategy: none
     prompt: ''
@@ -498,8 +487,8 @@ slides:
   table_assets: []
 - id: F-14
   type: concepto-abstracto
-  title: Un paradigma de programación es una forma de pensar el cómputo
-  subtitle: ''
+  title: ''
+  subtitle: Un paradigma de programación es una forma de pensar el cómputo
   body_blocks:
   - type: list
     ordered: false
@@ -529,8 +518,8 @@ slides:
   table_assets: []
 - id: F-15
   type: concepto-abstracto
-  title: La máquina de Von Neumann (modelo conceptual)
-  subtitle: ''
+  title: ''
+  subtitle: La máquina de Von Neumann (modelo conceptual)
   body_blocks:
   - type: list
     ordered: false
@@ -558,6 +547,9 @@ slides:
       level: 0
     - content: 'La ejecución es **secuencial**: cada instrucción se ejecuta en orden.'
       level: 0
+  - type: text
+    content: '> **Directive:** generar gráfico de la máquina Von Neumann (CPU, memoria,
+      bus).'
   code_blocks: []
   tables: []
   layout: *id001
@@ -574,8 +566,8 @@ slides:
   table_assets: []
 - id: F-16
   type: codigo
-  title: 'La máquina abstracta tiene un canal único: el bus'
-  subtitle: ''
+  title: ''
+  subtitle: 'La máquina abstracta tiene un canal único: el bus'
   body_blocks:
   - type: list
     ordered: false
@@ -585,11 +577,14 @@ slides:
       level: 0
     - content: Toda lectura/escritura de datos pasa por ese canal.
       level: 0
+  - type: text
+    content: '> **Directive:** generar gráfico de la máquina Von Neumann destacando
+      el bus.'
   code_blocks:
   - lang: text
     content: "CPU ←───bus───→ Memoria\n         ↑\n    cuello de botella"
   tables: []
-  layout: &id004
+  layout: &id003
     title: full-title
     body: subtitle-only
     image: none
@@ -608,8 +603,8 @@ slides:
   table_assets: []
 - id: F-17
   type: concepto-abstracto
-  title: El modelo impone restricciones a los lenguajes "pegados" a la máquina
-  subtitle: ''
+  title: ''
+  subtitle: El modelo impone restricciones a los lenguajes "pegados" a la máquina
   body_blocks:
   - type: list
     ordered: false
@@ -622,6 +617,9 @@ slides:
     - content: El estado mutable y la ejecución secuencial se vuelven “naturales”,
         pero limitantes.
       level: 0
+  - type: text
+    content: '> **Directive:** generar diagrama de flujo: variable → memoria → asignación
+      → estado.'
   code_blocks: []
   tables: []
   layout: *id001
@@ -637,9 +635,9 @@ slides:
     drive_id: null
   table_assets: []
 - id: F-18
-  type: diagrama
-  title: El cuello de botella empuja hacia otros modelos de cómputo
-  subtitle: ''
+  type: concepto-abstracto
+  title: ''
+  subtitle: El cuello de botella empuja hacia otros modelos de cómputo
   body_blocks:
   - type: list
     ordered: false
@@ -663,6 +661,9 @@ slides:
         compartida. Describe relaciones y deja que el motor inferencial determine
         el cómo.'
       level: 0
+  - type: text
+    content: '> **Directive:** generar gráfico comparativo (imperativo vs. funcional
+      vs. lógico) en relación al acceso a memoria.'
   - type: list
     ordered: false
     items:
@@ -670,12 +671,7 @@ slides:
       level: 0
   code_blocks: []
   tables: []
-  layout:
-    title: full-title
-    body: left-middle
-    image: right-half
-    code: none
-    table: none
+  layout: *id001
   background_image:
     strategy: none
     prompt: ''
@@ -689,8 +685,8 @@ slides:
   table_assets: []
 - id: F-19
   type: tabla
-  title: Los 4 paradigmas fundamentales
-  subtitle: ''
+  title: ''
+  subtitle: Los 4 paradigmas fundamentales
   body_blocks:
   - type: text
     content: '> *"El OO es una extensión del imperativo — no nació de cero. El funcional
@@ -747,11 +743,11 @@ slides:
       | **Declarativo (Lógico)** | Lógica simbólica (resolución) | Relación / hecho
       | Sin estado | Prolog |'
     local_asset: slides/assets/F-19-table-1.png
-    drive_id: 11A0qoO3fLdMm_bjN9WAvZTGxrJJIEQKz
+    drive_id: 1M6w9GFbvitbMmj-Mj9zdVkKL55iXN10d
 - id: F-20
   type: tabla
-  title: ¿Cuándo usar cada paradigma?
-  subtitle: ''
+  title: ''
+  subtitle: ¿Cuándo usar cada paradigma?
   body_blocks: []
   code_blocks: []
   tables:
@@ -799,11 +795,11 @@ slides:
       | Multiparadigma | Web full-stack, APIs, datos, IA aplicada | TypeScript, Python
       |'
     local_asset: slides/assets/F-20-table-1.png
-    drive_id: 1ZrDu1yTITDunQUP9twJzJSBV8s1IJlxT
+    drive_id: 1jVdz6YaeCaplE8QaEBWrUo88Ff05WoaD
 - id: F-21
   type: codigo
-  title: Todo lenguaje ocupa un nivel en la escalera de abstracción
-  subtitle: ''
+  title: ''
+  subtitle: Todo lenguaje ocupa un nivel en la escalera de abstracción
   body_blocks:
   - type: list
     ordered: false
@@ -832,7 +828,7 @@ slides:
       \ Go                    ← Nivel 1: estructura, funciones, tipos básicos\n  \
       \      ↑\nLC-3, ensamblador               ← Nivel 0: registros, saltos, direcciones"
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -846,8 +842,8 @@ slides:
   table_assets: []
 - id: F-22
   type: tabla
-  title: El paradigma imperativo abstrae el hardware
-  subtitle: ''
+  title: ''
+  subtitle: El paradigma imperativo abstrae el hardware
   body_blocks:
   - type: text
     content: '> El paradigma imperativo no es convención — es abstracción directa
@@ -894,11 +890,11 @@ slides:
 
       | Sucesión de instrucciones | **Cómputo** = sucesión de estados |'
     local_asset: slides/assets/F-22-table-1.png
-    drive_id: 19Tlsor8lUlEaFA8YIAIrxc1dhK2Qbfah
+    drive_id: 1wqSZv9d4Obr1-1NveA2_CW-PiJiJDFI3
 - id: F-23
   type: codigo
-  title: 'Suma de valores absolutos: LC-3 vs. C'
-  subtitle: ''
+  title: ''
+  subtitle: 'Suma de valores absolutos: LC-3 vs. C'
   body_blocks:
   - type: list
     ordered: false
@@ -929,7 +925,7 @@ slides:
       \ 0; i < n; i++)\n        acc += (arr[i] < 0) ? -arr[i] : arr[i];\n    return\
       \ acc;\n}"
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -943,9 +939,9 @@ slides:
   table_assets: []
 - id: F-24
   type: codigo
-  title: Todo lenguaje define una "máquina abstracta" — Gabbrielli & Martini, Cap.
+  title: ''
+  subtitle: Todo lenguaje define una "máquina abstracta" — Gabbrielli & Martini, Cap.
     1
-  subtitle: ''
   body_blocks:
   - type: list
     ordered: false
@@ -965,7 +961,7 @@ slides:
       \ → Ejecución\n  Flexible, más lento\n\nCompilación pura:\n  Programa → [Compilador]\
       \ → Lenguaje objeto → Ejecución\n  Rápido, menos flexible"
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -979,8 +975,8 @@ slides:
   table_assets: []
 - id: F-25
   type: concepto-abstracto
-  title: 'Paradigma funcional: cálculos sin efectos secundarios'
-  subtitle: ''
+  title: ''
+  subtitle: 'Paradigma funcional: cálculos sin efectos secundarios'
   body_blocks:
   - type: list
     ordered: false
@@ -991,6 +987,9 @@ slides:
       level: 0
     - content: 'Ventajas: razonamiento matemático, paralelismo, tests más predecibles.'
       level: 0
+  - type: text
+    content: '> **Directive:** generar gráfico comparando función pura vs función
+      con estado (mutación).'
   code_blocks: []
   tables: []
   layout: *id001
@@ -1007,8 +1006,8 @@ slides:
   table_assets: []
 - id: F-26
   type: codigo
-  title: 'Composición: construir programas como cadenas de funciones'
-  subtitle: ''
+  title: ''
+  subtitle: 'Composición: construir programas como cadenas de funciones'
   body_blocks:
   - type: list
     ordered: false
@@ -1019,6 +1018,8 @@ slides:
     - content: Componer funciones pequeñas permite razonar localmente y reutilizar
         código.
       level: 0
+  - type: text
+    content: '> **Directive:** generar gráfico de composición de funciones (f ∘ g).'
   code_blocks:
   - lang: typescript
     content: 'const doble = (x: number) => x * 2;
@@ -1027,7 +1028,7 @@ slides:
 
       const dobleYSuma = (x: number, y: number) => suma(doble(x), doble(y));'
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1041,8 +1042,8 @@ slides:
   table_assets: []
 - id: F-27
   type: codigo
-  title: 'Cambiar sin mutar: estructuras inmutables'
-  subtitle: ''
+  title: ''
+  subtitle: 'Cambiar sin mutar: estructuras inmutables'
   body_blocks:
   - type: list
     ordered: false
@@ -1054,13 +1055,16 @@ slides:
     - content: TypeScript usa `const` y prácticas funcionales; lenguajes puramente
         funcionales usan estructuras persistentes (Clojure).
       level: 0
+  - type: text
+    content: '> **Directive:** generar gráfico “copia con cambios” vs “mutación en
+      sitio”.'
   code_blocks:
   - lang: typescript
     content: 'const lista = [1, 2, 3];
 
       const nuevo = [...lista, 4]; // no muta la lista original'
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1074,8 +1078,8 @@ slides:
   table_assets: []
 - id: F-28
   type: concepto-abstracto
-  title: TypeScript permite el estilo funcional, pero hay lenguajes más “puros”
-  subtitle: ''
+  title: ''
+  subtitle: TypeScript permite el estilo funcional, pero hay lenguajes más “puros”
   body_blocks:
   - type: list
     ordered: false
@@ -1091,6 +1095,9 @@ slides:
       level: 0
   - type: text
     content: '> *Fuente: Louden & Lambert, Cap. 1; Hickey (2008) sobre Clojure.*'
+  - type: text
+    content: '> **Directive:** generar gráfico comparando TypeScript (híbrido) con
+      Clojure (funcional puro).'
   code_blocks: []
   tables: []
   layout: *id001
@@ -1107,8 +1114,8 @@ slides:
   table_assets: []
 - id: F-29
   type: concepto-abstracto
-  title: 'Paradigma lógico: programar declarando “qué” en lugar de “cómo”'
-  subtitle: ''
+  title: ''
+  subtitle: 'Paradigma lógico: programar declarando “qué” en lugar de “cómo”'
   body_blocks:
   - type: list
     ordered: false
@@ -1121,6 +1128,9 @@ slides:
       level: 0
     - content: Ideal para problemas de búsqueda, reglas, y consultas (bases de conocimiento).
       level: 0
+  - type: text
+    content: '> **Directive:** generar gráfico de un motor de inferencia (hechos +
+      reglas → solución).'
   code_blocks: []
   tables: []
   layout: *id001
@@ -1137,8 +1147,8 @@ slides:
   table_assets: []
 - id: F-30
   type: codigo
-  title: Programar con hechos y reglas
-  subtitle: ''
+  title: ''
+  subtitle: Programar con hechos y reglas
   body_blocks:
   - type: list
     ordered: false
@@ -1147,6 +1157,9 @@ slides:
       level: 0
     - content: '`ancestro/2` es una regla recursiva que define la relación.'
       level: 0
+  - type: text
+    content: '> **Directive:** generar gráfico que muestre hechos + regla → cadena
+      de inferencia.'
   code_blocks:
   - lang: prolog
     content: 'padre(alan, bob).
@@ -1156,65 +1169,6 @@ slides:
       ancestro(X, Y) :- padre(X, Y).
 
       ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).'
-  tables: []
-  layout: *id004
-  background_image:
-    strategy: none
-    prompt: ''
-    local_asset: ''
-    drive_id: null
-  content_image:
-    strategy: none
-    prompt: ''
-    local_asset: ''
-    drive_id: null
-  table_assets: []
-- id: F-31
-  type: codigo
-  title: Hacer preguntas al sistema
-  subtitle: ''
-  body_blocks:
-  - type: list
-    ordered: false
-    items:
-    - content: Una consulta es una pregunta sobre los hechos y reglas.
-      level: 0
-    - content: El intérprete busca una combinación de hechos y reglas que responda
-        la consulta.
-      level: 0
-  code_blocks:
-  - lang: prolog
-    content: '?- ancestro(alan, carla).
-
-      % Sí: hay una cadena de hechos que conecta a alan con carla.'
-  tables: []
-  layout: *id004
-  background_image:
-    strategy: none
-    prompt: ''
-    local_asset: ''
-    drive_id: null
-  content_image:
-    strategy: none
-    prompt: ''
-    local_asset: ''
-    drive_id: null
-  table_assets: []
-- id: F-32
-  type: socratica
-  title: ¿Para qué sirve la programación lógica?
-  subtitle: ''
-  body_blocks:
-  - type: list
-    ordered: false
-    items:
-    - content: Modelar conocimiento con hechos y reglas (sistemas expertos, diagnóstico).
-      level: 0
-    - content: Hacer consultas declarativas sobre una base de conocimiento.
-      level: 0
-    - content: Utilizada en IA simbólica para razonar sobre información.
-      level: 0
-  code_blocks: []
   tables: []
   layout: *id003
   background_image:
@@ -1228,10 +1182,75 @@ slides:
     local_asset: ''
     drive_id: null
   table_assets: []
+- id: F-31
+  type: codigo
+  title: ''
+  subtitle: Hacer preguntas al sistema
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: Una consulta es una pregunta sobre los hechos y reglas.
+      level: 0
+    - content: El intérprete busca una combinación de hechos y reglas que responda
+        la consulta.
+      level: 0
+  - type: text
+    content: '> **Directive:** generar gráfico mostrando una consulta y la respuesta
+      del motor.'
+  code_blocks:
+  - lang: prolog
+    content: '?- ancestro(alan, carla).
+
+      % Sí: hay una cadena de hechos que conecta a alan con carla.'
+  tables: []
+  layout: *id003
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-32
+  type: concepto-abstracto
+  title: ''
+  subtitle: ¿Para qué sirve la programación lógica?
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: Modelar conocimiento con hechos y reglas (sistemas expertos, diagnóstico).
+      level: 0
+    - content: Hacer consultas declarativas sobre una base de conocimiento.
+      level: 0
+    - content: Utilizada en IA simbólica para razonar sobre información.
+      level: 0
+  - type: text
+    content: '> **Directive:** generar gráfico de un sistema experto (reglas + hechos
+      → decisión).'
+  code_blocks: []
+  tables: []
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
 - id: F-33
   type: tabla
-  title: TypeScript como lenguaje del cursado
-  subtitle: ''
+  title: ''
+  subtitle: TypeScript como lenguaje del cursado
   body_blocks: []
   code_blocks: []
   tables:
@@ -1278,11 +1297,11 @@ slides:
       | **Relevancia** | Lenguaje #1 o #2 en encuestas de desarrolladores 2023–2025
       |'
     local_asset: slides/assets/F-33-table-1.png
-    drive_id: 1v11AWsqInMKV4LHF35J2UcRZoG65-eju
+    drive_id: 1p6N1uI3YoqWm55Kq5dBENWL_5Lpc_7d6
 - id: F-34
   type: concepto-abstracto
-  title: La IA funciona mejor con TypeScript porque...
-  subtitle: ''
+  title: ''
+  subtitle: La IA funciona mejor con TypeScript porque...
   body_blocks:
   - type: list
     ordered: false
@@ -1322,9 +1341,12 @@ slides:
   table_assets: []
 - id: F-35
   type: codigo
-  title: TypeScript = ejemplo vivo de Gabbrielli Cap. 1
-  subtitle: ''
+  title: ''
+  subtitle: TypeScript = ejemplo vivo de Gabbrielli Cap. 1
   body_blocks:
+  - type: text
+    content: '> **Directive:** generar gráfico de pipeline TS → JS → V8/Deno destacando
+      el rol de la verificación de tipos antes de ejecutar.'
   - type: list
     ordered: false
     items:
@@ -1349,7 +1371,7 @@ slides:
     | Java | javac | .class (bytecode) | JVM |
 
     | Python | CPython (implícito) | bytecode (.pyc) | CPython VM |'
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1372,11 +1394,11 @@ slides:
 
       | Python | CPython (implícito) | bytecode (.pyc) | CPython VM |'
     local_asset: slides/assets/F-35-table-1.png
-    drive_id: 1CBAml2IFcS-GlfDK_cYsHuELHfaJ5ZiT
+    drive_id: 1UQ04I7bKDfVb8WaVquaeqlLv_x0uxGY5
 - id: F-36
   type: codigo
-  title: TypeScript — estilo imperativo
-  subtitle: ''
+  title: ''
+  subtitle: TypeScript — estilo imperativo
   body_blocks:
   - type: list
     ordered: false
@@ -1396,7 +1418,7 @@ slides:
       \ arr[i];\n    }\n    return acc;\n}\n\nconsole.log(sumaAbs([3, -1, 4, -1, 5]));\
       \ // → 14"
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1410,8 +1432,8 @@ slides:
   table_assets: []
 - id: F-37
   type: codigo
-  title: TypeScript — estilo funcional
-  subtitle: ''
+  title: ''
+  subtitle: TypeScript — estilo funcional
   body_blocks:
   - type: list
     ordered: false
@@ -1440,7 +1462,7 @@ slides:
       \       .reduce((acc, x) => acc + x, 0);\n\nconsole.log(sumaAbs([3, -1, 4, -1,\
       \ 5])); // → 14"
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1454,8 +1476,8 @@ slides:
   table_assets: []
 - id: F-38
   type: codigo
-  title: 'TypeScript: tipos estáticos que aumentan la seguridad'
-  subtitle: ''
+  title: ''
+  subtitle: 'TypeScript: tipos estáticos que aumentan la seguridad'
   body_blocks:
   - type: text
     content: '> **Seguridad** (criterio Sebesta #3): el compilador como primer revisor.'
@@ -1468,7 +1490,7 @@ slides:
       \ ANTES de ejecutar:\nsumaAbs([\"hola\", \"mundo\"]);\n// ❌ Error: Argument\
       \ of type 'string[]' is not\n//    assignable to parameter of type 'number[]'"
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1482,8 +1504,8 @@ slides:
   table_assets: []
 - id: F-39
   type: codigo
-  title: 'TypeScript: ¿qué paradigma usamos?'
-  subtitle: ''
+  title: ''
+  subtitle: 'TypeScript: ¿qué paradigma usamos?'
   body_blocks:
   - type: list
     ordered: false
@@ -1505,7 +1527,7 @@ slides:
       \ {\n    sumaAbs(arr: number[]): number {\n        return arr.reduce((a, x)\
       \ => a + Math.abs(x), 0);\n    }\n}"
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1519,8 +1541,8 @@ slides:
   table_assets: []
 - id: F-40
   type: codigo
-  title: El trabajo del programador cambió radicalmente
-  subtitle: ''
+  title: ''
+  subtitle: El trabajo del programador cambió radicalmente
   body_blocks:
   - type: list
     ordered: false
@@ -1555,7 +1577,7 @@ slides:
 
       30% formulación del problema'
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1569,8 +1591,8 @@ slides:
   table_assets: []
 - id: F-41
   type: codigo
-  title: ¿Dónde apuntan los graduados de esta materia?
-  subtitle: ''
+  title: ''
+  subtitle: ¿Dónde apuntan los graduados de esta materia?
   body_blocks:
   - type: text
     content: '> AI Fluency sin paradigmas = imposible verificar lo que genera la IA.'
@@ -1603,7 +1625,7 @@ slides:
 
       └─────────────────────────────────────────────────────┘'
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1617,8 +1639,8 @@ slides:
   table_assets: []
 - id: F-42
   type: codigo
-  title: 'Prompt 1: versión base'
-  subtitle: ''
+  title: ''
+  subtitle: 'Prompt 1: versión base'
   body_blocks:
   - type: list
     ordered: false
@@ -1631,7 +1653,7 @@ slides:
 
       de los valores absolutos de una lista de números"'
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1645,8 +1667,8 @@ slides:
   table_assets: []
 - id: F-43
   type: codigo
-  title: 'Prompt 2: paradigma funcional explícito'
-  subtitle: ''
+  title: ''
+  subtitle: 'Prompt 2: paradigma funcional explícito'
   body_blocks:
   - type: list
     ordered: false
@@ -1665,7 +1687,7 @@ slides:
 
       sin mutación de estado, sin variables intermedias"'
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1679,8 +1701,8 @@ slides:
   table_assets: []
 - id: F-44
   type: codigo
-  title: 'Prompt 3: verificación de comprensión'
-  subtitle: ''
+  title: ''
+  subtitle: 'Prompt 3: verificación de comprensión'
   body_blocks:
   - type: list
     ordered: false
@@ -1699,7 +1721,7 @@ slides:
 
       este código TypeScript"'
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1713,8 +1735,8 @@ slides:
   table_assets: []
 - id: F-45
   type: codigo
-  title: Cómo trabajar con IA en programación — Schmidt & Runfola, Fig. 8
-  subtitle: ''
+  title: ''
+  subtitle: Cómo trabajar con IA en programación — Schmidt & Runfola, Fig. 8
   body_blocks:
   - type: text
     content: '> ⚠️ Demasiada dependencia en IA atrofia habilidades cognitivas.
@@ -1731,7 +1753,7 @@ slides:
       \ borde\n         ↓\n5. Refinar el prompt o escribir manualmente\n         ↑\n\
       \   (repetir si es necesario)"
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1745,8 +1767,8 @@ slides:
   table_assets: []
 - id: F-46
   type: codigo
-  title: Cómo se conectan los temas del cursado
-  subtitle: ''
+  title: ''
+  subtitle: Cómo se conectan los temas del cursado
   body_blocks:
   - type: text
     content: '> *"Lo que vimos hoy es el mapa. Las próximas 15 clases son el territorio."*'
@@ -1759,7 +1781,7 @@ slides:
       \     variables · tipos · control · módulos · polimorfismo\n    ↓\nTema 15 \
       \        Concurrencia y paralelismo"
   tables: []
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1773,8 +1795,8 @@ slides:
   table_assets: []
 - id: F-47
   type: codigo
-  title: 'Próxima clase: ¿qué hace un programa **válido**?'
-  subtitle: ''
+  title: ''
+  subtitle: 'Próxima clase: ¿qué hace un programa **válido**?'
   body_blocks:
   - type: list
     ordered: false
@@ -1833,7 +1855,7 @@ slides:
     | 46–47 | Cierre | 2 | 5 |
 
     | **Total** | | **47 filminas** | **120 min** |'
-  layout: *id004
+  layout: *id003
   background_image:
     strategy: none
     prompt: ''
@@ -1866,4 +1888,4 @@ slides:
 
       | **Total** | | **47 filminas** | **120 min** |'
     local_asset: slides/assets/F-47-table-1.png
-    drive_id: 1gnRUnYCBflTIr2SC9vJnGx5A-61ghKUf
+    drive_id: 1ELbdwH_vyMY_A4jjuMlDKbjRiCG7yDRF
