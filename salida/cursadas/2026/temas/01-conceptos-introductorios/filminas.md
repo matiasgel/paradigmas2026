@@ -97,7 +97,7 @@ Quien eligió el lenguaje no conocía los paradigmas ni sus trade-offs.
 |----------|---------------|-------------------|
 | **Legibilidad** | ¿Se puede leer código ajeno? | Python vs. Perl |
 | **Expresividad** | ¿El lenguaje facilita la expresión? | SQL vs. ensamblador |
-| **Confiabilidad** | ¿Los tipos reducen bugs? | TypeScript vs. JS puro |
+| **Seguridad** | ¿Los tipos reducen bugs? | TypeScript vs. JS puro |
 | **Costo** | ¿Cuánto cuesta desarrollar y mantener? | — |
 | **Portabilidad** | ¿Funciona en distintas plataformas? | Java vs. C |
 | **Eficiencia** | ¿Qué tan rápido y cuánta memoria? | C vs. Python |
@@ -394,7 +394,7 @@ console.log(sumaAbs([3, -1, 4, -1, 5])); // → 14
 
 ### [F-19] Sistema de tipos básico
 
-# TypeScript: tipos estáticos que aumentan la confiabilidad
+# TypeScript: tipos estáticos que aumentan la seguridad
 
 ```typescript
 // Anotaciones explícitas
@@ -417,7 +417,7 @@ sumaAbs(["hola", "mundo"]);
 //    assignable to parameter of type 'number[]'
 ```
 
-> **Confiabilidad** (criterio Sebesta #3): el compilador como primer revisor.
+> **Seguridad** (criterio Sebesta #3): el compilador como primer revisor.
 
 ---
 

@@ -125,12 +125,12 @@ Factores que afectan la legibilidad:
 
 Hay una tensión frecuente: los lenguajes muy expresivos a veces sacrifican legibilidad al escribir código compacto.
 
-#### 1.4.3 Confiabilidad
+#### 1.4.3 Seguridad
 
-¿Las verificaciones del lenguaje (tipado estático, manejo de excepciones, etc.) reducen la posibilidad de bugs?
+¿Las verificaciones del lenguaje (tipado estático, manejo de excepciones, etc.) reducen la posibilidad de errores y vulnerabilidades?
 
-- **Alta confiabilidad:** TypeScript detecta errores de tipo *antes de ejecutar* — pasar un `string[]` donde se espera `number[]` es un error en tiempo de compilación, no en tiempo de ejecución.
-- **Baja confiabilidad:** JavaScript dinámico — el mismo error silenciosamente retorna `NaN` en runtime, causando bugs difíciles de rastrear.
+- **Alta seguridad:** TypeScript detecta errores de tipo *antes de ejecutar* — pasar un `string[]` donde se espera `number[]` es un error en tiempo de compilación, no en tiempo de ejecución.
+- **Baja seguridad:** JavaScript dinámico — el mismo error silenciosamente retorna `NaN` en runtime, lo que puede llevar a bugs y comportamientos inseguros.
 
 ```typescript
 // TypeScript detecta esto ANTES de ejecutar:
