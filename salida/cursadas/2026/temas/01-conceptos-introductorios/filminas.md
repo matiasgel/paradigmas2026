@@ -638,19 +638,19 @@ ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
 
 ---
 
-### [F-20g] Backtracking y unificación
+### [F-20g] Consultas en Prolog
 
-# Cómo Prolog busca soluciones
+# Hacer preguntas al sistema
 
-- El motor expande posibilidades y retrocede (backtracking) cuando no encuentra solución.
-- La unificación empareja variables con términos para hacer coincidir hechos y reglas.
+- Una consulta es una pregunta sobre los hechos y reglas.
+- El intérprete busca una combinación de hechos y reglas que responda la consulta.
 
 ```prolog
 ?- ancestro(alan, carla).
-% Sí: unifica y prueba caminos.
+% Sí: hay una cadena de hechos que conecta a alan con carla.
 ```
 
-> **Directive:** generar gráfico de un árbol de búsqueda con backtracking.
+> **Directive:** generar gráfico mostrando una consulta y la respuesta del motor.
 
 ---
 
@@ -658,9 +658,9 @@ ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
 
 # ¿Para qué sirve la programación lógica?
 
-- Sistemas expertos y motores de reglas (diagnóstico, planificación).
-- Consultas sobre bases de conocimiento (preguntas declarativas).
-- En IA simbólica se usa para modelar conocimiento y razonamiento.
+- Modelar conocimiento con hechos y reglas (sistemas expertos, diagnóstico).
+- Hacer consultas declarativas sobre una base de conocimiento.
+- Utilizada en IA simbólica para razonar sobre información.
 
 > **Directive:** generar gráfico de un sistema experto (reglas + hechos → decisión).
 
