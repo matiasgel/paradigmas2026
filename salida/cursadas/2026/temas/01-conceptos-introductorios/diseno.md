@@ -193,7 +193,7 @@ Al finalizar la clase, el alumno podrá:
 2. Identificar los 4 paradigmas fundamentales y sus lenguajes representativos
 3. Distinguir código imperativo de código funcional observando mutación de estado
 4. Escribir una función básica con tipos en TypeScript
-5. Aplicar el loop "trust but verify" para verifi/educar código generado por IA: identificar el paradigma usado, detectar errores semánticos y reformular el prompt con precisión
+5. Aplicar el loop "trust but verify" para verificar código generado por IA: identificar el paradigma usado, detectar errores semánticos y reformular el prompt con precisión
 
 ---
 

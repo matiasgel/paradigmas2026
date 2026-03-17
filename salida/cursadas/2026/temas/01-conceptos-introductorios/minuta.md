@@ -46,7 +46,7 @@ Plantear la pregunta disparadora directamente:
 
 > *"¿Cuántos lenguajes de programación existen hoy?"*
 
-Dejar que respondan. La respuesta real: más de 700 con uso documentado, miles de dialects. Preguntar:
+Dejar que respondan. La respuesta real: más de 700 con uso documentado, miles de dialectos. Preguntar:
 > *"¿Tuvo sentido crear tantos? ¿O es un caos?"*
 
 Transición: *"La respuesta corta es: cada lenguaje resuelve un problema que los otros no resolvían bien. Hoy vamos a ver cuáles son esos problemas y cómo los lenguajes los abordan."*
@@ -85,8 +85,6 @@ Guiar rápidamente la línea de tiempo — usar la filmina de timeline:
 | 1995 | Java | OO + máquina virtual → "write once, run anywhere" |
 | 2008 | Python 3 | Multiparadigma, ecosistema IA |
 | 2012 | TypeScript | Tipos estáticos sobre JS → escalabilidad |
-
-indice de tiobe
 
 > *"Cada punto en esta línea resuelve un problema del anterior. No es evolución lineal — es diversificación."*
 

@@ -15,7 +15,7 @@
 | Título | TP 01 — Conceptos Introductorios + Intro a TypeScript |
 | Tiempo límite | 30 minutos |
 | Intentos permitidos | 1 |
-| Puntaje por pregunta | 1 punto (11 pts total) |
+| Puntaje por pregunta | 1 punto (12 pts total) |
 | Penalización por respuesta incorrecta | 0 |
 | Mostrar respuestas correctas al alumno | Sí, al completar |
 | Categoría Moodle | TP01-ConceptosIntroductorios |
