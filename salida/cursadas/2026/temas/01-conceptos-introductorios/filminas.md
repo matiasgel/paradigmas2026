@@ -296,7 +296,7 @@ Frameworks (React, Django)     ← Nivel 3: abstracción sobre el lenguaje y la 
         ↑
 Java, Python, TypeScript        ← Nivel 2: GC, tipos, ecosistema, runtime/VM (abstracción de plataforma)
         ↑
-C, Pascal, Go                   ← Nivel 1: estructura, funciones, tipos básicos
+C, Rust, Go                    ← Nivel 1: estructura, funciones, tipos básicos
         ↑
 LC-3, ensamblador               ← Nivel 0: registros, saltos, direcciones
 ```
