@@ -86,6 +86,8 @@ Guiar rápidamente la línea de tiempo — usar la filmina de timeline:
 | 2008 | Python 3 | Multiparadigma, ecosistema IA |
 | 2012 | TypeScript | Tipos estáticos sobre JS → escalabilidad |
 
+indice de tiobe
+
 > *"Cada punto en esta línea resuelve un problema del anterior. No es evolución lineal — es diversificación."*
 
 ### Criterios de evaluación de lenguajes *(📽 F-06 · F-07 · F-08 · F-09 · F-10 · F-11 · F-12)* (6 min)
@@ -273,6 +275,74 @@ Sintetizar el concepto de Gabbrielli Cap. 1:
 
 **Objetivo del bloque:** TypeScript como ejemplo vivo de los conceptos teóricos. Primera escritura de código de la cursada.
 
+### Paradigma funcional en profundidad *(📽 F-25 · F-26 · F-27 · F-28)* (4 min)
+
+> *"En TypeScript podés escribir funcional, pero hay lenguajes donde el funcional es la única opción — y eso tiene ventajas concretas."*
+
+***(📽 F-25) — Cálculos sin efectos secundarios:***
+- El cómputo se define como evaluación de expresiones, no como secuencia de instrucciones.
+- Las funciones son **puras**: dado el mismo input, siempre producen el mismo output — sin efectos secundarios.
+- El estado no cambia: no hay variables que se reasignen.
+- Ventajas: razonamiento matemático directo, paralelismo trivial, tests más predecibles.
+
+***(📽 F-26) — Composición de funciones:***
+- Construir programas como cadenas de transformaciones: `f(g(h(x)))`.
+- En TypeScript: `arr.map(f).filter(g).reduce(h)` — cada paso transforma los datos sin mutar.
+
+> *"La composición reemplaza el estado: en lugar de 'modificar esta variable paso a paso', 'aplicar estas funciones en secuencia'."*
+
+***(📽 F-27) — Estructuras inmutables:***
+- "Cambiar sin mutar": crear una copia con el cambio, no modificar el original.
+- `const nuevoArr = [...arr, nuevoElemento]` en lugar de `arr.push(nuevoElemento)`.
+
+***(📽 F-28) — TypeScript permite funcional, pero no lo garantiza:***
+- Lenguajes como Haskell o Clojure **imponen** la inmutabilidad por diseño.
+- TypeScript la permite (`const`, `readonly`) pero no la fuerza — depende de la disciplina del programador.
+
+### Paradigma lógico — introducción *(📽 F-29 · F-30 · F-31 · F-32)* (4 min)
+
+> *"El paradigma lógico es el más diferente de todos — no hay instrucciones, no hay funciones, solo relaciones y preguntas."*
+
+***(📽 F-29) — Programar declarando "qué", no "cómo":***
+- En lógica simbólica, un programa es un conjunto de **hechos** y **reglas** sobre el mundo.
+- El motor de inferencia determina cómo llegar a la respuesta.
+- Lenguaje representativo: **Prolog** — base de sistemas expertos, IA simbólica, procesamiento de lenguaje natural.
+
+***(📽 F-30) — Hechos y reglas en Prolog:***
+
+```prolog
+% Hechos: relaciones conocidas
+padre(juan, maria).
+padre(juan, pedro).
+madre(ana, maria).
+
+% Regla: X es progenitor de Y si X es padre o madre de Y
+progenitor(X, Y) :- padre(X, Y).
+progenitor(X, Y) :- madre(X, Y).
+```
+
+> *"Este código no dice 'cómo buscar' — dice 'qué es verdad'. El motor deduce el resto."*
+
+***(📽 F-31) — Hacer preguntas al sistema:***
+
+```prolog
+?- progenitor(juan, maria).   % Consulta: ¿juan es progenitor de maria?
+true.
+
+?- progenitor(X, maria).      % Consulta: ¿quién es progenitor de maria?
+X = juan ;
+X = ana.
+```
+
+> *"Nota la inversión: en lugar de 'ejecutar una función', 'hacer una pregunta'. El sistema busca todas las respuestas posibles."*
+
+***(📽 F-32) — ¿Para qué sirve la programación lógica?***
+Pasar rápido — pregunta socrática para reflexión:
+> *"¿Se imaginan un dominio donde describirle relaciones a la máquina sea más natural que darle instrucciones paso a paso?"*
+- Sistemas expertos médicos: "si el paciente tiene fiebre Y tos → posible diagnóstico X"
+- NLP: razonamiento sobre gramáticas como reglas
+- Motores de reglas de negocio: compliance, seguros, legales
+
 ### ¿Por qué TypeScript en 2026? *(📽 F-33 · F-34)* (4 min)
 
 Argumentos rápidos:
@@ -312,7 +382,7 @@ Python: .py   → [CPython (implícito)] → bytecode (.pyc) → [CPython VM] �
 - El compilador `tsc` hace verificación de tipos **antes** de ejecutar → más confiabilidad
 - El lenguaje intermedio (JS) es el que realmente ejecuta la CPU (via V8) → el runtime es diferente del lenguaje que leen
 
-### Demo: el mismo problema en TypeScript — Funcional y Lógico *(📽 F-25 · F-26 · F-27 · F-28 · F-29 · F-30 · F-31 · F-32 · F-36 · F-37)* (10 min)
+### Demo: el mismo problema en TypeScript — imperativo y funcional *(📽 F-36 · F-37)* (10 min)
 
 > 🛠 **Setup Deno Playground — paso a paso:**
 >
@@ -412,74 +482,6 @@ sumaAbs(["hola", "mundo"]); // tsc detecta esto antes de ejecutar
 - TypeScript no obliga a un paradigma — puede escribirse de forma imperativa, funcional u OO
 - La elección es del programador → más responsabilidad, más libertad
 - A lo largo de la materia van a ver los tres estilos con este mismo lenguaje
-
-### Paradigma funcional en profundidad *(📽 F-25 · F-26 · F-27 · F-28)* (4 min)
-
-> *"En TypeScript podés escribir funcional, pero hay lenguajes donde el funcional es la única opción — y eso tiene ventajas concretas."*
-
-***(📽 F-25) — Cálculos sin efectos secundarios:***
-- El cómputo se define como evaluación de expresiones, no como secuencia de instrucciones.
-- Las funciones son **puras**: dado el mismo input, siempre producen el mismo output — sin efectos secundarios.
-- El estado no cambia: no hay variables que se reasignen.
-- Ventajas: razonamiento matemático directo, paralelismo trivial, tests más predecibles.
-
-***(📽 F-26) — Composición de funciones:***
-- Construir programas como cadenas de transformaciones: `f(g(h(x)))`.
-- En TypeScript: `arr.map(f).filter(g).reduce(h)` — cada paso transforma los datos sin mutar.
-
-> *"La composición reemplaza el estado: en lugar de 'modificar esta variable paso a paso', 'aplicar estas funciones en secuencia'."*
-
-***(📽 F-27) — Estructuras inmutables:***
-- "Cambiar sin mutar": crear una copia con el cambio, no modificar el original.
-- `const nuevoArr = [...arr, nuevoElemento]` en lugar de `arr.push(nuevoElemento)`.
-
-***(📽 F-28) — TypeScript permite funcional, pero no lo garantiza:***
-- Lenguajes como Haskell o Clojure **imponen** la inmutabilidad por diseño.
-- TypeScript la permite (`const`, `readonly`) pero no la fuerza — depende de la disciplina del programador.
-
-### Paradigma lógico — introducción *(📽 F-29 · F-30 · F-31 · F-32)* (4 min)
-
-> *"El paradigma lógico es el más diferente de todos — no hay instrucciones, no hay funciones, solo relaciones y preguntas."*
-
-***(📽 F-29) — Programar declarando "qué", no "cómo":***
-- En lógica simbólica, un programa es un conjunto de **hechos** y **reglas** sobre el mundo.
-- El motor de inferencia determina cómo llegar a la respuesta.
-- Lenguaje representativo: **Prolog** — base de sistemas expertos, IA simbólica, procesamiento de lenguaje natural.
-
-***(📽 F-30) — Hechos y reglas en Prolog:***
-
-```prolog
-% Hechos: relaciones conocidas
-padre(juan, maria).
-padre(juan, pedro).
-madre(ana, maria).
-
-% Regla: X es progenitor de Y si X es padre o madre de Y
-progenitor(X, Y) :- padre(X, Y).
-progenitor(X, Y) :- madre(X, Y).
-```
-
-> *"Este código no dice 'cómo buscar' — dice 'qué es verdad'. El motor deduce el resto."*
-
-***(📽 F-31) — Hacer preguntas al sistema:***
-
-```prolog
-?- progenitor(juan, maria).   % Consulta: ¿juan es progenitor de maria?
-true.
-
-?- progenitor(X, maria).      % Consulta: ¿quién es progenitor de maria?
-X = juan ;
-X = ana.
-```
-
-> *"Nota la inversión: en lugar de 'ejecutar una función', 'hacer una pregunta'. El sistema busca todas las respuestas posibles."*
-
-***(📽 F-32) — ¿Para qué sirve la programación lógica?***
-Pasar rápido — pregunta socrática para reflexión:
-> *"¿Se imaginan un dominio donde describirle relaciones a la máquina sea más natural que darle instrucciones paso a paso?"*
-- Sistemas expertos médicos: "si el paciente tiene fiebre Y tos → posible diagnóstico X"
-- NLP: razonamiento sobre gramáticas como reglas
-- Motores de reglas de negocio: compliance, seguros, legales
 
 ---
 
