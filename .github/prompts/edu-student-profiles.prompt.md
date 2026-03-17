@@ -1,7 +1,7 @@
 ---
 description: 'EDU: Perfiles de alumno — gestiona perfiles del simulador e investiga en literatura académica (ERIC, ACM, IEEE)'
 agent: 'edu-agent-student-simulator'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'edit', 'search', 'execute', 'fetch']
 ---
 
 1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables

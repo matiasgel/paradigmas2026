@@ -1,7 +1,7 @@
 ---
 description: 'EDU: Regenerar Repo Autograde — regenera o ajusta autograde-repo/ a partir del tp.md actual. La creación inicial es automática con /edu-create-tp.'
 agent: 'edu-agent-classroom-designer'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'edit', 'search', 'execute', 'fetch']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store ALL fields as session variables.

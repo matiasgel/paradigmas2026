@@ -1,7 +1,7 @@
 ---
 description: 'EDU Fase 3: Cerrar tema — commit + merge Git, actualiza cobertura y topic.yaml'
 agent: 'edu-agent-topic-designer'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'edit', 'search', 'execute', 'fetch']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store ALL fields as session variables.

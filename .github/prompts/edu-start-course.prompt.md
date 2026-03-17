@@ -1,7 +1,7 @@
 ---
 description: 'EDU Fase 1: Iniciar curso — configura materia, carga programa oficial y congela plan mínimo (flujo completo de Fase 1)'
 agent: 'edu-agent-course-planner'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'edit', 'search', 'execute', 'fetch']
 ---
 
 1. Load {project-root}/_edu/config.yaml and store ALL fields as session variables

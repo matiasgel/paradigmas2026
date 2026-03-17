@@ -1,7 +1,7 @@
 ---
 description: 'EDU Fase 3: Reabrir tema cerrado para correcciones mayores'
 agent: 'edu-agent-topic-designer'
-tools: ['read', 'edit', 'search', 'execute', 'web']
+tools: ['read', 'edit', 'search', 'execute', 'fetch']
 ---
 
 1. Load `{project-root}/_edu/config.yaml` and store ALL fields as session variables.
