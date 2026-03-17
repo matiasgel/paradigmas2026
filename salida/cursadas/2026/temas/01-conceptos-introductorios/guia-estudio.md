@@ -90,7 +90,7 @@ Los lenguajes no evolucionaron en línea recta. Cada hito respondió a una neces
 | 1957 | FORTRAN | Reemplazó el ensamblador para cómputo científico — primer lenguaje de alto nivel verdaderamente útil |
 | 1960 | LISP | Introdujo funciones como datos de primera clase, recursión y evaluación simbólica — base del paradigma funcional |
 | 1972 | C | Imperativo estructurado con portabilidad sin sacrificar eficiencia — reemplazó el ensamblador en sistemas |
-| 1980 | Smalltalk | Primera implementación pura de orientación a objetos: todo es un objeto, todo es un mensaje |
+| 1980 | OO puro | Primera implementación pura de orientación a objetos: todo es un objeto, todo es un mensaje |
 | 1995 | Java | OO + máquina virtual → "write once, run anywhere" — desacopló el código del hardware |
 | 2008 | Python 3 | Multiparadigma + ecosistema científico → lenguaje de la IA y la ciencia de datos |
 | 2012 | TypeScript | Tipos estáticos sobre JavaScript — escalabilidad para proyectos grandes |
@@ -219,7 +219,7 @@ Además de las limitaciones de hardware, los paradigmas evolucionaron con las me
 | Años 70 | Análisis y diseño estructurado | Modularización, eliminación del GOTO, funciones y procedimientos |
 | Años 80 | Abstracción de datos (Simula, Ada) | El dato y sus operaciones juntos — precursor del OO |
 | Años 80 | Programación funcional madura (ML, Haskell) | Sin estado mutable, basado en lambda calculus |
-| Años 90 | OO mainstream (Smalltalk → Java) | Objetos como unidad fundamental del programa |
+| Años 90 | OO mainstream (Java) | Objetos como unidad fundamental del programa |
 | 2000s+ | Multiparadigma (Python, TypeScript, Scala) | Sin compromiso obligatorio con un solo modelo |
 
 ### 2.5 Los 4 paradigmas fundamentales
@@ -227,7 +227,7 @@ Además de las limitaciones de hardware, los paradigmas evolucionaron con las me
 | Paradigma | Base formal | Unidad de abstracción | Modelo de estado | Lenguajes representativos |
 |-----------|-------------|----------------------|-----------------|--------------------------|
 | **Imperativo** | Arquitectura Von Neumann | Instrucción | Mutable (explícito) | C, Go, Pascal, FORTRAN |
-| **Orientado a Objetos** | Imperativo + encapsulamiento | Objeto / mensaje | Mutable (encapsulado) | Java, C#, Smalltalk, Dart |
+| **Orientado a Objetos** | Imperativo + encapsulamiento | Objeto / mensaje | Mutable (encapsulado) | Java, C#, Dart |
 | **Funcional** | Cálculo lambda (Church, 1936) | Función matemática | Inmutable (sin efectos laterales) | Haskell, Clojure, LISP/Scheme, F# |
 | **Lógico** | Lógica simbólica (Robinson, 1965) | Relación / hecho / consulta | Sin concepto de estado | Prolog |
 
@@ -822,7 +822,7 @@ Para cada enunciado, indicá a qué paradigma corresponde:
 | Paradigma |
 |-----------|
 | Lógico (Prolog) |
-| Orientado a Objetos (Smalltalk, Java) |
+| Orientado a Objetos (Java) |
 | Funcional (Haskell, LISP) |
 | Imperativo (C, Go, Pascal) |
 

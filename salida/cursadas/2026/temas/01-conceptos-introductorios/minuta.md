@@ -69,7 +69,7 @@ Guiar rápidamente la línea de tiempo — usar la filmina de timeline:
 | 1957 | FORTRAN | Primer lenguaje de alto nivel — reemplazó ensamblador |
 | 1960 | LISP | Funciones como datos, recursión — programación funcional |
 | 1972 | C | Imperativo estructurado, portabilidad |
-| 1980 | Smalltalk | Orientación a objetos pura |
+| 1980 | OO puro | Orientación a objetos pura |
 | 1995 | Java | OO + máquina virtual → "write once, run anywhere" |
 | 2008 | Python 3 | Multiparadigma, ecosistema IA |
 | 2012 | TypeScript | Tipos estáticos sobre JS → escalabilidad |
@@ -125,7 +125,7 @@ No es solo sintaxis — dos lenguajes con sintaxis muy distintas pueden comparti
 - 70s: análisis y diseño estructurado — modularización, eliminación del GOTO
 - Abstracción de datos (Simula, Ada) — el dato y sus operaciones juntos
 - Programación funcional (LISP) — sin estado, funciones como objetos
-- OO (Smalltalk) — objetos que intercambian mensajes
+- OO — objetos que intercambian mensajes
 - Multiparadigma (Python, TypeScript, Scala) — lo mejor de todos
 
 ### El cuello de botella de Von Neumann *(📽 F-08)* (5 min)

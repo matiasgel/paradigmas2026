@@ -80,7 +80,7 @@ Quien eligió el lenguaje no conocía los paradigmas ni sus trade-offs.
 | 1957 | FORTRAN | El primero de alto nivel |
 | 1960 | LISP | Funciones como datos, recursión |
 | 1972 | C | Imperativo estructurado, portabilidad |
-| 1980 | Smalltalk | Orientación a objetos pura |
+| 1980 | OO puro | Orientación a objetos pura |
 | 1995 | Java | OO + máquina virtual |
 | 2008 | Python 3 | Multiparadigma, ecosistema IA |
 | 2012 | TypeScript | Tipos estáticos sobre JavaScript |
@@ -259,7 +259,7 @@ CPU ←───bus───→ Memoria
 | Paradigma | Base formal | Unidad | Estado | Ejemplos |
 |-----------|-------------|--------|--------|----------|
 | **Imperativo** | Máquina de Von Neumann | Instrucción | Mutable | C, Go, Pascal |
-| **OO** | Imperativo + encapsulamiento | Objeto / mensaje | Mutable (encapsulado) | Java, C#, Smalltalk, Dart |
+| **OO** | Imperativo + encapsulamiento | Objeto / mensaje | Mutable (encapsulado) | Java, C#, Dart |
 | **Funcional** | Cálculo lambda (Church, 1936) | Función | **Inmutable** | Haskell, Clojure, LISP |
 | **Lógico** | Lógica simbólica (resolución) | Relación / hecho | Sin estado | Prolog |
 

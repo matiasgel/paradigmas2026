@@ -46,7 +46,7 @@
 ### Bloque 1 — ¿Por qué estudiar lenguajes? (20 min)
 - Costo de elegir mal un lenguaje en un proyecto real
 - La proliferación de lenguajes: ¿cuántos hay y por qué?
-- Perspectiva histórica express: FORTRAN → C → Smalltalk → Java → Python → TypeScript
+- Perspectiva histórica express: FORTRAN → C → OO puro → Java → Python → TypeScript
 - Criterios de evaluación de lenguajes:
   - **Legibilidad** — ¿Es fácil de leer por otros programadores? *(Sebesta)*
   - **Escribibilidad** — ¿Se puede expresar lo que se quiere sin pelear con el lenguaje? *(Sebesta)*
@@ -65,7 +65,7 @@
     - Años 70: análisis y diseño estructurado
     - Abstracción de datos (Simula, Ada)
     - Programación funcional (LISP)
-    - Orientación a objetos (Smalltalk)
+    - Orientación a objetos (OO puro)
     - Multiparadigma (Python, TypeScript, Scala)
 - **El cuello de botella de Von Neumann** (Louden & Lambert, Cap. 1):
   - La ejecución secuencial instrucción a instrucción es una *restricción* heredada del hardware
@@ -79,7 +79,7 @@
   - **Orientado a Objetos**: extensión del imperativo con encapsulamiento y paso de mensajes
 - Tabla comparativa: modelo de cómputo, unidad de abstracción, lenguajes representativos
   - Imperativo: C, C++, Go — estado mutable, asignación
-  - OO: Smalltalk, Java, Dart — objetos y mensajes
+  - OO: Java, C#, Dart — objetos y mensajes
   - Funcional: Haskell, LISP, Clojure — funciones como objetos de primera clase
   - Lógico: Prolog — relaciones y deducción
   - Multiparadigma: TypeScript, Python, Scala, F#

@@ -249,6 +249,52 @@ const doble = (arr: number[]): number[] =>
 - ~ Fragmento C — por nombrar la función en mayúsculas, convención del paradigma OO
 - ~ Fragmento D — por usar `reduce` con acumulador, que internamente mantiene estado mutable
 
+> 🎯 **NOTA DOCENTE:** Esta pregunta no tiene referencia a un momento específico de clase — evalúa comprensión transferible de OA3. El distractor D es efectivo porque `reduce` recibe un acumulador `acc`, que *parece* una variable mutable, pero la inmutabilidad del estilo funcional se mantiene: `acc` es el valor que devuelve la función en cada paso, no una variable que se reasigna externamente.
+
+### P12 — Loop "trust but verify" con IA
+
+**Trazabilidad:** Bloque 5 — 40 (loop "trust but verify")
+
+**Enunciado:**
+En la clase se presentó el loop "trust but verify" como una forma de usar IA generativa de manera responsable. ¿Cuál es el paso que sigue inmediatamente después de pedirle algo a la IA (prompt)?
+
+**Opciones:**
+- ✅ **Verificar el output contra el conocimiento del dominio y hacer tests**
+- ~ Volver a escribir el prompt sin revisar el resultado, confiando en la IA
+- ~ Compartir el output directamente con el equipo sin validarlo
+- ~ Usar la IA para generar un prompt mejor sin leer el output original
+
+
+**Trazabilidad:** Bloque 3 + Bloque 4 — OA3 (distinguir imperativo vs funcional por mutación de estado)
+
+**Enunciado:**
+Analizar los siguientes cuatro fragmentos TypeScript. ¿Cuál de ellos es un ejemplo **inequívoco de paradigma imperativo**, independientemente del resultado que produce?
+
+```typescript
+// Fragmento A
+const doble = (arr: number[]): number[] => arr.map(x => x * 2);
+
+// Fragmento B
+function doble(arr: number[]): number[] {
+    let result: number[] = [];
+    for (const x of arr) result.push(x * 2);
+    return result;
+}
+
+// Fragmento C
+const doble = (arr: number[]): number[] => arr.map(x => x * 2);
+
+// Fragmento D
+const doble = (arr: number[]): number[] =>
+    arr.reduce((acc: number[], x) => [...acc, x * 2], []);
+```
+
+**Opciones:**
+- ✅ **Fragmento B** — declara `let result = []` (variable mutable) y la muta instrucción a instrucción con `push` dentro del loop
+- ~ Fragmento A — por usar sintaxis `function` en lugar de arrow function
+- ~ Fragmento C — por nombrar la función en mayúsculas, convención del paradigma OO
+- ~ Fragmento D — por usar `reduce` con acumulador, que internamente mantiene estado mutable
+
 > 🎯 **NOTA DOCENTE:** Esta pregunta no tiene referencia a un momento específico de clase — evalúa comprensión transferible de OA3. El distractor D es efectivo porque `reduce` recibe un acumulador `acc`, que *parece* una variable mutable, pero la inmutabilidad del estilo funcional se mantiene: `acc` es el valor que devuelve la función en cada paso, no una variable que se reasigna externamente. A y C son distractores para quienes confunden paradigma con sintaxis.
 
 ---
