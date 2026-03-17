@@ -407,7 +407,7 @@ Compilación pura:
 
 - Los modelos se entrenan con enormes conjuntos de código (GitHub, StackOverflow, npm) donde TypeScript es abundante y consistente.
 - Las anotaciones de tipo reducen la ambigüedad semántica: el código es más fácil de inferir, corregir y completar.
-- TypeScript fomenta prácticas robustas (tests, linting, formateo), lo que eleva la calidad del código de entrada al entrenar los modelos.
+- TypeScript fomenta prácticas robustas (tests, linting — revisa estilo código, formateo), lo que eleva la calidad del código de entrada al entrenar los modelos.
 - La salida de la IA es más fácil de **auditar** y **testear**, porque el compilador añade una barrera de verificación antes de ejecutar.
 - Como resultado, los prompts que piden código suelen generar TS más confiable que JavaScript dinámico.
 
