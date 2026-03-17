@@ -208,7 +208,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 ### [F-08] El cuello de botella de Von Neumann
 
-# El bus compartido limita la ejecución
+# El modelo Von Neumann impone una limitación abstracta
 
 ```
 CPU ←───bus───→ Memoria
@@ -216,23 +216,22 @@ CPU ←───bus───→ Memoria
     cuello de botella
 ```
 
-**¿Por qué es un cuello de botella?**
-- El bus es el canal único que une CPU y memoria.
-- Cada instrucción necesita leer memoria (fetch) y/o escribirla (store).
-- Cuando CPU y memoria compiten por el bus, la velocidad de ejecución se ve limitada.
+**¿Por qué importa al diseño de lenguajes?**
+- La máquina abstracta Von Neumann plantea que todo acceso a memoria pasa por un único canal (bus).
+- Lenguajes cercanos a la máquina (imperativos) modelan explícitamente este flujo: variables = celdas de memoria, asignación = transferencia de datos.
+- Esto hace que la complejidad del acceso a memoria y la gestión de estado se traslade directamente al lenguaje.
 
-**Consecuencias pedagógicas:**
-- Explica por qué los lenguajes imperativos se basan en estado y asignación.
-- Justifica por qué la programación paralela es difícil: múltiples hilos comparten la misma memoria y el mismo bus.
-- Muestra por qué el estado mutable es “costoso” y cómo el functionalismo busca evitarlo.
+**Implicación clave para lenguajes "pegados" a la máquina:**
+- Cualquier abstracción que sea muy cercana a esta máquina tiende a heredar sus restricciones (estado mutable, secuencialidad, sincronización).
+- Por eso el paradigma imperativo suele luchar con paralelismo y con la razón sobre efectos secundarios.
 
 > **Directive:** generar gráfico del cuello de botella (bus, CPU, memoria, acceso concurrente).
 
 **Pregunta que generó nuevos paradigmas:**
-> *¿Se puede describir cómputo **sin** depender de Von Neumann?*
+> *¿Se puede describir cómputo **sin** depender de esta máquina abstracta?*
 
-→ **Funcional:** cálculo lambda (Church, 1936)
-→ **Lógico:** lógica simbólica y resolución (Robinson, 1965)
+→ **Funcional:** cálculo lambda (Church, 1936) — evita estado mutable
+→ **Lógico:** lógica simbólica y resolución (Robinson, 1965) — evita dependencia de memoria compartida
 
 *Fuente: Louden & Lambert, Cap. 1*
 
