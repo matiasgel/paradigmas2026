@@ -548,6 +548,30 @@ class Calculadora {
 
 ---
 
+### [F-20a] Introducción al paradigma funcional
+
+# Paradigma funcional: cálculos sin efectos secundarios
+
+- El cómputo se define como la evaluación de expresiones.
+- El estado no cambia: las funciones son mapeos de entrada → salida.
+- Ventajas: razonamiento matemático, paralelismo, tests más predecibles.
+
+> **Directive:** generar gráfico comparando función pura vs función con estado (mutación).
+
+---
+
+### [F-20b] Introducción al paradigma lógico
+
+# Paradigma lógico: programar declarando “qué” en lugar de “cómo”
+
+- El programa describe hechos y reglas; el motor (intérprete) hace la inferencia.
+- No se escribe el control: el sistema busca soluciones que satisfagan las restricciones.
+- Ideal para problemas de búsqueda, reglas, y consultas (bases de conocimiento).
+
+> **Directive:** generar gráfico de un motor de inferencia (hechos + reglas → solución).
+
+---
+
 ## BLOQUE 5 — IA Generativa y los paradigmas (15 min)
 
 ---
@@ -730,7 +754,7 @@ if (x !== 0) y = 1 / x;
 | F-01 a F-05 | Bloque 1: ¿Por qué LP? | 5 | 20 |
 | F-06 a F-10 | Bloque 2: Paradigmas | 5 | 25 |
 | F-11 a F-14 | Bloque 3: Imperativo + Máquina Abstracta | 4 | 20 |
-| F-15 a F-20 | Bloque 4: TypeScript | 6 | 30 |
+| F-15 a F-20b | Bloque 4: TypeScript | 9 | 35 |
 | F-21 a F-26 | Bloque 5: IA Generativa | 6 | 15 |
 | F-27 a F-28 | Cierre | 2 | 10 |
-| **Total** | | **29 filminas** | **120 min** |
+| **Total** | | **31 filminas** | **125 min** |
