@@ -122,7 +122,7 @@ Escribí `/edu-` en Copilot Chat para ver todos los comandos disponibles.
 | Comando | Cuándo usarlo |
 |---------|---------------|
 | `/edu-setup-apis` | **Una vez** — configura Google OAuth + Gemini key |
-| `/edu-slides-designer` | **Una vez por cursada** — define diseño visual del cursado |
+| `/edu-slides-designer` | **Una vez por cursada** — define UX visual del cursado y cómo se renderiza Markdown en Slides |
 | `/edu-publish-slides` | **En cada tema** — flujo completo: valida + genera + link |
 | `/edu-slides-publisher` | Re-exportar sin rediseñar |
 
@@ -225,7 +225,14 @@ cp ~/Descargas/credentials.json _edu/credentials.json
 /edu-slides-designer
 ```
 
-Genera `_edu/slides-config.yaml` con la paleta, tipografías y grilla del cursado. Se hace **una sola vez** por cursada.
+Genera `_edu/slides-config.yaml` con la paleta, tipografías, grilla del cursado y contrato de render semántico para Markdown. Se hace **una sola vez** por cursada.
+
+Ese contrato UX define, entre otras cosas:
+
+- listas Markdown como bullets nativos de Google Slides;
+- headings internos con jerarquía visual real;
+- `**bold**`, `*italic*`, `` `inline code` `` y links convertidos a estilo de texto;
+- ausencia de markup residual en la presentación final.
 
 ### Ejecutar el pipeline de filminas
 

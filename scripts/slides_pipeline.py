@@ -63,8 +63,12 @@ SCOPES = [
 SLIDE_W = 9_144_000
 SLIDE_H = 5_143_500
 MARGIN = 457_200      # ~0.5 pulgada
-TITLE_H = 1_300_000  # alto reservado para título (2 líneas de 36pt)
+TITLE_H = 760_000  # alto reservado para título, compacto para maximizar espacio útil de contenido
 LOGO_CLEAR = 700_000  # y mínimo para no solapar el logo institucional del template
+TITLE_SAFE_X = 1_520_000
+BOTTOM_CLEAR = 760_000
+TABLE_BOTTOM_CLEAR = 1_520_000
+EMU_PER_PT = 12_700
 
 # Estrategia de imagen por tipo de filmina
 IMAGE_STRATEGY: dict[str, str] = {
@@ -85,8 +89,8 @@ LAYOUT_MAP: dict[str, dict] = {
     "portada":            {"title": "center-middle",  "body": "center-bottom", "image": "background", "code": "none", "table": "none"},
     "concepto-abstracto": {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none", "table": "none"},
     "codigo":             {"title": "full-title",     "body": "subtitle-only", "image": "none",       "code": "full-bottom", "table": "none"},
-    "tabla":              {"title": "full-title",     "body": "none",          "image": "none",       "code": "none", "table": "full-bottom"},
-    "tabla-comparativa":  {"title": "full-title",     "body": "none",          "image": "none",       "code": "none", "table": "full-bottom"},
+    "tabla":              {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none", "table": "table-main"},
+    "tabla-comparativa":  {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none", "table": "table-main"},
     "diagrama":           {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none", "table": "none"},
     "socratica":          {"title": "center-top",     "body": "center-middle", "image": "background", "code": "none", "table": "none"},
     "demo":               {"title": "full-title",     "body": "left-middle",   "image": "none",       "code": "right-half", "table": "none"},
@@ -98,9 +102,13 @@ LAYOUT_MAP: dict[str, dict] = {
 def _zones(w: int = SLIDE_W, h: int = SLIDE_H, m: int = MARGIN, th: int = TITLE_H) -> dict[str, tuple]:
     half_w = w // 2
     body_y = LOGO_CLEAR + th + 80_000
-    body_h = h - body_y - m
+    body_h = h - body_y - max(m, BOTTOM_CLEAR)
+    table_intro_h = 560_000
+    table_gap = 140_000
+    table_main_y = body_y + table_intro_h + table_gap
+    table_main_h = h - table_main_y - max(m, TABLE_BOTTOM_CLEAR)
     return {
-        "full-title":    (m,            LOGO_CLEAR,   w - 2 * m,       th),        # ancho completo
+        "full-title":    (TITLE_SAFE_X, LOGO_CLEAR,   w - TITLE_SAFE_X - m, th),   # reserva lateral para logo
         "left-top":      (m,            LOGO_CLEAR,   half_w - m,      th),        # media anchura
         "center-top":    (m,            LOGO_CLEAR,   w - 2 * m,       th),
         "center-middle": (m,            h // 3,       w - 2 * m,       h // 3),
@@ -111,6 +119,8 @@ def _zones(w: int = SLIDE_W, h: int = SLIDE_H, m: int = MARGIN, th: int = TITLE_
         "full-bottom":   (m,            body_y,       w - 2 * m,       body_h),
         "full-center":   (m,            m,            w - 2 * m,       h - 2 * m),
         "subtitle-only": (m,            body_y,       w - 2 * m,       th // 2),
+        "table-intro":   (m,            body_y,       w - 2 * m,       table_intro_h),
+        "table-main":    (m,            table_main_y, w - 2 * m,       table_main_h),
         "background":    (0,            0,            w,               h),
         "none":          None,
     }
@@ -204,6 +214,301 @@ def _strip_markdown(text: str) -> str:
     return text.strip()
 
 
+def _sanitize_markdown_paragraph(text: str) -> str:
+    """Limpia marcadores de bloque que no deben quedar visibles en Slides."""
+    clean = re.sub(r'^\s*>+\s?', '', text.strip())
+    return clean.strip()
+
+
+def _compose_body_text(subtitle: str, blocks: list[dict]) -> str:
+    parts: list[str] = []
+    clean_subtitle = _strip_markdown(subtitle or "")
+    if clean_subtitle:
+        parts.append(clean_subtitle)
+
+    body_text = _blocks_to_text(blocks)
+    if body_text:
+        parts.append(body_text)
+
+    return "\n\n".join(part for part in parts if part)
+
+
+def _list_item_parts(item: Any) -> tuple[str, int]:
+    if isinstance(item, dict):
+        return _strip_markdown(str(item.get("content", ""))), int(item.get("level", 0) or 0)
+    return _strip_markdown(str(item)), 0
+
+
+def _parse_inline_markdown(text: str) -> tuple[str, list[dict[str, Any]]]:
+    plain_parts: list[str] = []
+    spans: list[dict[str, Any]] = []
+    i = 0
+
+    def current_len() -> int:
+        return sum(len(part) for part in plain_parts)
+
+    while i < len(text):
+        if text.startswith("**", i) or text.startswith("__", i):
+            marker = text[i:i + 2]
+            end = text.find(marker, i + 2)
+            if end != -1:
+                inner_plain, inner_spans = _parse_inline_markdown(text[i + 2:end])
+                start = current_len()
+                plain_parts.append(inner_plain)
+                spans.extend(
+                    {**span, "start": span["start"] + start, "end": span["end"] + start}
+                    for span in inner_spans
+                )
+                if inner_plain:
+                    spans.append({"start": start, "end": start + len(inner_plain), "bold": True})
+                i = end + 2
+                continue
+
+        if text[i] in "*_":
+            marker = text[i]
+            end = text.find(marker, i + 1)
+            if end != -1:
+                inner_plain, inner_spans = _parse_inline_markdown(text[i + 1:end])
+                start = current_len()
+                plain_parts.append(inner_plain)
+                spans.extend(
+                    {**span, "start": span["start"] + start, "end": span["end"] + start}
+                    for span in inner_spans
+                )
+                if inner_plain:
+                    spans.append({"start": start, "end": start + len(inner_plain), "italic": True})
+                i = end + 1
+                continue
+
+        if text[i] == "`":
+            end = text.find("`", i + 1)
+            if end != -1:
+                literal = text[i + 1:end]
+                start = current_len()
+                plain_parts.append(literal)
+                if literal:
+                    spans.append({"start": start, "end": start + len(literal), "code": True})
+                i = end + 1
+                continue
+
+        if text[i] == "[":
+            close_label = text.find("]", i + 1)
+            if close_label != -1 and close_label + 1 < len(text) and text[close_label + 1] == "(":
+                close_url = text.find(")", close_label + 2)
+                if close_url != -1:
+                    label = text[i + 1:close_label]
+                    url = text[close_label + 2:close_url].strip()
+                    inner_plain, inner_spans = _parse_inline_markdown(label)
+                    start = current_len()
+                    plain_parts.append(inner_plain)
+                    spans.extend(
+                        {**span, "start": span["start"] + start, "end": span["end"] + start}
+                        for span in inner_spans
+                    )
+                    if inner_plain and url:
+                        spans.append({"start": start, "end": start + len(inner_plain), "link": url})
+                    i = close_url + 1
+                    continue
+
+        plain_parts.append(text[i])
+        i += 1
+
+    return "".join(plain_parts), spans
+
+
+def _compose_rich_text(subtitle: str, blocks: list[dict]) -> dict[str, Any]:
+    groups: list[dict[str, Any]] = []
+
+    lead = _sanitize_markdown_paragraph(subtitle or "")
+    if lead:
+        groups.append({"kind": "lead", "paragraphs": [lead]})
+
+    for block in blocks:
+        kind = block.get("type")
+        if kind == "heading":
+            content = _sanitize_markdown_paragraph(str(block.get("content", "")))
+            if content:
+                groups.append({
+                    "kind": "heading",
+                    "level": int(block.get("level", 2) or 2),
+                    "paragraphs": [content],
+                })
+            continue
+
+        if kind == "text":
+            paragraphs = [
+                _sanitize_markdown_paragraph(line)
+                for line in str(block.get("content", "")).splitlines()
+                if line.strip()
+            ]
+            paragraphs = [paragraph for paragraph in paragraphs if paragraph]
+            if paragraphs:
+                groups.append({"kind": "text", "paragraphs": paragraphs})
+            continue
+
+        if kind == "list":
+            paragraphs = []
+            for item in block.get("items", []):
+                item_text, _level = _list_item_parts(item)
+                if item_text:
+                    paragraphs.append(item_text)
+            if paragraphs:
+                groups.append({
+                    "kind": "list",
+                    "ordered": bool(block.get("ordered", False)),
+                    "paragraphs": paragraphs,
+                })
+
+    text_parts: list[str] = []
+    spans: list[dict[str, Any]] = []
+    bullet_ranges: list[dict[str, Any]] = []
+    emphasis_ranges: list[dict[str, Any]] = []
+    cursor = 0
+
+    for group_idx, group in enumerate(groups):
+        if group_idx > 0:
+            text_parts.append("\n\n")
+            cursor += 2
+
+        group_start = cursor
+        for paragraph_idx, paragraph in enumerate(group.get("paragraphs", [])):
+            if paragraph_idx > 0:
+                text_parts.append("\n")
+                cursor += 1
+
+            plain, local_spans = _parse_inline_markdown(paragraph)
+            if not plain:
+                continue
+            start = cursor
+            text_parts.append(plain)
+            cursor += len(plain)
+            end = cursor
+
+            spans.extend(
+                {**span, "start": span["start"] + start, "end": span["end"] + start}
+                for span in local_spans
+            )
+
+            if group["kind"] == "lead":
+                emphasis_ranges.append({"start": start, "end": end, "role": "lead", "level": 1})
+            elif group["kind"] == "heading":
+                emphasis_ranges.append({
+                    "start": start,
+                    "end": end,
+                    "role": "heading",
+                    "level": int(group.get("level", 2) or 2),
+                })
+
+        if group["kind"] == "list" and cursor > group_start:
+            bullet_ranges.append({
+                "start": group_start,
+                "end": cursor,
+                "ordered": bool(group.get("ordered", False)),
+            })
+
+    return {
+        "text": "".join(text_parts).strip(),
+        "spans": spans,
+        "bullet_ranges": bullet_ranges,
+        "emphasis_ranges": emphasis_ranges,
+    }
+
+
+def _inset_geometry(geo: tuple[int, int, int, int], pad_x: int, pad_y: int | None = None) -> tuple[int, int, int, int]:
+    if pad_y is None:
+        pad_y = pad_x
+    x, y, w, h = geo
+    inner_w = max(300_000, w - 2 * pad_x)
+    inner_h = max(220_000, h - 2 * pad_y)
+    return (x + pad_x, y + pad_y, inner_w, inner_h)
+
+
+def _fit_code_font_size(
+    code_text: str,
+    geo: tuple[int, int, int, int],
+    preferred_size: float,
+    min_size: float = 5,
+) -> tuple[float, bool]:
+    lines = [line.expandtabs(4).rstrip() for line in code_text.splitlines()] or [""]
+    longest_line = max((len(line) for line in lines), default=1)
+    line_count = len(lines)
+    _, _, width_emu, height_emu = geo
+    width_pt = width_emu / EMU_PER_PT
+    height_pt = height_emu / EMU_PER_PT
+
+    probe = int(preferred_size)
+    floor = int(min_size)
+    for size in range(probe, floor - 1, -1):
+        approx_chars = width_pt / max(size * 0.66, 1)
+        approx_lines = height_pt / max(size * 1.55, 1)
+        if longest_line <= approx_chars and line_count <= approx_lines:
+            return float(size), size < probe
+
+    return float(min_size), True
+
+
+def _fit_text_font_size(
+    text: str,
+    geo: tuple[int, int, int, int],
+    preferred_size: float,
+    min_size: float = 10,
+) -> float:
+    lines = [line.strip() for line in text.splitlines() if line.strip()] or [""]
+    _, _, width_emu, height_emu = geo
+    width_pt = width_emu / EMU_PER_PT
+    height_pt = height_emu / EMU_PER_PT
+
+    probe = int(preferred_size)
+    floor = int(min_size)
+    for size in range(probe, floor - 1, -1):
+        chars_per_line = max(width_pt / max(size * 0.52, 1), 8)
+        visual_lines = 0
+        for line in lines:
+            visual_lines += max(1, int((len(line) + chars_per_line - 1) // chars_per_line))
+        max_lines = height_pt / max(size * 1.32, 1)
+        if visual_lines <= max_lines:
+            return float(size)
+
+    return float(min_size)
+
+
+def _table_dimensions(table_md: str) -> tuple[int, int]:
+    rows = []
+    for line in table_md.strip().splitlines():
+        clean = line.replace("|", "").strip()
+        if re.match(r"^[\-:\s]+$", clean):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        rows.append(cells)
+    if not rows:
+        return (0, 0)
+    return len(rows), max(len(row) for row in rows)
+
+
+def _should_use_native_table(table_md: str) -> bool:
+    rows, cols = _table_dimensions(table_md)
+    return rows > 0 and rows <= 8 and cols <= 5
+
+
+def _looks_like_ascii_diagram(code_text: str) -> bool:
+    lines = [line.rstrip() for line in code_text.splitlines() if line.strip()]
+    if not lines or len(lines) > 6:
+        return False
+    joined = "\n".join(lines)
+    has_ascii_connectors = any(token in joined for token in ("→", "←", "↑", "↓", "──", "|", "/", "\\"))
+    looks_like_program = any(token in joined for token in ("{", "}", ";", "=>", "function", "const ", "let ", "class "))
+    return has_ascii_connectors and not looks_like_program
+
+
+def _centered_box(geo: tuple[int, int, int, int], width_ratio: float, height_ratio: float) -> tuple[int, int, int, int]:
+    x, y, w, h = geo
+    inner_w = int(w * width_ratio)
+    inner_h = int(h * height_ratio)
+    inner_x = x + (w - inner_w) // 2
+    inner_y = y + (h - inner_h) // 2
+    return (inner_x, inner_y, inner_w, inner_h)
+
+
 # ═══════════════════════════════════════════════════════════════════════
 # FASE 1 — PARSEO DE FILMINAS.MD
 # ═══════════════════════════════════════════════════════════════════════
@@ -276,15 +581,23 @@ def _finalize_slide(raw: dict) -> dict:
             tables.append("\n".join(tbl_lines))
             continue
 
-        # ── Saltar secciones del documento (## BLOQUE …, ### etc.) ────────
-        if re.match(r'^#{2,}', line):
+        # ── Saltar secciones del documento que no pertenecen a la slide ───
+        if re.match(r'^##\s+(PORTADA|BLOQUE)\b', line, flags=re.IGNORECASE):
             i += 1
             continue
 
-        # ── Subtitle (# heading) ────────────────────────────────────────
-        m_h = re.match(r"^#\s+(.+)$", line)
+        # ── Headings Markdown → subtítulo o texto destacado ─────────────
+        m_h = re.match(r"^(#{1,6})\s+(.+)$", line)
         if m_h and not subtitle:
-            subtitle = m_h.group(1).strip()
+            subtitle = m_h.group(2).strip()
+            i += 1
+            continue
+        if m_h:
+            body_blocks.append({
+                "type": "heading",
+                "level": len(m_h.group(1)),
+                "content": m_h.group(2).strip(),
+            })
             i += 1
             continue
 
@@ -309,15 +622,16 @@ def _finalize_slide(raw: dict) -> dict:
 
         first = block_lines[0].strip()
         if re.match(r"^[-*•]|\d+\.", first):
+            ordered = bool(re.match(r"^\s*\d+[.)]\s+", first))
             items = []
             for bl in block_lines:
                 # Strip bullet prefix correctamente: "- text", "* text", "• text", "1. text"
                 stripped = re.sub(r'^\s*[-*•]\s+', '', bl)
                 stripped = re.sub(r'^\s*\d+[.)]\s+', '', stripped).strip()
                 if stripped:
-                    items.append(stripped)
+                    items.append({"content": stripped, "level": 0})
             if items:
-                body_blocks.append({"type": "list", "items": items})
+                body_blocks.append({"type": "list", "ordered": ordered, "items": items})
         else:
             combined = "\n".join(block_lines)
             body_blocks.append({"type": "text", "content": combined})
@@ -413,7 +727,13 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
 
     slides      = parse_filminas(filminas_path)
     topic_id    = filminas_path.parent.name
-    topic_title = slides[0]["title"] if slides else topic_id.replace("-", " ").title()
+    topic_title = topic_id.replace("-", " ").title()
+    if slides:
+        first_title = (slides[0].get("title") or "").strip()
+        first_subtitle = (slides[0].get("subtitle") or "").strip()
+        topic_title = first_subtitle or first_title or topic_title
+        if first_title.lower() == "portada" and first_subtitle:
+            topic_title = first_subtitle
 
     # Budget de imágenes: máximo 8 por presentación
     max_images  = int(config.get("gemini_image_strategy", {}).get("max_per_presentation", 8) or 8)
@@ -755,6 +1075,216 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         counter[0] += 1
         return f"{page_id}_e{counter[0]}_{suffix}"[:50]
 
+    def add_box(geo: tuple[int, int, int, int], fill: str, outline: str | None = None, alpha: float | None = None) -> str:
+        box_id = nid("box")
+        x, y, w, h = geo
+        solid_fill: dict[str, Any] = {"color": _rgb_color(fill)}
+        if alpha is not None:
+            solid_fill["alpha"] = alpha
+        shape_props: dict[str, Any] = {
+            "shapeBackgroundFill": {"solidFill": solid_fill},
+        }
+        # Google Slides no acepta solidFill directo en outline; el efecto de marco
+        # se logra anidando cajas con distintos fondos.
+        _ = outline
+        shape_props["outline"] = {"propertyState": "NOT_RENDERED"}
+        reqs.append({
+            "createShape": {
+                "objectId":  box_id,
+                "shapeType": "RECTANGLE",
+                "elementProperties": {
+                    "pageObjectId": page_id,
+                    "size":         _emu_size(w, h),
+                    "transform":    _transform(x, y),
+                },
+            }
+        })
+        reqs.append({
+            "updateShapeProperties": {
+                "objectId": box_id,
+                "shapeProperties": shape_props,
+                "fields": "shapeBackgroundFill,outline",
+            }
+        })
+        return box_id
+
+    def add_textbox_geo(
+        text: str,
+        geo: tuple[int, int, int, int],
+        size: float,
+        bold: bool = False,
+        italic: bool = False,
+        color: str = "#1A1A1A",
+        font: str = "Roboto",
+        align: str = "LEFT",
+    ) -> None:
+        if not text.strip():
+            return
+        x, y, w, h = geo
+        tb_id = nid("txt")
+        reqs.append({
+            "createShape": {
+                "objectId":  tb_id,
+                "shapeType": "TEXT_BOX",
+                "elementProperties": {
+                    "pageObjectId": page_id,
+                    "size":         _emu_size(w, h),
+                    "transform":    _transform(x, y),
+                },
+            }
+        })
+        reqs.append({"insertText": {"objectId": tb_id, "insertionIndex": 0, "text": text}})
+        reqs.append({
+            "updateTextStyle": {
+                "objectId": tb_id,
+                "style": {
+                    "bold":            bold,
+                    "italic":          italic,
+                    "fontSize":        _pt(size),
+                    "fontFamily":      font,
+                    "foregroundColor": _color(color),
+                },
+                "textRange": {"type": "ALL"},
+                "fields": "bold,italic,fontSize,fontFamily,foregroundColor",
+            }
+        })
+        reqs.append({
+            "updateParagraphStyle": {
+                "objectId": tb_id,
+                "style":    {"alignment": _normalize_alignment(align)},
+                "textRange": {"type": "ALL"},
+                "fields":   "alignment",
+            }
+        })
+
+    def add_rich_textbox_geo(
+        subtitle_text: str,
+        blocks: list[dict],
+        geo: tuple[int, int, int, int],
+        size: float,
+        color: str = "#1A1A1A",
+        font: str = "Roboto",
+        align: str = "LEFT",
+    ) -> None:
+        rich = _compose_rich_text(subtitle_text, blocks)
+        rich_text = rich.get("text", "")
+        if not rich_text.strip():
+            return
+
+        render_cfg = config.get("markdown_rendering", {}) or {}
+        unordered_preset = render_cfg.get("unordered_bullet_preset", "BULLET_DISC_CIRCLE_SQUARE")
+        ordered_preset = render_cfg.get("ordered_bullet_preset", "NUMBERED_DIGIT_ALPHA_ROMAN")
+        code_font = render_cfg.get("inline_code_font", typo.get("code", {}).get("font", "Roboto Mono"))
+        code_color = render_cfg.get("inline_code_color", primary)
+        lead_scale = float(render_cfg.get("lead_scale", 1.08) or 1.08)
+        heading_scale = float(render_cfg.get("heading_scale", 1.12) or 1.12)
+
+        x, y, w, h = geo
+        tb_id = nid("rich")
+        reqs.append({
+            "createShape": {
+                "objectId":  tb_id,
+                "shapeType": "TEXT_BOX",
+                "elementProperties": {
+                    "pageObjectId": page_id,
+                    "size":         _emu_size(w, h),
+                    "transform":    _transform(x, y),
+                },
+            }
+        })
+        reqs.append({"insertText": {"objectId": tb_id, "insertionIndex": 0, "text": rich_text}})
+        reqs.append({
+            "updateTextStyle": {
+                "objectId": tb_id,
+                "style": {
+                    "fontSize":        _pt(size),
+                    "fontFamily":      font,
+                    "foregroundColor": _color(color),
+                },
+                "textRange": {"type": "ALL"},
+                "fields": "fontSize,fontFamily,foregroundColor",
+            }
+        })
+        reqs.append({
+            "updateParagraphStyle": {
+                "objectId": tb_id,
+                "style":    {"alignment": _normalize_alignment(align)},
+                "textRange": {"type": "ALL"},
+                "fields":   "alignment",
+            }
+        })
+
+        for bullet in rich.get("bullet_ranges", []):
+            if bullet["end"] <= bullet["start"]:
+                continue
+            reqs.append({
+                "createParagraphBullets": {
+                    "objectId": tb_id,
+                    "textRange": {
+                        "type": "FIXED_RANGE",
+                        "startIndex": bullet["start"],
+                        "endIndex": bullet["end"],
+                    },
+                    "bulletPreset": ordered_preset if bullet.get("ordered") else unordered_preset,
+                }
+            })
+
+        for emphasis in rich.get("emphasis_ranges", []):
+            if emphasis["end"] <= emphasis["start"]:
+                continue
+            role = emphasis.get("role")
+            scale = heading_scale if role == "heading" else lead_scale
+            heading_size = round(size * scale, 1)
+            reqs.append({
+                "updateTextStyle": {
+                    "objectId": tb_id,
+                    "style": {
+                        "bold": True,
+                        "fontSize": _pt(heading_size),
+                        "foregroundColor": _color(primary if role == "heading" else color),
+                    },
+                    "textRange": {
+                        "type": "FIXED_RANGE",
+                        "startIndex": emphasis["start"],
+                        "endIndex": emphasis["end"],
+                    },
+                    "fields": "bold,fontSize,foregroundColor",
+                }
+            })
+
+        for span in rich.get("spans", []):
+            if span["end"] <= span["start"]:
+                continue
+            style: dict[str, Any] = {}
+            fields: list[str] = []
+            if span.get("bold"):
+                style["bold"] = True
+                fields.append("bold")
+            if span.get("italic"):
+                style["italic"] = True
+                fields.append("italic")
+            if span.get("code"):
+                style["fontFamily"] = code_font
+                style["foregroundColor"] = _color(code_color)
+                fields.extend(["fontFamily", "foregroundColor"])
+            if span.get("link"):
+                style["link"] = {"url": span["link"]}
+                fields.append("link")
+            if not fields:
+                continue
+            reqs.append({
+                "updateTextStyle": {
+                    "objectId": tb_id,
+                    "style": style,
+                    "textRange": {
+                        "type": "FIXED_RANGE",
+                        "startIndex": span["start"],
+                        "endIndex": span["end"],
+                    },
+                    "fields": ",".join(dict.fromkeys(fields)),
+                }
+            })
+
     # ── 1. Crear slide en blanco ────────────────────────────────────────
     reqs.append({
         "createSlide": {
@@ -837,44 +1367,9 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         align:   str   = "LEFT",
     ) -> None:
         geo = ZONES.get(zone)
-        if not geo or not text.strip():
+        if not geo:
             return
-        x, y, w, h = geo
-        tb_id = nid("txt")
-        reqs.append({
-            "createShape": {
-                "objectId":  tb_id,
-                "shapeType": "TEXT_BOX",
-                "elementProperties": {
-                    "pageObjectId": page_id,
-                    "size":         _emu_size(w, h),
-                    "transform":    _transform(x, y),
-                },
-            }
-        })
-        reqs.append({"insertText": {"objectId": tb_id, "insertionIndex": 0, "text": text}})
-        reqs.append({
-            "updateTextStyle": {
-                "objectId": tb_id,
-                "style": {
-                    "bold":            bold,
-                    "italic":          italic,
-                    "fontSize":        _pt(size),
-                    "fontFamily":      font,
-                    "foregroundColor": _color(color),
-                },
-                "textRange": {"type": "ALL"},
-                "fields": "bold,italic,fontSize,fontFamily,foregroundColor",
-            }
-        })
-        reqs.append({
-            "updateParagraphStyle": {
-                "objectId": tb_id,
-                "style":    {"alignment": _normalize_alignment(align)},
-                "textRange": {"type": "ALL"},
-                "fields":   "alignment",
-            }
-        })
+        add_textbox_geo(text, geo, size, bold=bold, italic=italic, color=color, font=font, align=align)
 
     def add_native_table(table_md: str, zone: str) -> None:
         geo = ZONES.get(zone)
@@ -893,6 +1388,14 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         rows   = [r + [""] * (n_cols - len(r)) for r in rows]
         n_rows = len(rows)
         x, y, w, h = geo
+        if zone == "table-main":
+            y += 110_000
+            h = max(360_000, h - 620_000)
+        header_font = 13
+        body_font = 12
+        if n_rows >= 7:
+            header_font = 10
+            body_font = 9
         tbl_id = nid("tbl")
         reqs.append({
             "createTable": {
@@ -928,7 +1431,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
                             "style": {
                                 "bold":            True,
                                 "foregroundColor": _color("#FFFFFF"),
-                                "fontSize":        _pt(13),
+                                "fontSize":        _pt(header_font),
                             },
                             "textRange": {"type": "ALL"},
                             "fields":    "bold,foregroundColor,fontSize",
@@ -957,7 +1460,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
                             "cellLocation": {"rowIndex": r_idx, "columnIndex": c_idx},
                             "style": {
                                 "foregroundColor": _color(text_col),
-                                "fontSize":        _pt(12),
+                                "fontSize":        _pt(body_font),
                             },
                             "textRange": {"type": "ALL"},
                             "fields":    "foregroundColor,fontSize",
@@ -977,20 +1480,23 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         if img_zone != "none":
             add_image(_drive_url(ci["drive_id"]), img_zone)
 
-    # ── 5. Tablas (imagen desde Drive o native) ─────────────────────────
+    # ── 5. Tablas (preferir nativas cuando entren bien) ─────────────────
     table_zone = layout.get("table", "full-bottom")
     ta_list    = slide.get("table_assets") or []
     tables     = slide.get("tables") or []
 
     if table_zone and table_zone != "none":
-        used_image = False
-        for ta in ta_list:
-            if ta.get("drive_id"):
-                add_image(_drive_url(ta["drive_id"]), table_zone)
-                used_image = True
-                break    # una sola tabla por zona
-        if not used_image and tables:
+        if tables and _should_use_native_table(tables[0]):
             add_native_table(tables[0], table_zone)
+        else:
+            used_image = False
+            for ta in ta_list:
+                if ta.get("drive_id"):
+                    add_image(_drive_url(ta["drive_id"]), table_zone)
+                    used_image = True
+                    break
+            if not used_image and tables:
+                add_native_table(tables[0], table_zone)
 
     # ── 6. Título ───────────────────────────────────────────────────────
     title      = slide.get("title", "")
@@ -998,6 +1504,14 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     t_size     = typo.get("title", {}).get("size", 36)
     if stype == "portada":
         t_size = 36
+    if len(title) > 42:
+        t_size = min(t_size, 32)
+    if len(title) > 60:
+        t_size = min(t_size, 28)
+    title_geo = ZONES.get(title_zone)
+    if title_geo and title:
+        min_title_size = 24 if stype == "portada" else 20
+        t_size = _fit_text_font_size(title, title_geo, t_size, min_size=min_title_size)
     t_align    = "CENTER" if "center" in str(title_zone) else "LEFT"
     t_align    = _normalize_alignment(t_align)
     add_textbox(title, title_zone, t_size, bold=True, color=primary, align=t_align)
@@ -1010,10 +1524,18 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
 
     # ── 8. Cuerpo (texto + listas) ──────────────────────────────────────
     body_zone = layout.get("body", "left-middle")
+    body_subtitle = slide.get("subtitle", "") if stype != "portada" else ""
     if body_zone not in ("none", "subtitle-only"):
-        body_txt = _blocks_to_text(slide.get("body_blocks") or [])
+        body_blocks = slide.get("body_blocks") or []
+        body_txt = _compose_body_text(body_subtitle, body_blocks)
         b_size   = typo.get("body", {}).get("size", 18)
-        add_textbox(body_txt, body_zone, b_size, color=text_col)
+        if body_zone == "table-intro":
+            b_size = min(b_size, 15)
+        body_geo = ZONES.get(body_zone)
+        if body_geo and body_txt:
+            b_size = _fit_text_font_size(body_txt, body_geo, b_size, min_size=10)
+        if body_geo:
+            add_rich_textbox_geo(body_subtitle, body_blocks, body_geo, b_size, color=text_col)
     elif body_zone == "subtitle-only" and subtitle:
         b_size = typo.get("body", {}).get("size", 18)
         add_textbox(subtitle, "subtitle-only", b_size, color=text_col)
@@ -1023,36 +1545,26 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     code_blocks = slide.get("code_blocks") or []
     if code_zone != "none" and code_blocks:
         code_geo = ZONES.get(code_zone)
-        if code_geo:
-            # Fondo gris para el bloque de código
-            bx, by, bw, bh = code_geo
-            bg_id = nid("codebg")
-            reqs.append({
-                "createShape": {
-                    "objectId":  bg_id,
-                    "shapeType": "RECTANGLE",
-                    "elementProperties": {
-                        "pageObjectId": page_id,
-                        "size":         _emu_size(bw, bh),
-                        "transform":    _transform(bx, by),
-                    },
-                }
-            })
-            reqs.append({
-                "updateShapeProperties": {
-                    "objectId": bg_id,
-                    "shapeProperties": {
-                        "shapeBackgroundFill": {
-                            "solidFill": {"color": _rgb_color("#F4F4F4")}
-                        }
-                    },
-                    "fields": "shapeBackgroundFill",
-                }
-            })
-        # Solo el contenido del código, sin marcadores de lenguaje
         code_text = "\n\n".join(cb['content'] for cb in code_blocks)
         c_size = typo.get("code", {}).get("size", 14)
-        add_textbox(code_text, code_zone, c_size, font="Roboto Mono", color="#222222")
+        if code_geo and _looks_like_ascii_diagram(code_text):
+            diagram_geo = _centered_box(code_geo, 0.78, 0.55)
+            add_box(diagram_geo, "#F4F4F4", outline="#D8D8D8")
+            inner_geo = _inset_geometry(diagram_geo, 140_000, 110_000)
+            c_size = _fit_code_font_size(code_text, inner_geo, max(c_size + 6, 20), min_size=14)[0]
+            add_textbox_geo(code_text, inner_geo, c_size, font="Roboto Mono", color="#222222")
+        else:
+            if code_geo:
+                add_box(code_geo, "#F4F4F4", outline="#D8D8D8")
+            inner_geo = _inset_geometry(code_geo, 170_000, 130_000) if code_geo else None
+            if inner_geo:
+                dense_code = len(code_text.splitlines()) > 12 or max((len(line) for line in code_text.splitlines()), default=0) > 52
+                c_size, needs_inner_frame = _fit_code_font_size(code_text, inner_geo, c_size, min_size=5)
+                if needs_inner_frame or dense_code:
+                    inner_geo = _inset_geometry(code_geo, 280_000, 210_000)
+                    add_box(inner_geo, "#FFFFFF", outline="#C8C8C8")
+                    c_size, _ = _fit_code_font_size(code_text, inner_geo, min(c_size, typo.get("code", {}).get("size", 14)), min_size=5)
+                add_textbox_geo(code_text, inner_geo, c_size, font="Roboto Mono", color="#222222")
 
     return reqs
 
@@ -1062,8 +1574,13 @@ def _blocks_to_text(blocks: list[dict]) -> str:
     for b in blocks:
         if b.get("type") == "text":
             lines.append(_strip_markdown(b["content"]))
+        elif b.get("type") == "heading":
+            lines.append(_strip_markdown(b["content"]))
         elif b.get("type") == "list":
-            lines.extend(f"• {_strip_markdown(item)}" for item in b.get("items", []))
+            for item in b.get("items", []):
+                text, _level = _list_item_parts(item)
+                if text:
+                    lines.append(text)
     return "\n".join(lines)
 
 
@@ -1106,9 +1623,10 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
             failed_batches.append(f"{label}: {exc}")
 
     if failed_batches:
-        print(f"  ⚠️  {len(failed_batches)} lote(s) fallaron — la presentación puede estar incompleta:")
+        print(f"  ⚠️  {len(failed_batches)} lote(s) fallaron — la presentación quedó incompleta:")
         for msg in failed_batches:
             print(f"     • {msg}")
+        raise RuntimeError("Publish incompleto: uno o más lotes de Google Slides fallaron")
 
     # ── Limpieza: elimina textos del template que quedaron en los slides ─
     _TEMPLATE_TEXTS = {

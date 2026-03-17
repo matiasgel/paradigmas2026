@@ -14,6 +14,13 @@ tools: ['read', 'edit', 'search', 'execute', 'fetch']
 2. `_edu/slides-config.yaml` debe existir → si no: activar `/edu-slides-designer` automáticamente antes de continuar.
 3. `filminas.md` del tema activo debe existir → si no: informar que ejecute `/edu-create-class` → STOP.
 
+### Contrato UX del pipeline
+
+- El pipeline debe respetar el sistema definido por Vera como UX designer de filminas.
+- Las listas Markdown se convierten a bullets nativos de Google Slides, nunca se publican con prefijos literales como `-`, `*`, `•` o `1.`.
+- Los headings internos, énfasis, inline code y links del Markdown se renderizan como estilo de texto real en Slides.
+- El objetivo es una filmina proyectable y limpia, no una copia textual del markup.
+
 ### Resolución del tema activo
 
 - Leer `active-topic.yaml` si existe → extraer `topic_folder`.
@@ -35,7 +42,7 @@ El script realiza automáticamente:
 |------|-------------|--------|
 | 1. Plan | Lee `filminas.md` → genera `slides/plan-filminas-{tema}.yaml` con contenido completo, directrices de layout e instrucciones de imágenes | `slides/plan-filminas-{tema}.yaml` |
 | 2. Assets | Genera imágenes con Gemini API, renderiza tablas como PNG con matplotlib, sube todo a Google Drive | `slides/assets/` + Drive IDs en el plan |
-| 3. Publish | Copia plantilla, crea cada filmina con layout correcto, inserta imágenes, tablas y código, guarda URL | `slides/slides-url.txt` |
+| 3. Publish | Copia plantilla, crea cada filmina con layout correcto, inserta imágenes, tablas, código y formato semántico de Markdown, guarda URL | `slides/slides-url.txt` |
 
 ### Opciones de ejecución parcial
 

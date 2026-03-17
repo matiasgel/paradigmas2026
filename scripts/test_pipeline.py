@@ -26,11 +26,12 @@ Estructura del reporte generado:
 
 Fases del test:
   1. Setup        — copia artefactos de referencia, crea estructura
-  2. Plan         — ejecuta Fase 1 del pipeline (parse filminas.md → plan YAML)
-  3. Assets       — ejecuta Fase 2 del pipeline (Imagen 4.0 + tablas matplotlib)
-  4. Publish      — ejecuta Fase 3 del pipeline (crea presentación en Google Slides)
-  5. Screenshots  — descarga capturas de slides via Google Slides API
-  6. Report       — genera report.html + test-meta.yaml
+    2. Semantic UX  — valida render semántico Markdown → Google Slides
+    3. Plan         — ejecuta Fase 1 del pipeline (parse filminas.md → plan YAML)
+    4. Assets       — ejecuta Fase 2 del pipeline (Imagen 4.0 + tablas matplotlib)
+    5. Publish      — ejecuta Fase 3 del pipeline (crea presentación en Google Slides)
+    6. Screenshots  — descarga capturas de slides via Google Slides API
+    7. Report       — genera report.html + test-meta.yaml
 
 Uso:
   python test_pipeline.py                          # test completo
@@ -49,6 +50,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import importlib.util
 import shutil
 import subprocess
 import sys
@@ -132,6 +134,172 @@ def _get_creds(secrets_path: Path, token_path: Path) -> Credentials:
     return creds
 
 
+def _load_slides_pipeline_module(project_root: Path):
+    module_path = project_root / "salida" / "edu-standalone" / "scripts" / "slides_pipeline.py"
+    spec = importlib.util.spec_from_file_location("slides_pipeline_under_test", module_path)
+    if not spec or not spec.loader:
+        raise RuntimeError(f"No se pudo cargar slides_pipeline.py desde {module_path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def validate_semantic_rendering(project_root: Path, meta: dict) -> bool:
+    """Valida que el pipeline convierta Markdown a formato nativo de Slides."""
+    try:
+        slides_pipeline = _load_slides_pipeline_module(project_root)
+    except Exception as exc:
+        meta["errors"].append(f"Semantic UX: no se pudo cargar slides_pipeline.py: {exc}")
+        meta["phases"]["semantic"] = {"status": "error", "elapsed_s": 0}
+        return False
+
+    config = {
+        "palette": {"primary": "#8B0000", "text": "#1A1A1A", "background": "#FFFFFF"},
+        "typography": {
+            "title": {"size": 36},
+            "body": {"size": 16},
+            "code": {"font": "Roboto Mono", "size": 18},
+        },
+        "markdown_rendering": {
+            "unordered_bullet_preset": "BULLET_DISC_CIRCLE_SQUARE",
+            "ordered_bullet_preset": "NUMBERED_DIGIT_ALPHA_ROMAN",
+            "inline_code_font": "Roboto Mono",
+            "inline_code_color": "#8B0000",
+        },
+        "gemini_image_strategy": {"max_per_presentation": 0},
+    }
+
+    findings: list[str] = []
+
+    fixture = project_root / "informe" / "filminas.md"
+    plan = slides_pipeline.generate_plan(fixture, config, "template-id")
+    if plan["meta"]["title"] != "Conceptos Introductorios + Intro a TypeScript":
+        findings.append("La portada no usa el subtítulo inicial como título del plan")
+
+    bullet_slide = {
+        "id": "F-10",
+        "type": "concepto-abstracto",
+        "title": "Listas con formato",
+        "subtitle": "Conceptos clave",
+        "body_blocks": [
+            {
+                "type": "list",
+                "ordered": False,
+                "items": [
+                    {"content": "Primer concepto", "level": 0},
+                    {"content": "Segundo concepto", "level": 0},
+                ],
+            }
+        ],
+        "tables": [],
+        "table_assets": [],
+        "code_blocks": [],
+        "layout": slides_pipeline.LAYOUT_MAP["concepto-abstracto"],
+        "background_image": {},
+        "content_image": {},
+    }
+    reqs = slides_pipeline._build_slide_requests(bullet_slide, config, "page_semantic_1", 0)
+    inserted = [
+        r["insertText"]["text"]
+        for r in reqs
+        if "insertText" in r and r["insertText"].get("objectId", "").endswith("rich")
+    ]
+    if not [r for r in reqs if "createParagraphBullets" in r]:
+        findings.append("Las listas no generan bullets nativos de Google Slides")
+    if not inserted or any("•" in text or "- " in text for text in inserted):
+        findings.append("Las listas siguen publicándose con prefijos literales en el texto")
+
+    inline_slide = {
+        "id": "F-11",
+        "type": "concepto-abstracto",
+        "title": "Markdown inline",
+        "subtitle": "Resumen",
+        "body_blocks": [
+            {"type": "heading", "level": 2, "content": "Idea central"},
+            {"type": "text", "content": "Texto con **énfasis**, *itálica*, `codigo()` y [link](https://example.com)."},
+        ],
+        "tables": [],
+        "table_assets": [],
+        "code_blocks": [],
+        "layout": slides_pipeline.LAYOUT_MAP["concepto-abstracto"],
+        "background_image": {},
+        "content_image": {},
+    }
+    reqs = slides_pipeline._build_slide_requests(inline_slide, config, "page_semantic_2", 0)
+    inserted = [
+        r["insertText"]["text"]
+        for r in reqs
+        if "insertText" in r and r["insertText"].get("objectId", "").endswith("rich")
+    ]
+    styled_ranges = [
+        r["updateTextStyle"]
+        for r in reqs
+        if "updateTextStyle" in r and r["updateTextStyle"].get("textRange", {}).get("type") == "FIXED_RANGE"
+    ]
+    if not inserted or any("**" in text or "*" in text or "`" in text for text in inserted):
+        findings.append("El Markdown inline queda visible como markup literal")
+    if any(">" in text for text in inserted):
+        findings.append("Los blockquotes siguen publicándose con '>' literal")
+    if not any(style["style"].get("bold") for style in styled_ranges):
+        findings.append("No se detectó estilo bold para **texto** inline")
+    if not any(style["style"].get("italic") for style in styled_ranges):
+        findings.append("No se detectó estilo italic para *texto* inline")
+    if not any(style["style"].get("fontFamily") == "Roboto Mono" for style in styled_ranges):
+        findings.append("No se detectó estilo monoespaciado para inline code")
+    if not any(style["style"].get("link", {}).get("url") == "https://example.com" for style in styled_ranges):
+        findings.append("No se detectó link real para enlaces Markdown")
+
+    table_slide = {
+        "id": "F-12",
+        "type": "tabla",
+        "title": "Tabla legible",
+        "subtitle": "Comparación breve",
+        "body_blocks": [{"type": "text", "content": "> Contexto de la tabla."}],
+        "tables": [
+            "| A | B | C |\n|---|---|---|\n| 1 | 2 | 3 |\n| 4 | 5 | 6 |"
+        ],
+        "table_assets": [{"index": 0, "table_markdown": "", "local_asset": "", "drive_id": "fake-drive-id"}],
+        "code_blocks": [],
+        "layout": slides_pipeline.LAYOUT_MAP["tabla"],
+        "background_image": {},
+        "content_image": {},
+    }
+    reqs = slides_pipeline._build_slide_requests(table_slide, config, "page_semantic_3", 0)
+    if not any("createTable" in req for req in reqs):
+        findings.append("Las tablas cortas no se están renderizando como tablas nativas")
+
+    long_title_slide = {
+        "id": "F-13",
+        "type": "concepto-abstracto",
+        "title": "Von Neumann → código imperativo (correspondencia directa)",
+        "subtitle": "Subtítulo breve",
+        "body_blocks": [],
+        "tables": [],
+        "table_assets": [],
+        "code_blocks": [],
+        "layout": slides_pipeline.LAYOUT_MAP["concepto-abstracto"],
+        "background_image": {},
+        "content_image": {},
+    }
+    reqs = slides_pipeline._build_slide_requests(long_title_slide, config, "page_semantic_4", 0)
+    title_styles = [
+        r["updateTextStyle"]["style"]
+        for r in reqs
+        if "updateTextStyle" in r
+        and r["updateTextStyle"].get("textRange", {}).get("type") == "ALL"
+        and r["updateTextStyle"]["style"].get("bold") is True
+    ]
+    if not any(style.get("fontSize", {}).get("magnitude", 0) < 36 for style in title_styles):
+        findings.append("Los títulos largos no están reduciendo tamaño para entrar mejor en slide")
+
+    meta["semantic_checks"] = {"status": "ok" if not findings else "error", "errors": findings}
+    meta["phases"]["semantic"] = {"status": "ok" if not findings else "error", "elapsed_s": 0}
+    if findings:
+        meta["errors"].extend(f"Semantic UX: {item}" for item in findings)
+        return False
+    return True
+
+
 # ══════════════════════════════════════════════════════════════════════
 # FASE 1 — Setup del directorio de reporte
 # ══════════════════════════════════════════════════════════════════════
@@ -173,6 +341,7 @@ def setup_test_dir(
         "test_dir":        str(test_dir.relative_to(project_root)),
         "phases": {
             "setup":       {"status": "ok",     "elapsed_s": 0},
+            "semantic":    {"status": "pending", "elapsed_s": 0},
             "plan":        {"status": "pending", "elapsed_s": 0, "slides": 0},
             "assets":      {"status": "pending", "elapsed_s": 0},
             "publish":     {"status": "pending", "elapsed_s": 0, "presentation_url": ""},
@@ -235,7 +404,7 @@ def run_pipeline(
         _info(f"Plan reutilizado desde: {reuse_plan}")
     else:
         t0 = time.time()
-        print(f"  Ejecutando plan...")
+        print("  Ejecutando plan...")
         ok, out = _run_pipeline_phase(pipeline, topic_folder, "--plan-only", python_bin)
         elapsed = round(time.time() - t0, 1)
         meta["phases"]["plan"]["elapsed_s"] = elapsed
@@ -260,7 +429,7 @@ def run_pipeline(
     # ── Fase Assets ───────────────────────────────────────────────────
     if not no_images:
         t0 = time.time()
-        print(f"  Generando assets...")
+        print("  Generando assets...")
         ok, out = _run_pipeline_phase(pipeline, topic_folder, "--assets-only", python_bin)
         elapsed = round(time.time() - t0, 1)
         meta["phases"]["assets"]["elapsed_s"] = elapsed
@@ -273,12 +442,38 @@ def run_pipeline(
             meta["phases"]["assets"]["status"] = "ok"
             _ok(f"Assets generados ({elapsed}s)")
     else:
-        meta["phases"]["assets"]["status"] = "skipped_no_images"
-        _info("Assets omitidos (--no-images)")
+        # En modo --no-images seguimos renderizando tablas y subiéndolas a Drive,
+        # pero anulamos las imágenes Gemini para que el test siga siendo barato y
+        # mantenga layouts equivalentes a producción para tablas.
+        plan_path = topic_folder / "slides" / f"plan-filminas-{TOPIC_NAME}.yaml"
+        plan_data = load_yaml(plan_path)
+        for slide in plan_data.get("slides", []):
+            bg = slide.get("background_image") or {}
+            bg.update({"strategy": "none", "prompt": "", "local_asset": "", "drive_id": None})
+            slide["background_image"] = bg
+
+            ci = slide.get("content_image") or {}
+            ci.update({"strategy": "none", "prompt": "", "local_asset": "", "drive_id": None})
+            slide["content_image"] = ci
+        save_yaml(plan_path, plan_data)
+
+        t0 = time.time()
+        print("  Generando assets de tablas (sin Gemini)...")
+        ok, out = _run_pipeline_phase(pipeline, topic_folder, "--assets-only", python_bin)
+        elapsed = round(time.time() - t0, 1)
+        meta["phases"]["assets"]["elapsed_s"] = elapsed
+        if not ok:
+            meta["phases"]["assets"]["status"] = "error"
+            meta["phases"]["assets"]["output"] = out[-2000:]
+            meta["errors"].append(f"Assets sin imágenes fallaron: {out[-500:]}")
+            _warn(f"Assets de tablas fallaron ({elapsed}s) — continuando con publish...")
+        else:
+            meta["phases"]["assets"]["status"] = "ok"
+            _ok(f"Assets de tablas generados ({elapsed}s)")
 
     # ── Fase Publish ──────────────────────────────────────────────────
     t0 = time.time()
-    print(f"  Publicando en Google Slides...")
+    print("  Publicando en Google Slides...")
     ok, out = _run_pipeline_phase(pipeline, topic_folder, "--publish-only", python_bin)
     elapsed = round(time.time() - t0, 1)
     meta["phases"]["publish"]["elapsed_s"] = elapsed
@@ -379,8 +574,15 @@ def screenshot_slides(
 
     print()  # nueva línea tras el \r
     meta["phases"]["screenshots"]["count"]  = count
+    meta["phases"]["screenshots"]["expected"] = total
     meta["phases"]["screenshots"]["errors"] = errors
-    meta["phases"]["screenshots"]["status"] = "ok" if count > 0 else "error"
+    if count == total and errors == 0:
+        meta["phases"]["screenshots"]["status"] = "ok"
+    elif count > 0:
+        meta["phases"]["screenshots"]["status"] = "partial"
+        meta["errors"].append(f"Screenshots incompletas: {count}/{total}")
+    else:
+        meta["phases"]["screenshots"]["status"] = "error"
     _ok(f"Capturas: {count}/{total} OK, {errors} errores")
     return count
 
@@ -457,10 +659,11 @@ def generate_report(
         return f"<tr><td>{icon} {label}</td><td>{el}s{extra}</td></tr>"
 
     phases_html = (
-        phase_row("plan",        "Fase 1 — Plan YAML") +
-        phase_row("assets",      "Fase 2 — Assets (IA + tablas)") +
-        phase_row("publish",     "Fase 3 — Publicar Google Slides") +
-        phase_row("screenshots", "Fase 4 — Screenshots")
+        phase_row("semantic",    "Fase 1 — Validación semántica UX") +
+        phase_row("plan",        "Fase 2 — Plan YAML") +
+        phase_row("assets",      "Fase 3 — Assets (IA + tablas)") +
+        phase_row("publish",     "Fase 4 — Publicar Google Slides") +
+        phase_row("screenshots", "Fase 5 — Screenshots")
     )
 
     # ── Errores ────────────────────────────────────────────────────────
@@ -653,7 +856,7 @@ def main(argv: list[str] | None = None) -> None:
     token_path   = project_root / "_edu" / "token_slides.json"
 
     if not args.plan_only and not secrets_path.exists():
-        _err(f"Falta _edu/secrets.local.yaml — ejecutar /edu-setup-apis primero")
+        _err("Falta _edu/secrets.local.yaml — ejecutar /edu-setup-apis primero")
         sys.exit(1)
 
     print("""
@@ -680,11 +883,21 @@ def main(argv: list[str] | None = None) -> None:
     if source_config != config_override:
         _info(f"Usando slides-config de referencia para el test: {source_config}")
 
-    # ── Paso 2: Pipeline ───────────────────────────────────────────────
-    _step(2, "Ejecutando pipeline (Plan → Assets → Publish)")
+    # ── Paso 2: Validación semántica UX ───────────────────────────────
+    _step(2, "Validando render semántico Markdown → Slides")
+    t0 = time.time()
+    semantic_ok = validate_semantic_rendering(project_root, meta)
+    meta["phases"]["semantic"]["elapsed_s"] = round(time.time() - t0, 1)
+    if semantic_ok:
+        _ok("Validación semántica OK")
+    else:
+        _err("Validación semántica falló")
+
+    # ── Paso 3: Pipeline ───────────────────────────────────────────────
+    _step(3, "Ejecutando pipeline (Plan → Assets → Publish)")
     reuse_plan = Path(args.reuse_plan) if args.reuse_plan else None
 
-    pipeline_ok, pres_id = run_pipeline(
+    _, pres_id = run_pipeline(
         project_root  = project_root,
         topic_folder  = topic_folder,
         meta          = meta,
@@ -694,13 +907,13 @@ def main(argv: list[str] | None = None) -> None:
         python_bin    = args.python,
     )
 
-    # ── Paso 3: Screenshots ────────────────────────────────────────────
+    # ── Paso 4: Screenshots ────────────────────────────────────────────
     if pres_id and not args.plan_only:
-        _step(3, f"Descargando capturas de Google Slides (pres_id: {pres_id})")
+        _step(4, f"Descargando capturas de Google Slides (pres_id: {pres_id})")
         t0 = time.time()
         try:
             creds = _get_creds(secrets_path, token_path)
-            n_shots = screenshot_slides(
+            screenshot_slides(
                 pres_id    = pres_id,
                 creds      = creds,
                 output_dir = test_dir / "filminas",
@@ -713,17 +926,17 @@ def main(argv: list[str] | None = None) -> None:
         meta["phases"]["screenshots"]["elapsed_s"] = round(time.time() - t0, 1)
     elif args.plan_only:
         meta["phases"]["screenshots"]["status"] = "skipped_plan_only"
-        _step(3, "Screenshots — omitido (plan-only)")
+        _step(4, "Screenshots — omitido (plan-only)")
     else:
         meta["phases"]["screenshots"]["status"] = "skipped_no_pres"
-        _step(3, "Screenshots — omitido (sin presentación disponible)")
+        _step(4, "Screenshots — omitido (sin presentación disponible)")
 
-    # ── Paso 4: Copiar assets ──────────────────────────────────────────
-    _step(4, "Copiando assets al directorio de reporte")
+    # ── Paso 5: Copiar assets ──────────────────────────────────────────
+    _step(5, "Copiando assets al directorio de reporte")
     copy_assets_to_report(test_dir, topic_folder, meta)
 
-    # ── Paso 5: Generar reporte ────────────────────────────────────────
-    _step(5, "Generando informe HTML")
+    # ── Paso 6: Generar reporte ────────────────────────────────────────
+    _step(6, "Generando informe HTML")
     report_path = generate_report(test_dir, topic_folder, meta, args.plan_only)
 
     # ── Resumen final ──────────────────────────────────────────────────
