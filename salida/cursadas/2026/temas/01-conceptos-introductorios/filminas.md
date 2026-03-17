@@ -13,7 +13,7 @@
 
 ---
 
-### [F-00] Portada
+### [1]
 
 # Conceptos Introductorios + Intro a TypeScript
 
@@ -28,7 +28,7 @@ Semana 1 · Clase 1 de 2 · 120 minutos
 
 ---
 
-### [F-01] ¿Para qué estudiar lenguajes de programación?
+### [2]
 
 # ¿Para qué estudiar lenguajes si ya saben programar?
 
@@ -38,7 +38,7 @@ Semana 1 · Clase 1 de 2 · 120 minutos
 
 ---
 
-### [F-01b] ¿Qué es un lenguaje de programación?
+### [3]
 
 # Definición formal
 
@@ -57,7 +57,7 @@ Semana 1 · Clase 1 de 2 · 120 minutos
 
 ---
 
-### [F-02] El costo de elegir mal
+### [4]
 
 # Elegir el lenguaje equivocado tiene consecuencias reales
 
@@ -71,7 +71,7 @@ Quien eligió el lenguaje no conocía los paradigmas ni sus trade-offs.
 
 ---
 
-### [F-03] Perspectiva histórica
+### [5]
 
 # La línea de tiempo de los lenguajes
 
@@ -89,7 +89,7 @@ Quien eligió el lenguaje no conocía los paradigmas ni sus trade-offs.
 
 ---
 
-### [F-04] Criterios de evaluación de lenguajes
+### [6]
 
 # ¿Cómo evaluamos un lenguaje? — Sebesta (2018)
 
@@ -108,7 +108,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 ---
 
-### [F-04a] Legibilidad
+### [7]
 
 # Legibilidad — el costo cognitivo de leer código
 
@@ -118,7 +118,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 ---
 
-### [F-04b] Expresividad
+### [8]
 
 # Expresividad — qué tan cercano está el código al problema real
 
@@ -128,7 +128,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 ---
 
-### [F-04c] Seguridad
+### [9]
 
 # Seguridad — detección temprana de errores
 
@@ -138,7 +138,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 ---
 
-### [F-04d] Costo
+### [10]
 
 # Costo — desarrollo, mantenimiento y soporte
 
@@ -147,7 +147,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 ---
 
-### [F-04e] Portabilidad
+### [11]
 
 # Portabilidad — ejecutar en distintas plataformas
 
@@ -156,7 +156,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 ---
 
-### [F-04f] Eficiencia
+### [12]
 
 # Eficiencia — tiempo de ejecución y uso de memoria
 
@@ -165,7 +165,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 ---
 
-### [F-05] Pregunta abierta
+### [13]
 
 # ¿Importa el lenguaje si la IA puede escribir en cualquiera?
 
@@ -176,7 +176,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 ---
 
-### [F-06] ¿Qué es un paradigma?
+### [14]
 
 # Un paradigma de programación es una forma de pensar el cómputo
 
@@ -187,7 +187,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 ---
 
-### [F-07] Arquitectura de Von Neumann
+### [15]
 
 # La máquina de Von Neumann (modelo conceptual)
 
@@ -206,7 +206,7 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 ---
 
-### [F-08] El cuello de botella de Von Neumann
+### [16]
 
 # La máquina abstracta tiene un canal único: el bus
 
@@ -223,7 +223,7 @@ CPU ←───bus───→ Memoria
 
 ---
 
-### [F-08a] ¿Por qué esto importa para los lenguajes?
+### [17]
 
 # El modelo impone restricciones a los lenguajes "pegados" a la máquina
 
@@ -235,7 +235,7 @@ CPU ←───bus───→ Memoria
 
 ---
 
-### [F-08b] ¿Qué paradigmas buscan escapar de esto?
+### [18]
 
 # El cuello de botella empuja hacia otros modelos de cómputo
 
@@ -252,7 +252,7 @@ CPU ←───bus───→ Memoria
 
 ---
 
-### [F-09] Los 4 paradigmas fundamentales
+### [19]
 
 # Los 4 paradigmas fundamentales
 
@@ -269,7 +269,7 @@ CPU ←───bus───→ Memoria
 
 ---
 
-### [F-10] Dominios de aplicación
+### [20]
 
 # ¿Cuándo usar cada paradigma?
 
@@ -287,7 +287,7 @@ CPU ←───bus───→ Memoria
 
 ---
 
-### [F-11] La escalera de abstracciones
+### [21]
 
 # Todo lenguaje ocupa un nivel en la escalera de abstracción
 
@@ -311,7 +311,7 @@ LC-3, ensamblador               ← Nivel 0: registros, saltos, direcciones
 
 ---
 
-### [F-12] Von Neumann → código imperativo (correspondencia directa)
+### [22]
 
 # El paradigma imperativo abstrae el hardware
 
@@ -327,7 +327,7 @@ LC-3, ensamblador               ← Nivel 0: registros, saltos, direcciones
 
 ---
 
-### [F-13] Mismo algoritmo — 3 niveles
+### [23]
 
 # Suma de valores absolutos: LC-3 vs. C
 
@@ -361,7 +361,7 @@ int suma_abs(int arr[], int n) {
 
 ---
 
-### [F-14] Máquina abstracta, interpretación y compilación
+### [24]
 
 # Todo lenguaje define una "máquina abstracta" — Gabbrielli & Martini, Cap. 1
 
@@ -386,7 +386,7 @@ Compilación pura:
 
 ---
 
-### [F-15] ¿Por qué TypeScript en 2026?
+### [25]
 
 # TypeScript como lenguaje del cursado
 
@@ -401,7 +401,7 @@ Compilación pura:
 
 ---
 
-### [F-15a] ¿Por qué la IA obtiene mejor TypeScript?
+### [26]
 
 # La IA funciona mejor con TypeScript porque...
 
@@ -415,7 +415,7 @@ Compilación pura:
 
 ---
 
-### [F-16] TypeScript como máquina intermedia (el pipeline)
+### [27]
 
 # TypeScript = ejemplo vivo de Gabbrielli Cap. 1
 
@@ -442,7 +442,7 @@ archivo.js  ←── LENGUAJE INTERMEDIO
 
 ---
 
-### [F-17] El mismo problema: imperativo en TypeScript
+### [28]
 
 # TypeScript — estilo imperativo
 
@@ -465,7 +465,7 @@ console.log(sumaAbs([3, -1, 4, -1, 5])); // → 14
 
 ---
 
-### [F-18] El mismo problema: funcional en TypeScript
+### [29]
 
 # TypeScript — estilo funcional
 
@@ -489,7 +489,7 @@ console.log(sumaAbs([3, -1, 4, -1, 5])); // → 14
 
 ---
 
-### [F-19] Sistema de tipos básico
+### [30]
 
 # TypeScript: tipos estáticos que aumentan la seguridad
 
@@ -518,7 +518,7 @@ sumaAbs(["hola", "mundo"]);
 
 ---
 
-### [F-20] TypeScript como "acelerador de paradigma"
+### [31]
 
 # TypeScript: ¿qué paradigma usamos?
 
@@ -548,7 +548,7 @@ class Calculadora {
 
 ---
 
-### [F-20a] Introducción al paradigma funcional
+### [32]
 
 # Paradigma funcional: cálculos sin efectos secundarios
 
@@ -560,7 +560,7 @@ class Calculadora {
 
 ---
 
-### [F-20b] Funciones puras y composición
+### [33]
 
 # Composición: construir programas como cadenas de funciones
 
@@ -577,7 +577,7 @@ const dobleYSuma = (x: number, y: number) => suma(doble(x), doble(y));
 
 ---
 
-### [F-20c] Inmutabilidad y datos persistentes
+### [34]
 
 # Cambiar sin mutar: estructuras inmutables
 
@@ -594,7 +594,7 @@ const nuevo = [...lista, 4]; // no muta la lista original
 
 ---
 
-### [F-20d] Lenguajes funcionales más puros
+### [35]
 
 # TypeScript permite el estilo funcional, pero hay lenguajes más “puros”
 
@@ -608,7 +608,7 @@ const nuevo = [...lista, 4]; // no muta la lista original
 
 ---
 
-### [F-20e] Introducción al paradigma lógico
+### [36]
 
 # Paradigma lógico: programar declarando “qué” en lugar de “cómo”
 
@@ -620,7 +620,7 @@ const nuevo = [...lista, 4]; // no muta la lista original
 
 ---
 
-### [F-20f] Hechos y reglas en Prolog
+### [37]
 
 # Programar con hechos y reglas
 
@@ -638,7 +638,7 @@ ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
 
 ---
 
-### [F-20g] Consultas en Prolog
+### [38]
 
 # Hacer preguntas al sistema
 
@@ -654,7 +654,7 @@ ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
 
 ---
 
-### [F-20h] Aplicaciones del paradigma lógico
+### [39]
 
 # ¿Para qué sirve la programación lógica?
 
@@ -670,7 +670,7 @@ ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
 
 ---
 
-### [F-21] El cambio de rol del programador
+### [40]
 
 # El trabajo del programador cambió radicalmente
 
@@ -695,7 +695,7 @@ ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
 
 ---
 
-### [F-22] La jerarquía de proficiencia en IA
+### [41]
 
 # ¿Dónde apuntan los graduados de esta materia?
 
@@ -719,7 +719,7 @@ ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
 
 ---
 
-### [F-23] Demo en vivo — La IA elige paradigmas
+### [42]
 
 # Prompt 1: versión base
 
@@ -732,7 +732,7 @@ de los valores absolutos de una lista de números"
 
 ---
 
-### [F-24] Demo en vivo — Restricción de paradigma
+### [43]
 
 # Prompt 2: paradigma funcional explícito
 
@@ -748,7 +748,7 @@ sin mutación de estado, sin variables intermedias"
 
 ---
 
-### [F-25] Demo en vivo — Máquinas abstractas
+### [44]
 
 # Prompt 3: verificación de comprensión
 
@@ -764,7 +764,7 @@ este código TypeScript"
 
 ---
 
-### [F-26] El loop "trust but verify"
+### [45]
 
 # Cómo trabajar con IA en programación — Schmidt & Runfola, Fig. 8
 
@@ -793,7 +793,7 @@ este código TypeScript"
 
 ---
 
-### [F-27] Mapa de la materia — los 15 temas
+### [46]
 
 # Cómo se conectan los temas del cursado
 
@@ -816,7 +816,7 @@ Tema 15         Concurrencia y paralelismo
 
 ---
 
-### [F-28] Adelanto — Clase 2: Sintaxis y Semántica
+### [47]
 
 # Próxima clase: ¿qué hace un programa **válido**?
 
