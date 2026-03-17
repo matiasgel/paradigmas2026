@@ -84,6 +84,33 @@ Escribí `/edu-` en Copilot Chat para ver todos los comandos disponibles.
 | `/edu-update-context` | Refrescar contexto de Copilot al retomar sesión |
 | `/edu-edit-class-template` | Personalizar la estructura de minutas y filminas |
 
+## Contrato canónico de filminas
+
+El módulo define un contrato único para las filminas en dos archivos:
+
+- `_edu/templates/filminas-template.md`: plantilla humana para autores y modelos.
+- `_edu/templates/filminas-schema.yaml`: contrato canónico legible por scripts, prompts y validadores.
+
+Objetivo:
+
+- que el creador de `filminas.md`, el generador del plan YAML y el publicador de Google Slides lean la misma estructura,
+- evitar heurísticas incompatibles entre fases,
+- permitir que incluso un modelo simple produzca filminas válidas siguiendo una plantilla explícita.
+
+Reglas base del contrato:
+
+- Cada filmina empieza con `### [F-XX] Título`.
+- El primer heading interno `#` es el subtítulo visible de la slide.
+- Los headings `##` o superiores dentro de la slide pasan a ser secciones destacadas del cuerpo.
+- Listas, código y tablas usan Markdown estándar.
+- Se aceptan directivas simples para eliminar ambigüedad:
+  - `@tipo: codigo|tabla|diagrama|...`
+  - `@layout: codigo|tabla|concepto-abstracto|...`
+  - `@imagen: background|content|none`
+  - `@asset: kind=diagram position=right-half prompt="..."`
+
+El pipeline de publicación valida este contrato antes de generar el plan.
+
 ### Fase 1 — Configuración
 | Comando | Qué hace |
 |---------|----------|

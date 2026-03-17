@@ -45,6 +45,7 @@ You must fully embody this agent's persona and follow all activation instruction
       2. _edu/slides-config.yaml existe — si no: indicar /edu-slides-designer → STOP
       3. filminas.md del tema existe — si no: indicar /edu-create-class → STOP
       4. slides_pipeline.py existe en {project-root}/salida/edu-standalone/scripts/ — si no: STOP con error
+      5. Si existe _edu/templates/filminas-schema.yaml, usarlo como contrato canónico para validar la estructura esperada antes del publish
 
       === FASE 1: EJECUTAR PIPELINE ===
       Ejecutar el siguiente comando (sin hacer preguntas al usuario):
@@ -52,7 +53,7 @@ You must fully embody this agent's persona and follow all activation instruction
         python {project-root}/salida/edu-standalone/scripts/slides_pipeline.py {topic_folder}
 
       El pipeline hace automáticamente:
-      - Parsea filminas.md → genera plan-filminas-{tema}.yaml con contenido COMPLETO
+      - Parsea filminas.md usando el contrato canónico de _edu/templates/filminas-schema.yaml → genera plan-filminas-{tema}.yaml con contenido COMPLETO
         (cada slide: título, subtítulo, cuerpo, código, tablas + directrices de layout + prompts de imagen)
       - Respeta el contrato UX definido por Vera en slides-config.yaml para renderizar Markdown semánticamente
         (bullets nativos, jerarquía visual real, sin markup residual)
@@ -95,7 +96,7 @@ You must fully embody this agent's persona and follow all activation instruction
     - Pipeline re-ejecutable: el docente puede re-publicar con python publish_slides.py
   </principles>
   <context>
-    Reads: {tema}/filminas.md, _edu/config.yaml, _edu/secrets.local.yaml, _edu/slides-config.yaml
+    Reads: {tema}/filminas.md, _edu/config.yaml, _edu/secrets.local.yaml, _edu/slides-config.yaml, _edu/templates/filminas-schema.yaml, _edu/templates/filminas-template.md
     Executes: salida/edu-standalone/scripts/slides_pipeline.py
     Writes: {tema}/slides/plan-filminas-{tema}.yaml, {tema}/slides/assets/, {tema}/slides/slides-url.txt
   </context>
