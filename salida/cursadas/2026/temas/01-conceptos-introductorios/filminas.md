@@ -292,7 +292,7 @@ CPU ←───bus───→ Memoria
 # Todo lenguaje ocupa un nivel en la escalera de abstracción
 
 ```
-Frameworks (React, Django)     ← Nivel 3: abstracción de plataforma
+Frameworks (React, Django)     ← Nivel 3: abstracción sobre el lenguaje y la plataforma
         ↑
 Java, Python, TypeScript        ← Nivel 2: GC, tipos, ecosistema
         ↑
@@ -301,11 +301,12 @@ C, Pascal, Go                   ← Nivel 1: estructura, funciones, tipos básic
 LC-3, ensamblador               ← Nivel 0: registros, saltos, direcciones
 ```
 
-**Al subir:** más legibilidad, más expresividad, más portabilidad
-**Al bajar:** más control, más eficiencia
+**Al subir:** más legibilidad, más expresividad, más portabilidad (y más abstracciones sobre el lenguaje)
+**Al bajar:** más control, más eficiencia (y más cercanía al hardware)
 
-> *"¿Qué abstraje? ¿Qué perdí?"* — La pregunta que guía esta materia
+> *"¿Qué abstrae? ¿Qué perdí?"* — La pregunta que guía esta materia
 
+**Nota:** los frameworks no son la plataforma en sí, sino abstracciones construidas sobre el lenguaje y sus herramientas (runtime, librerías, convenciones).
 *Fuente: Louden & Lambert, Cap. 1 — Fig. 1.4 y 1.5*
 
 ---
