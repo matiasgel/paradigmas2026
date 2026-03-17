@@ -28,7 +28,7 @@ Semana 1 · Clase 1 de 2 · 120 minutos
 
 ---
 
-### [F-01] La pregunta incómoda
+### [F-01] ¿Para qué estudiar lenguajes de programación?
 
 # ¿Para qué estudiar lenguajes si ya saben programar?
 

@@ -36,7 +36,7 @@ Este quiz evalúa los conceptos trabajados en la Clase 1. Algunas preguntas requ
 
 ### P01 — Criterio Sebesta aplicado al error de TypeScript en clase
 
-**Trazabilidad:** Bloque 4 — F-19, demo en vivo de error de tipos
+**Trazabilidad:** Bloque 4 — 30, demo en vivo de error de tipos
 
 **Enunciado:**
 En clase vimos en vivo este error de TypeScript al pasar `["hola", "mundo"]` a la función `sumaAbs`:
@@ -57,7 +57,7 @@ El compilador (`tsc`) detectó este problema **antes de ejecutar el programa**. 
 
 ### P02 — Pipeline de ejecución de TypeScript ⚠️ [TRAMPA: DATO INCORRECTO PLANTADO]
 
-**Trazabilidad:** Bloque 4 — F-16, pipeline dibujado en clase
+**Trazabilidad:** Bloque 4 — 27, pipeline dibujado en clase
 
 **Enunciado:**
 En clase dibujamos el pipeline completo de TypeScript (F-16). Evaluá la siguiente afirmación:
@@ -72,13 +72,13 @@ En clase dibujamos el pipeline completo de TypeScript (F-16). Evaluá la siguien
 - ~ Es parcialmente correcta — TypeScript puede compilar a JVM opcionalmente con `tsc --target jvm`
 - ~ Es correcta — V8 es el motor JVM de Google Chrome, por eso el flujo es equivalente
 
-> 🎯 **NOTA DOCENTE (trampa):** La afirmación es deliberadamente falsa. La IA tiende a validarla o confundirse porque asocia TypeScript con Java/Kotlin en ecosistemas empresariales. Un alumno que vio la filmina F-16 sabe que el pipeline es `archivo.ts → tsc → archivo.js → V8/Deno`.
+> 🎯 **NOTA DOCENTE (trampa):** La afirmación es deliberadamente falsa. La IA tiende a validarla o confundirse porque asocia TypeScript con Java/Kotlin en ecosistemas empresariales. Un alumno que vio la filmina 27 sabe que el pipeline es `archivo.ts → tsc → archivo.js → V8/Deno`.
 
 ---
 
 ### P03 — Código C de clase: variable acumuladora ⚠️ [TRAMPA: REFERENCIA A CÓDIGO DE CLASE]
 
-**Trazabilidad:** Bloque 3 — F-13, ejemplo comparativo en tres niveles
+**Trazabilidad:** Bloque 3 — 23, ejemplo comparativo en tres niveles
 
 **Enunciado:**
 En clase (F-13) mostramos este fragmento de código C como ejemplo del **paradigma imperativo puro**:
@@ -106,7 +106,7 @@ int suma_abs(int arr[], int n) {
 
 ### P04 — Von Neumann y el paradigma imperativo
 
-**Trazabilidad:** Bloque 2 — F-07, F-08
+**Trazabilidad:** Bloque 2 — 15, 16
 
 **Enunciado:**
 En clase explicamos que el paradigma imperativo surgió como abstracción directa de la arquitectura de Von Neumann. Según lo discutido, ¿qué elemento del paradigma imperativo **mapea directamente a una celda de memoria**?
@@ -121,7 +121,7 @@ En clase explicamos que el paradigma imperativo surgió como abstracción direct
 
 ### P05 — Demo de IA en clase: evidencia de imperativo ⚠️ [TRAMPA: REFERENCIA A CLASE]
 
-**Trazabilidad:** Bloque 5 — F-23, Prompt 1 de la demo en vivo
+**Trazabilidad:** Bloque 5 — 42, Prompt 1 de la demo en vivo
 
 **Enunciado:**
 En la demo de IA (F-23), el docente usó este prompt **sin restricción de paradigma**:
@@ -142,7 +142,7 @@ La IA generó código con la variable `sum` declarada con `let` y un loop `for..
 
 ### P06 — Cuello de botella de Von Neumann: ¿qué bus? ⚠️ [TRAMPA: TÉRMINO INCORRECTO PLANTADO]
 
-**Trazabilidad:** Bloque 2 — F-08, Louden & Lambert Cap. 1
+**Trazabilidad:** Bloque 2 — 16, Louden & Lambert Cap. 1
 
 **Enunciado:**
 Según Louden & Lambert (Capítulo 1), discutido en la filmina F-08, el **cuello de botella de Von Neumann** surge de la limitación de velocidad de un bus específico. ¿Entre qué componentes está ese bus?
@@ -159,7 +159,7 @@ Según Louden & Lambert (Capítulo 1), discutido en la filmina F-08, el **cuello
 
 ### P07 — LISP 1960: aporte al paradigma funcional
 
-**Trazabilidad:** Bloque 1 — F-03, timeline histórico
+**Trazabilidad:** Bloque 1 — 5, timeline histórico
 
 **Enunciado:**
 La perspectiva histórica de F-03 ubicó a **LISP (1960)** como un hito clave. ¿Cuál fue el concepto que LISP introdujo y que se convirtió en la base del paradigma funcional?
@@ -174,7 +174,7 @@ La perspectiva histórica de F-03 ubicó a **LISP (1960)** como un hito clave. �
 
 ### P08 — Escalera de abstracciones: ¿qué se pierde al subir?
 
-**Trazabilidad:** Bloque 3 — F-11, metáfora de la escalera de Gabbrielli
+**Trazabilidad:** Bloque 3 — 21, metáfora de la escalera de Gabbrielli
 
 **Enunciado:**
 En la "escalera de abstracciones" presentada en F-11 (Gabbrielli), el docente planteó un trade-off central. Al **subir** niveles de abstracción (de ensamblador → C → TypeScript → frameworks), ¿qué se **pierde**?
@@ -189,7 +189,7 @@ En la "escalera de abstracciones" presentada en F-11 (Gabbrielli), el docente pl
 
 ### P09 — TypeScript multiparadigma: ¿existe un paradigma predeterminado?
 
-**Trazabilidad:** Bloque 4 — F-20, cierre del bloque TypeScript
+**Trazabilidad:** Bloque 4 — 31, cierre del bloque TypeScript
 
 **Enunciado:**
 Al cerrar el Bloque 4 (F-20), el docente afirmó algo sobre TypeScript como lenguaje multiparadigma. ¿Cuál de las siguientes opciones refleja **lo que se dijo en clase**?
@@ -204,7 +204,7 @@ Al cerrar el Bloque 4 (F-20), el docente afirmó algo sobre TypeScript como leng
 
 ### P10 — Cierre de la clase: ¿importa el lenguaje si la IA puede escribir en cualquiera?
 
-**Trazabilidad:** Bloque 1 — F-05 (pregunta abierta) + Bloque 5 — F-21 (cierre)
+**Trazabilidad:** Bloque 1 — 13 (pregunta abierta) + Bloque 5 — 40 (cierre)
 
 **Enunciado:**
 En el Bloque 1 (F-05) se dejó abierta la pregunta: *"¿Importa el lenguaje si la IA puede escribir en cualquiera?"*. En el Bloque 5 (F-21) se retomó y se respondió usando datos de Schmidt & Runfola (2025). ¿Cuál fue la respuesta del docente?

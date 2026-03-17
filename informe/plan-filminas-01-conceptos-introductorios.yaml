@@ -44,7 +44,7 @@ slides:
   table_assets: []
 - id: F-01
   type: socratica
-  title: La pregunta incómoda
+  title: ¿Para qué estudiar lenguajes de programación?
   subtitle: ¿Para qué estudiar lenguajes si ya saben programar?
   body_blocks:
   - type: text
@@ -63,7 +63,7 @@ slides:
     table: none
   background_image:
     strategy: gemini
-    prompt: 'Imagen minimalista evocadora para reflexión sobre: «La pregunta incómoda».
+    prompt: 'Imagen minimalista evocadora para reflexión sobre: «¿Para qué estudiar lenguajes de programación?».
       Mucho espacio negativo, composición centralizada. flat design académico, sin
       texto, sin palabras, sin letras, paleta #A9191B y gris oscuro sobre fondo blanco,
       alta resolución'

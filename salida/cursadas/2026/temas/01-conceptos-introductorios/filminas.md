@@ -13,7 +13,7 @@
 
 ---
 
-### [F-00] Portada
+### [1]
 
 # Conceptos Introductorios + Intro a TypeScript
 
@@ -28,7 +28,7 @@ Semana 1 · Clase 1 de 2 · 120 minutos
 
 ---
 
-### [F-01] La pregunta incómoda
+### [2]
 
 # ¿Para qué estudiar lenguajes si ya saben programar?
 
@@ -38,7 +38,26 @@ Semana 1 · Clase 1 de 2 · 120 minutos
 
 ---
 
-### [F-02] El costo de elegir mal
+### [3]
+
+# Definición formal
+
+**Cómputo**
+> Una serie de operaciones estructuradas aplicadas a un conjunto de datos de entrada para obtener nuevos datos como resultado.
+
+**Programa**
+> Una colección definida y ordenada de cómputos diseñada para realizar una tarea específica o resolver un problema concreto.
+
+**Lenguaje de programación**
+> Un conjunto de **reglas sintácticas y semánticas** usadas para definir programas. Sistema de notación cuyas instrucciones son comprendidas y ejecutadas por máquinas.
+
+*(Slides cátedra UNTDF 2024 · Aaby, A. — citado en Louden & Lambert, Cap. 1)*
+
+> Una descripción completa incluye el **modelo computacional**, la **sintaxis**, la **semántica** y las **consideraciones pragmáticas** que dan forma al lenguaje.
+
+---
+
+### [4]
 
 # Elegir el lenguaje equivocado tiene consecuencias reales
 
@@ -52,7 +71,7 @@ Quien eligió el lenguaje no conocía los paradigmas ni sus trade-offs.
 
 ---
 
-### [F-03] Perspectiva histórica
+### [5]
 
 # La línea de tiempo de los lenguajes
 
@@ -70,15 +89,17 @@ Quien eligió el lenguaje no conocía los paradigmas ni sus trade-offs.
 
 ---
 
-### [F-04] Criterios de evaluación de lenguajes
+### [6]
 
 # ¿Cómo evaluamos un lenguaje? — Sebesta (2018)
+
+Sebesta propone un conjunto de criterios para comparar lenguajes de programación de manera sistemática. Cada criterio aborda un aspecto distinto del uso real del lenguaje (lectura, escritura, seguridad, costo, portabilidad y eficiencia).
 
 | Criterio | Pregunta clave | Ejemplo de tensión |
 |----------|---------------|-------------------|
 | **Legibilidad** | ¿Se puede leer código ajeno? | Python vs. Perl |
-| **Escribibilidad** | ¿El lenguaje facilita la expresión? | SQL vs. ensamblador |
-| **Confiabilidad** | ¿Los tipos reducen bugs? | TypeScript vs. JS puro |
+| **Expresividad** | ¿El lenguaje facilita la expresión? | SQL vs. ensamblador |
+| **Seguridad** | ¿Los tipos reducen bugs? | TypeScript vs. JS puro |
 | **Costo** | ¿Cuánto cuesta desarrollar y mantener? | — |
 | **Portabilidad** | ¿Funciona en distintas plataformas? | Java vs. C |
 | **Eficiencia** | ¿Qué tan rápido y cuánta memoria? | C vs. Python |
@@ -87,11 +108,67 @@ Quien eligió el lenguaje no conocía los paradigmas ni sus trade-offs.
 
 ---
 
-### [F-05] Pregunta abierta
+### [7]
+
+# Legibilidad — el costo cognitivo de leer código
+
+- Es el esfuerzo mental necesario para entender código escrito por otro.
+- Impacta directamente el mantenimiento y la colaboración en equipos.
+- Lenguajes con sintaxis clara y pocas excepciones tienden a ser más legibles.
+
+---
+
+### [8]
+
+# Expresividad — qué tan cercano está el código al problema real
+
+- Refleja cuán fácil es traducir ideas del dominio a código.
+- Alta expresividad reduce el código repetitivo y acelera el desarrollo.
+- Puede llevar a sintaxis tersa, pero también a estilos difíciles de depurar.
+
+---
+
+### [9]
+
+# Seguridad — detección temprana de errores
+
+- Mide cuán pronto el lenguaje detecta errores (tipado estático, análisis estático, chequeos en tiempo de ejecución).
+- El tipado estático contribuye a la seguridad al eliminar clases de bugs antes de ejecutar.
+- La seguridad también incluye protección contra fallos y vulnerabilidades.
+
+---
+
+### [10]
+
+# Costo — desarrollo, mantenimiento y soporte
+
+- Incluye tiempo de desarrollo, curva de aprendizaje, herramientas y comunidad.
+- Lenguajes con ecosistema maduro pueden reducir costos debido a bibliotecas y soporte.
+
+---
+
+### [11]
+
+# Portabilidad — ejecutar en distintas plataformas
+
+- Evalúa qué tan fácil es correr el mismo código en diferentes sistemas.
+- La independencia de plataforma puede ser una ventaja crítica en proyectos a gran escala.
+
+---
+
+### [12]
+
+# Eficiencia — tiempo de ejecución y uso de memoria
+
+- Es relevante en sistemas críticos o con recursos limitados.
+- Un lenguaje más eficiente puede operar en hardware más modesto o escalar mejor.
+
+---
+
+### [13]
 
 # ¿Importa el lenguaje si la IA puede escribir en cualquiera?
 
-*(Respuesta al final de la clase — Bloque 5)*
 
 ---
 
@@ -99,7 +176,7 @@ Quien eligió el lenguaje no conocía los paradigmas ni sus trade-offs.
 
 ---
 
-### [F-06] ¿Qué es un paradigma?
+### [14]
 
 # Un paradigma de programación es una forma de pensar el cómputo
 
@@ -110,27 +187,28 @@ Quien eligió el lenguaje no conocía los paradigmas ni sus trade-offs.
 
 ---
 
-### [F-07] Los factores que formaron los paradigmas
+### [15]
 
-# Los paradigmas no surgieron de la nada
+# La máquina de Von Neumann (modelo conceptual)
 
-**Arquitectura de Von Neumann → paradigma imperativo**
-- CPU + Memoria + Bus de datos
-- "Variables" = celdas de memoria
-- Ejecución secuencial instrucción a instrucción
+**Elementos clave:**
+- **Memoria unificada:** los datos y el programa conviven en el mismo espacio.
+- **Unidad de control:** lee (fetch) una instrucción, la decodifica y la ejecuta.
+- **ALU** (unidad aritmético-lógica) + registros temporales en CPU.
+- **Bus de datos** común entre CPU y memoria.
 
-**La evolución metodológica:**
-- `70s` → análisis y diseño estructurado, eliminación del GOTO
-- `80s` → abstracción de datos (Simula, Ada)
-- `80s` → programación funcional madura (LISP, ML)
-- `90s` → OO mainstream (Smalltalk → Java)
-- `2000s+` → multiparadigma (Python, TypeScript, Scala)
+**Implicaciones para los lenguajes:**
+- Una **variable** es una celda de memoria.
+- La **asignación** es una transferencia de datos CPU ↔ memoria.
+- La ejecución es **secuencial**: cada instrucción se ejecuta en orden.
+
+> **Directive:** generar gráfico de la máquina Von Neumann (CPU, memoria, bus).
 
 ---
 
-### [F-08] El cuello de botella de Von Neumann
+### [16]
 
-# La ejecución secuencial es una restricción del hardware, no una verdad universal
+# La máquina abstracta tiene un canal único: el bus
 
 ```
 CPU ←───bus───→ Memoria
@@ -138,21 +216,43 @@ CPU ←───bus───→ Memoria
     cuello de botella
 ```
 
-**Consecuencias:**
-- Limita el paralelismo natural
-- Limita el cómputo no determinista
+- La máquina de Von Neumann define un único canal entre CPU y memoria (el bus).
+- Toda lectura/escritura de datos pasa por ese canal.
 
-**Pregunta que generó nuevos paradigmas:**
-> *¿Se puede describir cómputo **sin** depender de Von Neumann?*
+> **Directive:** generar gráfico de la máquina Von Neumann destacando el bus.
 
-→ **Funcional:** cálculo lambda (Church, 1936)
-→ **Lógico:** lógica simbólica y resolución (Robinson, 1965)
+---
+
+### [17]
+
+# El modelo impone restricciones a los lenguajes "pegados" a la máquina
+
+- Lenguajes imperativos modelan explícitamente este flujo: variables = celdas, asignación = transferencia.
+- Eso traslada la complejidad del acceso a memoria al diseño del lenguaje.
+- El estado mutable y la ejecución secuencial se vuelven “naturales”, pero limitantes.
+
+> **Directive:** generar diagrama de flujo: variable → memoria → asignación → estado.
+
+---
+
+### [18]
+
+# El cuello de botella empuja hacia otros modelos de cómputo
+
+- El paradigma imperativo lucha con paralelismo y efectos secundarios.
+- Paradigmas alternativos proponen reducir la dependencia de la memoria compartida.
+
+**Ejemplos contemporáneos:**
+- **Funcional:** lenguajes como Haskell o Clojure adoptan un modelo donde el cómputo es una evaluación de expresiones, minimizando el estado mutable.
+- **Lógico:** lenguajes como Prolog usan un modelo de resolución basada en hechos y reglas, reduciendo la dependencia de memoria compartida.
+
+> **Directive:** generar gráfico comparativo (imperativo vs. funcional vs. lógico) en relación al acceso a memoria.
 
 *Fuente: Louden & Lambert, Cap. 1*
 
 ---
 
-### [F-09] Los 4 paradigmas fundamentales
+### [19]
 
 # Los 4 paradigmas fundamentales
 
@@ -169,7 +269,7 @@ CPU ←───bus───→ Memoria
 
 ---
 
-### [F-10] Dominios de aplicación
+### [20]
 
 # ¿Cuándo usar cada paradigma?
 
@@ -187,30 +287,31 @@ CPU ←───bus───→ Memoria
 
 ---
 
-### [F-11] La escalera de abstracciones
+### [21]
 
 # Todo lenguaje ocupa un nivel en la escalera de abstracción
 
 ```
-Frameworks (React, Django)     ← Nivel 3: abstracción de plataforma
+Frameworks (React, Django)     ← Nivel 3: abstracción sobre el lenguaje y la plataforma
         ↑
-Java, Python, TypeScript        ← Nivel 2: GC, tipos, ecosistema
+Java, Python, TypeScript        ← Nivel 2: GC, tipos, ecosistema, runtime/VM (abstracción de plataforma)
         ↑
-C, Pascal, Go                   ← Nivel 1: estructura, funciones, tipos básicos
+C, Rust, Go                    ← Nivel 1: estructura, funciones, tipos básicos
         ↑
 LC-3, ensamblador               ← Nivel 0: registros, saltos, direcciones
 ```
 
-**Al subir:** más legibilidad, más escribibilidad, más portabilidad
-**Al bajar:** más control, más eficiencia
+**Al subir:** más legibilidad, más expresividad, más portabilidad (y más abstracciones sobre el lenguaje)
+**Al bajar:** más control, más eficiencia (y más cercanía al hardware)
 
-> *"¿Qué abstraje? ¿Qué perdí?"* — La pregunta que guía esta materia
+> *"¿Qué abstrae? ¿Qué perdí?"* — La pregunta que guía esta materia
 
+**Nota:** los lenguajes modernos también ofrecen abstracción de plataforma (JVM, CLR, runtime), y los frameworks construyen una capa adicional de abstracciones sobre ese entorno.
 *Fuente: Louden & Lambert, Cap. 1 — Fig. 1.4 y 1.5*
 
 ---
 
-### [F-12] Von Neumann → código imperativo (correspondencia directa)
+### [22]
 
 # El paradigma imperativo abstrae el hardware
 
@@ -226,7 +327,7 @@ LC-3, ensamblador               ← Nivel 0: registros, saltos, direcciones
 
 ---
 
-### [F-13] Mismo algoritmo — 3 niveles
+### [23]
 
 # Suma de valores absolutos: LC-3 vs. C
 
@@ -260,7 +361,7 @@ int suma_abs(int arr[], int n) {
 
 ---
 
-### [F-14] Máquina abstracta, interpretación y compilación
+### [24]
 
 # Todo lenguaje define una "máquina abstracta" — Gabbrielli & Martini, Cap. 1
 
@@ -268,7 +369,7 @@ int suma_abs(int arr[], int n) {
 
 ```
 Interpretación pura:
-  Programa → [Intérprete en runtime] → Ejecución
+  Programa → [Intérprete en tiempo de ejecución] → Ejecución
   Flexible, más lento
 
 Compilación pura:
@@ -285,7 +386,129 @@ Compilación pura:
 
 ---
 
-### [F-15] ¿Por qué TypeScript en 2026?
+### [25]
+
+# Paradigma funcional: cálculos sin efectos secundarios
+
+- El cómputo se define como la evaluación de expresiones.
+- El estado no cambia: las funciones son mapeos de entrada → salida.
+- Ventajas: razonamiento matemático, paralelismo, tests más predecibles.
+
+> **Directive:** generar gráfico comparando función pura vs función con estado (mutación).
+
+---
+
+### [26]
+
+# Composición: construir programas como cadenas de funciones
+
+- Una función es pura si siempre devuelve el mismo resultado para los mismos argumentos.
+- Componer funciones pequeñas permite razonar localmente y reutilizar código.
+
+```typescript
+const doble = (x: number) => x * 2;
+const suma = (a: number, b: number) => a + b;
+const dobleYSuma = (x: number, y: number) => suma(doble(x), doble(y));
+```
+
+> **Directive:** generar gráfico de composición de funciones (f ∘ g).
+
+---
+
+### [27]
+
+# Cambiar sin mutar: estructuras inmutables
+
+- En vez de modificar datos, se crean nuevas versiones (copias con cambios).
+- Esto reduce errores y facilita la concurrencia.
+- TypeScript usa `const` y prácticas funcionales; lenguajes puramente funcionales usan estructuras persistentes (Clojure).
+
+```typescript
+const lista = [1, 2, 3];
+const nuevo = [...lista, 4]; // no muta la lista original
+```
+
+> **Directive:** generar gráfico “copia con cambios” vs “mutación en sitio”.
+
+---
+
+### [28]
+
+# TypeScript permite el estilo funcional, pero hay lenguajes más “puros”
+
+- **Clojure** (LISP sobre JVM) insiste en inmutabilidad y funciones puras.
+- **Haskell** es un lenguaje funcional puro: los efectos se manejan explícitamente con mónadas.
+- En este curso usaremos TypeScript para practicar ideas funcionales y veremos ejemplos de Clojure más adelante.
+
+> *Fuente: Louden & Lambert, Cap. 1; Hickey (2008) sobre Clojure.*
+
+> **Directive:** generar gráfico comparando TypeScript (híbrido) con Clojure (funcional puro).
+
+---
+
+### [29]
+
+# Paradigma lógico: programar declarando “qué” en lugar de “cómo”
+
+- El programa describe hechos y reglas; el motor (intérprete) hace la inferencia.
+- No se escribe el control: el sistema busca soluciones que satisfagan las restricciones.
+- Ideal para problemas de búsqueda, reglas, y consultas (bases de conocimiento).
+
+> **Directive:** generar gráfico de un motor de inferencia (hechos + reglas → solución).
+
+---
+
+### [30]
+
+# Programar con hechos y reglas
+
+```prolog
+padre(alan, bob).
+padre(bob, carla).
+ancestro(X, Y) :- padre(X, Y).
+ancestro(X, Y) :- padre(X, Z), ancestro(Z, Y).
+```
+
+- `padre/2` son hechos.
+- `ancestro/2` es una regla recursiva que define la relación.
+
+> **Directive:** generar gráfico que muestre hechos + regla → cadena de inferencia.
+
+---
+
+### [31]
+
+# Hacer preguntas al sistema
+
+- Una consulta es una pregunta sobre los hechos y reglas.
+- El intérprete busca una combinación de hechos y reglas que responda la consulta.
+
+```prolog
+?- ancestro(alan, carla).
+% Sí: hay una cadena de hechos que conecta a alan con carla.
+```
+
+> **Directive:** generar gráfico mostrando una consulta y la respuesta del motor.
+
+---
+
+### [32]
+
+# ¿Para qué sirve la programación lógica?
+
+- Modelar conocimiento con hechos y reglas (sistemas expertos, diagnóstico).
+- Hacer consultas declarativas sobre una base de conocimiento.
+- Utilizada en IA simbólica para razonar sobre información.
+
+> **Directive:** generar gráfico de un sistema experto (reglas + hechos → decisión).
+
+---
+
+## BLOQUE 5 — IA Generativa y los paradigmas (15 min)
+
+---
+
+### [33]
 
 # TypeScript como lenguaje del cursado
 
@@ -297,11 +520,24 @@ Compilación pura:
 | **Multiparadigma** | Imperativo + Funcional + OO en el mismo archivo |
 | **Relevancia** | Lenguaje #1 o #2 en encuestas de desarrolladores 2023–2025 |
 
-> Reemplaza Kotlin en el cursado 2026 — mismos objetivos conceptuales, mayor adopción.
 
 ---
 
-### [F-16] TypeScript como máquina intermedia (el pipeline)
+### [34]
+
+# La IA funciona mejor con TypeScript porque...
+
+- Los modelos se entrenan con enormes conjuntos de código (GitHub, StackOverflow, npm) donde TypeScript es abundante y consistente.
+- Las anotaciones de tipo reducen la ambigüedad semántica: el código es más fácil de inferir, corregir y completar.
+- TypeScript fomenta prácticas robustas (tests, linting — revisa estilo código, formateo), lo que eleva la calidad del código de entrada al entrenar los modelos.
+- La salida de la IA es más fácil de **auditar** y **testear**, porque el compilador añade una barrera de verificación antes de ejecutar.
+- Como resultado, los prompts que piden código suelen generar TS más confiable que JavaScript dinámico.
+
+> *Fuente: Schmidt & Runfola (2025); Louden & Lambert, Cap. 1 (máquinas abstractas).* 
+
+---
+
+### [35]
 
 # TypeScript = ejemplo vivo de Gabbrielli Cap. 1
 
@@ -313,9 +549,11 @@ archivo.js  ←── LENGUAJE INTERMEDIO
    Ejecución en CPU
 ```
 
+> **Directive:** generar gráfico de pipeline TS → JS → V8/Deno destacando el rol de la verificación de tipos antes de ejecutar.
+
 **Comparación:**
 
-| Lenguaje | Paso 1 | Intermediario | Runtime |
+| Lenguaje | Paso 1 | Intermediario | Tiempo de ejecución |
 |----------|--------|---------------|---------|
 | TypeScript | tsc | .js | V8 / Node / Deno |
 | Java | javac | .class (bytecode) | JVM |
@@ -326,7 +564,7 @@ archivo.js  ←── LENGUAJE INTERMEDIO
 
 ---
 
-### [F-17] El mismo problema: imperativo en TypeScript
+### [36]
 
 # TypeScript — estilo imperativo
 
@@ -349,7 +587,7 @@ console.log(sumaAbs([3, -1, 4, -1, 5])); // → 14
 
 ---
 
-### [F-18] El mismo problema: funcional en TypeScript
+### [37]
 
 # TypeScript — estilo funcional
 
@@ -373,9 +611,9 @@ console.log(sumaAbs([3, -1, 4, -1, 5])); // → 14
 
 ---
 
-### [F-19] Sistema de tipos básico
+### [38]
 
-# TypeScript: tipos estáticos que aumentan la confiabilidad
+# TypeScript: tipos estáticos que aumentan la seguridad
 
 ```typescript
 // Anotaciones explícitas
@@ -398,11 +636,11 @@ sumaAbs(["hola", "mundo"]);
 //    assignable to parameter of type 'number[]'
 ```
 
-> **Confiabilidad** (criterio Sebesta #3): el compilador como primer revisor.
+> **Seguridad** (criterio Sebesta #3): el compilador como primer revisor.
 
 ---
 
-### [F-20] TypeScript como "acelerador de paradigma"
+### [39]
 
 # TypeScript: ¿qué paradigma usamos?
 
@@ -432,11 +670,7 @@ class Calculadora {
 
 ---
 
-## BLOQUE 5 — IA Generativa y los paradigmas (15 min)
-
----
-
-### [F-21] El cambio de rol del programador
+### [40]
 
 # El trabajo del programador cambió radicalmente
 
@@ -461,7 +695,7 @@ class Calculadora {
 
 ---
 
-### [F-22] La jerarquía de proficiencia en IA
+### [41]
 
 # ¿Dónde apuntan los graduados de esta materia?
 
@@ -485,7 +719,7 @@ class Calculadora {
 
 ---
 
-### [F-23] Demo en vivo — La IA elige paradigmas
+### [42]
 
 # Prompt 1: versión base
 
@@ -498,7 +732,7 @@ de los valores absolutos de una lista de números"
 
 ---
 
-### [F-24] Demo en vivo — Restricción de paradigma
+### [43]
 
 # Prompt 2: paradigma funcional explícito
 
@@ -514,7 +748,7 @@ sin mutación de estado, sin variables intermedias"
 
 ---
 
-### [F-25] Demo en vivo — Máquinas abstractas
+### [44]
 
 # Prompt 3: verificación de comprensión
 
@@ -525,12 +759,12 @@ este código TypeScript"
 
 **Verificar:**
 - ¿Explica el pipeline `.ts → .js → V8`?
-- ¿Distingue el compilador (`tsc`) del runtime (`V8`)?
+- ¿Distingue el compilador (`tsc`) del tiempo de ejecución (`V8`)?
 - ¿Menciona el lenguaje intermedio?
 
 ---
 
-### [F-26] El loop "trust but verify"
+### [45]
 
 # Cómo trabajar con IA en programación — Schmidt & Runfola, Fig. 8
 
@@ -559,7 +793,7 @@ este código TypeScript"
 
 ---
 
-### [F-27] Mapa de la materia — los 15 temas
+### [46]
 
 # Cómo se conectan los temas del cursado
 
@@ -582,7 +816,7 @@ Tema 15         Concurrencia y paralelismo
 
 ---
 
-### [F-28] Adelanto — Clase 2: Sintaxis y Semántica
+### [47]
 
 # Próxima clase: ¿qué hace un programa **válido**?
 
@@ -610,11 +844,15 @@ if (x !== 0) y = 1 / x;
 
 | Rango | Bloque | Filminas | Minutos |
 |-------|--------|----------|---------|
-| F-00 | Portada | 1 | — |
-| F-01 a F-05 | Bloque 1: ¿Por qué LP? | 5 | 20 |
-| F-06 a F-10 | Bloque 2: Paradigmas | 5 | 25 |
-| F-11 a F-14 | Bloque 3: Imperativo + Máquina Abstracta | 4 | 20 |
-| F-15 a F-20 | Bloque 4: TypeScript | 6 | 30 |
-| F-21 a F-26 | Bloque 5: IA Generativa | 6 | 15 |
-| F-27 a F-28 | Cierre | 2 | 10 |
-| **Total** | | **29 filminas** | **120 min** |
+| 0 | Portada | 1 | — |
+| 1–13 | Bloque 1: ¿Por qué LP? | 13 | 20 |
+| 14–20 | Bloque 2: Paradigmas | 7 | 25 |
+| 21–24 | Bloque 3: Imperativo + Máquina Abstracta | 4 | 20 |
+| 25–39 | Bloque 4: TypeScript + paradigmas funcional/lógico | 15 | 35 |
+| 40–45 | Bloque 5: IA Generativa | 6 | 15 |
+| 46–47 | Cierre | 2 | 5 |
+| **Total** | | **47 filminas** | **120 min** |
+
+
+
+

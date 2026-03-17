@@ -12,7 +12,7 @@
 
 | Nivel | ID | Archivos afectados | Descripción |
 |-------|----|--------------------|-------------|
-| [ERROR] | COH-01 | tp.md | Referencia a filmina incorrecta (F-18 en vez de F-19) |
+| [ERROR] | COH-01 | tp.md | Referencia a filmina incorrecta (29 en vez de 30) |
 | [IMPROVEMENT] | COH-02 | filminas.md vs guia-estudio.md | Portabilidad: en guia pero no en filminas F-11 |
 | [IMPROVEMENT] | COH-03 | filminas.md vs guia-estudio.md | Smalltalk ausente en F-09 OO pero presente en guia §2.5 |
 
@@ -33,7 +33,7 @@
 
 **Texto incorrecto:**
 ```
-**Trazabilidad:** Bloque 4 — F-18, demo en vivo de error de tipos
+**Trazabilidad:** Bloque 4 — 29, demo en vivo de error de tipos
 ```
 
 **Corrección:**

@@ -40,7 +40,7 @@ Al finalizar el estudio de este tema, deberías poder:
 
 ## Bloque 1 — ¿Por qué estudiar lenguajes de programación?
 
-### 1.1 La pregunta incómoda
+### 1.1 ¿Para qué estudiar lenguajes de programación?
 
 Si ya sabés programar en, digamos, Python o JavaScript, ¿para qué estudiar más lenguajes? La respuesta no es obvia al principio, pero se vuelve clara enseguida: **conocer distintos lenguajes no es saber su sintaxis — es adquirir diferentes modelos mentales para pensar problemas**.
 
