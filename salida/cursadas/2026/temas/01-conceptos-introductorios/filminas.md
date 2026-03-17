@@ -187,31 +187,28 @@ Sebesta propone un conjunto de criterios para comparar lenguajes de programació
 
 ---
 
-### [F-07] Los factores que formaron los paradigmas
+### [F-07] Arquitectura de Von Neumann
 
-# Los paradigmas no surgieron de la nada
+# La máquina de Von Neumann (1940s)
 
-**Arquitectura de Von Neumann → paradigma imperativo**
-- El modelo propuesto por John von Neumann en los años 40 define una máquina con:
-  - **Memoria unificada** (datos + programa en el mismo espacio)
-  - **Unidad de control** que lee (fetch) una instrucción, la decodifica y la ejecuta
-  - **ALU** (unidad aritmético-lógica) y registros temporales
-  - **Bus de datos** compartido entre CPU y memoria
-- En este modelo, una **variable** en el programa corresponde a una celda de memoria y la **asignación** es una transferencias de datos entre CPU y memoria.
-- La ejecución es **secuencial**: cada instrucción se procesa una por una siguiendo el orden en memoria.
+**Elementos clave:**
+- **Memoria unificada:** los datos y el programa conviven en el mismo espacio.
+- **Unidad de control:** lee (fetch) una instrucción, la decodifica y la ejecuta.
+- **ALU** (unidad aritmético-lógica) + registros temporales en CPU.
+- **Bus de datos** común entre CPU y memoria.
 
-**La evolución metodológica:**
-- `70s` → análisis y diseño estructurado, eliminación del GOTO
-- `80s` → abstracción de datos (Simula, Ada)
-- `80s` → programación funcional madura (LISP, ML)
-- `90s` → OO mainstream (Smalltalk → Java)
-- `2000s+` → multiparadigma (Python, TypeScript, Scala)
+**Implicaciones para los lenguajes:**
+- Una **variable** es una celda de memoria.
+- La **asignación** es una transferencia de datos CPU ↔ memoria.
+- La ejecución es **secuencial**: cada instrucción se ejecuta en orden.
+
+> **Directive:** generar gráfico de la máquina Von Neumann (CPU, memoria, bus).
 
 ---
 
 ### [F-08] El cuello de botella de Von Neumann
 
-# La ejecución secuencial es una restricción del hardware, no una verdad universal
+# El bus compartido limita la ejecución
 
 ```
 CPU ←───bus───→ Memoria
@@ -224,10 +221,12 @@ CPU ←───bus───→ Memoria
 - Cada instrucción necesita leer memoria (fetch) y/o escribirla (store).
 - Cuando CPU y memoria compiten por el bus, la velocidad de ejecución se ve limitada.
 
-**Consecuencias pedagógicas (por qué esto importa):**
-- Explica por qué los lenguajes imperativos enfocan en estado y asignación.
+**Consecuencias pedagógicas:**
+- Explica por qué los lenguajes imperativos se basan en estado y asignación.
 - Justifica por qué la programación paralela es difícil: múltiples hilos comparten la misma memoria y el mismo bus.
-- Hace evidente por qué el estado mutable es “costoso” y por qué el functionalismo propone evitarlo.
+- Muestra por qué el estado mutable es “costoso” y cómo el functionalismo busca evitarlo.
+
+> **Directive:** generar gráfico del cuello de botella (bus, CPU, memoria, acceso concurrente).
 
 **Pregunta que generó nuevos paradigmas:**
 > *¿Se puede describir cómputo **sin** depender de Von Neumann?*
