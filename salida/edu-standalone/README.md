@@ -345,3 +345,4 @@ Escribí `/goproduction` en el chat y confirmá con `si` para activar el deploy 
 ## Licencia
 
 MIT
+\n<- **THEN** Playwright starts  as a webServer ( existing behavior, unchanged trigger goproduction workflow -->
