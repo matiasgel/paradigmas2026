@@ -1,0 +1,14 @@
+topic_number: "01"
+topic_name: "Conceptos Introductorios + Intro a TypeScript"
+topic_folder: "temas/01-conceptos-introductorios"
+module: "I"
+semana: 1
+clase: "1 de 2"
+duracion: 120
+estado: "cerrado"
+git_branch: "tema1"
+tp_type: "repo"
+artifacts:
+  autograde_repo: autograde-repo/
+pdf_exported: true
+pdf_path: salida/cursadas/2026/temas/01-conceptos-introductorios/guia-estudio.pdf
