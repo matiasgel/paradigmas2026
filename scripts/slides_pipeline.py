@@ -2,14 +2,14 @@
 """
 EDU Slides Pipeline — Módulo EDU
 =================================
-Convierte filminas.md → plan YAML → assets (imágenes/tablas) → Google Slides.
+Consume artefactos YAML ya resueltos → assets (imágenes/tablas) → Google Slides.
 
 Fases:
-  1. plan    — Lee filminas.md y genera plan-filminas-{tema}.yaml con contenido
-               completo y directrices de layout + prompts de imagen.
-  2. assets  — Genera imágenes con Gemini, renderiza tablas como PNG,
+    1. validate — Valida plan-filminas-{tema}.yaml, assets-manifest.yaml y
+                                publish-context.yaml generados por el agente.
+    2. assets   — Genera imágenes con Gemini, renderiza tablas como PNG,
                sube todo a Google Drive.
-  3. publish — Lee el plan + assets y crea la presentación en Google Slides.
+    3. publish  — Lee el plan + assets y crea la presentación en Google Slides.
 
 Uso:
   python slides_pipeline.py <ruta-tema>
@@ -27,6 +27,11 @@ Requiere:
 Archivos de configuración requeridos (en la raíz del proyecto):
   _edu/secrets.local.yaml  — google_credentials_path + gemini_api_key
   _edu/slides-config.yaml  — sistema de diseño generado por /edu-slides-designer
+
+Artefactos requeridos en la carpeta del tema (generados por el agente):
+    slides/plan-filminas-{tema}.yaml
+    slides/assets-manifest.yaml
+    slides/publish-context.yaml
 """
 
 from __future__ import annotations
@@ -189,6 +194,7 @@ def _default_filminas_schema() -> dict[str, Any]:
             "type": "@tipo:",
             "layout": "@layout:",
             "image": "@imagen:",
+            "image_prompt": "@prompt-imagen:",
             "asset": "@asset:",
         },
         "allowed": {
@@ -757,6 +763,8 @@ def validate_filminas_contract(slides: list[dict], schema: dict[str, Any], filmi
     allowed_types = set(allowed.get("slide_types", []))
     allowed_layouts = set(allowed.get("layout_presets", []))
     allowed_images = set(allowed.get("image_strategies", []))
+    validation_cfg = schema.get("validation", {}) or {}
+    image_prompt_required = bool(validation_cfg.get("image_prompt_required_when_image_enabled", False))
 
     for slide in slides:
         slide_id = slide.get("id", "?")
@@ -779,6 +787,13 @@ def validate_filminas_contract(slides: list[dict], schema: dict[str, Any], filmi
         image_override = directives.get("image")
         if image_override and image_override not in allowed_images:
             errors.append(f"{slide_id}: @imagen inválido ({image_override})")
+
+        if image_prompt_required and image_override in {"background", "content"}:
+            image_prompt = str(directives.get("image_prompt", "")).strip()
+            asset_hints = slide.get("asset_hints") or []
+            asset_prompt = any(str(asset.get("prompt", "")).strip() for asset in asset_hints if isinstance(asset, dict))
+            if not image_prompt and not asset_prompt:
+                errors.append(f"{slide_id}: requiere @prompt-imagen o @asset con prompt cuando @imagen={image_override}")
 
     if errors:
         raise ValueError(
@@ -969,6 +984,52 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
     }
 
     print(f"  ✅ {len(slides)} filminas procesadas, {img_count} imágenes planificadas.")
+    return plan
+
+
+def validate_publish_artifacts(
+    topic_folder: Path,
+    plan_path: Path,
+    assets_manifest_path: Path,
+    publish_context_path: Path,
+) -> dict[str, Any]:
+    missing = []
+    for path, label in [
+        (plan_path, "slides/plan-filminas-{tema}.yaml"),
+        (assets_manifest_path, "slides/assets-manifest.yaml"),
+        (publish_context_path, "slides/publish-context.yaml"),
+    ]:
+        if not path.exists():
+            missing.append(f"- {label} ({path})")
+
+    if missing:
+        raise FileNotFoundError(
+            "Faltan artefactos de publicación generados por el agente:\n" + "\n".join(missing)
+        )
+
+    plan = load_yaml(plan_path)
+    if not plan.get("meta") or not plan.get("slides"):
+        raise ValueError(f"Plan inválido: {plan_path} debe incluir 'meta' y 'slides'.")
+
+    meta = plan.get("meta", {}) or {}
+    required_meta = {"topic_id", "title", "source", "template_id"}
+    missing_meta = required_meta - set(meta.keys())
+    if missing_meta:
+        raise ValueError(
+            f"Plan inválido: faltan campos en meta: {', '.join(sorted(missing_meta))}"
+        )
+
+    for slide in plan.get("slides", []):
+        slide_id = slide.get("id", "?")
+        bg = slide.get("background_image") or {}
+        ci = slide.get("content_image") or {}
+        if bg.get("strategy") == "gemini" and not str(bg.get("prompt", "")).strip():
+            raise ValueError(f"Plan inválido: {slide_id} requiere background_image.prompt no vacío.")
+        if ci.get("strategy") == "gemini" and not str(ci.get("prompt", "")).strip():
+            raise ValueError(f"Plan inválido: {slide_id} requiere content_image.prompt no vacío.")
+
+    load_yaml(assets_manifest_path)
+    load_yaml(publish_context_path)
     return plan
 
 
@@ -1821,7 +1882,7 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
-        description="EDU Slides Pipeline — filminas.md → Google Slides",
+        description="EDU Slides Pipeline — YAML de publicación → Google Slides",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
@@ -1829,7 +1890,7 @@ def main(argv: list[str] | None = None) -> None:
         "topic_folder",
         help="Ruta a la carpeta del tema (ej: salida/cursadas/2026/temas/01-conceptos-introductorios)",
     )
-    parser.add_argument("--plan-only",    action="store_true", help="Solo genera el plan YAML")
+    parser.add_argument("--plan-only",    action="store_true", help="Solo valida los YAML de publicación")
     parser.add_argument("--assets-only",  action="store_true", help="Solo genera assets (requiere plan previo)")
     parser.add_argument("--publish-only", action="store_true", help="Solo publica (requiere plan + assets)")
     args = parser.parse_args(argv)
@@ -1844,9 +1905,10 @@ def main(argv: list[str] | None = None) -> None:
     secrets_path  = project_root / "_edu" / "secrets.local.yaml"
     config_path   = project_root / "_edu" / "slides-config.yaml"
     token_path    = project_root / "_edu" / "token_slides.json"
-    filminas_path = topic_folder / "filminas.md"
     plan_name     = f"plan-filminas-{topic_folder.name}.yaml"
     plan_path     = topic_folder / "slides" / plan_name
+    assets_manifest_path = topic_folder / "slides" / "assets-manifest.yaml"
+    publish_context_path = topic_folder / "slides" / "publish-context.yaml"
 
     required_paths = [(config_path, "_edu/slides-config.yaml")]
     if not args.plan_only:
@@ -1867,23 +1929,18 @@ def main(argv: list[str] | None = None) -> None:
     gemini_key   = secrets.get("gemini_api_key", "")
     template_id  = config.get("template_id", "")
 
-    # ── Fase 1: Generar plan ─────────────────────────────────────────────
-    if not args.assets_only and not args.publish_only:
-        if not filminas_path.exists():
-            print(f"❌ No se encontró filminas.md en: {filminas_path}")
-            sys.exit(1)
-        plan = generate_plan(filminas_path, config, template_id)
-        save_yaml(plan_path, plan)
-        print(f"  📄 Plan guardado en: {plan_path.relative_to(project_root)}")
-        if args.plan_only:
-            print("\n✅ Plan generado. Podés revisarlo y luego ejecutar sin --plan-only para publicar.")
-            return
-    else:
-        if not plan_path.exists():
-            print(f"❌ No se encontró el plan en: {plan_path}")
-            print(f"   Ejecutar primero sin --assets-only / --publish-only.")
-            sys.exit(1)
-        plan = load_yaml(plan_path)
+    # ── Fase 1: Validar artefactos generados por el agente ────────────────
+    try:
+        plan = validate_publish_artifacts(topic_folder, plan_path, assets_manifest_path, publish_context_path)
+    except (FileNotFoundError, ValueError) as exc:
+        print(f"❌ {exc}")
+        print("   Ejecutar primero el prompt/agente que genera los YAML de publicación.")
+        sys.exit(1)
+
+    print(f"  📄 Plan cargado desde: {plan_path.relative_to(project_root)}")
+    if args.plan_only:
+        print("\n✅ Artefactos validados. Podés ejecutar sin --plan-only para generar assets y publicar.")
+        return
 
     # ── Autenticar con Google ─────────────────────────────────────────────
     creds = _get_creds(secrets_path, token_path)
