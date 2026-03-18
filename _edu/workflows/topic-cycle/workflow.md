@@ -118,7 +118,7 @@ Según `tp_type` guardado en Step 5, ejecutar el sub-paso correspondiente:
 
 #### Tipo: `quiz-moodle`
 - **Agent:** tp-designer (Valeria)
-- **Output:** `{topic_folder}/tp-quiz.gift` — importable directo en Moodle
+- **Output:** `{topic_folder}/tp-quiz.gift` + `{topic_folder}/tp-quiz-moodle-config.md`
 - **Workflow:** `_edu/workflows/create-tp-quiz/workflow.md`
 
 #### Tipo: `quiz-google`
