@@ -1,12 +1,17 @@
 # Diseño — Tema 02: Sintaxis y Semántica de Lenguajes
 
-> **Estado:** APROBADO
-> **Agrobado por:** Matías Gel (docente)
-> **Fecha de aprobación:** 2026-03-10
-> **Agente:** Lic. Marcos (topic-designer)
-> **Fecha:** 2026-03-10
-> **Workflow:** topic-cycle / Step 1
-> **Material fuente:** `material/02-sintaxis/txt/` (4 archivos procesados)
+> **Estado:** REDISEÑO — pendiente de aprobación
+> **Rediseño generado por:** Lic. Marcos (topic-designer)
+> **Fecha de rediseño:** 2026-03-18
+> **Historial:**
+> - Aprobado originalmente: 2026-03-10 (Matías Gel)
+> - Rediseñado el 2026-03-18 tomando como baseline las filminas año anterior (`02 sintaxis.pdf`) y las filminas 2026 desarrolladas (F-00 a F-37)
+> **Material fuente:**
+> - `material/02-sintaxis/txt/02 sintaxis.txt` — filminas cátedra año anterior (baseline año previo)
+> - `material/02-sintaxis/txt/185-220.txt` — Sebesta Cap. 3 y Cap. 4 (Lexical and Syntax Analysis)
+> - `material/02-sintaxis/txt/083-105.txt` — Gabbrielli & Martini Cap. 4 (Names and the Environment)
+> - `material/02-sintaxis/txt/210-330.txt` — material complementario
+> **Referencia de implementación:** `filminas.md` actual (F-00 a F-37) — producto del ciclo anterior, usada como evidencia de lo que funciona
 
 ---
 
@@ -40,6 +45,47 @@
 
 ---
 
+## Análisis comparativo — Año anterior vs. Rediseño 2026
+
+### Qué se mantuvo del año anterior (`02 sintaxis.pdf`)
+
+Las filminas del año anterior cubrían el núcleo sintáctico. Los siguientes contenidos se conservaron y mejoraron:
+
+| Contenido (2025) | Estado en 2026 | Filmina(s) |
+|-----------------|----------------|-----------|
+| Definición de LP: sintaxis + semántica | ✅ mantenido y expandido | F-02, F-03, F-04 |
+| Criterios sintácticos (legibilidad, writability, etc.) | ✅ mantenido en F-03 | F-03 |
+| Elementos sintácticos de un LP (tokens, identificadores, operadores…) | ✅ integrado en Bloque 2 | F-07 a F-11 |
+| Estructura léxica: lexemas y tokens | ✅ mantenido con mejor ejemplo (tabla indice=5*contador+1) | F-09, F-10 |
+| BNF: metasímbolos, reglas, LHS/RHS | ✅ mantenido con gramática de trabajo extendida | F-14, F-15 |
+| Derivaciones con símbolo `⇒` | ✅ mantenido, derivación completa de A:=B*(A+C) | F-16 |
+| Árboles sintácticos | ✅ mantenido con árbol ASCII de la misma derivación | F-17 |
+| Ambigüedad y gramáticas ambiguas | ✅ mantenido con ejemplo J:=1+2*3 | F-18 |
+| EBNF (extensiones `[]`, `{}`) | ✅ mantenido con ejemplo completo de lenguaje simple | F-19 |
+| Diagramas de sintaxis (railroad diagrams) | ✅ mantenido con diagrama ASCII del condicional | F-21, F-22 |
+
+### Qué es nuevo en 2026 (no estaba en 2025)
+
+| Contenido nuevo | Justificación | Filmina(s) |
+|----------------|---------------|-----------|
+| **TypeScript como lenguaje principal** — todos los ejemplos en TS | Lenguaje de la cursada; conecta con Tema 01 | F-02 a F-07, F-11, F-31 |
+| **Actividad participativa** — identificar error sintáctico vs semántico | Pausa activa en Bloque 1; alta retención | F-05, F-06 |
+| **Analizador léxico como componente explícito** del pipeline | Sebesta Cap. 4; clarifica el rol del lexer | F-11 |
+| **Bloque 5 completo: nombres, entorno, binding, semántica operacional** | Gabbrielli & Martini Cap. 4; cubre contenido mínimo #1 explícitamente | F-25 a F-28 |
+| **Pipeline integrado del compilador** (Lexer→Parser→Type-checker→Emitter) | Conecta todos los bloques; cierra con `tsc` como ejemplo real | F-29 |
+| **Síntesis: tres tipos de error en TypeScript** con código real | Consolida la distinción sintáctico/semántico estático/semántico dinámico | F-31 |
+| **Las gramáticas hoy: constrained decoding en LLMs** | Motivación de relevancia; conecta con Tema 01 (era de la IA) | F-32, F-33 |
+| **Línea del tiempo** Chomsky 1957 → BNF 1960 → EBNF → 2023 | Perspectiva histórica + relevancia actual | F-33 |
+| **Preguntas para pensar** y **Mapa de la clase** al cierre | Cierre cognitivo y herramienta de repaso | F-34, F-35 |
+| **Referencias actualizadas** (Willard & Louf 2023, LMQL, Grammar-Constrained Decoding 2023) | Alineación con literatura 2023 | F-37 |
+
+### Ajuste de énfasis respecto a 2025
+
+- **Criterios sintácticos (legibilidad, writability, etc.):** En 2025 tenían sección propia y se desarrollaban con ejemplos comparativos entre lenguajes. En el rediseño están en F-03 como lista breve. **Recomendación para próximo ciclo:** agregar una filmina dedicada con ejemplos comparativos (Python vs. C vs. APL en legibilidad).
+- **Elementos sintácticos de un LP** (caracteres, identificadores, operadores, palabras reservadas, comentarios, espacios en blanco, delimitadores): En 2025 eran un bullet list explícito. En el rediseño están dispersos en Bloque 2. **Recomendación:** unificarlos en una slide tipo checklist en Bloque 2, previo a la slide de tokenización.
+
+---
+
 ## Conexión con Tema 01 (Continuidad pedagógica)
 
 El Tema 01 cerró con la pregunta: *"¿Por qué estudiar lenguajes de programación en la era de la IA?"* y la idea de que TypeScript compila a JavaScript, que ejecuta en V8. Este tema responde la pregunta técnica subyacente: **¿cómo sabe el compilador si un programa está bien escrito, y qué significa que esté bien?**
@@ -66,7 +112,13 @@ El Tema 01 cerró con la pregunta: *"¿Por qué estudiar lenguajes de programaci
   - Ejemplo contrastivo: `int x = "hola";` — sintácticamente inválido en TypeScript; `x = null` — sintácticamente válido pero semánticamente puede ser un error
 - La definición formal de un lenguaje = gramática (sintaxis) + semántica
 - **Punto de tensión:** Un programa puede ser sintácticamente correcto y semánticamente incorrecto — el compilador detecta errores sintácticos pero no todos los semánticos
-- Criterios sintácticos: legibilidad, facilidad de escritura, facilidad de verificación, facilidad de traducción, carencia de ambigüedad *(slides cátedra)*
+- **Criterios sintácticos de un buen lenguaje** *(slides cátedra — sección explícita del material 2025)*:
+  - **Legibilidad**: lo que se escribe puede leerse y entenderse fácilmente
+  - **Facilidad de escritura** (writability): es natural expresar algoritmos en el lenguaje
+  - **Facilidad de verificación**: es posible demostrar propiedades del programa
+  - **Facilidad de traducción**: el compilador puede procesarlo eficientemente
+  - **Carencia de ambigüedad**: cada construcción tiene exactamente un significado
+  - *Estrategia: mostrar un ejemplo de lenguaje con mala legibilidad (APL o Perl) y uno con buena (Python) — sin profundizar, solo para anclar el concepto*
 
 **Estrategia pedagógica:** Abrir con 3 ejemplos rápidos en TypeScript. Para cada uno, preguntar: ¿error de sintaxis o de semántica?
 ```typescript
@@ -88,6 +140,17 @@ const y = undefined; y.length  // Error semántico en runtime
 - **Reglas léxicas** vs. **reglas sintácticas** — slides cátedra; Sebesta Cap. 4:
   - Léxicas: definen el alfabeto y cómo combinar caracteres en palabras válidas (ej: case-sensitivity en Java vs. Python)
   - Sintácticas: definen cómo combinar palabras en sentencias
+- **Elementos sintácticos de un LP** *(sección propia en slides cátedra 2025 — restituida en rediseño)*:
+  - **Caracteres**: conjunto de símbolos permitidos (ASCII, Unicode)
+  - **Identificadores**: nombres para variables, funciones, tipos — reglas: longitud, case-sensitivity, caracteres permitidos
+  - **Operadores**: símbolos para operaciones (aritméticos, lógicos, relacionales, de asignación)
+  - **Palabras clave y reservadas**: `if`, `while`, `const` — no pueden usarse como identificadores
+  - **Comentarios**: texto ignorado por el compilador (`//`, `/* */`)
+  - **Espacios en blanco**: generalmente ignorados salvo en lenguajes como Python (indentación significativa)
+  - **Delimitadores y corchetes**: `{}`, `()`, `[]`, `;` — estructuran el programa
+  - **Expresiones**: combinaciones de operandos y operadores que producen un valor
+  - **Sentencias**: unidades de ejecución del programa
+  - *Esta lista es el "vocabulario" que el lexer categoriza en tokens*
 - **Lexemas y Tokens** — slides cátedra; Sebesta Cap. 4:
   - Lexema: unidad sintáctica de más bajo nivel (identificadores, operadores, palabras especiales)
   - Token: categoría del lexema (clase abstracta)
@@ -102,7 +165,7 @@ const y = undefined; y.length  // Error semántico en runtime
     | `+` | op_suma |
     | `1` | constante_entera |
     | `;` | delimitador |
-- **Elementos sintácticos de un lenguaje** — slides cátedra: caracteres, identificadores, operadores, palabras clave y reservadas, comentarios, espacios en blanco, delimitadores, expresiones, sentencias
+  - *Nota: los Elementos sintácticos completos se desarrollaron en la sub-sección anterior*
 - **Analizador léxico (lexer/scanner)**: transforma la cadena de caracteres en secuencia de tokens — Sebesta Cap. 4
   - Es el "front-end" del analizador sintáctico
   - Motivo de separación: simplicidad, eficiencia, portabilidad — Sebesta Cap. 4
@@ -330,4 +393,4 @@ Los siguientes contenidos están fuera de scope para esta clase y **no deben inc
 
 ---
 
-> **⚙️ APROBADO:** Diseño confirmado por Matías Gel el 2026-03-10. Cubre contenidos mínimos #1 y #6 en 120 minutos exactos.
+> **⚙️ REDISEÑO — pendiente de aprobación:** Rediseñado el 2026-03-18 incorporando el material de filminas año anterior (`02 sintaxis.pdf`). Cubre contenidos mínimos #1 y #6 en 120 minutos exactos. Para aprobar: ejecutar `/edu-approve-design`.
