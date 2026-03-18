@@ -1,0 +1,216 @@
+// TP 01 — Conceptos Introductorios + Intro a TypeScript
+// Regenerado desde guia-estudio.md
+// Importar en Moodle: Banco de preguntas > Importar > Formato GIFT
+// Encoding: UTF-8
+
+$CATEGORY: TP/01-conceptos-introductorios
+
+::TP01-Q01-computo::[markdown]¿Qué definición corresponde mejor a computo según la guia? {
+=Una serie de operaciones estructuradas aplicadas a datos de entrada para obtener nuevos datos de salida
+~Una colección de archivos fuente compilados en un ejecutable
+~Una interfaz gráfica para interactuar con un programa
+~Un lenguaje usado para expresar algoritmos
+}
+
+::TP01-Q02-programa::[markdown]¿Qué es un programa según la guia? {
+=Una colección definida y ordenada de computos diseñada para realizar una tarea específica
+~Una lista de variables declaradas en memoria
+~Un conjunto de componentes de hardware conectados por un bus
+~Una traducción de bytecode a lenguaje máquina
+}
+
+::TP01-Q03-lenguaje-programacion::[markdown]¿Qué describe mejor a un lenguaje de programación? {
+=Un conjunto de reglas sintácticas y semánticas usadas para definir programas
+~Un protocolo de comunicación entre compiladores
+~Una notación para escribir solo instrucciones imperativas
+~Un sistema de archivos para organizar proyectos
+}
+
+::TP01-Q04-modelos-mentales::[markdown]Según la guia estudiar lenguajes sirve sobre todo para adquirir ¿que cosa? {
+=Modelos mentales diferentes para pensar problemas
+~Técnicas para memorizar comandos del compilador
+~Reglas fijas para escribir todo en un único paradigma
+~Habilidades de administración de servidores
+}
+
+::TP01-Q05-eleccion-lenguaje::[markdown]¿Que ilustra el ejemplo de elegir Node.js para procesamiento numérico intensivo y luego migrar a Python más NumPy? {
+=Que elegir mal un lenguaje puede implicar costos técnicos y económicos reales
+~Que todo lenguaje multiparadigma sirve igual para cualquier dominio
+~Que JavaScript es mejor que Python para cómputo científico
+~Que el rendimiento nunca depende del paradigma
+}
+
+::TP01-Q06-fortran::[markdown]¿Qué problema resolvió FORTRAN en 1957 según la tabla histórica de la guia? {
+=Reemplazó al ensamblador para cómputo científico como lenguaje de alto nivel útil
+~Introdujo objetos puros y paso de mensajes
+~Permitió tipado estático sobre JavaScript
+~Hizo posible la lógica simbólica en Prolog
+}
+
+::TP01-Q07-lisp::[markdown]¿Qué aporte se asocia a LISP en la guía? {
+=Funciones de primera clase recursión y evaluación simbólica
+~Máquina virtual portable entre arquitecturas
+~Encapsulamiento orientado a objetos puro
+~Drivers de bajo nivel con máxima eficiencia
+}
+
+::TP01-Q08-c::[markdown]¿Cuál fue el aporte histórico de C según la guía? {
+=Ofreció imperativo estructurado con portabilidad sin sacrificar eficiencia
+~Hizo mainstream la IA generativa
+~Introdujo el paradigma lógico en producción
+~Eliminó la necesidad de compilar programas
+}
+
+::TP01-Q09-java::[markdown]¿Qué idea se destaca para Java en 1995? {
+=Write once run anywhere mediante máquina virtual
+~Reemplazó totalmente a C en sistemas embebidos
+~Introdujo recursión por primera vez
+~Eliminó el uso de bytecode
+}
+
+::TP01-Q10-typescript-2012::[markdown]¿Qué se destaca de TypeScript en 2012? {
+=Agrega tipos estáticos sobre JavaScript para escalar proyectos grandes
+~Fue creado como lenguaje lógico declarativo
+~Compila a bytecode JVM
+~Reemplaza completamente a Python en IA
+}
+
+::TP01-Q11-legibilidad::[markdown]¿Qué criterio de Sebesta evalúa si un programador puede leer y comprender código ajeno con facilidad? {
+=Legibilidad
+~Eficiencia
+~Costo
+~Portabilidad
+}
+
+::TP01-Q12-expresividad::[markdown]¿Qué criterio se asocia a cuán naturalmente un lenguaje permite expresar una solución? {
+=Expresividad
+~Confiabilidad
+~Eficiencia
+~Portabilidad
+}
+
+::TP01-Q13-confiabilidad::[markdown]En la guía la detección de errores de tipo antes de ejecutar se usa como ejemplo de ¿qué criterio? {
+=Seguridad o confiabilidad del lenguaje
+~Legibilidad
+~Portabilidad entre plataformas
+~Abstracción de hardware
+}
+
+::TP01-Q14-portabilidad::[markdown]¿Qué criterio mide si un lenguaje puede funcionar en distintas plataformas sin reescribir el código? {
+=Portabilidad
+~Eficiencia
+~Costo
+~Legibilidad
+}
+
+::TP01-Q15-eficiencia::[markdown]¿Qué criterio se relaciona con velocidad de ejecución y consumo de memoria? {
+=Eficiencia
+~Escribibilidad
+~Portabilidad
+~Legibilidad
+}
+
+::TP01-Q16-paradigma::[markdown]Según la guía un paradigma de programación es principalmente ¿qué cosa? {
+=Una forma de pensar el cómputo y estructurar la solución
+~Un conjunto de librerías de un ecosistema
+~Un listado de palabras reservadas del lenguaje
+~Un formato de serialización de datos
+}
+
+::TP01-Q17-von-neumann-imperativo::[markdown]¿Qué rasgo central del paradigma imperativo se vincula directamente con la arquitectura de Von Neumann? {
+=La secuencia de instrucciones que modifican variables y estado
+~La ausencia de estado mutable
+~El uso exclusivo de funciones puras
+~La búsqueda de pruebas lógicas
+}
+
+::TP01-Q18-variable-memoria::[markdown]En el modelo explicado en la guía una variable imperativa mapea directamente a ¿qué entidad? {
+=Una celda de memoria
+~Un mensaje entre objetos
+~Una consulta lógica
+~Un tipo algebraico
+}
+
+::TP01-Q19-cuello-botella::[markdown]¿Dónde se produce el cuello de botella de Von Neumann? {
+=Entre CPU y memoria
+~Entre GPU y VRAM
+~Entre disco y CPU
+~Entre navegador y compilador
+}
+
+::TP01-Q20-evolucion-metodologica::[markdown]¿Qué hito metodológico se asocia a los años 70 en la guía? {
+=Análisis y diseño estructurado con modularización y eliminación del GOTO
+~Multiparadigma en TypeScript
+~Aparición de la JVM
+~Adopción masiva de IA generativa
+}
+
+::TP01-Q21-funcional-base::[markdown]¿Qué base formal aparece asociada al paradigma funcional? {
+=Calculo lambda de Church
+~Arquitectura de Von Neumann
+~Lógica de resolución de Robinson
+~Encapsulamiento de Smalltalk
+}
+
+::TP01-Q22-logico::[markdown]¿Qué caracteriza al paradigma lógico según la guía? {
+=Un programa como hechos y reglas cuya ejecución es una búsqueda de pruebas
+~El cómputo como mutación explícita de estado
+~El uso obligatorio de clases e interfaces
+~El reemplazo del compilador por un framework web
+}
+
+::TP01-Q23-oo::[markdown]¿Cómo presenta la guía al paradigma orientado a objetos? {
+=Como una extensión del imperativo con encapsulamiento y mensajes
+~Como una ruptura total con el imperativo
+~Como un caso particular del lógico
+~Como sinónimo de programación funcional
+}
+
+::TP01-Q24-dominio-logico::[markdown]¿Cuál es un dominio de aplicación ideal del paradigma lógico según la tabla? {
+=IA simbólica y sistemas expertos
+~Drivers y sistemas embebidos
+~Interfaces gráficas empresariales
+~Renderizado 3D en GPU
+}
+
+::TP01-Q25-escalera-ganancias::[markdown]Al subir en la escalera de abstracciones ¿qué se gana según la guía? {
+=Legibilidad escribibilidad y portabilidad
+~Control directo sobre registros y memoria
+~Ejecución puramente nativa sin intermediarios
+~Menor overhead del runtime
+}
+
+::TP01-Q26-salto-condicional::[markdown]¿Qué construcción del lenguaje imperativo corresponde a un salto condicional del procesador? {
+=if
+~Una interfaz
+~Un predicado lógico
+~Una lambda pura
+}
+
+::TP01-Q27-tres-niveles::[markdown]En el ejemplo de suma de valores absolutos ¿qué nivel se identifica como estilo funcional? {
+=TypeScript con map y reduce
+~LC-3
+~C imperativo de alto nivel
+~Ensamblador con registros R0 y R1
+}
+
+::TP01-Q28-maquina-abstracta::[markdown]Según Gabbrielli y Martini todo lenguaje define ¿qué cosa? {
+=Una máquina abstracta que ejecuta los programas del lenguaje
+~Un único compilador obligatorio a lenguaje máquina
+~Un sistema operativo propio
+~Una GPU dedicada
+}
+
+::TP01-Q29-pipeline-typescript::[markdown]¿Cuál es el pipeline correcto de TypeScript según la guía? {
+=archivo.ts luego tsc luego archivo.js luego V8 o Node.js o Deno y finalmente CPU
+~archivo.ts luego JVM luego archivo.class y finalmente CPU
+~archivo.ts luego intérprete Python luego archivo.pyc y finalmente CPU
+~archivo.ts luego gcc luego archivo.o y finalmente CPU
+}
+
+::TP01-Q30-trust-but-verify::[markdown]En el loop trust but verify ¿qué debe hacer el programador después de recibir el output de la IA? {
+=Revisarlo con conocimiento de dominio para verificar paradigma y semántica
+~Ejecutarlo sin revisar para ganar tiempo
+~Publicarlo directamente si compila
+~Pedirle a otra IA que lo apruebe sin leerlo
+}
