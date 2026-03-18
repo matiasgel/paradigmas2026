@@ -171,6 +171,15 @@ El pipeline de publicación valida este contrato antes de generar el plan.
   └→ /edu-create-study-guide     ← Guía de estudio completa (integra PDFs fuente)
   └→ /edu-create-tp
   └→ /edu-create-autograde-repo  ← Solo si el TP tiene autograde o quiz
+
+### Nota sobre Quiz Moodle
+
+Para Moodle, el módulo no genera una actividad Quiz completa dentro de un único archivo. Genera:
+
+- `tp-quiz.gift`: banco de preguntas importable al question bank.
+- `tp-quiz-moodle-config.md`: guía de configuración de la actividad Quiz en Moodle 5.
+
+Esto refleja cómo funciona Moodle: primero se importan preguntas al banco, luego se crea la actividad Quiz y se agregan esas preguntas con sus ajustes de tiempo, intentos, navegación y review options.
   └→ /edu-quality
   └→ /edu-test-topic
   └→ /edu-adaptive-replan   ← Opcional: ajustar cronograma si hubo desvíos

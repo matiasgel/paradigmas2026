@@ -22,7 +22,7 @@ tools: ['read', 'edit', 'search', 'execute', 'fetch']
    - `repo` → load `{project-root}/_edu/workflows/create-autograde-repo/workflow.md`
      para generar `{topic_folder}/autograde-repo/`.
    - `quiz-moodle` → load `{project-root}/_edu/workflows/create-tp-quiz/workflow.md`
-     para generar `{topic_folder}/tp-quiz.gift`.
+     para generar `{topic_folder}/tp-quiz.gift` + `{topic_folder}/tp-quiz-moodle-config.md`.
    - `quiz-google` → load `{project-root}/_edu/workflows/create-tp-quiz/workflow.md`
      para generar `{topic_folder}/tp-quiz-forms.md` + `{topic_folder}/tp-quiz-forms-script.js`.
    - `mixto` → ejecutar los sub-pasos de cada tipo incluido en secuencia.
