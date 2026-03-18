@@ -603,6 +603,97 @@ console.log(arr[100].toString())
 
 ---
 
+### [F-32b]
+
+## Ejemplo comparativo: sin EBNF vs con EBNF (archivo separado)
+
+**Sin EBNF (frágil):** el modelo puede generar texto correcto pero también puede agregar explicaciones, salirse del formato, o inventar detalles.
+
+> Prompt “libre”:
+> "Genera una consulta en el mini-lenguaje `FIND <campo> WHERE <campo> > <número>`"
+
+**Posibles salidas inválidas:**
+- `FIND edad WHERE edad is greater than 30` (no cumple la forma exacta)
+- `FIND precio WHERE precio > 100; -- tarea` (incluye comentarios)
+- `Aquí va mi consulta: FIND edad WHERE edad > 30` (texto extra)
+
+**Con EBNF (robusto):** adjuntamos un archivo `grammar.ebnf` y pedimos explícitamente que la salida cumpla la gramática.
+
+> Archivo `grammar.ebnf` (contenido):
+> ```ebnf
+> query    ::= "FIND" field ["WHERE" condition]
+> field    ::= /[a-zA-Z_][a-zA-Z0-9_]*/
+> condition::= term ("AND" term)*
+> term     ::= field ">" number | field "=" value
+> number   ::= /[0-9]+/
+> value    ::= /"[^"]*"/ | number
+> ```
+
+> Prompt (ChatGPT):
+> "Tienes el archivo `grammar.ebnf` con la gramática. Genera **una sola línea** que cumpla esa gramática. No agregues nada más."
+
+---
+
+### [F-32c]
+
+## Prompt complejo + validación (ChatGPT)
+
+```
+Eres un generador de consultas en el mini-lenguaje definido en el archivo `grammar.ebnf`.
+
+Genera **exactamente una línea** que cumpla la gramática.
+
+Ejemplo válido:
+FIND precio WHERE precio > 100 AND categoria = "libros"
+```
+
+✅ **Salida válida esperada:**
+`FIND nombre WHERE edad > 30 AND pais = "AR"`
+
+> Si la respuesta no cumple la gramática, indícale: "Tu respuesta debe ser solo la consulta, sin texto adicional, y debe seguir exactamente el formato del grammar.ebnf."
+
+---
+
+### [F-32d]
+
+## Ejemplo real (investigación reciente): “Efficient Guided Generation”
+
+En 2023 Willard & Louf (Eth Zürich) propusieron un método eficiente para **forzar que LLMs respeten gramáticas (regular/CFG)** usando un autómata sobre el vocabulario.
+
+> Paper: *Efficient Guided Generation for Large Language Models* (arXiv 2307.09702)
+
+### Idea clave
+- Tomar una gramática (EBNF / CFG / regex) como especificación
+- Construir un **autómata que restringe el vocabulario** en cada paso de generación
+- Al generar cada token, solo se consideran las opciones que mantienen la derivación válida
+
+### Ejemplo conceptual (pseudocódigo)
+
+```python
+# pseudo-API basada en la idea del paper
+from outlines import Grammar, GuidedGenerator
+
+# Gramática: mini-SQL
+grammar = Grammar.from_ebnf("""
+query   ::= "SELECT" fields "FROM" table ["WHERE" condition]
+fields  ::= "*" | field ("," field)*
+field   ::= /[a-zA-Z_][a-zA-Z0-9_]*/
+table   ::= /[a-zA-Z_][a-zA-Z0-9_]*/
+condition ::= field ">" number
+number  ::= /[0-9]+/
+""")
+
+gen = GuidedGenerator(model="gpt-4o-mini", grammar=grammar)
+print(gen.generate("Write a query: "))
+```
+
+### ¿Por qué es relevante?
+- **No depende del prompt**: el modelo no puede salirse del formato porque el autómata no le deja.
+- **Escala a gramáticas complejas** (consulta SQL, JSON, código de configuración, etc.).
+- **Investigación reciente**: muestra que esto se puede hacer con bajo overhead y sin alterar el modelo.
+
+---
+
 ### [F-33]
 
 ## La línea del tiempo
