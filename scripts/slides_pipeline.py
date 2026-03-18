@@ -13,13 +13,13 @@ Fases:
 
 Uso:
   python slides_pipeline.py <ruta-tema>
-  python slides_pipeline.py <ruta-tema> --plan-only
+    python slides_pipeline.py <ruta-tema> --plan-only
   python slides_pipeline.py <ruta-tema> --assets-only
   python slides_pipeline.py <ruta-tema> --publish-only
 
 Ejemplos:
   python slides_pipeline.py salida/cursadas/2026/temas/01-conceptos-introductorios
-  python slides_pipeline.py salida/cursadas/2026/temas/01-conceptos-introductorios --plan-only
+    python slides_pipeline.py salida/cursadas/2026/temas/01-conceptos-introductorios --plan-only
 
 Requiere:
   pip install -r requirements.txt

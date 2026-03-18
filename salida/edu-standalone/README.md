@@ -67,6 +67,8 @@ Usá `@` en Copilot Chat para invocar agentes directamente:
 | `@edu-agent-coherence-fixer` | Coherencia 🔗 | Unifica coherencia entre docs |
 | `@edu-agent-reference-validator` | Referencias 🔬 | Valida citas académicas |
 | `@edu-agent-academic-guardrail` | Guardrail 🛡️ | Controla formalidad y densidad |
+| `@edu-agent-slides-designer` | Vera 🎨 | Define UX visual del cursado: paleta, tipografía, layouts, slides-config.yaml |
+| `@edu-agent-slides-publisher` | Diego 🚀 | Publica filminas en Google Slides: plan YAML, imágenes Gemini, pipeline completo |
 
 ## Slash Commands (28)
 
@@ -107,6 +109,7 @@ Reglas base del contrato:
   - `@tipo: codigo|tabla|diagrama|...`
   - `@layout: codigo|tabla|concepto-abstracto|...`
   - `@imagen: background|content|none`
+  - `@prompt-imagen: descripción visual específica del tópico de la filmina` (requerido cuando `@imagen:` activo)
   - `@asset: kind=diagram position=right-half prompt="..."`
 
 El pipeline de publicación valida este contrato antes de generar el plan.
@@ -150,8 +153,7 @@ El pipeline de publicación valida este contrato antes de generar el plan.
 |---------|---------------|
 | `/edu-setup-apis` | **Una vez** — configura Google OAuth + Gemini key |
 | `/edu-slides-designer` | **Una vez por cursada** — define UX visual del cursado y cómo se renderiza Markdown en Slides |
-| `/edu-publish-slides` | **En cada tema** — flujo completo: valida + genera + link |
-| `/edu-slides-publisher` | Re-exportar sin rediseñar |
+| `/edu-publish-slides` | **Único punto de entrada** en cada tema — genera artefactos, assets y publicación completa |
 
 ### Fase 4 — Cierre
 | Comando | Qué hace |
@@ -294,8 +296,7 @@ La primera vez que corrás el flujo completo, se abrirá el navegador para autor
 ### Flujo recomendado via Copilot Chat
 
 ```
-/edu-publish-slides    ← flujo completo guiado: valida filminas + genera + link de Slides
-/edu-slides-publisher  ← re-exportar sin rediseñar el sistema visual
+/edu-publish-slides    ← único flujo completo: valida + genera artefactos + assets + link de Slides
 ```
 
 ---

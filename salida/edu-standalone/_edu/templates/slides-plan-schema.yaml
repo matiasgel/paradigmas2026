@@ -1,0 +1,56 @@
+version: "slides-plan/v1"
+description: "Contrato canónico entre el agente de planeamiento de filminas y el pipeline técnico de publicación"
+
+required_files:
+  - plan-filminas-{tema}.yaml
+  - assets-manifest.yaml
+  - publish-context.yaml
+
+plan:
+  meta:
+    required:
+      - topic_id
+      - title
+      - source
+      - generated_at
+      - template_id
+  slides:
+    each_slide_required:
+      - id
+      - type
+      - title
+      - body_blocks
+      - layout
+      - background_image
+      - content_image
+    image_requirements:
+      - "Los prompts de imagen deben derivarse del tópico y del contenido de la slide"
+      - "Los prompts deben evitar formulaciones genéricas del tipo 'abstract shapes' si la slide tiene semántica concreta"
+      - "Las imágenes deben ser originales y no pedir imitación de obras o estilos protegidos"
+    coherence_requirements:
+      - "El contenido de la slide debe ser coherente con el resto del material docente del tema"
+      - "Si background_image.strategy o content_image.strategy es gemini, el campo prompt correspondiente no puede estar vacío"
+
+assets_manifest:
+  required:
+    - slide_id
+    - asset_kind
+    - local_asset
+  allowed_asset_kinds:
+    - background_image
+    - content_image
+    - table_png
+    - code_png
+
+publish_context:
+  required:
+    - template_id
+    - topic_folder
+    - slides_output_dir
+    - source_filminas
+
+validation_rules:
+  - "Toda slide con imagen debe tener justificación semántica trazable al contenido"
+  - "El pipeline no infiere semántica: solo valida contrato y ejecuta"
+  - "La responsabilidad de planeamiento pertenece al agente invocado por el prompt"
+  - "La publicación completa tiene un único punto de entrada: /edu-publish-slides"

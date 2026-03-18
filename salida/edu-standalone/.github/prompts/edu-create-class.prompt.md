@@ -12,7 +12,11 @@ tools: ['read', 'edit', 'search', 'execute', 'fetch']
    If yes → load it and pass it to Roberto as the structural constraint for minuta.md y filminas.md.
 5. Check if `{project-root}/_edu/templates/filminas-template.md` and `{project-root}/_edu/templates/filminas-schema.yaml` exist.
    If yes → load ambos y pasarlos a Roberto como contrato canónico de filminas para que el archivo sea consistente con el generador de plan y el publicador.
-6. Load and follow the workflow at `{project-root}/_edu/workflows/topic-cycle/workflow.md`.
-7. Purpose: Generate `{topic_folder}/minuta.md` and `{topic_folder}/filminas.md`.
+6. If `{project-root}/{topic_folder}/minuta.md` or `{project-root}/{topic_folder}/filminas.md` already exist, load them and pass them to Roberto as baseline a mejorar, no como artefactos a ignorar.
+7. If extracted source material exists under `{project-root}/material/{topic_number}-*/txt/`, load the available `.txt` files and pass them to Roberto as factual reference for improvements.
+8. Require that every slide with `@imagen: background|content` includes either `@prompt-imagen:` or an `@asset:` directive with a non-empty `prompt="..."` tied to the topic of that slide.
+9. Require that any extra material Roberto creates for the class (`minuta.md`, transiciones, notas docentes, ejemplos, bloques introductorios) remains coherent with `filminas.md`: misma secuencia conceptual, mismos ejemplos centrales, misma terminología y mismas decisiones pedagógicas.
+10. Load and follow the workflow at `{project-root}/_edu/workflows/topic-cycle/workflow.md`.
+11. Purpose: Generate `{topic_folder}/minuta.md` and `{topic_folder}/filminas.md`.
    Content proportional to `class_duration` from topic.yaml. Requires approved diseno.md.
 

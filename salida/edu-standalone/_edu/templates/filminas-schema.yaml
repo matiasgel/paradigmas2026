@@ -17,6 +17,7 @@ directives:
   type: "@tipo:"
   layout: "@layout:"
   image: "@imagen:"
+  image_prompt: "@prompt-imagen:"
   asset: "@asset:"
 
 allowed:
@@ -56,6 +57,7 @@ contract:
   code_blocks: "Usar fences ```lenguaje"
   tables: "Usar tablas Markdown cuando la comparacion sea tabular"
   directives: "Las directivas @tipo, @layout, @imagen y @asset permiten eliminar ambiguedad"
+  image_prompt: "Toda slide con @imagen: background|content debe incluir @prompt-imagen o un @asset con prompt=..."
 
 examples:
   minimal_slide:
@@ -67,7 +69,21 @@ examples:
     - "### [F-08] Cuello de botella"
     - "@tipo: diagrama"
     - "@imagen: content"
+    - "@prompt-imagen: diagrama del cuello de botella CPU-memoria con flujo secuencial y puntos de contención"
     - "@asset: kind=diagram position=right-half prompt=\"Bus CPU memoria\""
     - "# La ejecucion secuencial es una restriccion"
     - "- Consecuencia 1"
     - "- Consecuencia 2"
+
+validation:
+  image_prompt_required_when_image_enabled: true
+  accepted_image_prompt_sources:
+    - directive:image_prompt
+    - asset:prompt
+  image_prompt_rules:
+    - "Debe referirse al tópico de la filmina, no al tema en abstracto"
+    - "Debe describir una escena, diagrama o metáfora visual vinculada al contenido"
+    - "No usar prompts genéricos como 'formas abstractas', salvo portada o cierre"
+  coherence_rules:
+    - "Los ejemplos, términos y secuencia conceptual deben poder reutilizarse en minuta.md sin contradicciones"
+    - "Si una filmina introduce una imagen, el prompt debe reforzar la idea central de esa misma filmina"

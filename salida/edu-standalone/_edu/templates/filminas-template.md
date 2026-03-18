@@ -17,7 +17,10 @@ Usar esta plantilla para que `filminas.md`, el plan YAML y la publicación a Sli
 - `@tipo: portada|concepto-abstracto|codigo|tabla|tabla-comparativa|diagrama|socratica|demo|cierre|timeline`
 - `@layout: portada|concepto-abstracto|codigo|tabla|tabla-comparativa|diagrama|socratica|demo|cierre|timeline`
 - `@imagen: background|content|none`
+- `@prompt-imagen: descripción visual específica del tópico de la filmina`
 - `@asset: kind=diagram position=right-half prompt="texto breve para imagen o grafico"`
+
+Si una slide activa `@imagen: background|content`, debe incluir `@prompt-imagen:` o un `@asset:` con `prompt="..."`.
 
 ## Esqueleto sugerido
 
@@ -51,6 +54,7 @@ Subtítulo institucional o de contexto
 
 @tipo: diagrama
 @imagen: content
+@prompt-imagen: diagrama del flujo entre parser, árbol sintáctico y validación semántica
 @asset: kind=diagram position=right-half prompt="diagrama simple del flujo"
 
 # Explicación del concepto
@@ -100,4 +104,5 @@ console.log(saludo("Ada"));
 
 - Una slide debe ser inequívoca para un humano y para el pipeline.
 - Si una slide necesita “adivinarse”, faltan subtítulo o directivas.
-- Si un gráfico es importante, declarar la intención con `@asset`.
+- Si un gráfico es importante, declarar la intención con `@asset` y/o `@prompt-imagen`.
+- Si ya existían filminas previas del tema, reutilizar lo rescatable y mejorar con el material fuente dado.
