@@ -6,6 +6,7 @@
 Documentación técnica complementaria del proyecto:
 
 - [Google Slides API para BMAD/EDU](googlesl.md)
+- [Quiz Moodle 5 para BMAD/EDU](moodle-quiz-moodle5.md)
 
 ---
 

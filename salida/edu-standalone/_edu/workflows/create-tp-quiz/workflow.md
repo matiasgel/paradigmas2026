@@ -9,190 +9,267 @@
 
 ## Overview
 
-Genera los archivos de quiz a partir del `tp.md` del tema.
-Soporta dos plataformas de destino:
+Genera los artefactos de quiz a partir de `tp.md`.
+En Moodle hay que separar dos capas distintas:
 
-| Plataforma | Output | Formato |
-|-----------|--------|---------|
-| Moodle | `tp-quiz.gift` | GIFT (General Import Format Template) — importable directo en Moodle |
-| Google Classroom / Forms | `tp-quiz-forms.md` + `tp-quiz-forms-script.js` | Markdown estructurado + Apps Script para crear el Form automáticamente |
+1. **Banco de preguntas**: se importa con GIFT a una categoría del question bank.
+2. **Actividad Quiz**: se configura dentro de Moodle con sus propios ajustes de tiempo, intentos, navegación, revisión y feedback.
+
+Por lo tanto, este workflow **no pretende serializar toda la actividad Quiz dentro del archivo GIFT**, porque Moodle no funciona así. En su lugar genera:
+
+| Plataforma | Output | Propósito |
+|-----------|--------|-----------|
+| Moodle | `tp-quiz.gift` + `tp-quiz-moodle-config.md` | Banco de preguntas GIFT UTF-8 + guía exacta para crear/configurar la actividad Quiz en Moodle 5 |
+| Google Classroom / Forms | `tp-quiz-forms.md` + `tp-quiz-forms-script.js` | Estructura del quiz + Apps Script para Google Forms |
+
+Referencias normativas usadas en este workflow:
+- MoodleDocs 5.1 `GIFT format`
+- MoodleDocs 5.1 `Import questions`
+- MoodleDocs 5.1 `Question banks`
+- MoodleDocs 5.1 `Quiz activity`
+- MoodleDocs 5.1 `Quiz settings`
 
 ---
 
 ## Preconditions
 
 - `_edu/active-topic.yaml` debe existir.
-- `{topic_folder}/tp.md` debe existir con preguntas de tipo multiple choice definidas.
+- `{topic_folder}/tp.md` debe existir.
+- `{topic_folder}/topic.yaml` debe existir y contener `tp_type`.
+- El `tp.md` debe contener consignas de evaluación estructurables como quiz.
 - Si alguna precondition falla → informar y STOP.
 
 ---
 
-## Steps
-
-### Step 0: Initialize
+## Step 0: Initialize
 
 1. Load `{project-root}/_edu/config.yaml` → store all fields.
 2. Load `{project-root}/_edu/active-topic.yaml` → store `{topic_folder}`, `{topic_number}`, `{topic_name}`.
-3. Load `{project-root}/{topic_folder}/tp.md` → extraer preguntas, opciones y respuestas correctas.
-4. Determinar plataforma destino (viene de topic.yaml `tp_type`: `quiz-moodle` o `quiz-google`).
+3. Load `{project-root}/{topic_folder}/topic.yaml` → store all fields.
+4. Load `{project-root}/{topic_folder}/tp.md`.
+5. Determinar plataforma destino desde `tp_type`.
+6. Detectar preguntas candidatas a quiz y clasificarlas por tipo real:
+  - multiple choice de respuesta única
+  - multiple choice de respuesta múltiple
+  - verdadero/falso
+  - short answer solo si el docente lo pidió explícitamente
+7. Si el TP no está estructurado en un formato evaluable → informar qué falta y STOP.
 
 ---
 
-### Step 1: Elicitar Configuración del Quiz
+## Step 1: Elicitar configuración pedagógica y operativa
 
-Preguntar al docente (esperar respuesta antes de continuar):
+Preguntar al docente y esperar respuesta:
 
-1. **Título del quiz** (sugerido: "TP {topic_number} — {topic_name}")
-2. **Tiempo límite** (en minutos; sugerido: 30 minutos; 0 = sin límite)
-3. **Intentos permitidos** (sugerido: 1)
-4. **Puntaje por pregunta correcta** (sugerido: igual para todas; o el docente especifica por pregunta)
-5. **Penalización por respuesta incorrecta** (sugerido: 0 — sin penalización)
-6. **Mostrar respuestas correctas al alumno** después de completar: sí / no
+1. **Título visible del cuestionario**
+  Sugerido: `TP {topic_number} — {topic_name}`
+2. **Categoría del banco de preguntas**
+  Sugerido: `TP/{topic_number}-{topic_name_slug}`
+3. **Modo de evaluación**
+  Opciones sugeridas: práctica formativa / parcial corto / autoevaluación
+4. **Cantidad de intentos permitidos en Moodle**
+5. **Método de calificación si hay múltiples intentos**
+  Opciones Moodle: `highest`, `average`, `first`, `last`
+6. **Tiempo límite de la actividad Quiz**
+  En minutos, `0` = sin límite
+7. **Navegación**
+  `free` o `sequential`
+8. **Comportamiento de preguntas**
+  Sugerido: `deferred feedback` para examen tradicional, `interactive with multiple tries` para práctica guiada
+9. **Shuffle de opciones dentro de cada pregunta**
+  sí / no
+10. **Mostrar right answers y feedback al alumno**
+  Definir por franja de revisión: inmediatamente, mientras siga abierto, después del cierre
+11. **Puntaje por pregunta**
+  uniforme o específico por consigna
+12. **Si habrá feedback específico por alternativa**
+  sí / no
 
-Mostrar resumen y pedir confirmación antes de generar.
+Mostrar resumen y pedir confirmación.
 
 ---
 
-### Step 2: Verificar y Completar Preguntas del tp.md
+## Step 2: Validar las preguntas antes de exportar
 
-Revisar que cada consigna del tp.md marcada como multiple choice tenga:
-- Enunciado claro
-- Exactamente 1 respuesta correcta marcada (o indicada)
-- Al menos 3 opciones incorrectas (distractores)
+Para cada pregunta candidata, verificar:
 
-Si alguna pregunta está incompleta → mostrar el listado y pedir que el docente las complete antes de continuar.
+- Tiene trazabilidad explícita a `tp.md` y a la cobertura de `minuta.md`.
+- El enunciado es autosuficiente fuera del contexto del TP.
+- Si es multiple choice simple:
+  - exactamente 1 correcta
+  - al menos 3 distractores plausibles
+- Si es multiple choice múltiple:
+  - los pesos parciales suman como máximo `100%`
+  - las incorrectas tienen peso `0` o negativo si se quiere evitar marcar todo
+- Si incluye símbolos GIFT reservados `~ = # { } :`, deben escaparse con `\`.
+- Si requiere formato enriquecido, usar `[html]` o `[markdown]` de manera consistente.
+- Debe haber una línea en blanco entre preguntas en el archivo final.
+
+Si alguna pregunta falla, listar el problema y corregir antes de exportar.
 
 ---
 
-### Step 3A: Generar `tp-quiz.gift` (Moodle)
+## Step 3A: Generar banco de preguntas Moodle en `tp-quiz.gift`
 
-Formato GIFT — importable desde Moodle en: Banco de preguntas → Importar → Formato GIFT.
+### Regla crítica
 
-```
+`tp-quiz.gift` representa **preguntas**, no la actividad Quiz completa.
+Los parámetros como tiempo límite, intentos, review options, navegación, grade category y contraseña se documentan en `tp-quiz-moodle-config.md` para ser cargados luego en la actividad Quiz de Moodle.
+
+### Formato base
+
+```gift
 // TP {topic_number}: {topic_name}
-// Importar en: Moodle → Banco de preguntas → Importar → Formato GIFT
-// Encoding: UTF-8
+// Importar en Moodle 5: Banco de preguntas > Importar > Formato GIFT
+// Encoding obligatorio: UTF-8 sin BOM
 
-$CATEGORY: TP{topic_number}-{topic_name_slug}
+$CATEGORY: TP/{topic_number}-{topic_name_slug}
 
-::Pregunta 1::[html]<p>{enunciado_pregunta_1}</p> {
-  ={opcion_correcta_1}
-  ~{distractor_1_1}
-  ~{distractor_1_2}
-  ~{distractor_1_3}
+::TP{topic_number}-Q01::[markdown]{enunciado_pregunta_1} {
+={opcion_correcta_1}#{feedback_correcto_1}
+~{distractor_1_1}#{feedback_incorrecto_1a}
+~{distractor_1_2}#{feedback_incorrecto_1b}
+~{distractor_1_3}#{feedback_incorrecto_1c}
+#### {feedback_general_1}
 }
 
-::Pregunta 2::[html]<p>{enunciado_pregunta_2}</p> {
-  ={opcion_correcta_2}
-  ~{distractor_2_1}
-  ~{distractor_2_2}
-  ~{distractor_2_3}
+::TP{topic_number}-Q02::[markdown]{enunciado_pregunta_2} {
+~%-50%{distractor_2_1}
+~%50%{correcta_parcial_2a}
+~%50%{correcta_parcial_2b}
+~%-50%{distractor_2_2}
+#### {feedback_general_2}
 }
 ```
 
-**Reglas GIFT:**
-- Encoding obligatorio: UTF-8
-- `=` prefija la respuesta correcta
-- `~` prefija cada distractor
-- `[html]` permite HTML en el enunciado (tildes, código, negrita)
-- Para penalización: `~%XX%{distractor}` donde XX es porcentaje negativo (ej: `~%-25%{Incorrecta}`)
-- Comentarios con `//`
-- El campo `name_slug` es {topic_name} en minúsculas sin espacios ni tildes
+### Reglas obligatorias para Moodle GIFT
 
-**Trazabilidad:** Cada pregunta GIFT DEBE tener el número de consigna de tp.md en el título (`::Pregunta N - ...::`)
+- El archivo debe guardarse como `UTF-8` y preferentemente **sin BOM**.
+- Debe haber al menos una línea en blanco entre preguntas.
+- `::titulo::` debe estar presente en todas las preguntas.
+- `=` marca respuesta correcta en multiple choice simple.
+- `~` marca respuesta incorrecta o alternativa ponderada.
+- `#` agrega feedback específico de esa alternativa.
+- `####` agrega feedback general de la pregunta.
+- `[html]`, `[markdown]`, `[moodle]` o `[plain]` pueden prefijar el texto de la pregunta.
+- `$CATEGORY:` puede cambiar la categoría de destino dentro del archivo.
+- Si se usan porcentajes, Moodle valida contra su lista de grades importables; si no coincide exacto, el import puede fallar o redondear según `Match grades`.
+- Para dividir en tercios usar `33.33333`, no `33` ni `33.33`.
+- Los caracteres reservados `~ = # { } :` deben escaparse con `\` cuando se usan como texto literal.
+
+### Criterios de generación para el módulo EDU
+
+- Preferir `multiple choice` de respuesta única como formato por defecto.
+- Usar `multiple choice` de respuesta múltiple solo si la consigna realmente lo exige.
+- Incluir feedback específico solo cuando agrega valor pedagógico real.
+- Incluir `feedback general` breve cuando el quiz sea formativo.
+- Trazabilidad obligatoria en el título de la pregunta:
+  - formato sugerido: `::TP{topic_number}-C{consigna_numero}-{slug_corto}::`
+- No generar categorías ambiguas; usar una ruta jerárquica estable.
 
 ---
 
-### Step 3B: Generar quiz para Google Classroom / Forms
+## Step 3B: Generar `tp-quiz-moodle-config.md`
+
+Generar una guía operativa para crear la actividad Quiz en Moodle 5 usando las preguntas importadas.
+
+Contenido mínimo:
+
+```markdown
+# Configuración Moodle 5 — Quiz TP {topic_number}
+
+## Banco de preguntas
+- Archivo: `tp-quiz.gift`
+- Categoría sugerida: `TP/{topic_number}-{topic_name_slug}`
+- En importación: activar `Get category from file` si se quiere respetar `$CATEGORY:`
+
+## Actividad Quiz
+- Nombre: {quiz_title}
+- Intentos permitidos: {attempts_allowed}
+- Método de calificación: {grading_method}
+- Tiempo límite: {time_limit}
+- Navegación: {navigation_method}
+- Comportamiento: {question_behaviour}
+- Shuffle dentro de preguntas: {shuffle_answers}
+
+## Review options sugeridas
+- Immediately after: {review_immediate}
+- Later while quiz is still open: {review_open}
+- After the quiz is closed: {review_closed}
+
+## Procedimiento
+1. Curso > More > Question banks.
+2. Import > GIFT.
+3. Seleccionar `tp-quiz.gift`.
+4. Si corresponde, tildar `Get category from file`.
+5. Crear la actividad Quiz.
+6. Configurar settings según esta guía.
+7. Edit quiz > Add > from question bank.
+8. Seleccionar la categoría importada.
+```
+
+Incluir además notas importantes:
+
+- Moodle crea la actividad Quiz en dos pasos: primero settings, luego agregar preguntas.
+- Los tiempos, intentos, contraseña, review options y navegación no viajan dentro del GIFT.
+- Las preguntas `Draft` no se pueden agregar al quiz; deben quedar `Ready`.
+- Las preguntas del course shared question bank pueden reutilizarse entre cursos; las del quiz question bank son privadas del quiz.
+
+---
+
+## Step 3C: Generar quiz para Google Forms
 
 Generar dos archivos:
 
-#### `tp-quiz-forms.md` — estructura legible para el docente
+### `tp-quiz-forms.md`
 
-```markdown
-# Quiz: TP {topic_number} — {topic_name}
-**Plataforma:** Google Forms (importar como quiz)
-**Tiempo límite:** {tiempo_limite} min | **Intentos:** {intentos}
+Documento legible con:
 
----
+- título
+- objetivos del quiz
+- preguntas
+- opciones
+- correcta marcada
+- puntaje
+- feedback si aplica
+- nota explícita de que Google Forms no soporta tiempo límite nativo
 
-## Pregunta 1 — {descripción breve} *(Consigna {N} tp.md)*
-{enunciado_completo}
+### `tp-quiz-forms-script.js`
 
-- ( ) {opcion_A}
-- (✓) {opcion_correcta}
-- ( ) {opcion_B}
-- ( ) {opcion_C}
+Script Apps Script con:
 
-**Puntos:** {puntos} | **Feedback correcto:** {feedback_si_aplica}
-
----
-```
-
-#### `tp-quiz-forms-script.js` — Apps Script para crear el Form automáticamente
-
-```javascript
-// Google Apps Script — Crear quiz automáticamente
-// Instrucciones: script.google.com → Nuevo proyecto → Pegar este código → Ejecutar createQuiz()
-// Requiere permisos de Google Forms.
-
-function createQuiz() {
-  const form = FormApp.create("TP {topic_number}: {topic_name}");
-  form.setIsQuiz(true);
-  form.setCollectEmail(true);       // requerido para identificar al alumno en el panel de respuestas
-  form.setLimitOneResponsePerUser(true);
-  {si tiempo_limite > 0: // Nota: Google Forms no tiene límite de tiempo nativo — usar timer externo}
-
-  // Pregunta 1
-  const q1 = form.addMultipleChoiceItem();
-  q1.setTitle("{enunciado_pregunta_1}");
-  q1.setChoices([
-    q1.createChoice("{opcion_correcta_1}", true),
-    q1.createChoice("{distractor_1_1}", false),
-    q1.createChoice("{distractor_1_2}", false),
-    q1.createChoice("{distractor_1_3}", false),
-  ]);
-  q1.setPoints({puntos_pregunta_1});
-
-  // ... (una entrada por pregunta)
-
-  Logger.log("Form URL: " + form.getPublishedUrl());
-  Logger.log("Edit URL: " + form.getEditUrl());
-}
-```
+- `form.setIsQuiz(true)`
+- `form.setCollectEmail(true)` cuando el docente quiera trazabilidad
+- `form.setLimitOneResponsePerUser(true)` si corresponde
+- una pregunta por `MultipleChoiceItem` o `CheckboxItem` según el caso
+- `setPoints(...)`
 
 ---
 
-### Step 4: Output Summary
+## Step 4: Output Summary
 
-Mostrar al docente según plataforma:
+### Moodle
 
-**Moodle:**
+```text
+Quiz Moodle preparado en:
+- {topic_folder}/tp-quiz.gift
+- {topic_folder}/tp-quiz-moodle-config.md
+
+Preguntas: {N}
+Categoría: {question_category}
+Formato de importación: GIFT UTF-8
+
+Importante:
+- El GIFT importa preguntas al banco.
+- La actividad Quiz se configura aparte en Moodle 5.
 ```
-✅ Quiz Moodle generado en: {topic_folder}/tp-quiz.gift
 
-Preguntas: {N} | Formato: GIFT | Encoding: UTF-8
+### Google
 
-Cómo importar:
-1. Moodle → tu curso → Banco de preguntas → Importar
-2. Formato: GIFT
-3. Subir tp-quiz.gift (UTF-8)
-4. Crear cuestionario → Agregar desde banco de preguntas
-5. Configurar: tiempo={tiempo_limite}min, intentos={intentos}
-```
-
-**Google:**
-```
-✅ Quiz Google Forms generado en:
-  {topic_folder}/tp-quiz-forms.md         ← estructura legible
-  {topic_folder}/tp-quiz-forms-script.js  ← Apps Script para crear el Form
-
-Cómo publicar:
-1. Ir a script.google.com → Nuevo proyecto
-2. Pegar el contenido de tp-quiz-forms-script.js
-3. Ejecutar createQuiz()
-4. Autorizar permisos de Google Forms
-5. Copiar el Form URL del log y compartirlo en Google Classroom como assignment
+```text
+Quiz Google preparado en:
+- {topic_folder}/tp-quiz-forms.md
+- {topic_folder}/tp-quiz-forms-script.js
 ```
 
 ---
@@ -201,6 +278,7 @@ Cómo publicar:
 
 | Archivo | Plataforma | Descripción |
 |---------|-----------|-------------|
-| `tp-quiz.gift` | Moodle | Quiz importable directo — formato GIFT UTF-8 |
+| `tp-quiz.gift` | Moodle | Banco de preguntas importable en GIFT UTF-8 |
+| `tp-quiz-moodle-config.md` | Moodle | Guía de configuración de la actividad Quiz en Moodle 5 |
 | `tp-quiz-forms.md` | Google | Estructura legible del quiz |
-| `tp-quiz-forms-script.js` | Google | Apps Script para crear el Google Form automáticamente |
+| `tp-quiz-forms-script.js` | Google | Apps Script para crear el Google Form |

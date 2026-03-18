@@ -14,7 +14,7 @@ tools: ['read', 'edit', 'search', 'execute', 'fetch']
    - `repo` → load and follow `{project-root}/_edu/workflows/create-autograde-repo/workflow.md`
      (Purpose: regenerar `{topic_folder}/autograde-repo/` con el template de GitHub Classroom)
    - `quiz-moodle` → load and follow `{project-root}/_edu/workflows/create-tp-quiz/workflow.md`
-     (Purpose: regenerar `{topic_folder}/tp-quiz.gift`)
+     (Purpose: regenerar `{topic_folder}/tp-quiz.gift` + `{topic_folder}/tp-quiz-moodle-config.md`)
    - `quiz-google` → load and follow `{project-root}/_edu/workflows/create-tp-quiz/workflow.md`
      (Purpose: regenerar `{topic_folder}/tp-quiz-forms.md` + `{topic_folder}/tp-quiz-forms-script.js`)
    - Any other value → inform "Tipo '{tp_type}' no requiere output adicional" → STOP.
