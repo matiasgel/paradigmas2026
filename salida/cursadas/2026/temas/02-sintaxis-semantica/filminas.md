@@ -13,9 +13,7 @@
 
 ---
 
-<!-- ============================================================ -->
-## SLIDE 01 — Portada
-<!-- ============================================================ -->
+### [F-00]
 
 # Sintaxis y Semántica de Lenguajes
 
@@ -27,9 +25,7 @@ Universidad Nacional de Tierra del Fuego — Instituto IDEI
 
 ---
 
-<!-- ============================================================ -->
-## SLIDE 02 — Agenda de la clase
-<!-- ============================================================ -->
+### [F-01]
 
 ## Agenda
 
@@ -46,12 +42,9 @@ Universidad Nacional de Tierra del Fuego — Instituto IDEI
 
 ---
 
-<!-- ============================================================ -->
 ## BLOQUE 1 — SINTAXIS Y SEMÁNTICA (20 min)
-<!-- ============================================================ -->
 
-<!-- SLIDE 03 -->
-## SLIDE 03 — Continuidad con Tema 01
+### [F-02]
 
 ## ¿Cómo sabe el compilador?
 
@@ -66,8 +59,7 @@ Universidad Nacional de Tierra del Fuego — Instituto IDEI
 
 ---
 
-<!-- SLIDE 04 -->
-## SLIDE 04 — Definiciones: Sintaxis
+### [F-03]
 
 ## Sintaxis
 
@@ -87,8 +79,7 @@ legibilidad · facilidad de escritura · verificabilidad · traducibilidad · no
 
 ---
 
-<!-- SLIDE 05 -->
-## SLIDE 05 — Definiciones: Semántica
+### [F-04]
 
 ## Semántica
 
@@ -105,8 +96,7 @@ x = null         // ✓ sintácticamente válido
 
 ---
 
-<!-- SLIDE 06 -->
-## SLIDE 06 — Actividad: clasificar errores
+### [F-05]
 
 ## Actividad — ¿Sintaxis o semántica?
 
@@ -125,8 +115,7 @@ const y = undefined; y.length
 
 ---
 
-<!-- SLIDE 07 -->
-## SLIDE 07 — Respuestas
+### [F-06]
 
 ## Respuestas
 
@@ -140,12 +129,9 @@ const y = undefined; y.length
 
 ---
 
-<!-- ============================================================ -->
 ## BLOQUE 2 — ESTRUCTURA LÉXICA (20 min)
-<!-- ============================================================ -->
 
-<!-- SLIDE 08 -->
-## SLIDE 08 — El programa como texto plano
+### [F-07]
 
 ## El punto de partida: texto plano
 
@@ -161,8 +147,7 @@ result = oldsum - value / 100;
 
 ---
 
-<!-- SLIDE 09 -->
-## SLIDE 09 — Reglas léxicas vs. sintácticas
+### [F-08]
 
 ## Dos niveles de análisis
 
@@ -178,8 +163,7 @@ result = oldsum - value / 100;
 
 ---
 
-<!-- SLIDE 10 -->
-## SLIDE 10 — Lexemas y Tokens
+### [F-09]
 
 ## Lexemas y Tokens
 
@@ -190,8 +174,7 @@ Analogía lingüística: "perro", "gato", "ave" → distintos lexemas, mismo tok
 
 ---
 
-<!-- SLIDE 11 -->
-## SLIDE 11 — Ejemplo de tokenización
+### [F-10]
 
 ## Tokenización de `indice = 5 * contador + 1;`
 
@@ -210,8 +193,7 @@ Analogía lingüística: "perro", "gato", "ave" → distintos lexemas, mismo tok
 
 ---
 
-<!-- SLIDE 12 -->
-## SLIDE 12 — El analizador léxico (lexer)
+### [F-11]
 
 ## El analizador léxico
 
@@ -231,12 +213,9 @@ Los mensajes de error con número de línea y columna vienen del lexer.
 
 ---
 
-<!-- ============================================================ -->
 ## BLOQUE 3 — GRAMÁTICAS FORMALES (30 min)
-<!-- ============================================================ -->
 
-<!-- SLIDE 13 -->
-## SLIDE 13 — ¿Por qué gramáticas formales?
+### [F-12]
 
 ## El problema del lenguaje natural
 
@@ -248,8 +227,7 @@ Los mensajes de error con número de línea y columna vienen del lexer.
 
 ---
 
-<!-- SLIDE 14 -->
-## SLIDE 14 — Gramáticas libres de contexto
+### [F-13]
 
 ## Gramáticas LCF — Clasificación de Chomsky (1959)
 
@@ -264,8 +242,7 @@ Una gramática es la tupla `(N, T, S, P)`:
 
 ---
 
-<!-- SLIDE 15 -->
-## SLIDE 15 — BNF
+### [F-14]
 
 ## BNF — Backus-Naur Form
 
@@ -285,8 +262,7 @@ Una gramática es la tupla `(N, T, S, P)`:
 
 ---
 
-<!-- SLIDE 16 -->
-## SLIDE 16 — Gramática de ejemplo
+### [F-15]
 
 ## Gramática de trabajo
 
@@ -306,8 +282,7 @@ Una gramática es la tupla `(N, T, S, P)`:
 
 ---
 
-<!-- SLIDE 17 -->
-## SLIDE 17 — Derivación paso a paso
+### [F-16]
 
 ## Derivación de `A := B * (A + C)`
 
@@ -328,8 +303,7 @@ Cada paso aplica exactamente **una producción**. La cadena intermedia = **forma
 
 ---
 
-<!-- SLIDE 18 -->
-## SLIDE 18 — Árbol sintáctico
+### [F-17]
 
 ## Árbol de derivación (parse tree)
 
@@ -355,8 +329,7 @@ Cada paso aplica exactamente **una producción**. La cadena intermedia = **forma
 
 ---
 
-<!-- SLIDE 19 -->
-## SLIDE 19 — Ambigüedad
+### [F-18]
 
 ## Gramática ambigua
 
@@ -374,8 +347,7 @@ Cada paso aplica exactamente **una producción**. La cadena intermedia = **forma
 
 ---
 
-<!-- SLIDE 20 -->
-## SLIDE 20 — EBNF
+### [F-19]
 
 ## EBNF — Extended BNF
 
@@ -397,8 +369,7 @@ Cada paso aplica exactamente **una producción**. La cadena intermedia = **forma
 
 ---
 
-<!-- SLIDE 21 -->
-## SLIDE 21 — Actividad: árbol de derivación
+### [F-20]
 
 ## Actividad (5 min)
 
@@ -411,12 +382,9 @@ Cada paso aplica exactamente **una producción**. La cadena intermedia = **forma
 
 ---
 
-<!-- ============================================================ -->
 ## BLOQUE 4 — DIAGRAMAS DE SINTAXIS (10 min)
-<!-- ============================================================ -->
 
-<!-- SLIDE 22 -->
-## SLIDE 22 — Railroad diagrams
+### [F-21]
 
 ## Diagramas de sintaxis (Railroad Diagrams)
 
@@ -430,8 +398,7 @@ Representación **gráfica** equivalente a EBNF.
 
 ---
 
-<!-- SLIDE 23 -->
-## SLIDE 23 — Diagrama de condicional
+### [F-22]
 
 ## Diagrama: `<condicional>`
 
@@ -449,8 +416,7 @@ Ambos son válidos → la gramática lo expresa sin recursión.
 
 ---
 
-<!-- SLIDE 24 -->
-## SLIDE 24 — Dos usos de la descripción sintáctica
+### [F-23]
 
 ## Usos de la descripción sintáctica
 
@@ -467,12 +433,9 @@ Ambos son válidos → la gramática lo expresa sin recursión.
 
 ---
 
-<!-- ============================================================ -->
 ## BLOQUE 5 — SEMÁNTICA (20 min)
-<!-- ============================================================ -->
 
-<!-- SLIDE 25 -->
-## SLIDE 25 — ¿Por qué semántica formal?
+### [F-24]
 
 ## Más allá de la sintaxis
 
@@ -487,8 +450,7 @@ Ambos son válidos → la gramática lo expresa sin recursión.
 
 ---
 
-<!-- SLIDE 26 -->
-## SLIDE 26 — Nombres y objetos denotables
+### [F-25]
 
 ## Nombres y objetos denotables
 
@@ -503,8 +465,7 @@ variables · parámetros formales · procedimientos · tipos · módulos · cons
 
 ---
 
-<!-- SLIDE 27 -->
-## SLIDE 27 — Entorno
+### [F-26]
 
 ## El entorno (environment)
 
@@ -523,8 +484,7 @@ Entorno en un instante de ejecución:
 
 ---
 
-<!-- SLIDE 28 -->
-## SLIDE 28 — Binding (ligadura)
+### [F-27]
 
 ## Binding — ligadura
 
@@ -544,8 +504,7 @@ Entorno en un instante de ejecución:
 
 ---
 
-<!-- SLIDE 29 -->
-## SLIDE 29 — Semántica operacional
+### [F-28]
 
 ## Semántica operacional
 
@@ -568,12 +527,9 @@ Estado final: { x = 5, y = 6 }
 
 ---
 
-<!-- ============================================================ -->
 ## BLOQUE 6 — PARSER + CIERRE (15 min)
-<!-- ============================================================ -->
 
-<!-- SLIDE 30 -->
-## SLIDE 30 — El parser en el pipeline
+### [F-29]
 
 ## El compilador: pipeline completo
 
@@ -596,8 +552,7 @@ Código fuente (texto)
 
 ---
 
-<!-- SLIDE 31 -->
-## SLIDE 31 — Top-down vs. Bottom-up
+### [F-30]
 
 ## Dos estrategias de parsing
 
@@ -610,8 +565,7 @@ Código fuente (texto)
 
 ---
 
-<!-- SLIDE 32 -->
-## SLIDE 32 — Síntesis de errores en TypeScript
+### [F-31]
 
 ## Síntesis: errores en TypeScript
 
@@ -632,8 +586,7 @@ console.log(arr[100].toString())
 
 ---
 
-<!-- SLIDE 33 -->
-## SLIDE 33 — Gramáticas y LLMs
+### [F-32]
 
 ## Las gramáticas hoy: IA generativa
 
@@ -650,8 +603,7 @@ console.log(arr[100].toString())
 
 ---
 
-<!-- SLIDE 34 -->
-## SLIDE 34 — La línea del tiempo
+### [F-33]
 
 ## La línea del tiempo
 
@@ -666,8 +618,7 @@ console.log(arr[100].toString())
 
 ---
 
-<!-- SLIDE 35 -->
-## SLIDE 35 — Preguntas de cierre
+### [F-34]
 
 ## Preguntas para pensar
 
@@ -679,8 +630,7 @@ console.log(arr[100].toString())
 
 ---
 
-<!-- SLIDE 36 -->
-## SLIDE 36 — Mapa de conceptos
+### [F-35]
 
 ## Mapa: lo que vimos hoy
 
@@ -704,8 +654,7 @@ LENGUAJE DE PROGRAMACIÓN
 
 ---
 
-<!-- SLIDE 37 -->
-## SLIDE 37 — Próxima clase
+### [F-36]
 
 ## Próxima clase — Tema 03: Sistema de Tipos
 
@@ -717,8 +666,7 @@ LENGUAJE DE PROGRAMACIÓN
 
 ---
 
-<!-- SLIDE 38 -->
-## SLIDE 38 — Referencias
+### [F-37]
 
 ## Referencias
 

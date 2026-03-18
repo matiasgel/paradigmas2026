@@ -1,0 +1,393 @@
+meta:
+  topic_id: 04-pruebas-filminas
+  title: Tema 04 · Pruebas de filminas
+  source: filminas.md
+  schema_version: filminas/v1
+  schema_path: _edu/templates/filminas-schema.yaml
+  generated_at: '2026-03-17T19:17:15'
+  template_id: 1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI
+  total_slides: 9
+  images_planned: 4
+slides:
+- id: F-00
+  type: portada
+  title: Portada
+  subtitle: Tema 04 · Pruebas de filminas
+  body_blocks:
+  - type: text
+    content: Contrato canónico para generación, plan y publicación
+  - type: text
+    content: Clase técnica de prueba · 90 minutos
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout:
+    title: center-middle
+    body: center-bottom
+    image: background
+    code: none
+    table: none
+  background_image:
+    strategy: gemini
+    prompt: 'Composición abstracta de íconos de programación: engranajes, bifurcaciones
+      de flujo, nodos conectados, código como grafo visual. Solo formas y colores
+      institucionales. flat design académico, paleta rojo granate institucional y
+      gris oscuro, composición puramente pictórica, alta resolución'
+    local_asset: slides/assets/F-00-bg.png
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-01
+  type: concepto-abstracto
+  title: El problema real
+  subtitle: Cada fase interpreta distinto la misma filmina
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: El escritor piensa en Markdown humano.
+      level: 0
+    - content: El generador de plan intenta inferir semántica.
+      level: 0
+    - content: El publicador necesita una estructura inequívoca.
+      level: 0
+    - content: Si cada fase adivina, aparecen incoherencias y errores.
+      level: 0
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: &id001
+    title: full-title
+    body: left-middle
+    image: right-half
+    code: none
+    table: none
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: Composición abstracta de círculos y líneas interconectadas en rojo granate
+      y gris. Arte geométrico minimalista. pintura digital abstracta, paleta rojo
+      granate y gris oscuro, fondo blanco limpio, alta resolución
+    local_asset: slides/assets/F-01-content.png
+    drive_id: null
+  table_assets: []
+- id: F-02
+  type: concepto-abstracto
+  title: La regla base
+  subtitle: Una slide debe ser inequívoca para humano y máquina
+  body_blocks:
+  - type: heading
+    level: 2
+    content: Convención mínima
+  - type: list
+    ordered: false
+    items:
+    - content: '`### [F-XX]` identifica la slide.'
+      level: 0
+    - content: El primer `#` de la slide es el subtítulo visible.
+      level: 0
+    - content: Los `##` internos pasan a ser secciones del cuerpo.
+      level: 0
+    - content: Listas, código y tablas usan Markdown estándar.
+      level: 0
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: Composición abstracta de círculos y líneas interconectadas en rojo granate
+      y gris. Arte geométrico minimalista. pintura digital abstracta, paleta rojo
+      granate y gris oscuro, fondo blanco limpio, alta resolución
+    local_asset: slides/assets/F-02-content.png
+    drive_id: null
+  table_assets: []
+- id: F-03
+  type: diagrama
+  title: Cuando el contenido no alcanza
+  subtitle: Las directivas eliminan ambigüedad visual
+  body_blocks:
+  - type: heading
+    level: 2
+    content: Casos típicos
+  - type: list
+    ordered: false
+    items:
+    - content: Un bloque ASCII puede ser código o diagrama.
+      level: 0
+    - content: Una tabla puede necesitar contexto arriba.
+      level: 0
+    - content: Una slide conceptual puede requerir imagen lateral o no.
+      level: 0
+  code_blocks: []
+  tables: []
+  directives:
+    type: diagrama
+    image: content
+  asset_hints:
+  - kind: diagram
+    position: right-half
+    prompt: flujo entre autor, plan y publicador
+  layout: &id002
+    title: full-title
+    body: left-middle
+    image: right-half
+    code: none
+    table: none
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: Tres círculos rojos grandes conectados por líneas con flechas. Arte minimalista
+      geométrico. pintura digital abstracta, paleta rojo granate y gris oscuro, fondo
+      blanco limpio, alta resolución
+    local_asset: slides/assets/F-03-content.png
+    drive_id: null
+  table_assets: []
+- id: F-04
+  type: diagrama
+  title: Flujo del pipeline
+  subtitle: Un contrato único reduce errores acumulados
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '`filminas.md` define contenido y hints.'
+      level: 0
+    - content: El plan YAML preserva semántica y assets.
+      level: 0
+    - content: El publicador renderiza sin re-interpretar desde cero.
+      level: 0
+  code_blocks: []
+  tables: []
+  directives:
+    type: diagrama
+    image: content
+  asset_hints:
+  - kind: diagram
+    position: right-half
+    prompt: filminas markdown a plan yaml a google slides
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: Tres círculos rojos grandes conectados por líneas con flechas. Arte minimalista
+      geométrico. pintura digital abstracta, paleta rojo granate y gris oscuro, fondo
+      blanco limpio, alta resolución
+    local_asset: slides/assets/F-04-content.png
+    drive_id: null
+  table_assets: []
+- id: F-05
+  type: codigo
+  title: Código largo
+  subtitle: El código debe adaptarse al espacio disponible
+  body_blocks:
+  - type: heading
+    level: 2
+    content: Criterio de publicación
+  - type: list
+    ordered: false
+    items:
+    - content: Si no entra, la tipografía baja.
+      level: 0
+    - content: Si sigue siendo denso, se encuadra dentro de un cuadro interno.
+      level: 0
+  code_blocks:
+  - lang: ts
+    content: "type SlideDirective = {\n  type?: \"codigo\" | \"tabla\" | \"diagrama\"\
+      ;\n  layout?: \"codigo\" | \"tabla\" | \"concepto-abstracto\";\n  image?: \"\
+      background\" | \"content\" | \"none\";\n  asset?: { kind: string; position:\
+      \ string; prompt: string };\n};\n\nconst buildPlanSlide = (sourceId: string,\
+      \ directive: SlideDirective, blocks: string[]) => ({\n  id: sourceId,\n  directive,\n\
+      \  blocks,\n  valid: blocks.length > 0 && (directive.image ?? \"none\") !==\
+      \ \"background\",\n});"
+  tables: []
+  directives:
+    type: codigo
+  asset_hints: []
+  layout:
+    title: full-title
+    body: subtitle-only
+    image: none
+    code: full-bottom
+    table: none
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-06
+  type: tabla
+  title: Tabla con contexto
+  subtitle: La tabla no debe aparecer sola
+  body_blocks:
+  - type: heading
+    level: 2
+    content: Antes de leer la tabla
+  - type: list
+    ordered: false
+    items:
+    - content: La primera columna describe el artefacto.
+      level: 0
+    - content: La segunda muestra quién lo consume.
+      level: 0
+    - content: La tercera explica qué riesgo evita.
+      level: 0
+  code_blocks: []
+  tables:
+  - '| Artefacto | Consumidor | Riesgo que evita |
+
+    | --------- | ---------- | ---------------- |
+
+    | `filminas.md` | autor humano | ambigüedad de contenido |
+
+    | `filminas-schema.yaml` | parser y publicador | interpretación inconsistente
+    |
+
+    | `plan-filminas.yaml` | assets + Slides | pérdida de semántica |'
+  directives:
+    type: tabla
+  asset_hints: []
+  layout:
+    title: full-title
+    body: table-intro
+    image: none
+    code: none
+    table: table-main
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Artefacto | Consumidor | Riesgo que evita |
+
+      | --------- | ---------- | ---------------- |
+
+      | `filminas.md` | autor humano | ambigüedad de contenido |
+
+      | `filminas-schema.yaml` | parser y publicador | interpretación inconsistente
+      |
+
+      | `plan-filminas.yaml` | assets + Slides | pérdida de semántica |'
+    local_asset: slides/assets/F-06-table-1.png
+    drive_id: null
+- id: F-07
+  type: concepto-abstracto
+  title: Heading interno dentro del cuerpo
+  subtitle: Los headings Markdown también son parte del contrato
+  body_blocks:
+  - type: heading
+    level: 2
+    content: Qué debe pasar
+  - type: list
+    ordered: false
+    items:
+    - content: El parser no debe descartarlos.
+      level: 0
+    - content: El plan no debe convertirlos en texto plano indiferenciado.
+      level: 0
+    - content: Slides debe mostrarlos como jerarquía real, no como markup literal.
+      level: 0
+  - type: heading
+    level: 2
+    content: Qué no debe pasar
+  - type: list
+    ordered: false
+    items:
+    - content: No deben desaparecer.
+      level: 0
+    - content: No deben verse `##` en pantalla.
+      level: 0
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-08
+  type: cierre
+  title: Cierre
+  subtitle: El contrato vive fuera de cada tema
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: La plantilla humana guía al autor.
+      level: 0
+    - content: El esquema YAML guía al parser.
+      level: 0
+    - content: El publicador valida antes de generar.
+      level: 0
+    - content: Así los errores aparecen temprano y no en el proyector.
+      level: 0
+  code_blocks: []
+  tables: []
+  directives:
+    type: cierre
+  asset_hints: []
+  layout:
+    title: center-middle
+    body: center-bottom
+    image: background
+    code: none
+    table: none
+  background_image:
+    strategy: gemini
+    prompt: 'Composición motivacional académica: diploma geométrico, estrella, trayectoria
+      ascendente de flechas, íconos de logro. Solo formas y colores. flat design académico,
+      paleta rojo granate institucional y gris oscuro, composición puramente pictórica,
+      alta resolución'
+    local_asset: slides/assets/F-08-bg.png
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
