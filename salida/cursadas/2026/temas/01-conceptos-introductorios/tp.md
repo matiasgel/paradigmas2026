@@ -1,287 +1,378 @@
-# TP — Tema 01: Conceptos Introductorios + Intro a TypeScript
+# TP 01 — Quiz Moodle
 
-> **Tipo:** Repo GitHub Classroom (autograding)
-> **Agente:** Aux. Valeria (tp-designer)
-> **Fecha:** 2026-03-10
-> **Trazado desde:** `temas/01-conceptos-introductorios/minuta.md` · `filminas.md`
-> **Output asociado:** `temas/01-conceptos-introductorios/autograde-repo/`
+> Tipo: quiz-moodle
+> Tema: Conceptos Introductorios + Intro a TypeScript
+> Fuente principal: guia-estudio.md
+> Fecha de regeneración: 2026-03-17
+> Salidas asociadas: tp-quiz.gift · tp-quiz-moodle-config.md
 
 ---
 
-## Configuración del Quiz
+## Criterio de regeneración
+
+Este TP reemplaza la versión anterior y fue reconstruido exclusivamente a partir de `guia-estudio.md`.
+
+Objetivo:
+
+- evaluar comprensión conceptual del tema;
+- cubrir los bloques 1 a 5 de la guía del alumno;
+- generar un banco de 30 preguntas importable en Moodle.
+
+---
+
+## Configuración sugerida del quiz
 
 | Campo | Valor |
-|-------|-------|
+| ----- | ----- |
 | Título | TP 01 — Conceptos Introductorios + Intro a TypeScript |
+| Plataforma | Moodle |
+| Formato | GIFT UTF-8 |
+| Preguntas | 30 |
 | Tiempo límite | 30 minutos |
 | Intentos permitidos | 1 |
-| Puntaje por pregunta | 1 punto (12 pts total) |
-| Penalización por respuesta incorrecta | 0 |
-| Mostrar respuestas correctas al alumno | Sí, al completar |
-| Categoría Moodle | TP01-ConceptosIntroductorios |
+| Puntaje | 1 punto por pregunta |
+| Navegación | Libre |
+| Comportamiento | Deferred feedback |
+| Mostrar respuestas correctas | Después del cierre del quiz |
+| Categoría | TP/01-conceptos-introductorios |
 
 ---
 
 ## Instrucciones para el alumno
 
-Este quiz evalúa los conceptos trabajados en la Clase 1. Algunas preguntas requieren recordar ejemplos y código específicos presentados en clase — no busques las respuestas en internet ni en IA: varias preguntas contienen referencias que solo podés responder correctamente si estuviste en clase. Tenés **30 minutos** y **1 intento**.
+Respondé las 30 preguntas en base al contenido de la guía de estudio del Tema 01.
+El cuestionario evalúa definiciones, relaciones entre paradigmas, criterios de evaluación de lenguajes, máquina abstracta, TypeScript como lenguaje multiparadigma e impacto de la IA generativa en la práctica de programación.
 
 ---
 
-## Preguntas
+## Banco de preguntas
 
-> ⚠️ Columna `[TRAMPA]` visible solo para el docente — no aparece en el quiz.
+### P01 — Qué es un cómputo
 
----
+**Fuente:** Guía, sección 1.0
 
-### P01 — Criterio Sebesta aplicado al error de TypeScript en clase
+¿Qué definición corresponde mejor a “cómputo” según la guía?
 
-**Trazabilidad:** Bloque 4 — F-38, demo en vivo de error de tipos
+- ✅ Una serie de operaciones estructuradas aplicadas a datos de entrada para obtener nuevos datos de salida
+- Una colección de archivos fuente compilados en un ejecutable
+- Una interfaz gráfica para interactuar con un programa
+- Un lenguaje usado para expresar algoritmos
 
-**Enunciado:**
-En clase vimos en vivo este error de TypeScript al pasar `["hola", "mundo"]` a la función `sumaAbs`:
+### P02 — Qué es un programa
 
-```
-Argument of type 'string[]' is not assignable to parameter of type 'number[]'
-```
+**Fuente:** Guía, sección 1.0
 
-El compilador (`tsc`) detectó este problema **antes de ejecutar el programa**. Según los criterios de Sebesta (F-06), ¿cuál es el criterio que mejor describe esta capacidad del lenguaje?
+¿Qué es un programa?
 
-**Opciones:**
-- ✅ **Confiabilidad** — el sistema de tipos reduce bugs antes de la ejecución
-- ~ Legibilidad — la facilidad para leer el mensaje de error
-- ~ Portabilidad — la capacidad de ejecutar en múltiples plataformas
-- ~ Escribibilidad — la facilidad para expresar la intención del programador
+- Una lista de variables declaradas en memoria
+- ✅ Una colección definida y ordenada de cómputos diseñada para realizar una tarea específica
+- Un conjunto de componentes de hardware conectados por un bus
+- Una traducción de bytecode a lenguaje máquina
 
----
+### P03 — Qué es un lenguaje de programación
 
-### P02 — Pipeline de ejecución de TypeScript ⚠️ [TRAMPA: DATO INCORRECTO PLANTADO]
+**Fuente:** Guía, sección 1.0
 
-**Trazabilidad:** Bloque 4 — F-35, pipeline dibujado en clase
+¿Qué describe mejor a un lenguaje de programación?
 
-**Enunciado:**
-En clase dibujamos el pipeline completo de TypeScript (F-35). Evaluá la siguiente afirmación:
+- Un protocolo de comunicación entre compiladores
+- Una notación para escribir solo instrucciones imperativas
+- ✅ Un conjunto de reglas sintácticas y semánticas usadas para definir programas
+- Un sistema de archivos para organizar proyectos
 
-> *"TypeScript compila a bytecode de la JVM (Java Virtual Machine), que luego es interpretado y ejecutado por la máquina virtual de Java — a la manera de Java y Kotlin."*
+### P04 — Por qué estudiar lenguajes
 
-¿Es correcta esta afirmación?
+**Fuente:** Guía, sección 1.1
 
-**Opciones:**
-- ✅ **Es incorrecta** — TypeScript compila a JavaScript (`.js`), que es ejecutado por V8, Node.js o Deno; no interviene ninguna JVM
-- ~ Es correcta — TypeScript y Kotlin comparten la misma máquina virtual por diseño
-- ~ Es parcialmente correcta — TypeScript puede compilar a JVM opcionalmente con `tsc --target jvm`
-- ~ Es correcta — V8 es el motor JVM de Google Chrome, por eso el flujo es equivalente
+Según la guía, estudiar lenguajes no consiste solo en aprender sintaxis sino en adquirir:
 
-> 🎯 **NOTA DOCENTE (trampa):** La afirmación es deliberadamente falsa. La IA tiende a validarla o confundirse porque asocia TypeScript con Java/Kotlin en ecosistemas empresariales. Un alumno que vio la filmina F-35 sabe que el pipeline es `archivo.ts → tsc → archivo.js → V8/Deno`.
+- Técnicas para memorizar comandos del compilador
+- ✅ Modelos mentales diferentes para pensar problemas
+- Reglas fijas para escribir todo en un único paradigma
+- Habilidades de administración de servidores
 
----
+### P05 — Costo de elegir mal un lenguaje
 
-### P03 — Código C de clase: variable acumuladora ⚠️ [TRAMPA: REFERENCIA A CÓDIGO DE CLASE]
+**Fuente:** Guía, sección 1.2
 
-**Trazabilidad:** Bloque 3 — F-23, ejemplo comparativo en tres niveles
+¿Qué ilustra el ejemplo de elegir Node.js para procesamiento numérico intensivo y luego migrar a Python más NumPy?
 
-**Enunciado:**
-En clase (F-23) mostramos este fragmento de código C como ejemplo del **paradigma imperativo puro**:
+- Que todo lenguaje multiparadigma sirve igual para cualquier dominio
+- ✅ Que elegir mal un lenguaje puede implicar costos técnicos y económicos reales
+- Que JavaScript es mejor que Python para cómputo científico
+- Que el rendimiento nunca depende del paradigma
 
-```c
-int suma_abs(int arr[], int n) {
-    int acc = 0;
-    for (int i = 0; i < n; i++)
-        acc += (arr[i] < 0) ? -arr[i] : arr[i];
-    return acc;
-}
-```
+### P06 — FORTRAN en la línea histórica
 
-¿Cuál es la variable que actúa como **acumulador mutable** y constituye evidencia directa del estilo imperativo?
+**Fuente:** Guía, sección 1.3
 
-**Opciones:**
-- ✅ `acc`
-- ~ `arr`
-- ~ `n`
-- ~ `i`
+¿Qué problema resolvió FORTRAN en 1957 según la tabla histórica?
 
-> 🎯 **NOTA DOCENTE (trampa):** La IA podría elegir `i` (variable de iteración, también mutable) o no distinguir. La respuesta pedagógicamente relevante es `acc` porque es la que acumula el **estado** del cómputo — que es exactamente lo que define el paradigma imperativo según lo discutido.
+- Introdujo objetos puros y paso de mensajes
+- ✅ Reemplazó al ensamblador para cómputo científico como lenguaje de alto nivel útil
+- Permitió tipado estático sobre JavaScript
+- Hizo posible la lógica simbólica en Prolog
 
----
+### P07 — LISP en la línea histórica
 
-### P04 — Von Neumann y el paradigma imperativo
+**Fuente:** Guía, sección 1.3
 
-**Trazabilidad:** Bloque 2 — F-15 · F-16
+¿Qué aporte se asocia a LISP en la guía?
 
-**Enunciado:**
-En clase explicamos que el paradigma imperativo surgió como abstracción directa de la arquitectura de Von Neumann. Según lo discutido, ¿qué elemento del paradigma imperativo **mapea directamente a una celda de memoria**?
+- Máquina virtual portable entre arquitecturas
+- ✅ Funciones de primera clase, recursión y evaluación simbólica
+- Encapsulamiento orientado a objetos puro
+- Drivers de bajo nivel con máxima eficiencia
 
-**Opciones:**
-- ✅ Una variable
-- ~ Una función
-- ~ Una clase
-- ~ Un predicado lógico (como en Prolog)
+### P08 — C en la línea histórica
 
----
+**Fuente:** Guía, sección 1.3
 
-### P05 — Demo de IA en clase: evidencia de imperativo ⚠️ [TRAMPA: REFERENCIA A CLASE]
+¿Cuál fue el aporte histórico de C según la guía?
 
-**Trazabilidad:** Bloque 5 — F-42, Prompt 1 de la demo en vivo
+- Hizo mainstream la IA generativa
+- Introdujo el paradigma lógico en producción
+- ✅ Ofreció imperativo estructurado con portabilidad sin sacrificar eficiencia
+- Eliminó la necesidad de compilar programas
 
-**Enunciado:**
-En la demo de IA (F-42), el docente usó este prompt **sin restricción de paradigma**:
+### P09 — Java en la línea histórica
 
-> *"Escribí en TypeScript una función que devuelva la suma de los valores absolutos de una lista de números"*
+**Fuente:** Guía, sección 1.3
 
-La IA generó código con la variable `sum` declarada con `let` y un loop `for...of` con mutación acumulativa. ¿Cuál fue el rasgo que el docente identificó como **evidencia del paradigma imperativo** en ese output?
+¿Qué idea se destaca para Java en 1995?
 
-**Opciones:**
-- ✅ El uso de `let sum = 0` (variable mutable) y la mutación acumulativa dentro del loop — estado que cambia instrucción a instrucción
-- ~ El uso de tipos estáticos como `number[]` — que son propios del sistema de tipos de TypeScript
-- ~ La declaración con `function` en lugar de arrow function — que indica estilo clásico imperativo
-- ~ El nombre de la variable `numbers` en inglés — convención del paradigma imperativo
+- Reemplazó totalmente a C en sistemas embebidos
+- ✅ Write once, run anywhere mediante máquina virtual
+- Introdujo recursión por primera vez
+- Eliminó el uso de bytecode
 
-> 🎯 **NOTA DOCENTE (trampa):** La IA puede razonar correctamente pero sin referencia al momento específico de clase. Un alumno presente sabe que el marcador principal fue `let sum = 0` — variable mutable que muta en el loop — exactamente lo que vinculamos con Von Neumann.
+### P10 — TypeScript en la línea histórica
 
----
+**Fuente:** Guía, sección 1.3
 
-### P06 — Cuello de botella de Von Neumann: ¿qué bus? ⚠️ [TRAMPA: TÉRMINO INCORRECTO PLANTADO]
+¿Qué se destaca de TypeScript en 2012?
 
-**Trazabilidad:** Bloque 2 — F-16 · F-18, Louden & Lambert Cap. 1
+- Que fue creado como lenguaje lógico declarativo
+- ✅ Que agrega tipos estáticos sobre JavaScript para escalar proyectos grandes
+- Que compila a bytecode JVM
+- Que reemplaza completamente a Python en IA
 
-**Enunciado:**
-Según Louden & Lambert (Capítulo 1), discutido en la filmina F-16, el **cuello de botella de Von Neumann** surge de la limitación de velocidad de un bus específico. ¿Entre qué componentes está ese bus?
+### P11 — Legibilidad
 
-**Opciones:**
-- ✅ Entre la **CPU** y la **memoria** (RAM)
-- ~ Entre la GPU y la memoria de video (VRAM)
-- ~ Entre la CPU y el disco rígido (almacenamiento secundario)
-- ~ Entre los núcleos del procesador en sistemas multicore
+**Fuente:** Guía, sección 1.4.1
 
-> 🎯 **NOTA DOCENTE (trampa):** Las opciones incorrectas suenan plausibles. La GPU es un distractor efectivo porque la IA moderna asocia cómputo paralelo con GPU. La respuesta correcta es explícita en la filmina F-16 y en el texto de Louden & Lambert Cap. 1.
+¿Qué criterio de Sebesta evalúa si un programador puede leer y comprender código ajeno con facilidad?
 
----
+- Eficiencia
+- Costo
+- ✅ Legibilidad
+- Portabilidad
 
-### P07 — LISP 1960: aporte al paradigma funcional
+### P12 — Expresividad
 
-**Trazabilidad:** Bloque 1 — F-05, timeline histórico
+**Fuente:** Guía, sección 1.4.2
 
-**Enunciado:**
-La perspectiva histórica de F-05 ubicó a **LISP (1960)** como un hito clave. ¿Cuál fue el concepto que LISP introdujo y que se convirtió en la base del paradigma funcional?
+¿Qué criterio se asocia a cuán naturalmente un lenguaje permite expresar una solución?
 
-**Opciones:**
-- ✅ Las **funciones como datos de primera clase** y la **recursión** — base del cálculo lambda
-- ~ La orientación a objetos con encapsulamiento y mensajes entre objetos
-- ~ Los tipos estáticos y la verificación formal en tiempo de compilación
-- ~ La ejecución concurrente de múltiples hilos de código
+- Confiabilidad
+- ✅ Expresividad
+- Eficiencia
+- Portabilidad
 
----
+### P13 — Seguridad o confiabilidad
 
-### P08 — Escalera de abstracciones: ¿qué se pierde al subir?
+**Fuente:** Guía, sección 1.4.3
 
-**Trazabilidad:** Bloque 3 — F-21, metáfora de la escalera de Gabbrielli
+En la guía, la detección de errores de tipo antes de ejecutar se usa como ejemplo de:
 
-**Enunciado:**
-En la "escalera de abstracciones" presentada en F-21 (Gabbrielli), el docente planteó un trade-off central. Al **subir** niveles de abstracción (de ensamblador → C → TypeScript → frameworks), ¿qué se **pierde**?
+- Legibilidad
+- ✅ Seguridad o confiabilidad del lenguaje
+- Portabilidad entre plataformas
+- Abstracción de hardware
 
-**Opciones:**
-- ✅ **Control y eficiencia** de ejecución — menor acceso directo al hardware
-- ~ Legibilidad y expresividad del código
-- ~ Confiabilidad y capacidad de verificación estática
-- ~ Portabilidad entre distintas plataformas
+### P14 — Portabilidad
 
----
+**Fuente:** Guía, sección 1.4.5
 
-### P09 — TypeScript multiparadigma: ¿existe un paradigma predeterminado?
+¿Qué criterio mide si un lenguaje puede funcionar en distintas plataformas sin reescribir el código?
 
-**Trazabilidad:** Bloque 4 — F-39, cierre del bloque TypeScript
+- Eficiencia
+- Costo
+- Legibilidad
+- ✅ Portabilidad
 
-**Enunciado:**
-Al cerrar el Bloque 4 (F-39), el docente afirmó algo sobre TypeScript como lenguaje multiparadigma. ¿Cuál de las siguientes opciones refleja **lo que se dijo en clase**?
+### P15 — Eficiencia
 
-**Opciones:**
-- ✅ TypeScript **no obliga** a ningún paradigma — la elección es del programador, lo que implica mayor responsabilidad de consistencia de estilo en equipos
-- ~ TypeScript implementa el paradigma **funcional como predeterminado** — el imperativo requiere deshabilitar las reglas del compilador
-- ~ TypeScript es multiparadigma pero `tsc` rechaza código con **variables mutables** (`let`) sin configuración especial
-- ~ Solo JavaScript puro permite el paradigma imperativo; TypeScript fuerza el funcional por su sistema de tipos avanzado
+**Fuente:** Guía, sección 1.4.6
 
----
+¿Qué criterio se relaciona con velocidad de ejecución y consumo de memoria?
 
-### P10 — Cierre de la clase: ¿importa el lenguaje si la IA puede escribir en cualquiera?
+- Escribibilidad
+- Portabilidad
+- ✅ Eficiencia
+- Legibilidad
 
-**Trazabilidad:** Bloque 1 — F-13 (pregunta abierta) + Bloque 5 — F-40 (cierre)
+### P16 — Qué es un paradigma de programación
 
-**Enunciado:**
-En el Bloque 1 (F-13) se dejó abierta la pregunta: *"¿Importa el lenguaje si la IA puede escribir en cualquiera?"*. En el Bloque 5 (F-40) se retomó y se respondió usando datos de Schmidt & Runfola (2025). ¿Cuál fue la respuesta del docente?
+**Fuente:** Guía, sección 2.1
 
-**Opciones:**
-- ✅ **Sí, importa más que nunca** — porque el trabajo actual es supervisar, criticar y verificar el código de la IA, y para eso se necesitan conocimientos de paradigmas y semántica
-- ~ No, el lenguaje dejó de importar — la IA abstrae completamente esa decisión por el programador
-- ~ Solo importa para lenguajes de sistemas (C, Rust); para TypeScript la IA es autónoma y confiable sin supervisión
-- ~ Importa menos que antes, pero todavía es relevante solo para optimización de performance
+Según la guía, un paradigma de programación es principalmente:
 
----
+- Un conjunto de librerías de un ecosistema
+- ✅ Una forma de pensar el cómputo y estructurar la solución
+- Un listado de palabras reservadas del lenguaje
+- Un formato de serialización de datos
 
-### P11 — Mutación de estado: ¿cuál de estos fragmentos es imperativo?
+### P17 — Arquitectura de Von Neumann
 
-**Trazabilidad:** Bloque 3 + Bloque 4 — OA3 (distinguir imperativo vs funcional por mutación de estado)
+**Fuente:** Guía, sección 2.2
 
-**Enunciado:**
-Analizar los siguientes cuatro fragmentos TypeScript. ¿Cuál de ellos es un ejemplo **inequívoco de paradigma imperativo**, independientemente del resultado que produce?
+¿Qué rasgo central del paradigma imperativo se vincula directamente con la arquitectura de Von Neumann?
 
-```typescript
-// Fragmento A
-const doble = (arr: number[]): number[] => arr.map(x => x * 2);
+- La ausencia de estado mutable
+- El uso exclusivo de funciones puras
+- ✅ La secuencia de instrucciones que modifican variables y estado
+- La búsqueda de pruebas lógicas
 
-// Fragmento B
-function doble(arr: number[]): number[] {
-    let result: number[] = [];
-    for (const x of arr) result.push(x * 2);
-    return result;
-}
+### P18 — Variable en el paradigma imperativo
 
-// Fragmento C
-const doble = (arr: number[]): number[] => arr.map(x => x * 2);
+**Fuente:** Guía, sección 2.2
 
-// Fragmento D
-const doble = (arr: number[]): number[] =>
-    arr.reduce((acc: number[], x) => [...acc, x * 2], []);
-```
+En el modelo explicado en la guía, una variable imperativa mapea directamente a:
 
-**Opciones:**
-- ✅ **Fragmento B** — declara `let result = []` (variable mutable) y la muta instrucción a instrucción con `push` dentro del loop
-- ~ Fragmento A — por usar sintaxis `function` en lugar de arrow function
-- ~ Fragmento C — por nombrar la función en mayúsculas, convención del paradigma OO
-- ~ Fragmento D — por usar `reduce` con acumulador, que internamente mantiene estado mutable
+- Un mensaje entre objetos
+- ✅ Una celda de memoria
+- Una consulta lógica
+- Un tipo algebraico
 
-> 🎯 **NOTA DOCENTE:** Esta pregunta no tiene referencia a un momento específico de clase — evalúa comprensión transferible de OA3. El distractor D es efectivo porque `reduce` recibe un acumulador `acc`, que *parece* una variable mutable, pero la inmutabilidad del estilo funcional se mantiene: `acc` es el valor que devuelve la función en cada paso, no una variable que se reasigna externamente.
+### P19 — Cuello de botella de Von Neumann
 
-### P12 — Loop "trust but verify" con IA
+**Fuente:** Guía, sección 2.3
 
-**Trazabilidad:** Bloque 5 — F-45 (loop "trust but verify")
+¿Dónde se produce el cuello de botella de Von Neumann?
 
-**Enunciado:**
-En la clase se presentó el loop "trust but verify" como una forma de usar IA generativa de manera responsable. ¿Cuál es el paso que sigue inmediatamente después de pedirle algo a la IA (prompt)?
+- Entre GPU y VRAM
+- Entre disco y CPU
+- ✅ Entre CPU y memoria
+- Entre navegador y compilador
 
-**Opciones:**
-- ✅ **Verificar el output contra el conocimiento del dominio y hacer tests**
-- ~ Volver a escribir el prompt sin revisar el resultado, confiando en la IA
-- ~ Compartir el output directamente con el equipo sin validarlo
-- ~ Usar la IA para generar un prompt mejor sin leer el output original
+### P20 — Evolución metodológica
 
----
+**Fuente:** Guía, sección 2.4
 
-## Resumen de trampas anti-IA
+¿Qué hito metodológico se asocia a los años 70 en la guía?
 
-| Pregunta | Tipo de trampa |
-|----------|---------------|
-| P02 | Dato incorrecto plantado — "JVM" en lugar de V8/Deno |
-| P03 | Referencia a código específico de clase (nombre exacto de variable) |
-| P05 | Referencia a demo en vivo de clase (output exacto de la IA) |
-| P06 | Término incorrecto plantado — "GPU" en lugar de CPU |
-| P09 | Respuesta contraintuitiva — la IA tiende a atribuir defaults funcionales a TypeScript |
+- Multiparadigma en TypeScript
+- ✅ Análisis y diseño estructurado con modularización y eliminación del GOTO
+- Aparición de la JVM
+- Adopción masiva de IA generativa
 
----
+### P21 — Paradigma funcional
 
-## Detección sistemática post-entrega
+**Fuente:** Guía, sección 2.5
 
-1. Exportar respuestas desde Moodle → **Calificaciones → Exportar CSV**
-2. Correr CSV por **GPTZero API** en lote (plan free: 10k palabras/mes; plan básico ~$10/mes)
-3. Comparar respuestas entre alumnos buscando frases idénticas o muy similares en P02, P05 y P09
-4. Alumnos que respondieron P02 con opciones incorrectas (validaron la JVM) → señal de uso de IA sin verificación
-5. Alumnos que respondieron P03 con `i` o `arr` → posible IA que priorizó "variable de loop" sin contexto semántico de la clase
+¿Qué base formal aparece asociada al paradigma funcional?
+
+- Arquitectura de Von Neumann
+- Lógica de resolución de Robinson
+- ✅ Cálculo lambda de Church
+- Encapsulamiento de Smalltalk
+
+### P22 — Paradigma lógico
+
+**Fuente:** Guía, sección 2.5
+
+¿Qué caracteriza al paradigma lógico según la guía?
+
+- El cómputo como mutación explícita de estado
+- ✅ Un programa como hechos y reglas cuya ejecución es una búsqueda de pruebas
+- El uso obligatorio de clases e interfaces
+- El reemplazo del compilador por un framework web
+
+### P23 — Orientado a objetos
+
+**Fuente:** Guía, sección 2.5
+
+¿Cómo presenta la guía al paradigma orientado a objetos?
+
+- Como una ruptura total con el imperativo
+- ✅ Como una extensión del imperativo con encapsulamiento y mensajes
+- Como un caso particular del lógico
+- Como sinónimo de programación funcional
+
+### P24 — Dominio de aplicación del paradigma lógico
+
+**Fuente:** Guía, sección 2.6
+
+¿Cuál es un dominio de aplicación ideal del paradigma lógico según la tabla?
+
+- Drivers y sistemas embebidos
+- Interfaces gráficas empresariales
+- ✅ IA simbólica y sistemas expertos
+- Renderizado 3D en GPU
+
+### P25 — Escalera de abstracciones
+
+**Fuente:** Guía, sección 3.1
+
+Al subir en la escalera de abstracciones, ¿qué se gana según la guía?
+
+- Control directo sobre registros y memoria
+- ✅ Legibilidad, escribibilidad y portabilidad
+- Ejecución puramente nativa sin intermediarios
+- Menor overhead del runtime
+
+### P26 — Correspondencia Von Neumann y código
+
+**Fuente:** Guía, sección 3.2
+
+¿Qué construcción del lenguaje imperativo corresponde a un salto condicional del procesador?
+
+- Una interfaz
+- ✅ Un if
+- Un predicado lógico
+- Una lambda pura
+
+### P27 — Ejemplo comparativo en tres niveles
+
+**Fuente:** Guía, sección 3.3
+
+En el ejemplo de suma de valores absolutos, ¿qué nivel se identifica como estilo funcional?
+
+- LC-3
+- C imperativo de alto nivel
+- ✅ TypeScript con map y reduce
+- Ensamblador con registros R0 y R1
+
+### P28 — Máquina abstracta
+
+**Fuente:** Guía, sección 3.4
+
+Según Gabbrielli y Martini, todo lenguaje define:
+
+- Un único compilador obligatorio a lenguaje máquina
+- ✅ Una máquina abstracta que ejecuta los programas del lenguaje
+- Un sistema operativo propio
+- Una GPU dedicada
+
+### P29 — Pipeline de TypeScript
+
+**Fuente:** Guía, sección 4.2
+
+¿Cuál es el pipeline correcto de TypeScript según la guía?
+
+- archivo.ts → JVM → archivo.class → CPU
+- archivo.ts → intérprete Python → archivo.pyc → CPU
+- ✅ archivo.ts → tsc → archivo.js → V8 o Node.js o Deno → CPU
+- archivo.ts → gcc → archivo.o → CPU
+
+### P30 — Trust but verify
+
+**Fuente:** Guía, secciones 5.3 y 5.4
+
+En el loop trust but verify, ¿qué debe hacer el programador después de recibir el output de la IA?
+
+- Ejecutarlo sin revisar para ganar tiempo
+- Publicarlo directamente si compila
+- ✅ Revisarlo con conocimiento de dominio para verificar paradigma y semántica
+- Pedirle a otra IA que lo apruebe sin leerlo
