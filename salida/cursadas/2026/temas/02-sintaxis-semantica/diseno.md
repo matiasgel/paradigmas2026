@@ -6,6 +6,7 @@
 > **Historial:**
 > - Aprobado originalmente: 2026-03-10 (Matías Gel)
 > - Rediseñado el 2026-03-18 tomando como baseline las filminas año anterior (`02 sintaxis.pdf`) y las filminas 2026 desarrolladas (F-00 a F-37)
+> - Ajustado el 2026-03-18 post-debate (panel Marcos+Roberto+Ana+Guardrail): nota de navegación Cap.4→Cap.3 [C1], B6 reenmarcado como síntesis [C2], errores TS movidos a puente B5→B6 [C3], mapa de fuentes separado por sección [C4]
 > **Material fuente:**
 > - `material/02-sintaxis/txt/02 sintaxis.txt` — filminas cátedra año anterior (baseline año previo)
 > - `material/02-sintaxis/txt/185-220.txt` — Sebesta Cap. 3 y Cap. 4 (Lexical and Syntax Analysis)
@@ -133,6 +134,8 @@ const y = undefined; y.length  // Error semántico en runtime
 ### Bloque 2 — Estructura léxica: del texto al token (20 min)
 
 **Objetivo:** Entender cómo se transforma un programa fuente en unidades mínimas para el análisis.
+
+> **📌 Nota de navegación pedagógica:** Este bloque anticipa **Sebesta Cap. 4 §4.1** (análisis léxico) *antes* de Cap. 3 (gramáticas formales — Bloque 3). La inversión es intencional: ver primero cómo el lexer produce tokens permite que las reglas BNF del Bloque 3 tengan anclaje práctico. En clase, el docente puede explicitarlo: *"Ya vieron cómo el lexer categoriza caracteres en tokens. Ahora vamos a ver las reglas formales que definen qué tokens son válidos — eso es Cap. 3."* Orden didáctico: concreto → abstracto. Orden canónico del libro: Cap. 3 → Cap. 4.
 
 **Contenidos:**
 
@@ -292,11 +295,26 @@ const y = undefined; y.length  // Error semántico en runtime
   - Ejemplo: TypeScript verifica que se asigne un `string` a una variable de tipo `number` antes de ejecutar
   - El type-checker es el primer "intérprete semántico" que ve el código
 
+- **Síntesis — Los tres niveles de corrección en TypeScript** *(puente hacia B6)*:
+  - La distinción sintaxis/semántica que se abrió en B1 se cierra acá con tres casos concretos:
+  ```typescript
+  // Error sintáctico (el parser falla — no puede construir el árbol):
+  function foo( { return 42 }   // falta ')'
+
+  // Error semántico estático (el type-checker falla — árbol válido, tipos incompatibles):
+  const x: number = "texto"     // violación de tipo detectada en compilación
+
+  // Error semántico dinámico (runtime — el compilador no lo detecta):
+  const arr: number[] = []
+  console.log(arr[100].toString())  // undefined.toString() — falla en ejecución
+  ```
+  - *Estos tres errores son evidencia directa del pipeline: el Bloque 6 muestra cómo se integran los tres componentes que los detectan.*
+
 ---
 
-### Bloque 6 — Analizador sintáctico: concepto y rol en el compilador (15 min)
+### Bloque 6 — Síntesis: el pipeline completo y las gramáticas en la IA (15 min)
 
-**Objetivo:** Entender el rol del parser en el pipeline de compilación — sin enseñar algoritmos.
+**Objetivo:** Integrar en un sistema coherente todos los hilos de la clase — los tokens del lexer (B2), las gramáticas (B3), los diagramas (B4) y el significado semántico (B5) se unen en el pipeline completo del compilador. El parser es el corazón de ese pipeline. Cierre: las gramáticas formales BNF/EBNF son infraestructura activa hoy, en el constrained decoding de LLMs.
 
 **Contenidos:**
 - **El parser como corazón del compilador** — Sebesta Cap. 4, §4.1:
@@ -312,19 +330,6 @@ const y = undefined; y.length  // Error semántico en runtime
   - Intérprete: el mismo pipeline, pero en lugar de generar código, *ejecuta* el árbol directamente
   - `tsc` (TypeScript compiler) hace exactamente el pipeline de compilación: lexer → parser → type-checker → emite JavaScript
   - El error message de `tsc` incluye la posición en el texto fuente — evidencia de que el lexer registró dónde estaba cada token
-- **Errores sintácticos vs. semánticos en TypeScript** — síntesis con ejemplos concretos:
-  ```typescript
-  // Error sintáctico (tsc falla en análisis sintáctico):
-  function foo( { return 42 }   // falta ')'
-
-  // Error semántico estático (tsc falla en type-checking):
-  const x: number = "texto"     // violación de tipo
-
-  // Error semántico dinámico (falla en runtime, tsc no lo detecta):
-  const arr: number[] = []
-  console.log(arr[100].toString())  // undefined.toString()
-  ```
-
 - **Cierre — Las gramáticas en la IA generativa** (5 min — gancho de relevancia):
   - Las gramáticas EBNF que se estudian hoy **son exactamente las mismas herramientas** que usan los LLMs modernos para generar outputs estructurados
   - **Constrained decoding**: técnica que compila una gramática EBNF a un autómata de estados finitos y lo usa para filtrar, token a token, qué puede generar el modelo — solo tokens que sean parte de una derivación válida — Willard & Louf (2023)
@@ -339,11 +344,11 @@ const y = undefined; y.length  // Error semántico en runtime
 | Bloque | Minutos | Tópico | Fuente principal |
 |--------|---------|--------|----------------|
 | 1 | 20 | Sintaxis y semántica: definición y relación | slides cátedra |
-| 2 | 20 | Estructura léxica: lexemas y tokens | slides cátedra; Sebesta Cap. 4 |
+| 2 | 20 | Estructura léxica: lexemas y tokens | slides cátedra; Sebesta Cap. 4 §4.1 *(anticipado — ver nota nav. en B2)* |
 | 3 | 30 | Gramáticas formales: BNF, EBNF, árboles sintácticos, ambigüedad | slides cátedra; Sebesta Cap. 3 |
 | 4 | 10 | Diagramas de sintaxis | slides cátedra |
-| 5 | 20 | Semántica: nombres, entorno, ligaduras, semántica operacional | Gabbrielli & Martini Cap. 4 |
-| 6 | 15 | Parser: rol en el compilador, top-down vs. bottom-up; gramáticas en IA (cierre) | Sebesta Cap. 4; Willard & Louf (2023); Beurer-Kellner et al. (2023) |
+| 5 | 20 | Semántica: nombres, entorno, ligaduras, semántica operacional; síntesis tres tipos de error TS | Gabbrielli & Martini Cap. 4; Sebesta Cap. 3 (type checking) |
+| 6 | 15 | Síntesis: pipeline completo; top-down vs. bottom-up; gramáticas en IA (cierre) | Sebesta Cap. 4 §§4.3–4.4 (parser); Willard & Louf (2023); Beurer-Kellner et al. (2023) |
 | — | 5 | Buffer / preguntas | — |
 
 **Total: 120 minutos** ✓
