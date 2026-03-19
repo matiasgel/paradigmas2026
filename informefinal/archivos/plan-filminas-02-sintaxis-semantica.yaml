@@ -1,0 +1,1784 @@
+meta:
+  topic_id: 02-sintaxis-semantica
+  title: Sintaxis y Semántica de Lenguajes
+  source: filminas.md
+  schema_version: filminas/v1
+  schema_path: _edu/templates/filminas-schema.yaml
+  generated_at: '2026-03-18T18:00:36'
+  template_id: 1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI
+  total_slides: 40
+  images_planned: 12
+slides:
+- id: F-00
+  type: portada
+  title: Sintaxis y Semántica de Lenguajes
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Paradigmas y Lenguajes de Programación — 2026**'
+      level: 0
+    - content: Universidad Nacional de Tierra del Fuego — Instituto IDEI
+      level: 0
+  - type: text
+    content: '> *"¿Cómo sabe el compilador si tu programa está bien escrito?*
+
+      > *¿Y sabe siempre cuándo está mal?"*'
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout:
+    title: center-middle
+    body: center-bottom
+    image: background
+    code: none
+    table: none
+  background_image:
+    strategy: gemini
+    prompt: 'Aula universitaria moderna con pizarrón abstracto mostrando bloques geométricos
+      conectados por flechas, mesa con laptop cerrada y carpetas apiladas. Estilo
+      ilustración plana minimalista, sin pantallas con código, sin texto en pizarrón..
+      Alta resolución, paleta bordo institucional, blanco, gris carbón. Sin texto,
+      sin letras, sin etiquetas, sin palabras clave, sin código, sin números. Solo
+      formas visuales: iconos planos, figuras geométricas y metáforas concretas.'
+    local_asset: slides/assets/F-00-bg.png
+    drive_id: 1SSGQ4PfW1Id8iwHRFegvvDq-I3JaHMxa
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-01
+  type: tabla
+  title: Agenda
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Total:** 120 minutos'
+      level: 0
+  code_blocks: []
+  tables:
+  - '| Bloque | Minutos | Tema |
+
+    |--------|---------|------|
+
+    | 1 | 20 | Sintaxis y semántica |
+
+    | 2 | 20 | Del texto al token |
+
+    | 3 | 30 | BNF, EBNF, derivación y ambigüedad |
+
+    | 4 | 10 | Diagramas de sintaxis |
+
+    | 5 | 20 | Type checking, nombres y entorno |
+
+    | 6 | 15 | Pipeline del compilador e IA |'
+  directives: {}
+  asset_hints: []
+  layout: &id003
+    title: full-title
+    body: table-intro
+    image: none
+    code: none
+    table: table-main
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Bloque | Minutos | Tema |
+
+      |--------|---------|------|
+
+      | 1 | 20 | Sintaxis y semántica |
+
+      | 2 | 20 | Del texto al token |
+
+      | 3 | 30 | BNF, EBNF, derivación y ambigüedad |
+
+      | 4 | 10 | Diagramas de sintaxis |
+
+      | 5 | 20 | Type checking, nombres y entorno |
+
+      | 6 | 15 | Pipeline del compilador e IA |'
+    local_asset: slides/assets/F-01-table-1.png
+    drive_id: 1nrlwyQkj9j9X44ZCGyTz-eRJtBxiN2oY
+- id: F-02
+  type: concepto-abstracto
+  title: Continuidad con Tema 01
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**La clase pasada:**'
+      level: 0
+    - content: TypeScript compila a JavaScript
+      level: 0
+    - content: JavaScript corre sobre una máquina de ejecución real
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '**La pregunta técnica de hoy:**'
+      level: 0
+  - type: text
+    content: '> ¿Cómo decide el compilador si un programa está bien escrito?'
+  - type: text
+    content: 'La respuesta requiere dos capas:'
+  - type: list
+    ordered: false
+    items:
+    - content: '**sintaxis** + **semántica**'
+      level: 0
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: &id001
+    title: full-title
+    body: left-middle
+    image: right-half
+    code: none
+    table: none
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: Two flat squares stacked vertically. Top square dark red. Bottom square
+      light gray. Three thin curved lines connecting them in the center. White background.
+      Pure geometric abstract composition. Alta resolución. Sin texto, sin letras,
+      sin números, sin símbolos de código, sin etiquetas. Solo formas geométricas
+      y colores.
+    local_asset: slides/assets/F-02-content.png
+    drive_id: 192gqNs6qOYfY0_qeG12jlqR1hm0rI2nP
+  table_assets: []
+- id: F-03
+  type: concepto-mixto
+  title: Sintaxis
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: '> **Reglas que determinan cuándo un programa está bien formado.**'
+  - type: list
+    ordered: false
+    items:
+    - content: Se ocupa de la **forma**
+      level: 0
+    - content: No decide todavía el comportamiento
+      level: 0
+    - content: 'Responde: *¿es este texto un programa válido?*'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '**Ejemplo canónico:**'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: if (<expresión>) <sentencia>
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: &id002
+    title: full-title
+    body: left-middle
+    image: none
+    code: right-half
+    table: none
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-04
+  type: concepto-abstracto
+  title: Semántica
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: '> **Reglas que asignan significado a los programas sintácticamente correctos.**'
+  - type: list
+    ordered: false
+    items:
+    - content: 'Responde: *¿qué hace este programa?*'
+      level: 0
+    - content: La sintaxis sola no alcanza
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '**Idea clave:**'
+      level: 0
+  - type: text
+    content: 'Un programa puede ser **sintácticamente correcto**
+
+      y aun así ser **semánticamente incorrecto**'
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: Justice scales flat icon. Left bowl contains orderly stacked horizontal
+      rectangles. Right bowl contains randomly scattered small squares. Bordo and
+      dark gray tones. White background. Zero text. Alta resolución. Sin texto, sin
+      letras, sin números, sin símbolos de código, sin etiquetas. Solo formas geométricas
+      y colores.
+    local_asset: slides/assets/F-04-content.png
+    drive_id: 1P5Wy7GI4S3oWNC99pNAQ8yaQE99JyZWw
+  table_assets: []
+- id: F-05
+  type: concepto-mixto
+  title: Actividad — ¿Qué tipo de error es?
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Antes de avanzar:**'
+      level: 0
+  - type: text
+    content: clasificar cada caso en parejas
+  code_blocks:
+  - lang: typescript
+    content: 'const x: number = "hola"
+
+
+      if true { console.log("ok") }
+
+
+      const y = undefined; y.length'
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-06
+  type: tabla
+  title: Respuestas
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: '> **Conclusión:** parser, type checker y ejecución no detectan el mismo
+      tipo de problema.'
+  code_blocks: []
+  tables:
+  - '| Caso | Tipo | Dónde aparece |
+
+    |------|------|---------------|
+
+    | `const x: number = "hola"` | Semántico estático | Type checker |
+
+    | `if true { ... }` | Sintáctico | Parser |
+
+    | `const y = undefined; y.length` | Semántico dinámico | Runtime |'
+  directives: {}
+  asset_hints: []
+  layout: *id003
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Caso | Tipo | Dónde aparece |
+
+      |------|------|---------------|
+
+      | `const x: number = "hola"` | Semántico estático | Type checker |
+
+      | `if true { ... }` | Sintáctico | Parser |
+
+      | `const y = undefined; y.length` | Semántico dinámico | Runtime |'
+    local_asset: slides/assets/F-06-table-1.png
+    drive_id: 1iccxwGgFbipB-Z9rPQ5iMgPzVkpAWTy_
+- id: F-07
+  type: concepto-mixto
+  title: 'Punto de partida: texto plano'
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: El compilador no recibe "intenciones".
+  - type: text
+    content: 'Recibe caracteres:'
+  - type: text
+    content: 'Primero necesita decidir:'
+  - type: list
+    ordered: false
+    items:
+    - content: '**dónde empieza y dónde termina cada pieza**'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: result = oldsum - value / 100;
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-08
+  type: tabla
+  title: Dos niveles de análisis
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Separarlos sirve para:**'
+      level: 0
+  - type: list
+    ordered: true
+    items:
+    - content: simplificar el análisis,
+      level: 0
+    - content: mejorar eficiencia,
+      level: 0
+    - content: aislar detalles de entrada.
+      level: 0
+  code_blocks: []
+  tables:
+  - '| Nivel | Qué resuelve |
+
+    |-------|--------------|
+
+    | Léxico | cómo formar palabras válidas |
+
+    | Sintáctico | cómo combinar esas palabras |'
+  directives: {}
+  asset_hints: []
+  layout: *id003
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Nivel | Qué resuelve |
+
+      |-------|--------------|
+
+      | Léxico | cómo formar palabras válidas |
+
+      | Sintáctico | cómo combinar esas palabras |'
+    local_asset: slides/assets/F-08-table-1.png
+    drive_id: 1qYcrAhpZ_jUg6ktCA1XnuVTw1-8oNUfB
+- id: F-09
+  type: concepto-abstracto
+  title: Vocabulario básico del lenguaje
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: Caracteres
+      level: 0
+    - content: Identificadores
+      level: 0
+    - content: Operadores
+      level: 0
+    - content: Palabras clave y reservadas
+      level: 0
+    - content: Comentarios
+      level: 0
+    - content: Espacios en blanco
+      level: 0
+    - content: Delimitadores y corchetes
+      level: 0
+    - content: Expresiones
+      level: 0
+    - content: Sentencias
+      level: 0
+  - type: text
+    content: '> El lexer clasifica este vocabulario.'
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: 'Composición de nueve íconos planos en grilla 3x3 representando caracteres
+      del lenguaje: símbolo alfanumérico, etiqueta de nombre, símbolo de operador
+      matemático, llave, bocadillo de chat, espacio en blanco, corchetes, árbol de
+      expresión, línea de sentencia. Íconos abstractos sin letras.. Alta resolución,
+      paleta bordo institucional, blanco, gris carbón. Sin texto, sin letras, sin
+      etiquetas, sin palabras clave, sin código, sin números. Solo formas visuales:
+      iconos planos, figuras geométricas y metáforas concretas.'
+    local_asset: slides/assets/F-09-content.png
+    drive_id: 1gcFPVvWT3yaW7ojlloHA5CUdIuvww91V
+  table_assets: []
+- id: F-10
+  type: codigo
+  title: Lexema y token
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Ejemplo:**'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: indice = 5 * contador + 1;
+  tables:
+  - '| Lexema | Token |
+
+    |--------|-------|
+
+    | `indice` | identificador |
+
+    | `=` | op-asignación |
+
+    | `5` | constante_entera |
+
+    | `*` | op_producto |
+
+    | `contador` | identificador |
+
+    | `+` | op_suma |
+
+    | `1` | constante_entera |
+
+    | `;` | delimitador |'
+  directives: {}
+  asset_hints: []
+  layout: &id004
+    title: full-title
+    body: subtitle-only
+    image: none
+    code: full-bottom
+    table: none
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Lexema | Token |
+
+      |--------|-------|
+
+      | `indice` | identificador |
+
+      | `=` | op-asignación |
+
+      | `5` | constante_entera |
+
+      | `*` | op_producto |
+
+      | `contador` | identificador |
+
+      | `+` | op_suma |
+
+      | `1` | constante_entera |
+
+      | `;` | delimitador |'
+    local_asset: slides/assets/F-10-table-1.png
+    drive_id: 1xAJ8Uu2ZHeJolJeTpjFV-ku6LAblpc8j
+- id: F-11
+  type: concepto-mixto
+  title: El analizador léxico
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: Agrupa caracteres
+      level: 0
+    - content: Descarta espacios y comentarios
+      level: 0
+    - content: Clasifica lexemas
+      level: 0
+    - content: Le entrega al parser una secuencia de tokens
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '**Todavía no sabe** si un identificador es variable, parámetro o constante.'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: Código fuente → [ LEXER ] → tokens → [ PARSER ]
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-12
+  type: socratica
+  title: ¿Por qué gramáticas formales?
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: Describir un lenguaje en castellano o inglés natural es ambiguo.
+  - type: text
+    content: 'Una gramática formal permite:'
+  - type: list
+    ordered: false
+    items:
+    - content: especificar con precisión,
+      level: 0
+    - content: validar automáticamente,
+      level: 0
+    - content: construir analizadores sobre esa base.
+      level: 0
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: &id005
+    title: center-top
+    body: center-middle
+    image: background
+    code: none
+    table: none
+  background_image:
+    strategy: gemini
+    prompt: 'Three flat icons in a horizontal sequence on white background separated
+      by thin arrows. First: irregular blob shape. Second: symmetrical triangular
+      branching tree. Third: bold checkmark symbol. Flat design, bordo and dark gray
+      palette. Nothing written. Alta resolución. Sin texto, sin letras, sin números,
+      sin símbolos de código, sin etiquetas. Solo formas geométricas y colores.'
+    local_asset: slides/assets/F-12-bg.png
+    drive_id: 1q-9IeiIca73GuZ9RsmJ8YotsA3X-mTZi
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-13
+  type: codigo
+  title: Gramáticas libres de contexto
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: 'Una gramática puede pensarse como la tupla:'
+  code_blocks:
+  - lang: text
+    content: (N, T, S, P)
+  tables:
+  - '| Símbolo | Significado |
+
+    |---------|-------------|
+
+    | `N` | no terminales |
+
+    | `T` | terminales |
+
+    | `S` | símbolo inicial |
+
+    | `P` | producciones |'
+  directives: {}
+  asset_hints: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Símbolo | Significado |
+
+      |---------|-------------|
+
+      | `N` | no terminales |
+
+      | `T` | terminales |
+
+      | `S` | símbolo inicial |
+
+      | `P` | producciones |'
+    local_asset: slides/assets/F-13-table-1.png
+    drive_id: 1_k5ZpDTW__bmc6_gsLlshTWc9wDNw__l
+- id: F-14
+  type: concepto-mixto
+  title: BNF — Backus-Naur Form
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Metasímbolos:**'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '`::=` se define como'
+      level: 0
+    - content: '`|` alternativa'
+      level: 0
+    - content: '`<...>` no terminal'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: "<enunc_if> ::= if <expr_log> then <enunc>\n             | if <expr_log>\
+      \ then <enunc> else <enunc>"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-15
+  type: concepto-mixto
+  title: Gramática de trabajo
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**La usaremos para:**'
+      level: 0
+  - type: list
+    ordered: true
+    items:
+    - content: derivar,
+      level: 0
+    - content: dibujar un árbol,
+      level: 0
+    - content: discutir ambigüedad.
+      level: 0
+  code_blocks:
+  - lang: text
+    content: "<assign> ::= <id> := <expr>\n<id>     ::= A | B | C\n<expr>   ::= <id>\
+      \ + <expr>\n           | <id> * <expr>\n           | (<expr>)\n           |\
+      \ <id>"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-16
+  type: codigo
+  title: Derivación de `A := B * (A + C)`
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: Cada paso aplica una producción.
+  code_blocks:
+  - lang: text
+    content: '<assign>
+
+      ⇒ <id> := <expr>
+
+      ⇒ A := <expr>
+
+      ⇒ A := <id> * <expr>
+
+      ⇒ A := B * <expr>
+
+      ⇒ A := B * (<expr>)
+
+      ⇒ A := B * (<id> + <expr>)
+
+      ⇒ A := B * (A + <expr>)
+
+      ⇒ A := B * (A + <id>)
+
+      ⇒ A := B * (A + C)'
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-17
+  type: concepto-mixto
+  title: Árbol sintáctico
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Nodos internos:** no terminales'
+      level: 0
+    - content: '**Hojas:** terminales'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: "         <assign>\n        /    |    \\\n      <id>  :=   <expr>\n \
+      \      |         /  |  \\\n       A      <id>  *  <expr>\n               | \
+      \        |\n               B      (<expr>)\n                           |\n \
+      \                     <id> + <expr>\n                       |       |\n    \
+      \                   A      <id>\n                               |\n        \
+      \                       C"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-18
+  type: concepto-mixto
+  title: Ambigüedad
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: '> Una gramática es ambigua si permite dos árboles distintos para la
+      misma cadena.'
+  - type: list
+    ordered: false
+    items:
+    - content: '**Ejemplo:**'
+      level: 0
+  - type: text
+    content: 'Puede leerse como:'
+  - type: list
+    ordered: false
+    items:
+    - content: '`(1 + 2) * 3`'
+      level: 0
+    - content: '`1 + (2 * 3)`'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '**Problema:** dos significados posibles.'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: J := 1 + 2 * 3
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-19
+  type: codigo
+  title: EBNF — notación extendida
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: Menos ruido, misma idea formal.
+  code_blocks:
+  - lang: text
+    content: "<programa>   ::= { <sentencia>* }\n<sentencia>  ::= <asignación> | <condicional>\
+      \ | <loop>\n<condicional>::= if <expr> { <sentencia>* }\n               | if\
+      \ <expr> { <sentencia>* } else { <sentencia>* }"
+  tables:
+  - '| Símbolo | Significado |
+
+    |---------|-------------|
+
+    | `[x]` | opcional |
+
+    | `{x}` | repetición |'
+  directives: {}
+  asset_hints: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Símbolo | Significado |
+
+      |---------|-------------|
+
+      | `[x]` | opcional |
+
+      | `{x}` | repetición |'
+    local_asset: slides/assets/F-19-table-1.png
+    drive_id: 1hHqK3VS1JS3Y4v_o1oYTFdX-bwjF-20q
+- id: F-20
+  type: concepto-abstracto
+  title: Actividad breve
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Consigna:**'
+      level: 0
+  - type: text
+    content: 'Para `C := D - E * F`:'
+  - type: list
+    ordered: true
+    items:
+    - content: indicar una posible derivación,
+      level: 0
+    - content: discutir el agrupamiento,
+      level: 0
+    - content: decir si la gramática deja dudas o no.
+      level: 0
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: 'Árbol de derivación sintáctica: nodo raíz arriba (círculo bordo), ramas
+      hacia abajo en tres niveles, hojas en la base (círculos pequeños grises). Árbol
+      simétrico y limpio, sin ningún texto ni etiqueta, solo nodos y aristas.. Alta
+      resolución, paleta bordo institucional, blanco, gris carbón. Sin texto, sin
+      letras, sin etiquetas, sin palabras clave, sin código, sin números. Solo formas
+      visuales: iconos planos, figuras geométricas y metáforas concretas.'
+    local_asset: slides/assets/F-20-content.png
+    drive_id: 1rOzJ3UlSL_3bP62d2qDlzbQzqgh0BaDU
+  table_assets: []
+- id: F-21
+  type: diagrama
+  title: Diagramas de sintaxis
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: Otra forma de escribir la misma gramática.
+  - type: list
+    ordered: false
+    items:
+    - content: '**Convención mínima:**'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: recuadro → no terminal
+      level: 0
+    - content: terminal destacado → símbolo concreto
+      level: 0
+  - type: text
+    content: Una cadena es válida si puede "recorrer" el diagrama.
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout:
+    title: full-title
+    body: left-middle
+    image: right-half
+    code: none
+    table: none
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: 'Diagrama ferroviario abstracto: línea horizontal con dos desvíos opcionales
+      representados como rieles curvos. Rectángulos para terminales, óvalos para no
+      terminales, todo sin texto interno. Estilo técnico minimalista.. Alta resolución,
+      paleta bordo institucional, blanco, gris carbón. Sin texto, sin letras, sin
+      etiquetas, sin palabras clave, sin código, sin números. Solo formas visuales:
+      iconos planos, figuras geométricas y metáforas concretas.'
+    local_asset: slides/assets/F-21-content.png
+    drive_id: 1JEbXn2pi6MZ0sECCIjZQN3QsB3WXE6VS
+  table_assets: []
+- id: F-22
+  type: concepto-mixto
+  title: 'Ejemplo: condicional'
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Lectura:**'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: 'camino superior: `if` simple'
+      level: 0
+    - content: 'camino inferior: `if ... else`'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: "──► (if) ─► <expr> ─► ({) ─► {sentencias} ─► (}) ─────────►\n      \
+      \                           │\n                                 └──► (else)\
+      \ ─► ({) ─► {sentencias} ─► (}) ─►"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-23
+  type: socratica
+  title: ¿Para qué sirven?
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Para el programador:**'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: leer la forma válida de una construcción
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '**Para el implementador:**'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: tener una especificación precisa del parser
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '**Para la documentación:**'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: comunicar estructura con carga visual menor que BNF larga
+      level: 0
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id005
+  background_image:
+    strategy: gemini
+    prompt: Three human silhouettes arranged in a column on white background. First
+      silhouette has a monitor floating beside it. Second silhouette has a gear floating
+      beside it. Third silhouette has a closed book floating beside it. Flat design,
+      bordo and dark navy palette. No labels, no text at all. Alta resolución. Sin
+      texto, sin letras, sin números, sin símbolos de código, sin etiquetas. Solo
+      formas geométricas y colores.
+    local_asset: slides/assets/F-23-bg.png
+    drive_id: 1hSRvED78lJlDd83JIMsSJqOp8Jyr39q8
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-24
+  type: socratica
+  title: ¿Qué agrega la semántica?
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: 'La sintaxis responde:'
+  - type: text
+    content: '> ¿está bien formado?'
+  - type: text
+    content: 'La semántica responde:'
+  - type: text
+    content: '> ¿qué significa y qué efecto tiene?'
+  - type: list
+    ordered: false
+    items:
+    - content: '**Consecuencia:**'
+      level: 0
+  - type: text
+    content: no todo programa con forma correcta es aceptable o correcto.
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id005
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-25
+  type: concepto-mixto
+  title: 'Semántica estática: el type checker'
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: El parser puede construir el árbol.
+      level: 0
+    - content: El programa sigue siendo rechazado.
+      level: 0
+    - content: El motivo no es de forma sino de tipos.
+      level: 0
+  - type: text
+    content: '> El type checker es una herramienta de semántica estática.'
+  code_blocks:
+  - lang: typescript
+    content: 'const x: number = "texto"'
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-26
+  type: concepto-abstracto
+  title: Nombres y objetos denotables
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: '> Un nombre es una secuencia de caracteres que denota otro objeto.'
+  - type: text
+    content: 'Puede denotar:'
+  - type: list
+    ordered: false
+    items:
+    - content: variables,
+      level: 0
+    - content: parámetros,
+      level: 0
+    - content: funciones,
+      level: 0
+    - content: tipos,
+      level: 0
+    - content: constantes,
+      level: 0
+    - content: operaciones predefinidas.
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '**Nombre ≠ objeto**'
+      level: 0
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: 'Small empty rectangle on the bottom left with a bold arrow pointing to
+      a larger square on the right. Inside the large square: six distinct geometric
+      shapes — cylinder, diamond, triangle, hexagon, circle, star — arranged loosely.
+      Bordo and gray palette. White background. No text whatsoever. Alta resolución.
+      Sin texto, sin letras, sin números, sin símbolos de código, sin etiquetas. Solo
+      formas geométricas y colores.'
+    local_asset: slides/assets/F-26-content.png
+    drive_id: 1UKVir71ipqQyHJ732XrbyKys3S-OAZC5
+  table_assets: []
+- id: F-27
+  type: concepto-mixto
+  title: Entorno
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: '> El entorno es el conjunto de asociaciones nombre → objeto disponibles
+      en un punto del programa.'
+  - type: text
+    content: El entorno permite saber a qué refiere cada nombre en cada contexto.
+  code_blocks:
+  - lang: text
+    content: "{\n  x        → 5\n  contador → 12\n  suma     → 17\n}"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-28
+  type: tabla
+  title: Binding — ligadura
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: '> Binding = asociación entre un nombre y el objeto que denota.'
+  - type: list
+    ordered: false
+    items:
+    - content: '**Puede aparecer en distintas fases:**'
+      level: 0
+  code_blocks: []
+  tables:
+  - '| Fase | Ejemplo |
+
+    |------|---------|
+
+    | Diseño del lenguaje | `+`, `int`, `true` |
+
+    | Escritura | declaraciones del programador |
+
+    | Compilación | posiciones o estructuras resueltas estáticamente |
+
+    | Ejecución | variables locales y memoria dinámica |'
+  directives: {}
+  asset_hints: []
+  layout: *id003
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Fase | Ejemplo |
+
+      |------|---------|
+
+      | Diseño del lenguaje | `+`, `int`, `true` |
+
+      | Escritura | declaraciones del programador |
+
+      | Compilación | posiciones o estructuras resueltas estáticamente |
+
+      | Ejecución | variables locales y memoria dinámica |'
+    local_asset: slides/assets/F-28-table-1.png
+    drive_id: 1H2guFKgCbNwTb-pPa48_s1glMqvjT3Za
+- id: F-29
+  type: concepto-mixto
+  title: Intuición mínima de estado
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: 'Puede pensarse como transformación:'
+  - type: text
+    content: Con esto alcanza para esta materia.
+  - type: list
+    ordered: false
+    items:
+    - content: '**No** vamos hoy a reglas formales SOS ni semántica denotacional.'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: x = 5; y = x + 1
+  - lang: text
+    content: '{} → {x = 5} → {x = 5, y = 6}'
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-30
+  type: codigo
+  title: Tres niveles de error en TypeScript
+  subtitle: ''
+  body_blocks: []
+  code_blocks:
+  - lang: typescript
+    content: 'function foo( { return 42 }
+
+      const x: number = "texto"
+
+      const arr: number[] = []
+
+      console.log(arr[100].toString())'
+  tables:
+  - '| Caso | Detecta |
+
+    |------|---------|
+
+    | falta `)` | parser |
+
+    | tipo incompatible | type checker |
+
+    | acceso inválido en ejecución | runtime |'
+  directives: {}
+  asset_hints: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Caso | Detecta |
+
+      |------|---------|
+
+      | falta `)` | parser |
+
+      | tipo incompatible | type checker |
+
+      | acceso inválido en ejecución | runtime |'
+    local_asset: slides/assets/F-30-table-1.png
+    drive_id: 1sGoqxQi6rNNqrm0jWwZ3PXjngbIzIK8o
+- id: F-31
+  type: codigo
+  title: El pipeline completo
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: Cada etapa responde una pregunta distinta.
+  code_blocks:
+  - lang: text
+    content: "Código fuente\n   ↓\nLexer\n   ↓\nTokens\n   ↓\nParser\n   ↓\nÁrbol\n\
+      \   ↓\nAnálisis semántico / type checking\n   ↓\nEmisión o ejecución"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id004
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-32
+  type: tabla
+  title: Dos ideas de parsing
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Importante:**'
+      level: 0
+  - type: text
+    content: Hoy no estudiamos algoritmos concretos.
+  - type: text
+    content: Solo ubicamos el problema conceptualmente.
+  code_blocks: []
+  tables:
+  - '| Estrategia | Intuición |
+
+    |------------|-----------|
+
+    | Top-down | partir del símbolo inicial |
+
+    | Bottom-up | partir de los tokens |'
+  directives: {}
+  asset_hints: []
+  layout: *id003
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Estrategia | Intuición |
+
+      |------------|-----------|
+
+      | Top-down | partir del símbolo inicial |
+
+      | Bottom-up | partir de los tokens |'
+    local_asset: slides/assets/F-32-table-1.png
+    drive_id: 1UKT6yEaPK9ewVOay-wXLtVtnkZGTGwmj
+- id: F-33
+  type: concepto-abstracto
+  title: Compilador e intérprete revisitado
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: Ambos necesitan análisis léxico y sintáctico.
+      level: 0
+    - content: Ambos necesitan algún criterio semántico.
+      level: 0
+    - content: 'La diferencia aparece después:'
+      level: 0
+    - content: uno traduce,
+      level: 0
+    - content: el otro ejecuta directamente o con menos mediación.
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '**TypeScript:**'
+      level: 0
+  - type: text
+    content: '`lexer → parser → type checker → emite JavaScript`'
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: Two vertical parallel columns. Each column has four plain gray and bordo
+      rectangles connected by downward arrows. Left column ends at a document icon
+      with a folded top corner. Right column ends at a microchip icon. White background.
+      Flat minimal design. No text, no code symbols. Alta resolución. Sin texto, sin
+      letras, sin números, sin símbolos de código, sin etiquetas. Solo formas geométricas
+      y colores.
+    local_asset: slides/assets/F-33-content.png
+    drive_id: 1V3zmhN1O0sb2sSQiSOEZEqePAKsNcgWy
+  table_assets: []
+- id: F-34
+  type: concepto-mixto
+  title: Ejemplo práctico — guiar estructura sin EBNF
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Tarea:** extraer pendientes desde una nota de reunión.'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '**Prompt:**'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '**Qué guía la salida:**'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: el ejemplo de formato,
+      level: 0
+    - content: los nombres de campos,
+      level: 0
+    - content: la instrucción "devolvé JSON".
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '**Problema:** sigue siendo una guía blanda.'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: "Leé esta nota y devolvé un JSON con esta forma:\n{\n   \"action_items\"\
+      : [\n      {\"description\": \"...\", \"due_date\": \"...\", \"owner\": \"...\"\
+      }\n   ]\n}\n\nNota: \"Ana prepara las filminas para el viernes.\nLuis revisa\
+      \ bibliografía. Marta confirma aula.\""
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-35
+  type: concepto-mixto
+  title: El mismo caso — guiar estructura con EBNF
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Prompt + gramática simplificada:**'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: '**Efecto:**'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: ya no solo sugerimos forma,
+      level: 0
+    - content: definimos qué secuencias son válidas,
+      level: 0
+    - content: reducimos comas de más, campos faltantes o orden inválido.
+      level: 0
+  - type: text
+    content: '> En sistemas actuales esto suele entrar como JSON Schema, tipos o CFG
+      compilada para constrained decoding.
+
+      > Acá usamos **EBNF como simplificación didáctica** de esa idea formal.'
+  - type: list
+    ordered: false
+    items:
+    - content: '**Apoyo actual:**'
+      level: 0
+  - type: list
+    ordered: false
+    items:
+    - content: 'Para uso **explícito de EBNF** en un lenguaje de prompting para LLMs:
+        Gong (2026) presenta SPL y reporta una gramática formal EBNF: [arXiv:2602.21257](https://arxiv.org/abs/2602.21257)'
+      level: 0
+    - content: 'Para *grammar-constrained decoding*: Alpay y Senturk (2026) analizan
+        decoding guiado por CFG y sus costos estructurales: [arXiv:2603.05540](https://arxiv.org/abs/2603.05540)'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: "Devolvé una salida que respete esta EBNF:\n\n<salida> ::= '{' '\"action_items\"\
+      ' ':' '[' <item> { ',' <item> } ']' '}'\n<item> ::= '{' '\"description\"' ':'\
+      \ <string> ','\n                         '\"due_date\"' ':' <string> ','\n \
+      \                        '\"owner\"' ':' <string> '}'"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-36
+  type: concepto-mixto
+  title: De Chomsky a constrained decoding
+  subtitle: ''
+  body_blocks:
+  - type: text
+    content: La formalización de la sintaxis sigue viva.
+  - type: text
+    content: 'No es arqueología: es infraestructura.'
+  code_blocks:
+  - lang: text
+    content: '1957  gramáticas formales
+
+      1960  BNF
+
+      ...   EBNF y parsers
+
+      2023  constrained decoding en LLMs'
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id002
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-37
+  type: concepto-abstracto
+  title: Mapa final de la clase
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: true
+    items:
+    - content: 'Sintaxis: forma válida'
+      level: 0
+    - content: 'Léxico: texto → tokens'
+      level: 0
+    - content: 'Gramática: tokens → estructura'
+      level: 0
+    - content: 'Diagramas: representación visual de la sintaxis'
+      level: 0
+    - content: 'Semántica: significado mediante tipos, nombres y entorno'
+      level: 0
+    - content: 'Pipeline: integración en compiladores e IA'
+      level: 0
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: 'One large bordo filled circle in the center. Six thin straight lines
+      radiate outward. At the end of each line, one small flat icon: magnifying glass,
+      gear, downward branching tree, two-by-two grid, cube, horizontal tube. White
+      background. No labels, no words, nothing written anywhere. Alta resolución.
+      Sin texto, sin letras, sin números, sin símbolos de código, sin etiquetas. Solo
+      formas geométricas y colores.'
+    local_asset: slides/assets/F-37-content.png
+    drive_id: 1RjvwwRgL_EkQjTwaqSQ92rSD3lWgNgTK
+  table_assets: []
+- id: F-38
+  type: socratica
+  title: Preguntas para cerrar
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: ¿Qué detecta el parser que no detecta el type checker?
+      level: 0
+    - content: ¿Qué detecta el type checker que no detecta el parser?
+      level: 0
+    - content: ¿Por qué una gramática ambigua es un problema de diseño?
+      level: 0
+    - content: ¿Qué papel cumple el entorno en el significado de un programa?
+      level: 0
+    - content: ¿Dónde reaparecen hoy BNF y EBNF fuera de compiladores clásicos?
+      level: 0
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id005
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-39
+  type: concepto-abstracto
+  title: Referencias
+  subtitle: ''
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: Slides de cátedra UNTDF 2025
+      level: 0
+    - content: Sebesta — análisis léxico y sintáctico
+      level: 0
+    - content: Gabbrielli & Martini — nombres y entorno
+      level: 0
+    - content: Referencias recientes sobre constrained decoding listadas en `diseno.md`
+      level: 0
+    - content: OpenAI — Structured Outputs y constrained decoding con CFG
+      level: 0
+    - content: Outlines / LMQL — ejemplos de generación estructurada guiada
+      level: 0
+    - content: 'Gong (2026) — *Structured Prompt Language: Declarative Context Management
+        for LLMs*, [arXiv:2602.21257](https://arxiv.org/abs/2602.21257)'
+      level: 0
+    - content: 'Alpay, Senturk (2026) — *Attention Meets Reachability: Structural
+        Equivalence and Efficiency in Grammar-Constrained LLM Decoding*, [arXiv:2603.05540](https://arxiv.org/abs/2603.05540)'
+      level: 0
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: *id001
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: gemini
+    prompt: 'Pila de tres libros académicos cerrados con señaladores de colores, rodeados
+      de íconos flotantes: estrella de cita, documento con viñetas, lupa. Composición
+      académica limpia y ordenada. Sin texto, sin títulos visibles en los lomos..
+      Alta resolución, paleta bordo institucional, blanco, gris carbón. Sin texto,
+      sin letras, sin etiquetas, sin palabras clave, sin código, sin números. Solo
+      formas visuales: iconos planos, figuras geométricas y metáforas concretas.'
+    local_asset: slides/assets/F-39-content.png
+    drive_id: 13a4BFVilBCXVWnK0Ro1bwzYy88ADNvcl
+  table_assets: []
