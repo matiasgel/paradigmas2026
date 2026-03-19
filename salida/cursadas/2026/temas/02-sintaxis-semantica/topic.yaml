@@ -1,27 +1,14 @@
-topic_number: '02'
-topic_name: "Sintaxis y Sem\xE1ntica de Lenguajes"
-topic_slug: sintaxis-semantica
-topic_folder: temas/02-sintaxis-semantica/
-class_duration: '120'
-git_branch: tema-02-sintaxis-semantica
-created_at: '2026-03-10'
-status: design-revised
-design_revised_at: '2026-03-18'
-design_revised_by: "Lic. Marcos (topic-designer)"
-study_guide_approved_at: '2026-03-11'
-study_guide_approved_by: "Mat\xEDas Gel"
-design_approved_at: '2026-03-10'
-design_approved_by: "Mat\xEDas Gel"
-tp_type: repo
+topic_number: "02"
+topic_name: "Sintaxis y Semántica de Lenguajes"
+topic_folder: "salida/cursadas/2026/temas/02-sintaxis-semantica"
+module: "V"
+semana: 1
+clase: "2 de 2"
+duracion: 120
+estado: "clase-generada"
+git_branch: "tema02"
+tp_type: "ejercicios"
 artifacts:
   diseno: diseno.md
-  minuta: minuta.md
   filminas: filminas.md
-  tp: tp.md
-  autograde_repo: autograde-repo/
-  guia_estudio: guia-estudio.md
-  score: score-pedagogico.md
-  faq: faq-anticipado.md
-  slides_url: slides/slides-url.txt
-pdf_exported: true
-pdf_path: salida/cursadas/2026/temas/02-sintaxis-semantica/guia-estudio.pdf
+  minuta: minuta.md

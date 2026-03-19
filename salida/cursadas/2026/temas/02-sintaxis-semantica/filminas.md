@@ -2,18 +2,24 @@
 
 # Filminas — Tema 02: Sintaxis y Semántica de Lenguajes
 
-> **Estado:** REGENERADA desde `diseno.md` rediseñado
+> **Estado:** GENERADA
 > **Agente:** Dr. Roberto ✍️ (class-writer)
-> **Fecha de generación:** 2026-03-18
-> **Duración total:** 120 minutos (constraint absoluto)
+> **Fecha de generación:** 2026-03-19
+> **Baseline:** `informefinal/archivos/filminas.md` (F-00 a F-39, generado 2026-03-18)
+> **Cambios respecto al baseline:** B5 rediseñado — semántica estática (gramáticas de atributos) + tres enfoques de semántica dinámica (Sebesta Cap. 3 §§3.4–3.5); nombres/entorno/binding diferidos a Tema 09
+> **Duración total:** 120 minutos · Portada + 38 filminas (F-01 a F-37)
 > **Clase:** 2 de 2 — Semana 1
 > **Perfil docente:** profesor-teorico
 > **Lenguaje principal:** TypeScript
+> **Input:** `salida/cursadas/2026/temas/02-sintaxis-semantica/diseno.md` (REDISEÑO — pendiente de aprobación)
 > **Workflow:** topic-cycle / Step 4
 
 ---
 
 ### [F-00]
+
+@imagen: background
+@prompt-imagen: prompt="Escena académica contemporánea sobre compiladores y lenguajes de programación: pantalla con código TypeScript, flujo lexer-parser-árbol sintáctico, cuaderno universitario y contexto de aula. Tema: Sintaxis y Semántica de Lenguajes." local_asset="slides/assets/F-00-bg.png"
 
 # Sintaxis y Semántica de Lenguajes
 
@@ -33,9 +39,9 @@ Universidad Nacional de Tierra del Fuego — Instituto IDEI
 |--------|---------|------|
 | 1 | 20 | Sintaxis y semántica |
 | 2 | 20 | Del texto al token |
-| 3 | 30 | BNF, EBNF, derivación y ambigüedad |
+| 3 | 30 | BNF, EBNF, derivación y árboles |
 | 4 | 10 | Diagramas de sintaxis |
-| 5 | 20 | Type checking, nombres y entorno |
+| 5 | 12 | Semántica: síntesis y tipos |
 | 6 | 15 | Pipeline del compilador e IA |
 
 **Total:** 120 minutos
@@ -44,7 +50,12 @@ Universidad Nacional de Tierra del Fuego — Instituto IDEI
 
 ## BLOQUE 1 — SINTAXIS Y SEMÁNTICA (20 min)
 
+---
+
 ### [F-02]
+
+@imagen: content
+@prompt-imagen: prompt="Diagrama que conecta Tema 01 con Tema 02: flecha desde TypeScript→JavaScript (compilación) hacia el interior del compilador, mostrando que hoy respondemos la pregunta técnica subyacente. Infografía técnica académica, fondo claro, sin texto." local_asset="slides/assets/F-02-content.png"
 
 ## Continuidad con Tema 01
 
@@ -78,9 +89,14 @@ La respuesta requiere dos capas:
 if (<expresión>) <sentencia>
 ```
 
+*Slides cátedra UNTDF 2025 · Sebesta, Cap. 3*
+
 ---
 
 ### [F-04]
+
+@imagen: content
+@prompt-imagen: prompt="Diagrama conceptual que muestra la diferencia entre sintaxis (forma) y semántica (significado): una balanza o dos columnas, una con el texto del programa y otra con el efecto/significado. Infografía técnica académica, fondo claro, sin texto." local_asset="slides/assets/F-04-content.png"
 
 ## Semántica
 
@@ -98,6 +114,22 @@ y aun así ser **semánticamente incorrecto**
 
 ### [F-05]
 
+## Criterios sintácticos de un buen lenguaje
+
+*Slides cátedra UNTDF 2025*
+
+| Criterio | Qué garantiza |
+|----------|---------------|
+| **Legibilidad** | el código escrito puede leerse y entenderse |
+| **Facilidad de escritura** | es natural expresar algoritmos |
+| **Facilidad de verificación** | es posible demostrar propiedades |
+| **Facilidad de traducción** | el compilador puede procesarlo eficientemente |
+| **Carencia de ambigüedad** | cada construcción tiene exactamente un significado |
+
+---
+
+### [F-06]
+
 ## Actividad — ¿Qué tipo de error es?
 
 ```typescript
@@ -108,13 +140,11 @@ if true { console.log("ok") }
 const y = undefined; y.length
 ```
 
-**Antes de avanzar:**
-
-clasificar cada caso en parejas
+**Antes de avanzar:** clasificar cada caso en parejas
 
 ---
 
-### [F-06]
+### [F-06b]
 
 ## Respuestas
 
@@ -122,13 +152,17 @@ clasificar cada caso en parejas
 |------|------|---------------|
 | `const x: number = "hola"` | Semántico estático | Type checker |
 | `if true { ... }` | Sintáctico | Parser |
-| `const y = undefined; y.length` | Semántico dinámico | Runtime |
+| `y = undefined; y.length` | Semántico dinámico | Runtime |
 
 > **Conclusión:** parser, type checker y ejecución no detectan el mismo tipo de problema.
+>
+> Volveremos a este cuadro al final de la clase.
 
 ---
 
 ## BLOQUE 2 — DEL TEXTO AL TOKEN (20 min)
+
+---
 
 ### [F-07]
 
@@ -146,40 +180,49 @@ Primero necesita decidir:
 
 **dónde empieza y dónde termina cada pieza**
 
+*Sebesta, Cap. 4 §4.1*
+
 ---
 
 ### [F-08]
 
 ## Dos niveles de análisis
 
-| Nivel | Qué resuelve |
-|-------|--------------|
-| Léxico | cómo formar palabras válidas |
-| Sintáctico | cómo combinar esas palabras |
+| Nivel | Qué resuelve | Formalismo |
+|-------|--------------|------------|
+| **Léxico** | cómo formar palabras válidas | expresiones regulares |
+| **Sintáctico** | cómo combinar esas palabras | gramáticas libres de contexto |
 
 **Separarlos sirve para:**
 
-1. simplificar el análisis,
-2. mejorar eficiencia,
-3. aislar detalles de entrada.
+1. simplificar el análisis
+2. mejorar eficiencia
+3. aislar detalles dependientes del hardware
+
+*Sebesta, Cap. 4 §4.1 — tres razones de separación*
 
 ---
 
 ### [F-09]
 
+@imagen: content
+@prompt-imagen: prompt="Checklist visual de los elementos sintácticos de un lenguaje de programación: caracteres, identificadores, operadores, palabras clave, comentarios, espacios, delimitadores, expresiones, sentencias. Lista limpia estilo infografía académica, sin texto embebido." local_asset="slides/assets/F-09-content.png"
+
 ## Vocabulario básico del lenguaje
 
-- Caracteres
-- Identificadores
-- Operadores
-- Palabras clave y reservadas
-- Comentarios
-- Espacios en blanco
-- Delimitadores y corchetes
-- Expresiones
-- Sentencias
+*Slides cátedra UNTDF 2025*
 
-> El lexer clasifica este vocabulario.
+- **Caracteres** — conjunto de símbolos permitidos (ASCII, Unicode)
+- **Identificadores** — nombres para variables, funciones, tipos
+- **Operadores** — aritméticos, lógicos, relacionales, de asignación
+- **Palabras clave y reservadas** — `if`, `while`, `const`
+- **Comentarios** — texto ignorado por el compilador
+- **Espacios en blanco** — generalmente ignorados (salvo Python)
+- **Delimitadores** — `{}`, `()`, `[]`, `;`
+- **Expresiones** — combinaciones que producen un valor
+- **Sentencias** — unidades de ejecución
+
+> El lexer clasifica este vocabulario en tokens.
 
 ---
 
@@ -187,7 +230,7 @@ Primero necesita decidir:
 
 ## Lexema y token
 
-**Ejemplo:**
+**Ejemplo clásico:**
 
 ```text
 indice = 5 * contador + 1;
@@ -204,6 +247,8 @@ indice = 5 * contador + 1;
 | `1` | constante_entera |
 | `;` | delimitador |
 
+*Slides cátedra UNTDF 2025 · Sebesta, Cap. 4*
+
 ---
 
 ### [F-11]
@@ -214,16 +259,23 @@ indice = 5 * contador + 1;
 Código fuente → [ LEXER ] → tokens → [ PARSER ]
 ```
 
-- Agrupa caracteres
-- Descarta espacios y comentarios
-- Clasifica lexemas
-- Le entrega al parser una secuencia de tokens
+**El lexer:**
+- agrupa caracteres en lexemas
+- descarta espacios y comentarios
+- clasifica lexemas en tokens
+- entrega al parser una secuencia de tokens
 
-**Todavía no sabe** si un identificador es variable, parámetro o constante.
+**Todavía no sabe** si un identificador es variable, parámetro o constante — eso lo decide el análisis semántico.
+
+**Razones para separar lexer de parser:** simplificar, eficiencia, portabilidad
+
+*Sebesta, Cap. 4 §4.1*
 
 ---
 
 ## BLOQUE 3 — GRAMÁTICAS FORMALES (30 min)
+
+---
 
 ### [F-12]
 
@@ -231,17 +283,22 @@ Código fuente → [ LEXER ] → tokens → [ PARSER ]
 
 Describir un lenguaje en castellano o inglés natural es ambiguo.
 
+> FORTRAN: definido con reglas en inglés
+> Python: descripción formal con BNF *(gramática libre de contexto)*
+
 Una gramática formal permite:
 
-- especificar con precisión,
-- validar automáticamente,
-- construir analizadores sobre esa base.
+- especificar con precisión
+- validar automáticamente
+- construir analizadores directamente sobre esa base
+
+*Slides cátedra UNTDF 2025 · Sebesta, Cap. 3*
 
 ---
 
 ### [F-13]
 
-## Gramáticas libres de contexto
+## Gramáticas libres de contexto — Chomsky (1959)
 
 Una gramática puede pensarse como la tupla:
 
@@ -249,12 +306,14 @@ Una gramática puede pensarse como la tupla:
 (N, T, S, P)
 ```
 
-| Símbolo | Significado |
-|---------|-------------|
-| `N` | no terminales |
-| `T` | terminales |
-| `S` | símbolo inicial |
-| `P` | producciones |
+| Símbolo | Significado | Ejemplo |
+|---------|-------------|---------|
+| `N` | no terminales | `<assign>`, `<expr>` |
+| `T` | terminales | `A`, `B`, `:=`, `+` |
+| `S` | símbolo inicial | `<assign>` |
+| `P` | producciones | `<assign> ::= ...` |
+
+*Slides cátedra UNTDF 2025 · Sebesta, Cap. 3*
 
 ---
 
@@ -262,22 +321,30 @@ Una gramática puede pensarse como la tupla:
 
 ## BNF — Backus-Naur Form
 
+*Sebesta, Cap. 3 · Slides cátedra UNTDF 2025*
+
 **Metasímbolos:**
 
-- `::=` se define como
-- `|` alternativa
-- `<...>` no terminal
+- `::=` — "se define como"
+- `|` — alternativa
+- `< >` — encierra no terminales
 
 ```text
 <enunc_if> ::= if <expr_log> then <enunc>
              | if <expr_log> then <enunc> else <enunc>
 ```
 
+**Regla:**
+- LHS: no terminal que se define
+- RHS: definición (puede contener terminales y no terminales)
+
 ---
 
 ### [F-15]
 
 ## Gramática de trabajo
+
+*Slides cátedra UNTDF 2025*
 
 ```text
 <assign> ::= <id> := <expr>
@@ -290,9 +357,9 @@ Una gramática puede pensarse como la tupla:
 
 **La usaremos para:**
 
-1. derivar,
-2. dibujar un árbol,
-3. discutir ambigüedad.
+1. derivar paso a paso
+2. construir el árbol sintáctico
+3. discutir ambigüedad
 
 ---
 
@@ -300,20 +367,24 @@ Una gramática puede pensarse como la tupla:
 
 ## Derivación de `A := B * (A + C)`
 
+*Slides cátedra UNTDF 2025*
+
 ```text
 <assign>
-⇒ <id> := <expr>
-⇒ A := <expr>
-⇒ A := <id> * <expr>
-⇒ A := B * <expr>
-⇒ A := B * (<expr>)
-⇒ A := B * (<id> + <expr>)
-⇒ A := B * (A + <expr>)
-⇒ A := B * (A + <id>)
-⇒ A := B * (A + C)
+  ⇒ <id> := <expr>
+  ⇒ A := <expr>
+  ⇒ A := <id> * <expr>
+  ⇒ A := B * <expr>
+  ⇒ A := B * (<expr>)
+  ⇒ A := B * (<id> + <expr>)
+  ⇒ A := B * (A + <expr>)
+  ⇒ A := B * (A + <id>)
+  ⇒ A := B * (A + C)
 ```
 
-Cada paso aplica una producción.
+Cada paso aplica exactamente una producción.
+
+`⇒` se lee "deriva".
 
 ---
 
@@ -337,8 +408,11 @@ Cada paso aplica una producción.
                                C
 ```
 
-**Nodos internos:** no terminales  
-**Hojas:** terminales
+- **Nodos internos:** no terminales
+- **Hojas:** terminales
+- Representa la **estructura jerárquica** de la derivación
+
+*Slides cátedra UNTDF 2025 · Sebesta, Cap. 3*
 
 ---
 
@@ -346,7 +420,9 @@ Cada paso aplica una producción.
 
 ## Ambigüedad
 
-> Una gramática es ambigua si permite dos árboles distintos para la misma cadena.
+> **Una gramática es ambigua si genera dos árboles de derivación distintos para la misma cadena.**
+
+*Slides cátedra UNTDF 2025 · Sebesta, Cap. 3*
 
 **Ejemplo:**
 
@@ -356,10 +432,12 @@ J := 1 + 2 * 3
 
 Puede leerse como:
 
-- `(1 + 2) * 3`
-- `1 + (2 * 3)`
+- `(1 + 2) * 3` = 9
+- `1 + (2 * 3)` = 7
 
-**Problema:** dos significados posibles.
+**Consecuencia:** el compilador no sabe cuál árbol construir → **defecto de diseño del lenguaje**.
+
+**Solución:** rediseñar la gramática con precedencia y asociatividad explícitas, o usar regla de desambiguación.
 
 ---
 
@@ -367,50 +445,68 @@ Puede leerse como:
 
 ## EBNF — notación extendida
 
+*Slides cátedra UNTDF 2025 · Sebesta, Cap. 3*
+
 | Símbolo | Significado |
 |---------|-------------|
-| `[x]` | opcional |
-| `{x}` | repetición |
+| `[x]` | opcional (0 o 1 vez) |
+| `{x}` o `{x*}` | repetición (0 o más) |
+| `\|` (dentro de `[]`) | alternativa |
 
 ```text
-<programa>   ::= { <sentencia>* }
-<sentencia>  ::= <asignación> | <condicional> | <loop>
-<condicional>::= if <expr> { <sentencia>* }
-               | if <expr> { <sentencia>* } else { <sentencia>* }
+<programa>    ::= { <sentencia>* }
+<sentencia>   ::= <asignación> | <condicional> | <loop>
+<asignación>  ::= <identificador> = <expr>
+<condicional> ::= if <expr> { <sentencia>* }
+                | if <expr> { <sentencia>* } else { <sentencia>* }
+<loop>        ::= while <expr> { <sentencia>* }
 ```
 
-Menos ruido, misma idea formal.
+Menos ruido que BNF pura, misma potencia formal.
 
 ---
 
 ### [F-20]
 
-## Actividad breve
+@imagen: content
+@prompt-imagen: prompt="Pizarrón con derivación parcial del árbol sintáctico de la expresión C := D - E * F, mostrando los pasos de derivación BNF. Estilo ilustración técnica académica, sin texto embebido, fondo claro." local_asset="slides/assets/F-20-content.png"
+
+## Actividad — derivar `C := D − E * F`
 
 **Consigna:**
 
-Para `C := D - E * F`:
+Dado:
+```text
+<assign> ::= <id> := <expr>
+<id>     ::= A | B | C | D | E | F
+<expr>   ::= <id> + <expr> | <id> * <expr>
+           | <id> – <expr> | (<expr>) | <id>
+```
 
-1. indicar una posible derivación,
-2. discutir el agrupamiento,
-3. decir si la gramática deja dudas o no.
+1. Indicar una derivación para `C := D – E * F`
+2. Construir el árbol correspondiente
+3. ¿Hay más de un árbol posible? ¿La gramática es ambigua?
 
 ---
 
 ## BLOQUE 4 — DIAGRAMAS DE SINTAXIS (10 min)
 
+---
+
 ### [F-21]
 
 ## Diagramas de sintaxis
 
-Otra forma de escribir la misma gramática.
+*Slides cátedra UNTDF 2025 · Sebesta, Cap. 3*
 
-**Convención mínima:**
+Otra forma de representar la misma gramática.
 
-- recuadro → no terminal
-- terminal destacado → símbolo concreto
+**Convención:**
 
-Una cadena es válida si puede "recorrer" el diagrama.
+- `[ recuadro ]` → no terminal
+- `( óvalo )` → terminal
+
+Una cadena es válida si puede "recorrer" el diagrama de izquierda a derecha.
 
 ---
 
@@ -419,260 +515,247 @@ Una cadena es válida si puede "recorrer" el diagrama.
 ## Ejemplo: condicional
 
 ```text
-──► (if) ─► <expr> ─► ({) ─► {sentencias} ─► (}) ─────────►
-                                 │
-                                 └──► (else) ─► ({) ─► {sentencias} ─► (}) ─►
+──► (if) ─► [expr] ─► ({) ─► {[sent]*} ─► (}) ──────────────────►
+                                │
+                                └─► (else) ─► ({) ─► {[sent]*} ─► (}) ─►
 ```
 
 **Lectura:**
-
 - camino superior: `if` simple
 - camino inferior: `if ... else`
+
+Equivale a la regla EBNF del `<condicional>`.
 
 ---
 
 ### [F-23]
 
-## ¿Para qué sirven?
+## ¿Para qué sirven los diagramas de sintaxis?
 
 **Para el programador:**
-
-- leer la forma válida de una construcción
+- leer de forma visual la forma válida de una construcción del lenguaje
 
 **Para el implementador:**
+- tener una especificación precisa del parser que puede convertirse en código
 
-- tener una especificación precisa del parser
+**Dos usos de la descripción sintáctica** *(slides cátedra UNTDF 2025)*:
+1. Ayuda al programador a escribir programas válidos
+2. Base para el analizador sintáctico
 
-**Para la documentación:**
-
-- comunicar estructura con carga visual menor que BNF larga
+**Conexión actual:** la documentación oficial de TypeScript usa diagramas de sintaxis para describir construcciones del lenguaje.
 
 ---
 
-## BLOQUE 5 — SEMÁNTICA PRAGMÁTICA (20 min)
+## BLOQUE 5 — SEMÁNTICA: SÍNTESIS Y TIPOS (12 min)
+
+*Fuente: Sebesta, Cap. 3 §§3.4–3.5*
+
+---
 
 ### [F-24]
 
-## ¿Qué agrega la semántica?
+## Semántica — el significado de los programas
 
-La sintaxis responde:
+- **Sintaxis** responde: ¿está bien formado?
+- **Semántica** responde: ¿qué hace?
 
-> ¿está bien formado?
+Un programa sintácticamente correcto puede tener semántica inválida.
 
-La semántica responde:
+Sin semántica formalmente especificada, el comportamiento del lenguaje
+depende de la implementación → no portable entre compiladores / intérpretes.
 
-> ¿qué significa y qué efecto tiene?
+> *"There is no universal method for describing the semantics of a programming language that is generally acceptable."*
+>
+> — Sebesta (2019)
 
-**Consecuencia:**
-
-no todo programa con forma correcta es aceptable o correcto.
+**Dos grandes dimensiones:**
+- **estática** — verificada antes de ejecutar
+- **dinámica** — significado en ejecución
 
 ---
 
 ### [F-25]
 
-## Semántica estática: el type checker
+## Semántica estática — gramáticas de atributos
 
-```typescript
-const x: number = "texto"
-```
+*Sebesta, Cap. 3 §3.4 · Knuth (1968)*
 
-- El parser puede construir el árbol.
-- El programa sigue siendo rechazado.
-- El motivo no es de forma sino de tipos.
+**El problema:** no toda restricción semántica puede expresarse con BNF.
 
-> El type checker es una herramienta de semántica estática.
+Ejemplo: la compatibilidad de tipos en una asignación es **sensible al contexto** — no es una regla libre de contexto.
+
+**Solución: gramáticas de atributos**
+- Extienden BNF agregando **atributos** (ej.: tipo, valor) a los símbolos
+- Definen **reglas semánticas** que calculan esos atributos a partir del árbol
+- Permiten describir restricciones contextuales de forma rigurosa
+
+**Cubren típicamente:**
+- compatibilidad de tipos en asignaciones y llamadas
+- declaración antes de uso de variables
+- aridad de funciones
 
 ---
 
 ### [F-26]
 
-## Nombres y objetos denotables
+## TypeScript como semántica estática en acción
 
-> Un nombre es una secuencia de caracteres que denota otro objeto.
+```typescript
+const x: number = "texto"
+// → Type 'string' is not assignable to type 'number'
+```
 
-Puede denotar:
+- El **parser** construyó el árbol → no hay error sintáctico
+- El **type checker** evalúa atributos (tipos) sobre ese árbol
+- Rechaza porque los tipos son incompatibles → error **semántico estático**
 
-- variables,
-- parámetros,
-- funciones,
-- tipos,
-- constantes,
-- operaciones predefinidas.
+**Type soundness:**
+> Si el programa pasa el type checker, no producirá errores de tipo en runtime.
 
-**Nombre ≠ objeto**
+`tsc` ES un intérprete de semántica estática: evalúa el árbol sin ejecutarlo.
 
 ---
 
 ### [F-27]
 
-## Entorno
+## Tres enfoques de semántica dinámica
 
-> El entorno es el conjunto de asociaciones nombre → objeto disponibles en un punto del programa.
+*Sebesta, Cap. 3 §3.5*
 
-```text
-{
-  x        → 5
-  contador → 12
-  suma     → 17
-}
-```
+| Enfoque | Idea central | Origen |
+|---------|--------------|--------|
+| **Operacional** | el significado = la secuencia de pasos en una máquina abstracta | Landin (1964); SOS, Plotkin (1981) |
+| **Denotacional** | el significado = función matemática estado → estado | Scott & Strachey (1970) |
+| **Axiomática** | el significado = aserciones lógicas (pre/postcondiciones) | Floyd (1967); Hoare (1969) |
 
-El entorno permite saber a qué refiere cada nombre en cada contexto.
+- No existe método universalmente aceptado
+- Cada uno sirve para distintos propósitos: implementación, verificación, corrección formal
+- El rigor formal de cada enfoque corresponde a **Semántica Formal / Lógica**
 
 ---
 
 ### [F-28]
 
-## Binding — ligadura
-
-> Binding = asociación entre un nombre y el objeto que denota.
-
-**Puede aparecer en distintas fases:**
-
-| Fase | Ejemplo |
-|------|---------|
-| Diseño del lenguaje | `+`, `int`, `true` |
-| Escritura | declaraciones del programador |
-| Compilación | posiciones o estructuras resueltas estáticamente |
-| Ejecución | variables locales y memoria dinámica |
-
----
-
-### [F-29]
-
-## Intuición mínima de estado
-
-```text
-x = 5; y = x + 1
-```
-
-Puede pensarse como transformación:
-
-```text
-{} → {x = 5} → {x = 5, y = 6}
-```
-
-Con esto alcanza para esta materia.
-
-**No** vamos hoy a reglas formales SOS ni semántica denotacional.
-
----
-
-### [F-30]
-
-## Tres niveles de error en TypeScript
+## Síntesis — tres niveles de corrección en TypeScript
 
 ```typescript
-function foo( { return 42 }
-const x: number = "texto"
+// Error sintáctico — el parser falla (no puede construir el árbol):
+function foo( { return 42 }      // falta ')'
+
+// Error semántico estático — el type-checker falla (árbol válido, tipos incompatibles):
+const x: number = "texto"        // violación de tipo en compilación
+
+// Error semántico dinámico — falla en runtime (el compilador no lo detecta):
 const arr: number[] = []
-console.log(arr[100].toString())
+console.log(arr[100].toString()) // undefined.toString() en ejecución
 ```
 
-| Caso | Detecta |
-|------|---------|
-| falta `)` | parser |
-| tipo incompatible | type checker |
-| acceso inválido en ejecución | runtime |
+| Nivel | Herramienta | Cuándo |
+|-------|-------------|--------|
+| Sintáctico | Parser | compilación |
+| Semántico estático | Type checker | compilación |
+| Semántico dinámico | Runtime | ejecución |
 
 ---
 
 ## BLOQUE 6 — PIPELINE E IA (15 min)
 
-### [F-31]
+---
 
-## El pipeline completo
+### [F-29]
+
+## El pipeline del compilador
 
 ```text
 Código fuente
-   ↓
-Lexer
-   ↓
-Tokens
-   ↓
-Parser
-   ↓
-Árbol
-   ↓
-Análisis semántico / type checking
-   ↓
-Emisión o ejecución
+      ↓ Lexer
+   Tokens
+      ↓ Parser
+   Árbol sintáctico
+      ↓ Análisis semántico / type checking
+   Árbol anotado
+      ↓ Generación de código (compilador)
+        ó ejecución directa (intérprete)
 ```
 
 Cada etapa responde una pregunta distinta.
 
+`tsc` hace: lexer → parser → type checker → emite JavaScript.
+
+*Sebesta, Cap. 4 §§4.1–4.3*
+
 ---
 
-### [F-32]
+### [F-30]
 
 ## Dos ideas de parsing
 
-| Estrategia | Intuición |
-|------------|-----------|
-| Top-down | partir del símbolo inicial |
-| Bottom-up | partir de los tokens |
+*Sebesta, Cap. 4 §§4.3–4.4 (conceptual)*
 
-**Importante:**
+| Estrategia | Intuición | Dirección |
+|------------|-----------|-----------|
+| **Top-down** | partir del símbolo inicial, derivar hasta los tokens | S → ... → tokens |
+| **Bottom-up** | partir de los tokens, reducir hasta el símbolo inicial | tokens → ... → S |
 
-Hoy no estudiamos algoritmos concretos.
+**Importante para hoy:**
+
+No estudiamos algoritmos concretos (recursive-descent, LR).
 
 Solo ubicamos el problema conceptualmente.
 
 ---
 
-### [F-33]
+### [F-31]
+
+@imagen: content
+@prompt-imagen: prompt="Diagrama del pipeline completo de un compilador e intérprete: lexer, parser, type checker, generación de código vs ejecución. Comparación lado a lado compilador vs intérprete. Infografía técnica académica clara, fondo blanco, sin texto embebido." local_asset="slides/assets/F-31-content.png"
 
 ## Compilador e intérprete revisitado
 
-- Ambos necesitan análisis léxico y sintáctico.
-- Ambos necesitan algún criterio semántico.
-- La diferencia aparece después:
-  - uno traduce,
-  - el otro ejecuta directamente o con menos mediación.
+- Ambos necesitan análisis léxico y sintáctico
+- Ambos aplican algún criterio semántico
+- La diferencia aparece **después** del análisis semántico:
+  - el **compilador** traduce a otro lenguaje (ej.: JavaScript)
+  - el **intérprete** ejecuta el árbol directamente
 
-**TypeScript:**
+**TypeScript con `tsc`:**
 
-`lexer → parser → type checker → emite JavaScript`
+```text
+lexer → parser → type checker → emite JavaScript
+```
+
+El mensaje de error de `tsc` incluye línea y columna → evidencia de que el lexer registró la posición de cada token.
 
 ---
 
-### [F-34]
+### [F-32]
 
-## Ejemplo práctico — guiar estructura sin EBNF
+## Ejemplo práctico — guiar estructura con prompt bando
 
 **Tarea:** extraer pendientes desde una nota de reunión.
 
-**Prompt:**
-
+**Prompt sin estructura formal:**
 ```text
-- ¿Qué detecta el type checker que no detecta el parser?
-- ¿Por qué una gramática ambigua es un problema de diseño?
-- ¿Qué papel cumple el entorno en el significado de un programa?
-- ¿Dónde reaparecen hoy BNF y EBNF fuera de compiladores clásicos?
-
-Leé esta nota y devolvé un JSON con esta forma:
-{
-   "action_items": [
-      {"description": "...", "due_date": "...", "owner": "..."}
-   ]
-}
-
-Nota: "Ana prepara las filminas para el viernes.
-Luis revisa bibliografía. Marta confirma aula."
+Leé esta nota y devolvé las acciones pendientes.
 ```
+→ variación libre en formato, campos, orden
 
-**Qué guía la salida:**
+**Prompt con estructura JSON:**
+```text
+Devolvé un JSON con esta forma:
+{
+  "action_items": [
+    {"description": "...", "due_date": "...", "owner": "..."}
+  ]
+}
+```
+→ más predecible, pero sigue siendo una guía blanda.
 
-- el ejemplo de formato,
-- los nombres de campos,
-- la instrucción "devolvé JSON".
-
-**Problema:** sigue siendo una guía blanda.
+**Problema:** el modelo puede omitir campos, cambiar orden, agregar claves.
 
 ---
 
-### [F-35]
+### [F-33]
 
 ## El mismo caso — guiar estructura con EBNF
 
@@ -682,78 +765,81 @@ Luis revisa bibliografía. Marta confirma aula."
 Devolvé una salida que respete esta EBNF:
 
 <salida> ::= '{' '"action_items"' ':' '[' <item> { ',' <item> } ']' '}'
-<item> ::= '{' '"description"' ':' <string> ','
-                         '"due_date"' ':' <string> ','
-                         '"owner"' ':' <string> '}'
+<item>   ::= '{' '"description"' ':' <string> ','
+                 '"due_date"'    ':' <string> ','
+                 '"owner"'       ':' <string> '}'
 ```
 
-**Efecto:**
+**Efecto:** ya no sugerimos forma — definimos qué secuencias son válidas.
 
-- ya no solo sugerimos forma,
-- definimos qué secuencias son válidas,
-- reducimos comas de más, campos faltantes o orden inválido.
+> En sistemas actuales esto entra como JSON Schema, tipos o CFG compilada para **constrained decoding**.
+> Acá usamos EBNF como simplificación didáctica de esa idea formal.
 
-> En sistemas actuales esto suele entrar como JSON Schema, tipos o CFG compilada para constrained decoding.
-> Acá usamos **EBNF como simplificación didáctica** de esa idea formal.
+*Referencia reciente: Gong (2026), arXiv:2602.21257 — SPL: Structured Prompt Language*
 
-**Apoyo actual:**
+---
 
-- Para uso **explícito de EBNF** en un lenguaje de prompting para LLMs: Gong (2026) presenta SPL y reporta una gramática formal EBNF: [arXiv:2602.21257](https://arxiv.org/abs/2602.21257)
-- Para *grammar-constrained decoding*: Alpay y Senturk (2026) analizan decoding guiado por CFG y sus costos estructurales: [arXiv:2603.05540](https://arxiv.org/abs/2603.05540)
+### [F-34]
+
+## De Chomsky a constrained decoding
+
+```text
+1957  Chomsky — gramáticas formales
+1960  Backus-Naur — BNF para Algol60
+...   EBNF, diagramas de sintaxis, parsers LR
+2023  Constrained decoding en LLMs (Willard & Louf, Outlines)
+2026  Structured Prompt Language con EBNF (Gong, arXiv:2602.21257)
+```
+
+La formalización de la sintaxis **no es historia**.
+
+Es infraestructura activa.
+
+*Alpay & Senturk (2026), arXiv:2603.05540 — Structural Equivalence and Efficiency in Grammar-Constrained LLM Decoding*
+
+---
+
+## CIERRE
+
+---
+
+### [F-35]
+
+@imagen: content
+@prompt-imagen: prompt="Mapa conceptual visual de la clase de Sintaxis y Semántica: seis bloques conectados por flechas — Sintaxis, Léxico, Gramáticas, Diagramas, Semántica, Pipeline. Infografía académica limpia, fondo claro, sin texto embebido." local_asset="slides/assets/F-35-content.png"
+
+## Mapa final de la clase
+
+1. **Sintaxis** — forma válida de los programas
+2. **Léxico** — texto plano → secuencia de tokens
+3. **Gramáticas** — tokens → estructura jerárquica (BNF/EBNF)
+4. **Diagramas** — representación gráfica equivalente
+5. **Semántica** — significado vía tipos, enfoques formales y runtime
+6. **Pipeline** — integración en compiladores, intérpretes y LLMs
 
 ---
 
 ### [F-36]
 
-## De Chomsky a constrained decoding
+## Preguntas para cerrar
 
-```text
-1957  gramáticas formales
-1960  BNF
-...   EBNF y parsers
-2023  constrained decoding en LLMs
-```
-
-La formalización de la sintaxis sigue viva.
-
-No es arqueología: es infraestructura.
+- ¿Qué detecta el **parser** que no detecta el type checker?
+- ¿Qué detecta el **type checker** que no detecta el parser?
+- ¿Por qué una gramática **ambigua** es un problema de diseño?
+- ¿Cuál es la diferencia entre **semántica estática** y **semántica dinámica**?
+- ¿Dónde reaparecen hoy BNF y EBNF **fuera de compiladores clásicos**?
 
 ---
 
 ### [F-37]
 
-## Mapa final de la clase
-
-1. Sintaxis: forma válida
-2. Léxico: texto → tokens
-3. Gramática: tokens → estructura
-4. Diagramas: representación visual de la sintaxis
-5. Semántica: significado mediante tipos, nombres y entorno
-6. Pipeline: integración en compiladores e IA
-
----
-
-### [F-38]
-
-## Preguntas para cerrar
-
-- ¿Qué detecta el parser que no detecta el type checker?
-- ¿Qué detecta el type checker que no detecta el parser?
-- ¿Por qué una gramática ambigua es un problema de diseño?
-- ¿Qué papel cumple el entorno en el significado de un programa?
-- ¿Dónde reaparecen hoy BNF y EBNF fuera de compiladores clásicos?
-
----
-
-### [F-39]
-
 ## Referencias
 
-- Slides de cátedra UNTDF 2025
-- Sebesta — análisis léxico y sintáctico
-- Gabbrielli & Martini — nombres y entorno
-- Referencias recientes sobre constrained decoding listadas en `diseno.md`
-- OpenAI — Structured Outputs y constrained decoding con CFG
-- Outlines / LMQL — ejemplos de generación estructurada guiada
-- Gong (2026) — *Structured Prompt Language: Declarative Context Management for LLMs*, [arXiv:2602.21257](https://arxiv.org/abs/2602.21257)
-- Alpay, Senturk (2026) — *Attention Meets Reachability: Structural Equivalence and Efficiency in Grammar-Constrained LLM Decoding*, [arXiv:2603.05540](https://arxiv.org/abs/2603.05540)
+- **Slides de cátedra UNTDF 2025** — Sintaxis de Lenguajes de Programación (baseline)
+- **Sebesta, R.** (2019). *Concepts of Programming Languages*, 12ª ed. Cap. 3 (gramáticas, semántica) y Cap. 4 (análisis léxico y sintáctico)
+- **Gabbrielli, M. & Martini, S.** (2023). *Programming Languages: Principles and Paradigms*. Cap. 4 (nombres y entorno) — para Tema 09
+- **Willard, B. T. & Louf, R.** (2023). *Efficient Guided Generation for Large Language Models*. arXiv:2307.09702 — Outlines, constrained decoding
+- **Beurer-Kellner, L. et al.** (2023). *LMQL: Prompting Is Programming*. VLDB 2023. arXiv:2212.06094
+- **Geng, S. et al.** (2023). *Grammar-Constrained Decoding for Structured NLP Tasks*. ACL 2023
+- **Gong, L.** (2026). *Structured Prompt Language: Declarative Context Management for LLMs*. arXiv:2602.21257
+- **Alpay, T. & Senturk, E.** (2026). *Attention Meets Reachability: Grammar-Constrained LLM Decoding*. arXiv:2603.05540
