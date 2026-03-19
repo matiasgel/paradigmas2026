@@ -87,6 +87,7 @@ IMAGE_STRATEGY: dict[str, str] = {
     "timeline":          "content",
     "codigo":            "none",
     "concepto-mixto":    "none",         # body izq + código der: no imagen
+    "tabla-mixta":       "none",         # texto + código izq, tabla der
     "tabla":             "none",
     "tabla-comparativa": "none",
     "demo":              "none",
@@ -97,6 +98,7 @@ LAYOUT_MAP: dict[str, dict] = {
     "portada":            {"title": "center-middle",  "body": "center-bottom", "image": "background", "code": "none",       "table": "none"},
     "concepto-abstracto": {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none",       "table": "none"},
     "concepto-mixto":     {"title": "full-title",     "body": "left-middle",   "image": "none",       "code": "right-half", "table": "none"},
+    "tabla-mixta":        {"title": "full-title",     "body": "left-top-split", "image": "none",      "code": "left-bottom-split", "table": "right-half"},
     "codigo":             {"title": "full-title",     "body": "subtitle-only", "image": "none",       "code": "full-bottom", "table": "none"},
     "tabla":              {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none",       "table": "table-main"},
     "tabla-comparativa":  {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none",       "table": "table-main"},
@@ -112,10 +114,15 @@ def _zones(w: int = SLIDE_W, h: int = SLIDE_H, m: int = MARGIN, th: int = TITLE_
     half_w = w // 2
     body_y = LOGO_CLEAR + th + 80_000
     body_h = h - body_y - max(m, BOTTOM_CLEAR)
-    table_intro_h = 560_000
-    table_gap = 140_000
+    table_intro_h = 620_000
+    table_gap = 220_000
     table_main_y = body_y + table_intro_h + table_gap
     table_main_h = h - table_main_y - max(m, TABLE_BOTTOM_CLEAR)
+    split_intro_h = 600_000
+    split_gap = 180_000
+    split_left_w = half_w - int(m * 1.35)
+    split_bottom_y = body_y + split_intro_h + split_gap
+    split_bottom_h = max(600_000, body_h - split_intro_h - split_gap)
     return {
         "full-title":    (TITLE_SAFE_X, LOGO_CLEAR,   w - TITLE_SAFE_X - m, th),   # reserva lateral para logo
         "left-top":      (m,            LOGO_CLEAR,   half_w - m,      th),        # media anchura
@@ -124,6 +131,8 @@ def _zones(w: int = SLIDE_W, h: int = SLIDE_H, m: int = MARGIN, th: int = TITLE_
         "center-bottom": (m,            h * 2 // 3,   w - 2 * m,       h // 3 - m),
         "left-middle":   (m,            body_y,       half_w - m,      body_h),
         "left-half":     (m,            body_y,       half_w - m,      body_h),
+        "left-top-split": (m,           body_y,       split_left_w,    split_intro_h),
+        "left-bottom-split": (m,        split_bottom_y, split_left_w,  split_bottom_h),
         "right-half":    (half_w + m,   body_y,       half_w - 2 * m,  body_h),
         "full-bottom":   (m,            body_y,       w - 2 * m,       body_h),
         "full-center":   (m,            m,            w - 2 * m,       h - 2 * m),
@@ -816,6 +825,8 @@ def _detect_type(slide_id: str, title: str, code_blocks, tables, directives: dic
     num = int(slide_id.split("-")[1])
     if num == 0:
         return "portada"
+    if code_blocks and tables:
+        return "tabla-mixta"
     if code_blocks:
         # Si hay cuerpo sustancial (listas o varios bloques de texto), usar diseño mixto
         if body_blocks:
@@ -1824,6 +1835,8 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         body_txt = _compose_body_text(body_subtitle, body_blocks)
         b_size   = typo.get("body", {}).get("size", 18)
         if body_zone == "table-intro":
+            b_size = min(b_size, 13)
+        if body_zone == "left-top-split":
             b_size = min(b_size, 15)
         body_geo = ZONES.get(body_zone)
         if body_geo and body_txt:
