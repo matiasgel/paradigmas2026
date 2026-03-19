@@ -86,6 +86,7 @@ IMAGE_STRATEGY: dict[str, str] = {
     "diagrama":          "content",
     "timeline":          "content",
     "codigo":            "none",
+    "concepto-mixto":    "none",         # body izq + código der: no imagen
     "tabla":             "none",
     "tabla-comparativa": "none",
     "demo":              "none",
@@ -93,16 +94,17 @@ IMAGE_STRATEGY: dict[str, str] = {
 
 # Directrices de layout por tipo
 LAYOUT_MAP: dict[str, dict] = {
-    "portada":            {"title": "center-middle",  "body": "center-bottom", "image": "background", "code": "none", "table": "none"},
-    "concepto-abstracto": {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none", "table": "none"},
+    "portada":            {"title": "center-middle",  "body": "center-bottom", "image": "background", "code": "none",       "table": "none"},
+    "concepto-abstracto": {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none",       "table": "none"},
+    "concepto-mixto":     {"title": "full-title",     "body": "left-middle",   "image": "none",       "code": "right-half", "table": "none"},
     "codigo":             {"title": "full-title",     "body": "subtitle-only", "image": "none",       "code": "full-bottom", "table": "none"},
-    "tabla":              {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none", "table": "table-main"},
-    "tabla-comparativa":  {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none", "table": "table-main"},
-    "diagrama":           {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none", "table": "none"},
-    "socratica":          {"title": "center-top",     "body": "center-middle", "image": "background", "code": "none", "table": "none"},
+    "tabla":              {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none",       "table": "table-main"},
+    "tabla-comparativa":  {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none",       "table": "table-main"},
+    "diagrama":           {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none",       "table": "none"},
+    "socratica":          {"title": "center-top",     "body": "center-middle", "image": "background", "code": "none",       "table": "none"},
     "demo":               {"title": "full-title",     "body": "left-middle",   "image": "none",       "code": "right-half", "table": "none"},
-    "cierre":             {"title": "center-middle",  "body": "center-bottom", "image": "background", "code": "none", "table": "none"},
-    "timeline":           {"title": "full-title",     "body": "full-center",   "image": "none",       "code": "none", "table": "none"},
+    "cierre":             {"title": "center-middle",  "body": "center-bottom", "image": "background", "code": "none",       "table": "none"},
+    "timeline":           {"title": "full-title",     "body": "full-center",   "image": "none",       "code": "none",       "table": "none"},
 }
 
 # Geometría de zonas en EMU: (x, y, width, height)
@@ -629,6 +631,7 @@ def parse_filminas(filminas_path: Path, schema: dict[str, Any] | None = None) ->
 def _finalize_slide(raw: dict, schema: dict[str, Any]) -> dict:
     """Parsea raw_lines en bloques semánticos: subtitle, body_blocks, code_blocks, tables."""
     lines       = raw["raw_lines"]
+    title       = raw["raw_title"]
     subtitle    = ""
     body_blocks: list[dict] = []
     code_blocks: list[dict] = []
@@ -692,6 +695,10 @@ def _finalize_slide(raw: dict, schema: dict[str, Any]) -> dict:
 
         # ── Headings Markdown → subtítulo o texto destacado ─────────────
         m_h = re.match(r"^(#{1,6})\s+(.+)$", line)
+        if m_h and not title:
+            title = m_h.group(2).strip()
+            i += 1
+            continue
         if m_h and not subtitle and len(m_h.group(1)) in subtitle_levels:
             subtitle = m_h.group(2).strip()
             i += 1
@@ -742,8 +749,8 @@ def _finalize_slide(raw: dict, schema: dict[str, Any]) -> dict:
 
     return {
         "id":          raw["id"],
-        "type":        _detect_type(raw["id"], raw["raw_title"], code_blocks, tables, directives),
-        "title":       raw["raw_title"],
+        "type":        _detect_type(raw["id"], title, code_blocks, tables, directives, body_blocks),
+        "title":       title,
         "subtitle":    subtitle,
         "body_blocks": body_blocks,
         "code_blocks": code_blocks,
@@ -802,7 +809,7 @@ def validate_filminas_contract(slides: list[dict], schema: dict[str, Any], filmi
         )
 
 
-def _detect_type(slide_id: str, title: str, code_blocks, tables, directives: dict[str, Any] | None = None) -> str:
+def _detect_type(slide_id: str, title: str, code_blocks, tables, directives: dict[str, Any] | None = None, body_blocks: list | None = None) -> str:
     forced_type = str((directives or {}).get("type", "")).strip()
     if forced_type in LAYOUT_MAP:
         return forced_type
@@ -810,6 +817,16 @@ def _detect_type(slide_id: str, title: str, code_blocks, tables, directives: dic
     if num == 0:
         return "portada"
     if code_blocks:
+        # Si hay cuerpo sustancial (listas o varios bloques de texto), usar diseño mixto
+        if body_blocks:
+            substantial = sum(
+                len(b.get("items", []))
+                if b.get("type") == "list"
+                else (1 if b.get("type") in ("text", "heading") else 0)
+                for b in body_blocks
+            )
+            if substantial >= 2:
+                return "concepto-mixto"
         return "codigo"
     if tables:
         return "tabla"
@@ -831,52 +848,115 @@ def _detect_type(slide_id: str, title: str, code_blocks, tables, directives: dic
 # FASE 1 — GENERADOR DE PLAN
 # ═══════════════════════════════════════════════════════════════════════
 
+def _preferred_image_prompt(slide: dict) -> str:
+    directives = slide.get("directives") or {}
+    explicit = str(directives.get("image_prompt", "")).strip()
+    if explicit:
+        return explicit
+
+    for asset in slide.get("asset_hints") or []:
+        if not isinstance(asset, dict):
+            continue
+        prompt = str(asset.get("prompt", "")).strip()
+        if prompt:
+            return prompt
+
+    return ""
+
+
+def _slide_visual_context(slide: dict) -> str:
+    parts: list[str] = []
+    title = _strip_markdown(str(slide.get("title", "")).strip())
+    subtitle = _strip_markdown(str(slide.get("subtitle", "")).strip())
+
+    if title:
+        parts.append(title)
+    if subtitle:
+        parts.append(subtitle)
+
+    return ". ".join(part for part in parts if part)
+
+
+def _palette_prompt_fragment(config: dict) -> str:
+    palette = config.get("palette", {}) or {}
+    color_names = {
+        "#8B0000": "bordo institucional",
+        "#FFFFFF": "blanco",
+        "#1A1A1A": "gris carbon",
+        "#000000": "negro",
+    }
+    mapped = [
+        color_names.get(str(color).strip().upper())
+        for color in [palette.get("primary"), palette.get("secondary"), palette.get("text")]
+        if color
+    ]
+    mapped = [color for color in mapped if color]
+    if not mapped:
+        return "paleta sobria universitaria"
+    return "paleta " + ", ".join(dict.fromkeys(mapped))
+
+
+def _image_safety_rules() -> str:
+    return (
+        "Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. "
+        "Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. "
+        "Estilo vectorial limpio, fondo claro, académico."
+    )
+
+
+def _append_image_guardrails(prompt: str, config: dict) -> str:
+    base = re.sub(r"\s+", " ", prompt).strip().rstrip(".")
+    style = f"Alta resolución, {_palette_prompt_fragment(config)}. {_image_safety_rules()}"
+    return f"{base}. {style}"
+
+
+def _max_images_per_presentation(config: dict) -> int:
+    strategy = config.get("gemini_image_strategy", {}) or {}
+    raw = strategy.get("max_per_presentation", strategy.get("max_images_per_presentation", 8))
+    if raw is None or raw == "":
+        return 8
+    return int(raw)
+
 def _image_prompt(slide: dict, config: dict) -> str:
     """Genera un prompt Gemini para imagen de fondo o contenido."""
-    stype = slide.get("type", "concepto-abstracto")
+    preferred = _preferred_image_prompt(slide)
+    if preferred:
+        return _append_image_guardrails(preferred, config)
 
-    style_bg = (
-        "flat design académico, paleta rojo granate institucional y gris oscuro, "
-        "composición puramente pictórica, alta resolución"
-    )
-    style_icon = (
-        "pintura digital abstracta, paleta rojo granate y gris oscuro, "
-        "fondo blanco limpio, alta resolución"
-    )
+    stype = slide.get("type", "concepto-abstracto")
+    title = _strip_markdown(str(slide.get("title", "")).strip()) or "lenguajes de programación"
 
     if stype == "portada":
-        return (
-            "Composición abstracta de íconos de programación: engranajes, "
-            "bifurcaciones de flujo, nodos conectados, código como grafo visual. "
-            f"Solo formas y colores institucionales. {style_bg}"
+        prompt = (
+            f"Portada académica universitaria: bloques geométricos y flechas representando etapas de un compilador, "
+            f"aula y materiales de estudio. Tema: {title}"
         )
-    if stype == "cierre":
-        return (
-            "Composición motivacional académica: diploma geométrico, estrella, "
-            "trayectoria ascendente de flechas, íconos de logro. "
-            f"Solo formas y colores. {style_bg}"
+    elif stype == "cierre":
+        prompt = (
+            f"Composición visual de síntesis: árbol sintáctico, bloques de pipeline y símbolo de completitud. "
+            f"Tema: {title}"
         )
-    if stype == "socratica":
-        return (
-            "Ilustración minimalista: signo de interrogación geométrico grande, "
-            "formas circulares concéntricas, amplio espacio negativo. "
-            f"Solo formas y colores. {style_bg}"
+    elif stype == "socratica":
+        prompt = (
+            f"Escena de debate académico: dos caminos visuales opuestos con íconos contrastantes. "
+            f"Tema: {title}"
         )
-    if stype == "diagrama":
-        return (
-            "Tres círculos rojos grandes conectados por líneas con flechas. "
-            f"Arte minimalista geométrico. {style_icon}"
+    elif stype == "diagrama":
+        prompt = (
+            f"Infografía técnica con cajas y flechas representando un pipeline o flujo de procesamiento. "
+            f"Tema: {title}"
         )
-    if stype == "timeline":
-        return (
-            "Línea horizontal con cinco puntos marcados en rojo. "
-            f"Arte minimalista de evolución temporal. {style_icon}"
+    elif stype == "timeline":
+        prompt = (
+            f"Línea de tiempo con hitos visuales concretos, íconos mudos, sin texto. "
+            f"Tema: {title}"
         )
-    # concepto-abstracto / default
-    return (
-        "Composición abstracta de círculos y líneas interconectadas en rojo granate y gris. "
-        f"Arte geométrico minimalista. {style_icon}"
-    )
+    else:
+        prompt = (
+            f"Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, "
+            f"sin elementos decorativos. Tema: {title}"
+        )
+    return _append_image_guardrails(prompt, config)
 
 
 def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
@@ -895,8 +975,10 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
         if first_title.lower() == "portada" and first_subtitle:
             topic_title = first_subtitle
 
-    # Budget de imágenes: máximo 8 por presentación
-    max_images  = int(config.get("gemini_image_strategy", {}).get("max_per_presentation", 8) or 8)
+    # Budget de imágenes: máximo 12 por presentación
+    max_images  = _max_images_per_presentation(config)
+    if max_images < 12:
+        max_images = 12
     img_count   = 0
     priority    = ["portada", "cierre", "concepto-abstracto", "diagrama", "socratica", "timeline"]
 
@@ -1891,6 +1973,7 @@ def main(argv: list[str] | None = None) -> None:
         help="Ruta a la carpeta del tema (ej: salida/cursadas/2026/temas/01-conceptos-introductorios)",
     )
     parser.add_argument("--plan-only",    action="store_true", help="Solo valida los YAML de publicación")
+    parser.add_argument("--regen-plan",   action="store_true", help="Regenera plan-filminas YAML desde filminas.md")
     parser.add_argument("--assets-only",  action="store_true", help="Solo genera assets (requiere plan previo)")
     parser.add_argument("--publish-only", action="store_true", help="Solo publica (requiere plan + assets)")
     args = parser.parse_args(argv)
@@ -1911,7 +1994,7 @@ def main(argv: list[str] | None = None) -> None:
     publish_context_path = topic_folder / "slides" / "publish-context.yaml"
 
     required_paths = [(config_path, "_edu/slides-config.yaml")]
-    if not args.plan_only:
+    if not args.plan_only and not args.regen_plan:
         required_paths.insert(0, (secrets_path, "_edu/secrets.local.yaml"))
 
     # Verificar prerequisitos
@@ -1928,6 +2011,23 @@ def main(argv: list[str] | None = None) -> None:
     secrets = load_yaml(secrets_path) if secrets_path.exists() else {}
     gemini_key   = secrets.get("gemini_api_key", "")
     template_id  = config.get("template_id", "")
+
+    # ── --regen-plan: regenerar plan desde filminas.md ────────────────────
+    if args.regen_plan:
+        filminas_path = topic_folder / "filminas.md"
+        if not filminas_path.exists():
+            print(f"❌ No se encontró filminas.md en {topic_folder}")
+            sys.exit(1)
+        if not template_id:
+            print("❌ template_id no configurado en slides-config.yaml")
+            sys.exit(1)
+        new_plan = generate_plan(filminas_path, config, template_id)
+        plan_path.parent.mkdir(parents=True, exist_ok=True)
+        save_yaml(plan_path, new_plan)
+        print(f"  📄 Plan regenerado: {plan_path.relative_to(project_root)}")
+        print(f"     {new_plan['meta']['total_slides']} filminas, {new_plan['meta']['images_planned']} imágenes planificadas.")
+        print("\n✅ Plan listo. Ejecutar con --assets-only para generar imágenes.")
+        return
 
     # ── Fase 1: Validar artefactos generados por el agente ────────────────
     try:
