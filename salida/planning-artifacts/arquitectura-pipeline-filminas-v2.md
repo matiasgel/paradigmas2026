@@ -449,45 +449,64 @@ Esto convierte la validación en una **puerta automática de calidad**, no solo 
 
 ## 8. Plan de Implementación — Sprints
 
-### Sprint 1 (inmediato — sin romper nada)
-- [ ] Actualizar `_edu/slides-config.yaml` con sección `slide_types` completa (incluye `concepto-mixto`)
-- [ ] Corregir `max_per_presentation: 12` en `slides-config.yaml` (eliminar necesidad de floor en script)
-- [ ] Actualizar `_edu/templates/filminas-schema.yaml` con campo `image.prompt` obligatorio cuando `image != none`
-- [ ] Crear `scripts/validate_plan.py` como herramienta de pre-verificación
-- [ ] Crear `scripts/capture_thumbnails.py` (ya creado en esta sesión)
-- [ ] Documentar template de prompt visual puro en `_edu/templates/prompt-imagen-guide.md`
+### Sprint 1 (inmediato — sin romper nada) ✅ COMPLETO
+- [x] `_edu/slides-config.yaml` con sección `slide_types` completa + `gemini_image_strategy.max_per_presentation: 12`
+- [x] `_edu/templates/filminas-schema.yaml` → **v2**: `concepto-mixto`, `tabla-mixta` en enums; regla anti-Bug 3 en `image_prompt_rules`
+- [x] `_edu/templates/filmina-slide-schema.yaml` → CREADO: schema canónico v2 por filmina con validaciones cruzadas
+- [x] `_edu/templates/slides-plan-schema.yaml` → **v2**: modelo de un único plan YAML (elimina 3-artefactos separados)
+- [x] `scripts/validate_plan.py` como herramienta de pre-verificación
+- [x] `scripts/capture_thumbnails.py` creado con retry y timeout robusto
+- [x] `_edu/templates/prompt-imagen-guide.md` con template de lenguaje visual puro y ejemplos probados
 
-### Sprint 2 (refactor del script)
-- [ ] Extraer `generate_plan()` a `scripts/parse_filminas.py` (genera draft con `type: pending`)
-- [ ] Eliminar `_detect_type()` del pipeline principal
-- [ ] Eliminar `_image_prompt()` del pipeline principal
-- [ ] El pipeline solo lee el plan — la validación es el contrato de entrada
-- [ ] Actualizar tests en `scripts/test_pipeline.py` y `scripts/test_slides_contract.py`
+### Sprint 2 (refactor del script) ✅ COMPLETO
+- [x] Crear `scripts/parse_filminas.py`: parseo DRAFT con `type: pending` para slides sin `@tipo:` — nunca infiere
+- [x] Deprecar `_detect_type()` del pipeline principal: `_finalize_slide()` ya no la llama
+- [x] Deprecar `_image_prompt()` del pipeline principal: marcado DEPRECATED, fuera del flujo principal
+- [x] Deprecar `generate_plan()`: marcado DEPRECATED + backwards-compat con re-inferencia para `--regen-plan`
+- [x] `--regen-plan` redirige a `parse_filminas.py` (o fallback legacy si no existe)
+- [x] `test_slides_contract.py`: schema_version v1→v2; nuevo test `test_parse_filminas_returns_pending_without_directive`
 
-### Sprint 3 (agentes)
-- [ ] Actualizar prompt del agente `slides-designer.md` con instrucciones para asignar tipos explícitos
-- [ ] Agregar regla de prompt visual puro en el agente
-- [ ] Agregar step de validación (`python scripts/validate_plan.py`) en el workflow `topic-cycle`
-- [ ] Agregar loop automático `repair_plan.py` con máximo 3 reintentos y errores estructurados por campo
-- [ ] Crear template de filmina JSON/YAML editable por el docente en `_edu/templates/filmina-slide.yaml`
+### Sprint 3 (agentes) ✅ COMPLETO
+- [x] `_edu/agents/slides-designer.md` → tipos corregidos (socratica, demo, +concepto-mixto, +diagrama, +tabla, +tabla-mixta)
+- [x] `_edu/agents/slides-designer.md` → REGLA CRÍTICA anti-Bug 3: lenguaje visual puro obligatorio
+- [x] `.github/prompts/edu-publish-slides.prompt.md` → `validate_plan.py` como puerta obligatoria; modelo v2
+- [x] `scripts/repair_plan.py` → CREADO: loop de validación con máx 3 reintentos, errores estructurados por campo
+- [x] `_edu/workflows/topic-cycle/workflow.md` Step 9.5 → flujo v2 completo (parse → agente → repair → publish)
 
 ---
 
-## 9. Estado Actual Post-Sesión (19 de marzo 2026)
+## 9. Estado Actual (19 de marzo 2026)
 
-### ✅ Completado en esta sesión
-- Pipeline corregido (`concepto-mixto`, `--regen-plan`, `_image_safety_rules` mejorada, budget=12) desplegado en:
-  - `scripts/slides_pipeline.py` (raíz)
-  - `salida/edu-standalone/scripts/slides_pipeline.py`
-- Tema 02 publicado con el pipeline corregido: 40 slides, 742 requests, 15 lotes
-- **URL nueva:** https://docs.google.com/presentation/d/1bMGI0BttGqaYJBmvXWzr9R8VPqkq8eYuuE14MIVqozk/edit
+### ✅ Sesión 1 — Pipeline Tema 02
+- Pipeline corregido (`concepto-mixto`, `--regen-plan`, `_image_safety_rules` mejorada, budget=12) desplegado en `scripts/slides_pipeline.py` (raiz y edu-standalone)
+- Tema 02 publicado: 40 slides, 742 requests, 15 lotes
+- **URL:** https://docs.google.com/presentation/d/1bMGI0BttGqaYJBmvXWzr9R8VPqkq8eYuuE14MIVqozk/edit
 - **40/40 thumbnails capturados** en `salida/cursadas/2026/temas/02-sintaxis-semantica/slides/thumbnails/`
-- Script `scripts/capture_thumbnails.py` creado con retry y timeout robusto.
+- `scripts/capture_thumbnails.py` creado con retry y timeout robusto
 
-### ⏳ Pendiente de implementación
-- Sprint 1-3 del plan anterior
-- Validación visual de los 40 thumbnails capturados
-- Actualización del `slides-config.yaml` con `slide_types` completo
+### ✅ Sesión 2 — Sprints 1+2+3 (19 de marzo 2026)
+
+#### Schemas y plantillas
+- `_edu/templates/filminas-schema.yaml` → v2: `concepto-mixto`, `tabla-mixta`; regla anti-Bug 3
+- `_edu/templates/slides-plan-schema.yaml` → v2: un solo plan YAML, elimina 3-artefactos
+- `_edu/templates/filmina-slide-schema.yaml` → CREADO: contrato canónico con validaciones cruzadas
+
+#### Agentes y prompts
+- `_edu/agents/slides-designer.md` → enum de tipos correcto + regla CRÍTICA anti-Bug 3
+- `.github/prompts/edu-publish-slides.prompt.md` → `validate_plan.py` como puerta obligatoria
+
+#### Scripts
+- `scripts/parse_filminas.py` → CREADO: draft con `type: pending` para slides sin `@tipo:`
+- `scripts/repair_plan.py` → CREADO: loop validación máx 3 reintentos, errores por campo
+- `scripts/slides_pipeline.py` → `_detect_type()`, `_image_prompt()`, `generate_plan()` DEPRECATED; `--regen-plan` redirige a `parse_filminas.py`
+- `scripts/test_slides_contract.py` → schema v2; nuevo test `test_parse_filminas_returns_pending_without_directive`
+
+#### Workflows
+- `_edu/workflows/topic-cycle/workflow.md` Step 9.5 → flujo v2 completo (parse → agente → repair → publish)
+
+### ⏳ Pendiente
+- Validación visual de los 40 thumbnails del Tema 02
+- Prueba del flujo v2 completo con el Tema 03 (primer tema usando `parse_filminas.py`)
 
 ---
 

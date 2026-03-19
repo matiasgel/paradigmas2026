@@ -758,7 +758,9 @@ def _finalize_slide(raw: dict, schema: dict[str, Any]) -> dict:
 
     return {
         "id":          raw["id"],
-        "type":        _detect_type(raw["id"], title, code_blocks, tables, directives, body_blocks),
+        # v2 (Sprint 2): el tipo viene SIEMPRE del @tipo: explícito en filminas.md.
+        # Sin @tipo: → "pending". _detect_type() ya no se llama aquí.
+        "type":        directives.get("type") or "pending",
         "title":       title,
         "subtitle":    subtitle,
         "body_blocks": body_blocks,
@@ -818,6 +820,10 @@ def validate_filminas_contract(slides: list[dict], schema: dict[str, Any], filmi
         )
 
 
+# DEPRECATED (v2 — Sprint 2): _detect_type() ya no se llama desde _finalize_slide().
+# La inferencia automática de tipo fue la causa del Bug 1 (tipo 'codigo' tapaba el cuerpo).
+# Usar @tipo: en filminas.md. Se mantiene solo para generate_plan() (backwards compat).
+# El nuevo flujo usa parse_filminas.py → agente asigna tipo explícito → validate_plan.py.
 def _detect_type(slide_id: str, title: str, code_blocks, tables, directives: dict[str, Any] | None = None, body_blocks: list | None = None) -> str:
     forced_type = str((directives or {}).get("type", "")).strip()
     if forced_type in LAYOUT_MAP:
@@ -915,6 +921,13 @@ def _image_safety_rules() -> str:
     )
 
 
+# DEPRECATED (v2 — Sprint 2): _append_image_guardrails() y _image_prompt() ya no se
+# llaman desde el flujo principal. La inferencia automática de prompts fue la causa del
+# Bug 3 (etiquetas de texto en inglés en imágenes). El agente escribe los prompts con
+# lenguaje visual puro (ver _edu/templates/prompt-imagen-guide.md). Se mantienen solo
+# para generate_plan() (backwards compat).
+
+
 def _append_image_guardrails(prompt: str, config: dict) -> str:
     base = re.sub(r"\s+", " ", prompt).strip().rstrip(".")
     style = f"Alta resolución, {_palette_prompt_fragment(config)}. {_image_safety_rules()}"
@@ -970,13 +983,35 @@ def _image_prompt(slide: dict, config: dict) -> str:
     return _append_image_guardrails(prompt, config)
 
 
+# DEPRECATED (v2 — Sprint 2): generate_plan() fue movido a scripts/parse_filminas.py.
+# El nuevo flujo: parse_filminas.py → agente completa → validate_plan.py → slides_pipeline.py
+# Esta función se mantiene SOLO para compatibilidad con --regen-plan legacy.
 def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
-    """Fase 1: filminas.md → plan-filminas-{tema}.yaml."""
-    print("📋 Fase 1 — Generando plan desde filminas.md …")
+    """Fase 1: filminas.md → plan-filminas-{tema}.yaml.
+
+    DEPRECATED (v2): Usar scripts/parse_filminas.py en su lugar.
+    """
+    import warnings
+    warnings.warn(
+        "generate_plan() está deprecado (v2). Usar scripts/parse_filminas.py en su lugar.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    print("⚠️  DEPRECADO: generate_plan() → usar scripts/parse_filminas.py (flujo v2)")
+    print("📋 Generando plan (legacy — con inferencia de tipos) desde filminas.md …")
 
     project_root = find_project_root(filminas_path.parent)
     schema = load_filminas_schema(project_root)
     slides      = parse_filminas(filminas_path, schema)
+
+    # Backwards compat: re-inferir tipos para slides con type: "pending" (sin @tipo:)
+    for s in slides:
+        if s.get("type") == "pending":
+            s["type"] = _detect_type(
+                s["id"], s["title"], s["code_blocks"], s["tables"],
+                s.get("directives"), s.get("body_blocks")
+            )
+
     topic_id    = filminas_path.parent.name
     topic_title = topic_id.replace("-", " ").title()
     if slides:
@@ -2025,21 +2060,32 @@ def main(argv: list[str] | None = None) -> None:
     gemini_key   = secrets.get("gemini_api_key", "")
     template_id  = config.get("template_id", "")
 
-    # ── --regen-plan: regenerar plan desde filminas.md ────────────────────
+    # ── --regen-plan: DEPRECADO — redirige a parse_filminas.py (v2) ──────────
     if args.regen_plan:
+        print("⚠️  DEPRECADO: --regen-plan")
+        print("   El flujo v2 usa scripts/parse_filminas.py para generar el plan DRAFT.")
+        print("   parse_filminas.py produce type: pending para slides sin @tipo: explícito.")
+        print("   El agente completa los tipos y prompts. validate_plan.py verifica el contrato.\n")
         filminas_path = topic_folder / "filminas.md"
         if not filminas_path.exists():
             print(f"❌ No se encontró filminas.md en {topic_folder}")
             sys.exit(1)
+        parse_script = Path(__file__).parent / "parse_filminas.py"
+        if parse_script.exists():
+            import subprocess as _sp
+            result = _sp.run([sys.executable, str(parse_script), str(topic_folder)], check=False)
+            sys.exit(result.returncode)
+        # Fallback: comportamiento legacy (si parse_filminas.py no existe aún)
+        print("   (parse_filminas.py no encontrado — usando generate_plan() legacy)")
         if not template_id:
             print("❌ template_id no configurado en slides-config.yaml")
             sys.exit(1)
         new_plan = generate_plan(filminas_path, config, template_id)
         plan_path.parent.mkdir(parents=True, exist_ok=True)
         save_yaml(plan_path, new_plan)
-        print(f"  📄 Plan regenerado: {plan_path.relative_to(project_root)}")
-        print(f"     {new_plan['meta']['total_slides']} filminas, {new_plan['meta']['images_planned']} imágenes planificadas.")
-        print("\n✅ Plan listo. Ejecutar con --assets-only para generar imágenes.")
+        print(f"  📄 Plan regenerado (legacy): {plan_path.relative_to(project_root)}")
+        print(f"     {new_plan['meta']['total_slides']} filminas, {new_plan['meta']['images_planned']} imágenes.")
+        print("\n✅ Plan listo (legacy). Verificar con validate_plan.py antes de ejecutar.")
         return
 
     # ── Fase 1: Validar artefactos generados por el agente ────────────────
