@@ -8,6 +8,8 @@
 > - Rediseñado el 2026-03-18 tomando como baseline las filminas año anterior (`02 sintaxis.pdf`) y las filminas 2026 desarrolladas (F-00 a F-37)
 > - Ajustado el 2026-03-18 post-debate (panel Marcos+Roberto+Ana+Guardrail): nota de navegación Cap.4→Cap.3 [C1], B6 reenmarcado como síntesis [C2], errores TS movidos a puente B5→B6 [C3], mapa de fuentes separado por sección [C4]
 > - Ajustado el 2026-03-18 por pedido docente: B5 rediseñado — semántica operacional formal eliminada (sin fuente cargada que la soporte); enfoque reemplazado por type checking concreto (TypeScript) + modelo nombres/entorno/binding (G&M §4.1–4.2) + intuición mínima de estado
+> - Ajustado el 2026-03-19 por pedido docente: B5 reducido a **reseña introductoria (8 min)** — nombres/entorno/binding comprimidos a mención; tratamiento completo diferido a Tema 09; 12 min liberados redistribuidos al buffer
+> - Ajustado el 2026-03-19 por pedido docente: B5 ampliado a **síntesis de semántica según Sebesta (12 min)** — incluye definición, gramáticas de atributos (semántica estática) y los tres enfoques de semántica dinámica (operacional/denotacional/axiomática) sin desarrollo de formalismos; fuente: Sebesta Cap. 3 §§3.4–3.5
 > **Material fuente:**
 > - `material/02-sintaxis/txt/02 sintaxis.txt` — filminas cátedra año anterior (baseline año previo)
 > - `material/02-sintaxis/txt/185-220.txt` — Sebesta Cap. 3 y Cap. 4 (Lexical and Syntax Analysis)
@@ -38,8 +40,8 @@
 | Tópico | Código plan mínimo | Fuente principal |
 |--------|--------------------|-----------------|
 | Sintaxis y semántica — definición y relación | Contenido mínimo #1 | slides cátedra; Sebesta Cap. 3 |
-| Nociones básicas de semántica formal | Contenido mínimo #1 | Gabbrielli & Martini Cap. 4 (introductorio) |
-| Semántica operacional (introducción) | Contenido mínimo #1 | Gabbrielli & Martini Cap. 4 |
+| Nociones básicas de semántica formal | Contenido mínimo #1 | Gabbrielli & Martini Cap. 4 (introductorio) — ⚠️ cobertura a nivel reseña |
+| Semántica operacional (introducción) | Contenido mínimo #1 | mención conceptual breve — tratamiento profundo en Tema 09 |
 | Conceptos de intérpretes y compiladores | Contenido mínimo #6 | Sebesta Cap. 4; conecta con Tema 01 Bloque 3 |
 
 > ⚠️ **OUT OF SCOPE:** Scope rules, binding y entorno (variables/nombres como denotable objects) se abordan en detalle en Tema 09 (Variables, Binding y Ámbito), aunque se hace una mención breve para motivar la semántica.
@@ -260,53 +262,42 @@ const y = undefined; y.length  // Error semántico en runtime
 
 ---
 
-### Bloque 5 — Semántica: nombres, entorno y tipos (20 min)
+### Bloque 5 — Semántica: síntesis y tipos (12 min)
 
-**Objetivo:** Comprender qué distingue la semántica de la sintaxis e introducir los tres conceptos semánticos fundamentales para un curso de lenguajes: nombres, entorno y tipos. El enfoque es pragmático — la semántica como herramienta de razonamiento sobre el efecto de los programas, no como formalismo matemático.
+**Objetivo:** Establecer qué es la semántica de un lenguaje, qué tipos existen según Sebesta y cómo se manifiesta en la práctica con TypeScript. Tratamiento de *síntesis introductoria* — no se desarrollan los formalismos internos de cada enfoque (eso corresponde a Semántica Formal / Lógica).
 
-> 📌 **Nota de fuentes:** Este bloque se basa directamente en **Gabbrielli & Martini Cap. 4 §§4.1–4.2** (archivo `083-105.txt`), que cubre nombres, objetos denotables, binding y la Definición 4.1 del entorno. La semántica operacional formal (reglas de inferencia SOS, Plotkin 1981) y la semántica denotacional quedan **fuera de scope** — corresponden a cursos de Teoría de Compiladores o Semántica Formal. Lo que se enseña aquí es el *modelo conceptual* de cómo los lenguajes dan significado a través de nombres y tipos.
+> 📌 **Fuente:** Sebesta, *Concepts of Programming Languages* (12ª ed.), Cap. 3 §§3.4–3.5 — "Attribute Grammars" y "Describing the Meanings of Programs: Dynamic Semantics".
 
 **Contenidos:**
 
-- **¿Qué hace la semántica?** (motivación, 3 min):
-  - La sintaxis contesta "¿está bien formado?"; la semántica contesta "¿qué efecto produce?"
-  - Sintaxis correcta ≠ programa correcto: un programa puede compilar y hacer lo incorrecto
-  - Sin semántica definida formalmente, el comportamiento del lenguaje depende de la implementación → no portable entre compiladores/intérpretes
-  - La semántica especifica la transformación que el programa produce sobre los datos
+- **¿Qué es la semántica de un lenguaje?** (2 min) — Sebesta Cap. 3:
+  - La sintaxis define la *forma* de los programas — describe la estructura válida
+  - La semántica le asigna *significado* a esa forma: especifica qué efecto produce cada construcción del lenguaje
+  - Sintaxis correcta ≠ significado correcto: `const x: number = "texto"` es sintácticamente inválido en TypeScript, pero en otro lenguaje podría ser válido y hacer algo inesperado
+  - Sin semántica especificada formalmente, el comportamiento del lenguaje queda a criterio de cada implementación → no portable entre compiladores/intérpretes
+  - Sebesta: *"There is no universal method for describing the semantics of a programming language that is generally acceptable"* — es un problema abierto en ciencias de la computación
 
-- **Semántica estática: el type checker** (8 min) — TypeScript como caso concreto:
-  - Las reglas semánticas estáticas son las que se verifican *antes* de ejecutar: tipos, aridades, visibilidad
-  - El type checker de TypeScript (`tsc`) ES un intérprete semántico estático: evalúa el árbol y decide si los tipos son coherentes
-  - Ejemplo: `const x: number = "texto"` — el árbol sintáctico es válido; el type checker lo rechaza porque viola la semántica de tipos
-  - Lo que type checking certifica: "si este programa pasa, no producirá errores de tipo en tiempo de ejecución" (type soundness)
-  - Distinción clave: el compilador conoce la *forma* del programa (sintaxis); el type checker conoce el *significado* parcial (tipos estáticos)
+- **Semántica estática — Gramáticas de atributos** (2 min) — Sebesta Cap. 3 §3.4:
+  - Las reglas sintácticamente válidas pero semánticamente incorrectas *no pueden describirse con gramáticas libres de contexto*
+  - Las **gramáticas de atributos** (Knuth, 1968) extienden las gramáticas BNF agregando *atributos* a los símbolos y *reglas semánticas* que los calculan
+  - Se usan para describir la **semántica estática**: las reglas que se verifican antes de ejecutar el programa
+  - Ejemplos típicos de semántica estática: compatibilidad de tipos, declaración antes de uso, aridad de funciones
+  - El type checker de TypeScript (`tsc`) implementa exactamente este tipo de verificación estática: evalúa el árbol de derivación y calcula atributos (tipos) sin ejecutar el programa
 
-- **Nombres y objetos denotables** — Gabbrielli & Martini §4.1:
-  - Un nombre es una secuencia de caracteres que *denota* otro objeto
-  - Nombre ≠ objeto que denota: un mismo objeto puede tener varios nombres → aliasing (pasaje por referencia, punteros)
-  - **Objetos denotables** (G&M §4.1.1): variables, parámetros formales, procedimientos, tipos definidos por el usuario, etiquetas, módulos, constantes, excepciones; también tipos primitivos y operaciones predefinidas del lenguaje
-  - **Entorno (environment)** — G&M Definición 4.1: *el conjunto de asociaciones nombre→objeto denotable que existen en un punto del programa en un instante de la ejecución*
-  - El entorno es el componente de la máquina abstracta que resuelve a qué objeto apunta cada nombre en cada contexto
-  - Nota: los mecanismos de scope y las reglas de visibilidad se profundizan en Tema 09
+- **Semántica dinámica — Tres enfoques formales** (5 min) — Sebesta Cap. 3 §3.5:
 
-- **Binding (ligadura)** — G&M §4.1:
-  - Una ligadura es la asociación entre un nombre y el objeto que denota
-  - **Fases de creación de ligaduras** (G&M §4.1):
-    - *Diseño del lenguaje*: `int`, `+`, `true` — el lenguaje asocia nombres a operaciones y tipos primitivos
-    - *Escritura del programa*: el programador declara variables, funciones, tipos — define ligaduras incompletas
-    - *Tiempo de compilación*: el compilador asocia identificadores con ubicaciones de memoria para variables globales y estáticas
-    - *Tiempo de ejecución*: variables locales en llamadas recursivas, memoria dinámica (punteros, heap)
-  - **Static vs. dynamic** (G&M §4.1): "estático" = todo lo que ocurre antes de ejecutar; "dinámico" = todo lo que ocurre durante la ejecución
-  - Esta distinción estático/dinámico es una de las dimensiones más importantes del diseño de lenguajes
+  La **semántica dinámica** describe el significado de los programas en ejecución. Sebesta presenta tres enfoques formales establecidos — ninguno está universalmente aceptado como definitivo:
 
-- **Intuición de semántica dinámica** (2 min — herramienta de razonamiento, no formalismo):
-  - El significado dinámico de un programa se puede razonar como la transformación que produce sobre el estado
-  - Estado = conjunto de pares (nombre, valor) en un momento de la ejecución
-  - Ejemplo mínimo: `x = 5; y = x + 1` → `{}` → `{x=5}` → `{x=5, y=6}`
-  - *Esta intuición es suficiente para este curso. La formalización rigurosa —semántica operacional estructural (Plotkin, 1981), semántica denotacional, semántica axiomática de Hoare— corresponde a cursos de Lógica y Semántica Formal.*
+  | Enfoque | Idea central | Propuesto por |
+  |---------|--------------|---------------|
+  | **Operacional** | El significado de un programa se define como la secuencia de pasos que realiza una máquina abstracta al ejecutarlo — "el significado ES la ejecución" | Landin (1964); Plotkin (1981) |
+  | **Denotacional** | El significado de cada construcción es una función matemática que mapea el estado de entrada al estado de salida — el significado es una *denotación* matemática | Scott & Strachey (1970) |
+  | **Axiomática** | El significado se define mediante aserciones lógicas (pre/postcondiciones) sobre el estado del programa — base de la verificación formal de programas (corrección de código) | Floyd (1967); Hoare (1969) |
 
-- **Síntesis — Los tres niveles de corrección en TypeScript** *(puente hacia B6)*:
-  - La distinción sintaxis/semántica que se abrió en B1 se cierra acá con tres casos concretos:
+  - Los tres enfoques son complementarios: ninguno es "mejor", cada uno sirve para distintos propósitos (implementación, verificación matemática, corrección formal)
+  - *El estudio riguroso de cada enfoque — reglas de inferencia SOS, semántica de puntos fijos, lógica de Hoare — corresponde a Semántica Formal / Lógica. En este curso se toman como referencias conceptuales.*
+
+- **Síntesis — Los tres niveles de corrección en TypeScript** (3 min) *(puente hacia B6)*:
   ```typescript
   // Error sintáctico (el parser falla — no puede construir el árbol):
   function foo( { return 42 }   // falta ')'
@@ -318,7 +309,10 @@ const y = undefined; y.length  // Error semántico en runtime
   const arr: number[] = []
   console.log(arr[100].toString())  // undefined.toString() — falla en ejecución
   ```
-  - *Estos tres errores son evidencia directa del pipeline: el Bloque 6 muestra cómo se integran los tres componentes que los detectan.*
+  - Cada nivel corresponde a un tipo distinto de semántica del lenguaje: la semántica estática (type checking) detecta el error del medio; la semántica dinámica (operacional) da cuenta del error en runtime
+  - *El Bloque 6 muestra cómo el pipeline integra los tres componentes que detectan cada nivel.*
+
+> 📌 **Diferido a Tema 09:** nombres, objetos denotables, entorno (G&M Def. 4.1), binding y sus fases (diseño/escritura/compilación/ejecución), aliasing, reglas de scope. Todo ese material (G&M §§4.1–4.2) tiene tratamiento completo en Tema 09.
 
 ---
 
@@ -357,9 +351,9 @@ const y = undefined; y.length  // Error semántico en runtime
 | 2 | 20 | Estructura léxica: lexemas y tokens | slides cátedra; Sebesta Cap. 4 §4.1 *(anticipado — ver nota nav. en B2)* |
 | 3 | 30 | Gramáticas formales: BNF, EBNF, árboles sintácticos, ambigüedad | slides cátedra; Sebesta Cap. 3 |
 | 4 | 10 | Diagramas de sintaxis | slides cátedra |
-| 5 | 20 | Semántica: motivación, type checker (semántica estática), nombres/entorno/binding (G&M §4.1–4.2), intuición dinámica; síntesis tres tipos de error TS | Gabbrielli & Martini Cap. 4 §§4.1–4.2 (material cargado) |
+| 5 | 12 | Semántica: definición, gramáticas de atributos (est.), tres enfoques dinámicos (operacional/denotacional/axiomática), síntesis tres tipos de error TS | Sebesta Cap. 3 §§3.4–3.5 |
 | 6 | 15 | Síntesis: pipeline completo; top-down vs. bottom-up; gramáticas en IA (cierre) | Sebesta Cap. 4 §§4.3–4.4 (parser); Willard & Louf (2023); Beurer-Kellner et al. (2023) |
-| — | 5 | Buffer / preguntas | — |
+| — | 13 | Buffer / preguntas / margen de clase | — |
 
 **Total: 120 minutos** ✓
 
