@@ -43,15 +43,19 @@ You must fully embody this agent's persona and follow all activation instruction
       1. Preguntar sobre identidad visual del cursado (colores institucionales, preferencias)
       2. Definir paleta: primario, secundario, acento, fondo, texto — con ejemplos visuales en markdown
       3. Definir tipografía: fuente título, fuente cuerpo, fuente código, tamaños por jerarquía
-      4. Definir layouts por tipo de filmina:
-         - portada: título centrado grande + subtítulo + logo
-         - concepto-abstracto: título + cuerpo texto + imagen Gemini derecha
-         - código: título + bloque código monoespaciado + output esperado
-         - tabla-comparativa: título + tabla full-width
-         - pregunta-socrática: pregunta centrada grande + espacio visual
-         - timeline: título + línea temporal horizontal
-         - cierre: frase clave centrada + call-to-action
-         - demo-herramienta: título + pasos numerados + captura/imagen
+      4. Definir layouts por tipo de filmina (usar EXACTAMENTE estos nombres — son el enum canónico del pipeline):
+         - portada: título centrado grande + subtítulo + logo → image.layer: background
+         - concepto-abstracto: título + cuerpo texto izquierda + imagen Gemini derecha → image.layer: content
+         - concepto-mixto: título + texto izquierda + bloque código derecha (sin imagen)
+         - codigo: título + subtítulo breve + bloque código full-bottom (sin imagen)
+         - tabla: título + intro breve + tabla full-width (sin imagen)
+         - tabla-comparativa: título + intro breve + tabla comparativa full-width (sin imagen)
+         - tabla-mixta: título + texto/código izquierda + tabla derecha (sin imagen)
+         - diagrama: título + cuerpo izquierda + imagen/diagrama derecha → image.layer: content
+         - socratica: pregunta centrada grande + espacio visual → image.layer: background
+         - timeline: título + línea temporal / listado temporal horizontal (sin imagen)
+         - cierre: frase clave centrada + call-to-action → image.layer: background
+         - demo: título + pasos numerados + código derecha (sin imagen)
       5. Definir contrato de render semántico de Markdown para el pipeline:
         - listas con bullets nativos de Google Slides, nunca con `-`, `*`, `•` ni `1.` escritos en texto
         - headings internos como jerarquía visual real, no como texto plano
@@ -67,7 +71,16 @@ You must fully embody this agent's persona and follow all activation instruction
       9. Escribir _edu/slides-config.yaml con toda la configuración
       10. Confirmar: "✅ Sistema de diseño guardado. Diego puede publicar filminas ahora."
     </r>
-     <r>slides-config.yaml debe incluir: palette, typography, layouts, template_id, gemini_image_strategy, markdown_rendering</r>
+     <r>slides-config.yaml debe incluir: palette, typography, layouts, slide_types, template_id, gemini_image_strategy, markdown_rendering</r>
+    <r>REGLA CRÍTICA — Prompts de imagen (anti-Bug 3):
+      Al asignar image.prompt en cualquier slide, Vera DEBE usar EXCLUSIVAMENTE lenguaje visual puro:
+      - Describir SOLO geometría: formas (circle, rectangle, branching tree), colores, tamaños, posiciones relativas.
+      - NUNCA nombrar conceptos técnicos del tema (compilador, parser, semántica, paradigma, etc.) — Gemini los convierte en etiquetas de texto en inglés.
+      - Template obligatorio: "[Elemento]: [forma] [color] [posición]. [Relación posicional]. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución."
+      - Ver _edu/templates/prompt-imagen-guide.md para vocabulario aprobado y ejemplos probados del Tema 02.
+      - Ejemplo CORRECTO: "Three flat icons in a horizontal sequence on white background. First: blob shape bordo. Second: branching tree dark gray. Third: checkmark symbol. No text whatsoever."
+      - Ejemplo INCORRECTO: "diagrama con fases del compilador: lexer, parser, semántica" → Gemini agrega etiquetas.
+    </r>
   </rules>
 </activation>
 

@@ -1,5 +1,6 @@
-version: "filminas/v1"
+version: "filminas/v2"
 description: "Contrato canónico para autoria, parseo, plan y publicación de filminas EDU"
+changelog: "v2 (2026-03-19): agrega concepto-mixto y tabla-mixta al enum; alinea nombres con slide_types en slides-config.yaml"
 template_path: "_edu/templates/filminas-template.md"
 
 markers:
@@ -24,9 +25,11 @@ allowed:
   slide_types:
     - portada
     - concepto-abstracto
+    - concepto-mixto      # texto + código en columnas (v2)
     - codigo
     - tabla
     - tabla-comparativa
+    - tabla-mixta          # texto/código izquierda + tabla derecha (v2)
     - diagrama
     - socratica
     - demo
@@ -35,9 +38,11 @@ allowed:
   layout_presets:
     - portada
     - concepto-abstracto
+    - concepto-mixto
     - codigo
     - tabla
     - tabla-comparativa
+    - tabla-mixta
     - diagrama
     - socratica
     - demo
@@ -81,9 +86,12 @@ validation:
     - directive:image_prompt
     - asset:prompt
   image_prompt_rules:
-    - "Debe referirse al tópico de la filmina, no al tema en abstracto"
-    - "Debe describir una escena, diagrama o metáfora visual vinculada al contenido"
-    - "No usar prompts genéricos como 'formas abstractas', salvo portada o cierre"
+    - "REGLA FUNDAMENTAL (anti-Bug 3): describir SOLO geometría visual — formas, colores, posiciones."
+    - "NUNCA nombrar conceptos técnicos en el prompt — Gemini los convierte en etiquetas de texto en inglés."
+    - "SIEMPRE terminar el prompt con: Sin texto, sin letras, sin etiquetas, sin código, sin números."
+    - "Ejemplo CORRECTO: Three flat icons in a horizontal sequence on white background. First: blob shape bordo. Second: branching tree dark gray. Third: checkmark symbol. No text whatsoever."
+    - "Ejemplo INCORRECTO: 'diagrama con fases del compilador: lexer, parser, semántica' → Gemini generará etiquetas."
+    - "Ver guía completa en: _edu/templates/prompt-imagen-guide.md"
   coherence_rules:
     - "Los ejemplos, términos y secuencia conceptual deben poder reutilizarse en minuta.md sin contradicciones"
     - "Si una filmina introduce una imagen, el prompt debe reforzar la idea central de esa misma filmina"
