@@ -15,7 +15,7 @@ SPEC.loader.exec_module(slides_pipeline)
 
 class SlidesContractTests(unittest.TestCase):
     def test_generate_plan_exposes_schema_metadata(self) -> None:
-        fixture = Path(__file__).parents[3] / "informe" / "filminas.md"
+        fixture = Path(__file__).parents[1] / "informe" / "filminas.md"
         config = {
             "palette": {},
             "typography": {},
@@ -27,19 +27,65 @@ class SlidesContractTests(unittest.TestCase):
         self.assertEqual(plan["meta"]["schema_version"], "filminas/v1")
         self.assertEqual(plan["meta"]["schema_path"], "_edu/templates/filminas-schema.yaml")
 
+    def test_image_prompt_excludes_slide_text_and_hex_palette(self) -> None:
+        slide = {
+            "type": "concepto-abstracto",
+            "title": "Continuidad con Tema 01",
+            "subtitle": "",
+            "body_blocks": [
+                {
+                    "type": "list",
+                    "ordered": False,
+                    "items": [
+                        {"content": "TypeScript compila a JavaScript", "level": 0},
+                        {"content": "JavaScript corre sobre una máquina de ejecución real", "level": 0},
+                    ],
+                }
+            ],
+            "directives": {},
+            "asset_hints": [],
+        }
+        config = {
+            "palette": {
+                "primary": "#8B0000",
+                "secondary": "#FFFFFF",
+                "text": "#1A1A1A",
+            }
+        }
+
+        prompt = slides_pipeline._image_prompt(slide, config)
+
+        self.assertIn("Continuidad con Tema 01", prompt)
+        self.assertNotIn("Conceptos clave", prompt)
+        self.assertNotIn("TypeScript compila a JavaScript", prompt)
+        self.assertNotIn("#8B0000", prompt)
+        self.assertIn("No incluir texto legible dentro de la imagen", prompt)
+
+    def test_generate_plan_accepts_legacy_and_current_image_budget_keys(self) -> None:
+        fixture = Path(__file__).parents[1] / "informe" / "filminas.md"
+        config = {
+            "palette": {},
+            "typography": {},
+            "gemini_image_strategy": {"max_images_per_presentation": 0},
+        }
+
+        plan = slides_pipeline.generate_plan(fixture, config, "template-id")
+        images = [
+            slide for slide in plan["slides"]
+            if slide["background_image"]["strategy"] == "gemini"
+            or slide["content_image"]["strategy"] == "gemini"
+        ]
+
+        self.assertEqual(images, [])
+
     def test_parse_filminas_applies_directive_overrides(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             topic = Path(tmp) / "tema-demo"
             scripts = Path(tmp) / "scripts"
-            edu = Path(tmp) / "_edu" / "templates"
+            edu = Path(tmp) / "_edu"
             topic.mkdir(parents=True)
             scripts.mkdir(parents=True)
             edu.mkdir(parents=True)
-
-            (edu / "filminas-schema.yaml").write_text(
-                (Path(__file__).parents[1] / "_edu" / "templates" / "filminas-schema.yaml").read_text(encoding="utf-8"),
-                encoding="utf-8",
-            )
 
             filminas = topic / "filminas.md"
             filminas.write_text(
@@ -58,15 +104,10 @@ class SlidesContractTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             topic = Path(tmp) / "tema-demo"
             scripts = Path(tmp) / "scripts"
-            edu = Path(tmp) / "_edu" / "templates"
+            edu = Path(tmp) / "_edu"
             topic.mkdir(parents=True)
             scripts.mkdir(parents=True)
             edu.mkdir(parents=True)
-
-            (edu / "filminas-schema.yaml").write_text(
-                (Path(__file__).parents[1] / "_edu" / "templates" / "filminas-schema.yaml").read_text(encoding="utf-8"),
-                encoding="utf-8",
-            )
 
             filminas = topic / "filminas.md"
             filminas.write_text(

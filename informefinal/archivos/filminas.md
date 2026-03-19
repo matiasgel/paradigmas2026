@@ -646,11 +646,6 @@ Solo ubicamos el problema conceptualmente.
 **Prompt:**
 
 ```text
-- ¿Qué detecta el type checker que no detecta el parser?
-- ¿Por qué una gramática ambigua es un problema de diseño?
-- ¿Qué papel cumple el entorno en el significado de un programa?
-- ¿Dónde reaparecen hoy BNF y EBNF fuera de compiladores clásicos?
-
 Leé esta nota y devolvé un JSON con esta forma:
 {
    "action_items": [
