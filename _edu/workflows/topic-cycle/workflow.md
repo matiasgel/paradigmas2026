@@ -151,13 +151,49 @@ Según `tp_type` guardado en Step 5, ejecutar el sub-paso correspondiente:
 
 ### Step 9.5: Publish Slides (Optional)
 - **Prompt:** `/edu-publish-slides`
-- **Script:** `salida/edu-standalone/scripts/slides_pipeline.py`
 - **Condition:** Solo si `_edu/secrets.local.yaml` y `_edu/slides-config.yaml` existen
 - **Input:** `{topic_folder}/filminas.md` (aprobadas y corregidas)
 - **Output:**
-  - `{topic_folder}/slides/plan-filminas-{tema}.yaml` — plan completo con contenido + prompts de imagen
-  - `{topic_folder}/slides/assets/` — imágenes generadas localmente (Gemini + matplotlib)
+  - `{topic_folder}/slides/plan-filminas-{tema}.yaml` — plan completo validado
+  - `{topic_folder}/slides/assets/` — imágenes generadas (Gemini + matplotlib)
   - `{topic_folder}/slides/slides-url.txt` — URL de la presentación publicada
-- **Ejecución automática:** sin preguntas al usuario; el pipeline completo corre de una sola vez
+
+**Flujo v2 (inmutable):**
+
+**Paso 1 — Generar plan DRAFT:**
+```bash
+python scripts/parse_filminas.py {topic_folder}
+```
+Produce `slides/plan-draft-{tema}.yaml` con `type: pending` para slides sin `@tipo:`.
+
+**Paso 2 — El agente (invocado por `/edu-publish-slides`) completa el plan:**
+- Asigna un `type` explícito del enum canónico a cada slide con `type: pending`
+- Escribe `image.prompt` con **lenguaje visual puro** para cada slide con imagen
+  (ver `_edu/templates/prompt-imagen-guide.md` — REGLA ANTI-BUG 3)
+- Completa `layout` para slides incompletos (usar tabla `slide_types` en `slides-config.yaml`)
+- Elimina la clave `_draft_instructions` del YAML
+- Renombra el archivo a `slides/plan-filminas-{tema}.yaml`
+
+**Paso 3 — Validación con loop de reparación (máximo 3 intentos):**
+```bash
+python scripts/repair_plan.py {topic_folder} --attempt 1 --max-attempts 3
+```
+- Exit `0` → plan válido → continuar al Paso 4
+- Exit `1` → errores encontrados → agente corrige **solo** los campos reportados → `--attempt 2`
+- Exit `2` → 3 intentos fallidos → STOP, revisión humana requerida
+
+**Paso 4 — Publicar:**
+```bash
+python scripts/slides_pipeline.py {topic_folder}
+```
+El script solo ejecuta: assets (Gemini + Drive) → publicación en Google Slides.
+
+**Correción de imágenes sin tocar el script:**
+1. Editar `image.prompt` en el plan YAML con lenguaje visual puro
+2. Limpiar `drive_id` (poner `null`) y eliminar el asset local si existe
+3. `python scripts/slides_pipeline.py {topic_folder} --assets-only`
+4. `python scripts/slides_pipeline.py {topic_folder} --publish-only`
+5. Verificar: `python scripts/capture_thumbnails.py <id> {topic_folder}/slides/thumbnails/`
+
 - **Note:** Si `_edu/slides-config.yaml` no existe, activar `/edu-slides-designer` primero (una sola vez por cursada)
 
