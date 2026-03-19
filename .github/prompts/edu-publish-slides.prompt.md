@@ -38,26 +38,28 @@ tools: ['read', 'edit', 'search', 'execute', 'fetch']
 
 ### Ejecución del pipeline
 
-Antes de ejecutar el script, el agente debe generar estos artefactos en `{topic_folder}/slides/`:
+Antes de ejecutar el script, el agente debe generar en `{topic_folder}/slides/`:
 
-1. `plan-filminas-{tema}.yaml`
-  - Contenido completo de cada slide
-  - Layout resuelto
-  - Estrategia de assets
-  - Prompts de imagen específicos del tópico
-2. `assets-manifest.yaml`
-  - Lista de imágenes/tablas/código a materializar
-  - Naming estable de archivos locales
-3. `publish-context.yaml`
-  - template_id
-  - metadatos del tema
-  - opciones de publicación necesarias para el script
+1. **`plan-filminas-{tema}.yaml`** — un único archivo con todas las slides
+   - Cada slide: `id`, `type` (enum canónico), `title`, `body_blocks`, `layout` completo, `image` (con `layer` y `prompt`)
+   - Tipos permitidos: `portada`, `concepto-abstracto`, `concepto-mixto`, `codigo`, `tabla`, `tabla-comparativa`, `tabla-mixta`, `diagrama`, `socratica`, `demo`, `cierre`, `timeline`
+   - Si `image.layer != none` → `image.prompt` OBLIGATORIO con lenguaje visual puro (ver `_edu/templates/prompt-imagen-guide.md`)
+   - Contrato completo en: `{project-root}/_edu/templates/slides-plan-schema.yaml`
 
-El contrato canónico del plan debe vivir en:
+> ⚠️ **NUNCA** nombrar conceptos técnicos en los prompts de imagen. Usar solo geometría, colores y posiciones. Ver guía anti-Bug 3 en `_edu/templates/prompt-imagen-guide.md`.
 
-- `{project-root}/_edu/templates/slides-plan-schema.yaml`
+### Validación obligatoria pre-ejecución
 
-Una vez generados y validados esos artefactos, ejecutar en terminal **sin preguntas**:
+Después de generar el plan y **antes** de ejecutar el pipeline, validar el contrato:
+
+```bash
+python {project-root}/salida/edu-standalone/scripts/validate_plan.py {topic_folder}
+```
+
+- Exit code `0` → plan válido, continuar.
+- Exit code `1` → errores listados por campo (ej: `F-12.image.prompt vacío`). El agente debe corregir **solo** los campos reportados y re-ejecutar la validación. Máximo 3 intentos antes de escalar a revisión humana.
+
+Una vez que `validate_plan.py` retorna `0`, ejecutar en terminal **sin preguntas**:
 
 ```bash
 python {project-root}/salida/edu-standalone/scripts/slides_pipeline.py \
