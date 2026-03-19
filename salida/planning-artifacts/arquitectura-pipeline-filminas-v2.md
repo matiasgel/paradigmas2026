@@ -272,6 +272,65 @@ filminas.md (fuente del contenido)
 Presentación publicada verificada
 ```
 
+### 4.3 Validación por contrato cerrado con reintento automático
+
+El flow v2 propuesto **sí debe evolucionar** a un loop cerrado de contrato. La validación previa ya existe, pero hoy el documento deja la corrección en manos del agente de forma implícita. Conviene volverlo explícito:
+
+```
+[AGENTE GENERADOR]
+  │  produce plan-filminas.yaml
+  ▼
+[NORMALIZADOR]
+  │  parsea YAML y lo reserializa en forma canónica
+  │  elimina variaciones superficiales de formato
+  ▼
+[VALIDADOR DE CONTRATO]
+  │  1. sintaxis
+  │  2. estructura obligatoria
+  │  3. enums cerrados
+  │  4. reglas semánticas cruzadas
+  ▼
+¿válido?
+  ├─ sí  → slides_pipeline.py
+  └─ no  → generar diff/errores estructurados → volver al agente
+         con máximo N reintentos
+```
+
+Regla operativa propuesta:
+- `max_attempts: 3`
+- Cada fallo devuelve errores determinísticos por slide y campo (`F-12.layout.code`, `F-26.content_image.prompt`, etc.)
+- El agente corrige **solo** los campos reportados, no regenera todo el plan desde cero
+- Si al tercer intento falla, se detiene el workflow y escala a revisión humana
+
+Esto reduce drift, evita correcciones creativas fuera de contrato y hace trazable por qué falló cada intento.
+
+### 4.4 EBNF vs schema estructural
+
+**Sí, se puede usar EBNF, pero no es la mejor herramienta como validador principal de este caso.**
+
+EBNF sirve bien para validar la **forma textual** de una entrada, por ejemplo:
+- la gramática de `filminas.md`
+- la sintaxis de directivas como `@tipo:`, `@imagen:` o `@prompt-imagen:`
+- restricciones del orden de secciones en Markdown
+
+Pero EBNF **no resuelve bien** lo que más importa en este pipeline:
+- campos obligatorios en YAML/JSON
+- enums cerrados
+- validaciones cruzadas (`image != none` implica `prompt != ""`)
+- coherencia `type ↔ layout ↔ assets`
+- límites globales como budget de imágenes
+
+Para el contrato canónico de salida, la combinación recomendada es:
+- **JSON Schema o CUE** para estructura exacta del plan YAML/JSON
+- **Validador Python** para reglas semánticas cruzadas que el schema no expresa cómodo
+- **Normalizador canónico** para reserializar el YAML y quitar ambigüedad de formato
+- **Loop de reparación** que reciba los errores y reintente automáticamente
+
+Decisión arquitectónica recomendada:
+- `filminas.md`: opcionalmente EBNF o parser ad hoc, porque ahí sí hay gramática textual
+- `plan-filminas.yaml`: contrato principal con JSON Schema o CUE, no con EBNF
+- `validate_plan.py`: segunda capa semántica y de negocio
+
 ---
 
 ## 5. Cambios Concretos al Script (lo mínimo necesario)
@@ -367,6 +426,25 @@ Script de validación independiente que corre ANTES del pipeline:
 # Exit code 1 = errores (lista detallada)
 ```
 
+### 7.1 Siguiente paso recomendado: `scripts/repair_plan.py`
+
+Para cerrar el contrato de salida y evitar correcciones manuales repetitivas, agregar un orquestador simple:
+
+```python
+# scripts/repair_plan.py
+# Uso: python scripts/repair_plan.py <tema> --max-attempts 3
+
+# Loop:
+# 1. Invoca al agente generador para producir o corregir plan-filminas.yaml
+# 2. Normaliza el YAML a forma canónica
+# 3. Ejecuta validate_plan.py
+# 4. Si falla: devuelve al agente SOLO la lista estructurada de errores
+# 5. Si pasa: retorna exit code 0 y habilita slides_pipeline.py
+# 6. Si supera max-attempts: exit code 2 y requiere revisión humana
+```
+
+Esto convierte la validación en una **puerta automática de calidad**, no solo en un checklist previo.
+
 ---
 
 ## 8. Plan de Implementación — Sprints
@@ -390,6 +468,7 @@ Script de validación independiente que corre ANTES del pipeline:
 - [ ] Actualizar prompt del agente `slides-designer.md` con instrucciones para asignar tipos explícitos
 - [ ] Agregar regla de prompt visual puro en el agente
 - [ ] Agregar step de validación (`python scripts/validate_plan.py`) en el workflow `topic-cycle`
+- [ ] Agregar loop automático `repair_plan.py` con máximo 3 reintentos y errores estructurados por campo
 - [ ] Crear template de filmina JSON/YAML editable por el docente en `_edu/templates/filmina-slide.yaml`
 
 ---
