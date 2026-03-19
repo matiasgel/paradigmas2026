@@ -133,6 +133,10 @@ slide_types:
     layout: {title: full-title, body: left-middle, image: none, code: right-half, table: none}
     image_layer: none
     note: "Texto izquierda + código derecha. Añadido v2 post-Bug 1."
+  tabla-mixta:
+    layout: {title: full-title, body: left-top-split, image: none, code: left-bottom-split, table: right-half}
+    image_layer: none
+    note: "Texto/código a la izquierda y tabla a la derecha. Añadido para evitar pérdida de tablas en slides mixtas."
   codigo:
     layout: {title: full-title, body: subtitle-only, image: none, code: full-bottom, table: none}
     image_layer: none
@@ -176,5 +180,5 @@ markdown_rendering:
   ordered_bullet_preset: "NUMBERED_DIGIT_ALPHA_ROMAN"
   inline_code_font: "Roboto Mono"
   inline_code_color: "#8B0000"
-  lead_scale: 1.08
+  lead_scale: 1.0
   heading_scale: 1.12

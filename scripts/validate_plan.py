@@ -21,7 +21,7 @@ import yaml
 
 # Tipos permitidos (enum cerrado — nunca inferidos)
 ALLOWED_TYPES = {
-    "portada", "concepto-abstracto", "concepto-mixto", "codigo",
+    "portada", "concepto-abstracto", "concepto-mixto", "tabla-mixta", "codigo",
     "tabla", "tabla-comparativa", "diagrama", "socratica",
     "demo", "cierre", "timeline",
 }
@@ -30,10 +30,11 @@ ALLOWED_TYPES = {
 ALLOWED_LAYOUT_ZONES = {
     "title": {"center-middle", "full-title", "center-top", "left-top"},
     "body":  {"center-bottom", "left-middle", "center-middle", "subtitle-only",
+              "left-top-split",
               "table-intro", "full-center", "full-bottom", "none"},
     "image": {"background", "right-half", "none"},
-    "code":  {"right-half", "full-bottom", "none"},
-    "table": {"table-main", "none"},
+    "code":  {"right-half", "left-bottom-split", "full-bottom", "none"},
+    "table": {"right-half", "table-main", "none"},
 }
 
 # Estrategias de imagen permitidas
@@ -111,6 +112,12 @@ def validate_plan(topic_folder: Path) -> list[str]:
             errors.append(f"{prefix}: campo 'type' faltante — DEBE ser explícito, nunca inferido")
         elif slide_type not in ALLOWED_TYPES:
             errors.append(f"{prefix}: type='{slide_type}' no está en el enum permitido: {sorted(ALLOWED_TYPES)}")
+
+        if slide.get("code_blocks") and slide.get("tables") and slide_type == "codigo":
+            errors.append(
+                f"{prefix}: combina code_blocks + tables pero está tipada como 'codigo'. "
+                "Debe usar 'tabla-mixta' para no perder la tabla en publicación."
+            )
 
         # 2. title no vacío
         if not slide.get("title", "").strip():

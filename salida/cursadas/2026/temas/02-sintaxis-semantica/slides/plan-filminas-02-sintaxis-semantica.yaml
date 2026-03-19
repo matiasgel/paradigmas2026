@@ -473,7 +473,7 @@ slides:
     drive_id: 1gcFPVvWT3yaW7ojlloHA5CUdIuvww91V
   table_assets: []
 - id: F-10
-  type: codigo
+  type: tabla-mixta
   title: Lexema y token
   subtitle: ''
   body_blocks:
@@ -507,12 +507,12 @@ slides:
     | `;` | delimitador |'
   directives: {}
   asset_hints: []
-  layout: &id004
+  layout:
     title: full-title
-    body: subtitle-only
+    body: left-top-split
     image: none
-    code: full-bottom
-    table: none
+    code: left-bottom-split
+    table: right-half
   background_image:
     strategy: none
     prompt: ''
@@ -629,7 +629,7 @@ slides:
     drive_id: null
   table_assets: []
 - id: F-13
-  type: codigo
+  type: tabla-mixta
   title: Gramáticas libres de contexto
   subtitle: ''
   body_blocks:
@@ -652,7 +652,12 @@ slides:
     | `P` | producciones |'
   directives: {}
   asset_hints: []
-  layout: *id004
+  layout:
+    title: full-title
+    body: left-top-split
+    image: none
+    code: left-bottom-split
+    table: right-half
   background_image:
     strategy: none
     prompt: ''
