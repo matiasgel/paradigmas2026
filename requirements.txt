@@ -23,3 +23,7 @@ requests>=2.31.0
 # Renderizado de tablas como imágenes
 matplotlib>=3.7.0
 Pillow>=10.0.0
+
+# Exportación PDF (pandoc incluido via pypandoc_binary)
+pypandoc>=1.13
+pypandoc_binary>=1.13
