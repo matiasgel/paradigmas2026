@@ -44,7 +44,7 @@ $CATEGORY: TP/02-sintaxis-semantica
 ####Cada elemento con significado independiente genera un token: 3 identificadores + 3 operadores + 1 entero + 1 punto y coma \= **8 tokens**.
 }
 
-::TP02-Q05-funcion-lexer::[markdown]Un estudiante afirma: *"El lexer determina si una variable fue declarada con el tipo correcto antes de usarla."* ¿Es correcto? {
+::TP02-Q05-funcion-lexer::[markdown]Un estudiante afirma: *"El lexer determina si una variable fue declarada con el tipo correcto antes de usarla."* ¿Es correcta esta afirmación? {
 =No. El lexer solo clasifica cadenas en categorías de tokens; no tiene información sobre el sistema de tipos ni sobre declaraciones.#Correcto. El lexer no conoce el concepto de tipo. La verificación de tipos es semántica estática, responsabilidad del type checker.
 ~Sí, el lexer verifica tipos en tiempo de compilación.#Incorrecto. El lexer no conoce el concepto de tipo. Solo convierte texto en tokens: `number` lo tokenizaría como `identificador_de_tipo`, pero no sabe si se usa correctamente.
 ~Sí, pero solo para tipos primitivos como `number` o `string`.#Incorrecto. El lexer no verifica ningún tipo. Clasificaría `number` como un token, pero no tiene información sobre la compatibilidad de tipos.
@@ -87,7 +87,7 @@ console.log(y.length);
 ####Este es un error **semántico dinámico**: la forma es correcta, la semántica estática puede no detectarlo (sin `strictNullChecks`), y el error real ocurre en **tiempo de ejecución** al acceder a `.length` sobre `undefined`.
 }
 
-::TP02-Q09-propiedad-escritura::[markdown]Un lenguaje tiene la propiedad que *"minimiza el esfuerzo del programador al escribir código"* e incluye constructores expresivos que evitan el código repetitivo. ¿Cuál propiedad sintáctica describe esto? {
+::TP02-Q09-propiedad-escritura::[markdown]Un lenguaje tiene la propiedad de que *"minimiza el esfuerzo del programador al escribir código"* e incluye construcciones expresivas que evitan el código repetitivo. ¿Cuál propiedad sintáctica describe esto? {
 =Facilidad de escritura#Correcto. La facilidad de escritura busca que el lenguaje permita expresar ideas con el menor código necesario.
 ~Legibilidad#La legibilidad busca que el código sea fácil de *leer y comprender*, no necesariamente de *escribir*. Python prioriza legibilidad explícitamente.
 ~Carencia de ambigüedad#Garantiza una única interpretación válida para cada construcción. No está directamente relacionada con el esfuerzo de escritura.
@@ -159,7 +159,7 @@ console.log(y.length);
 
 ¿Cuántos **símbolos no-terminales distintos** tiene esta gramática? {
 =5 (`<assign>`, `<id>`, `<expr>`, `<term>`, `<factor>`)#Correcto. Los cinco no-terminales son exactamente los símbolos que aparecen como LHS en alguna producción.
-~3 (`<id>`, `<expr>`, `<term>`)#Incorrectos: faltan `<assign>` (símbolo inicial) y `<factor>`, ambos definidos con producciones propias.
+~3 (`<id>`, `<expr>`, `<term>`)#Incorrecto: faltan `<assign>` (símbolo inicial) y `<factor>`, ambos definidos con producciones propias.
 ~7#Hay que contar los símbolos entre `< >` sin repetir. Hay exactamente 5 distintos.
 ~4 (`<assign>`, `<expr>`, `<term>`, `<factor>`)#`<id>` también es un no-terminal — tiene su propia regla de producción: `<id> ::= A | B | C`.
 ####Los **no-terminales** son todos los símbolos que aparecen como **LHS** de alguna producción. En G1: `<assign>`, `<id>`, `<expr>`, `<term>`, `<factor>` \= **5 no-terminales**.
@@ -298,7 +298,7 @@ console.log(y.length);
 ::TP02-Q31-ebnf-if-else::[markdown]La regla EBNF `stmt ::= 'if' '(' expr ')' stmt ['else' stmt] | id ':=' expr` describe: {
 =Un `if` donde el bloque `else` es **opcional** (puede estar o no)#Correcto. `['else' stmt]` usa corchetes — el else aparece 0 o 1 vez. Un `if` sin `else` es válido según esta regla.
 ~Un `if` donde el `else` es **obligatorio** siempre#Si el `else` fuera obligatorio, se escribiría sin corchetes: `'if' '(' expr ')' stmt 'else' stmt`.
-~Puede haber **múltiples bloques** `else` consecutivos#Para múltiples, se usaría llaves: `\{'else' stmt\}`. Los corchetes permiten solo 0 o 1 ocurrencia.
+~Puede haber **múltiples bloques** `else` consecutivos#Para múltiples, se usarían llaves: `\{'else' stmt\}`. Los corchetes permiten solo 0 o 1 ocurrencia.
 ~La expresión entre paréntesis es opcional#Los `'('` y `')'` en la regla son terminales literales (no metasímbolos). Son obligatorios según la regla.
 ####`['else' stmt]` \= el bloque else aparece **cero o una vez**. Esta regla modela exactamente el if de la mayoría de los lenguajes: el `else` es siempre optativo.
 }
@@ -352,7 +352,7 @@ console.log(y.length);
 ~BNF estricto sin ninguna extensión#La gramática de Python usa `*`, `+`, `?` y agrupaciones — extensiones típicas de EBNF. No es BNF puro.
 ~XML Schema (XSD)#XML Schema describe documentos XML. No es una notación para gramáticas de lenguajes de programación.
 ~JSON Schema#JSON Schema valida documentos JSON, no describe gramáticas de lenguajes de programación.
-####La gramática oficial de Python (en `docs.python.org/3/reference/grammar.html`) usa una notación esencialmente **EBNF extendida**. Python 3.9+ migró a PEG (Parsing Expression Grammar), que es otra extensión de EBNF.
+####La gramática oficial de Python (en `docs.python.org/3/reference/grammar.html`) usa una notación esencialmente **EBNF extendida**. Python fue uno de los primeros lenguajes en publicar su gramática formal oficialmente. Python 3.9+ migró a PEG (Parsing Expression Grammar), que es otra extensión de EBNF.
 }
 
 ::TP02-Q38-fases-compilador-tsc::[markdown]El compilador `tsc` de TypeScript realiza las siguientes fases. ¿Cuál es el **orden correcto**? {

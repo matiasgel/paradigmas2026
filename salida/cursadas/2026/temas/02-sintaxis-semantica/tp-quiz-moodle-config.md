@@ -39,7 +39,7 @@
 
 ## Review options (revisión por franja)
 
-| Franja | Right answer | Feedback específico | Feedback general | Puntaje |
+| Franja | Respuesta correcta | Feedback específico | Feedback general | Puntaje |
 |--------|-------------|---------------------|-----------------|---------|
 | **Inmediatamente después** | No | Sí | Sí | Sí |
 | **Mientras el quiz está abierto** | No | Sí | Sí | Sí |
@@ -88,7 +88,7 @@
 - [ ] Tiempo límite configurado: 60 minutos.
 - [ ] Shuffle activado para preguntas y opciones.
 - [ ] Calificación de aprobación configurada.
-- [ ] Hacer un **preview** del quiz como estudiante para verificar el formateo.
+- [ ] Hacer un **preview** del quiz como estudiante para verificar la visualización.
 
 ---
 
