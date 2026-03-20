@@ -4,7 +4,7 @@
 **Institución:** Universidad Nacional de Tierra del Fuego — Instituto IDEI  
 **Tema:** 02 — Sintaxis y Semántica de Lenguajes  
 **Semana / Clase:** Semana 1, Clase 2 de 2  
-**Agente editor:** Dra. Sofía (study-guide-writer)  
+**Docente:** Matías Gel  
 **Fecha:** 2026-03-20
 
 ---
@@ -19,7 +19,7 @@ En este tema vas a responder dos preguntas centrales:
 La idea clave es que todo lenguaje de programación se define por dos capas:
 
 > **"Un lenguaje de programación es una notación formal para describir algoritmos a ser ejecutados por computadoras."**  
-> — Material de cátedra UNTDF [02 sintaxis.txt]
+> — Cátedra Paradigmas y Lenguajes de Programación, UNTDF
 
 - **Sintaxis**: conjunto de reglas que determinan cuándo un programa está bien formado, considerando solo el punto de vista de la representación.
 - **Semántica**: le asigna significado a los programas sintácticamente correctos.
@@ -76,12 +76,12 @@ La definición de un lenguaje permite determinar:
 
 **Semántica** es el significado de expresiones, sentencias y unidades de programa.
 
-Ejemplo canónico [02 sintaxis.txt]:
+Ejemplo canónico:
 
 - **Sintaxis** de la sentencia condicional en C: `if (<expresión>) <sentencia>`
 - **Semántica** de esa sentencia: *"Si el valor actual de la expresión es cierto, se ejecuta la sentencia siguiente."*
 
-#### 4.1.2 Criterios de una buena sintaxis [02 sintaxis.txt]
+#### 4.1.2 Criterios de una buena sintaxis
 
 | Criterio | Qué garantiza |
 |----------|---------------|
@@ -103,13 +103,13 @@ Esta tabla es clave: conviene memorizarla y poder reproducirla con ejemplos prop
 
 ---
 
-### 4.2 Estructura léxica: del texto a los tokens *(sección secundaria)*
+### 4.2 Estructura léxica: del texto a los tokens
 
 **Ver filminas:** F-07 a F-11.
 
 Antes de que el parser pueda analizar la estructura gramatical de un programa, el texto fuente debe transformarse en unidades mínimas. Ese trabajo lo hace el **lexer (analizador léxico)**.
 
-#### 4.2.1 Elementos sintácticos de un LP [02 sintaxis.txt]
+#### 4.2.1 Elementos sintácticos de un LP
 
 Todo lenguaje define cómo se construyen las siguientes categorías:
 
@@ -123,7 +123,7 @@ Todo lenguaje define cómo se construyen las siguientes categorías:
 - **Expresiones**: combinaciones de operandos y operadores que producen un valor.
 - **Sentencias**: unidades de ejecución del programa.
 
-#### 4.2.2 Lexemas y tokens [02 sintaxis.txt; Sebesta, Cap. 4]
+#### 4.2.2 Lexemas y tokens
 
 Dos conceptos fundamentales:
 
@@ -143,7 +143,7 @@ Ejemplo clásico para la sentencia `indice = 5 * contador + 1;`:
 | `1` | constante_entera |
 | `;` | delimitador |
 
-Otro ejemplo de Sebesta [185-220.txt, secc. 4.2] para `result = oldsum - value / 100;`:
+Otro ejemplo (Sebesta, Cap. 4) para `result = oldsum - value / 100;`:
 
 | Lexema | Token |
 |--------|-------|
@@ -156,7 +156,7 @@ Otro ejemplo de Sebesta [185-220.txt, secc. 4.2] para `result = oldsum - value /
 | `100` | INT_LIT |
 | `;` | SEMICOLON |
 
-#### 4.2.3 El analizador léxico [Sebesta, Cap. 4 §4.1]
+#### 4.2.3 El analizador léxico
 
 El lexer es esencialmente un **reconocedor de patrones**. Su función es:
 
@@ -166,7 +166,7 @@ El lexer es esencialmente un **reconocedor de patrones**. Su función es:
 4. Clasificar lexemas en tokens.
 5. Devolver tokens de a uno al parser.
 
-Sebesta explica por qué el análisis léxico se separa del sintáctico con tres razones [185-220.txt, secc. 4.1]:
+Sebesta explica por qué el análisis léxico se separa del sintáctico con tres razones (Cap. 4):
 
 1. **Simplicidad**: las técnicas de análisis léxico son menos complejas que las sintácticas.
 2. **Eficiencia**: permite optimizar el lexer por separado, ya que consume una porción significativa del tiempo de compilación.
@@ -174,7 +174,7 @@ Sebesta explica por qué el análisis léxico se separa del sintáctico con tres
 
 ---
 
-### 4.3 Gramáticas formales: BNF y EBNF *(sección principal)*
+### 4.3 Gramáticas formales: BNF y EBNF
 
 **Ver filminas:** F-12 a F-20.
 
@@ -186,15 +186,15 @@ Describir la sintaxis de un lenguaje en lenguaje natural (castellano, inglés) p
 
 > FORTRAN fue originalmente definido con reglas en inglés.  
 > Python tiene su gramática oficial publicada como BNF en docs.python.org.  
-> [Slides cátedra UNTDF 2025, 02 sintaxis.txt]
+> — Cátedra Paradigmas y Lenguajes de Programación, UNTDF
 
-Usando BNF, como señala Sebesta, se obtienen al menos tres ventajas [185-220.txt]:
+Usando BNF, como señala Sebesta (Cap. 4), se obtienen al menos tres ventajas:
 
 1. Las descripciones BNF son **claras y concisas**, tanto para humanos como para herramientas de software.
 2. La descripción BNF puede usarse como **base directa para el analizador sintáctico**.
 3. Las implementaciones basadas en BNF son **fáciles de mantener** por su modularidad.
 
-#### 4.3.2 Gramáticas libres de contexto — clasificación de Chomsky [02 sintaxis.txt]
+#### 4.3.2 Gramáticas libres de contexto — clasificación de Chomsky
 
 En 1959, Chomsky propuso una clasificación de las gramáticas formales. Los lenguajes de programación utilizan **gramáticas libres de contexto**: un conjunto de reglas que definen todas las construcciones válidas de un lenguaje.
 
@@ -210,7 +210,7 @@ Formalmente, una gramática se define como la tupla **(N, T, S, P)**:
 **Símbolos no terminales** son abstracciones: representan categorías sintácticas que se deben expandir con más reglas.  
 **Símbolos terminales** son los lexemas reales del programa: no se expanden más.
 
-#### 4.3.3 El metalenguaje BNF: metasímbolos y estructura de reglas [02 sintaxis.txt]
+#### 4.3.3 El metalenguaje BNF: metasímbolos y estructura de reglas
 
 BNF (Backus-Naur Form) es el metalenguaje estándar para escribir gramáticas formales. Sus metasímbolos son:
 
@@ -234,7 +234,7 @@ Los terminales se escriben tal y como son (sin `< >`).
 - **LHS** (*Left-Hand Side*): el símbolo no terminal que se está definiendo.
 - **RHS** (*Right-Hand Side*): la definición, que puede combinar terminales y no terminales.
 
-Ejemplo de regla simple [02 sintaxis.txt]:
+Ejemplo de regla simple:
 
 ```text
 <assign> ::= <var> = <expression>
@@ -252,7 +252,7 @@ Ejemplo de la sentencia `if` en Pascal con alternativas:
 Ambas reglas para `<enunc_if>` pueden escribirse en una sola gracias al símbolo `|`.  
 Se lee: *"`<enunc_if>` puede ser un `if-then` o un `if-then-else`.*"
 
-#### 4.3.4 Gramática de trabajo para los ejercicios [02 sintaxis.txt]
+#### 4.3.4 Gramática de trabajo para los ejercicios
 
 Vamos a trabajar con la siguiente gramática a lo largo de toda esta sección. Es el ejemplo canónico de la cátedra:
 
@@ -273,7 +273,7 @@ Descripción informal:
 
 Esta gramática describe un mini-lenguaje. El objetivo no es realismo sino que derivar sea manejable.
 
-#### 4.3.5 Derivaciones: del símbolo inicial a la cadena final [02 sintaxis.txt]
+#### 4.3.5 Derivaciones: del símbolo inicial a la cadena final
 
 Una **derivación** es el proceso de generar una cadena aplicando reglas de la gramática, empezando por el símbolo inicial y reemplazando no terminales hasta que toda la cadena son terminales.
 
@@ -283,7 +283,7 @@ Notación:
 - Cada línea reemplaza **exactamente un** no terminal por una de sus definiciones.
 - Cada string intermedio (incluyendo el inicial `<assign>`) se llama **forma sentencial** (*sentential form*).
 
-**Derivación completa de `A := B * (A + C)`** [02 sintaxis.txt]:
+**Derivación completa de `A := B * (A + C)`:**
 
 ```text
 <assign>
@@ -302,7 +302,7 @@ Todos los símbolos son ahora terminales: **la derivación terminó**.
 
 > 💡 **Estrategia de estudio:** antes de leer la solución, intentá derivar `A := B * (A + C)` solo con la gramática y el símbolo inicial. Verificá que cada `⇒` corresponde a una producción válida.
 
-#### 4.3.6 Árboles sintácticos (*parse trees*) [02 sintaxis.txt]
+#### 4.3.6 Árboles sintácticos (*parse trees*)
 
 Un **árbol sintáctico** representa la estructura jerárquica de la derivación. Es la misma información que la secuencia de `⇒`, pero organizada de forma visual.
 
@@ -332,13 +332,13 @@ Reglas del árbol:
 
 > 💡 **Para estudiar:** dibujá el árbol de forma independiente a partir de la derivación del punto anterior. El árbol y la derivación deben ser consistentes entre sí.
 
-#### 4.3.7 Gramáticas ambiguas [02 sintaxis.txt; Sebesta Cap. 3]
+#### 4.3.7 Gramáticas ambiguas
 
 > **Una gramática es ambigua si permite construir dos o más árboles de derivación distintos para la misma cadena.**
 
 Esto implica que hay dos significados posibles para el mismo texto. En un compilador, la ambigüedad es un **defecto de diseño**: el compilador no puede elegir de forma única el árbol correcto.
 
-**Ejemplo con `J := 1 + 2 * 3`** [02 sintaxis.txt]:
+**Ejemplo con `J := 1 + 2 * 3`:**
 
 Supongamos esta gramática simplificada para expresiones:
 
@@ -396,7 +396,7 @@ Ahora `*` tiene mayor precedencia porque está más profundo en la jerarquía: p
 
 ---
 
-### 4.4 EBNF: notación extendida para gramáticas más legibles [02 sintaxis.txt]
+### 4.4 EBNF: notación extendida para gramáticas más legibles
 
 **Ver filminas:** F-19, F-20.
 
@@ -408,7 +408,7 @@ EBNF (Extended BNF) agrega tres abreviaciones sobre BNF, sin aumentar la potenci
 | `{x}` o `{x*}` | `x` se repite 0 o más veces | `<A> ::= <A> x \| ε` |
 | `\|` dentro de `[]` | alternativa en contexto de opcionalidad | |
 
-#### Ejemplo: valor con signo opcional [02 sintaxis.txt]
+#### Ejemplo: valor con signo opcional
 
 En BNF puro necesitarías:
 
@@ -427,7 +427,7 @@ En EBNF se simplifica:
 
 Mucho más legible. El `[<signo>]` dice: el signo puede estar o no.
 
-#### 4.4.1 Gramática EBNF completa para un LP simple [02 sintaxis.txt]
+#### 4.4.1 Gramática EBNF completa para un LP simple
 
 Este es el ejemplo más completo del material de cátedra. Leelo con cuidado porque aparece tanto en las filminas como en este ejercicio:
 
@@ -485,7 +485,7 @@ Ambas describen lo mismo; EBNF evita la recursión izquierda en las reglas de `<
 
 ---
 
-### 4.5 Diagramas de sintaxis (*railroad diagrams*) *(sección secundaria)*
+### 4.5 Diagramas de sintaxis (*railroad diagrams*)
 
 **Ver filminas:** F-21, F-22, F-23.
 
@@ -510,14 +510,14 @@ Lectura:
 - Camino superior: `if <expr> { ... }` (sin else).
 - Camino inferior: `if <expr> { ... } else { ... }`.
 
-Dos usos principales [02 sintaxis.txt]:
+Dos usos principales:
 
 1. Ayuda al programador a saber cómo escribir un programa sintácticamente correcto.
 2. Se utiliza para determinar cuándo un programa es sintácticamente correcto (lo que hace el compilador).
 
 ---
 
-### 4.6 Semántica: estática y dinámica *(sección secundaria)*
+### 4.6 Semántica: estática y dinámica
 
 **Ver filminas:** F-24 a F-28.
 
@@ -547,7 +547,7 @@ Esto es semántica estática en acción.
 
 Describe el comportamiento **en tiempo de ejecución**.
 
-Existen tres enfoques formales de descripción [Sebesta, Cap. 3 §§3.4–3.5]:
+Existen tres enfoques formales de descripción (Sebesta, Cap. 3):
 
 | Enfoque | Idea central | Referencia |
 |---------|--------------|------------|
@@ -559,7 +559,7 @@ En este tema vemos solo la panorámica. El tratamiento formal completo queda fue
 
 ---
 
-### 4.7 Pipeline compilador/intérprete y vínculo con IA *(sección secundaria)*
+### 4.7 Pipeline compilador/intérprete y vínculo con IA
 
 **Ver filminas:** F-29 a F-34.
 
@@ -811,11 +811,11 @@ Texto fuente
 
 ## 9. Referencias y lecturas recomendadas
 
-### Fuentes del tema (material disponible en el curso)
+### Bibliografía obligatoria
 
-- **Material de cátedra UNTDF 2025**: slides "Sintaxis de Lenguajes de Programación" → `material/02-sintaxis/02 sintaxis.pdf` / `02 sintaxis.txt`. Fuente principal para BNF, EBNF, derivaciones, árboles y diagramas de sintaxis.
-- **Sebesta, R.W.** (2019). *Concepts of Programming Languages*, 12ª ed., Addison Wesley. Capítulo 3 (gramáticas formales, BNF, ambigüedad, semántica estática y dinámica) y Capítulo 4 (análisis léxico y sintáctico) → `material/02-sintaxis/185-220.pdf` / `185-220.txt`.
-- **Gabbrielli, M. & Martini, S.** (2023). *Programming Languages: Principles and Paradigms*. Capítulo 4 (nombres, entorno y binding) → `material/02-sintaxis/083-105.pdf` / `083-105.txt`. Relevante como puente hacia el Tema 09.
+- **Material de cátedra UNTDF 2025**: Slides «Sintaxis de Lenguajes de Programación». Fuente principal para BNF, EBNF, derivaciones, árboles y diagramas de sintaxis.
+- **Sebesta, R.W.** (2019). *Concepts of Programming Languages*, 12ª ed., Addison Wesley. Capítulo 3 (gramáticas formales, BNF, ambigüedad, semántica estática y dinámica) y Capítulo 4 (análisis léxico y sintáctico).
+- **Gabbrielli, M. & Martini, S.** (2023). *Programming Languages: Principles and Paradigms*. Capítulo 4 (nombres, entorno y binding). Puente hacia el Tema 09.
 
 ### Lecturas recomendadas para profundizar
 
@@ -827,7 +827,7 @@ Texto fuente
 
 ## 10. Límites de alcance de esta guía
 
-Para mantener coherencia con el diseño aprobado del tema (ver `diseno.md`):
+Para mantener coherencia con el alcance definido para el tema:
 
 - No se desarrolla la implementación de parsers LL/LR ni la construcción algorítmica de analizadores.
 - No se profundizan los formalismos de semántica operacional, denotacional ni axiomática más allá de la síntesis conceptual.
