@@ -11,7 +11,7 @@
 > **Clase:** 2 de 2 — Semana 1
 > **Perfil docente:** profesor-teorico
 > **Lenguaje principal:** TypeScript
-> **Input:** `salida/cursadas/2026/temas/02-sintaxis-semantica/diseno.md` (REDISEÑO — pendiente de aprobación)
+> **Input:** `salida/cursadas/2026/temas/02-sintaxis-semantica/diseno.md` (REDISEÑO — APROBADO)
 > **Workflow:** topic-cycle / Step 4
 
 ---
