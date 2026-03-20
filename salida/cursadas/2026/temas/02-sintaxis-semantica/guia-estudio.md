@@ -646,7 +646,7 @@ Gramática:
 ⇒ A := B * (A + C)            (producción 2: <id> → C)
 ```
 
-**Chequeo:** todos los símbolos son terminales. La derivación está completa.
+**Verificación:** todos los símbolos son terminales. La derivación está completa.
 
 **Árbol resultante:**
 
