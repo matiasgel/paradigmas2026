@@ -1,0 +1,380 @@
+// TP 02: Sintaxis y Semántica de Lenguajes
+// Quiz — BNF, EBNF y Análisis de Sintaxis (40 preguntas)
+// Importar en Moodle 5: Banco de preguntas > Importar > Formato GIFT
+// Encoding: UTF-8 sin BOM
+// Agente: Aux. Valeria 📝 (tp-designer)
+// Fecha: 2026-03-20
+// Trazabilidad: minuta.md Bloques 1-4 + Bloque 6
+
+$CATEGORY: TP/02-sintaxis-semantica
+
+// ============================================================
+// SECCIÓN A — Análisis Léxico (5 preguntas: Q01–Q05)
+// ============================================================
+
+::TP02-Q01-token-const::[markdown]En la declaración TypeScript `const x: number = 42;`, ¿a qué categoría de token pertenece la cadena `const`? {
+=Palabra reservada (*keyword*)#Correcto. `const` es parte del vocabulario fijo del lenguaje — no puede usarse como nombre de variable.
+~Identificador#Un identificador es un nombre definido por el programador (como `x` o `contador`). `const` no puede ser redefinido por el usuario.
+~Operador#Los operadores realizan operaciones sobre valores (`+`, `-`, `*`). `const` no opera sobre nada — introduce una declaración.
+~Delimitador#Los delimitadores separan construcciones sintácticas (`;`, `,`, `(`, `)`). `const` introduce una declaración, no separa nada.
+####`const` es una **palabra reservada** del lenguaje. El lexer la reconoce como un token de categoría fija, independientemente del contexto donde aparezca. No puede ser reutilizada como nombre de variable.
+}
+
+::TP02-Q02-lexema-token::[markdown]En la tabla de tokenización de `indice = 5 * contador + 1`, ¿cuál de las siguientes opciones es un **lexema** (y no un token)? {
+=`indice`#Correcto. `indice` es la cadena de texto concreta que el lexer encontró en el código fuente. Su token (categoría) sería `identificador`.
+~`identificador`#`identificador` es el nombre de una **categoría de token**, no una cadena concreta. Es la etiqueta abstracta que clasifica a `indice`, `contador`, etc.
+~`operador`#`operador` es una categoría de token. La cadena concreta (lexema) podría ser `=`, `*` o `+`.
+~`constante_entera`#`constante_entera` es una categoría de token. Sus lexemas concretos son `5` o `1`.
+####El **lexema** es la cadena de caracteres tal como aparece en el código fuente. El **token** es la etiqueta abstracta que la clasifica. Un mismo token (`identificador`) puede tener miles de lexemas distintos.
+}
+
+::TP02-Q03-lexer-descarta::[markdown]¿Qué elementos del código fuente descarta el analizador léxico (lexer) antes de enviar tokens al parser? {
+=Espacios en blanco y comentarios#Correcto. El lexer elimina el "ruido" visual que no lleva información sintáctica. Excepción: lenguajes con indentación significativa como Python.
+~Identificadores de variables#Los identificadores son tokens válidos que el lexer *sí* envía al parser, clasificados como `identificador`.
+~Palabras reservadas del lenguaje#Las palabras reservadas (`if`, `while`, `const`) son tokens de alta prioridad que el lexer conserva y envía al parser.
+~Operadores aritméticos#Los operadores son tokens que el lexer conserva y clasifica (ej.: `operador_suma`, `operador_mult`).
+####El lexer actúa como filtro de ruido: descarta espacios, tabulaciones y comentarios porque no afectan la estructura del programa. Solo envía al parser los tokens "con significado" para el análisis sintáctico.
+}
+
+::TP02-Q04-contar-tokens::[markdown]Analizando la expresión `result = oldsum - value / 100;`, ¿cuántos tokens produce el lexer? {
+=8#Correcto: `result`(id), `=`(op), `oldsum`(id), `-`(op), `value`(id), `/`(op), `100`(int), `;`(punct) \= 8 tokens.
+~5#Incompleto. Hay que contar cada token individualmente, incluidos operadores y el punto y coma.
+~6#Incompleto. Los operadores `-`, `/` son tokens separados, y el `;` también es un token de puntuación.
+~7#Casi. Asegurate de contar el punto y coma final `;` como token de puntuación.
+####Cada elemento con significado independiente genera un token: 3 identificadores + 3 operadores + 1 entero + 1 punto y coma \= **8 tokens**.
+}
+
+::TP02-Q05-funcion-lexer::[markdown]Un estudiante afirma: *"El lexer determina si una variable fue declarada con el tipo correcto antes de usarla."* ¿Es correcto? {
+=No. El lexer solo clasifica cadenas en categorías de tokens; no tiene información sobre el sistema de tipos ni sobre declaraciones.#Correcto. El lexer no conoce el concepto de tipo. La verificación de tipos es semántica estática, responsabilidad del type checker.
+~Sí, el lexer verifica tipos en tiempo de compilación.#Incorrecto. El lexer no conoce el concepto de tipo. Solo convierte texto en tokens: `number` lo tokenizaría como `identificador_de_tipo`, pero no sabe si se usa correctamente.
+~Sí, pero solo para tipos primitivos como `number` o `string`.#Incorrecto. El lexer no verifica ningún tipo. Clasificaría `number` como un token, pero no tiene información sobre la compatibilidad de tipos.
+~No. El lexer no analiza identificadores.#La primera parte es correcta (no verifica tipos), pero la segunda es falsa: el lexer sí analiza identificadores y los clasifica como tokens `identificador`.
+####**Responsabilidades del lexer:** reconocer y clasificar tokens. **Fuera del lexer:** verificar tipos (type checker), estructura correcta (parser), comportamiento en ejecución (runtime).
+}
+
+// ============================================================
+// SECCIÓN B — Sintaxis vs. Semántica (5 preguntas: Q06–Q10)
+// ============================================================
+
+::TP02-Q06-error-sintactico::[markdown]El fragmento TypeScript `if true \{ return 1; \}` (sin paréntesis alrededor de `true`) genera un error en `tsc`. ¿Qué tipo de error es? {
+=Sintáctico — el parser no puede construir el árbol porque la forma esperada es `if (expr) stmt`#Correcto. La regla BNF del `if` requiere paréntesis. Sin ellos, el árbol sintáctico no puede construirse. Falla la **forma**.
+~Semántico estático — `true` tiene tipo incorrecto para la condición#Incorrecto. El tipo `boolean` de `true` es correcto para una condición. El problema no es el tipo sino la forma: faltan los `( )`.
+~Semántico dinámico — `true` falla en tiempo de ejecución#Incorrecto. Este error se detecta antes de ejecutar, durante el análisis sintáctico, no en runtime.
+~Léxico — `true` no es un lexema válido en TypeScript#Incorrecto. `true` es un lexema completamente válido (literal booleano). El lexer lo reconoce sin problema.
+####La sintaxis define la **forma** correcta de las construcciones. El `if` de TypeScript requiere `if (expr) stmt`. Faltan los paréntesis → el **parser** rechaza la forma antes de construir el árbol.
+}
+
+::TP02-Q07-error-semantico-estatico::[markdown]La línea `const x: number = "hola";` en TypeScript produce el error: *Type 'string' is not assignable to type 'number'*. ¿Qué componente del compilador lo detecta? {
+=El type checker (semántica estática)#Correcto. El árbol sintáctico de esta expresión es perfectamente válido. Es el type checker quien calcula los atributos de tipo y detecta la incompatibilidad.
+~El lexer#El lexer clasifica `"hola"` como `string_literal` y `number` como un token de tipo. No sabe nada de incompatibilidad de tipos.
+~El parser#El parser construye el árbol sintáctico: una declaración con tipo anotado y un inicializador. La estructura es válida — el árbol se construye sin errores.
+~El runtime de JavaScript (Node.js / V8)#Para cuando llega al runtime, TypeScript ya habría rechazado la compilación. Y en JavaScript puro la asignación no causaría error en runtime.
+####El árbol sintáctico de `const x: number = "hola"` es correcto. El error lo detecta el **type checker** al verificar que el tipo del inicializador (`string`) sea compatible con el tipo declarado (`number`). Esto es **semántica estática**.
+}
+
+::TP02-Q08-error-semantico-dinamico::[markdown]Analizá el siguiente código TypeScript compilado y ejecutado (sin `strictNullChecks`):
+
+```typescript
+let y: string | undefined = undefined;
+console.log(y.length);
+```
+
+¿Qué tipo de error genera y cuándo ocurre? {
+=Semántico dinámico — falla en tiempo de ejecución con `TypeError: Cannot read properties of undefined`#Correcto. La estructura sintáctica es válida. Sin `strictNullChecks`, el type checker no lo detecta. El error ocurre en runtime.
+~Sintáctico — el parser rechaza `y.length` cuando `y` puede ser `undefined`#Incorrecto. `.length` sobre un identificador es sintácticamente válido. El parser construye el árbol sin error.
+~Semántico estático — el type checker siempre rechaza esto en tiempo de compilación#Solo con `strictNullChecks` activado. Sin esa opción, TypeScript acepta la operación. El error fundamental es de runtime.
+~Léxico — `undefined` no es reconocido por el lexer#Incorrecto. `undefined` es un lexema válido en JavaScript/TypeScript. El lexer lo tokeniza correctamente.
+####Este es un error **semántico dinámico**: la forma es correcta, la semántica estática puede no detectarlo (sin `strictNullChecks`), y el error real ocurre en **tiempo de ejecución** al acceder a `.length` sobre `undefined`.
+}
+
+::TP02-Q09-propiedad-escritura::[markdown]Un lenguaje tiene la propiedad que *"minimiza el esfuerzo del programador al escribir código"* e incluye constructores expresivos que evitan el código repetitivo. ¿Cuál propiedad sintáctica describe esto? {
+=Facilidad de escritura#Correcto. La facilidad de escritura busca que el lenguaje permita expresar ideas con el menor código necesario.
+~Legibilidad#La legibilidad busca que el código sea fácil de *leer y comprender*, no necesariamente de *escribir*. Python prioriza legibilidad explícitamente.
+~Carencia de ambigüedad#Garantiza una única interpretación válida para cada construcción. No está directamente relacionada con el esfuerzo de escritura.
+~Modularidad#Se refiere a dividir el programa en componentes independientes. No es una propiedad de la sintaxis del lenguaje.
+####**Criterios de una buena sintaxis:** legibilidad (fácil de leer), facilidad de escritura (fácil de escribir), carencia de ambigüedad (una sola interpretación). Hay trade-offs: Perl maximizó facilidad de escritura a costa de legibilidad.
+}
+
+::TP02-Q10-parser-vs-typechecker::[markdown]¿Qué tipo de error detecta el **parser** pero el **type checker** no? {
+=Un paréntesis de cierre faltante: `const x = (1 + 2;`#Correcto. El parser verifica la **forma** del programa. Un paréntesis faltante rompe la estructura definida por la gramática.
+~El uso de una variable antes de declararla: `x = 5; let x: number;`#Este es un error semántico estático detectado por el análisis de scope/type checker, no por el parser. La forma del programa puede ser gramaticalmente válida.
+~La suma de un `number` con un `string` sin conversión explícita#Incompatibilidad de tipos — responsabilidad del type checker (semántica estática), no del parser.
+~Una división por cero: `const r = 1 / 0;`#La división por cero es un error de semántica dinámica que puede ocurrir en runtime. La estructura es sintácticamente válida.
+####El **parser** verifica la **estructura formal** del programa usando las reglas de la gramática. Si el parser falla, el type checker ni siquiera se ejecuta. El type checker opera sobre el árbol ya construido para verificar propiedades semánticas.
+}
+
+// ============================================================
+// SECCIÓN C — BNF: Conceptos y Lectura (7 preguntas: Q11–Q17)
+// ============================================================
+
+::TP02-Q11-metasimbolo-bnf::[markdown]En la notación BNF, el metasímbolo `::=` se interpreta como: {
+="se define como"#Correcto. Las reglas BNF tienen la forma `<no-terminal> ::= definición`. El `::=` separa lo definido (LHS) de su definición (RHS).
+~"puede derivar en" (símbolo de derivación directa)#El símbolo de derivación directa es `⇒` (flecha doble), usado en *secuencias de derivación*. `::=` es el símbolo de *definición* en la gramática.
+~"es equivalente a" (relación bidireccional)#`::=` es una definición unidireccional: el LHS se *define como* el RHS. No implica equivalencia bidireccional.
+~"es opcional"#La opcionalidad en BNF se expresa con alternativas incluyendo la cadena vacía. `::=` es solo el símbolo de definición, sin implicar opcionalidad.
+####En BNF: `<LHS> ::= RHS` significa "*LHS* **se define como** *RHS*". El LHS siempre es un único no-terminal. El RHS es la expansión posible para ese no-terminal.
+}
+
+::TP02-Q12-identificar-no-terminales::[markdown]En la regla BNF: `<if_stmt> ::= if ( <expr> ) then <stmt>`, ¿cuáles son los **no-terminales**? {
+=`<if_stmt>`, `<expr>` y `<stmt>`#Correcto. Los no-terminales están encerrados entre `< >`. Son símbolos que se expanden mediante otras reglas de la gramática.
+~`if`, `then`, `(`, `)`#Estos son **terminales** — tokens literales que aparecen exactamente en el código fuente tal como están escritos.
+~Solo `<if_stmt>`#`<if_stmt>` es el no-terminal del LHS, pero `<expr>` y `<stmt>` en el RHS también son no-terminales y deben expandirse.
+~`<expr>` y `<stmt>` solamente#`<if_stmt>` también es un no-terminal — es precisamente el símbolo que esta regla define.
+####**No-terminales:** entre `< >` — se expanden mediante reglas. **Terminales:** texto literal que aparece exactamente en el código. Esta regla define `<if_stmt>` usando 4 terminales y 2 no-terminales en el RHS.
+}
+
+::TP02-Q13-identificar-terminales::[markdown]En la regla BNF: `<if_stmt> ::= if ( <expr> ) then <stmt>`, ¿cuáles son los **terminales** (tokens literales)? {
+=`if`, `(`, `)`, `then`#Correcto. Estos cuatro símbolos son literales — aparecen exactamente en el código fuente, escritos por el programador.
+~`<expr>` y `<stmt>`#`<expr>` y `<stmt>` son **no-terminales** — se expanden mediante otras reglas. No aparecen literalmente en el código.
+~`<if_stmt>`, `<expr>` y `<stmt>`#Todos los que están entre `< >` son no-terminales, incl. `<if_stmt>`. Los terminales no usan ángulos.
+~No hay terminales en esta regla#Incorrecto. `if`, `(`, `)`, `then` son terminales — aparecerán literalmente en el código fuente final.
+####Los **terminales** son los "tokens hoja" — lo que queda después de todas las expansiones. En esta regla: `if`, `(`, `)`, `then` son terminales. Los no-terminales (`<expr>`, `<stmt>`) se expandirán hasta llegar a terminales.
+}
+
+::TP02-Q14-gramatica-libre-contexto::[markdown]Una gramática libre de contexto (tipo 2 en la jerarquía de Chomsky) tiene producciones de la forma: {
+=A → α, donde A es exactamente un único no-terminal y α es cualquier cadena de terminales y/o no-terminales#Correcto. La restricción clave es que el **LHS** sea siempre un único no-terminal. El RHS puede ser cualquier combinación.
+~A B → α, donde el LHS puede tener múltiples símbolos#Eso describe gramáticas sensibles al contexto (tipo 1), donde el contexto del no-terminal afecta qué producciones se aplican.
+~A → a, donde a es un único terminal#Eso describe gramáticas regulares (tipo 3), que generan los lenguajes reconocibles por autómatas finitos deterministas.
+~A → α | ε, donde α debe incluir explícitamente la cadena vacía#La posibilidad de producir ε existe en gramáticas LC (son ε-producciones), pero la *forma general* del LHS sigue siendo un único no-terminal A.
+####Las gramáticas de los lenguajes de programación son **libres de contexto**: el LHS es siempre **un único no-terminal**, y las reglas se aplican sin importar el contexto de ese símbolo. Por eso BNF/EBNF es suficiente para describirlos.
+}
+
+::TP02-Q15-simbolo-inicial::[markdown]El símbolo que aparece en el LHS de la **primera producción** de una gramática — representando el constructo más general — se denomina: {
+=Símbolo inicial (o axioma de la gramática)#Correcto. El símbolo inicial es el punto de partida de todas las derivaciones. En G1 es `<assign>`.
+~Terminal de base#Los terminales son símbolos hoja — nunca aparecen en el LHS de una producción. El símbolo inicial es siempre un no-terminal.
+~No-terminal recursivo#"Recursivo" es una propiedad que *puede* tener el símbolo inicial, pero no lo define. Todo símbolo inicial podría o no ser recursivo.
+~Producción de cierre#Las "producciones" son reglas de la gramática, no símbolos. Un símbolo y una producción son conceptos distintos.
+####El **símbolo inicial** (también llamado *axioma*) es el no-terminal raíz de la gramática. Toda derivación comienza aquí. En G1 es `<assign>`.
+}
+
+::TP02-Q16-no-terminales-G1::[markdown]En la **Gramática G1**:
+
+```
+<assign> ::= <id> := <expr>
+<id>     ::= A | B | C
+<expr>   ::= <expr> + <term> | <expr> - <term> | <term>
+<term>   ::= <term> * <factor> | <factor>
+<factor> ::= ( <expr> ) | <id>
+```
+
+¿Cuántos **símbolos no-terminales distintos** tiene esta gramática? {
+=5 (`<assign>`, `<id>`, `<expr>`, `<term>`, `<factor>`)#Correcto. Los cinco no-terminales son exactamente los símbolos que aparecen como LHS en alguna producción.
+~3 (`<id>`, `<expr>`, `<term>`)#Incorrectos: faltan `<assign>` (símbolo inicial) y `<factor>`, ambos definidos con producciones propias.
+~7#Hay que contar los símbolos entre `< >` sin repetir. Hay exactamente 5 distintos.
+~4 (`<assign>`, `<expr>`, `<term>`, `<factor>`)#`<id>` también es un no-terminal — tiene su propia regla de producción: `<id> ::= A | B | C`.
+####Los **no-terminales** son todos los símbolos que aparecen como **LHS** de alguna producción. En G1: `<assign>`, `<id>`, `<expr>`, `<term>`, `<factor>` \= **5 no-terminales**.
+}
+
+::TP02-Q17-terminal-en-G1::[markdown]Usando la Gramática G1, ¿cuál de los siguientes es un **terminal**? {
+=`:=`#Correcto. `:=` es el operador de asignación — aparece literalmente en las cadenas generadas y no tiene ninguna regla de producción asociada.
+~`<expr>`#`<expr>` es un no-terminal — aparece como LHS en una producción y se expande en otras formas.
+~`<assign>`#`<assign>` es el símbolo inicial — un no-terminal que no aparece en ninguna cadena terminal final.
+~`<factor>`#`<factor>` es un no-terminal — tiene su propia producción (`<factor> ::= ( <expr> ) | <id>`) y se expande.
+####Los **terminales** de G1 son: `:=`, `+`, `-`, `*`, `(`, `)`, `A`, `B`, `C`. Nunca aparecen como LHS de ninguna producción. Las cadenas del lenguaje de G1 están compuestas únicamente de estos terminales.
+}
+
+// ============================================================
+// SECCIÓN D — BNF: Derivaciones y Árboles (7 preguntas: Q18–Q24)
+// ============================================================
+
+::TP02-Q18-forma-sentencial::[markdown]En el contexto de las derivaciones BNF, una **forma sentencial** es: {
+=Una cadena mixta de terminales y no-terminales obtenida en un paso intermedio de la derivación#Correcto. Durante la derivación se generan cadenas intermedias con ambos tipos de símbolos, hasta llegar a la cadena final (solo terminales).
+~La cadena terminal final resultado de una derivación completa#Eso describe la *sentencia*, no la forma sentencial. Una sentencia es un caso especial de forma sentencial (sin no-terminales).
+~El símbolo inicial de la gramática#El símbolo inicial es el punto de partida (la primera forma sentencial), pero no la definición general del concepto.
+~Cualquier regla de producción de la gramática#Una producción define cómo expandir un no-terminal. La forma sentencial es el resultado de aplicar producciones al símbolo inicial.
+####Una **forma sentencial** es cualquier cadena derivable desde el símbolo inicial que puede tener terminales, no-terminales, o ambos. La **sentencia** (cadena del lenguaje) es la forma sentencial que ya no contiene no-terminales.
+}
+
+::TP02-Q19-primer-paso-derivacion::[markdown]Usando la Gramática G1, ¿cuál es el **único primer paso válido** de derivación comenzando desde `<assign>`? {
+=`<assign>` ⇒ `<id> := <expr>`#Correcto. `<assign>` tiene una única producción en G1. No hay alternativas posibles en este paso.
+~`<assign>` ⇒ `A := B`#Esto aplica múltiples producciones de una sola vez. Una derivación aplica exactamente **una** producción por paso.
+~`<assign>` ⇒ `<expr> := <id>`#El orden en G1 es `<id> := <expr>`, no `<expr> := <id>`. Las producciones son asimétricas y deben aplicarse tal como están.
+~`<assign>` ⇒ `<id> + <expr>`#`+` no aparece en la producción de `<assign>`. Una derivación solo puede aplicar producciones de la gramática tal como están definidas.
+####`<assign>` tiene una sola producción en G1: `<assign> ::= <id> := <expr>`. Por lo tanto, el **único primer paso** posible es `<assign>` ⇒ `<id> := <expr>`.
+}
+
+::TP02-Q20-produccion-en-paso2::[markdown]En esta derivación parcial usando G1:
+
+```
+<assign> ⇒ <id> := <expr> ⇒ A := <expr>
+```
+
+¿Qué producción de G1 se aplicó en el **segundo paso**? {
+=`<id> ::= A`#Correcto. En el segundo paso, el no-terminal `<id>` se reemplaza por el terminal `A`.
+~`<assign> ::= <id> := <expr>`#Esta producción se aplicó en el **primer** paso. En el segundo paso ya no existe `<assign>` en la forma sentencial.
+~`<expr> ::= <term>`#Esta producción expande `<expr>`, pero en la forma sentencial el `<expr>` todavía no fue expandido en este paso.
+~`<id> ::= B`#La cadena generada tiene `A` (no `B`), por lo que se usó `<id> ::= A`.
+####En el **segundo paso**, el no-terminal disponible para expandir era `<id>`. Se aplicó la producción `<id> ::= A`, obteniendo `A := <expr>`.
+}
+
+::TP02-Q21-cadena-valida-G1::[markdown]Usando la Gramática G1, ¿cuál de las siguientes cadenas **puede ser generada**? {
+=`A := B * ( A + C )`#Correcto. Se puede derivar en G1: `<assign>` ⇒ `<id> := <expr>` ⇒ `A := <term>` ⇒ `A := <term> * <factor>` ⇒ ... ⇒ `A := B * ( A + C )`.
+~`A = B * C`#El operador de asignación en G1 es `:=`, no `=`. La cadena `A = B` no puede generarse porque `=` no es terminal de G1.
+~`D := A + B`#`D` no está en el alfabeto de `<id>` (solo `A`, `B`, `C`). La gramática no genera identificadores distintos de esos tres.
+~`A := B + * C`#`+ *` consecutivos no corresponden a ninguna expansión válida de `<expr>`. Después de un `+` debe venir un `<term>`, no otro operador.
+####G1 solo acepta identificadores `A`, `B`, `C`; usa `:=` como operador de asignación; y la estructura de las expresiones sigue la precedencia correcta. `A := B * ( A + C )` cumple todo esto.
+}
+
+::TP02-Q22-cadena-invalida-G1::[markdown]¿Cuál de las siguientes cadenas **no puede ser generada** por G1? {
+=`A := D - B`#Correcto. `D` no es un terminal de G1 — la regla `<id> ::= A | B | C` no incluye `D`. Ninguna derivación puede producir el símbolo `D`.
+~`A := B - C`#Válida. `<expr> ::= <expr> - <term>` permite la resta. `A`, `B`, `C` son terminales válidos.
+~`C := A`#Válida. `<assign>` ⇒ ... ⇒ `C := <id>` ⇒ `C := A`. La cadena de expansión de `<expr>` hacia `<id>` es posible.
+~`B := A * A`#Válida. G1 permite usar el mismo identificador varias veces. `<term> ::= <term> * <factor>` y ambos pueden expandirse a `<id> ::= A`.
+####G1 tiene un alfabeto de terminales **cerrado**: solo `A`, `B`, `C` son identificadores válidos. Cualquier cadena que contenga otro identificador (como `D`, `E`, etc.) no puede ser generada.
+}
+
+::TP02-Q23-pasos-minimos::[markdown]Usando G1, ¿cuántos **pasos de derivación** mínimos se necesitan para obtener `A := A` desde `<assign>`? {
+=6#Correcto. Ruta: (1) `<assign>` ⇒ `<id> := <expr>`, (2) ⇒ `A := <expr>`, (3) ⇒ `A := <term>`, (4) ⇒ `A := <factor>`, (5) ⇒ `A := <id>`, (6) ⇒ `A := A`.
+~4#Demasiado pocos. No se puede llegar a `A := A` en 4 pasos porque `<expr>` necesita pasar por `<term>` y `<factor>` antes de llegar a `<id>`.
+~5#Falta un paso. La cadena de expansión del lado derecho es: `<expr>` → `<term>` → `<factor>` → `<id>` → `A` (4 pasos para el RHS) más los 2 pasos del LHS.
+~3#Muy pocos. Cada paso aplica exactamente una producción y la ruta mínima requiere 6 expansiones.
+####Ruta mínima: `<assign>` ⇒ `<id> := <expr>` ⇒ `A := <expr>` ⇒ `A := <term>` ⇒ `A := <factor>` ⇒ `A := <id>` ⇒ `A := A`. Total: **6 pasos**.
+}
+
+::TP02-Q24-hojas-arbol::[markdown]En el árbol sintáctico de `A := B * C` según G1, ¿cuáles son las **hojas** del árbol? {
+=`A`, `:=`, `B`, `*`, `C` — todos los terminales de la cadena#Correcto. Las hojas de un árbol sintáctico son los terminales: no se expanden más y son exactamente los tokens que forman la cadena final.
+~`<assign>`, `<id>`, `<expr>`, `<term>`, `<factor>` — los no-terminales#Los no-terminales son los **nodos internos** del árbol, no las hojas. Las hojas siempre son terminales.
+~Solo `A`, `B`, `C` — los identificadores#`:=` y `*` también son hojas — son terminales de la cadena. Todos los terminales forman las hojas.
+~La raíz `<assign>` es la hoja principal#Confusión entre raíz y hojas. La **raíz** es `<assign>` (símbolo inicial). Las **hojas** son los terminales del extremo inferior.
+####En un árbol sintáctico: **raíz** \= símbolo inicial (`<assign>`), **nodos internos** \= no-terminales expandidos, **hojas** \= terminales (`A`, `:=`, `B`, `*`, `C`). Las hojas leídas de izquierda a derecha forman la cadena original.
+}
+
+// ============================================================
+// SECCIÓN E — Ambigüedad (4 preguntas: Q25–Q28)
+// ============================================================
+
+::TP02-Q25-def-ambiguedad::[markdown]Una gramática BNF se dice **ambigua** cuando: {
+=Existe al menos una cadena que puede derivarse produciendo dos o más árboles sintácticos distintos#Correcto. La ambigüedad es una propiedad de la gramática: si hay *alguna* cadena con dos árboles posibles, la gramática es ambigua.
+~Tiene reglas recursivas a la izquierda (left-recursive)#La recursividad izquierda no implica ambigüedad. Muchas gramáticas left-recursive son no-ambiguas; son un desafío para parsers top-down, pero no sinónimo de ambigüedad.
+~Contiene más de una alternativa en alguna producción (`A ::= B | C`)#Las alternativas son el mecanismo normal para expresar variantes. No implican ambigüedad por sí solas.
+~No tiene símbolo inicial definido explícitamente#La ambigüedad es independiente de cómo se documente el símbolo inicial. Una gramática puede ser no-ambigua aunque el símbolo inicial sea implícito.
+####**Ambigüedad** \= una misma cadena tiene dos o más estructuras sintácticas distintas (dos árboles). Es un **defecto de diseño** de la gramática porque el compilador no puede elegir cuál árbol usar para interpretar el programa.
+}
+
+::TP02-Q26-cadena-que-demuestra-ambiguedad::[markdown]Dada la gramática: `<E> ::= <E> + <E> | <E> * <E> | id`, ¿cuál cadena demuestra que es **ambigua**? {
+=`id + id * id`#Correcto. Tiene dos árboles: `(id+id)*id` vs `id+(id*id)`. Los dos árboles dan resultados distintos al evaluar.
+~`id + id`#Con dos operandos y un operador, solo hay un árbol posible. No demuestra ambigüedad.
+~`id * id`#Similar al caso anterior: un único árbol posible.
+~`id`#Un único token `id` tiene un árbol trivial con un solo nodo. No es posible la ambigüedad.
+####`id + id * id` tiene **dos árboles sintácticos**: (1) `(<E>+<E>) * id` → suma primero, (2) `id + (<E>*<E>)` → producto primero. Como cada árbol implica un resultado diferente, la gramática es **ambigua**.
+}
+
+::TP02-Q27-resultados-expresion-ambigua::[markdown]Para la expresión `J := 1 + 2 * 3` con una gramática que **no define precedencia** de operadores, ¿cuántos resultados numéricos distintos son posibles? {
+=2 (puede ser 9 interpretando `(1+2)*3`, o 7 interpretando `1+(2*3)`)#Correcto. La ambigüedad produce dos árboles con dos evaluaciones distintas.
+~1 (siempre da 7 por la convención matemática estándar)#La convención matemática NO es parte de una gramática ambigua. Debe **definirse explícitamente** en la gramática; sin esa definición, ambos resultados son posibles.
+~3 (hay tres formas de agrupar tres operandos)#Con dos operadores binarios del mismo nivel, hay exactamente 2 formas de agrupar, no 3.
+~4 (cada combinación de paréntesis posible)#Con tres operandos y dos operadores de igual precedencia, solo hay 2 formas de agrupar.
+####**Árbol 1:** `(1+2)*3 \= 3*3 \= 9`. **Árbol 2:** `1+(2*3) \= 1+6 \= 7`. La diferencia de resultado es concreta y visible. Una gramática ambigua hace que el compilador no pueda elegir.
+}
+
+::TP02-Q28-resolver-ambiguedad-precedencia::[markdown]¿Cuál es la forma **correcta** de resolver la ambigüedad de precedencia en una gramática BNF? {
+=Rediseñar la gramática para que operadores de mayor precedencia queden en niveles más profundos del árbol (más cerca de las hojas)#Correcto. En G1, `<term>` maneja `*` y está más profundo que `<expr>` (que maneja `+`). Así `*` siempre se evalúa antes que `+`.
+~Agregar un comentario en la gramática indicando la precedencia deseada#Los comentarios no forman parte del formalismo BNF. El parser no los interpreta. La gramática debe resolver la ambigüedad estructuralmente.
+~Usar el metasímbolo `|` en lugar de producciones separadas#El `|` es azúcar sintáctica para múltiples producciones del mismo LHS. No resuelve la ambigüedad de precedencia.
+~Exigir paréntesis obligatorios para toda operación binaria#Esto haría el lenguaje no-ambiguo, pero extremadamente tedioso de escribir. No es la práctica de ningún lenguaje real.
+####La solución clásica (usada en G1): **estratificar** la gramática en niveles. `<expr>` maneja `+`/`-` (baja precedencia), `<term>` maneja `*` (alta precedencia), `<factor>` maneja átomos. Operadores de mayor precedencia quedan más profundos → se evalúan primero.
+}
+
+// ============================================================
+// SECCIÓN F — EBNF (8 preguntas: Q29–Q36)
+// ============================================================
+
+::TP02-Q29-ebnf-corchetes::[markdown]En notación EBNF, el símbolo `[x]` (corchetes cuadrados) indica que `x`: {
+=Es **opcional**: aparece cero o una vez#Correcto. `[x]` en EBNF es equivalente a `x | ε` en BNF.
+~Puede repetirse **cero o más veces**#La repetición cero-o-más en EBNF usa llaves: `\{x\}`. Los corchetes son específicamente para opcionalidad.
+~Debe aparecer **exactamente una vez**#Si algo debe aparecer exactamente una vez, se escribe `x` sin ningún metasímbolo.
+~Indica un **conjunto de alternativas**#Las alternativas usan paréntesis con `|`: `(a | b)`. Los corchetes son para opcionalidad, no alternativas.
+####En EBNF: `[x]` \= opcional (0 o 1 vez), `\{x\}` \= repetición (0 o más veces), `(a | b)` \= alternativa. Estas tres extensiones hacen que EBNF sea más compacto que BNF puro.
+}
+
+::TP02-Q30-ebnf-llaves::[markdown]En notación EBNF, el símbolo `\{x\}` (llaves) indica que `x`: {
+=Puede **repetirse cero o más veces** (incluyendo que no aparezca)#Correcto. `\{x\}` es el equivalente iterativo de la recursividad en BNF: `<L> ::= x | <L> x`.
+~Es **opcional** (aparece cero o una vez)#La opcionalidad usa corchetes: `[x]`. Las llaves son exclusivamente para repetición.
+~Debe repetirse **al menos una vez** (una o más)#Para "uno o más" se escribe `x \{x\}` (primero uno obligatorio, luego cero o más). Las llaves solas permiten también cero ocurrencias.
+~Indica que `x` es un **no-terminal**#Los no-terminales se identifican por convención (mayúsculas, ángulos, etc.), no por llaves. Las llaves son metasímbolos de repetición.
+####EBNF: `[x]` → 0-1 vez. `\{x\}` → 0 o más veces (Kleene star). `x \{x\}` → 1 o más veces. Las llaves eliminan la necesidad de reglas recursivas auxiliares en BNF.
+}
+
+::TP02-Q31-ebnf-if-else::[markdown]La regla EBNF `stmt ::= 'if' '(' expr ')' stmt ['else' stmt] | id ':=' expr` describe: {
+=Un `if` donde el bloque `else` es **opcional** (puede estar o no)#Correcto. `['else' stmt]` usa corchetes — el else aparece 0 o 1 vez. Un `if` sin `else` es válido según esta regla.
+~Un `if` donde el `else` es **obligatorio** siempre#Si el `else` fuera obligatorio, se escribiría sin corchetes: `'if' '(' expr ')' stmt 'else' stmt`.
+~Puede haber **múltiples bloques** `else` consecutivos#Para múltiples, se usaría llaves: `\{'else' stmt\}`. Los corchetes permiten solo 0 o 1 ocurrencia.
+~La expresión entre paréntesis es opcional#Los `'('` y `')'` en la regla son terminales literales (no metasímbolos). Son obligatorios según la regla.
+####`['else' stmt]` \= el bloque else aparece **cero o una vez**. Esta regla modela exactamente el if de la mayoría de los lenguajes: el `else` es siempre optativo.
+}
+
+::TP02-Q32-ebnf-lista-ids::[markdown]¿Cuál de las siguientes reglas EBNF expresa correctamente **"una lista de uno o más identificadores separados por comas"**? {
+=`lista ::= id \{ ',' id \}`#Correcto. `id` asegura al menos uno. `\{ ',' id \}` agrega cero o más pares adicionales `,id`. Genera: `id`, `id,id`, `id,id,id`, etc.
+~`lista ::= id [ ',' id ]`#Esto genera solo `id` (uno solo) o `id,id` (exactamente dos). No puede generar listas de tres o más elementos.
+~`lista ::= \{ id \}`#`\{id\}` permite **cero o más** identificadores (sin separadores). No garantiza al menos uno ni incluye las comas.
+~`lista ::= id | lista ',' id`#Esta es la forma recursiva BNF, no EBNF. En EBNF la notación con `\{ \}` es la forma apropiada.
+####Para "uno o más" en EBNF: `elemento \{ separador elemento \}`. `id` garantiza el primero, `\{ ',' id \}` agrega los siguientes. Genera exactamente listas de 1 o más elementos.
+}
+
+::TP02-Q33-ebnf-number-rule::[markdown]La regla EBNF `number ::= digit \{ digit \}` describe números con: {
+=**Uno o más** dígitos#Correcto. `digit` al inicio asegura al menos un dígito. `\{digit\}` agrega cero o más dígitos adicionales. Total: 1 o más dígitos.
+~**Cero o más** dígitos (puede ser la cadena vacía)#Para cero-o-más, se escribiría solo `\{digit\}`. Tener `digit` antes de las llaves garantiza al menos uno.
+~**Exactamente dos** dígitos#`digit \{digit\}` admite un dígito o muchos. No hay fijación en dos.
+~**Un único** dígito obligatorio#`\{digit\}` agrega más dígitos opcionales. Un solo dígito sería `number ::= digit` sin llaves.
+####`digit \{digit\}` \= "un dígito seguido de cero o más dígitos" \= **uno o más dígitos en total**. Es el patrón EBNF estándar para "at least one" en notación iterativa.
+}
+
+::TP02-Q34-expresividad-bnf-ebnf::[markdown]Respecto a la **expresividad** (qué lenguajes pueden describir): {
+=BNF y EBNF son **igualmente expresivos** — EBNF es solo una notación más compacta para patrones comunes#Correcto. Cualquier gramática EBNF puede traducirse mecánicamente a BNF puro introduciendo no-terminales auxiliares. Misma potencia, diferente notación.
+~EBNF puede describir lenguajes que BNF no puede expresar#Falso. EBNF es una extensión **notacional**, no semántica. Toda construcción EBNF traduce a un BNF equivalente.
+~BNF es más expresivo porque es más "primitivo"#Falso. Mayor "primitividad" no implica mayor expresividad. BNF y EBNF tienen el mismo poder descriptivo.
+~EBNF solo puede describir gramáticas sin recursividad#Falso. EBNF puede usar recursividad directamente. Además, `\{x\}` sirve para *reemplazar* la recursividad auxiliar, pero la recursividad sigue siendo posible.
+####BNF y EBNF generan exactamente la misma clase de lenguajes (libres de contexto). La diferencia es **notacional**: EBNF agrega `[...]`, `\{...\}` y `(...)` para evitar reglas recursivas auxiliares. Más legible, mismo poder.
+}
+
+::TP02-Q35-ebnf-a-bnf-equivalente::[markdown]La regla EBNF `expr ::= term \{ ('+' | '-') term \}` es equivalente en BNF a: {
+=`<expr> ::= <term> | <expr> + <term> | <expr> - <term>`#Correcto. `term \{('+' | '-') term\}` se traduce a recursividad izquierda: `<expr>` puede ser solo `<term>`, o `<expr>` seguido de operador y otro `<term>`.
+~`<expr> ::= <term> + <term> | <term> - <term>`#Esta versión no permite cadenas como `a + b + c` (tres o más términos). La regla EBNF sí genera múltiples operaciones encadenadas.
+~`<expr> ::= <term> <term>`#Generaría dos términos consecutivos sin operador. No corresponde a la regla EBNF.
+~`<expr> ::= <term> | + <term> | - <term>`#`+ <term>` y `- <term>` son expresiones incompletas sin operando izquierdo. Semánticamente incorrectas.
+####La traducción estándar de `A \{sep B\}` a BNF es `<A> ::= <B> | <A> sep <B>` (recursividad izquierda). Esta equivalencia modela la repetición como recursividad y preserva la asociatividad izquierda.
+}
+
+::TP02-Q36-diagramas-vs-ebnf::[markdown]Los **diagramas de sintaxis** (*syntax diagrams* / *railroad diagrams*) comparados con EBNF son: {
+=**Equivalentes en expresividad** — representan la misma información en formato gráfico (flechas y cajas)#Correcto. Un diagrama de sintaxis y una regla EBNF describen exactamente el mismo lenguaje. Son dos representaciones del mismo formalismo.
+~Más expresivos que EBNF porque permiten representar contexto#Falso. Ninguno puede representar propiedades sensibles al contexto. Ambos son equivalentes a gramáticas libres de contexto.
+~Solo se usan para documentación informal y no tienen valor formal#Falso. Los diagramas de sintaxis son una representación formal. Pueden leerse mecánicamente para verificar si una cadena es válida.
+~Solo pueden representar gramáticas sin recursividad izquierda#Falso. Los diagramas de sintaxis representan estructuras recursivas mediante ciclos (loops) en el diagrama.
+####Los diagramas de sintaxis son la **representación visual** de una gramática EBNF. Una cadena es válida si y solo si puede "recorrerse" del inicio al final del diagrama. La documentación de TypeScript los usa por su legibilidad.
+}
+
+// ============================================================
+// SECCIÓN G — Aplicaciones (4 preguntas: Q37–Q40)
+// ============================================================
+
+::TP02-Q37-python-grammar-format::[markdown]Python publica su gramática oficial en `docs.python.org`. ¿En qué notación está escrita? {
+=EBNF (o una variante equivalente con notación extendida)#Correcto. La gramática oficial de Python usa una variante de EBNF/PEG. Python fue uno de los primeros lenguajes en publicar su gramática formal de manera pública.
+~BNF estricto sin ninguna extensión#La gramática de Python usa `*`, `+`, `?` y agrupaciones — extensiones típicas de EBNF. No es BNF puro.
+~XML Schema (XSD)#XML Schema describe documentos XML. No es una notación para gramáticas de lenguajes de programación.
+~JSON Schema#JSON Schema valida documentos JSON, no describe gramáticas de lenguajes de programación.
+####La gramática oficial de Python (en `docs.python.org/3/reference/grammar.html`) usa una notación esencialmente **EBNF extendida**. Python 3.9+ migró a PEG (Parsing Expression Grammar), que es otra extensión de EBNF.
+}
+
+::TP02-Q38-fases-compilador-tsc::[markdown]El compilador `tsc` de TypeScript realiza las siguientes fases. ¿Cuál es el **orden correcto**? {
+=Lexer → Parser → Type Checker → Emisión de código (.js)#Correcto. Este es el pipeline estándar: análisis léxico → análisis sintáctico → análisis semántico (tipos) → generación de código.
+~Parser → Lexer → Type Checker → Emisión#El lexer siempre va **antes** que el parser, porque el parser necesita los tokens que produce el lexer.
+~Type Checker → Lexer → Parser → Emisión#El type checker opera sobre el árbol que construye el parser. No puede ejecutarse antes que lexer y parser.
+~Lexer → Type Checker → Parser → Emisión#El type checker necesita el árbol que construye el **parser**. No puede verificar tipos antes de que exista el árbol.
+####Pipeline de `tsc`: **Lexer** (texto → tokens) → **Parser** (tokens → AST) → **Type Checker** (AST + tipos → errores) → **Emitter** (AST → código JS). Cada fase alimenta a la siguiente.
+}
+
+::TP02-Q39-constrained-decoding::[markdown]En los modelos de lenguaje grande (LLMs) actuales, el *constrained decoding* (decodificación restringida) usa gramáticas EBNF para: {
+=Filtrar los tokens generables en cada paso de modo que la salida sea siempre una cadena válida según la gramática#Correcto. En cada paso, el sistema calcula qué tokens continuarían una derivación válida y solo permite elegir entre esos tokens.
+~Entrenar al modelo con más datos de código fuente formal#El entrenamiento es una fase separada de la inferencia. El constrained decoding opera en tiempo de **inferencia** (generación), no de entrenamiento.
+~Detectar errores semánticos en el código generado por el modelo#El constrained decoding asegura **corrección sintáctica**, no semántica. No puede verificar que el código generado haga lo que se espera.
+~Reducir la longitud de las respuestas del modelo para mayor eficiencia#El constrained decoding no controla longitud — puede incluso generar respuestas más largas si la gramática lo requiere.
+####El constrained decoding usa una gramática EBNF compilada a un autómata. En cada token generado, solo son válidos los tokens que continúan una derivación válida. Así, el LLM siempre produce JSON válido, HTML válido o código sintácticamente correcto. Las gramáticas de Backus (1960) son la **infraestructura** de estos sistemas actuales.
+}
+
+::TP02-Q40-recursividad-izquierda-G1::[markdown]En la Gramática G1, la regla `<expr> ::= <expr> + <term> | <expr> - <term> | <term>` tiene una propiedad importante. ¿Cuál es? {
+=Es **recursiva a la izquierda**: `<expr>` aparece como el primer símbolo del RHS en dos de sus alternativas#Correcto. Una regla es recursiva izquierda cuando el LHS aparece al inicio del RHS. Esto modela la asociatividad izquierda de `+` y `-`.
+~La gramática es **ambigua** porque `<expr>` tiene múltiples alternativas#Múltiples alternativas no implican ambigüedad. G1 está diseñada para ser **no-ambigua** mediante la estratificación de niveles.
+~La precedencia de `+` es **mayor** que la de `*` en G1#Falso. En G1, `*` tiene mayor precedencia que `+`, porque `<term>` (que maneja `*`) es más profundo en el árbol que `<expr>` (que maneja `+`).
+~`<factor>` es el símbolo inicial de la gramática#`<assign>` es el símbolo inicial (la primera regla). `<factor>` es el nivel más profundo de la jerarquía de expresiones.
+####La **recursividad izquierda** de `<expr>` define la **asociatividad izquierda**: `a - b - c` se parsea como `(a - b) - c`. Es una propiedad de diseño deliberada. Los parsers top-down (LL) tienen dificultades con esto; los bottom-up (LR) no.
+}

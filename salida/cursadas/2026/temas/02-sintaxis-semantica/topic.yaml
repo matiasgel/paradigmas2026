@@ -7,8 +7,11 @@ clase: "2 de 2"
 duracion: 120
 estado: "clase-generada"
 git_branch: "tema02"
-tp_type: "ejercicios"
+tp_type: "quiz-moodle"
 artifacts:
   diseno: diseno.md
   filminas: filminas.md
   minuta: minuta.md
+  tp: tp.md
+  tp_quiz_gift: tp-quiz.gift
+  tp_quiz_moodle_config: tp-quiz-moodle-config.md
