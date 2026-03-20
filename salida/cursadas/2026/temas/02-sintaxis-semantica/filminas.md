@@ -795,7 +795,7 @@ La formalización de la sintaxis **no es historia**.
 
 Es infraestructura activa.
 
-*Alpay & Senturk (2026), arXiv:2603.05540 — Structural Equivalence and Efficiency in Grammar-Constrained LLM Decoding*
+*Alpay & Senturk (2026), arXiv:2603.05540 — Attention Meets Reachability: Structural Equivalence and Efficiency in Grammar-Constrained LLM Decoding*
 
 ---
 
@@ -839,7 +839,7 @@ Es infraestructura activa.
 - **Sebesta, R.** (2019). *Concepts of Programming Languages*, 12ª ed. Cap. 3 (gramáticas, semántica) y Cap. 4 (análisis léxico y sintáctico)
 - **Gabbrielli, M. & Martini, S.** (2023). *Programming Languages: Principles and Paradigms*. Cap. 4 (nombres y entorno) — para Tema 09
 - **Willard, B. T. & Louf, R.** (2023). *Efficient Guided Generation for Large Language Models*. arXiv:2307.09702 — Outlines, constrained decoding
-- **Beurer-Kellner, L. et al.** (2023). *LMQL: Prompting Is Programming*. VLDB 2023. arXiv:2212.06094
-- **Geng, S. et al.** (2023). *Grammar-Constrained Decoding for Structured NLP Tasks*. ACL 2023
+- **Beurer-Kellner, L. et al.** (2023). *Prompting Is Programming: A Query Language for Large Language Models*. PLDI'23. arXiv:2212.06094
+- **Geng, S. et al.** (2023). *Grammar-Constrained Decoding for Structured NLP Tasks without Finetuning*. EMNLP 2023. arXiv:2305.13971
 - **Gong, L.** (2026). *Structured Prompt Language: Declarative Context Management for LLMs*. arXiv:2602.21257
-- **Alpay, T. & Senturk, E.** (2026). *Attention Meets Reachability: Grammar-Constrained LLM Decoding*. arXiv:2603.05540
+- **Alpay, T. & Senturk, E.** (2026). *Attention Meets Reachability: Structural Equivalence and Efficiency in Grammar-Constrained LLM Decoding*. arXiv:2603.05540
