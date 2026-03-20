@@ -730,7 +730,7 @@ El mensaje de error de `tsc` incluye línea y columna → evidencia de que el le
 
 ### [F-32]
 
-## Ejemplo práctico — guiar estructura con prompt bando
+## Ejemplo práctico — guiar estructura con prompt blando
 
 **Tarea:** extraer pendientes desde una nota de reunión.
 

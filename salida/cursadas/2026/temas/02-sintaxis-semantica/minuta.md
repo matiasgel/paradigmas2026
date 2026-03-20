@@ -152,7 +152,7 @@ Mostrar F-10. La tabla de `indice = 5 * contador + 1` viene exactamente de las s
 - **Lexema:** la cadena de caracteres concreta (`indice`, `5`)
 - **Token:** la categoría abstracta (`identificador`, `constante_entera`)
 
-> *"El lexema es lo que escribieron. El token es cómo el compilador lo clasifica. Un mismo token (`identificador`) puede tens miles de lexemas distintos."*
+> *"El lexema es lo que escribieron. El token es cómo el compilador lo clasifica. Un mismo token (`identificador`) puede tener miles de lexemas distintos."*
 
 ---
 

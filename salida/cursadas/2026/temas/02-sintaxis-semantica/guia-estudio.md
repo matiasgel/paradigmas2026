@@ -621,7 +621,7 @@ const y = undefined; y.length
 - En **ejecución**, acceder a `.length` de `undefined` lanza `TypeError`.
 - Categoría: **error semántico dinámico**.
 
-### Ejemplo 2: Derivación completa de `A := B* (A + C)`
+### Ejemplo 2: Derivación completa de `A := B * (A + C)`
 
 Gramática:
 
