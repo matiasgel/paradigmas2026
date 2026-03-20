@@ -1,10 +1,11 @@
 # Diseño — Tema 02: Sintaxis y Semántica de Lenguajes
 
-> **Estado:** REDISEÑO — pendiente de aprobación
+> **Estado:** APROBADO
 > **Rediseño generado por:** Lic. Marcos (topic-designer)
 > **Fecha de rediseño:** 2026-03-18
 > **Historial:**
 > - Aprobado originalmente: 2026-03-10 (Matías Gel)
+> - Aprobado rediseño: 2026-03-20 (Matías Gel)
 > - Rediseñado el 2026-03-18 tomando como baseline las filminas año anterior (`02 sintaxis.pdf`) y las filminas 2026 desarrolladas (F-00 a F-37)
 > - Ajustado el 2026-03-18 post-debate (panel Marcos+Roberto+Ana+Guardrail): nota de navegación Cap.4→Cap.3 [C1], B6 reenmarcado como síntesis [C2], errores TS movidos a puente B5→B6 [C3], mapa de fuentes separado por sección [C4]
 > - Ajustado el 2026-03-18 por pedido docente: B5 rediseñado — semántica operacional formal eliminada (sin fuente cargada que la soporte); enfoque reemplazado por type checking concreto (TypeScript) + modelo nombres/entorno/binding (G&M §4.1–4.2) + intuición mínima de estado
