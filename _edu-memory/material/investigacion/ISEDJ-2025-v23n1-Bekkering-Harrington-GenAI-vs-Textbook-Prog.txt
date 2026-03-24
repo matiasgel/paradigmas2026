@@ -1,0 +1,3558 @@
+Information Systems 
+Education Journal 
+
+Volume 23, No. 1 
+January  2025 
+ISSN: 1545-679X 
+
+In this issue: 
+
+4.  
+
+A Comparison of Generative AI Solutions and Textbook Solutions in an 
+Introductory Programming Course 
+Ernst Bekkering, Northeastern State University 
+Patrick Harrington, Northeastern State University 
+
+23.   Teaching Case: 
+
+Cleaning Out the Basement: Designing & Developing a Database to Support 
+an Online Side Hustle Case 
+Dana Schwieger, Southeast Missouri State University 
+
+32.   Empathy-Driven  Student  Transformations:  Bridging  the  Gap  in  Software 
+
+Development for Inclusive User Experiences 
+Jami Cotler, Siena College 
+Eszter Kiss, James Cook University 
+Dmitry Burshteyn, Siena College 
+Megan Hall, Brockport College 
+Aman Walker, Siena College 
+John Slyer, SkyHigh Adventures 
+
+46.   Teaching Case 
+
+A Small Accounting Firm Must Meet the Challenge Posed by Artificial 
+Intelligence 
+Michael A. Smith 
+
+54.   Examining Impacts on Digital Discrimination, Digital Inequity and Digital 
+
+Injustice in Higher Education: A Qualitative Study  
+Rachida F. Parks, Quinnipiac University 
+Amy KB Paros, Quinnipiac University 
+Mariama Yakubu, University of New Haven 
+
+70.  
+
+Invited Article 
+On Becoming: Why Disposition Distinguishes Information Systems 
+Education from Training. A Commentary on Model Curricula 
+Jeffry Babb, West Texas A&M University 
+David Yates, Bentley University 
+Leslie Waguespack, Bentley University 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+The  Information  Systems  Education  Journal  (ISEDJ)  is  a  double-blind  peer-reviewed 
+academic  journal  published  by  ISCAP  (Information  Systems  and  Computing  Academic 
+Professionals). Publishing frequency is five times per year. The first year of publication was 
+2003. 
+
+ISEDJ  is  published  online  (https://isedj.org).  Our  sister  publication,  the  Proceedings  of  the 
+ISCAP  Conference  (https://iscap.us/proceedings)  features  all  papers,  abstracts,  panels, 
+workshops, and presentations from the conference. 
+
+The  journal  acceptance  review  process  involves  a  minimum  of  three  double-blind  peer 
+reviews, where both the reviewer is not aware of the identities of the authors and the authors 
+are not aware of the identities of the reviewers. The initial reviews happen before the ISCAP 
+conference.  All  papers,  whether  award-winners  or  not,  are  invited  to  resubmit  for  journal 
+consideration after applying feedback from the Conference presentation. Award winning papers 
+are assured of a publication slot; however, all re-submitted papers including award winners are 
+subjected  to  a  second  round  of  three  blind  peer  reviews  to  improve  quality  and  make  final 
+accept/reject decisions. Those papers  that  are  deemed  of  sufficient  quality  are  accepted  for 
+publication in the ISEDJ journal. Currently the target acceptance rate for the journal is under 
+35%. 
+
+Information  Systems  Education  Journal  is  pleased  to  be  listed  in  the  Cabell's  Directory  of 
+Publishing Opportunities in Educational Technology and Library Science, in both the electronic 
+and printed editions. Questions should be addressed to the editor at editor@isedj.org or the 
+publisher at publisher@isedj.org. Special thanks to volunteer members of ISCAP who perform 
+the editorial and review processes for ISEDJ. 
+
+2024 ISCAP Board of Directors 
+
+Jeff Cummings 
+Univ of NC Wilmington 
+President  
+
+Amy Connolly 
+James Madison University 
+Vice President 
+
+Eric Breimer 
+Siena College 
+Past President 
+
+Jennifer Breese 
+Penn State University 
+Director 
+
+RJ Podeschi 
+Millikin University 
+Director/Treasurer  
+
+David Gomillion 
+Texas A&M University 
+Director 
+
+Leigh Mutchler 
+James Madison University 
+Director/Secretary 
+
+David Woods 
+Miami University 
+Director 
+
+Jeffry Babb 
+West Texas A&M University 
+Director/Curricular Items Chair 
+
+Tom Janicki 
+Univ of NC Wilmington 
+Director/Meeting Facilitator 
+
+Paul Witman 
+California Lutheran University 
+Director/2024 Conf Chair 
+
+Xihui “Paul” Zhang 
+University of North Alabama 
+Director/JISE Editor 
+
+Copyright  ©  2025  by  Information  Systems  and  Computing  Academic  Professionals  (ISCAP).  Permission  to  make 
+digital or hard copies of all or part of this journal for personal or classroom use is granted without fee provided that 
+the copies are not made or distributed for profit or commercial use. All copies must bear this notice and full citation. 
+Permission from the Editor is required to post to servers, redistribute to lists, or utilize in a for-profit or commercial 
+use. Permission requests should be sent to Paul Witman, Editor, editor@isedj.org.  
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 2 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+Information Systems 
+Education Journal 
+
+Editors 
+
+Paul Witman 
+Editor 
+California Lutheran 
+University 
+
+Thomas Janicki 
+Publisher 
+U of North Carolina 
+Wilmington 
+
+Dana Schwieger  
+Associate Editor 
+Southeast Missouri 
+State University 
+
+Kevin Mentzer 
+Associate Editor 
+Nichols College 
+
+Ira Goldstein 
+Teaching Cases & Exercises 
+Co-Editor 
+Siena College 
+
+Michelle Louch 
+Teaching Cases & Exercises 
+Co-Editor 
+Duquesne University 
+
+Donald Colton 
+Emeritus Editor  
+Brigham Young University 
+Hawaii 
+
+Jeffry Babb 
+Emeritus Editor 
+West Texas A&M 
+University 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 3 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+A Comparison of Generative AI Solutions and 
+Textbook Solutions in an Introductory 
+Programming Course 
+
+Ernst Bekkering 
+bekkerin@nsuok.edu 
+
+Patrick Harrington 
+harringp@nsuok.edu 
+
+Mathematics and Computer Science 
+Northeastern State University 
+Tahlequah, OK 74464 
+
+Abstract 
+
+Generative AI has recently gained the ability to generate computer code. This development is bound to 
+affect  how  computer  programming  is  taught  in  higher  education.  We  used  past  programming 
+assignments and solutions for textbook exercises in our introductory programming class to analyze how 
+accurately  one  of  the  leading  models,  ChatGPT,  generates  solutions.  We  selected  the  ChatGPT-4 
+available through the Bing search engine for our testing. We used a one-tailed test to calculate success 
+percentage of the textbook versus ChatGPT solutions to determine if there was a statistically significant 
+difference. Neither the book nor ChatGPT provided perfect solutions. Analysis of the results showed that 
+the generated code does not always meet the programming requirements, but also that instructions for 
+generative  AI  coding  and  for  traditional  programming  can  be  improved.  We  conclude  with 
+recommendations for incorporating generative AI in programming classes. 
+
+Keywords: artificial intelligence, generative AI, ChatGPT, C++, introductory programming courses. 
+
+Recommended Citation: Bekkering, T.E., Harrington, P., (2024). If You Want Something Specific, Ask 
+for it Specifically: A Comparison of Generative AI Solutions and Textbook Solutions in an Introductory 
+Programming 
+4-22. 
+https://doi.org/10.62273/YQWP1758 
+
+Information 
+
+Education 
+
+Systems 
+
+V23(n1) 
+
+Journal. 
+
+Course. 
+
+pp 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 4 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+A Comparison of Generative AI Solutions and  
+Textbook Solutions in an Introductory Programming Course 
+
+Ernst Bekkering and Patrick Harrington 
+
+1. INTRODUCTION 
+
+When the news reported that chatbots using GPT-
+3  could  write  comprehensive  answers  to  test 
+questions,  we  tried  to  see  how  well they  did on 
+essay  questions  from  our  CS3343  Computer 
+Operating Systems course. The contrast between 
+ChatGPT  answers  and  textbook  answers  was 
+eerie.  Computer  answers  were  well-written  and 
+provided  good  examples  in  contrast  with  the 
+official answers ( 
+Figure  1).  We  reported  this  to  faculty  at  our 
+department meeting in January 2023, but did not 
+give  it  much  mind  for  the  remainder  of  the 
+semester.  Then  came  the  news  that  large 
+companies  had  started  using  generative  AI  in 
+their IT departments.  
+
+Companies  using  generative  AI  include  Google, 
+Microsoft,  Meta,  Insider,  Duolingo,  Slack,  Snap, 
+Coca  Cola,  Instacart,  SalesForce,  and  Shopify 
+(CNBC.com,  2023;  Yahoo  News,  2023). 
+Companies  like  Code  Academy  (Johnson,  2023) 
+and  Udemy  (2023),  as  well  as  traditional 
+University 
+educators 
+(Classcentral.com,  2023),  the  University  of 
+Michigan  (Michigan  Online,  2023),  and  MIT 
+(2023)  have started offering course in generative 
+AI.  
+
+Vanderbilt 
+
+like 
+
+Figure 1:Comparison of answers (personal 
+communication, January 2023) 
+
+The  revolution  in  artificial  intelligence  is  now 
+hitting  higher  education.  David  Foster,  a 
+prominent researcher of AI, states the impending 
+shift  as  “necessitating  a  reevaluation  and 
+adjustment  of  current  teaching  methods  and 
+assessment criteria.” (Foster, 2022, p. 410). 
+
+to 
+
+investigate 
+
+Because generative AI can write source code, we 
+sought 
+limitations  and 
+strengths, and begin to determine its usefulness 
+of whether it should be incorporated in teaching 
+Computer Science. 
+
+its 
+
+We  took  the  assignments  in  our  Spring  2023 
+introductory programming course. We compared 
+the  results  of  ChatGPT  generated  code  with  our 
+own instructor solutions as posted on the course 
+management system after the assignments were 
+due.  Then,  we  took  the  end-of-chapter  exercise 
+solutions and compared them with the solutions 
+generated by ChatGPT.  
+
+The  structure  of  this  paper  is  as  follows.  We 
+review the literature on generative AI in general 
+and ChatGPT in particular. We briefly review the 
+history of artificial intelligence, describe different 
+types,  focus  on  generative  AI,  and  discuss 
+relevant  artificial  intelligence  in  education.  Then 
+we  describe  our  methodology  in  more  detail. 
+Following  the  description  of  sample  and  data 
+collection,  we  analyze  the  results.  Finally,  we 
+discuss 
+and  make 
+conclusions 
+recommendations. 
+
+our 
+
+2. LITERATURE REVIEW 
+
+History of artificial intelligence (AI) 
+Multiple definitions of AI exist, but a common one 
+is  “a  system’s  ability  to  interpret  external  data 
+correctly,  to  learn  from  such  data,  and  to  use 
+those learnings to achieve specific goals and tasks 
+through flexible adaptation” (Kaplan & Haenlein, 
+2019, p. 17). AI has become a societal focus with 
+the rise  of  Big  Data  and increases in computing 
+power (Haenlein & Kaplan, 2019).  
+
+Shao  et  al.  (2022)  describe  the  development  of 
+AI  in  three  generations.  The  first  generation, 
+Symbolic AI, simulated human intelligence based 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 5 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+on  knowledge  and  experience.  Examples  are 
+Expert  Systems  built  on  knowledge  of  human 
+experts,  natural  language  processing,  financial 
+modeling, and game playing systems. IBM Deep 
+Blue defeated the chess world champion based on 
+raw  processing  power  and  analyzing  Kasparov’s 
+previous  games,  even  though  it  lacked  human 
+understanding of chess strategy. 
+
+Figure 2:RNN structure (Researchgate.net, 
+2019) 
+
+Before  the  Transformer  Model,  recurrent  neural 
+networks processed input sequences one element 
+at  a  time  from  input  layer  to  hidden  layer  to 
+output  layer  (Figure  2).  The  Transformer  Model 
+replaced the fixed internal weights with attention 
+relationships 
+mechanisms 
+between inputs and outputs (Figure 3).  
+
+to  compute 
+
+the 
+
+The  second  generation  (Shao  et  al.,  2022)  is 
+data-driven  and  based  on  deep  learning.  New 
+algorithms,  such  as  Convolutional  Neural 
+Networks,  Recurrent  Neural  Networks,  and 
+Generative  Adversarial  Networks,  emerged. 
+Growth  has  been  accelerated  since  the  models 
+depend  on  the  growth of  data  without  the need 
+for extracting features, and the installed base for 
+storage capacity worldwide is forecast to grow at 
+an annual rate of 19.2% (Statista, 2023). In the 
+future,  Shao  et  al  (2022)  predict  that  the  third 
+generation  of  AI  will  combine  knowledge-driven 
+and  data-driven  theory.  Rather  than  copy  brain 
+function,  the  structure  of  the  brain  will  be 
+mimicked.  This  could  lead  to  true  Artificial 
+General  Intelligence  (AGI),  but  this  is  in  the 
+future.  We  will  now 
+the 
+development in the second generation of AI since 
+it  underlies 
+current  generative  AI 
+applications. 
+
+focus  more  on 
+
+the 
+
+AI rapidly changed with the introduction of Deep 
+Learning  applied  first  to  the  game  Go  (Silver  et 
+al., 2016), followed by a generalization applied to 
+chess  and  shogi  (Silver  et  al.,  2017).  This 
+approach  is  now  the  basis  for  applications  like 
+virtual  assistants, 
+chatbots,  entertainment 
+recommendations, humanities compositions, self-
+detection 
+driving 
+(Simplilearn.com,  2022).  In  2016,  DeepMind 
+Applied  used  Deep  Learning  to  optimize  and 
+reduce  the  energy  consumption  of  its  data 
+centers by up to 40% (Evans & Gao, 2016). 
+
+fraud 
+
+cars, 
+
+and 
+
+The  2017  Google  Brain  paper,  “Attention  Is  All 
+You  Need”  describes 
+text  generation  and 
+conversational  AI  (Vaswani  et  al.,  2017).  It 
+introduced  the  Transformer  Model,  which  is  a 
+neural  network  architecture  that  uses  attention 
+mechanisms  to  compute  representations  of  its 
+input  and  output.    Google  has  made  significant 
+contributions  with  Google  Brain  (Google,  2023) 
+and  TensorFlow  (Tensorflow,  2023)  as  a  means 
+for programming convolutional neural networks.  
+
+Figure 3: Model architecture of transformer 
+(Vaswani et al., 2017) 
+
+In 2018, researchers from OpenAI demonstrated 
+that  natural  language  understanding  could  be 
+improved  by  generative  pre-training  on  large 
+amounts  of  unlabeled 
+followed  by 
+discriminative fine-tuning for each task (Radford 
+et al., 2018). Researchers from Google reported 
+bidirectional pretraining simplified the fine-tuning 
+phase  (Devlin  et  al.,  2018).  Other  Google 
+
+text, 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 6 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+researchers  presented  a  unified  framework  that 
+addresses  text-based  language  problems  and 
+called it T5, “Text-to-Text Transfer Transformer” 
+(Raffel  et  al.,  2020).  The  wide  field  of  use  is 
+illustrated in Figure 4.  
+
+category of content is up for debate because they 
+are  computer  language  tools.  Code  generation 
+tools  offer  special 
+features  such  as  code 
+completion,  review,  and  documentation  (Tech 
+Point Magazine, 2023). 
+
+Figure 4: T5 model (Raffel et al., 2020) 
+
+Text normalization was improved by augmented 
+use of Batch Normalization (BN), previously used 
+for  Computer  Vision.  Through  parameter 
+adjustment,  Shen  et  al.  (2020)  improved  the 
+traditional Layer Normalization (LN) and called it 
+Power Normalization (PN). 
+
+Increasing  the  size  of  the  language  model  does 
+not  necessarily  improve  the  performance.  Using 
+human feedback, Ouyang et al. (2022) fine-tuned 
+the  performance  of  GPT-3  in  the  InstructGPT 
+model, which showed improved truthfulness and 
+reduced  toxic  output  generation  with  minimal 
+performance reduction despite using 100x fewer 
+parameters in the model. 
+
+Types of artificial intelligence 
+Machine learning includes three types of learning: 
+supervised,  unsupervised,  and  reinforcement 
+learning  (Brown,  2021).  Supervised  learning 
+presents  the  model  with  a  large  data  set  with 
+example inputs labeled  according to the  desired 
+output  or  result.  After  training,  the  model  can 
+predict  outputs  in  response  to  new  inputs. 
+Unsupervised learning uses large amounts of data 
+without  specifying  the  outcomes.  The  model 
+produces  groupings  of  sufficient  similarity.  In 
+reinforcement learning, AI observes and records 
+responses to its actions generated by a simulator 
+running  large  numbers  of  cases  and  evaluates 
+responses using a reward function.  
+
+Generative  AI  is  a  broad  term  for  AI  systems 
+designed  to  generate  content  in  multiple  forms. 
+Images  can  be  generated  with  websites  like 
+Midjourney  (2023)  or  Stable  Diffusion  (2023). 
+Audio  generators  include  VALL-E  (Microsoft, 
+2023)  and  resemble.ai  (2023).  Large  Language 
+Models (LLMs) work with language. GPT-4 is the 
+most prominent example, but other models exist 
+(Table  1).  Whether  code  generation  tools  like 
+Github’s Copilot (Github Inc., 2023) and TabNine 
+(TabNine, 2023) should be considered a separate 
+
+LLM 
+
+GPT-4 
+Bloom 
+AlexaTM 
+ESMFold 
+Gato 
+WuDao 
+
+LLaMa 
+MT-NLG 
+LaMDA 
+PanGu-Σ 
+PaLM-2 
+
+Company 
+
+OpenAI 
+Hugging Face 
+Amazon 
+Meta AI 
+DeepMind 
+Beijing Academy of Artificial 
+Intelligence 
+Meta 
+Nvidia and Microsoft 
+Google 
+Huawei 
+Google 
+
+Table 1: Selected language models 
+
+Chat programs 
+In the area of generative AI, chatbots are special 
+programs  that  respond  to  human  language  in  a 
+contextually relevant way. They adapt over time 
+and  provide  nuanced  responses.  The  programs 
+have  the  same  objective  function:  “Given  a 
+sequence  of  text,  guess  what  comes  next” 
+(Roose, 2023). The best-known example is Chat 
+Generative Pretrained Transformer (ChatGPT). 
+
+in 
+
+ChatGPT  is  a  product  of  OpenAI,  a  company 
+its 
+in  2015.  Major  milestones 
+founded 
+development are (Marr, 2023): 
+• 
+
+June 2018: release of GPT-1 with 117 million 
+parameters. It used language understanding 
+tasks for word prediction. 
+February  2019:  release  of  GPT-2  with  1.5 
+billion parameters. It could produce coherent, 
+multi-paragraph text. 
+June 2020: release of GPT-3 with 175 billion 
+parameters.  It  could  draft  advanced  text, 
+answer 
+factual  questions,  and  generate 
+programming code.  
+
+• 
+
+• 
+
+•  March  2023:  release  of  GPT-4  with  1 trillion 
+parameters.  It  can  use  text,  video,  sound, 
+and image input, output in the same formats, 
+decrease error rates, and is more responsive 
+to user intent (Techradar.com, 2023).  
+
+Using  LLMs  for  code  generation  has  not  been  a 
+deliberate undertaking. As  LLMs learn  to predict 
+the next word in a sequence, trained over millions 
+or  billions  of  repetitions,  they  can  develop 
+surprising  new  abilities  as  emergent  behaviors 
+(Mok,  2017).  AlphaZero  came  up  with  moves 
+such as sacrificing a queen to improve position in 
+chess (Kissinger et al., 2021). In generating the 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 7 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+antibiotic  Halicin,  new  relationships  between 
+molecules  and 
+to  bacteria  were 
+discovered (Kissinger et al., 2021).  
+
+lethality 
+
+Generative  AI  can  improve  the  workplace.  In  a 
+survey  of  GitHub  developers,  60-75%  reported 
+improved work satisfaction, 73% had less effect 
+of  context  switches,  and  87%  worked  better  in 
+repetitive  tasks  when  using  Github’s  AI  CoPilot 
+evaluated 
+(Kalliamvakou, 
+CodeCompose  and  found  that  20%  of  users 
+reported acceleration of their coding activities, as 
+well  as 
+internal  and  external 
+documentation (Murali et al., 2023).  
+
+increasing 
+
+2022). 
+
+Meta 
+
+Use of AI in higher education 
+Students  have  flocked  to  using  ChatGPT  (Terry, 
+2023).  According  to  Intelligent  (2023),  30%  of 
+college students used ChatGPT for schoolwork in 
+the  past  academic  year.  Faculty  have  raised 
+concerns, ranging from cheating and plagiarism, 
+using  it  to  create  scholarly  work,  threats  to 
+privacy, fabrication of quotes and references, and 
+lack  of  trustworthiness  (Brandon  Paykamian, 
+2023;  Dempere  et  al.,  2023;  Freeman-Wong  et 
+al., 2023; Lachheb, 2024). 
+
+These  concerns  are  not  without  foundation. 
+ChatGPT is a powerful tool. The new AI tools have 
+now been used to pass multiple exams (Table 2). 
+Educators  fear  not  only  that  students  will  use 
+generative AI to create and submit work that is 
+not their own (Kayla Jimenez, 2023), but also that 
+the  software  may  present  false,  misleading,  or 
+ideologically  based  information.  On  average, 
+generative  AI  programs  are  truthful  25%  of  the 
+time  and  absorb  underlying  social  biases  from 
+their training data  (Stanford University, 2022).  
+
+Exam 
+Uniform bar exam 
+SAT reading and writing 
+SAT math 
+GRE verbal 
+GRE quantitative 
+GRE writing 
+USA Biology Olympiad 
+
+Percentile score 
+90th 
+93rd 
+89th 
+99th 
+80th 
+54th 
+99th 
+
+Table 2: GPT-4 exam scores 
+
+Use  of  AI  is  inevitable,  and  we  should  use  it  in 
+education  to  help  prepare  students 
+for  a 
+workforce  where  it  will  be  used  (McMurtrie, 
+2023). Chen (2022) found that machine learning 
+is already at the core of the AI curriculum in the 
+top  46  business  schools.  Increasingly,  experts 
+advocate  educational  use  (Cardona,  2023; 
+Renbarger, 2023). 
+
+Furthermore, AI can be used for higher levels of 
+learning (Denny et al., 2023). Students can use 
+AI to create functions with the appropriate sorting 
+algorithm  and  focus  on  the  structure  of  the 
+software.  Traditional  coders  could  see  their  job 
+market vanish in a shift to software engineering. 
+As  Kissinger  et  al.  (2021,  p.  90)  explain:  “AI 
+coders  will  complete  programs  sketched  by 
+human  developers.”  Bansal  (2024)  argues  that 
+generative  AI  will  shift  the  workload  from 
+generating code to quality assurance of code. 
+
+If higher education does not provide pathways to 
+deep  learning,  alternative  providers  will.  Cloud 
+services  such  as  Amazon  Web  Services  (AWS) 
+and Microsoft Azure offer pre-built deep learning 
+tools  (Amazon,  2023;  Azure,  2023).  Coursera 
+with  DeepLearning.ai  are  providing  a  series  of 
+online  courses.  (Coursera,  2023a).  IBM  offers  a 
+similar six course sequence leading to the IBM AI 
+Engineering  Professional  Certificate  (Coursera, 
+2023b).  
+
+Artificial  intelligence  is  like  any  tool  that  can  be 
+used either for good or for harm. It is the intent 
+and  action  of  the  user  that  matters,  not  the 
+existence of the tool itself. 
+
+3. METHODOLOGY 
+
+CS2014  Computer  Science  I  is  our  introductory 
+programming  class.  It  is  taught  in  C++.  The 
+textbook  is  shared  with  the  follow-up  class, 
+CS2163  Computer  Science  II.  CS2014  uses  the 
+first  8  chapters  of  the  book;  CS2163  uses  the 
+rest. 
+
+It consists of 3 hours lecture and one hour lab, for 
+a total of 4 credit hours. During the lecture, the 
+instructor  demonstrates  programs 
+in  Visual 
+Studio Code. The programs consist of code in the 
+body  of  the  chapters  and  the  end-of-chapter 
+exercises.  The  labs  use  special  short  exercises 
+with  problems  and  solutions  for  independent 
+practice.  The 
+six  hands-on 
+course  has 
+programming  exercises  and  a  multiple-choice 
+final exam. 
+
+of 
+
+The  book  comes  with  solutions  for  the  end-of-
+chapter  exercises.  We  decided  to  use  these 
+solutions to check how well ChatGPT can meet the 
+and 
+requirements 
+assignments,  as  they  have  been  formulated  by 
+the  textbook  author  and  the  class  instructor. 
+Since the assignment descriptions are frequently 
+adjusted from semester to semester, we took the 
+most  recent  instructions  from  the  Spring  2023 
+semester. 
+
+exercises 
+
+these 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 8 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+Spring 2023 assignments 
+The  six  assignments 
+the  material 
+presented  in  the  book  chapters  and  focus  on 
+specific topics: 
+•  Assignment  1  involves  numerical  input  and 
+
+follow 
+
+sum and average. 
+
+•  Assignment  2  focuses  on  loops  and  output 
+
+formatting with decimals and tables. 
+
+•  Assignment  3 
+
+introduces 
+
+file 
+
+reading, 
+
+subtotals, and grand totals. 
+
+•  Assignment  4  uses 
+
+random  number 
+generation,  file  writing  and  reading,  and 
+nested loops. 
+
+•  Assignment 5 focuses on functions. 
+•  Assignment 6 works with arrays, sorting, and 
+
+searching. 
+
+The specific descriptions of the assignments are 
+listed in Appendix A.  
+
+We used the assignment descriptions to generate 
+ChatGPT instructions and minimized the changes 
+as  much  as  possible.  We  omitted  references  to 
+unknown  context  such  as  the  four-step  process 
+data 
+(declare 
+manipulation,  and  output  or  file  writing).  The 
+ChatGPT instructions are listed in Appendix A next 
+to the assignment instructions for comparison.  
+
+variables, 
+
+values, 
+
+assign 
+
+version 
+
+Textbook end-of-chapter exercises 
+Textbooks currently come in paper and electronic 
+format.  We  used  the  instructions  from  the 
+electronic 
+and  made  minimal 
+modifications.  We  had  to  specify  the  C++ 
+language.  For  exercises  building  on  a  previous 
+exercise,  we  copied  the  instructions  from  the 
+older  exercise  and  added  the  modification 
+instructions. Figure 5 gives an example. 
+
+encountered  minor 
+
+We 
+problems  with 
+incompatibilities  between  the  textbook  and 
+exercise  solutions.  Occasionally  the  solution 
+numbering  was  off  or  no  textbook  solution  was 
+provided,  so  we  matched  the  solutions  with  the 
+proper  exercise  number.  If  we  did  not  have  a 
+textbook solution, we make notes in Appendix B 
+which has the results of the analysis. 
+
+Finally, since we did not want to list the textbook 
+instructions  with  the  textbook  solutions  in  this 
+paper,  we  do  not  include  them  in  an  appendix. 
+They are, however, available upon request to the 
+corresponding author.  
+
+Selecting the AI instrument 
+Multiple tools are currently available for free. We 
+will  briefly  discuss  three  of  them.  All  three  are 
+web-based 
+software  plugins. 
+than 
+Students  have  different  preferences  for  their 
+Integrated  Development  Environments  (IDEs) 
+
+rather 
+
+and  copying  and  pasting  from  a  browser  allows 
+them to use their favorite IDE. 
+
+Game 
+
+Number 
+
+Guessing 
+
+First exercise: 
+Random Number Guessing Game 
+Write  a  program  that  generates  a  random 
+number  and  asks  the  user  to  guess  what  the 
+number  is.  If  the  user’s  guess  is  higher  than 
+the  random  number,  the  program  should 
+display  “Too  high,  try  again.”  If  the  user’s 
+guess  is  lower  than  the  random  number,  the 
+program  should  display  “Too  low,  try  again.” 
+The  program  should  use  a  loop  that  repeats 
+until  the  user  correctly  guesses  the  random 
+number. 
+Second exercise: 
+Random 
+Enhancement 
+Enhance  the  program  that  you  wrote  for 
+Programming Challenge 20 so it keeps a count 
+of  the  number  of  guesses  the  user  makes. 
+When  the  user  correctly  guesses  the  random 
+number,  the  program  should  display  the 
+number of guesses. 
+Combined ChatGPT instructions: 
+Random 
+Guessing 
+Number 
+Enhancement 
+Write a C++ program that generates a random 
+number  and  asks  the  user  to  guess  what  the 
+number  is.  If  the  user’s  guess  is  higher  than 
+the  random  number,  the  program  should 
+display  “Too  high,  try  again.”  If  the  user’s 
+guess  is  lower  than  the  random  number,  the 
+program  should  display  “Too  low,  try  again.” 
+The  program  should  use  a  loop  that  repeats 
+until  the  user  correctly  guesses  the  random 
+number. 
+
+Game 
+
+Enhance the C++ program so it keeps a count 
+of  the  number  of  guesses  the  user  makes. 
+When  the  user  correctly  guesses  the  random 
+number,  the  program  should  display  the 
+number of guesses. 
+Figure 5 - Combined ChatGPT Instructions 
+
+The original ChatGPT is available on the OpenAI 
+It 
+website  at  https://openai.com/chatgpt 
+requires  setting  up  an  account  and  logging  in. 
+Traffic may be throttled with high use, leading to 
+the  error  message  “ChatGPT  has  too  many 
+requests  in  1  hour.  Try  again  later.”    Since 
+availability  to  students  is  a  major  issue,  this 
+disqualified OpenAI for this study. 
+
+. 
+
+ChatGPT-4  has  been  integrated  into  the  Bing 
+search engine on the Microsoft Edge Browser and 
+now  also  at  https://www.bing.com/ 
+(MIT 
+Technology  Review,  2023).  The  Bing  chatbot  is 
+also plugged into the Bing search engine (Figure 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 9 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+6),  so  it  can  get  current  information  from  the 
+internet to use in the responses (Tomsguide.com, 
+2023).  
+
+Google  Bard  is  based  on  the  Google  LaMDA 
+language  model.  On  April  21,  2023,  the  CEO  of 
+Google  announced  that  Google  Bard  could 
+generate code including the C++ language. Users 
+must 
+page 
+(https://bard.google.com/) and choose “Join the 
+waitlist.” Waiting does not exist at the time of this 
+writing.  Bard  is  currently  not  integrated  with  a 
+search engine, relies on updates, and can only be 
+used for personal accounts. 
+
+Google 
+
+Bard 
+
+visit 
+
+the 
+
+We selected the Bing search engine site because 
+it was free, easy to use, and we did not notice any 
+performance issues in our initial testing.  
+
+Figure 6: Chatbot in Edge 
+
+Using the Bing chatbot 
+The chatbot is available as  part of the Microsoft 
+Edge browser. On each new page, an icon with a 
+“b”  opens  the  chat  pane  (Figure  6,  top  right). 
+Users  enter  their  questions  and  requests  in  the 
+“Ask me anything” bar and can choose between 
+three conversational styles  (Warren, 2023). The 
+default is More Balanced, and we used this style 
+for  most  of  our  work.  Occasionally,  when  the 
+chatbot declined to answer and wanted to go to 
+another  topic,  we  used  the  More  Precise  style. 
+“More Creative” did not seem appropriate for our 
+work. One reason to go to “More Precise” is the 
+character  limit  on  the  ChatGPT  input.  Whereas 
+More Balanced has a 2,000-character limit, both 
+More Creative and More Balanced have a 4,000-
+character limit. 
+
+4. SAMPLE AND DATA COLLECTION 
+
+Legacy assignments 
+The six course assignments have been discussed 
+the  previous  section.  Their  complete 
+in 
+solutions,  and  ChatGPT 
+instructions  and 
+equivalents, are listed in Appendix A. 
+
+Textbook exercises 
+The  textbook  has  eight  chapters  used  for  the 
+CS2014 class. The remainder of the chapters are 
+used  in  the  follow-up  class,  CS  2163  Computer 
+Science  II.  Table  3  provides  an  overview  of  the 
+topics  and 
+the  number  of  end-of-chapter 
+exercises. 
+
+Scoring assignments and exercises 
+We copied and pasted the ChatGPT instructions in 
+Appendix  A  to  generate  the  C++  code  for  the 
+ChatGPT version. We then copied both the book 
+solutions and ChatGPT code to programs in Visual 
+Studio Code. All programs were scored by the first 
+author  on  whether  (yes/no)  all  requirements  in 
+the instructions were met. 
+
+We focused on the explicitly stated requirements 
+as provided in the book description.  For instance, 
+textbook  authors  made  extensive  use  of 
+constants.  We  only  considered  the  presence  or 
+absence  of  constants  when  it  was  specifically 
+mentioned.  As  another  example,  chapter  6  on 
+functions  preceded  chapter  8  on  searching  and 
+sorting.  We  did  not  penalize  ChatGPT  unless 
+separate  functions  were  specifically  mentioned 
+(which they usually were not). The only exception 
+we  made  was  in  chapter  2  where  the  book 
+solutions  ran  without  output.    We  did  consider 
+that an (unspoken) requirement. 
+
+5. ANALYSIS AND FINDINGS 
+
+Legacy course assignments 
+ChatGPT was able to meet most requirements. 
+
+Assignment  1  was  the  simplest,  with  identical 
+source  code  answers.  Both  versions  met  all 
+requirements. 
+
+Assignment 2 was more demanding, but standard 
+for  repetition  and  output 
+formatting.  Both 
+versions met all requirements. 
+
+Assignment 3 used file input to generate a table 
+with  annual  and  grand  totals.  ChatGPT  added 
+arrays,  which  had  not  yet  been  covered.  In  the 
+Spring 2023 class, this issue was addressed with 
+the  general  instruction  to  only  use  material 
+previously  covered.  This  context  was  not 
+available  to  ChatGPT.  Both  versions  met  all 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 10 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+requirements. It is a good example of needing to 
+use specific instructions to get specific results. 
+
+#  Name 
+
+2 
+
+Introduction  to 
+C++ 
+
+3 
+
+Expressions 
+and 
+Interactivity 
+
+4 
+
+Making 
+Decisions 
+
+5 
+
+Loops and Files 
+
+6 
+
+Functions 
+
+7 
+
+Arrays 
+Vectors 
+
+and 
+
+8 
+
+Searching  and 
+Sorting Arrays 
+
+data 
+
+strings 
+
+casting 
+
+Focus 
+Output 
+#include 
+variables 
+numerical 
+types 
+C++ 
+Operators 
+Mathematical 
+operations 
+type 
+assignment 
+output  formatting 
+string class 
+If  ,  if/else,  if/else 
+if/else 
+logical  operators 
+input 
+checking 
+switch 
+(do)  while  loops 
+for loops 
+(sub) 
+nested 
+intro to files 
+Functions 
+(definition,  calls, 
+prototypes) 
+return 
+static variables 
+Reference 
+variables 
+Arrays (definition, 
+accessing, 
+processing) 
+range-based 
+loop 
+multi-dimensional 
+arrays 
+STL vectors 
+Bubble 
+insertion 
+linear 
+binary search 
+
+sort 
+sort 
+search 
+
+totals 
+loops 
+
+values 
+
+for 
+
+ex. 
+
+20 
+
+25 
+
+28 
+
+27 
+
+24 
+
+21 
+
+12 
+
+Table 3: Textbook Chapters 
+
+Assignment 4 is where  ChatGPT first failed. The 
+program was to generate a user-specified number 
+of random numbers, to read and calculate on the 
+first 50 numbers, and then to read and calculate 
+on all numbers in the file. Of course, this required 
+closing the file after reading the first 50 numbers 
+so  all  numbers  could  be  accessed.  ChatGPT  did 
+not, so the second table was based on 50 too few 
+numbers.  In  experimenting  with  requests  to  fix 
+this  error,  ChatGPT  came  up  with  innovative 
+
+solutions including setting the file pointer back to 
+the  start  of  the  file,  but  it  did  not  initially  meet 
+the requirements. 
+
+Assignment 5 required breaking down seconds to 
+days, hours, and minutes. The calculations were 
+correct, but there was one minor deviation in the 
+output. In the original instructions, an example of 
+output  was  given  where  0  days  would  not  be 
+displayed.  It  is  again  an  example  of  needing 
+explicit instructions.  
+
+In assignment 6, where 25 floats were processed 
+in  an  array,  ChatGPT  met  all  requirements.  It 
+used the algorithms library to sort the array, but 
+this was not specifically forbidden.  
+
+As a last remark, we would like to note that giving 
+sample  output  helps  ChatGPT  to  generate  code 
+with the same look and feel as originally intended. 
+In  the  assignments,  we  have  included  sample 
+output for students to practice proper input and 
+output. In the end-of-chapter exercises, ChatGPT 
+did not have this advantage. 
+
+Textbook exercises 
+Except  for  chapter  2,  where  the  book  solutions 
+omitted the output, the book solutions outscored 
+the  ChatGPT  results.  Appendix  B  shows  the 
+results by exercise, summarized by chapter  and 
+overall.  Five  exercises  did  not  have  a  book 
+solution,  and  even  though  ChatGPT  created 
+working solutions, we excluded the pairs from the 
+sample.  
+
+Comparing  the  chapters,  ChatGPT  had  most 
+difficulties  in  chapter  6  on  functions.  On  further 
+investigation,  this  was  not  due  to  inability  to 
+create separate functions. Most  failures resulted 
+from lack of input checking and some logic errors.  
+
+Overall,  neither  the  book  nor  ChatGPT  provided 
+perfect solutions. Whereas ChatGPT successfully 
+met the stated requirements 78.9% of the time, 
+the book managed only 90.8%. Examples of book 
+solutions  not  meeting  requirements  are 
+in 
+Appendix  C.  With  a  valid  total  of  152  exercise 
+pairs,  we  wanted  to  determine  if  there  was  a 
+statistically  significant  difference  of  the  two 
+proportions.  This  is  a  simple  test  that  can  be 
+performed  with  a  Z-test  in  Excel  (Statology, 
+2019).  Since  the  book  success  percentage  was 
+higher than the ChatGPT success percentage, we 
+used a one-tailed test. The null hypothesis was 
+
+H0: pb <= pc 
+and the alternative hypothesis 
+Ha: pb > pc 
+where  pb  is  the  book  proportion  and  pc  the 
+ChatGPT proportion. We calculated the z-value as 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 11 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+follows:  the  book  proportion  pb  is  0.908;  the 
+ChatGPT proportion pc is 0.789. Both sample sizes 
+sb and sc are 152. The pooled sample proportion 
+ps 
+
+ps = (pb * sb + pc * sc)/ (sb + sc) = 
+(0.908 * 152 + 0.789 * 152) / (152 + 152) = 
+0.84868 
+
+The test statistic z: 
+z = (pb - pc) / √ ps * (1- ps) * [ (1/ sb) + (1/ sc)] 
+= (0.908 – 0.789) / √ 0.84868* (1- 0.84868) * 
+[ (1/ 152) + (1/ 152)] 
+= 2.88085. 
+The  p-value  can  be  found  on  a  Z  table  or 
+calculated with the Excel formula  
+
+p = 1 – NORM.S.DIST(z,true) = 
+0.00198 
+At  a  value  of  0.00198,  the  null  hypothesis  is 
+rejected  and  the  alternative  hypothesis  of  the 
+book  success  percentage  being  statistically 
+greater, is correct. 
+
+In  the  course  of  analysis  of  the  data,  combined 
+with our experience using AI in the class, we have 
+several recommendations for using generative AI 
+in introductory programming classes.  
+•  Specify the programming language. ChatGPT 
+would  generate  solutions  in  the  wrong 
+language. 
+
+• 
+
+•  Require students to explain each line of code 
+to make sure that they understand the whole 
+program (Figure 7).  
+Instruct students that they can only use what 
+has been covered in  class. For instance, the 
+use of arrays in assignment 4 was superior to 
+repeatedly reading files. However, arrays had 
+not been covered yet.  
+
+•  Consider specifying what you want the AI to 
+do, as opposed to instructing it not to do. It 
+worked in 2-15, where the instruction “Please 
+don't  use  loops.  We  have  not  covered  that 
+yet”  resulted  in  the  proper  sequence  of 
+in  the  more 
+output.  It  did  not  work 
+complicated  2-16  which  used  a  diamond 
+instead of a triangle, and instructing the AI to 
+avoid  loops  was  not  successful.  Likewise,  in 
+3-13, ChatGPT used constants because it was 
+explicitly instructed to  do so. In contrast,  in 
+3-14,  tax  rates  were  not  used  as  constants 
+because there was no instruction to do so. 
+•  Unless  you  ask  for  something,  you  may  not 
+get  it.  The  AI  would  not  use  variables  but 
+hard-coded  values.  We  suggest  specifying 
+data 
+the 
+types 
+membership rates.” 
+
+like  “use  doubles 
+
+for 
+
+• 
+
+• 
+
+Figure 7: Commenting to demonstrate 
+understanding. 
+
+The input on the website has a maximum of 
+2000 characters for input. If one exercise is a 
+modification of an earlier exercise, there may 
+be enough room to paste the instructions for 
+the old exercise before the new one. If there 
+is  not,  consider  going  to  the  slower  More 
+Precise style with the 4,000-character limit. 
+The  outcome  of  the  AI  cannot  be  trusted 
+completely. This allows us, and indeed forces 
+us, to introduce the concept of testing much 
+earlier 
+than  before.  Tests  should  be 
+dependent  on  the  requirements  of  the 
+program.  For 
+if  the  program 
+specifies  input  range  checking,  this  requires 
+additional  tests  with  out-of-bound  inputs. 
+Without  the  requirement,  only  valid  values 
+should  be  used  and  clearly  incorrect  inputs 
+(e.g., negative ages) avoided. Generative AI 
+has  also  been  known  to  create  non-existing 
+data.  We  saw  this  in  exercise  6-2,  where 
+ChatGPT made up an interest rate. This does 
+not  mean  that  testing  the  book  solutions  is 
+any less important. In exercises 4-12 and 4-
+20,  ChatGPT  got  the  math  correct  and  the 
+book did not. 
+
+instance, 
+
+•  When running the program to test the output, 
+consider  using  different  numbers  than  the 
+book  sample  output.  We  did  not  find  any 
+instances  of  hard-coded  output  but  is  a 
+(remote)  possibility.  More 
+importantly, 
+numbers 
+the  book  don’t  always 
+appropriately test the program. For instance, 
+prices  like  $25  could  easily  overlook  lack  of 
+output formatting, whereas prices like $24.78 
+might  give  additional  information  without 
+additional tests. 
+
+from 
+
+•  ChatGPT often  gives explanations of how its 
+generated code works. This could be used in 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 12 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+questions  like  “Where  can  you  see  that  the 
+input is between 0 and 100?” 
+
+•  ChatGPT  cannot  read  figures  because  it  is 
+only text-based at this point. It could not do 
+exercise  4-27  because  it  was  based  on  a 
+figure. Thus, figures could be used in class to 
+discourage or prevent the use of ChatGPT for 
+tests. 
+
+• 
+
+•  Book instructions often contain formulas that 
+students need to solve an exercise, but that 
+ChatGPT  may  not  need.  For 
+instance, 
+formulas  for  Future  Value  or  Present  Value 
+may not need to be given.  
+It helps to give sample output as part of the 
+instructions.  This  automatically  led  to  the 
+inclusion  of  the  setw()  function  to  create 
+columns of the exact same width as the book 
+solution.  We  recommend  monospaced  fonts 
+in  the  code  editor  to  facilitate  checking  the 
+results.  Wording  may  matter,  e.g.  “The 
+program should display a report similar to the 
+following”  versus  “This  is  what  the  program 
+should look like to the user.” 
+
+•  When starting another program, begin a new 
+conversation  so  old  instructions  do  not 
+influence  the  results.  When  modifying  the 
+results, specify that the current solution must 
+be  used.  We  found  words  like  “Now  use  …” 
+helpful. 
+
+•  Using  an  online  engine  is  dependent  on 
+availability  of  the  service.  There  are  times 
+that the system may not be available or runs 
+slowly. 
+
+6. CONCLUSIONS AND RECOMMENDATIONS 
+
+Even though the book solutions outperformed the 
+ChatGPT  solutions,  the  comparison  is  imperfect. 
+With  more  precise  instructions,  we  might  have 
+been  able  to  generate  solutions  that  better  met 
+the  requirements.  The  other  issue is  the  quality 
+of the code for both versions. Even though it may 
+not  be  specified,  ChatGPT  often  provides 
+solutions with higher-level or better programming 
+logic.  For 
+instance,  sorting  and  searching 
+algorithms  have  long  been  formalized.  It  may 
+simply  be  enough  for  students  to  recognize  the 
+algorithm,  learn  the  relative  strengths  and 
+weaknesses in a course like Data Structures and 
+Algorithms, and learn to use the algorithm library 
+in this course. 
+
+Regardless, generative AI is here to stay, and we 
+will  need  to  incorporate  it  in  our  programming 
+classes,  starting  with  introductory  classes  and 
+progressing  to  more  advanced  programming 
+classes as the software gains power. The current 
+competition  between  technology  giants 
+like 
+Microsoft,  Google,  and  Amazon  will  continue  to 
+
+drive  advancements.  At  the  same  time,  the 
+workflow  of  software  engineers  is  going  to  be 
+significantly streamlined and automated.  
+
+With  the  current  limitations  of  AI  and  the 
+expected  rapid  development,  can  we  expect  to 
+use  AI  in  advanced  programming  classes?  We 
+plan  to  examine  this  in  the  follow-up  class 
+CS2163  and  the  Java-based  CS3033  Object-
+Oriented Programming classes. 
+
+Future directions 
+This  study  only  compares  literal  copies  of  book 
+instructions  for  C++  programming  exercises. 
+ChatGPT shows success especially in earlier parts 
+of  the  book.  We  plan  to  expand  our  work  by 
+taking 
+building 
+instructions to ChatGPT from scratch to recreate 
+the  book  solutions  as  closely  as  possible.  We 
+expect  this  to  yield  valuable  information  for 
+faculty  and  students  how  to  specifically  instruct 
+ChatGPT to get specific answers. 
+
+solutions 
+
+textbook 
+
+and 
+
+7.REFERENCES 
+
+Amazon. (2023). Deep Learning on AWS. Amazon 
+Inc. 
+
+Web 
+https://aws.amazon.com/deep-learning/ 
+
+Services, 
+
+Azure. (2023). Azure Machine Learning—ML as a 
+Azure. 
+
+Service 
+Microsoft 
+| 
+https://azure.microsoft.com/en-
+us/products/machine-learning 
+
+Bansal,  J.  (2024,  March  5).  Thanks  to  AI,  the 
+coder  is  no  longer  king:  All  hail  the  QA 
+engineer. 
+Company. 
+Fast 
+https://www.fastcompany.com/91045570/th
+anks-to-ai-the-coder-is-no-longer-king-all-
+hail-the-qa-engineer 
+
+Brandon Paykamian. (2023, January 25). Higher 
+Ed  Reactions  to  ChatGPT  Run  the  Gamut. 
+GovTech. 
+https://www.govtech.com/education/higher-
+ed/higher-ed-reactions-to-chatgpt-run-the-
+gamut 
+
+Brown,  S.  (2021,  April  21).  Machine  learning, 
+Sloan. 
+
+explained 
+https://mitsloan.mit.edu/ideas-made-to-
+matter/machine-learning-explained 
+
+MIT 
+
+| 
+
+Cardona, M. A. (2023). Artificial Intelligence and  
+Future  of  Teaching  and  Learning:  Insights 
+and  Recommendations.  U.S.  Department  of 
+Education, Office  of  Educational Technology. 
+https://tech.ed.gov/ai-future-of-teaching-
+and-learning/ 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 13 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+Chen,  L.  (2022).  Current  and  Future  Artificial 
+Intelligence  (AI)  Curriculum  in  Business 
+School:  A  Text  Mining  Analysis.  Journal  of 
+Information Systems Education, 33(4), 416–
+426. 
+
+Classcentral.com.  (2023,  May  17).  LLM  (Large 
+Language  Model)  |  Free  Online  Courses  | 
+Class 
+Central. 
+https://www.classcentral.com/subject/llm 
+
+CNBC.com. (2023, March 11). Why ChatGPT and 
+AI are taking over the cold call, according to 
+Salesforce 
+CNBC. 
+https://www.cnbc.com/2023/03/11/why-
+chatgpt-ai-are-taking-over-the-cold-call-
+salesforce-leader.html 
+
+leader. 
+
+Coursera.  (2023a).  Deep  Learning.  Coursera. 
+
+https://www.coursera.org/specializations/de
+ep-learning 
+
+Coursera. 
+
+(2023b). 
+
+IBM  AI  Engineering. 
+
+Coursera. 
+https://www.coursera.org/professional-
+certificates/ai-engineer 
+
+Dempere,  J.,  Modugu,  K.,  Hesham,  A.,  & 
+Ramasamy,  L.  K.  (2023).  The  impact  of 
+ChatGPT  on  higher  education.  Frontiers  in 
+8. 
+Education, 
+https://doi.org/10.3389/feduc.2023.120693
+6 
+
+Denny,  P.,  Prather,  J.,  Becker,  B.  A.,  Finnie-
+Ansley,  J.,  Hellas,  A.,  Leinonen,  J.,  Luxton-
+Reilly,  A.,  Reeves,  B.  N.,  Santos,  E.  A.,  & 
+Sarsa, S. (2023). Computing Education in the 
+Era  of  Generative  AI  (arXiv:2306.02608). 
+arXiv. 
+https://doi.org/10.48550/arXiv.2306.02608 
+
+Devlin,  J.,  Chang,  M.-W.,  Lee,  K.,  &  Toutanova, 
+K.  (2018).  Bert:  Pre-training  of  deep 
+language 
+bidirectional 
+Preprint 
+understanding. 
+arXiv:1810.04805. 
+https://doi.org/10.48550/arXiv.1810.04805 
+
+transformers 
+arXiv 
+
+for 
+
+Evans, R., & Gao, J. (2016, July 20). DeepMind AI 
+Reduces  Google  Data  Centre  Cooling  Bill  by 
+40%. 
+https://www.deepmind.com/blog/deepmind-
+ai-reduces-google-data-centre-cooling-bill-
+by-40 
+
+Foster,  D.  (2022).  Generative  Deep  Learning. 
+
+O’Reilly Media, Inc. 
+
+Freeman-Wong,  J.,  Munguia,  D.,  &  Mohr,  J.  J. 
+(2023).  Building  a  Strategy  to  Harness 
+ChatGPT in Education. California Management 
+Insights. 
+Review 
+
+https://cmr.berkeley.edu/2023/08/building-
+a-strategy-to-harness-chatgpt-in-education/ 
+
+Github  Inc.  (2023).  GitHub  Resources.  GitHub 
+
+Resources. 
+https://resources.github.com/copilot-for-
+business/ 
+
+Google.  (2023).  Brain  [Corporate].  About  the 
+
+Team. https://research.google/teams/brain 
+
+Haenlein, M., & Kaplan, A. (2019). A Brief History 
+of Artificial Intelligence: On the Past, Present, 
+and Future of Artificial Intelligence. California 
+Management Review, 61, 000812561986492. 
+https://doi.org/10.1177/0008125619864925 
+
+Intelligent. (2023). One-Third of College Students 
+Used  ChatGPT  for  Schoolwork  During  the 
+2022-23 
+Year. 
+https://www.intelligent.com/one-third-of-
+college-students-used-chatgpt-for-
+schoolwork-during-the-2022-23-academic-
+year/ 
+
+Academic 
+
+Johnson, J. (2023, April 11). What Is ChatGPT & 
+Why  Should  Programmers  Care  About  It? 
+Codecademy 
+Blog. 
+https://www.codecademy.com/resources/blo
+g/what-is-chatgpt/ 
+
+Kalliamvakou, E. (2022, September 7). Research: 
+Quantifying  GitHub  Copilot’s 
+impact  on 
+developer  productivity  and  happiness.  The 
+GitHub  Blog.  https://github.blog/2022-09-
+07-research-quantifying-github-copilots-
+impact-on-developer-productivity-and-
+happiness/ 
+
+Kaplan, A., & Haenlein, M. (2019). Siri, Siri, in my 
+hand:  Who’s  the  fairest  in  the  land?  On  the 
+interpretations, illustrations, and implications 
+of  artificial  intelligence.  Business  Horizons, 
+62(1), 
+15–25. 
+https://doi.org/10.1016/j.bushor.2018.08.0
+04 
+
+Kayla  Jimenez.  (2023,  January  30).  “This 
+shouldn’t  be  a  surprise”  The  education 
+to 
+community  shares  mixed 
+TODAY. 
+ChatGPT. 
+https://www.usatoday.com/story/news/educ
+ation/2023/01/30/chatgpt-going-banned-
+teachers-sound-alarm-new-ai-
+tech/11069593002/ 
+
+reactions 
+
+USA 
+
+Kissinger, H. A., Schmidt, E., & Huttenlocher, D. 
+(2021). The Age of AI and Our Human Future. 
+Hachette Book Group. 
+
+Lachheb,  A.  (2024,  January  15).  ChatGPT  in 
+Higher  Education:  Facts  and  Ideas 
+to 
+Teaching. 
+Consider 
+
+Online 
+
+| 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 14 
+
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+https://onlineteaching.umich.edu/articles/ch
+atgpt-in-higher-education-facts-and-ideas-
+to-consider/ 
+
+Marr,  B.  (2023,  May  19).  A  Short  History  Of 
+ChatGPT:  How  We  Got  To  Where  We  Are 
+Today. 
+Forbes. 
+https://www.forbes.com/sites/bernardmarr/
+2023/05/19/a-short-history-of-chatgpt-how-
+we-got-to-where-we-are-today/ 
+
+McMurtrie,  B.  (2023).  ChatGPT  Is  Everywhere: 
+Love it or hate it, academics can’t ignore the 
+already  pervasive  technology.  The  Chronicle 
+of 
+69(15). 
+https://www.chronicle.com/article/chatgpt-
+is-already-upending-campus-practices-
+colleges-are-rushing-to-respond 
+
+Education, 
+
+Higher 
+
+Michigan  Online.  (2023).  ChatGPT  Teach-Out. 
+https://online.umich.edu/courses/chatgpt-
+teach-out/ 
+
+Microsoft.  (2023).  VALL-E.  VALL-E.  https://vall-
+
+e.io/ 
+
+Midjourney.com.  (2023).  Midjourney  Showcase. 
+https://www.midjourney.com/showcase/rece
+nt/ 
+
+MIT  Center  for  Constructive  Communication. 
+(2023).  MIT  MAS.S68!  MIT  MAS.S68. 
+https://www.mit.edu/~mas.s68/ 
+
+MIT  Technology  Review.  (2023,  March  23).  The 
+inside  story  of  how  ChatGPT  was  built  from 
+the  people  who  made  it.  MIT  Technology 
+Review. 
+https://www.technologyreview.com/2023/03
+/03/1069311/inside-story-oral-history-how-
+chatgpt-built-openai/ 
+
+Mok,  K.  (2017,  April  4).  Identifying  Emergent 
+Behaviors  of  Complex  Systems—In  Nature 
+and 
+Stack. 
+New 
+https://thenewstack.io/identifying-
+emergent-behaviors-complex-systems-
+nature-computers/ 
+
+Computers. 
+
+The 
+
+Murali,  V.,  Maddila,  C.,  Ahmad,  I.,  Bolin,  M., 
+Cheng,  D.,  Ghorbani,  N.,  Fernandez,  R.,  & 
+Nagappan,  N.  (2023).  CodeCompose:  A 
+Large-Scale  Industrial  Deployment  of  AI-
+assisted 
+Authoring. 
+Code 
+https://doi.org/10.48550/arXiv.2305.12050 
+
+Ouyang,  L.,  Wu,  J.,  Jiang,  X.,  Almeida,  D., 
+Wainwright,  C.,  Mishkin,  P.,  Zhang,  C., 
+Agarwal,  S.,  Slama,  K.,  &  Ray,  A.  (2022). 
+Training 
+follow 
+instructions with human feedback. Advances 
+in  Neural  Information  Processing  Systems, 
+
+language  models 
+
+to 
+
+35, 
+https://doi.org/10.48550/arXiv.2203.02155 
+
+27730–27744. 
+
+Radford,  A.,  Narasimhan,  K.,  Salimans,  T.,  & 
+Sutskever,  I.  (2018).  Improving  language 
+understanding  with  unsupervised  learning. 
+Technical 
+OpenAI. 
+report. 
+https://openai.com/research/language-
+unsupervised 
+
+Raffel,  C.,  Shazeer,  N.,  Roberts,  A.,  Lee,  K., 
+Narang,  S.,  Matena,  M.,  Zhou,  Y.,  Li,  W.,  & 
+Liu,  P.  J.  (2020).  Exploring  the  limits  of 
+transfer  learning  with  a  unified  text-to-text 
+transformer. The Journal of Machine Learning 
+5485–5551. 
+21(1), 
+Research, 
+https://doi.org/10.48550/arXiv.1910.10683 
+
+for 
+
+Renbarger, M. (2023, January 31). Generative AI 
+is  coming 
+the  classroom,  whether 
+teachers  like  it  or  not.  Here’s  why  many  in 
+education think it should be embraced rather 
+than 
+Insider. 
+https://www.businessinsider.com/education-
+experts-teachers-generative-ai-chatgpt-
+classroom-2023-1 
+
+shunned. 
+
+Business 
+
+Researchgate.net.  (2019).  Fig.  3.  Generalized 
+(recurrent)  neural  network  architecture  with 
+two... 
+ResearchGate. 
+https://www.researchgate.net/figure/Genera
+lized-recurrent-neural-network-architecture-
+with-two-hidden-layers-The-
+NN_fig3_337881315 
+
+resemble.ai.  (2023).  AI  Voice  Generator  with 
+AI. 
+
+Resemble 
+
+Text-to-Speech. 
+https://www.resemble.ai/ 
+
+Roose, K. (2023, March 28). How Does ChatGPT 
+Really  Work?  The  New  York  Times. 
+https://www.nytimes.com/2023/03/28/tech
+nology/ai-chatbots-chatgpt-bing-bard-
+llm.html 
+
+Shao, Z., Zhao, R., Yuan, S., Ding, M., & Wang, 
+Y. (2022). Tracing the evolution of AI in the 
+past  decade  and  forecasting  the  emerging 
+trends.  Expert  Systems  with  Applications, 
+118221. 
+https://doi.org/10.1016/j.eswa.2022.11822
+1 
+
+Shen,  S.,  Yao,  Z.,  Gholami,  A.,  Mahoney,  M.,  & 
+Keutzer,  K.  (2020).  Powernorm:  Rethinking 
+transformers. 
+batch 
+on  Machine 
+International 
+Learning, 
+8741–8751. 
+https://doi.org/10.48550/arXiv.2003.07845 
+
+in 
+Conference 
+
+normalization 
+
+Silver, D., Huang, A., Maddison, C. J., Guez, A., 
+L.,  Van  Den  Driessche,  G., 
+I., 
+
+Sifre, 
+Schrittwieser, 
+
+Antonoglou, 
+
+J., 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 15 
+
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+Panneershelvam,  V.,  &  Lanctot,  M.  (2016). 
+Mastering  the  game  of  Go  with  deep  neural 
+search.  Nature, 
+networks 
+tree 
+529(7587), 
+484–489. 
+https://doi.org/10.1038/nature16961 
+
+and 
+
+Silver,  D.,  Hubert,  T.,  Schrittwieser, 
+
+J., 
+Antonoglou, I., Lai, M., Guez, A., Lanctot, M., 
+Sifre, L., Kumaran, D., & Graepel, T. (2017). 
+Mastering chess and shogi by self-play with a 
+general  reinforcement  learning  algorithm. 
+https://doi.org/10.48550/arXiv.1712.01815 
+
+Simplilearn.com.  (2022).  Top  25  Deep  Learning 
+Applications  Used  Across  Industries  [2022 
+Simplilearn.Com. 
+Edition]. 
+https://www.simplilearn.com/tutorials/deep-
+learning-tutorial/deep-learning-applications 
+
+stablediffusionweb.com. (2023). Stable Diffusion 
+Online. https://stablediffusionweb.com/ 
+
+Stanford University. (2022). The AI index report. 
+https://aiindex.stanford.edu/ai-index-report-
+2022/ 
+
+Statista.  (2023,  November  16).  Data  growth 
+Statista. 
+
+worldwide 
+https://www.statista.com/statistics/871513/
+worldwide-data-created/ 
+
+2010-2025. 
+
+Statology. (2019, June 7). How to Perform a Two 
+Proportion  Z-Test 
+in  Excel.  Statology. 
+https://www.statology.org/two-proportion-z-
+test-excel/ 
+
+TabNine.  (2023).  AI  Assistant  for  software 
+Tabnine. 
+
+developers 
+https://www.tabnine.com/ 
+
+| 
+
+Tech Point Magazine. (2023, February 26).  How 
+Code. 
+ChatGPT 
+
+to 
+https://techpointmag.com/how-to-use-
+chatgpt-to-code/ 
+
+use 
+
+to 
+
+Techradar.com.  (2023,  March  14).  GPT-4  is 
+bringing  a  massive  upgrade  to  ChatGPT  | 
+TechRadar. 
+https://www.techradar.com/news/gpt-4 
+
+Tensorflow.  (2023).  Create  production-grade 
+machine  learning  models  with  TensorFlow 
+[Corporate]. https://www.tensorflow.org/ 
+
+Terry, O. K. (2023). I’m a Student. We’re Already 
+Using  ChatGPT:  No  professor  or  software 
+could  ever  pick  up  on  it.  The  Chronicle  of 
+Higher 
+69(15). 
+Education, 
+https://www.chronicle.com/article/im-a-
+student-you-have-no-idea-how-much-were-
+using-chatgpt 
+
+Tomsguide.com. (2023, April 20). 7 best ChatGPT 
+tested.  Tom’s  Guide. 
+
+alternatives 
+https://www.tomsguide.com/features/chatg
+pt-alternatives 
+
+I’ve 
+
+Udemy. (2023). Online Courses—Learn Anything, 
+Udemy. 
+
+On 
+https://www.udemy.com/courses/search/ 
+
+Schedule. 
+
+Your 
+
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, 
+J., Jones, L., Gomez, A. N., Kaiser,  \Lukasz, 
+&  Polosukhin,  I.  (2017).  Attention  is  all  you 
+need.  Advances 
+Information 
+Processing Systems, 30. 
+
+in  Neural 
+
+Warren,  T.  (2023,  March  2).  Microsoft  now  lets 
+you  change  Bing’s  chatbot  personality  to  be 
+more 
+Verge. 
+https://www.theverge.com/2023/3/2/23621
+772/microsoft-bing-ai-chatbot-personality-
+toggle 
+
+entertaining. 
+
+The 
+
+Yahoo  News.  (2023,  May  24).  Here  Are  All  the 
+Companies  Using  ChatGPT…So  Far.  Yahoo 
+News.  https://news.yahoo.com/companies-
+using-chatgpt-far-205500883.html 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 16 
+
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+Appendix A – Description of Assignments and ChatGPT Instructions 
+
+The appendix has been moved online due to restrictions on the file size of submitted manuscripts.  
+
+Link: appendixA.docx 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us 
+
+ Page 17 
+
+ 
+ 
+ 
+ 
+ 
+  
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+Appendix B – Pairwise Comparison of Book and ChatGPT Solutions 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                        
+https://isedj.org/; https://iscap.us 
+
+ Page 18 
+
+ExerciseChatGPTbookExerciseChatGPTbookExerciseChatGPTbookExerciseChatGPTbookExerciseChatGPTbookExerciseChatGPTbookExerciseChatGPTbook2-1yesno3-1yesyes4-1yesyes5-1yesyes6-1yesyes7-1noyes8-1yesyes2-2yesno3-2yesyes4-2yesyes5-2noyes6-2yesyes7-2yesyes8-2yesyes2-3yesno3-3yesyes4-3yesyes5-3yesyes6-3yesyes7-3yesyes8-3yesyes2-4yesyes3-4yesyes4-4yesyes5-4yesyes6-4yesyes7-4yesyes8-4yesyes2-5yesyes3-5yesyes4-5yesyes5-5yesno6-5yesyes7-5noyes8-5yesno2-6yesyes3-6yesyes4-6yesyes5-6yesyes6-6yesyes7-6yesyes8-6noyes2-7yesyes3-7yesyes4-7noyes5-7yesyes6-7yesyes7-7noyes8-7noyes2-8yesyes3-8yesyes4-8yesyes5-8noyes6-8noyes7-8yesyes8-8yesyes2-9yesyes3-9noyes4-9yesyes5-9yesyes6-9noyes7-9yesno8-9yesyes2-10yesyes3-10yesyes4-10yesyes5-10yesyes6-10yesyes7-10noyes8-10yesyes2-11yesyes3-11yesyes4-11noyes5-11yesyes6-11noyes7-11yesno8-11yesyes2-12yesno3-12yesyes4-12yesno5-12yesyes6-12noyes7-12yesyes8-12**2-13yesyes3-13yesyes4-13yesyes5-13yesyes6-13yesyes7-13yesno2-14yesyes3-14yesyes4-14yesyes5-14yesyes6-14noyes7-14yesyes2-15yesyes3-15yesyes4-15yesyes5-15yesyes6-15noyes7-15yesyes2-16yesyes3-16yesyes4-16yesyes5-16noyes6-16yesyes7-16noyes2-17yesyes3-17noyes4-17yesyes5-17yesyes6-17yesno7-17yesyes2-18yesyes3-18yesyes4-18yesyes5-18noyes6-18noyes7-18yesyes2-19yesyes3-19yesyes4-19yesyes5-19yesyes6-19noyes7-19**2-20nono3-20yesyes4-20yesno5-20yesyes6-20noyes7-20**3-21yesyes4-21yesyes5-21yesyes6-21yesyes7-21yesyes3-22yesyes4-22yesyes5-22yesyes6-22noyes3-23yesyes4-23yesyes5-23yesyes6-23yesyes3-24yesyes4-24noyes5-24yesyes6-24noyes3-25noyes4-25yesno5-25noyes4-26yesyes5-26**4-27noyes5-27**4-28noyesch02ch03ch04ch05ch06ch07ch08ChatGPT1995.0%ChatGPT2288.0%ChatGPT2382.1%ChatGPT2080.0%ChatGPT1354.2%ChatGPT1473.7%ChatGPT981.8%book1575.0%book25100.0%book2589.3%book2496.0%book2395.8%book1684.2%book1090.9%count20count25count28count25count24count19count11*no solution in the book solution bankChatGPT total:120ChatGPT %: 78.9%book total:138book %90.8%Legendcount total:152yesrequirements metnorequirements not metTwo sample -test (one-tailed)source: https://www.statology.org/two-proportion-z-test-excel/ book proportion0.908book sample size152ChatGPT proportion0.789ChatGPT sample size152Pooled sample proportion0.84868=(D40*D41+D42*D43)/(D41+D43)Test statistic2.88085=(D40-D42)/SQRT(E45*(1-E45)*((1/D41)+(1/D43)))p-value0.00198=(1-NORM.S.DIST(E46, TRUE)) 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+Appendix C – Examples of Incomplete Textbook Solutions 
+
+Sum of Two Numbers 
+Write a program that stores the integers 50 and 100 in variables, and stores the sum of these two in a 
+variable named total. 
+
+Example 1 
+
+// Chapter 2, Programming Challenge 1: Sum of Two Numbers 
+int main() 
+{ 
+
+// Store the integers 50 and 100 in num1 and num2. 
+int num1 = 50, num2 = 100; 
+
+// Store the sum of num1 and num2 in total. 
+int total = num1 + num2; 
+return 0; 
+
+} 
+
+No output - the book forgot to use a cout statement. 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                          Page 19 
+https://isedj.org/; https://iscap.us 
+
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+  
+  
+  
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+Example 2 
+
+Software Sales 
+A software company sells a package that retails for $99. Quantity discounts are given according to the 
+following table. 
+Quantity        Discount 
+10–19                20% 
+20–49                30% 
+50–99                40% 
+100 or more        50% 
+Write a program that asks for the number of units sold and computes the total cost of the purchase. 
+Input Validation: Make sure the number of units is greater than 0. 
+
+// Chapter 4, Programming Challenge 12: Software Sales 
+#include <iostream> 
+#include <iomanip> 
+using namespace std; 
+
+int main() 
+{ 
+
+// Constant for the unit price. 
+const double UNIT_PRICE = 99.0; 
+
+int unitsSold;       // Number of units sold 
+double discountPct;  // Discount percentage 
+double discountCost; // Unit cost after discount 
+double totalCost;    // Total cost 
+
+// Get the number of units sold. 
+cout << "How many units were sold? "; 
+cin  >> unitsSold; 
+
+// Make sure a positive number was entered. 
+if (unitsSold <= 0) 
+
+cout << "Units sold must be greater than zero.\n"; 
+
+// Determine the discount percentage. 
+else 
+{ 
+
+if (unitsSold < 10) 
+
+discountPct = 0.00; 
+
+else if (unitsSold >= 10 && unitsSold <= 19) 
+
+discountPct = 0.20; 
+
+else if (unitsSold >= 20 && unitsSold <= 49) 
+
+discountPct = 0.30; 
+
+else if (unitsSold >= 50 && unitsSold <= 99) 
+
+discountPct = 0.40; 
+
+else    // unitsSold was 100 or more 
+
+discountPct = 0.50; 
+
+// Calculate the unit cost after the discount. 
+discountCost = UNIT_PRICE * discountPct; 
+
+// Calculate total cost. 
+totalCost = unitsSold * discountCost; 
+
+// Display the total cost. 
+cout << fixed << showpoint << setprecision(2); 
+cout << "The total cost of the purchase is $"  
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                          Page 20 
+https://isedj.org/; https://iscap.us 
+
+ 
+ 
+ 
+ 
+ 
+  
+  
+    
+  
+  
+  
+       
+       
+       
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+<< totalCost << endl; 
+
+} 
+
+return 0; 
+
+} 
+
+Output: 
+How many units were sold? -5 
+Units sold must be greater than zero. 
+
+How many units were sold? 55 
+The total cost of the purchase is $2178.00 
+
+Problem: the book solution is wrong. It gives a 60% discount. 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                          Page 21 
+https://isedj.org/; https://iscap.us 
+
+ 
+ 
+ 
+ 
+ 
+    
+  
+ 
+ 
+ 
+ 
+  
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+Example 3 
+
+void getEmployeeInfo(long emp[], int hrs[], double rate[], double pay[], int size) 
+{ 
+
+cout << "Enter the requested information " 
+
+ << "for each employee.\n"; 
+
+// Get the information for each employee. 
+for (int count = 0; count < size; count++) 
+{ 
+
+cout << "\nEmployee #" << emp[count] << endl; 
+
+The program crashes here because it should be hrs[count] 
+
+// Get this employee's hours worked. 
+cout << "\tHours worked: "; 
+cin  >> hrs[count]; 
+
+// Validate hours worked. 
+while (hrs < 0)  
+{   
+
+cout << "Hours worked 
+must be 0 or more. " 
+
+ << "Please re-enter: "; 
+
+cin  >> hrs[count]; 
+
+} 
+
+// Get this employee's pay rate. 
+cout << "\tPay rate: $"; 
+cin  >> rate[count]; 
+
+// Validate the pay rate. 
+while (rate[count] < 15.00) 
+{   
+
+cout << "Pay rate must be 15.00 or more. " 
+
+ << "Please re-enter: $"; 
+
+cin  >> rate[count]; 
+
+} 
+
+// Calculate this employee's gross pay. 
+pay[count] = hrs[count] * rate[count]; 
+} 
+
+} 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                          Page 22 
+https://isedj.org/; https://iscap.us 
+
+ 
+ 
+ 
+ 
+ 
+ 
+    
+    
+       
+  
+       
+  
+  
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+Teaching Case 
+
+Cleaning Out the Basement: Designing & 
+Developing a Database to Support an Online Side 
+Hustle Case 
+
+Dana Schwieger 
+dschwieger@semo.edu  
+Department of Management 
+Southeast Missouri State University 
+Cape Girardeau, MO 63701, USA 
+
+Abstract 
+
+With the growing  entrepreneurial  spirit  and  ease  of  selling items online,  many  people  are  turning  to 
+virtual marketplaces to earn extra income or, in some instances, build a career. This case focuses upon 
+the development of a database to assist in inventory management for an online reselling business that 
+has grown from an occasional hobby to a full-blown business. The case provides a realistic scenario that 
+can  be  used  in  a  capstone  business  course,  systems  analysis  and  design,  database  development,  or 
+graduate level management information systems course. Some of the suggested case exercises were 
+written  so  that  the  case  could  be  used  as  an  integrative  capstone  project  across  multiple  disciplines 
+including  digital  marketing,  entrepreneurship,  business  management,  project  management,  human 
+resources, accounting, finance, information systems, and computer science. Multiple assignment options 
+are  provided  allowing  instructors  to  select  an  assignment  based  upon  course  material  coverage. 
+Suggested  assignments  include  the  investigation  of  developing  an  online  business,  development  of 
+process  modeling  diagrams  such  as  a  data  flow  or  swim  lane  diagrams,  and  database  design  and 
+development artifacts.  
+
+Keywords: Teaching case, Database design, Process design, Swimlane diagrams, multidisciplinary 
+project  
+
+Recommended Citation: Schwieger, D., (2024). Cleaning Out the Basement: Designing & 
+Developing a Database to Support an Online Side Hustle Case. Information Systems Education 
+Journal. V22(n1) pp 23-31. https://doi.org/10.62273/PVUF5649 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                          Page 23 
+https://isedj.org/; https://iscap.us 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+Cleaning Out the Basement: Designing & Developing  
+a Database to Support an Online Side Hustle Case 
+
+Dana Schwieger 
+
+1. CASE SUMMARY 
+
+In a short amount of time, Tim Carter went from 
+an online resale novice, bent on cleaning out his 
+overstuffed  basement,  to  running  a  full-fledged 
+online  business  with  plans  to  hire  a  part  time 
+employee.  Tim  seeks  the  help  of  his  next-door 
+neighbor to design and develop a database that 
+will help him keep track of his inventory and sales 
+as well as prepare reports he can use to file his 
+income taxes.  
+
+2. THE BASEMENT 
+
+“I thought I was going to have free time when I 
+retired,”  Tim  mumbled  under  his  breath  as  he 
+finished packing a shipping box in preparation for 
+fulfilling  a  customer’s  Facebook  Marketplace 
+order. 
+
+“You did this to yourself, Timothy Carter,” Robin, 
+his  wife  teased.  “Besides,  you  know  you  really 
+enjoy the thrill of making a big flip.” 
+
+Tim couldn’t argue with that. It was exhilarating 
+to make a big  sale on something he had  gotten 
+for  free  or  next  to  nothing.  Tim  had  recently 
+retired from Whispering Hills Parks District where 
+he had worked as the supervisor of grounds and 
+maintenance for forty years. He was a jack-of-all-
+trades  and  could  fix  anything.  Over  the  years, 
+their  basement  had  been  stuffed  with  an 
+accumulation of rescued “treasures” park patrons 
+had abandoned during their visits. 
+Tim  had  promised  Robin,  that  he  would  start 
+selling  off  his  “basement  bounty”  when  he 
+retired; and they would use the money to go on 
+a Caribbean cruise. Upon waking the first day of 
+his  retirement,  Robin  held  Tim  to  start  fulfilling 
+his promise. 
+
+3. ONLINE RESELLING 
+
+Tim had friends who had been successful selling 
+items on eBay, Facebook Marketplace, and other 
+social  media  outlets.  He  didn’t  know  anything 
+about how it all worked, but he was a quick study 
+and now had the time to learn.   
+
+Tim  quizzed  his  friends  to  find  out  how  to  get 
+started.  He  also  watched  numerous  YouTube 
+
+videos to learn how to attractively stage products 
+for  photos  and  craft  their  descriptions  to 
+maximize customer interest. When he thought he 
+knew enough to give it a go, he posted his first 
+item  for  sale  and  watched his inbox  expectantly 
+for a week before he even got a nibble of interest. 
+Things  weren’t  happening  as  quickly  as  he 
+thought they should; so, Tim decided to do some 
+more research before trying again. 
+
+On  his  second  attempt,  Tim’s  Facebook 
+Marketplace post received a response in a matter 
+of  hours.  He  was  already  making  arrangements 
+to get the product to the customer by the end of 
+the  day.  The  thrill  of  having  his  first  sale  was 
+exhilarating.  This  motivated  him  to  continue 
+researching  ways  to  tweak  and  refine  his 
+marketing techniques to entice more customers.  
+
+In  less  than  six  months,  Tim  found  the  “secret 
+sauce” that worked for him in selling his products. 
+He  had  also  expanded  his  online  territory  into 
+eBay  sales.  He  was  making  headway  on  the 
+basement as well as helping his friends clean out 
+some of theirs.  
+
+His  part  time  basement  cleaning  project  was 
+turning  into  a  full-time  job.  Tracking  sales, 
+shipping  products,  and  keeping  up  with  the 
+paperwork was starting to get overwhelming. His 
+simple  spreadsheet  system  worked  well  in  the 
+beginning when he was only listing a few products 
+and  treated  online  sales  as  a  hobby.  Now, 
+however, he was posting twenty or more products 
+at  a  time  and  was  getting  concerned  that  he 
+might  have  to  start  paying  taxes  on  his  online 
+sales income. (eBay, 2022). He decided to treat 
+his  hobby  as  a  business  and  keep  track  of  his 
+revenue and expenses in case he would need to 
+pay taxes on his income. He was also taking his 
+online  sales  business  more  seriously.  The 
+spreadsheet that once collected just a few fields 
+of  data  for  inventory  purposes  had  grown  to  an 
+for  tracking  and 
+unmanageable  35+ 
+analysis  of  inventory,  sales,  customers,  and 
+shipment modes. 
+
+fields 
+
+Tim had made more than enough money to take 
+Robin  on  that  cruise  he  had  promised.  She  was 
+starting to get impatient for them to start making 
+reservations. Truth be told, Tim was ready to go 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                          Page 24 
+https://isedj.org/; https://iscap.us 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+from  his 
+as  well.  He  needed  a  vacation 
+“retirement vacation” and he couldn’t do that until 
+his  paperwork  was  under  control  and  he  hired 
+some part time help to handle sales and shipping 
+while he was away.  
+
+4. LOOKING FOR HELP 
+
+“Tim,” Robin started as she poured their morning 
+coffee.  “You  are  starting  to  look  frazzled  and 
+exhausted. Retirement is supposed to be a time 
+to rest and enjoy life. Why don’t you see if Janie, 
+from  next  door,  would  be  interested  in  helping 
+you with this online business of yours?  She had 
+mentioned wanting to find a part time, work-at-
+home job the other day so she would have time 
+to finish up her online MBA and take care of the 
+new baby.” 
+
+“You know, Robin, that sounds like a great idea. 
+I  can  at  least  ask  her  if  she,  or  someone  she 
+knows,  would  be  interested,”  Tim  said  as  he 
+picked up his phone to give her a call. 
+
+5. THE MEETING 
+
+Janie Collins was delighted to get Tim’s call. She 
+was excited about the prospect of having a part-
+time flexible job she could do from the comfort of 
+her  home.  She  invited  Tim  to  come  over  to 
+explain  what  he  needed  during  the  baby’s 
+morning nap time. Tim printed off his spreadsheet 
+to show Janie. He hoped that, at the very least, 
+she  might  have  an  idea  of  what  he  could  do  to 
+better organize his data. 
+
+After welcoming Tim into her home and offering 
+him a seat at the kitchen table, Janie watched Tim 
+unroll a series of landscape printed spreadsheet 
+pages that had been taped together end-to-end. 
+“Wow!”  she  exclaimed  as  she  glanced  over  the 
+series of columns. “What is that!” (Appendix A) 
+“Well,”  Tim  started,  “it  has  become  a  hot  mess 
+and  part  of  the  reason  why  I  called  you  this 
+morning.  I  started  selling  things  online  to  clean 
+out the basement. However, I have done so well 
+that it has become a small business and has taken 
+over my life. I need help managing the business 
+as  well  as  managing  the  data.  I  had  promised 
+Robin  that  we  would  do  some  traveling  once  I 
+retired, but my  ‘part time’ job requires full  time 
+work,  and  I  cannot  just  walk  off  and  leave  it.  I 
+need help running the business so I can actually 
+enjoy my retirement. I also need help developing 
+a system that will help me manage my data better 
+so  that  I  can  keep  track  of  inventory,  sales, 
+shipping, and end of year tax reporting.” 
+
+“What  you  are  seeing  here  is  a  portion  of  the 
+spreadsheet  that  I  use  to  keep  track  of  my 
+inventory,  customers,  and  sales.  I use  this data 
+to  calculate  my  income  as  well  as  to  determine 
+my best-selling products and product categories, 
+customers, and shipping methods. The data was 
+very  helpful  when  I  first  got  started  and  could 
+read  it.  However,  now  that  it  spans  multiple 
+pages, it is hard to decipher. I need some help on 
+two levels, so I  have  two questions for  you:  Do 
+you think you can help me run the business? And 
+do you think you can help me organize my data 
+better,  or  point  me  in  the  right  direction  to 
+someone who can?” 
+
+6. THE ONLINE BUSINESS 
+
+“Tim,” Janie said as she looked at the worry lines 
+in Tim’s face “If you show me the ropes, I think I 
+can give you  some  of  the  help  that  you  need. I 
+would like to take some notes about your entire 
+business  process.  Can  you  tell  me  about  the 
+business  and  the  data  you  collect  on  this 
+spreadsheet?” 
+
+‘treasures’ 
+
+Tim could see a little hope on the horizon. “Sure! 
+Let me start from the beginning. I got started in 
+the business by trying to clean out my basement. 
+that  were 
+I  had  accumulated 
+abandoned  in  the  parks  when  I  worked  for  the 
+park  district.  Some  of  them  just needed  a  good 
+cleaning, but others needed some minor repairs. 
+Items listed early in the spreadsheet are some of 
+those items I found abandoned in the park. Since 
+they  were  free,  they  do  not  have  a  purchase 
+price, but they may have some costs associated 
+with repair materials.” 
+
+“So,” Janie interrupted, “you track cost and repair 
+data about your inventory. What else do you track 
+about your inventory.” 
+
+I  buy 
+
+things  at 
+
+“Well,”  Tim  began,  “now  that  it  has  become  a 
+business,  I  have  been  purchasing  a  lot  of  my 
+inventory. 
+thrift  stores, 
+consignment  shops,  and  yard  sales.  I  like  to 
+record the  date  I  purchased  the  item,  the  item, 
+the name of the place from which I purchased it 
+(e.g.,  Jones’  family  yard  sale,  Thrifty  Treasures 
+store, Goodwill North, Goodwill South, etc.), the 
+address of the place, the price I paid for the item, 
+a general classification of the item, a description 
+of  the item  so that I can tweak it for my  online 
+post, and the repairs required to get it ready for 
+sale.  I  also  take  a  picture  of  the  item  once  it  is 
+sale ready.” 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                          Page 25 
+https://isedj.org/; https://iscap.us 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+“What kind of data do you collect about the selling 
+of the item?” Janie asked. 
+
+of  the  rest  of  the  process  so  I  can  better 
+understand how your business operates?” 
+
+Tim  continued,  “I  record  the  date  I  placed  the 
+item  up  for  sale  and  the  date  that  the  item 
+actually  sold.  I  use  those  two  pieces  of  data  to 
+calculate the number of days that the product was 
+on  the  market.  I  record  the  price  at  which  I 
+initially  listed  the  product  and,  because  some 
+customers make counter offers, the actual  price 
+for  which  the  item  sold.  I  also  record  the  taxes 
+paid  on  the  item  and  the  online  marketplace  I 
+used  to  make  the  sale.  Once  the  item  is  sold,  I 
+record  customer 
+the 
+customer’s name, their address, notes about our 
+transaction,  the  satisfaction  rating  I  give  the 
+customer, and finally, the satisfaction rating that 
+the customer gives me regarding the transaction 
+on the online marketplace.” 
+
+information  such  as 
+
+“Tell  me  about  the  data  you  collect  regarding 
+shipping,” Janie interjected. 
+
+Tim  thought  for  a  moment,”  I  collect  the  sales 
+price,  the  calculated  shipping  charge  and  the 
+actual  shipping  charge,  the  packing  materials 
+used and their cost, the shipping label used and 
+its cost, the mode that I used to ship the products 
+(e.g.,  US  postal  services,  FedEx,  or  UPS),  the 
+shipping  company’s  local  address,  the  day  the 
+item  was  shipped,  and  the  day  the  item  was 
+received. I use  those  two dates to calculate  the 
+number of days it took to ship the product to the 
+customer. I record whether the product shipped 
+safely,  my  satisfaction  level  with  the  shipment, 
+and any notes I may have accumulated about the 
+shipping process.” 
+
+“Why  are  there  two  shipping  charges?”  Janie 
+asked. 
+
+“The  online  marketplace  calculates  an  initial 
+shipping  charge  for  the  listed  item.  However, 
+based  upon  the  buyer’s  location,  the  actual 
+shipping charge may be a bit more or a bit less 
+than  what  the  online  marketplace  charged  the 
+customer.  I  need  to  keep  that  in  mind  when  I 
+calculate  the  full  product  cost  and  income-basis 
+for  the  product.  If  the  actual  shipping  charge  is 
+higher  than  the  original  shipping  charge  listed 
+with the price, then the net income that I receive 
+from  that  sale  is  less.  If  the  actual  shipping 
+charge is lower than what is posted on the online 
+marketplace  price,  then  I  need  to  claim  more 
+income on that sale.” 
+“Wow!”  Janie  exclaimed.  “There’s  a  lot  more  to 
+this than I thought. Can you give me a run down 
+
+The Sales Process 
+Tim  started,  “I  have  a  section  of  my  basement 
+that has a bunch of shelves on which I store my 
+inventory.  When I  get  something  that  I want to 
+place  in  my  inventory,  I  record  data  about  the 
+item  in  the  spreadsheet  and  tape  an  ID  to  the 
+bottom of the item so that I can match it to the 
+spreadsheet  record.  I  also  take  a  picture  of  the 
+item in the staging area of my basement and save 
+the  picture  on  my  computer  using  the  assigned 
+ID number.  
+
+The basement shelving is sectioned off according 
+to inventory classifications. Items are shelved in 
+numeric  ID  order  so  that  I  can  find  things…  I 
+learned this the hard way. If there is a particular 
+class of inventory that is selling well, then I will 
+go to that section of my basement storehouse and 
+find  similar  items  to  list.  When  I  list  an  item,  I 
+copy  and  tweak  the  item  description  from  the 
+spreadsheet  and  find  the  corresponding  staging 
+picture  to  post.  The  online  marketplace  will 
+calculate shipping charges and taxes based upon 
+the  shipping  choices  I  select  and  my  location. 
+Those charges are applied to my online post. 
+
+When a customer is interested in a product, they 
+will usually ask a question about the product and 
+make a counteroffer on the price. Rarely does a 
+customer initially offer to pay the listed price. If 
+the  counteroffer  is  higher  than  my  costs, 
+depending upon  how long the product has been 
+on the market, I may accept their offer or return 
+a counteroffer. If the product has not been on the 
+market very long or the counteroffer is below the 
+costs  that  I  have  in  the  item,  I  may  reject  the 
+customer’s counteroffer. 
+
+Once a customer offers the list price or makes an 
+acceptable  counteroffer,  the  sales  transaction 
+begins. The online system marks the item as sold, 
+collects payment from the customer, and notifies 
+us both of the sale. At that point, I start preparing 
+the  item  for  shipping.  The  online  system  has  a 
+wizard that I use to print off the sales label. Once 
+I  have  prepared  the  item  for  shipment,  I  then 
+take  the  package  to  the  shipping  business,  and 
+use the online marketplace to notify the customer 
+that the item has shipped and provide a package 
+tracking number. 
+
+After the package is out of my hands, I catch up 
+on updating my spreadsheet. I enter transaction 
+data such as data about the sale, customer, and 
+shipping.  Once  the  customer  has  received  the 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                          Page 26 
+https://isedj.org/; https://iscap.us 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+product, I will record my customer review in the 
+marketplace system and update my spreadsheet 
+with the customer’s review of our transaction.”  
+
+“You  mentioned  something  about  income  taxes. 
+Tell me a little about that,” Janie prodded. 
+
+“The  IRS  has  been  considering  setting  a  new 
+income  threshold  for  tax  reporting  for  online 
+transactions,” Tim began. “I want to prepare for 
+having to report my income. This process should 
+be pretty easy since I record the final sales price 
+for  each  product  and  all  of  the  costs  associated 
+with the sale.” 
+
+7. DEVELOPING A SOLUTION 
+
+Janie looked at her notes and said, “You’ve given 
+me a lot to think about.” I would like to create a 
+process  model of  what  I  think  you  are  doing  so 
+that  I  can  make  sure  I  clearly  understand  how 
+your business works. I just started learning about 
+databases  in  my  MBA  MIS  course.  I  think  a 
+database  would  really  be  beneficial  to  you  in 
+keeping  track  of  your  data  and  minimizing  data 
+errors and redundancies. I think if I understand 
+the  processes  better,  it  will  help  me  as  I  try  to 
+normalize the fields on your spreadsheet to create 
+the tables in the database.  What would you like 
+to do with this data if you had a better handle on 
+it?” 
+
+Tim hesitated and then said, “I don’t know what 
+you  mean  about  ‘normalize  the  fields.’  In 
+addition, the data has gotten so out of hand that 
+I can’t make heads or tails out of it. What I wish 
+I  could  do  with  the  data  is  to  determine  which 
+products  are  my  best  sellers;  under  which 
+classification most of my best-selling products are 
+listed;  which  product  descriptions  result  in  the 
+fastest  turnover  time;  who  my  best  customers 
+are;  which  mode  of  shipment  is  the  fastest  and 
+least prone to damage; and of course, I need to 
+be able to determine total costs of each product 
+sold  in  order  to  calculate  the  net  income 
+generated for tax purposes.” 
+
+“Wonderful!” Janie exclaimed as she continued to 
+take notes. All of that information will help me as 
+I  start  normalizing  the  fields  to  create  the 
+diagram  that  I  plan  to  use  to  develop  the 
+database. I would like to send something to you 
+next week so I can make sure I am on the right 
+track.” 
+
+“That  would  be  great!”  Tim  said  as  the  baby 
+started to cry. “It sounds like our meeting is over 
+and  that  is  my  cue  to  leave.  I  can’t  wait  to  get 
+
+started. I look forward to getting something from 
+you next week.” 
+
+8. ASSIGNMENTS 
+
+8.1 Integrated Capstone Project 
+Assume  that  you  have  been  asked  to  provide 
+some additional resources to help  Janie  develop 
+the database or to help Tim successfully run his 
+business. Complete the tasks below as assigned 
+by your instructor. 
+
+1.  Managing the project: Develop a work 
+breakdown  analysis  or  create  a  Gantt 
+chart  to  breakdown  the  needs  of  the 
+project,  allocate  the  work  according  to 
+skills, and assign tasks and deadlines. 
+2.  Development  of  a  business  plan: 
+Create  a  business  plan  to  provide 
+for  Tim’s 
+guidance  and  direction 
+burgeoning business.  
+
+3.  Development  of  an  employment 
+contract: 
+  Create  an  employment 
+contract to solidify the expectations of the 
+part-time job.  
+
+Research 
+
+4.  Online 
+
+marketplace 
+recommendation: 
+and 
+provide a short report recommending the 
+best online marketplace(s)  for  Tim, or a 
+business like Tim’s, to sell his products.  
+5.  Digital  marketing  plan:  Develop  a 
+digital  marketing  plan  to  help  Tim 
+increase product sales.  
+
+6.  Income  statements,  Balance  Sheet, 
+and/or  tax  reporting  documents: 
+Create  accounting  report  templates  to 
+help  Tim  successfully  run  his  business. 
+You will  also need  to investigate current 
+tax  reporting  requirements  for  online 
+sales.  
+
+7.  Normalization  of  the  spreadsheet 
+fields  of  the 
+fields:  Normalize  the 
+spreadsheet to create the entities for the 
+database.  
+
+8.  Development  of  process  diagrams: 
+Develop process diagrams to clarify your 
+understanding of the business process.  
+
+9.  Excel Power Pivot or database: Create 
+an  Excel  Power  Pivot  file  or  database  to 
+manage Tim’s data.  
+
+10. Assumptions: 
+
+segment 
+For 
+assigned,  students  should  record  any 
+assumptions  they  make,  regarding  the 
+process, in a separate document.  
+
+each 
+
+Create  the  assigned  task  deliverable(s),  along 
+with the assumptions made while developing the 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                          Page 27 
+https://isedj.org/; https://iscap.us 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+deliverable(s)  and  submit  the  deliverable(s)  as 
+directed. 
+
+Compile the diagram, narrative, and assumptions 
+into a short report and submit as directed. 
+
+8.2 Internet Sales 
+Assume that you are Tim at the beginning of the 
+case.  Conduct  research  to  learn  about  selling 
+products  through  online  marketplaces  such  as 
+eBay, Etsy, or Facebook Marketplace.  
+
+1.  Select  a  product  type  to  sell  and  a 
+marketplace  to  research.  Record  your 
+choices and explain why you made those 
+choices. 
+
+2.  Research the process  of selling products 
+through  that  marketplace  and  record 
+what you learned. 
+
+3.  Research  the  process  of  advertising 
+products to sell on that marketplace and 
+record what you learned. 
+
+4.  Research  the  way  to  collect  money  for 
+items sold through that marketplace and 
+record what you learned. 
+
+5.  Research  the  way  to  ship  products 
+associated  with  that  marketplace  and 
+record what you learned. 
+
+6.  Research  the  way  to  maintain  high 
+reviews  on  that  marketplace  and  record 
+what you learned. 
+
+7.  Research  the  current  IRS  tax  policy  for 
+online sales and record what you learned. 
+8.  Record  anything  else  that  you  learned 
+that  would  be  beneficial  in  starting  an 
+online business.  
+
+9.  Create a list of any online resources you 
+find that would be beneficial to look into 
+in the future. 
+
+10. Create  a  bibliography  of  the  resources 
+
+that you used for questions 2- 8. 
+
+Provide  a  report  addressing  the  tasks  above 
+assigned by your instructor and submit the report 
+as directed. 
+
+8.3 Process Modeling 
+Janie  would  like  to  draw  the  functional  process 
+out on paper to verify that she understands how 
+everything  will  work.  She  does  not  want  to 
+overlook any important data, details, or steps in 
+the process.  
+
+1.  Create a diagram modeling the process.  
+2.  Write  a  short  narrative  to  accompany 
+your diagram to verify and support your 
+interpretation of the process. 
+
+3.  As the diagram is developed, record any 
+assumptions  you  make,  regarding  the 
+process, in a separate document.  
+
+8.4 Normalization and Database Diagram 
+Janie would like to normalize the fields and create 
+a diagram design of the database. 
+
+1.  Work through the normalization process. 
+2.  Create a database design diagram using 
+
+a diagramming tool. 
+
+3.  Write  a  short  narrative  to  accompany 
+your diagram to verify and support your 
+interpretation of the diagram. 
+
+4.  As the diagram is developed, record any 
+assumptions  you  make  in  a  separate 
+document.  
+
+Create  a  short  report  compiling  the deliverables 
+listed above and submit the report as directed. 
+
+8.5  Systems  Analysis  Design  and  Database 
+Development 
+Assume  that  Janie  is  ready  to  create  the 
+database. She wants to: 
+
+1.  Accumulate the functional and technical 
+
+requirements for the system. 
+
+2.  Prioritize the requirements. 
+3.  Create system development diagrams 
+
+(You may also want to use the diagrams 
+created in 8.3 and 8.4). 
+4.  Create a data dictionary. 
+5.  Create data entry forms. 
+6.  Create  queries 
+
+to  generate  records 
+needed  for  determining  the  best-selling 
+products  and  classifications;  turnover 
+rates  for  products  and  classifications; 
+most  active  customers;  best  shipping 
+modes; and costs and income. 
+
+7.  Create  reports  for  the  queries  including 
+product  sales  ranking  list;  classification 
+sales  ranking  list;  product  and  product 
+classification 
+lists; 
+customer  ranking  list;  shipping  mode 
+ranking  list;  and  product  costs  and 
+income generated reports. 
+
+turnover 
+
+ranking 
+
+8.  As the database is developed, record any 
+assumptions  that  you  make  in  a  short 
+report. 
+
+Create  a  short  report  compiling the  deliverables 
+listed above and submit the report as directed. 
+
+9. WORKS CITED 
+
+eBay. (2022). 1099-K and Tax Withholding FAQs, 
+eBay.  Retrieved  on  May  25,  2023,  from 
+https://www.ebay.com/sellercenter/resource
+s/2022-changes-to-ebay-and-your-1099-k  
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                          Page 28 
+https://isedj.org/; https://iscap.us 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+OpenAI.  (2024).  ChatGPT  (January  16  version) 
+model0]. 
+language 
+
+[Large 
+https://chat.openai.com/chat  
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                          Page 29 
+https://isedj.org/; https://iscap.us 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (1) 
+January 2025 
+
+APPENDIX A 
+
+Tim’s Spreadsheet Part 1: Customers 
+
+Tim’s Spreadsheet Part 2: Products 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                          Page 30 
+https://isedj.org/; https://iscap.us 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+

@@ -1,0 +1,998 @@
+That’s Not the Feedback I Need! - Student Engagement with
+GenAI Feedback in the Tutor Kai
+Maurice Kempf
+University of Siegen
+Siegen, Germany
+maurice.kempf@uni-siegen.de
+
+Natalie Kiesler
+Nuremberg Tech
+Nuremberg, Germany
+natalie.kiesler@th-nuernberg.de
+
+Sven Jacobs
+University of Siegen
+Siegen, Germany
+sven.jacobs@uni-siegen.de
+
+5
+2
+0
+2
+
+n
+u
+J
+
+6
+2
+
+]
+
+Y
+C
+.
+s
+c
+[
+
+2
+v
+3
+3
+4
+0
+2
+.
+6
+0
+5
+2
+:
+v
+i
+X
+r
+a
+
+Abstract
+The potential of Generative AI (GenAI) for generating feedback
+in computing education has been the subject of numerous studies.
+However, there is still limited research on how computing students
+engage with this feedback and to what extent it supports their
+problem-solving. For this reason, we built a custom web application
+providing students with Python programming tasks, a code editor,
+GenAI feedback, and compiler feedback. Via a think-aloud protocol
+including eye-tracking and a post-interview with 11 undergradu-
+ate students, we investigate (1) how much attention the generated
+feedback received from learners and (2) to what extent the gener-
+ated feedback is helpful (or not). In addition, students’ attention to
+GenAI feedback is compared with that towards the compiler feed-
+back. We further investigate differences between students with and
+without prior programming experience. The findings indicate that
+GenAI feedback generally receives a lot of visual attention, with
+inexperienced students spending twice as much fixation time. More
+experienced students requested GenAI less frequently, and could
+utilize it better to solve the given problem. It was more challenging
+for inexperienced students to do so, as they could not always com-
+prehend the GenAI feedback. They often relied solely on the GenAI
+feedback, while compiler feedback was not read. Understanding stu-
+dents’ attention and perception toward GenAI feedback is crucial
+for developing educational tools that support student learning.
+
+CCS Concepts
+• Social and professional topics → Computer science educa-
+tion.
+
+Keywords
+Programming Education, Feedback, Large Language Models, Gen-
+erative AI, GenAI
+
+ACM Reference Format:
+Sven Jacobs, Maurice Kempf, and Natalie Kiesler. 2025. That’s Not the Feed-
+back I Need! - Student Engagement with GenAI Feedback in the Tutor Kai.
+In Proceedings of 2025 Conference on United Kingdom & Ireland Comput-
+ing Education Research (UKICER ’25). ACM, New York, NY, USA, 7 pages.
+https://doi.org/XXXXXXX.XXXXXXX
+
+UKICER ’25, September 04–05, 2025, Edinburgh, UK
+© 2025 Copyright held by the owner/author(s). Publication rights licensed to ACM.
+This is the author’s version of the work. It is posted here for your personal use. Not
+for redistribution. The definitive Version of Record was published in Proceedings of
+2025 Conference on United Kingdom & Ireland Computing Education Research (UKICER
+’25), https://doi.org/XXXXXXX.XXXXXXX.
+
+1 Introduction
+Learning to program is cognitively complex, and students require
+support throughout their studies, e.g., via individualized and timely
+feedback [14]. However, this task is becoming increasingly chal-
+lenging for educators, especially in large university courses with a
+diverse student body. Even though automated tools for program-
+ming practice have been around since the 1960s, such tools have
+predominantly focused on identifying mistakes rather than sug-
+gesting next steps or guidance on fixing problems [16]. Moreover,
+effective feedback must consider the timing of an intervention,
+the context, and the learner. Individuals at different competency
+levels require different types of support, ranging from basic error
+identification to strategic problem-solving guidance [31, 43].
+
+The emergence of Generative AI (GenAI) tools based on Large
+Language Models (LLMs) offers promising possibilities, specifically
+for the automatic generation of individual feedback in the context
+of programming education [2, 3]. However, early studies showed
+that GenAI tools often provided immediate code solutions to tasks
+and student questions [19, 20] instead of providing the scaffolding
+approach that students prefer for independent learning [8]. Recent
+evaluations of GenAI feedback have focused on quality metrics such
+as completeness and accuracy, typically assessed through expert
+evaluation [1, 9, 11, 19] or comparative analysis using additional
+models [22]. Scholl et al. [41] started to investigate students’ use
+patterns in the context of an introductory course [39, 41]. However,
+there is a gap in empirical research on how exactly students engage
+with GenAI feedback in introductory programming education [45].
+To address this gap, we adopt a mixed-methods approach com-
+bining eye-tracking, and a think-aloud protocol including semi-
+structured interviews with the goal of investigating students’ at-
+tention to GenAI vs. compiler feedback, and to what extent it was
+helpful to them. We are also looking at different students (inexperi-
+enced vs. experienced learners). Thereby, this study contributes
+to an increased understanding of students’ perception and use of
+GenAI feedback in the context of introductory programming.
+
+2 Related Work
+Timely and personalized feedback is crucial for programming edu-
+cation [14]. Yet, it remains challenging to implement such feedback
+at scale. While traditional automated feedback systems often focus
+on simple test case results or compiler errors, GenAI has emerged
+as a promising approach for generating natural language feedback.
+In the past years, a variety of customized GenAI tools have been
+developed. These include tools for feedback and hint generation like
+CodeAid [15], Codehelp [25], SCRIPT [40], LLM Hint Factory [47],
+StAP-tutor [37] or (context aware) chatbots like CS50 Duck [26, 27]
+
+ 
+ 
+ 
+ 
+ 
+ 
+UKICER ’25, September 04–05, 2025, Edinburgh, UK
+
+Jacobs, Kempf, Kiesler
+
+and CodeTutor [29]. For example, Kiesler et al. [19] analyzed Chat-
+GPT’s feedback on introductory programming tasks, demonstrating
+its ability to provide detailed explanations and suggestions while
+identifying significant variations between outputs, and also mis-
+leading information. A comprehensive evaluation of GPT-4 Turbo
+further improved our understanding of GenAI’s feedback capabili-
+ties [1]. The feedback analysis of feedback to 55 student submissions
+showed substantial improvements in structure and consistency [1]
+compared to earlier models. However, only 52% of the feedback was
+fully correct and complete, emphasizing the continuing challenges
+in generating reliable feedback, particularly for novices [1].
+
+Researchers developed more complex approaches to enhance
+feedback quality based on these initial findings. Phung et al. [33]
+introduced a dual-model approach, combining GPT-4 as a tutor
+with GPT-3.5 as a student validator. Jacobs and Jaschke [12] used
+Retrieval Augmented Generation to incorporate lecture materials
+into GenAI feedback for programming tasks. In their study, stu-
+dents strategically chose between quick, general feedback and more
+detailed, context-aware responses depending on a problem’s com-
+plexity. Addressing the need for more control over the generated
+feedback, Lohr et al. [28] investigated the generation of specific
+types of feedback based on established feedback taxonomies [16].
+Through iterative prompt engineering, they showed that GPT-4
+could generate the requested feedback types in 63 out of 66 cases.
+While these studies have significantly advanced our understand-
+ing of feedback generation with GenAI, a crucial gap remains re-
+garding how students interact with GenAI during problem-solving.
+Prather et al. [34] conducted a mixed-method study including in-
+terviews, eye tracking, and student observations with 21 novice
+programmers to investigate the benefits and challenges of using
+GenAI tools in introductory programming. They found that some
+students could effectively use these tools to accelerate their work,
+but others developed an illusion of competence [35] and faced new
+difficulties. The study by Prather et al. [34] identified three metacog-
+nitive difficulties related to GenAI: (1) interruption from frequent AI
+suggestions, (2) misleading code suggestions, and (3) false progres-
+sion awareness. Their findings suggest that GenAI tools may widen
+the gap between well-prepared and under-prepared students. Other
+work reported on problematic uses of GenAI, especially by learners
+without prior knowledge [21]. Similarly, Nam et al. [30] conclude
+that the benefit from their GenAI system “may vary depending on
+participants’ backgrounds or skills”. This study further addresses
+the research gap [45] in understanding how students engage with
+GenAI feedback in introductory programming education.
+
+3 Feedback-Generation with the Tutor Kai
+To systematically evaluate the use and perceived helpfulness of
+GenAI feedback in a programming education context, we developed
+a custom web application, the Tutor Kai [11–13]. This app served
+as the interface for students to engage with programming tasks and
+receive GenAI (and compiler) feedback throughout this study.
+
+3.1 Web Interface
+The web application comprises four Areas of Interest (AoIs), as
+illustrated in Figure 1:
+
+(1) Task Description (top left): Provides students with the program-
+
+ming problem to solve.
+
+(2) Code Editor (top right): Allows students to write and edit their
+
+code.
+
+(3) GenAI Feedback (bottom left): Shows generated feedback.
+(4) Compiler Feedback (bottom right): Displays results of code com-
+
+pilation (compiler output).
+
+Figure 1: Web application with highlighted AoIs
+
+In the center of Figure 1, there is a button to execute code. Upon
+execution, the solution is automatically tested against predefined
+unit tests for the programming task. Unit-test results are displayed
+as points. After a code’s execution, an additional button appears. It
+allows students to request feedback. The feedback button remains
+disabled whenever code changes are made until the code is executed
+again. This design serves two purposes: (1) to encourage students
+to make improvements based on compiler feedback and unit test
+results before requesting GenAI feedback, and (2) the execution re-
+sults are technically required for generating the feedback. Students
+can make unlimited code executions and GenAI feedback requests.
+
+3.2 Prompt Engineering for GenAI Feedback
+For generating feedback, we utilized OpenAI’s "gpt-4-turbo-2024-
+04-09" model, with the temperature parameter set to 0 to maximize
+output consistency. The prompt engineering process was crucial
+to ensure relevant and pedagogically sound feedback. We devel-
+oped the prompt iteratively based on our prior work [11]. The final
+prompt [10] was crafted in Markdown syntax and incorporates
+comprehensive contextual information, including the task descrip-
+tion, the student’s current program code, the compiler output, unit
+test results, and the expected length (6 sentences max.). We em-
+ployed a zero-shot prompting approach combined with role and
+style prompting techniques [42].
+
+4 Methodology
+This study is guided by the following research questions (RQs):
+RQ1 How much attention do learners of programming pay to GenAI
+
+feedback compared to compiler feedback?
+
+RQ2 To what extent is GenAI feedback helpful for programming
+
+learners?
+
+GenAI-FeedbackCode-EditorTask-DescriptionCompiler-FeedbackStudent Engagement with GenAI Feedback
+
+UKICER ’25, September 04–05, 2025, Edinburgh, UK
+
+For both RQs, we particularly investigate differences between stu-
+dents with and without prior programming experience.
+
+A combination of eye-tracking with think-aloud protocols and
+semi-structured interviews was chosen to capture both, observable
+behavioral patterns and self-reported perceptions. Eye-tracking
+technology provided objective measures of attention allocation in
+the web application, while think-aloud protocols offered individual
+insights into decision-making and problem-solving processes. In-
+terviews allowed for retrospective reflection and clarification. This
+triangulation of methods supports a comprehensive understanding
+of students’ perceptions of the offered feedback.
+
+The interview guide, programming tasks, think-aloud instruc-
+tions, prompt used for GenAI feedback, GenAI and compiler feed-
+back examples are available in an online repository [10].
+
+4.1 Data Collection
+Eye-tracking technology [5, 6] was used to measure the distribu-
+tion of visual attention across different Areas of Interest (AoIs). To
+investigate the helpfulness of GenAI and compiler feedback for
+inexperienced and experienced learners, we used the think-aloud
+method [44]. This method is common to gain insights into cogni-
+tive processes during, e.g., debugging [46], code refactoring [7], or
+feedback processing [18].
+
+4.1.1 Participants. The study was conducted at a university at the
+beginning of the summer semester of 2024. It involved students
+enrolled in the “Object-Oriented and Functional Programming”
+(OOFP) course, who are typically first and second-semester com-
+puter science students. All course participants (ca. 200) were invited
+via email and in-person announcements during tutorial sessions. A
+compensation of 20€ was offered for participation.
+
+4.1.2 Task Design. Six Python programming tasks were specifically
+developed for this study. The tasks were carefully designed to align
+with the course curriculum and progress in complexity, covering
+fundamental programming concepts including variable operations,
+control structures, loops, and recursion (all tasks are available in
+our supplementary data repository [10]). To ensure appropriate
+difficulty levels and time, all tasks were piloted with two student
+tutors who had previously completed the course. They took about
+40 minutes to complete all the tasks.
+
+Setting. The study took place in a controlled laboratory envi-
+4.1.3
+ronment equipped with a 27-inch monitor and standardized input
+devices (mouse and keyboard). The primary eye-tracking apparatus
+consisted of Tobii Pro Glasses 3, complemented by Tobii Pro Lab
+analysis software. This setup was chosen based on its established re-
+liability in programming education research, with Tobii technology
+being used in 55% of related studies [32]. To ensure data collection
+continuity, we implemented a backup system using the Tobii Eye
+Tracker 5. All participants consented after being briefed about data
+protection, recording procedures, and data processing.
+
+4.1.4 Procedure. Each participant was scheduled for a two-hour
+session, which was structured as follows:
+
+(1) Introduction (15-30 minutes):
+
+• Think-aloud protocol instruction and practice
+• Eye-tracking equipment familiarization and calibration
+
+• Informed consent process
+
+(2) Task Phase / Problem-Solving (60 minutes):
+
+• Completion of programming tasks
+• Continuous think-aloud verbalization
+• Eye-tracking and screen recording
+• Video and audio recording from front and side angles
+
+(3) Interview Phase (15-30 minutes):
+
+• Clarification of observed behaviors
+• Reflection of experiences
+
+An instructor remained present throughout the session to address
+technical issues and provide organizational guidance if needed,
+while assuring minimal intervention during problem-solving.
+
+4.2 Data Analysis
+RQ1 is addressed by analyzing the eye-tracking data of each student
+and mapping it to the Areas of Interest. To answer RQ2, we trian-
+gulate the eye-tracking data (and respective AoIs) with students’
+problem-solving steps to see whether the GenAI feedback, respec-
+tively the compiler messages, are indeed helping them succeed
+with the task. We further analyze instances where GenAI feed-
+back was not helpful. The semi-structured interviews add students’
+self-reported level of helpfulness for GenAI feedback.
+
+4.2.1 Eye-Tracking Analysis. To analyze students’ attention pat-
+terns, we defined four AoIs based on the key interface elements
+of the Tutor Kai: task description, code editor, GenAI feedback,
+and compiler feedback (see Figure 1). We mapped gaze data from
+the eye-tracking glasses’ video recordings to these AoIs using as-
+sisted mapping features of the Tobii Pro Lab analysis software. For
+participants S01, S02, and S10, equipment compatibility issues re-
+quired using a Tobii Eye Tracker 5 as an alternative to the Tobii
+Pro Glasses 3. For them, we manually mapped their gaze data us-
+ing frame-by-frame analysis. We analyzed fixation time [32] for
+each AoI across all participants, providing a quantitative measure
+of fixation distribution. To enable further analysis, we exported
+and synchronized the gaze data recordings with screen captures
+and external camera footage, creating synchronized videos for a
+detailed analysis of each participant (i.e., gaze visualization).
+
+4.2.2 Think-Aloud Protocol Analysis and Triangulation with Eye-
+Tracking. First, the audio was transcribed for the detailed analysis
+of the think-aloud study. Then, the transcript was linked with the
+synchronized videos for evaluation in MAXQDA [23]. All instances
+of code being executed or feedback requests during the task phase
+were marked. Then, we analyzed students’ fixated AoIs immediately
+before feedback was generated to determine what they were looking
+at (i.e., compiler feedback, task description, etc.).
+
+As a next step, students’ progress was coded w.r.t. their improve-
+ments (or the lack of them) to determine the objective helpfulness
+of the feedback and answer RQ2. We used the following categories
+(data sources are indicated in brackets):
+
+Has helped: Information in the compiler or GenAI feedback
+was read (gaze visualization). Subsequently, either a thought was
+verbalized (think-aloud) that explicitly indicated the information
+helped, or the code was improved in a way that directly related to
+the provided information. E.g., a participant read the GenAI feed-
+back “[...] It appears your function has not yet implemented a return
+
+UKICER ’25, September 04–05, 2025, Edinburgh, UK
+
+Jacobs, Kempf, Kiesler
+
+statement [...]” and verbalized “of course [...] return [...]” while si-
+multaneously correcting the code. Even without the verbalization,
+this instance would have been coded as helpful because the gaze
+visualization confirmed the participant had read the relevant GenAI
+feedback section before adding the return statement.
+
+Has not helped: Information in the compiler or GenAI feed-
+back was read (gaze visualization). Participants did not verbalize
+anything that indicated the information helped (think-aloud). No
+code improvements were made related to the provided information,
+e.g., some students read the compiler feedback but immediately
+requested GenAI feedback instead of acting on it. For future im-
+provements in feedback generation, we also categorized why GenAI
+feedback was unhelpful.
+
+Has not been read: Information in the compiler or GenAI feed-
+back was not read (gaze visualization). For example, GenAI feed-
+back was requested before reading the compiler feedback, or during
+GenAI feedback generation. Or the student made improvements
+independently and immediately requested new GenAI feedback.
+
+Interview Analysis. We conducted semi-structured interviews
+4.2.3
+to gain more insights into participants’ perceptions regarding the
+helpfulness of the compiler and GenAI feedback. The complete
+interview guide is available [10]. In particular, we wanted to let stu-
+dents rate (1) task difficulty (10-point-Likert scale, very easy – very
+difficult) and (2) the helpfulness of GenAI feedback (10-point-Likert
+scale, not helpful at all – very helpful). Responses are quantitatively
+analyzed and reported. In addition, we assessed interferences from
+the think-aloud protocol and eye-tracking equipment if explicitly
+uttered by participants in response to dedicated questions. Finally,
+we analyzed whether or not students had any prior programming
+experience resulting in a binary distinction.
+
+5 Results
+5.1 Student Sample
+11 students voluntarily participated and completed the study (S01-
+S11). The students recruited for this study were all familiar with
+the tool, as it was regularly used in the OOFP course. 7 identified
+themselves as males, 4 as females. Their mean age was 21 (SD=2.79).
+The analysis of students’ prior programming experience quickly
+revealed that there were inexperienced and experienced students
+among the recruits (as expected). 6 students were inexperienced,
+reporting little or no prior programming experience. The remaining
+5 students were classified as experienced, as they reported prior
+programming experience. This included exposure to programming
+through high school computer science courses or completion of
+programming-related coursework in previous academic terms.
+
+It should be noted that the students enrolled in the OOFP course
+were generally diverse in terms of prior knowledge. An initial
+survey (N=97) within the course revealed that 43 students (about
+half) had no prior knowledge. Hence, we assume that our sample
+is representative w.r.t. that diversity.
+
+Our analysis showed distinct patterns in both task completion
+rates and perceived difficulty levels between these two experience
+groups. Experienced students completed an average of 4.2 tasks,
+compared to 1.8 tasks for inexperienced students. Students’ subjec-
+tive assessments of task difficulty, collected through semi-structured
+
+interviews using a 10-point Likert scale (1 = very easy, 10 = very
+difficult), aligned with these performance differences: experienced
+students rated the tasks as moderately challenging (M = 4.2), while
+inexperienced participants consistently reported higher difficulty
+levels (M = 7.0). This data thus confirms students’ self-reported
+prior programming experiences (or the lack of them).
+
+5.2 RQ1: Students’ Attention Distribution
+The code editor (53.91%) received the longest fixation time overall,
+meaning among all 11 students. Compared to the other AoIs, GenAI
+feedback accounted for 23.79% of the total fixation time, which is
+more than three times longer than the compiler feedback received
+in total (7.00%). Compared to the task description (15.29%), the
+fixation time on GenAI feedback was also higher.
+
+Figure 2: Fixation Times on Areas of Interest
+
+Comparative analysis reveals that experienced students spent 15.49%
+of the time on the GenAI feedback, which is approximately half
+as much as inexperienced students spent on the GenAI feedback
+(30.71%). The inverse pattern emerged for compiler feedback, where
+experienced students exhibited nearly double the fixation time
+(9.35%) compared to inexperienced students (5.05%). Regarding the
+task description and code-editor area, experienced students paid
+some more attention to them, compared to the less experienced
+students (see Figure 2).
+
+5.3 RQ2: Helpfulness of the GenAI Feedback
+First of all, we looked at the fixated AoI, immediately before feed-
+back was generated to determine what students were looking at
+(see Table 1). The code editor and compiler feedback were each
+fixated right before about 50% of the 171 GenAI feedback requests.
+The task description was fixated only once. Inexperienced students
+fixated on the compiler feedback less often (36.45%) compared to
+experienced students (68.75%).
+
+GenAI-FeedbackCompiler-FeedbackCode-EditorTask-DescriptionStudent Engagement with GenAI Feedback
+
+UKICER ’25, September 04–05, 2025, Edinburgh, UK
+
+Figure 3: Resulting Helpfulness of GenAI and Compiler Feedback for Experienced and Inexperienced Students (RQ2)
+
+Table 1: Fixiated AoI before GenAI Feedback Request
+
+Task-
+Description
+
+Code-
+Editor
+
+Compiler-
+Feedback
+
+Inexperienced students
+Experienced students
+All students
+
+0 (0%)
+1 (1.56%)
+1 (0.58%)
+
+68 (63.55%)
+19 (29.69%)
+87 (50.88%)
+
+39 (36.45%)
+44 (68.75%)
+83 (48.54%)
+
+Table 2: Results of the Semi-Structured Interviews
+
+Inexperienced students
+
+Experienced students
+
+S01 S03 S04 S07 S08 S09 S02 S05 S06 S10 S11
+
+Solved tasks count (of 6)
+
+1
+
+2
+
+2
+
+2
+
+2
+
+Likert Scale Items (1-10):
+Perceived Task Difficulty
+Feedback Rating
+
+8
+
+5
+8
+7
+8 7.5 10 10 10
+
+7
+
+2
+
+7
+8
+
+5
+
+1
+9
+
+4
+
+6
+8
+
+5
+
+4
+
+3
+
+5
+4
+7 7.5
+
+4
+10
+
+Feedback:
+...was easy to understand
+...was sometimes too vague
+
+Prior programming experience ◦ ◦ ◦ ◦ ◦ ◦ • • • • •
+• • • • • ◦ • • • • •
+• • • • • • ◦ • • • ◦
+...had too complex vocabulary ◦ ◦ • • • ◦ ◦ • ◦ ◦ •
+• • • • • • • • • • •
+
+...increased motivation
+
+There were 171 GenAI feedback outputs, 107 for inexperienced
+and 64 for experienced students. 49.7% of them helped advance
+problem-solving processes to solve the tasks correctly (see Figure
+3). The information in the 287 compiler feedback messages was
+substantially less helpful (overall in just 17.4%).
+
+Our analysis reveals substantial differences between the two
+groups of students. As shown in Figure 3, GenAI feedback was
+more helpful for experienced students (60.9%) compared to inex-
+perienced students (43.0%). Experienced students requested 28%
+less GenAI feedback on average (only 64 in sum) compared to 107
+GenAI feedback requests from inexperienced students. The anal-
+ysis of the synchronized think-aloud protocols showed that the
+compiler feedback was almost four times more helpful for experi-
+enced students (25.9%) than for inexperienced students (7%). The
+eye-tracking data confirms that 39.5% of the 129 compiler feedback
+
+messages were not read by inexperienced students (lower left quad-
+rant of Figure 3). The fixation times on AoIs further confirm that
+inexperienced students fixated only half as long on the compiler
+feedback compared to experienced students (see Figure 2). Instead
+of reading the compiler feedback first, inexperienced students of-
+ten requested GenAI feedback immediately, explaining the higher
+number of GenAI feedback requests.
+
+Our analysis of the 77 instances where GenAI feedback was
+classified as “has not helped” revealed four categories of issues: (1)
+25 cases contained a range of various causes that opposed further
+distinct categorization, such as student misinterpretation of the
+feedback. (2) In 23 instances (22 for inexperienced, 1 for experi-
+enced students), the feedback was incomprehensible to the student.
+This occurred when the GenAI feedback referred to fundamental
+conceptual knowledge (e.g., ’loop’) unfamiliar to the student with-
+out sufficient explanation or illustrative examples. (3) In 17 cases (12
+for inexperienced, 5 for experienced students), students grasped the
+semantic solution but were unfamiliar with the necessary Python
+syntax, which the GenAI feedback failed to provide (e.g., through a
+code example). They expressed that it was not the feedback they
+needed. (4) In 13 instances, the error localization in the GenAI
+feedback lacked sufficient precision (e.g., indentation errors were
+indicated but remained difficult for students to identify).
+
+Students’ overall perception of the GenAI feedback was positive.
+In the interviews, students rated its helpfulness at an average of
+8.59 on a 10-point Likert scale (1 = not helpful at all, 10 = very
+helpful, see Table 2). This high rating was consistent across both
+experience groups, with no participant rating the feedback below
+7 (see Table 2). Yet, the in-depth analysis of think-aloud protocols
+and triangulation with the eye-tracking data suggests a more com-
+plex relationship between perceived and actual GenAI feedback
+helpfulness. The remaining interview results regarding students’
+retrospection were somewhat inconclusive (see Table 2). Ten out
+of eleven students described the GenAI feedback as generally un-
+derstandable, but also sometimes not precise enough. Five students
+mentioned that the GenAI feedback sometimes used too complex
+technical vocabulary. All students stated that the GenAI feedback
+increased their motivation to solve programming tasks.
+
+GenAIFeedbackCompilerFeedbackInexperienced studentsExperienced studentsUKICER ’25, September 04–05, 2025, Edinburgh, UK
+
+Jacobs, Kempf, Kiesler
+
+6 Discussion
+Our findings on GenAI feedback reflect broader patterns emerging
+in computing education due to the advent of GenAI tools. The gap
+observed between experienced and inexperienced students in uti-
+lizing GenAI feedback has significant implications. Recent work
+already reported how the introduction of GenAI tools coincided
+with dramatically increased failure rates in introductory program-
+ming courses [21]. This divergence in outcomes aligns with the
+observation that while some students can effectively use GenAI to
+“accelerate” their programming work, others may develop an “illu-
+sion of competence”. AI tools seem to introduce additional metacog-
+nitive difficulties, and students are often unaware of them [34].
+
+Furthermore, the results indicate that inexperienced students
+often do not read the compiler feedback. Instead, they read the
+GenAI feedback. This is not surprising, since programming error
+messages are generally problematic for students - even though they
+play an essential role as feedback agents [3]. If these inexperienced
+students perpetuate this strategy, they may not learn to interpret
+compiler outputs correctly. At the same time, it could be argued
+that with the ubiquity of GenAI support, interpreting compiler
+outputs may no longer be necessary in the future. After all, compiler
+messages can be directly explained by an LLM [24, 38]. While
+Reeves et al. [36] suggest natural language programming through
+GenAI as next logical step in programming abstraction, our results
+indicate that students still need to develop basic programming
+knowledge and skills to comprehend GenAI feedback.
+
+Successful integration of GenAI into programming education
+may require a balanced approach combining traditional founda-
+tional learning with gradual exposure to GenAI-assisted program-
+ming techniques. In this context, Keuning et al. [17] suggest a mas-
+tery learning approach, which allows students to develop founda-
+tional skills while gradually incorporating GenAI tools. Ultimately,
+we need to consider which competencies students should develop.
+
+7 Threats to Validity
+This study’s methodological limitations should be noted. For ex-
+ample, the think-aloud protocol and eye-tracking technology may
+have disrupted the problem-solving process. In the interviews, three
+students reported the think-aloud protocol as disruptive, noting
+difficulties in verbalizing their thoughts or finding the selection of
+which thoughts to verbalize burdensomely. The observation setting
+itself affected some participants’ comfort levels. Four students re-
+ported feeling embarrassed about their code and thoughts while
+being observed. Regarding the eye-tracking equipment, two stu-
+dents experienced physical distractions: one reported the glasses
+became warm during use, another one reported distractions caused
+by the glasses’ sensors. A technical limitation is due to the non-
+deterministic LLM for GenAI feedback generation; the output gener-
+ation of LLMs remains intransparent [42]. The nature of the study is
+qualitative and explorative. With the sample size of 11 students and
+171 GenAI feedbacks, we have reached a large enough sample [4].
+
+8 Conclusion
+In this study, we evaluated how 11 students utilize feedback gener-
+ated by GenAI while solving programming tasks in the Tutor Kai.
+
+Our mixed-methods approach, combining eye-tracking, think-aloud
+protocols, and interviews, revealed the following results:
+
+(1) Students dedicated a substantial portion of their visual attention
+(23.79%) to the GenAI feedback. However, there were notable
+differences between experience levels. Inexperienced students
+spent nearly twice as much time fixating on the GenAI feedback
+compared to more experienced peers.
+
+(2) Experienced students demonstrated a more effective utilization
+of the GenAI feedback. They requested it less frequently and
+derived more benefit from it, with 60.9% of the GenAI feedback
+helping to advance their problem-solving, compared to only
+43.0% for inexperienced students. One reason for this was that
+inexperienced students did not comprehend 20.6% (22 out of
+107 cases) of the GenAI feedback they received, compared to
+only 1.6% (1 out of 64 cases) for experienced students.
+
+(3) Inexperienced students often bypassed the compiler feedback
+entirely, relying solely on the GenAI feedback. This raises con-
+cerns about the potential impact on the development of tradi-
+tional debugging skills.
+
+Our findings highlight both the potential of GenAI feedback in
+programming education and the need for tailored approaches based
+on students’ experience. Prior research [8] suggests that this is also
+important to students. Future research should focus on developing
+feedback systems that provide feedback adapted to students’ prior
+knowledge and experience. Moreover, they should be capable of
+adapting to students’ individual informational needs. As this work
+has shown, experienced and inexperienced students seem to engage
+differently with compiler vs. GenAI feedback. Hence, this study
+should be repeated with a greater number of participants. More
+importantly, we need to develop instructional methods for diverse
+student groups with and without prior programming knowledge so
+they learn how to engage with both, compiler and GenAI feedback.
+
+References
+[1] Imen Azaiz, Natalie Kiesler, and Sven Strickroth. 2024. Feedback-Generation for
+Programming Exercises With GPT-4. In Proceedings of the 2024 on Innovation and
+Technology in Computer Science Education V. 1 (Milan, Italy) (ITiCSE 2024). ACM,
+New York, USA, 31–37. https://doi.org/10.1145/3649217.3653594
+
+[2] Brett A Becker, Michelle Craig, Paul Denny, Hieke Keuning, Natalie Kiesler,
+Juho Leinonen, Andrew Luxton-Reilly, James Prather, and Keith Quille. 2024.
+Generative AI in Introductory Programming. In Computer Science Curricula 2023.
+ACM, New York, USA, 438–439.
+
+[3] Brett A. Becker, Paul Denny, James Finnie-Ansley, Andrew Luxton-Reilly, James
+Prather, and Eddie Antonio Santos. 2023. Programming Is Hard - Or at Least It
+Used to Be: Educational Opportunities and Challenges of AI Code Generation.
+In Proc. of the 54th ACM Techn. Symp. V. 1. ACM, New York, 500–506. https:
+//doi.org/10.1145/3545945.3569759
+
+[4] Clive Roland Boddy. 2016. Sample size for qualitative research. Qualitative market
+
+research: An international journal 19, 4 (2016), 426–432.
+
+[5] Teresa Busjahn, Carsten Schulte, and Andreas Busjahn. 2011. Analysis of Code
+Reading to Gain More Insight in Program Comprehension. In Proceedings of the
+11th Koli Calling International Conference on Computing Education Research. ACM,
+Koli Finland, 1–9. https://doi.org/10.1145/2094131.2094133
+
+[6] Teresa Busjahn, Carsten Schulte, Bonita Sharif, Simon, Andrew Begel, Michael
+Hansen, Roman Bednarik, Paul Orlov, Petri Ihantola, Galina Shchekotova, and
+Maria Antropova. 2014. Eye Tracking in Computing Education. In Proceedings
+of the Tenth Annual Conference on International Computing Education Research.
+ACM, 3–10. https://doi.org/10.1145/2632320.2632344
+
+[7] Eduardo Carneiro Oliveira, Hieke Keuning, and Johan Jeuring. 2024. Investigating
+Student Reasoning in Method-Level Code Refactoring: A Think-Aloud Study
+(Koli Calling ’24). ACM, New York. https://doi.org/10.1145/3699538.3699550
+[8] Paul Denny, Stephen MacNeil, Jaromir Savelka, Leo Porter, and Andrew Luxton-
+Reilly. 2024. Desirable Characteristics for AI Teaching Assistants in Programming
+
+Student Engagement with GenAI Feedback
+
+UKICER ’25, September 04–05, 2025, Edinburgh, UK
+
+Education. In Proceedings of the 2024 on Innovation and Technology in Computer
+Science Education V. 1. ACM, 408–414. https://doi.org/10.1145/3649217.3653574
+[9] Arto Hellas, Juho Leinonen, Sami Sarsa, Charles Koutcheme, Lilja Kujanpää,
+and Juha Sorva. 2023. Exploring the Responses of Large Language Models to
+Beginner Programmers’ Help Requests. In Proceedings of the 2023 ACM Conference
+on International Computing Education Research - Volume 1. ACM, New York, USA,
+93–105. https://doi.org/10.1145/3568813.3600139
+
+[10] Sven Jacobs. 2025. Data: That’s Not the Feedback I Need! - Student Engagement
+with GenAI Feedback in the Tutor Kai. https://doi.org/10.17605/OSF.IO/US9HJ
+[11] Sven Jacobs and Steffen Jaschke. 2024. Evaluating the Application of Large
+Language Models to Generate Feedback in Programming Education. In 2024 IEEE
+Global Engineering Education Conference (EDUCON). IEEE. https://doi.org/10.
+1109/EDUCON60312.2024.10578838
+
+[12] Sven Jacobs and Steffen Jaschke. 2024. Leveraging Lecture Content for Improved
+Feedback: Explorations with GPT-4 and Retrieval Augmented Generation. In 2024
+36th International Conference on Software Engineering Education and Training.
+IEEE. https://doi.org/10.1109/CSEET62301.2024.10663001
+
+[13] Sven Jacobs, Henning Peters, Steffen Jaschke, and Natalie Kiesler. 2025. Unlimited
+Practice Opportunities: Automated Generation of Comprehensive, Personalized
+Programming Tasks. In Proceedings of the 30th ACM Conference on Innovation and
+Technology in Computer Science Education V. 1 (Nijmegen, Netherlands) (ITiCSE
+2025). ACM, New York, 319–325. https://doi.org/10.1145/3724363.3729089
+[14] Johan Jeuring, Hieke Keuning, Samiha Marwan, Dennis Bouvier, Cruz Izu, Natalie
+Kiesler, Teemu Lehtinen, Dominic Lohr, Andrew Peterson, and Sami Sarsa. 2022.
+Towards Giving Timely Formative Feedback and Hints to Novice Programmers.
+In Proceedings of the 2022 Working Group Reports on Innovation and Technology in
+Computer Science Education. ACM, New York, USA, 95–115. https://doi.org/10.
+1145/3571785.3574124
+
+[15] Majeed Kazemitabaar, Runlong Ye, Xiaoning Wang, Austin Zachary Henley,
+Paul Denny, Michelle Craig, and Tovi Grossman. 2024. CodeAid: Evaluating a
+Classroom Deployment of an LLM-based Programming Assistant that Balances
+Student and Educator Needs. In Proc. of the CHI Conference on Human Factors in
+Computing Systems. ACM, New York. https://doi.org/10.1145/3613904.3642773
+[16] Hieke Keuning, Johan Jeuring, and Bastiaan Heeren. 2019. A Systematic Literature
+Review of Automated Feedback Generation for Programming Exercises. ACM
+ToCE 19 (2019), 1–43. https://doi.org/10.1145/3231711
+
+[17] Hieke Keuning, Andrew Luxton-Reilly, Claudia Ott, Andrew Petersen, and Natalie
+Kiesler. 2024. Goodbye Hello World - Research Questions for a Future CS1
+Curriculum. In Proceedings of the 24th Koli Calling International Conference on
+Computing Education Research. ACM, Koli Finland, 1–2. https://doi.org/10.1145/
+3699538.3699591
+
+[18] Natalie Kiesler. 2023. Investigating the Use and Effects of Feedback in Coding-
+Bat Exercises: An Exploratory Thinking Aloud Study. 2023 Future of Educa-
+tional Innovation-Workshop Series Data in Action: Digital Ecosystem and Emerging
+Tools for Education (2023), 1–12. https://doi.org/10.1109/IEEECONF56852.2023.
+10104622
+
+[19] Natalie Kiesler, Dominic Lohr, and Hieke Keuning. 2023. Exploring the Potential
+of Large Language Models to Generate Formative Programming Feedback. In
+2023 IEEE Frontiers in Education Conference (FIE). IEEE, College Station, USA, 1–5.
+https://doi.org/10.1109/FIE58773.2023.10343457
+
+[20] Natalie Kiesler and Daniel Schiffner. 2023. Large Language Models in Intro-
+ductory Programming Education: ChatGPT’s Performance and Implications for
+Assessments. https://doi.org/10.48550/arXiv.2308.08572 arXiv:2308.08572 [cs.SE]
+[21] Natalie Kiesler, Ingo Scholz, Jens Albrecht, Friedhelm Stappert, and Uwe Wienkop.
+2024. Novice Learners of Programming and Generative AI - Prior Knowledge
+Matters. In Proceedings of the 24th Koli Calling International Conference on Com-
+puting Education Research. ACM, Koli Finland, 1–2. https://doi.org/10.1145/
+3699538.3699580
+
+[22] Charles Koutcheme, Nicola Dainese, Arto Hellas, Sami Sarsa, Juho Leinonen,
+Syed Ashraf, and Paul Denny. 2024. Evaluating Language Models for Generating
+and Judging Programming Feedback. https://doi.org/10.48550/arXiv.2407.04873
+[23] Udo Kuckartz and Stefan Rädiker. 2019. Analyzing qualitative data with MAXQDA.
+
+Springer.
+
+[24] Juho Leinonen, Arto Hellas, Sami Sarsa, Brent Reeves, Paul Denny, James Prather,
+and Brett A. Becker. 2023. Using Large Language Models to Enhance Program-
+ming Error Messages. In Proc. of the 54th ACM Technical Symposium on Computer
+Science Education V. 1. ACM, 563–569. https://doi.org/10.1145/3545945.3569770
+[25] Mark Liffiton, Brad E Sheese, Jaromir Savelka, and Paul Denny. 2024. Code-
+Help: Using Large Language Models with Guardrails for Scalable Support
+in Programming Classes. In Proceedings of the 23rd Koli Calling International
+Conference on Computing Education Research. ACM, New York, USA. https:
+//doi.org/10.1145/3631802.3631830
+
+[26] Rongxin Liu, Carter Zenke, Charlie Liu, Andrew Holmes, Patrick Thornton, and
+David J. Malan. 2024. Teaching CS50 with AI: Leveraging Generative Artificial
+Intelligence in Computer Science Education. In Proceedings of the 55th ACM
+Technical Symposium on Computer Science Education V. 1. 750–756. https://doi.
+org/10.1145/3626252.3630938
+
+[27] Rongxin Liu, Julianna Zhao, Benjamin Xu, Christopher Perez, Yuliia Zhukovets,
+and David J. Malan. 2025. Improving AI in CS50: Leveraging Human Feedback
+for Better Learning. In Proceedings of the 56th ACM Technical Symposium on
+Computer Science Education V. 1 (Pittsburgh, PA, USA) (SIGCSETS 2025). ACM,
+New York, NY, USA, 715–721. https://doi.org/10.1145/3641554.3701945
+
+[28] Dominic Lohr, Hieke Keuning, and Natalie Kiesler. 2025. You’re (Not) My Type-
+Can LLMs Generate Feedback of Specific Types for Introductory Programming
+Tasks? Journal of Computer Assisted Learning 41, 1 (2025), e13107. https://doi.
+org/10.1111/jcal.13107 e13107 JCAL-24-434.R1.
+
+[29] Wenhan Lyu, Yimeng Wang, Tingting Rachel Chung, Yifan Sun, and Yixuan
+Zhang. 2024. Evaluating the Effectiveness of LLMs in Introductory Computer
+Science Education: A Semester-Long Field Study. arXiv:2404.13414 (2024).
+[30] Daye Nam, Andrew Macvean, Vincent Hellendoorn, Bogdan Vasilescu, and Brad
+Myers. 2024. Using an LLM to Help With Code Understanding. In Proc. of the
+IEEE/ACM 46th ICSE. ACM. https://doi.org/10.1145/3597503.3639187
+
+[31] Susanne Narciss. 2008. Feedback strategies for interactive learning tasks. Hand-
+book of research on educational communications and technology 3 (2008), 125–144.
+[32] Unaizah Obaidellah, Mohammed Al Haek, and Peter C.-H. Cheng. 2019. A Survey
+on the Usage of Eye-Tracking in Computer Programming. Comput. Surveys 51, 1
+(Jan. 2019), 1–58. https://doi.org/10.1145/3145904
+
+[33] Tung Phung, Victor-Alexandru Pădurean, Anjali Singh, Christopher Brooks, José
+Cambronero, Sumit Gulwani, Adish Singla, and Gustavo Soares. 2024. Automating
+Human Tutor-Style Programming Feedback: Leveraging GPT-4 Tutor Model for
+Hint Generation and GPT-3.5 Student Model for Hint Validation. In Proceedings
+of the 14th Learning Analytics and Knowledge Conference. ACM, Kyoto, Japan,
+12–23. https://doi.org/10.1145/3636555.3636846
+
+[34] James Prather, Brent N Reeves, Juho Leinonen, Stephen MacNeil, Arisoa S
+Randrianasolo, Brett A. Becker, Bailey Kimmel, Jared Wright, and Ben Briggs.
+2024. The Widening Gap: The Benefits and Harms of Generative AI for
+Novice Programmers. In Proc. of ICER 2024, Vol. 1. ACM, New York, 469–486.
+https://doi.org/10.1145/3632620.3671116
+
+[35] Rajendra Raj, Mihaela Sabin, John Impagliazzo, David Bowers, Mats Daniels,
+Felienne Hermans, Natalie Kiesler, Amruth N. Kumar, Bonnie MacKellar, Renée
+McCauley, Syed Waqar Nabi, and Michael Oudshoorn. 2021. Professional Com-
+petencies in Computing Education: Pedagogies and Assessment. In Proceedings
+of the 2021 Working Group Reports on Innovation and Technology in Computer
+Science Education. 133–161. https://doi.org/10.1145/3502870.3506570
+
+[36] Brent N. Reeves, James Prather, Paul Denny, Juho Leinonen, Stephen MacNeil,
+Brett A. Becker, and Andrew Luxton-Reilly. 2024. Prompts First, Finally. https:
+//doi.org/10.48550/arXiv.2407.09231
+
+[37] Lianne Roest, Hieke Keuning, and Johan Jeuring. 2023. Next-Step Hint Generation
+for Introductory Programming Using Large Language Models. In Proceedings of
+the 26th Australasian Computing Education Conference. ACM, Sydney, Australia,
+144–153. https://doi.org/10.1145/3636243.3636259
+
+[38] Eddie Antonio Santos and Brett A. Becker. 2024. Not the Silver Bullet: LLM-
+enhanced Programming Error Messages are Ineffective in Practice. In Proceedings
+of the 2024 UKICER. ACM, Manchester United Kingdom, 1–7. https://doi.org/10.
+1145/3689535.3689554
+
+[39] Andreas Scholl and Natalie Kiesler. 2024. How Novice Programmers Use and
+Experience ChatGPT when Solving Programming Exercises in an Introductory
+Course. In 2024 IEEE Frontiers in Education Conference (FIE). 1–9. https://doi.org/
+10.1109/FIE61694.2024.10893442
+
+[40] Andreas Scholl and Natalie Kiesler. 2025. SCRIPT - Supportive Chatbot for
+Resolving Introductory Programming Tasks. In Proceedings of the 30th ACM
+Conference on Innovation and Technology in Computer Science Education V. 2.
+ACM, New York, 759. https://doi.org/10.1145/3724389.3730786
+
+[41] Andreas Scholl, Daniel Schiffner, and Natalie Kiesler. 2024. Analyzing Chat
+Protocols of Novice Programmers Solving Introductory Programming Tasks with
+ChatGPT. In Proceedings of DELFI 2024, Sandra Schulz and Natalie Kiesler (Eds.).
+63–79. https://doi.org/10.18420/delfi2024_05
+
+[42] Sander Schulhoff, Michael Ilie, Nishant Balepur, Konstantine Kahadze, Amanda
+Liu, and Chenglei et al. Si. 2024. The Prompt Report: A Systematic Survey of
+Prompting Techniques. https://doi.org/10.48550/arXiv.2406.06608
+
+[43] Valerie J. Shute. 2008. Focus on formative feedback. Review of Educational
+
+Research 78, 1 (2008).
+
+[44] Paul Solomon. 1994. The Think Aloud Method: A Practical Guide to Modelling
+
+Cognitive Processes. Academic Press, London.
+
+[45] Irene Stone. 2024. Exploring Human-Centered Approaches in Generative AI and
+Introductory Programming Research: A Scoping Review. In Proceedings of the 2024
+Conference on United Kingdom & Ireland Computing Education Research. ACM,
+Manchester United Kingdom, 1–7. https://doi.org/10.1145/3689535.3689553
+[46] Jacqueline Whalley, Amber Settle, and Andrew Luxton-Reilly. 2023. A Think-
+Aloud Study of Novice Debugging. ACM Trans. Comput. Educ. 23, 2 (June 2023),
+28:1–28:38. https://doi.org/10.1145/3589004
+
+[47] Ruiwei Xiao, Xinying Hou, and John Stamper. 2024. Exploring How Multiple
+Levels of GPT-Generated Programming Hints Support or Disappoint Novices. In
+Extended Abstracts of the 2024 CHI Conference. ACM, New York. https://doi.org/
+10.1145/3613905.3650937
+
+

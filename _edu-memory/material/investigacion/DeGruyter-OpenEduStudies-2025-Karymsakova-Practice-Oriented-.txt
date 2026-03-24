@@ -1,0 +1,1462 @@
+Open Education Studies 2025; 7(1): 20250099
+
+Research Article
+
+Anara Karymsakova, Gulsim Kapbar*, Kamalbek Berkimbayev and Gulmira Bakirova
+A Practice-Oriented Approach to Teaching Python
+Programming for University Students
+
+https://doi.org/10.1515/edu-2025-0099
+Received June 11, 2025; accepted August 1, 2025;
+published online December 3, 2025
+
+Abstract: The objective of this study was to examine the
+eﬀectiveness of a practice-oriented approach in teaching
+Python programming to students in Kazakhstan. The study
+participants comprised students from a control group (CG)
+and an experimental group (EG), with 89 students in each
+group. The mean age of the participants was 20 years.
+The sample included 93 male students and 85 female stu-
+dents. The CG followed a traditional teaching methodology,
+whereas the EG was instructed using an innovative
+approach. The applied research methods included theo-
+retical and practical tests, surveys, and interviews with
+instructors. The results demonstrated that the average
+score in the theoretical test increased from 67.8 to 82.1 (p =
+0.0001) for the EG, whereas the CG’s score improved from
+65.2 to 71.3 (p = 0.0002). During practical testing, the average
+score for the EG rose from 70.7 to 81.9 (p = 0.0003), while the
+CG’s score increased from 70.1 to 77.3 (p = 0.0001). The
+ﬁndings suggest that the practice-oriented approach con-
+tributes to the enhancement of theoretical knowledge,
+practical skills, and student engagement in Python pro-
+gramming education. The practical signiﬁcance of the re-
+sults lies in determining the eﬀectiveness of innovative
+teaching methods in fostering both theoretical and prac-
+tical competencies.
+
+Keywords: practice-based learning approach; programming
+curriculum; programming skills development; project-based
+learning; student education
+
+*Corresponding author: Gulsim Kapbar, Department of Computer
+Science, L.N. Gumilyov Eurasian National University, Astana, Kazakhstan,
+E-mail: 970810401257@enu.kz
+Anara Karymsakova, Department of Computer Science, L.N. Gumilyov
+Eurasian National University, Astana, Kazakhstan
+Kamalbek Berkimbayev, Department of Computer Science, International
+Kazakh-Turkish University named after Khoja Ahmed Yasawi, Turkestan,
+Kazakhstan
+Gulmira Bakirova, Department of Visual Arts, Technology and Music
+Education, Mukhtar Auezov South Kazakhstan University, Shymkent,
+Kazakhstan
+
+1 Introduction
+
+In the context of global digitalization and the expanding
+application of information technologies worldwide, leading
+countries are actively developing national programs for
+training IT specialists. For instance, in the United States,
+project-based learning is integrated into STEM education,
+facilitating students’ mastery of complex technical disci-
+plines and enhancing their critical thinking skills (Wil-
+liamson 2023). China actively employs innovative methods in
+programming education, including the integration of video
+lectures with elements of structural and project-based scaf-
+folding, which has led to a signiﬁcant improvement in stu-
+dents’ computational thinking skills (Wan et al. 2024).
+
+One of the key national programs aimed at increasing
+the competitiveness of Kazakhstan’s economy is the Digital
+Kazakhstan program (Baimukhamedov et al. 2022). Its ob-
+jectives include the expansion of digital infrastructure, the
+implementation of innovative technologies across various
+economic sectors, and the development of a workforce
+equipped with modern IT skills (Zheksembayeva 2021). In
+this context, the training of qualiﬁed programming special-
+ists capable of meeting the growing demands of the labor
+market is of particular importance (Patrushev and Bespaly
+2021).
+
+Among the most widely used technologies in the ﬁeld of
+information technology is the Python programming lan-
+guage (Dhruv et al. 2021). Python is extensively applied in
+data analysis, process automation, web development, arti-
+ﬁcial intelligence, and machine learning (Ashurova 2022). Its
+popularity is attributed not only to its ease of learning but
+also to its versatility, making it an optimal choice for student
+education. Python consistently ranks highly in programming
+language ratings, such as those conducted by TIOBE and
+Stack Overﬂow, further underscoring its signiﬁcance in the
+global IT industry (Ashurova 2022; Dhruv et al. 2021). Its
+application across diverse ﬁelds, including ﬁnance, health-
+care, communications, and public administration, highlights
+the necessity of incorporating it into educational curricula.
+Furthermore, Python enables the integration of automation
+tools, big data analysis, and machine learning algorithm
+
+Open Access. © 2025 the author(s), published by De Gruyter.
+
+This work is licensed under the Creative Commons Attribution 4.0 International License.
+
+2
+
+A. Karymsakova et al.
+
+development, which is particularly relevant in the context of
+increasing digitalization (Van Hattem 2022). However, the
+professional training system in programming faces several
+challenges. Foundational computer science education at
+universities presents signiﬁcant diﬃculties. Currently, the
+training of future programming instructors is either super-
+ﬁcial or entirely excluded from computer science curricula
+(Prokopiev et al. 2020). Such an approach may demotivate
+students who fail to perceive the real value of the subject
+they are studying. Additionally, the rapid advancement of
+technology necessitates the swift adaptation of educational
+programs, requiring the integration of
+innovative ap-
+proaches into the learning process. Computer science cour-
+ses typically cover only the basics of programming without
+fostering the practical application of acquired skills (Pro-
+kopiev et al. 2020). Furthermore, there is a shortage of
+qualiﬁed educators capable of eﬀectively combining prac-
+tical skills with the theoretical knowledge essential for the
+implementation of real-world projects (Markula and Aksela
+2022; Sun et al. 2023).
+
+On the one hand, the volume of knowledge that univer-
+sity graduates are expected to acquire is rapidly increasing.
+On the other hand, the abilities and motivation levels of the
+student population vary signiﬁcantly, and this diﬀerentiation
+continues to grow (Dolinsky 2023). Scholars and educators
+seek solutions to these challenges in the following areas:
+revising the knowledge requirements for university admis-
+sion in accordance with the realities of timely acquisition;
+utilizing new information technologies to simplify and
+enhance the learning process; and developing new teaching
+methodologies that reﬂect current realities (Dolinsky 2023).
+A practice-based approach to programming education
+presents an eﬀective solution to these issues. This approach
+incorporates real-world problems based on authentic sce-
+narios into the learning process. For example, students
+engage in projects that simulate industry-related tasks, such
+as developing web applications, conducting data analysis, or
+automating routine processes (Ashurova 2022; Van Hattem
+2022). These skills enable students to develop critical
+thinking, teamwork abilities, and problem-solving compe-
+tencies. Moreover, students not only gain an understanding
+of fundamental programming concepts but also acquire
+practical experience essential for building a successful
+career. Additionally, a practice-oriented approach allows
+students to create a portfolio of real-world projects, thereby
+signiﬁcantly improving their employability prospects (Dila-
+fruz 2023).
+
+The present study was motivated by the need to
+analyze and justify the use of a practice-oriented approach
+to Python programming education in universities in
+Kazakhstan. Given the increasing demand for domestic IT
+
+specialists, it is essential to identify strategies that will
+enhance graduates’ competitiveness in the global labor
+market (Myrzaev et al. 2024). The ﬁndings of this study
+contribute to the development of eﬀective strategies for
+implementing practical approaches, which can be utilized
+to update academic curricula. Ultimately, these advance-
+ments will support the growth of Kazakhstan’s IT sector
+and address the challenge of workforce training in align-
+ment with contemporary requirements. Furthermore, this
+study explores potential mechanisms for collaboration
+between universities and IT companies to jointly imple-
+ment educational projects and internships.
+
+Thus, addressing the topic of practice-oriented ap-
+proaches to Python programming education not only meets
+labor market demands but also contributes to the imple-
+mentation of the Digital Kazakhstan national program
+(Baimukhamedov et al. 2022; Patrushev and Bespaly 2021;
+Zheksembayeva 2021). Given the dynamic evolution of
+technologies and the changing educational
+landscape,
+research in this area has become increasingly important
+from both scientiﬁc and practical perspectives. This high-
+lights the necessity of exploring various instructional
+methods to enhance the quality of professional training
+while considering the needs of the modern digital economy.
+By employing a practice-oriented approach, students ac-
+quire not only foundational knowledge but also the skills
+required for active participation in digital transformation.
+
+1.1 Literature Review
+
+Contemporary approaches to programming education in
+Kazakhstani universities are actively explored in the context
+of digitalization and the integration of IT into academic
+curricula (Baimukhamedov et al. 2022; Zheksembayeva
+2021). International studies emphasize the signiﬁcance of
+project-based learning and practice-oriented methods in
+enhancing the quality of IT specialist training (Dilafruz
+2023). Swedish researchers point out that theoretical and
+practical components of academic programs are mutually
+reinforcing, and frequent transitions between them foster
+student engagement and improve knowledge retention
+(Eckerdal et al. 2024). Chinese scholars have demonstrated
+that the implementation of innovative learning tools sub-
+stantially enhances practical skills,
+fosters innovative
+thinking, and improves Python programming competencies
+in the ﬁelds of artiﬁcial intelligence and big data analytics
+(Liu and Guo 2024).
+
+Although computer literacy, ICT, educational technologies,
+and digital citizenship are integral elements of informatics,
+they diﬀer from computer science education in that they focus
+
+primarily on the use of software rather than understanding
+its underlying mechanisms or developing new technologies
+(Connolly et al. 2022). In this regard, eight key variables have
+been identiﬁed – perceived enjoyment, friendliness, ease of
+learning, social inﬂuence, creative and programming self-
+eﬃcacy, and attitudes toward collaboration – all of which
+positively aﬀect students’ behavioral
+intentions toward
+learning programming (Milutinović 2024). Structured pro-
+curricula have been introduced in the
+gramming
+United Kingdom (2014), Germany (2016), and in South Korea,
+China, and Taiwan since 2016 (Belmar 2022). Thus, the topic
+under investigation remains relevant and warrants further
+in-depth examination.
+
+Russian scholars concluded that practice-oriented
+learning and the development of interdisciplinary skills
+are key contemporary trends in preparing future specialists
+(Khaimina et al. 2023). Other researchers argue that pro-
+gramming education is becoming increasingly popular and
+that oﬀering introductory MOOCs (Massive Open Online
+Courses) in programming could serve as a means to make
+this education accessible to a broader audience (Lepp et al.
+2018). Turkish scholars highlight key themes in teachers’
+responses, including the improvement of educational qual-
+ity, adaptation to technological advancements, and the
+integration of technology into the learning process (Eğin
+et al. 2025).
+
+The primary challenge in this ﬁeld lies in the gap be-
+tween theory and practice, outdated curricula, and limited
+instructional methods (Lin and Fang 2023). A notable
+research gap persists in the comprehensive assessment of
+practical programming skills, particularly regarding code
+quality and algorithmic thinking (Lajis et al. 2018). The
+implementation of project-based learning requires sub-
+stantial resources, posing diﬃculties for certain universities
+(Othman et al. 2023; Padzil et al. 2021; Sun et al. 2023).
+Although practice-oriented teaching methods have demon-
+strated their eﬀectiveness, further research is needed to
+elucidate the mechanisms underlying their success and to
+develop universal pedagogical guidelines. Project-based
+learning proves eﬀective in small-group settings, yet its ef-
+ﬁcacy may diminish with larger student cohorts.
+
+The novelty of this study lies in its comprehensive
+approach to the implementation of practical Python pro-
+gramming exercises within the context of Kazakhstani higher
+education.
+It proposes the integration of project-based
+methods and modern educational technologies to enhance
+professional training in the era of digital transformation. A
+review of the literature reveals the absence of uniﬁed stan-
+dards for the integration of project-based learning and a lack
+of empirical evidence regarding its eﬀectiveness, under-
+scoring the need for further investigation. Consequently, this
+
+Practice-Oriented Python Teaching
+
+3
+
+research addresses both academic and practical demands,
+contributing to the improvement of specialist training quality
+under contemporary educational conditions.
+
+1.2 Problem Statement
+
+The motivation for this study lies in the development and
+justiﬁcation of a practice-oriented approach to Python pro-
+gramming education for university students in Kazakhstan.
+This approach aims to enhance students’ professional skills
+to meet the demands of the digital economy and align the
+academic curriculum with the needs of the IT industry. The
+objective of this article is to develop and demonstrate a
+practical approach to Python programming education for
+Kazakhstani students while integrating the curriculum with
+industry requirements.
+
+The research hypothesis posits that a practice-oriented
+approach to Python programming education, based on
+project-based activities and active collaboration with in-
+dustry, contributes signiﬁcantly to enhancing students’
+professional competence. This includes the development of
+analytical thinking, teamwork skills, and the ability to solve
+applied problems. The eﬀectiveness of this approach is
+particularly evident in the context of the digital trans-
+formation of education in Kazakhstan.
+
+–
+
+–
+
+–
+
+–
+
+Research Objectives:
+To develop and implement a model of practice-oriented
+Python programming education within the academic
+curriculum.
+To assess the eﬀectiveness of the proposed educational
+model by analyzing students’ academic performance
+and satisfaction with the learning process.
+To evaluate students’ comprehension of the curriculum
+and their interest in innovative teaching approaches.
+To collect feedback from instructors involved in teach-
+ing students in the experimental group.
+
+2 Research Methods
+
+2.1 Study Design
+
+In this study, the research design adopts a mixed-methods
+approach, incorporating both quantitative and qualitative
+methodologies to comprehensively assess the eﬀectiveness of
+the proposed teaching method. The quantitative methods
+involve evaluating students’ theoretical and practical knowl-
+edge at the beginning and end of the learning process, allowing
+for an assessment of their readiness for diﬀerent stages of
+the educational process and, consequently, identifying any
+
+4
+
+A. Karymsakova et al.
+
+changes that have occurred. This enables an objective mea-
+surement of students’ academic performance based on clear
+numerical data.
+
+The qualitative research methods complement
+the
+quantitative data by providing a deeper understanding of
+how students perceive the program and its impact on their
+motivation and interest. For instance, surveys and in-
+terviews facilitate the identiﬁcation of subjective aspects,
+such as instructors’ perspectives on the use of project-based
+learning methods, students’ attitudes toward new teaching
+approaches, and their overall satisfaction with the learning
+process. The integration of these two methods creates a
+comprehensive framework that captures both measurable
+outcomes (knowledge acquisition) and the personal experi-
+ences and observations of study participants.
+
+2.2 Sampling
+
+The study was conducted over four months at a university in
+Kazakhstan. The sample for this research comprised second-
+and third-year students from the technical faculties of the
+following universities in Kazakhstan: Ozbeksali Zhanibekov
+South Kazakhstan Pedagogical University, Khoja Akhmet
+Yassawi International Kazakh-Turkish University in Turke-
+stan, and Korkyt Ata Kyzylorda University. The total sample
+size consisted of 178 participants, including 75 students from
+Ozbeksali Zhanibekov South Kazakhstan Pedagogical Uni-
+versity, 60 students from Khoja Akhmet Yassawi Interna-
+tional Kazakh-Turkish University, and 43 students from
+Korkyt Ata Kyzylorda University. The sample included 93
+male and 85 female students, aged between 19 and 21 years.
+The inclusion criteria for the study were as follows:
+second-and third-year students from technical faculties
+residing in Kazakhstan who had actively participated in full-
+time educational programs over the last two semesters. This
+cohort was selected as it represents an optimal level of
+knowledge and experience necessary for engaging with both
+traditional and innovative learning tasks. Such a selection
+facilitates a clear comparison between conventional and
+innovative teaching methodologies. Furthermore,
+these
+students were able to actively participate in solving applied
+problems and assess the eﬀectiveness of the project-based
+learning approach, particularly in the context of application
+development and process automation.
+
+The exclusion criteria included students not enrolled in
+technical specializations, senior-year students with a more
+advanced level of knowledge, and students with signiﬁcant
+absenteeism. Additionally, 10 instructors who conducted the
+training participated in the study and were surveyed upon
+its completion.
+
+2.3 Procedure
+
+During the study, students were divided into groups. The
+control group (CG) consisted of 89 students who were taught
+Python programming using traditional methods, including
+lectures and standard laboratory sessions. This group fol-
+lowed a conventional curriculum without the introduction
+of project-based tasks. The experimental group (EG) also
+comprised 89 students, who participated in a Python pro-
+gramming curriculum focused on application development,
+data analysis, and task automation, incorporating project-
+oriented assignments. This approach enabled an assessment
+of the eﬀectiveness of new educational technologies.
+
+The instructional methods used for the experimental
+group emphasized active and innovative approaches aimed at
+developing practical skills in real-world scenarios while
+deepening students’ theoretical knowledge. In contrast to
+traditional methods, which primarily consist of standard lec-
+tures and laboratory sessions, the experimental group’s
+learning process also included team-based work, participation
+in hackathons, and engagement in programming competi-
+tions. The instructional approach used for the experimental
+group is described in detail in Table 1.
+
+The objective of this experimental group-based learning
+method is to develop practical skills, creative thinking, and
+teamwork abilities, thereby enhancing student engagement
+in the learning process and preparing them for real-world
+professional challenges.
+
+2.4 Research Tools
+
+As part of the study, the following tests were developed to
+assess students’ theoretical knowledge and practical skills
+before and after the learning process. The theoretical and
+tests (Appendix 1), designed speciﬁcally for
+practical
+the training program, aimed to provide a comprehensive
+evaluation of students’
+theoretical understanding and
+practical competencies in programming, data analysis, and
+software development. The assessment of theoretical and
+practical knowledge consisted of 10 tasks, each scored on a
+10-point scale, with a maximum possible score of 100 for
+the test.
+
+Subsequently, a survey was conducted among the
+experimental group (EG) students to gather data on their
+perceptions of the course and their interest in innovative
+teaching methods (Appendix 2). The survey was adminis-
+tered using Google Forms, facilitating eﬃcient data collec-
+tion and processing. The questionnaire included statements
+assessing motivation, interest, and awareness of the teach-
+ing methods, rated on a 5-point Likert scale (ranging from
+
+Practice-Oriented Python Teaching
+
+5
+
+Table : Student learning in the experimental group.
+
+. Solving Problems Based on
+Real-World Cases
+
+. Team-Based Project Work
+
+. Participation in Hackathons and
+Competitions
+
+Training in the experimental group (EG)
+
+Data Collection: Students work with company-provided data, conducting market research, analyzing customer
+behavior, and compiling statistical information.
+Data Processing: Students utilize data analysis tools such as Python, Excel, and specialized software for big data
+processing. They work with datasets, enabling them to apply theoretical knowledge in practice.
+Business Problem-Solving: Students develop solutions to help companies enhance processes, optimize production
+operations, improve resource eﬃciency, or reﬁne marketing strategies.
+Results Presentation: Students learn not only to solve problems but also to present their ﬁndings to client
+companies, thereby developing communication skills and the ability to defend their solutions with reasoned
+arguments.
+Role Distribution: Within each team, students assume diﬀerent roles (e.g., developer, analyst, project manager),
+allowing each participant to leverage their strengths while developing collaborative skills.
+Coordination of Actions: Students teach one another eﬀective teamwork strategies by addressing emerging
+challenges, developing solutions, and analyzing interim results.
+Project Documentation: Throughout the process, students create project documentation, plans, and reports,
+fostering project management skills and enhancing their ability to maintain technical documentation.
+Project Implementation: Teams engage in long-term projects, such as mobile application development, software
+prototyping, and business process automation, providing students with practical experience highly valued in the
+labor market.
+Idea Implementation Within a Limited Timeframe: During hackathons, students are presented with a problem that
+must be solved within a short period (e.g., – min). This fosters their ability to make quick decisions, enhances
+creativity, and develops resilience under pressure.
+Competition with Other Teams: Participation in hackathons and programming competitions allows students to
+compare their solutions with those of other teams, fostering a drive for improvement and self-development.
+Receiving Expert Feedback: Through these events, students gain valuable insights and constructive criticism from
+industry professionals, enabling them to reﬁne their projects and enhance their professional skills.
+Networking Opportunities: Hackathons and competitions provide students with the chance to engage with
+company representatives, potential employers, and peers from other universities, which can be beneﬁcial for their
+career development.
+
+Source: developed by the author.
+
+“strongly disagree” to “strongly agree”). The survey was
+conducted by instructors at the end of the training sessions,
+after students had completed all assignments and projects.
+The average time to complete the survey was approximately
+15–20 min. To ensure fairness and transparency, student
+responses were anonymized.
+
+Additionally,
+
+interviews were conducted with in-
+structors teaching students in the experimental group to
+collect their insights and observations (Appendix 3). The
+interviews took place at the end of the study period,
+following the experiment. They were conducted in person,
+allowing for direct interaction and detailed discussions on
+individual issues. Each interview lasted approximately 30–
+40 min. The interview questions focused on instructors’
+perceptions of the new teaching methods, challenges faced,
+and suggestions for improving the curriculum. The in-
+terviews were conducted in an informal setting, enabling
+instructors to express their thoughts and observations
+freely. Their responses were recorded and analyzed to
+identify key themes that could be used to enhance future
+courses.
+
+The reliability of the research instruments (theoretical
+and practical tests) was evaluated using Cronbach’s alpha
+reliability coeﬃcient. The coeﬃcient yielded values of 0.73
+for theoretical assessments and 0.78 for practical assess-
+ments, indicating high reliability of the instruments. Addi-
+tionally, Cronbach’s alpha was used to assess the reliability
+of the survey and interview instruments, resulting in values
+of 0.79 and 0.81, respectively, further conﬁrming the reli-
+ability of the assessment tools.
+
+2.5 Data Analysis and Processing
+
+The test results were analyzed using statistical methods to
+determine diﬀerences between the control group (CG) and
+the experimental group (EG). For each theoretical and
+practical test question, the mean group score (ranging from
+0 to 100) was calculated, reﬂecting overall trends in students’
+responses to speciﬁc statements. The Student’s t-test was
+employed to evaluate diﬀerences in knowledge test results
+between the control and experimental groups. This test was
+
+6
+
+A. Karymsakova et al.
+
+selected as it compares the mean values of two independent
+samples, making it particularly suitable for assessing the
+impact of project-based learning methods on student
+learning outcomes.
+
+In analyzing the survey results, descriptive statistical
+methods were applied to calculate the percentage of student
+responses to each survey question. This approach allows for
+a clear and accessible presentation of data, facilitating the
+identiﬁcation of trends and patterns among respondents.
+Each survey question was analyzed using a Likert scale,
+where response options were scored as follows: 1 – “Strongly
+Disagree,” 2 – “Disagree,” 3 – “Neutral,” 4 – “Somewhat
+Agree,” and 5 – “Strongly Agree.” These percentages illus-
+trate the degree to which students agree or disagree with
+various statements, enabling an assessment of their per-
+ceptions of the project-based learning approach in the
+curriculum.
+
+The interview data were analyzed using thematic
+analysis to identify key themes and recurring ideas among
+diﬀerent instructors. Responses were recorded and catego-
+rized into themes such as “positive observations,” “chal-
+lenges,” and “recommendations for improvement.” This
+method provides a deeper understanding of instructors’
+perceptions of the new teaching methods and facilitates the
+identiﬁcation of areas for further curriculum enhancement.
+
+2.6 Ethical Issues
+
+All participants in the study, including both students and
+instructors, provided informed consent to participate in the
+experiment. They were informed about the purpose of the
+study, data collection methods, and potential implications of
+their participation. Participation was voluntary, and in-
+dividuals had the right to withdraw from the study at any
+time without any consequences. All collected data, including
+survey responses and interview transcripts, were anony-
+mized. Participants’ identities were not disclosed, and re-
+sponses were processed solely for research purposes.
+Furthermore, all data were securely stored and used exclu-
+sively for academic research, ensuring conﬁdentiality and
+compliance with ethical research standards. To minimize
+potential power imbalances between teachers and students,
+especially in cases where the teacher is a researcher, it was
+emphasized that participation did not aﬀect grades or aca-
+demic progress. Data collection was carried out after the
+completion of the learning module, and the processing of the
+results was carried out independently of the teaching
+process.
+
+2.7 Research Limitations
+
+The student sample was limited to technical programs from
+three universities in Kazakhstan, which may restrict the
+generalizability of the ﬁndings to students in other academic
+programs or countries. This limits the applicability of the
+study results to a broader population. Additionally, the study
+did not account for the inﬂuence of external factors, such as
+students’ personal circumstances or extrinsic motivation,
+which may have aﬀected their participation and perfor-
+mance. These factors could have introduced bias into the
+data, particularly in students’ perceptions of the learning
+process. Despite employing a mixed-methods approach, this
+study lacked suﬃcient longitudinal measures to accurately
+assess long-term changes in students’ academic and profes-
+sional skills. The eﬀects of
+the project-based learning
+approach may take time to manifest, potentially limiting
+conclusions regarding its long-term eﬀectiveness. Further-
+more, the qualitative data obtained through interviews
+and surveys may reﬂect participants’ subjective opinions
+and preferences, which could aﬀect the objectivity of the
+results – especially if participants already had a preference
+for a practice-based approach.
+
+3 Results
+
+3.1 Testing Results
+
+Table 2 presents a comparative analysis of the theoretical
+and practical knowledge assessment results for students in
+the control group (CG) and the experimental group (EG)
+before and after training, allowing for an evaluation of the
+eﬀect of traditional and innovative teaching methods. This
+study utilized theoretical and practical tests, with each test
+scored on a scale from 1 to 10, yielding a total possible score
+of 100. The mean score and standard deviation (SD) for each
+test are provided in Table 2. Additionally, the T-values for
+independent samples and P-values are reported to assess the
+statistical signiﬁcance of diﬀerences between the groups.
+
+In the theoretical test, the control group (CG) demon-
+strated an increase in the mean score from 65.2 to 71.3, while
+the standard deviation remained nearly unchanged (5.4 and
+5.5, respectively). This indicates a moderate improvement in
+knowledge, primarily attributed to the acquisition of theo-
+retical concepts through traditional
+teaching methods.
+However, the t-value of 4.21 and p-value of 0.0002 suggest
+that this improvement is statistically signiﬁcant.
+
+Practice-Oriented Python Teaching
+
+7
+
+Table : Student test results.
+
+Group
+
+Pre-test
+
+Post-test
+
+t-value
+
+p-value
+
+Mean score
+
+Standard deviation
+
+Mean score
+
+Standard deviation
+
+CG
+EG
+
+CG
+EG
+
+.
+.
+
+.
+.
+
+Source: developed by the author.
+
+Theoretical testing
+
+.
+.
+
+Practical testing
+
+.
+.
+
+.
+.
+
+.
+.
+
+.
+.
+
+.
+.
+
+.
+.
+
+.
+.
+
+.
+.
+
+.
+.
+
+In the experimental group (EG),
+
+the mean score
+increased from 67.8 to 82.1, while the standard deviation
+decreased from 6.2 to 5.7. This reﬂects a substantial increase
+in theoretical knowledge, accompanied by greater consis-
+tency in students’ performance within the group. The sta-
+tistical signiﬁcance of these changes was conﬁrmed with a
+t-value of 4.47 and a p-value of 0.0001.
+
+Similar results were observed in practical tasks. In the
+control group, the mean score increased from 70.1 to 77.3,
+and the standard deviation decreased from 7.8 to 6.7, indi-
+cating a notable improvement in practical skills. These
+changes were statistically signiﬁcant, as evidenced by a
+t-value of 3.27 and a p-value of 0.0001.
+
+In the experimental group, the mean score increased
+from 70.7 to 81.9, while the standard deviation decreased
+from 7.1 to 5.8, suggesting both a signiﬁcant enhancement in
+students’ skills and more stable performance across the
+group. The statistical signiﬁcance of these improvements
+was conﬁrmed with a t-value of 3.87 and a p-value of 0.0003.
+The increase in mean scores in the control group (CG)
+was the result of a natural learning process, in which stu-
+dents assimilated material through traditional teaching
+methods. However, the improvement in knowledge and
+skills remained modest due to the limitations of the tradi-
+tional approach, which is often less eﬀective in enhancing
+student motivation and engagement.
+
+In contrast, the signiﬁcant improvement observed in the
+experimental group (EG) was attributed to the use of inno-
+vative teaching methods, such as active student participa-
+tion, project-based learning, and the integration of modern
+technologies. These factors contributed to a deeper under-
+standing of theoretical concepts and the development of
+practical skills while also reducing performance variability
+among participants. Thus, the study results demonstrate the
+innovative teaching approaches, which
+advantages of
+
+Table : Summary of student results and additional analysis.
+
+Group Testing
+
+Increase in mean
+score (%)
+
+Coeﬃcient of variation (%,
+Before/After)
+
+CG
+
+EG
+
+Theoretical
+Practical
+Theoretical
+Practical
+
+. %
+. %
+. %
+. %
+
+Source: developed by the author.
+
+./.
+./.
+./.
+./.
+
+facilitate greater learning progress and a more uniform
+distribution of knowledge among students.
+
+Table 3 presents the performance analysis of students in
+both the control and experimental groups, along with an
+additional statistical analysis of post-training changes. This
+analysis focuses on two aspects: the increase in mean scores
+and changes in the coeﬃcient of variation, which allows for
+an assessment of both the overall learning progress and
+the degree of knowledge uniformity within each group. In
+the control group, the mean score on the theoretical test
+increased by 9.4 %, indicating a moderate improvement
+in academic performance. The coeﬃcient of variation
+decreased from 8.3 % to 7.7 %, reﬂecting a slight improve-
+ment in the homogeneity of students’ knowledge. In the
+practical exam, the mean score increased by 10.3 %, while
+the coeﬃcient of variation decreased from 11.1 % to 8.7 %,
+suggesting a greater improvement in the uniformity of
+knowledge and skills compared to the theoretical exam.
+
+3.2 The Results of the Survey
+
+Figure 1 illustrates the distribution of responses from students
+in the experimental group (EG) regarding their perception
+of project-based learning in Python programming. The
+
+8
+
+A. Karymsakova et al.
+
+Figure 1: Survey results. Source: Developed by the author.
+
+responses were recorded using a Likert scale, ranging from
+“strongly disagree” to “strongly agree”. The ﬁrst question re-
+veals that the majority of students perceive the project-based
+approach as eﬀective in deepening their understanding of
+Python programming. 83 % of students responded with
+“agree” or “strongly agree,” while only 7 % disagreed, con-
+ﬁrming the positive perception of this approach and its
+educational eﬀectiveness.
+
+In response to the second question, 83 % of students
+indicated that project-based work enables them to acquire
+practical skills applicable to real-life scenarios. This high-
+lights the importance of practical tasks in professional
+development. The third question shows that learning Python
+through teamwork was perceived as more engaging, with
+82 % of students agreeing with this statement. Only 9 %
+responded with “neutral”, indicating an overall positive
+perception of collaborative learning.
+
+The fourth question indicated that the majority of stu-
+dents (84 %) were interested in solving tasks related to real-
+world examples. This suggests that such assignments eﬀec-
+tively stimulate interest in learning Python.
+
+For the ﬁfth question, 80 % of students responded
+positively, indicating that project-based learning helps pre-
+pare them for their future professional careers. However,
+13 % of students were uncertain in their assessment, which
+may indicate the need for further analysis.
+
+The sixth question revealed that 79 % of respondents
+found working on a project challenging yet engaging. This
+suggests that the level of diﬃculty was appropriately set to
+foster interest and engagement.
+
+The seventh question demonstrated that 75 % of students
+preferred learning through real-world projects over tradi-
+tional lectures and practical exercises. However, 14 % were
+undecided, which may reﬂect individual learning preferences
+that should be considered in curriculum development.
+
+The eighth question showed that 82 % of students re-
+ported that project-based learning increased their motivation
+to study Python programming, conﬁrming the motivational
+role of this approach in the educational process.
+
+For the ninth question, 82 % of students stated that the
+process of application development and data analysis was
+both useful and interesting, indicating the successful inte-
+gration of practical elements into the curriculum.
+
+Regarding the tenth question, 86 % of students stated that
+they would recommend project-based learning to others, sug-
+gesting a high overall level of satisfaction with this approach.
+Thus, as shown in Figure 1, the majority of students
+expressed a positive attitude toward project-based learning
+in Python programming. This approach supports the devel-
+opment of practical skills and professional preparation
+while also enhancing student engagement and motivation
+through hands-on tasks and teamwork.
+
+Practice-Oriented Python Teaching
+
+9
+
+3.3 Results of Interviews with Teachers
+
+During the interviews, instructors shared their observations
+and various aspects related to the implementation of project-
+based learning (Figure 2). Many instructors reported that
+students demonstrated increased interest in the learning
+process, actively engaged in project activities, and developed
+self-directed learning skills. Additionally, 80 % of instructors
+noted an increase in student engagement and an improve-
+ment in practical skills. However, instructors also encoun-
+tered challenges, such as the need to allocate more time for
+preparing materials and assessing projects, as well as the
+requirement for professional development to eﬀectively
+implement the new teaching approach.
+
+Furthermore, 60 % of instructors indicated that assess-
+ment materials need to be adapted to align with this teaching
+method. Additionally, 40 % noted insuﬃcient preparation
+time, while 20 % reported challenges related to assessment
+and the need for additional time for preparation. Overall,
+educators believe that project-based learning enhances
+students’ critical thinking and creative abilities; however, its
+implementation requires signiﬁcant eﬀort and resources.
+70 % of instructors suggested increasing the time allocated
+for practical work, while 30 % proposed allocating resources
+for course preparation. Although the positive feedback from
+instructors conﬁrms the eﬀectiveness of project-based
+learning, the identiﬁed challenges suggest that successful
+implementation of
+this approach requires additional
+training and resources.
+
+4 Discussion
+
+The study conﬁrmed the eﬀectiveness of practice-oriented
+in the
+instruction in Python programming:
+
+students
+
+Figure 2: Interview results. Source: Developed
+by the author.
+
+experimental group signiﬁcantly outperformed those in the
+control group on both theoretical and practical tasks. The
+project-based approach facilitates a deeper understanding
+of theoretical concepts and improves knowledge application,
+while also enhancing student motivation. Similar outcomes
+have been reported in other studies, including research
+conducted in Malaysia, where practical learning signiﬁ-
+cantly improved students’ problem-solving skills and the
+ability to develop real-world software solutions (Ibrahim
+et al. 2020).
+
+Theoretical assessments demonstrated knowledge gains
+in both groups, but the improvement was more pronounced
+in the experimental group: the average score increased from
+67.8 to 82.1, compared to 65.2 to 71.3 in the control group.
+American studies likewise conﬁrm that students engaged in
+project-based learning achieve higher scores on standard-
+ized assessments and exhibit greater levels of self-reﬂection
+(Krajcik et al. 2023). Chinese researchers have also found that
+innovative learning tools enhance practical skills and foster
+innovative thinking (Liu and Guo 2024). This eﬀect can be
+attributed to the nature of project-based learning, which
+engages students through real-world tasks, thereby deep-
+ening both theoretical and practical understanding.
+
+A comparison of performance on practical tasks revealed
+a similar pattern: while the control group showed moderate
+improvement (from 70.1 to 77.3), the experimental group
+demonstrated a substantial increase (from 70.7 to 81.9). These
+results further conﬁrm the eﬃcacy of practice-oriented ap-
+proaches that integrate theoretical knowledge with active
+application. Research from China has shown that project-
+structured instructional videos
+improve computational
+thinking, particularly in the areas of algorithmic reasoning
+and collaborative work (Wan et al. 2024). Kazakhstani
+scholars have likewise conﬁrmed that project-based learning
+enhances content mastery and practical skills acquisition (Liu
+
+10
+
+A. Karymsakova et al.
+
+et al. 2023), with the experimental group achieving statisti-
+cally signiﬁcant results compared to the control group (p =
+4.187). A Ukrainian study found that a structured program-
+ming curriculum eﬀectively develops problem-solving com-
+petencies, as reﬂected in the considerable improvement in
+programming proﬁciency among students in the experi-
+mental group (Bazurin et al. 2022). Another Chinese study
+aﬃrmed that project-based instruction enhances academic
+performance, aﬀective attitudes, and cognitive skills (Zhang
+and Ma 2023). These ﬁndings underscore that the project-
+based approach stimulates autonomous problem-solving and
+promotes the development of programming and critical
+thinking abilities.
+
+The ﬁndings of this study conﬁrm the high potential of a
+practice-oriented approach in enhancing the quality of Py-
+thon programming education in Kazakhstani universities.
+Students who participated in project-based learning demon-
+strated higher levels of knowledge and skills, indicating
+the eﬀectiveness of this method in teaching complex technical
+disciplines. Similar results were reported in Indonesia, where
+the average score of the experimental group reached 82.2
+compared to 72.5 in the control group (Sembiring et al. 2023).
+Cuban researchers have also noted improvements in stu-
+dents’ problem-solving and project management skills
+through report writing, which contributes to the development
+of core competencies and enhances student competitiveness
+(Rojas et al. 2024).
+
+Another Kazakhstani study (Karstina et al. 2024) exam-
+ined the characteristics of practice-oriented educational
+technologies in teaching technical and natural science dis-
+ciplines. The results indicated that specialists increasingly
+prioritize the development of personal, social, and technical
+competencies. This underscores the need for integrating
+practical approaches into Kazakhstan’s educational system.
+Given the rapid pace of technological advancement and
+shifts in the labor market, it is essential to prepare students
+not only for theoretical understanding but also for the
+practical application of knowledge. The implementation of
+innovative methods, particularly project-based learning,
+represents a key step toward improving the quality of higher
+education.
+
+At the same time, it is important to consider Kazakh-
+stan’s local speciﬁcities: disparities in students’ digital lit-
+eracy levels, limited access to modern technologies in certain
+regions, and the structural transformation of the national
+education system. These factors may inﬂuence learning
+outcomes and highlight the need to adapt practice-oriented
+approaches to the national context. Thus, the present study
+contributes to the existing body of knowledge by drawing
+attention to the realities and challenges of Kazakhstani
+higher education.
+
+5 Conclusions
+
+The ﬁndings conﬁrm that the project-based approach to Py-
+thon programming education signiﬁcantly enhances stu-
+dents’ theoretical knowledge and practical skills. In the
+experimental group (EG), the mean score on the theoretical
+knowledge assessment increased from 67.8 to 82.1, while
+the mean score on the practical knowledge assessment
+improved from 70.7 to 81.9. Additionally, the variability of
+results decreased, indicating a more uniform proﬁciency level
+in Python programming. These changes were statistically
+signiﬁcant, as evidenced by the t-value and p-value (p < 0.001).
+The control group (CG) also demonstrated improvement, with
+the mean score increasing from 65.2 to 71.3 (p = 0.0002) on the
+theoretical test and from 70.1 to 77.3 (p = 0.0001) on the
+practical test. A student survey revealed that 83 % of re-
+spondents considered the project-based approach highly
+eﬀective for deepening their understanding of programming,
+while 80 % stated that it was beneﬁcial for their professional
+preparation. The teacher survey results further emphasized
+the positive impact of this approach, with 80 % of instructors
+reporting increased student engagement and 60 % high-
+lighting the need for modiﬁcations in assessment materials
+and methods.
+
+The practical and scientiﬁc signiﬁcance of this study lies
+in its demonstration of the advantages of innovative teach-
+ing methods, which contribute to deeper subject mastery,
+the development of practical skills, and increased student
+motivation. These ﬁndings can be utilized to optimize
+educational programs in Kazakhstani universities, enhance
+the quality of education, and better prepare students for
+professional careers. Additionally, the results may inform
+the implementation of project-based learning in educational
+institutions and support
+the development of market-
+oriented curricula. Furthermore, they can be applied in
+the creation of educational platforms that integrate modern
+IT solutions with project-based tasks. The recommendations
+of this study include the integration of a project-based
+approach into university programs in Kazakhstan, ensuring
+that students gain hands-on experience relevant to industry
+needs. Another key recommendation is the development of
+an interactive platform that facilitates collaboration be-
+tween universities and IT companies, aligning academic
+programs with current labor market demands. To enhance
+the quality of education,
+it is also necessary to adapt
+curricula to modern educational standards, ensuring that
+students receive training that meets industry requirements.
+For the successful implementation of project-based learning,
+additional measures are required, such as faculty training,
+which would help instructors eﬀectively apply innovative
+
+teaching methodologies. Providing up-to-date resources is
+also crucial to ensure that students have access to the
+necessary tools and technologies. Furthermore, the devel-
+opment of eﬀective assessment methods for project-based
+learning is essential to objectively evaluate student progress
+and outcomes.
+
+Further research directions may include an examination
+of the eﬀectiveness of project-based learning across various
+educational contexts. It is essential to conduct studies to adapt
+this approach to diﬀerent stages of student training, including
+undergraduate and graduate education. Additionally, it is
+necessary to investigate the impact of this approach on the
+development of critical thinking, creativity, and teamwork
+skills across diﬀerent professional ﬁelds. One promising
+research area is the development of new methods for inte-
+grating information technologies and platforms to automate
+learning and assessment processes. In the long term, this in-
+cludes the creation of scalable learning models that can be
+adapted to various educational institutions, taking into ac-
+count the speciﬁc nature of disciplines and labor market
+needs. Furthermore, it is important to assess the economic
+eﬃciency of implementing new teaching methods and their
+impact on teacher and student satisfaction.
+
+Researchers should also focus on developing mecha-
+nisms for university-IT industry collaboration, updating
+curricula to align with industry demands, and ensuring that
+students have access to relevant tools and technologies. This
+may involve the establishment of partnerships for intern-
+ships,
+joint projects, and case-based learning, providing
+students with practical experience in real-world profes-
+sional settings.
+
+Informed consent: Informed consent was obtained from all
+participants.
+Author contributions: All authors contributed to the study
+conception and design. Material preparation, data collection
+and analysis were performed by AK and GK. The ﬁrst draft of
+the manuscript was written by KB and GB. All authors read
+and approved the ﬁnal manuscript.
+Conﬂict of interests: The authors state no conﬂict of
+interest..
+Data availability: All data generated or analysed during this
+study are included in this published article.
+Funding: The authors state no funding involved.
+Ethics approval: The study was conducted in accordance
+with the rules of the Declaration of Helsinki. The study was
+approved by L.N. Gumilyov Eurasian National University.
+
+Practice-Oriented Python Teaching
+
+11
+
+Appendix 1
+
+Theoretical Tests:
+
+(1) What is a variable in a programming language?
+(2) Explain the diﬀerence between code compilation and
+
+interpretation.
+
+(3) What data types exist in Python?
+(4) What is an array, and how is it used?
+(5) Explain the working principle of a hash table.
+(6) What is database normalization?
+(7) Explain the diﬀerence between INNER JOIN and LEFT
+
+JOIN in SQL.
+
+(8) Explain the diﬀerence between supervised and unsu-
+
+pervised learning in machine learning.
+
+(9) What is model overﬁtting, and how can it be mitigated?
+(10) What is DevOps, and how does it inﬂuence the devel-
+
+opment process?
+
+Practical Tests:
+
+(1) Write a function that calculates the factorial of a
+
+number.
+
+(2) Write a program that checks whether a given string is a
+
+palindrome.
+
+(3) Develop a Python script that reads a CSV ﬁle and gen-
+
+erates statistical summaries of the data.
+
+(4) Implement a K-means clustering algorithm for data
+
+classiﬁcation.
+
+(5) Write an SQL query to retrieve all orders placed by a
+
+speciﬁc user.
+
+(6) Implement a procedure for updating product infor-
+
+mation in a database.
+
+(7) Write a script that automatically fetches data from a
+
+website.
+
+(8) Develop a server monitoring system that sends notiﬁ-
+
+cations in case of failures.
+
+(9) Create a CI/CD pipeline for automatic application
+
+deployment.
+
+(10) Organize a code review process to improve code quality
+
+in a project.
+
+Appendix 2
+
+Student Survey Questions (Evaluation of the Educational
+Process in Python Programming Training):
+
+(1) The project-based learning approach contributes to a
+
+deeper understanding of Python programming.
+
+12
+
+A. Karymsakova et al.
+
+(2) Working on projects has helped me acquire practical
+
+programming skills.
+
+(3) Teamwork has made the process of learning Python
+
+more engaging and productive.
+
+(4) Solving real-world case-based problems sparked my
+
+interest and stimulated my learning.
+
+(5) The project-based approach helped me understand
+how Python programming skills can be applied in
+professional settings.
+
+(6) Project-related assignments were challenging yet
+
+engaging and informative.
+
+(7) I prefer learning through real-world projects rather
+than traditional lectures and laboratory exercises.
+(8) Completing project assignments increased my motiva-
+
+tion to study Python programming.
+
+(9) The process of developing software and analyzing data
+
+in Python was useful and interesting.
+
+(10) Overall, I recommend using the project-based learning
+approach for Python programming education for other
+students.
+
+Likert Scale Response Options:
+
+(1) – Strongly Disagree
+(2) – Disagree
+(3) – Neutral
+(4) – Agree
+(5) – Strongly Agree
+
+Appendix 3
+
+Interview Questions for Instructors (Evaluation of
+Teaching Practices):
+(1) How do you assess the eﬀectiveness of the project-based
+
+learning approach in student education?
+
+(2) What challenges did you encounter in organizing stu-
+
+dent project work?
+
+(3) How do you evaluate student engagement in the project
+
+development process?
+
+(4) In your opinion, what improvements could be made to
+enhance the eﬀectiveness of project-based learning?
+(5) What observations or recommendations do you have for
+
+improving teaching methodologies in the future?
+
+References
+
+Ashurova, M.M. (2022). Programming language python methodology for
+creating and using didactic materials for students. Galaxy Int.
+Interdiscip. Res. J. 10: 63–67.
+
+Baimukhamedov, M.F., Baimukhamedova, G.S., and Aimurzinov, M.S.
+
+(2022). Economic development within the framework of the state
+program “Digital Kazakhstan”. Actual Sci. Res. Mod. World 10: 200–204.
+
+Bazurin, V.M., Chashechnikova, O.S., Karpenko, Y.M., Pursky, O.I., and
+Palchuk, P.M. (2022). Interdisciplinary problems of mathematical
+content as a means of teaching programming to secondary school
+pupils. J. Phys.: Conf. Ser. 2288: 012010.
+
+Belmar, H. (2022). Review on the teaching of programming and
+
+computational thinking in the world. Front. Comput. Sci. 4: 997222.
+
+Connolly, C., Byrne, J.R., and Oldham, E. (2022). The trajectory of computer
+science education policy in Ireland: a document analysis narrative. Eur.
+J. Educ. 57: 512–529.
+
+Dhruv, A.J., Patel, R., and Doshi, N. (2021). Python: the most advanced
+
+programming language for computer science applications. In:
+Proceedings of the international conference on culture heritage,
+education, sustainable tourism, and innovation technologies (CESIT 2020).
+SCITEPRESS, pp. 292–299.
+
+Dilafruz, A. (2023). The Practice-oriented approach to learning in Europe. In:
+Mendoza, C.N. (Ed.). 10th-International conference on research in
+humanities, applied sciences and education. Conferencea, pp. 79–80,
+Available at: https://conferencea.org/index.php/conferences/article/
+view/1939.
+
+Dolinsky, M. (2023). Trends in the development of basic computer education
+at universities. Buletin Ilmiah Sarjana Teknik Elektro 5: 584–591.
+Eckerdal, A., Berglund, A., and Thuné, M. (2024). Learning programming
+practice and programming theory in the computer laboratory. Eur.
+J. Eng. Educ. 49: 330–347.
+
+Eğin, F., Onan, A., and Yildiz Durak, H. (2025). Let’s talk about EdTech! A topic
+modelling analysis of AI tools and pre‐service teachers’ perspectives.
+Eur. J. Educ. 60: e12913.
+
+Ibrahim, M.F., Huddin, A.B., Hashim, F.H., Abdullah, M., Rahni, A.A.A.,
+
+Mustaza, S.M., Hussain, A., and Zaman, M.H.M. (2020). Strengthening
+programming skills among engineering students through
+experiential learning based robotics project. Int. J. Eval. Res. Educ. 9:
+939–946.
+
+Karstina, S., Zhetpisbajeva, B., Tussupbekova, A., and Makhanov, K. (2024).
+
+Application of practice-oriented education technologies in training
+students in engineering and science specialties. Sci. Anal. J. “High. Sch.
+Kazakhstan” 46: 56–67.
+
+Khaimina, L.E., Demenkova, E.A., Zelenina, L.I., Demenkov, M.E.,
+
+Khaimin, E.S., and Zashikhina, I.M. (2023). Project-based learning:
+formation of students’ digital competencies. In: 2023 3rd International
+conference on technology enhanced learning in higher education (TELE).
+IEEE, pp. 178–180.
+
+Krajcik, J., Schneider, B., Miller, E.A., Chen, I.C., Bradford, L., Baker, Q., Bartz,
+K., Miller, C., Li, T., Codere, S., et al. (2023). Assessing the eﬀect of
+project-based learning on science learning in elementary schools. Am.
+Educ. Res. J. 60: 70–102.
+
+Lajis, A., Baharudin, S.A., Ab Kadir, D., Ralim, N.M., Nasir, H.M., and Aziz, N.A.
+(2018). A review of techniques in automatic programming assessment
+for practical skill test. J. Telecommun. Electron. Comput. Eng. 10: 109–113.
+Lepp, M., Palts, T., Luik, P., Papli, K., Suviste, R., Säde, M., Hollo, K., Vaherpuu,
+V., and Tõnisson, E. (2018). Troubleshooters for tasks of introductory
+programming MOOCs. Int. Rev. Res. Open Distr. Learn. 19: 56–75.
+
+Lin, Y. and Fang, L. (2023). Exploring innovations in teaching reform for
+
+Python programming under engineering education accreditation. In:
+Proceedings of the 2nd international seminar on artiﬁcial intelligence,
+networking and information technology (ANIT 2023). SCITEPRESS,
+pp. 355–361.
+
+Practice-Oriented Python Teaching
+
+13
+
+Liu, Q. and Guo, J. (2024). Course reform and practice of “Python
+
+programming” for artiﬁcial intelligence and big data applications.
+J. Comput. Technol. Electron. Res. 1: 1–5.
+
+the programming language Python. Propositos y Representaciones
+8: 33.
+
+Rojas, L.R.M., Martínez, M.G., and Burguera, G.J.M. (2024). Development
+
+Liu, Z., Alimbekov, A., Glushkov, S., and Ramazanova, L. (2023). Modern
+tendency to practice-oriented learning. Mendel 29: 155–161.
+
+of competencies from project-oriented learning. ITEGAM-JETIA 10:
+30–37.
+
+Markula, A. and Aksela, M. (2022). The key characteristics of project-based
+learning: how teachers implement projects in K-12 science education.
+Discipl. Interdiscip. Sci. Educ. Res. 4: 2.
+
+Milutinović, V. (2024). Unlocking the code: exploring predictors of future
+interest in learning computer programming among primary school
+boys and girls. Int. J. Hum. Comput. Interact. 41: 3149–3165.
+
+Myrzaev, R., Seitmuratov, A., Kanibaykyzy, K., Ibraeva, A., Kuralbaeva, A.A.,
+and Nuskabay, P.N. (2024). Professional focus of mathematical
+training of bachelors in it directions. Sci. J. “Bull. NAS RK” 408: 234–248.
+
+Othman, J., Mahlan, S.B., Kadar, R., Shamsuddin, M., and Wahab, N.A.
+(2023). Factors aﬀecting engineering students in learning the
+programming subject at UiTM Pulau Pinang: a study on educators’
+ability. Int. J. Acad. Res. Prog. Educ. Dev. 12: 944–953.
+
+Padzil, M.R., Abd Karim, A., and Husnin, H. (2021). Employing DDR to design
+and develop a ﬂipped classroom and project based learning module
+to applying design thinking in design and technology. Int. J. Adv.
+Comput. Sci. Appl. 12: 791–798.
+
+Patrushev, A.A. and Bespaly, S.V. (2021). State program “Digital
+
+Sembiring, J., Mubai, A., Dakhi, O., and Edi, F. (2023). Project-oriented self-
+directed learning as a learning model to improve learning outcomes.
+In: Ambiyar, A., Verawardina, U., and Dakhi, O. (Eds.). 9th International
+conference on technical and vocational education and training (ICTVET
+2022). Atlantis Press, pp. 116–121.
+
+Sun, J., Ma, H., Zeng, Y., Han, D., and Jin, Y. (2023). Promoting the AI teaching
+competency of K-12 computer science teachers: a TPACK-based
+professional development approach. Educ. Inf. Technol. 28: 1509–1533.
+
+Van Hattem, R. (2022). Mastering Python: write powerful and eﬃcient code
+using the full range of Python’s capabilities. Packt Publishing Ltd,
+Birmingham.
+
+Wan, H., Zhang, X., Yang, X., and Li, S. (2024). Which approach is eﬀective:
+comparing problematization-oriented and structuring-oriented
+scaﬀolding in instructional videos for programming education. Educ.
+Inf. Technol. 29: 17807–17823.
+
+Williamson, E. (2023). The eﬀectiveness of project-based learning in
+
+developing critical thinking skills among high school students. Eur.
+J. Educ. 1: 1–11.
+
+Kazakhstan”: implementation and development trends. In: Haliuta, J.
+(Ed.). Modern problems, trends and prospects of socio-economic
+development. Surgut State University, pp. 271–274, Available at https://
+elibrary.ru/item.asp?id=47216149.
+
+Zhang, L. and Ma, Y. (2023). A study of the impact of project-based learning
+on student learning eﬀects: a meta-analysis study. Front. Psychol. 14:
+1202728.
+
+Zheksembayeva, A. (2021). Comparative analysis and coverage of the state
+
+Prokopiev, M.S., Vlasova, E.Z., Tretiakova, T.N., Sorochinsky, M.A., and
+Soloveva, R.A. (2020). Development of a programming course for
+students of a teacher training higher education institution using
+
+program “Digital Kazakhstan” of the state program for the
+development of the tourism industry of the Republic of Kazakhstan
+2019-2025. Student J. 18: 6–9.
+
+

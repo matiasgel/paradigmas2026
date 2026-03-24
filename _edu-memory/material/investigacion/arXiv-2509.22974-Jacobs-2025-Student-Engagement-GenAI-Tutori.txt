@@ -1,0 +1,2543 @@
+5
+2
+0
+2
+
+p
+e
+S
+6
+2
+
+]
+
+Y
+C
+.
+s
+c
+[
+
+1
+v
+4
+7
+9
+2
+2
+.
+9
+0
+5
+2
+:
+v
+i
+X
+r
+a
+
+Student Engagement with GenAI’s Tutoring Feedback:
+A Mixed Methods Study
+
+Sven Jacobs
+University of Siegen
+Siegen, Germany
+sven.jacobs@uni-siegen.de
+
+Jan Haas
+University of Siegen
+Siegen, Germany
+jan3.haas@student.uni-siegen.de
+
+Natalie Kiesler
+Nuremberg Tech
+Nuremberg, Germany
+natalie.kiesler@th-nuernberg.de
+
+Abstract
+How students utilize immediate tutoring feedback in programming
+education depends on various factors. Among them are the feedback
+quality, but also students’ engagement, i.e., their perception, inter-
+pretation, and use of feedback. However, there is limited research
+on how students engage with various types of tutoring feedback.
+For this reason, we developed a learning environment that pro-
+vides students with Python programming tasks and various types
+of immediate, AI-generated tutoring feedback. The feedback is dis-
+played within four components. Using a mixed-methods approach
+(think-aloud study and eye-tracking), we conducted a study with 20
+undergraduate students enrolled in an introductory programming
+course. Our research aims to: (1) identify what students think when
+they engage with the tutoring feedback components, and (2) explore
+the relations between the tutoring feedback components, students’
+visual attention, verbalized thoughts, and their immediate actions
+as part of the problem-solving process. The analysis of students’
+thoughts while engaging with 380 feedback components revealed
+four main themes: students express understanding or disagreement,
+additional information needed, and students explicitly judge the
+feedback. Exploring the relations between feedback, students’ at-
+tention, thoughts, and actions showed a clear relationship. While
+expressions of understanding were associated with improvements,
+expressions of disagreement or need for additional information
+prompted students to collect another feedback component rather
+than act on the current information. These insights into students’
+engagement and decision-making processes contribute to an in-
+creased understanding of tutoring feedback and how students en-
+gage with it. Thereby, this work has implications for tool developers
+and educators facilitating feedback.
+
+CCS Concepts
+• Social and professional topics → Computer science educa-
+tion.
+
+Keywords
+Programming Education, Feedback, Large Language Models, Gen-
+erative AI, GenAI
+
+Permission to make digital or hard copies of all or part of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for components of this work owned by others than the
+author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or
+republish, to post on servers or to redistribute to lists, requires prior specific permission
+and/or a fee. Request permissions from permissions@acm.org.
+Koli Calling ’25, Koli, Finland
+© 2018 Copyright held by the owner/author(s). Publication rights licensed to ACM.
+ACM ISBN 978-1-4503-XXXX-X/2018/06
+https://doi.org/XXXXXXX.XXXXXXX
+
+ACM Reference Format:
+Sven Jacobs, Jan Haas, and Natalie Kiesler. 2018. Student Engagement with
+GenAI’s Tutoring Feedback: A Mixed Methods Study. In Proceedings of 25th
+International Conference on Computing Education Research (Koli Calling ’25).
+ACM, New York, NY, USA, 12 pages. https://doi.org/XXXXXXX.XXXXXXX
+
+1 Introduction
+In pedagogical psychology and research, feedback is considered
+one of the most powerful factors for learning [11, 49]. According to
+Narciss [34, 35], several conditions and factors influence feedback
+processing and effects on learners. Among them are the feedback
+contents/types, their scope/function, presentation, and context. In
+addition, the feedback recipient plays a crucial role. Individuals
+process feedback differently from each other, or than expected
+by educators and tool developers. This is particularly relevant in
+computing education in Germany, where students are increasingly
+heterogeneous in terms of their prior education, competencies,
+programming experience, and feedback needs [23].
+
+With the emergence of GenAI and related tools, their potential
+for providing individual feedback at scale has become subject to
+research [2, 12, 22, 38]. Qualitative analyses have shown the increas-
+ing completeness and accuracy of recent GenAI tools’ feedback for
+programming tasks and student solutions [1, 24, 31]. There is no
+doubt that novices are using GenAI tools in the context of intro-
+ductory programming courses. Recent research has, for example,
+focused on how students chat with GenAI tools by analyzing chat
+protocol and students’ perspectives [45–47]. Yet, a scoping literature
+review noted a research gap regarding students’ perceptions and
+interactions with GenAI feedback in introductory programming
+education [53]. Moreover, it is crucial to consider if and how stu-
+dents acknowledge and process GenAI feedback before concluding
+on its usefulness or effects on learners.
+
+To address this gap, we investigate programming students’ en-
+gagement with GenAI feedback types as part of an online learning
+environment for Python exercises. We analyze students’ attention,
+perceptions, and immediate actions in response to GenAI feed-
+back via a mixed-methods approach including eye-tracking and a
+think-aloud protocol. The present work is guided by the following
+research questions:
+
+RQ1 What do learners think aloud when they engage with AI-
+generated tutoring feedback components in an online learning
+environment for Python programming tasks?
+
+RQ2 What are the relations between tutoring feedback components,
+and students’ (visual) attention, (verbalized) thoughts, (imme-
+diate) actions?
+
+ 
+ 
+ 
+ 
+ 
+ 
+Koli Calling ’25, November 11–16, 2025, Koli, Finland
+
+Jacobs, Haas, Kiesler
+
+The goal of this empirical research study is to gain a qualitative
+understanding of how students engage with different types of AI-
+generated GenAI, i.e., how they acknowledge and process it, and,
+eventually, act upon it. Understanding students’ perspectives is
+crucial for educators’ pedagogical practices, and the integration
+of GenAI tools for feedback at scale. It further has implications
+for tool developers interested in improving their instructions, user
+interface, and other aspects of human-computer interaction.
+
+2 Background and Related Work
+Shute [49] defines formative feedback as “information communi-
+cated to the learner that is intended to modify the learner’s thinking
+or behavior for the purpose of improving learning”. The primary
+goal is not to grade or evaluate, but to support the ongoing learn-
+ing process. Elaborated tutoring feedback (specificity of formative
+feedback) provides information about particular responses or be-
+haviors beyond their accuracy and usually addresses the correct
+answer [49]. The goal is to guide the learner towards successful task
+completion [35]. In the following, we will outline the implemen-
+tation of feedback in learning environments before and after the
+GenAI revolution. We further provide insights into recent research
+on students’ engagement with feedback.
+
+2.1 Implementation of Feedback in Learning
+
+Environments for Programming Education
+Keuning et al. [20] systematically reviewed and analyzed 101 tools
+with programming exercises to identify the provided feedback types.
+They designed a labelling system to classify the feedback messages
+by using a established feedback taxonomy [34, 35]. The following
+elaborate feedback types are relevant for the present study:
+• Knowledge about Task Constraints Feedback that clarifies the
+problem’s rules and requirements, such as reminding a student
+to use a specific language construct (Hints on task requirements)
+or suggesting a general approach to the problem (Hints on task-
+processing rules) [20].
+
+• Knowledge about Mistakes Feedback that explicitly identifies
+an error. This can include pointing out Test failures, compiler
+errors, logic or runtime Solution errors, poor style issues, or
+suboptimal performance issues [20].
+
+• Knowledge about Concepts Feedback that addresses the stu-
+dent’s understanding of the subject matter, either through direct
+explanations of programming concepts or by providing illustra-
+tive examples [20].
+
+• Knowledge about How to Proceed Constructive feedback that
+guides the student forward. This can be a bug-related hint on
+error correction, a suggestion for the next task-processing steps,
+or a hint for improvements to an already working solution [20].
+• Knowledge about Meta-cognition Feedback that prompts the
+student to reflect on their learning and problem-solving strate-
+gies, for instance, by asking about their confidence in a chosen
+approach or their plan for solving the task [20].
+
+In addition, the Strategic Processing Steps type is suggested [21].
+This type provides knowledge on how to approach tasks strategi-
+cally and systematically, enabling students to solve similar tasks or
+problems. Kiesler [21, 22] had analyzed students’ use of predefined
+tutoring feedback types [20, 35] in an online programming tool.
+
+She concluded that learners need specific, task-related information
+to meet their cognitive and motivational needs. For educators, pro-
+viding such feedback at scale was unfeasible until the emergence
+of GenAI. Earlier automated systems without GenAI relied mostly
+on static approaches (e.g., program repair [26]), output-matching
+and unit-tests for generating feedback, which often did not provide
+enough detail and could leave students frustrated [33].
+
+Advancements in GenAI have opened unprecedented potential
+for providing immediate feedback in programming education at
+scale – even for diverse learners [2, 39, 40]. Recent studies demon-
+strate that models like GPT-4 can generate tiered [36] and vari-
+ous types [31, 57] of feedback. Even though the quality of feed-
+back messages generated by GPT-4 is improving, it is far from
+perfect [1, 10, 14]. As a result, there is growing research on how to
+enhance the quality of the feedback messages with techniques like
+Retrieval Augmented Generation [15, 29], multiple prompts [3, 19],
+chain-of-thought prompting [58], fine-tuning [30, 50], or validation
+of feedback with a smaller model [38]. Recent research on feedback
+in computing education often focuses on the quality of feedback
+messages and how we can develop custom tools to support students.
+Yet, Stone [53] highlights a crucial gap in our understanding of how
+introductory programming students actually engage with GenAI.
+
+2.2 Related Work on Feedback Engagement
+Regardless of the quality of a feedback message, Mandouit and
+Hattie [32] emphasize the necessity for students to hear, understand,
+and apply the feedback they receive. Feedback engagement can
+be described as students’ perception, interpretation, and use of
+feedback [54]. Price et al. [41] further characterizes the engagement
+process with (assessment) feedback on a temporal dimension. It
+starts with (1) students collecting feedback. Next, (2) students must
+devote their attention before they can (3) cogitatively engage with it.
+Based on their cognitive engagement and individual and situational
+factors, they might (4) take immediate or latent action.
+
+In this perspective, learners have a more active role than that
+of a recipient who processes information (cognitive, motivational,
+meta-cognitive [35] or cognitive, affective, and behavioral [28]).
+Winstone et al. [55] highlight this active role with the term proac-
+tive recipience, accentuating the learner’s responsibility for making
+feedback processes effective. Narciss [35] describes an interaction
+between internal and external feedback loops: Learners evaluate
+external feedback against their own internal feedback, determining
+whether and how to act on the feedback. It is thus important to
+foster learners’ feedback literacy [9, 56], that is the understanding,
+capacities, and dispositions required to make sense of the presented
+information and to use it successfully [8].
+
+3 Methodology
+To investigate students’ thinking and engagement with different
+types of immediate tutoring feedback, we developed and provided
+four feedback components as part of the Tutor Kai [14–18]. Stu-
+dents’ feedback requests, (visual) attention, cognitive engagement,
+and resulting actions [41] are gathered and analyzed. We adopted
+a mixed-methods approach comprising eye-tracking and a think-
+aloud protocol, including a questionnaire.
+
+Student Engagement with GenAI’s Tutoring Feedback
+
+Koli Calling ’25, November 11–16, 2025, Koli, Finland
+
+Figure 1: Code editor in the Tutor Kai (after a GenAI feedback was requested)
+
+Eye-tracking provides the possibility to observe cognitive pro-
+cessing without adding to the cognitive load [6]. In this study, we
+use it to observe students’ immediate (visual) attention when con-
+fronted with feedback. This allows us to see what students’ eyes
+fixate [48] (e.g., the textual feedback). We interpret fixations on
+textual feedback as an indication that the feedback has been read.
+The think-aloud protocol involves instructing participants to
+continuously express what goes through their minds and utter it
+without interpretation or explanation. These verbalizations during
+problem solving provide rich data for analyzing the involved cogni-
+tive processes [51]. In this study, the method is applied to explore
+computing students’ thinking while they solve programming tasks
+in an online learning environment. The eye-tracking data is col-
+lected simultaneously. We further used a questionnaire to collect
+demographic data (e.g., age, prior programming experience) and
+students’ perspectives (e.g, perceived task difficulty). Utilizing these
+methods and triangulating the resulting data is essential to gain
+insights into multiple processes of feedback engagement [41].
+
+In the following, we present the feedback components as part of
+the Tutor Kai, as well as our data collection and analysis methods.
+The research data (e.g., programming tasks, think-aloud instruc-
+tions, questionnaire, prompts used for GenAI feedback, examples
+of feedback components) is available online [13].
+
+3.1 Feedback Components in the Tutor Kai
+As a basis for this study, we provide students with a practice plat-
+form for Python programming exercises. It is the same platform
+they use for their weekly assignments as part of the Introduction
+to Programming class. Choosing this tool thus had several advan-
+tages, e.g., students were already familiar with it, and could sign
+on through their university’s authentication. Moreover, we were
+able to provide distinct feedback components in a controlled envi-
+ronment through this tool, which is crucial for this study.
+
+The learning environment’s UI comprises a task description
+(Figure 1, top left) and a code editor (Figure 1, top right). Students
+can execute their code as often as they wish, receiving compiler
+feedback (Figure 1, bottom right). In addition, unit tests associated
+with the task are run automatically with each execution. Students
+can (re-)generate GenAI feedback by using a separate button, which
+is only visible after code changes have been executed (at least once).
+GenAI feedback is provided via four components, which can be
+opened (i.e., collected) individually in any order (Figure 1, bottom
+left). The decision is based on findings in prior work [14, 16, 22],
+suggesting a self-determined selection of feedback and its extent to
+foster the students’ self-efficacy and competency.
+
+While the generation of isolated feedback types is possible with
+GenAI [31], their strict separation can be ineffective in real-world
+applications [22]. We therefore developed the following four feed-
+back components that represent various feedback types.
+
+The Find Problems (KM) component describes students’ mistakes.
+If the mistake relates to a compiler error, a brief explanation of the
+compiler message is provided. In addition, relevant information
+from the task description is supposed to help clarify the mistake.
+
+Find Problems
+
+You tried to iterate directly over ’rows’, but ’rows’ is a number and not an iterable
+object. This leads to the error: ’TypeError: ’int’ object is not iterable’. Additionally,
+the pattern is not built as required because the loops are not nested correctly and
+the ’return’ is executed too early.
+
+The Explanations and Examples (KC) component explains con-
+cepts relevant to the student’s mistakes identified in the KM com-
+ponent. It provides generic code examples for illustration and cites
+relevant lecture materials (video recordings from the lecture) when
+available. This provides additional scaffolding opportunities, as the
+student is shown an exemplary implementation of a concept, which
+they have to adapt to their own problem. The technique for linking
+to the precise moment in video lecture recordings where a concept
+
+Koli Calling ’25, November 11–16, 2025, Koli, Finland
+
+Jacobs, Haas, Kiesler
+
+is explained is implemented using Retrieval-Augmented Generation
+(RAG) and hypothetical student questions [15]. Linked videos will
+be opened within a modal in the Tutor Kai.
+
+and were tested by two tutors in the same environment. The com-
+plete tasks, including model solutions and unit tests, are available
+in our supplementary data repository [13].
+
+Explanations and Examples
+
+In Python, you can use a for loop to iterate over so-called ’iterable objects’, such
+as lists or number sequences generated with ’range()’. If you want to iterate over a
+number, you must use ’range()’ to generate a sequence of numbers (1). Example:
+(cid:11)
+
+(cid:8)
+
+for i in range (5) :
+
+print (i)
+
+(cid:10)
+This outputs the numbers 0 through 4. So the loop runs five times. This is useful
+when you want to repeat something a specific number of times.
+
+(cid:9)
+
+Sources (Links to Video):
+(1) Python Control Structures
+
+The Next step hint (KH) component provides the student with an
+actionable next step to guide them toward correcting their mistakes
+(identified in KM). It can include a very short code snippet, but it
+does not provide the complete solution.
+
+Next Step Hint
+
+Use ’range()’ in your for loop to count from 0 to rows-1. For example:
+(cid:11)
+
+for i in range ( rows ):
+
+# Your code for each line goes here
+
+(cid:10)
+This allows you to generate the desired number of lines.
+
+(cid:8)
+
+(cid:9)
+
+The Strategic Approach (SPS) component provides a generally
+formulated, step-by-step description of procedures for solving tasks
+of a similar nature. We do not provide the correct solution, but
+strategic processing steps [21] to prevent trial-and-error behavior.
+
+Strategic Approach
+
+To solve tasks like this where a specific pattern needs to be created with nested
+loops, you can apply the following strategy:
+(1) Consider how many lines the pattern should have and how you generate each line.
+(2) Use an outer loop that runs once for each line (e.g., from 1 to rows).
+(3) Use an inner loop to generate the stars and underscores in the current line.
+
+The number of stars corresponds to the current line number.
+
+(4) Make sure that underscores appear between stars, but not at the end of the line.
+(5) Add a line break (\n) after each line (except the last one).
+(6) Test your program with different inputs to ensure the pattern is generated
+
+correctly.
+
+This method is effective because it breaks down the problem into small, manageable
+steps, and nested loops are a typical solution for such pattern tasks.
+
+We used OpenAI’s gpt-4.1-2025-04-14 model with a temper-
+ature setting of 0 and structured output for feedback generation
+in all components. As context, we provided the task description,
+students’ code, corrected version of students’ code, relevant lec-
+ture transcripts, compiler output, unit tests, and their results. A
+full system description, including all prompts, example inputs, and
+outputs, is available in our supplementary data repository [13].
+
+3.2 Data Collection
+3.2.1 Task Design. Six tasks were selected in alignment with the
+course progress and students’ expected proficiency at the time
+of the study (see Table 1). These tasks had been used in a prior
+study [16] in this course before, were only available to participants,
+
+Table 1: Tasks
+
+Task
+
+Concepts
+
+T1
+T2
+T3
+
+T4
+
+T5
+
+T6
+
+Function, Parameter, Adding and multiplying variables, return
+Function, Parameter, IF-Else control structure, comparison operators, return
+Function, Parameter, If-Else control structure, comparison operators, loop,
+list, append to list, return
+Function, Parameter, If-Else control structure, comparison operators, nested
+loops, sequences of numbers with range, string concatenation, return
+Function, Parameter, If-Else control structure, comparison operators, recur-
+sion, return
+Function, Parameter, Adding and multiplying variables, Higher-Order Func-
+tions, return
+
+3.2.2 Questionnaire Design. A questionnaire was designed to gather
+students’ programming experience, their perception of the task
+difficulty, and their ratings of the helpfulness of the feedback com-
+ponents. Students rated their programming experience on a Likert
+scale from 1 (very inexperienced) to 10 (very experienced). We also
+asked students to provide their programming experience in years,
+and how many programming-related courses they have already
+taken at the university. Furthermore, the perceived difficulty of each
+task was rated on a 5-point Likert scale from 1 (the task was very
+easy for me) to 5 (the task was very difficult for me). We additionally
+invited students to describe any positive or negative effects they
+experienced from the think-aloud protocol and from wearing eye-
+tracking glasses via two open input fields. The full questionnaire is
+available in our supplementary data repository [13].
+
+3.2.3 Participants. The study was conducted in an introductory
+programming course at a German university. The target group of
+students is in their first or second semester. The data collection took
+place during the third and fourth weeks of the summer semester
+2025. We invited all (appr. 200) students by mail and in person
+during the lecture in the first week of the semester. We offered them
+compensation of 40€, but participation was completely voluntary
+and had no impact on students’ grades or success in the course.
+
+Setting and Procedure. Students used standard input (mouse,
+3.2.4
+keyboard) and output devices (27-inch monitor, headphones) while
+solving the tasks. For eye tracking, we used the Tobii Glasses 3,
+together with the Tobii Pro Lab analysis software. A two-hour time
+slot was reserved for each participant. The procedure within each
+time slot was structured as follows:
+(1) Introduction (20-40 minutes):
+• Informed consent process
+• Think-aloud protocol instruction and practice, including one
+demonstration task explained by the instructor and one prac-
+tice task completed by the participant
+
+• Eye-tracking equipment familiarization and calibration
+
+(2) Task Phase (60 minutes):
+
+• Completion of programming tasks
+• Think-aloud verbalization
+• Eye-tracking and screen recording
+• Video and audio recording from front webcam
+
+Student Engagement with GenAI’s Tutoring Feedback
+
+Koli Calling ’25, November 11–16, 2025, Koli, Finland
+
+(3) Questionnaire (10-20 minutes)
+
+The informed consent process includes a full disclosure of all
+technical equipment, the data being recorded, the data analysis, and
+the rights of the participants. All participants gave their written
+consent. For technical inquiries, the same instructor was always
+present during data collection.
+
+3.3 Data Analysis
+3.3.1 Data Preparation. First, the recordings from the Tobii Glasses
+3 were exported using the Tobii Pro Lab (25.7) analysis software.
+This process generates a video that overlays the gaze visualization
+onto the video recording from the glasses. We used the Tobii I-VT
+(fixation) gaze filter algorithm [37] with default settings (minimum
+fixation duration of 60 milliseconds). This video allows us to see
+where the student is looking at any given moment. We then syn-
+chronized this video with the screen recording and the webcam
+recording to create a single synchronized video consisting of three
+synchronized video streams. We used the audio recording from
+the Tobii Glasses 3, as students’ verbalized thoughts were clearest
+on this track. In the next step, transcripts for the synchronized
+videos were generated locally on our machines using the open-
+weight whisper-large-v3-turbo speech recognition model [43]. We
+imported the synchronized videos and their corresponding tran-
+scripts into MAXQDA for qualitative data analysis and coding [25].
+We manually corrected the generated transcripts. Additionally,
+we augmented the transcripts with data from the database logs.
+Whenever a student executed their code using “Run Code”, the
+corresponding database entry containing the student’s source code
+and associated compiler output was inserted into the transcript and
+coded as such. If the student’s solution was correct, we coded it
+as a successful task completion. When a student opened a GenAI
+feedback component, we inserted the corresponding feedback text
+into the transcript. We also coded the four feedback components as
+such (see subsection 3.1) and whether they were read or ignored.
+Visual attention was analyzed using gaze visualizations available
+within the synchronized videos. This allowed us to observe and
+follow students’ fixations (visualized as a red dot) at every moment
+during the recording. We interpret zero fixations on feedback com-
+ponent texts as indicating that they were not read (ignored). As we
+have no insights into each student’s individual reading behavior, we
+interpret multiple fixations on a feedback component as students
+having (partially) read this feedback component.
+
+3.3.2 RQ1: Think-Aloud Analysis. We investigated what students
+thought (aloud) during engagement with a feedback component
+via MAXQDA. We imported the synchronized video and its tran-
+script, augmented with data from the database logs. Using both the
+synchronized video and its transcript was important for data trian-
+gulation. The gaze visualization, as part of the synchronized video,
+lets us observe the feedback component that students relate to when
+verbalizing thoughts. We mapped this relation based on (1) the feed-
+back the student most recently looked at (gaze visualization), (2)
+the currently collected component (screen recording), and (3) the
+semantics of verbalized thoughts and the feedback component.
+
+Students’ verbalized thoughts (ranging from a single word to
+multiple sentences) related to a feedback component constitute
+a coding unit. If in doubt, we utilized the synchronized video
+
+and its transcript for the same programming task as a context
+unit. To ensure completeness, we had added the texts of the feed-
+back components during the data preparation phase. We also used
+MAXQDA’s [25] quantitative capabilities for analyzing frequen-
+cies and co-occurrences between feedback components, verbalized
+thoughts, and actions.
+
+Two of the authors coded the data inductively. They met regu-
+larly to discuss emerging codes and develop a preliminary category
+system. This occurred at increasing intervals, starting with two
+meetings for every 10% (i.e., material of two students) and then
+several times for every 20% of the material. Codes were themat-
+ically grouped to identify overarching patterns for analysis. For
+example, students thought aloud questions regarding information
+in the feedback component were grouped based on the types of
+difficulties [42] these questions addressed. The third author was
+consulted on unclear cases to reach a consensus [52]. This iter-
+ative process led to the construction of the final coding scheme,
+which defined each category with accompanying definitions and
+anchor examples. When saturation was achieved (i.e., no new codes
+emerged) within the sample, the final coding scheme was applied
+to the entire material.
+
+3.3.3 RQ2: Immediate Actions and Outcome Analysis. To answer
+RQ2, we developed a deductive coding scheme for students’ imme-
+diate actions based on the observable interactions and outcomes.
+The coding schema (code changes, feedback collection, or no ac-
+tion) is based on the possible feedback-related actions within the
+learning environment (see subsection 3.1).
+
+Actions were observable within the screen recording part of the
+synchronized videos. For code changes, we used the final student’s
+code state related to a feedback component as the coding unit. All
+prior logs related to the same task (added to transcripts during data
+preparation) served as a context unit. Other actions, like collecting
+another feedback component, were objectively based on logs.
+
+We mapped students’ actions to feedback components based
+on (1) the feedback component they most recently read, (2) the
+semantics of code changes made and information in the feedback
+text, and (3) their co-occurrent (verbalized) thoughts. Instances
+where action was lacking were coded accordingly.
+
+To investigate the relationships between the feedback compo-
+nents, students’ (verbalized) thoughts, and their (immediate) actions,
+we used MAXQDA’s so-called Complex Coding Query function. It
+analyzes the co-occurrence of multiple codes (feedback component,
+thoughts, and actions) within the same data segment.
+
+An inter-coder reliability test for coded attention, thoughts, and
+actions was conducted. A random sample of three participants (15%
+of the data) was coded independently by authors one and two. Using
+MAXQDA, we analyzed segment-level agreement and calculated
+a Kappa coefficient [5]. The analysis yielded a substantial [25, 27]
+inter-coder reliability of 𝜅𝑛 = 0.70.
+
+4 Results
+In this section, we present the results, starting with a short summary
+of the overall student sample. Moreover, we provide the number of
+student feedback requests and visual attention.
+
+Student Sample: A total of 23 students participated in the study.
+Due to technical issues and individual health conditions, precise
+
+Koli Calling ’25, November 11–16, 2025, Koli, Finland
+
+Jacobs, Haas, Kiesler
+
+Table 2: Participants
+
+Student
+
+S1
+
+S2
+
+S3
+
+S4
+
+S5
+
+S6
+
+S7
+
+S8
+
+S9
+
+S10
+
+S11
+
+S12
+
+S13
+
+S14
+
+S15
+
+S16
+
+S17
+
+S18
+
+S19
+
+S20 M (SD)*
+
+Background Information
+Self-reported experience (1-10)
+Years of programming
+Courses attended
+
+Feedback Usage (Count)
+GenAI feedback requests
+
+Find Problems (KM)
+Explanations and Examples (KC)
+Next Step Hint (KH)
+Strategic approach (SPS)
+
+2
+0.5
+1
+
+15
+15
+6
+6
+3
+
+2
+0
+1
+
+9
+9
+8
+6
+3
+
+4
+3
+2
+
+6
+6
+4
+4
+1
+
+1
+1
+1
+
+4
+4
+2
+1
+1
+
+3
+2
+1
+
+7
+7
+5
+2
+1
+
+4
+1
+2
+
+12
+9
+11
+8
+4
+
+6
+6
+2
+
+16
+16
+12
+11
+2
+
+3
+3
+4
+
+11
+9
+6
+8
+2
+
+1
+0.3
+0
+
+12
+12
+7
+1
+0
+
+8
+10
+2
+
+2
+1
+1
+0
+1
+
+6
+3
+1
+
+10
+10
+6
+2
+1
+
+5
+2
+2
+
+7
+7
+7
+5
+3
+
+5
+1
+1
+
+4
+4
+2
+1
+0
+
+2
+0
+2
+
+13
+13
+8
+3
+3
+
+5
+1
+1
+
+13
+13
+11
+6
+2
+
+4
+1
+0
+
+8
+8
+3
+2
+0
+
+4
+3
+2
+
+6
+6
+5
+3
+0
+
+2
+0
+1
+
+7
+7
+4
+3
+1
+
+1
+1
+2
+
+4
+4
+2
+1
+1
+
+7
+9
+3
+
+6
+6
+4
+1
+1
+
+3.8 (2.1)
+2.4 (2.8)
+1.6 (0.9)
+
+8.6 (4.0)
+8.3 (4.0)
+5.7 (3.2)
+3.7 (3.0)
+1.5 (1.2)
+
+Perceived Task Difficulty (1-5) and Task Performance (Y: solved, N: not solved)
+T1
+T2
+T3
+T4
+T5
+T6
+
+2 / Y 1 / Y 1 / Y 5 / Y 1 / Y 2 / Y 1 / Y 2 / Y 2 / Y 1 / Y 1 / Y 1 / Y 1 / Y 2 / Y 1 / Y 1 / Y 1 / Y 4 / Y 2 / Y 1 / Y 1.7 (1.1)
+2 / Y 2 / Y 2 / Y 5 / Y 1 / Y 2 / Y 2 / Y 3 / Y 3 / Y 1 / Y 1 / Y 2 / Y 1 / Y 2 / Y 1 / Y 1 / Y 2 / Y 4 / Y 2 / Y 1 / Y 2.0 (1.1)
+4 / N 5 / N 2 / Y 3 / Y 4 / N 1 / N 2 / Y 4 / Y 4 / Y 1 / Y 2 / Y 2 / Y 1 / Y – / Y 3 / Y 4 / Y 3 / Y 5 / N 2 / Y 2 / Y 2.8 (1.3)
+4 / N 5 / N 4 / N 1 / N – / N – / N 5 / N 5 / N 5 / N 1 / Y 4 / N 5 / N 3 / Y 5 / N 5 / N 5 / N – / N – / N 4 / N 4 / N 4.1 (1.3)
+– / N – / N – / N – / N – / N – / N – / N – / N – / N 4 / Y – / N – / N 4 / Y 5 / N – / N – / N – / N – / N – / N – / N 4.3 (0.6)
+– / N – / N – / N – / N – / N – / N – / N – / N – / N 1 / Y – / N – / N 1/ Y – / N – / N – / N – / N – / N – / N – / N 1.0 (0.0)
+
+*M = Mean, SD = Standard Deviation
+
+Table 3: Feedback components and (visual) attention
+
+Feedback Components
+
+Generated Collected Read
+
+Ignored
+
+Find Problems (KM)
+Explanations and Examples (KC)
+Next Step Hint (KH)
+Strategic approach (SPS)
+
+172
+172
+172
+172
+
+166
+114
+74
+30
+
+166
+111
+73
+30
+
+0
+3
+1
+0
+
+eye-tracking with the Tobii Glasses 3 was not possible for three
+participants. So we only analyzed the data from the remaining
+20 students. 15 students identified as male and 5 as female. The
+mean age was 22.45 years (SD = 2.97). Students self-reported di-
+verse programming experience on a 5-point scale (from 1 = “very
+inexperienced” to 10 = “very experienced”) with an average of 3.8
+(SD = 2.1). This diversity is notable in their years of programming
+experience and the number of programming-related courses taken
+(see Table 2). The students perceived the tasks as becoming increas-
+ingly difficult. On a 5-point scale (from 1 = “very easy for me” to 5
+= “very difficult for me”). The average rating increased from 1.7 for
+Task 1 to 4.3 for Task 5 (see Table 2). On average, students solved
+3.05 of 6 tasks (SD = 1.07).
+
+Students’ feedback requests and visual attention: GenAI-feedback
+was requested 172 times (see subsection 3.1). Since all four feedback
+components were generated each time, a total of 688 feedback
+components were generated. Students collected 384 (55.8%) of these
+688 components (see Table 3). By analyzing the gaze videos, we
+observed that 380 of the 384 collected feedback components were
+(at least partially) read.
+
+4.1 RQ 1: Students’ Verbalized Thoughts during
+
+Feedback Engagement
+
+To answer RQ1, we analyzed the thoughts during the think-aloud
+protocol for 380 feedback components that were actively collected
+and read by students (see Table 3). We were able to categorize
+verbalized thoughts for 314 of them. Precisely, we identified 12
+categories (see Table 4), and assigned them to four main themes:
+
+Students express understanding (45.5% of verbalized thoughts), Ad-
+ditional information needed (21.6%), Students express disagreement
+(18.7%), and Students’ explicit judgments (14.3%).
+
+For the remaining 66 (out of 380 collected and read) feedback com-
+ponents, we were unable to define categories as students’ thoughts
+were highly diverse (in 23 cases), or not uttered at all (in 43 cases).
+For example, only one student thought aloud “Well, I feel like I
+cheated a bit” after the next step hint feedback component provided
+one line of code, which was key for solving T5.
+
+Students Express Understanding.
+
+4.1.1
+Agrees to Information: Students expressed agreement in 89 cases.
+This often occurred immediately after or while reading individual
+pieces of information within a feedback component. However, a
+student sometimes initially agreed with a piece of information, and
+then expressed disagreement at a later stage. The opposite case was
+also observed, e.g., a student read the first half of the Explanations
+and Examples (KC) feedback component, which explains compari-
+son operators using an example. Then they express this is irrelevant
+to the current problem (see subsection 4.1). Still reading the same
+feedback component, the student sees the explanation for the ap-
+pend method and says, “Ah! Append. Okay yes.”. For this reason,
+there are 20 co-occurrences of categories from additional informa-
+tion needed and 2 co-occurrences from students express disagreement
+within the same coding units.
+
+Thoughts demonstrate understanding: In 79 cases, students’ ar-
+ticulated thoughts implying the feedback was understood. This
+was typically observed through the verbalization of required code
+changes or an explicit reflection of an existing error. In four cases,
+there were co-occurrences with Syntax and Implementation, mean-
+ing additional information was needed. For example, a student read
+a Find Problems (KM) feedback component for Task T3. It states that
+the comparison operator in their code, =<, does not exist, without
+specifying the correct syntax (this would be part of the KH feed-
+back component). The student stated that they understand the error
+description, but are unsure of how to correct their code. As the
+feedback had only described the error and provided no information
+
+Student Engagement with GenAI’s Tutoring Feedback
+
+Koli Calling ’25, November 11–16, 2025, Koli, Finland
+
+Table 4: Coding scheme for students’ thoughts when engaging with tutoring feedback components
+
+Category
+
+Definition
+
+Anchor Examples
+
+Students express understanding:
+
+Agrees to Informa-
+tion
+
+Expresses nonspecific agreement with the state-
+ment or information given.
+
+“Ah, okay”; “Hmm, great”
+
+Thoughts
+demon-
+strate understanding
+
+Articulated thoughts imply that the feedback has
+been understood (e.g., by verbalizing a necessary
+code change).
+
+Restates feedback in
+own words
+
+Restates (parts) of the given information in their
+own words.
+
+“Maybe I have to combine for and if somehow”; “So I don’t need
+the index anymore.”
+
+“That means, if we are dealing with a number, or rather an
+integer, we have to use ’range’ in the for loop.”; “okay, good,
+exactly, it’s suggesting that I just use if-else here”
+
+Additional information needed:
+
+I don’t understand
+
+Does not understand a piece of information, with-
+out specifying why.
+
+“I don’t understand.”; “But I didn’t manage to understand exactly
+how this case is incorrect.”
+
+Syntax and Imple-
+mentation
+
+Is uncertain about a syntactic detail. Knows what
+to do, but not how to implement it.
+
+“I really don’t know how to incorporate that right now.”; “How
+do you calculate a product now?”
+
+Concepts and Expla-
+nations
+
+Requires additional explanation or is uncertain
+about a programming concept.
+
+“What was ’append’ again?”; “This makes note a string and not
+a numerical value. Whoa, what exactly is meant by that now?”
+
+Strategy and next
+steps
+
+Does not know what to do next. For example, hav-
+ing problems understanding the task or creating a
+strategy to solve it.
+
+“Because I don’t know how to proceed.”; “I have no idea what
+I’m supposed to do here.”
+
+Students express disagreement:
+
+Disagree
+
+Contradicts given information or questions its cor-
+rectness.
+
+“But grades are the score, aren’t they?”; “Although, that
+wouldn’t really make much sense.”
+
+Irrelevant to the cur-
+rent problem
+
+States that the information does not match the
+problem currently worked on.
+
+“But that still doesn’t really solve the problem with the compar-
+ison operators.”; “It’s not very helpful that it focuses so much
+on the return statement, as that isn’t the main problem for me.”
+
+Information already
+known
+
+Already knows the information (e.g., previous
+GenAI feedback or prior knowledge).
+
+“Yes, unfortunately, I already know that.”; “This is mostly the
+same feedback I received before.”
+
+Students’ explicit judgments:
+
+Helpful
+
+Judges the information helpful.
+
+Not Helpful
+
+Judges the information not helpful.
+
+“Yes, that helps me.”; “This hint here was also helpful, that an
+integer isn’t a list.”
+
+“Yeah, this is no help to me either.”; “Unfortunately, that doesn’t
+help me.”
+
+Percentages show proportion relative to total read feedback components (KM: n=166, KC: n=111, KH: n=73, SPS: n=30).
+
+Occurrences
+
+Total KM
+
+KC
+
+KH
+
+SPS
+
+89
+
+79
+
+17
+
+8
+
+38
+
+16
+
+26
+
+12
+
+25
+
+39
+
+26
+
+32
+
+49
+(29.5%)
+
+19
+(17.1%)
+
+17
+(23.3%)
+
+4
+(13.3%)
+
+38
+(22.9%)
+
+25
+(22.5%)
+
+12
+(16.4%)
+
+4
+(13.3%)
+
+11
+(6.6%)
+
+3
+(2.7%)
+
+3
+(4.1%)
+
+0
+(0.0%)
+
+5
+(3.0%)
+
+1
+(0.9%)
+
+1
+(1.4%)
+
+1
+(3.3%)
+
+22
+(13.3%)
+
+6
+(5.4%)
+
+5
+(6.9%)
+
+5
+(16.7%)
+
+9
+(5.4%)
+
+10
+(6.0%)
+
+2
+(1.8%)
+
+8
+(7.2%)
+
+5
+(6.9%)
+
+0
+(0.0%)
+
+0
+(0.0%)
+
+8
+(26.7%)
+
+5
+(3.0%)
+
+5
+(3.0%)
+
+1
+(0.9%)
+
+5
+(6.9%)
+
+1
+(3.3%)
+
+9
+(8.1%)
+
+8
+(11.0%)
+
+3
+(10.0%)
+
+9
+(5.4%)
+
+20
+(18.0%)
+
+9
+(12.3%)
+
+1
+(3.3%)
+
+4
+(2.4%)
+
+9
+(5.4%)
+
+10
+(9.0%)
+
+10
+(9.0%)
+
+7
+(9.6%)
+
+5
+(16.7%)
+
+7
+(9.6%)
+
+6
+(20.0%)
+
+on its correction, the students’ thoughts still demonstrate that the
+feedback component itself was understood.
+
+Restates feedback in own words: Students restated information
+from the feedback component in their own words in 17 cases. 7
+of these 17 cases originated from a single student (S3). Typically,
+the student would first read the complete feedback and then repeat
+information from that feedback component in their own words,
+thereby revealing understanding. There were 5 co-occurrences with
+Syntax and Implementation in the same coding unit. Four of them in-
+volved Find Problems (KM) feedback components. In these instances,
+students asked further questions regarding implementation details
+(see subsection 3.1), implying understanding.
+
+4.1.2 Additional Information Needed.
+I don’t understand: In 8 cases, students stated they did not under-
+stand a piece of information, without specifying what information
+was missing.
+
+Syntax and Implementation: Students were unsure about a syn-
+tactic implementation detail in 38 cases. They knew what to do,
+
+but not how to implement it. This was primarily observed with the
+Find Problems (KM) (13.3% of read KM feedback components) and
+Strategic approach (SPS) (16.7% of read SPS feedback components)
+feedback components (see Table 4).
+
+Concepts and Explanations: This category applies when a student
+requires an additional explanation or is uncertain about a program-
+ming concept (16 cases). This occurred primarily with the Find
+Problems (KM) component (9 cases) and the Next Step Hint (KH)
+component (5 cases). For example, a student reads the KM feedback,
+trying to understand an error. Yet, they still do not know how to
+fix them, and collect KH feedback about the next step. However,
+neither of these components has provided a detailed explanation of,
+e.g., adding elements to a list. So the student thinks aloud, “What
+was append again?”, and consults the Explanations and Examples
+(KC) component.
+
+Strategy and next steps: In 26 cases, students did not know what
+to do next. This was evident through their think-aloud process,
+which revealed that they lacked a clear strategy to move forward.
+Notably, this occurred in 8 cases involving the Strategic approach
+
+Koli Calling ’25, November 11–16, 2025, Koli, Finland
+
+Jacobs, Haas, Kiesler
+
+Table 5: Coding Scheme representing students’ actions after reading tutoring feedback components
+
+Category
+
+Definition
+
+Anchor Examples
+
+IMP: Improvement
+
+Changes to code related to the given
+information, getting closer to a cor-
+rect solution.
+
+The student reads that a loop is necessary. He improves his code
+and implements the required for-loop. In doing so, he makes a small
+syntax error. Nevertheless, he has come closer to a correct solution
+overall.
+
+SET: Setback
+
+Changes to code related to the given
+information, moving further away
+from a correct solution.
+
+The student initially iterates over fixed values using the range func-
+tion. Feedback suggests iterating based on the variable rows (number).
+The student implements for i in rows.
+
+Improvement
+
+BOT:
+and Setback
+
+NOA: No Action (in
+Code)
+
+Both positive and negative changes
+to code related to the given informa-
+tion.
+
+No changes to the program code, or
+changes that have no connection to
+the given information.
+
+COF: Collect another
+Feedback Component
+
+Decides to collect an additional feed-
+back component
+
+Based on the feedback, the student uses a for-loop (Improvement), but
+changes variables elsewhere, which leads to a new problem (Setback).
+
+Student reads feedback but continues exploring other approaches or
+decides to collect an additional feedback component.
+
+After reading KM, the student opens KC for more details.
+
+Percentages show proportion relative to total read feedback components (KM: n=166, KC: n=111, KH: n=73, SPS: n=30).
+
+Occurrences
+
+Total
+
+KM
+
+KC
+
+KH
+
+SPS
+
+160
+
+69
+(41.6%)
+
+42
+(37.8%)
+
+38
+(52.1%)
+
+11
+(36.7%)
+
+13
+
+28
+
+179
+
+212
+
+6
+(3.6%)
+
+2
+(1.8%)
+
+3
+(4.1%)
+
+2
+(6.7%)
+
+10
+(6.0%)
+
+12
+(10.8%)
+
+4
+(5.5%)
+
+2
+(6.7%)
+
+79
+(47.6%)
+
+56
+(50.0%)
+
+29
+(39.7%)
+
+15
+(50.0%)
+
+115
+(69.3%)
+
+70
+(63.1%)
+
+23
+(31.5%)
+
+4
+(13.3%)
+
+Table 6: Verbalized thoughts in relation to the read feedback components and immediate actions
+
+Feedback Components
+
+KM n=139
+
+KC n=85
+
+KH n=63
+
+SPS n=27
+
+Thoughts
+
+\
+
+Actions
+
+Total IMP SET BOT NOA COF Total IMP SET BOT NOA COF Total IMP SET BOT NOA COF Total IMP SET BOT NOA COF
+
+Students express understanding:
+Agrees to Information
+Thoughts demonstrate understanding
+Restates feedback in own words
+
+Additional information needed:
+I don’t understand
+Syntax and Implementation
+Concepts and Explanations
+Strategy and next steps
+
+Students express disagreement:
+Information already known
+Irrelevant to the current problem
+Disagree
+
+Students’ explicit judgments:
+Helpful
+Not Helpful
+
+49
+38
+11
+
+5
+22
+9
+10
+
+9
+5
+5
+
+4
+9
+
+31
+32
+5
+
+0
+7
+4
+2
+
+0
+1
+0
+
+3
+0
+
+3
+0
+0
+
+0
+1
+0
+2
+
+0
+0
+1
+
+0
+0
+
+3
+2
+1
+
+0
+1
+0
+0
+
+0
+0
+0
+
+1
+0
+
+12
+4
+5
+
+5
+13
+5
+6
+
+9
+4
+4
+
+0
+9
+
+29
+16
+7
+
+5
+19
+7
+8
+
+9
+4
+3
+
+3
+9
+
+19
+25
+3
+
+1
+6
+2
+8
+
+20
+9
+1
+
+10
+10
+
+12
+23
+3
+
+0
+3
+0
+0
+
+1
+2
+1
+
+6
+0
+
+0
+0
+0
+
+0
+0
+1
+0
+
+0
+1
+0
+
+1
+0
+
+3
+1
+0
+
+0
+0
+1
+0
+
+2
+1
+0
+
+1
+1
+
+4
+1
+0
+
+1
+3
+0
+8
+
+17
+5
+0
+
+2
+9
+
+8
+7
+2
+
+1
+5
+2
+7
+
+17
+7
+0
+
+2
+9
+
+17
+12
+3
+
+13
+12
+3
+
+1
+5
+5
+0
+
+9
+8
+5
+
+7
+7
+
+0
+2
+4
+0
+
+0
+1
+0
+
+7
+1
+
+3
+0
+0
+
+0
+0
+0
+0
+
+0
+0
+0
+
+0
+0
+
+0
+0
+0
+
+1
+1
+0
+0
+
+0
+1
+1
+
+0
+0
+
+1
+0
+0
+
+0
+2
+1
+0
+
+9
+6
+4
+
+0
+6
+
+2
+1
+0
+
+1
+3
+1
+0
+
+2
+3
+4
+
+0
+5
+
+4
+4
+0
+
+1
+5
+0
+8
+
+1
+3
+1
+
+5
+6
+
+3
+4
+0
+
+0
+2
+0
+1
+
+0
+2
+0
+
+3
+1
+
+0
+0
+0
+
+0
+1
+0
+0
+
+0
+0
+0
+
+0
+0
+
+1
+0
+0
+
+0
+1
+0
+0
+
+0
+0
+0
+
+1
+0
+
+0
+0
+0
+
+1
+1
+0
+7
+
+1
+1
+1
+
+1
+5
+
+0
+0
+0
+
+0
+0
+0
+3
+
+0
+0
+0
+
+0
+2
+
+A feedback component can relate to multiple thoughts. For this reason, the sums of totals per action do not equal the sample sizes.
+
+(SPS) feedback component (26.7% of all read SPS feedback compo-
+nents). This might be due to the SPS component’s positioning. It
+was typically the last one that students opened. Hence, there was
+no further feedback available. These situations were sometimes
+linked to frustration, leading students to consider abandoning the
+task: “The question is whether I should continue here. I just don’t
+know what to do right now.”
+
+Students Express Disagreement.
+
+4.1.3
+Disagree: In 12 cases, students disagreed with or questioned the
+correctness of information provided by a tutoring feedback com-
+ponent for various reasons. For example, a student disagreed with
+a Next Step Hint (KH) component because the student had already
+made changes to the code based on a previously read feedback com-
+ponent. In this case, a variable name was changed (from ’rates’ to
+’number’). The KH feedback then referred to the original variable
+name (“In the if-statement, replace rates with the current grade,
+
+e.g., [Code Snippet]”). Then the student said: “But there is no ’rates’
+in the if-statement.”
+
+Irrelevant to the current problem: In 25 cases, students stated that
+the information provided by the feedback component did not match
+the problem they were currently solving. This often happened when
+the feedback component focused on what students considered a
+trivial issue, such as a missing return statement, the use of print
+instead of return, or incorrect indentation. While the students did
+not directly neglect the feedback, they were focused on a different
+aspect of the problem-solving process.
+
+Information already known: Students thought aloud that they
+already knew the generated information (39 cases). In 24 instances,
+they stated that they knew it from a previous feedback component.
+In 15 instances, they did not specify the source of their knowledge.
+This category was observed most frequently with the Explana-
+tions and Examples (KC) feedback components (18% of 111 read KC
+components).
+
+Student Engagement with GenAI’s Tutoring Feedback
+
+Koli Calling ’25, November 11–16, 2025, Koli, Finland
+
+Students’ Explicit Judgments. Overall, students judged the
+4.1.4
+helpfulness of the feedback in their verbalized thoughts as “helpful”
+26 times and “not helpful” 32 times.
+
+4.2 RQ 2: Relations of Processes in Feedback
+
+Engagement
+
+To investigate the relations between feedback collection, (visual)
+attention, (verbalized) thoughts, and (immediate) actions, we devel-
+oped a coding scheme for student actions. For feedback components
+that were read by students, we coded subsequent actions (or in-
+actions) using the categories Improvement (IMP), Setback (SET),
+Both (BOT), or No Action (NOA) (see Table 5). We also investigated
+whether the student collected an additional feedback component
+from the same GenAI-feedback request (COF). We then analyzed
+the relations between the coded thoughts and the subsequent ac-
+tions for each feedback component (see Table 6). Overall, in 141
+(82.0%) of 172 GenAI feedbacks, at least one of the four components
+was collected, read, and resulted in an improvement (IMP).
+
+Students expressed understanding (185 verbalized thoughts) in
+conjunction with improvements (IMP) in 76.2% of instances (see
+Table 6). An analysis of the coding frequencies relative to the total
+number of read components (see Table 5) reveals that the Next
+Step Hint (KH) component, compared to KM, KC, and SPS, most fre-
+quently led to an Improvement (in 52% of the 73 read KH instances).
+In 39.7%, the KH feedback component resulted in No Action (NOA).
+Students collected another feedback (COF) component after reading
+KH feedback in 31.5% of cases.
+
+Setbacks (SET) were rare across all feedback components (see
+Table 5). Code changes that resulted in both an Improvement and a
+Setback (BOT) were more frequent and sometimes occurred together
+with the Explanations and Examples (KC) feedback component (12
+cases, 10.8% of all read KC). Setbacks (SET) and mixed outcomes
+(BOT ) occurred more frequently with verbalized thoughts express-
+ing understanding (43.6% of 39 SET and BOT cases with verbalized
+thoughts) than with thoughts expressing disagreement (18.0%), a
+need for additional information (25.6%), or judgments of helpfulness
+(12.8%).
+
+There were 179 cases (47.1% of the 380 read feedback compo-
+nents) of No Action (NOA). Thus, students acted upon the remaining
+201 (52.9%) of the 380 read feedback components, resulting in an
+Improvement (160 cases), Setback (13 cases), or both (Improvement
+and Setback, 28 cases).
+
+No Action occurred in approximately 40% of cases after reading
+Next Step Hint (KH) components, and in roughly 50% of cases for
+Find Problems (KM), Explanations and Examples (KC), and Strategic
+Approach (SPS) components (relative to the total number of times
+each component was read, see Table 5). Students often chose to
+Collect another Feedback Component (212 cases). The frequency of
+this action, both in absolute terms and relative to how often each
+feedback component was read, decreases in the same order that
+the components were presented to the student in the user interface:
+From KM (highest), to KC, KH, and last SPS (lowest). This aligns
+with the observation that students generally followed the visual
+order of feedback components.
+
+Students’ verbalized thoughts and their subsequent actions were
+generally aligned. For example, when a thought belonged to the
+
+themes Additional information needed or Students express disagree-
+ment, it was often (69.5%) followed by No Action. In these situations,
+the most common subsequent step (79.2%) was to Collect another
+Feedback Component. This connection illustrates the internal valid-
+ity of the data and methods.
+
+5 Discussion
+RQ1 addressed what students think when engaging with tutoring
+feedback. With inductive coding of students’ verbalized thoughts
+during feedback engagement, we identified four main themes: Stu-
+dents express understanding, Additional information needed, Stu-
+dents express disagreement, Students’ explicit judgments. Although
+students’ (verbalized) thoughts indicated that they understood or
+agreed with most of the information provided, they also seemed to
+struggle somewhat during engagement. For example, the category
+Additional information needed was most prominent after reading
+the Find Problems (KM) and Strategic Approach (SPS) components,
+as students needed more information regarding Syntax and Imple-
+mentation.
+
+By design, the feedback components (KM and SPS) did not pro-
+vide concrete code examples. But even after reading a Next Step Hint
+(KH) component with code snippets, some students required more
+specific guidance on exactly where to insert the suggested code
+into their solution. Students thought about feedback as irrelevant to
+the current problem when it focused on an aspect that they did not
+consider their primary obstacle. This reveals a limitation of feed-
+back systems with predefined inputs, as students cannot steer the
+focus to their individual needs. We observed students developing
+strategies to avoid feedback that they predicted to be irrelevant to
+them. For example, students attempted to guide the feedback gener-
+ation by providing pseudocode or comments. Students sometimes
+thought aloud that they already knew the information presented by
+a feedback component (Information already known). This occurred
+mostly for the Explanations and Examples (KC) component, as it
+explained the same concepts relevant to a task repeatedly to stu-
+dents who requested multiple feedback components on a single
+task. This happened because the feedback generation process did
+not take into account a student’s previous engagements. Allowing
+for conversational follow-up questions could mitigate these issues
+by enabling students to direct the focus of the feedback or request
+more specific guidance tailored to their individual needs.
+
+For the second research question, we focused on students’ ac-
+tions related to their verbalized thoughts (see Figure 2). Students
+demonstrated self-regulation [7] in their active decisions on how
+they engage with tutoring feedback components. They only col-
+lected 55.8% (384 of 688) of the generated feedback components –
+not all of them. This may indicate that students are well aware of
+the type of feedback they need. However, students did not explicitly
+explain their choice of feedback components while thinking aloud.
+Once collected, almost all (380 of 384) feedback components got
+students’ visual attention. A student’s decision not to act on feed-
+back is not necessarily a sign of disengagement. They may have
+been deeply engaged in considering the feedback, but ultimately
+concluded that taking action was not adequate [41], as they are
+constantly evaluating external information (e.g., feedback) against
+
+Koli Calling ’25, November 11–16, 2025, Koli, Finland
+
+Jacobs, Haas, Kiesler
+
+information but later disagree with another piece of information
+from the same component (see subsection 4.1). It should also be
+noted that the fixed order of feedback components may have had
+confounding effects.
+
+7 Conclusions
+We evaluated how 20 introductory programming students engage
+with GenAI feedback via four different tutoring feedback com-
+ponents. Using Think-Aloud Protocols, Eye-tracking, and screen
+recordings, we investigated which tutoring feedback components
+were collected, got (visual) attention, and how students thought
+about and acted upon them.
+
+Through qualitative analysis of students’ verbalized thoughts
+during feedback engagement (RQ1), we identified four main themes.
+Students most frequently expressed understanding (45.5% of verbal-
+ized thoughts) through agreement, verbalized thoughts demonstrat-
+ing understanding, or restating the feedback in their own words.
+However, 21.6% of verbalized thoughts indicated a need for ad-
+ditional information, e.g., regarding syntax implementation de-
+tails and strategic guidance. Students also expressed disagreement
+(18.7%) when feedback seemed irrelevant, was already known, or
+perceived as incorrect. The remaining 14.3% of verbalized thoughts
+contained explicit judgments about the feedback’s helpfulness.
+
+By examining the relationship between students’ verbalized
+thoughts and their immediate actions (RQ2), we found that stu-
+dents selectively collected only 55.8% of the 688 generated feedback
+components. Almost all (99%) of the collected components were
+read. Students acted upon 52.9% of the feedback that they read.
+When students’ verbalized thoughts implying understanding, 76.2%
+of related feedback components led to code improvements. Con-
+versely, when thoughts expressed disagreement or a need for addi-
+tional information, 69.5% of related feedback components resulted
+in no immediate actions (code changes). Instead, students typically
+collected another feedback component (79.2% of no-action cases).
+There was a high overall improvement rate: 82.0% of GenAI feed-
+back requests resulted in at least one improvement. Thus, students
+were able to collect and act upon AI-generated information through
+the self-directed selection of tutoring feedback components.
+
+This study contributes to our understanding of student engage-
+ment with tutoring feedback components by revealing some of the
+complex relationships within the feedback engagement process. Stu-
+dents’ internal evaluation of external information was highlighted
+as a critical factor. For educators and tool developers, it is there-
+fore crucial to ensure that learners have understood the feedback
+they received. Allowing for conversational follow-up questions
+could, for example, help learners shift the focus of the feedback
+to their informational needs. Future work should focus on devel-
+oping pedagogical strategies to foster students’ feedback literacy,
+enabling them to critically evaluate information and make informed
+decisions about their next steps.
+
+References
+[1] Imen Azaiz, Natalie Kiesler, and Sven Strickroth. 2024. Feedback-Generation for
+Programming Exercises With GPT-4. In Proceedings of the 2024 on Innovation and
+Technology in Computer Science Education V. 1 (ITiCSE 2024). ACM, New York,
+USA, 31–37. doi:10.1145/3649217.3653594
+
+[2] Brett A. Becker, Paul Denny, James Finnie-Ansley, Andrew Luxton-Reilly, James
+Prather, and Eddie Antonio Santos. 2023. Programming Is Hard - Or at Least It
+
+Figure 2: Feedback engagement processes and relations
+
+their internal understanding. This is representative of the inter-
+play of external and internal feedback loops [35]. The Think-Aloud
+Protocol enabled us to observe aspects of this (internal) evaluation.
+If a student’s internal evaluation of that information resulted
+in Additional information needed or Students express disagreement,
+they would often refrain from changing their code (NOA). Instead,
+students continued with collecting another feedback component
+(COF). This successful internal evaluation prevented setbacks (ac-
+tions coded as SET and BOT ). In other cases, students’ internal
+evaluation was not successful (from an external perspective). Set-
+backs mostly co-occurred with verbalized thoughts coded as Agrees
+to Information or Thoughts demonstrate understanding. This may
+be due to a misunderstanding of the task, the feedback, or what is
+needed to solve the problem. Mitigating this issue via technology or
+within a tool is a challenge. It, therefore, remains important to let
+students determine if they have understood feedback and perhaps
+foster their feedback literacy and self-regulation.
+
+6 Threats to Validity
+The limitations of the methodology should be noted when interpret-
+ing the results. These comprise, for example, the setting of the think-
+aloud study, which was artificial and supervised. Students may have
+behaved differently at home when not being observed [44].
+
+In the questionnaire, we asked students about any negative or
+positive effects they experienced from wearing eye-tracking glasses
+or from the think-aloud protocol. The eye-tracking equipment may
+have distracted some of the students (four students mentioned this
+limitation). Two others noted their vision was somewhat limited
+due to the glasses. Regarding the think-aloud protocol, six students
+noted that thinking aloud slowed down their thinking and con-
+centration. At the same time, many others emphasized the more
+structured problem-solving while thinking aloud.
+
+Moreover, this study is qualitative and thus explorative. Hence,
+the findings need to be confirmed for other student groups (e.g., in
+other countries) before they can be generalized, but this is common
+for the qualitative research paradigm. Yet, with a sample size of 20
+students and 380 requested and read GenAI feedback components,
+we have reached saturation within the sample [4].
+
+Finally, feedback components often contained multiple pieces
+of information. Due to that, students sometimes uttered somewhat
+contradictory thoughts while processing a single feedback compo-
+nent. For example, a student might initially agree with one piece of
+
+ReadIgnoredAentionEye-TrackingExpress understandingAdditional InformationneededExpress disagreementJudgementsoughtsink AloudDid not actImprovedCollect anotherFeedback ComponentSetbackActionsScreen Recording and LogsCollect FeedbackComponentRequest & CollectionScreen Recording and LogsStudent Engagement with GenAI’s Tutoring Feedback
+
+Koli Calling ’25, November 11–16, 2025, Koli, Finland
+
+Used to Be: Educational Opportunities and Challenges of AI Code Generation. In
+Proc. of the 54th ACM Techn. Symp. V. 1. ACM, New York, 500–506. doi:10.1145/
+3545945.3569759
+
+[3] Anastasiia Birillo, Elizaveta Artser, Anna Potriasaeva, Ilya Vlasov, Katsiaryna
+Dzialets, Yaroslav Golubev, Igor Gerasimov, Hieke Keuning, and Timofey Bryksin.
+2024. One Step at a Time: Combining LLMs and Static Analysis to Generate
+Next-Step Hints for Programming Tasks. In Proceedings of the 24th Koli Calling
+International Conference on Computing Education Research. ACM, Koli Finland,
+1–12. doi:10.1145/3699538.3699556
+
+[4] Clive Roland Boddy. 2016. Sample size for qualitative research. Qualitative market
+
+research: An international journal 19, 4 (2016), 426–432.
+
+[5] Robert L. Brennan and Dale J. Prediger. 1981. Coefficient Kappa: Some Uses,
+Misuses, and Alternatives. Educational and Psychological Measurement 41, 3
+(1981), 687–699. doi:10.1177/001316448104100307
+
+[6] Teresa Busjahn, Carsten Schulte, Bonita Sharif, Simon, Andrew Begel, Michael
+Hansen, Roman Bednarik, Paul Orlov, Petri Ihantola, Galina Shchekotova, and
+Maria Antropova. 2014. Eye tracking in computing education. In Proceedings of
+the tenth annual conference on International computing education research. ACM,
+Glasgow Scotland United Kingdom, 3–10. doi:10.1145/2632320.2632344
+
+[7] Deborah L. Butler and Philip H. Winne. 1995. Feedback and Self-Regulated
+Learning: A Theoretical Synthesis. Review of Educational Research 65, 3 (1995),
+245–281. doi:10.3102/00346543065003245
+
+[8] David Carless, , and David Boud. 2018. The development of student feedback lit-
+eracy: enabling uptake of feedback. Assessment & Evaluation in Higher Education
+43, 8 (2018), 1315–1325. doi:10.1080/02602938.2018.1463354
+
+[9] Veronica Cucuiat and Jane Waite. 2024. Feedback Literacy: Holistic Analysis of
+Secondary Educators’ Views of LLM Explanations of Program Error Messages.
+In Proceedings of the 2024 on Innovation and Technology in Computer Science
+Education V. 1 (ITiCSE 2024). ACM, New York, NY, USA, 192–198. doi:10.1145/
+3649217.3653595
+
+[10] Hagit Gabbay and Anat Cohen. 2024. Combining LLM-Generated and Test-Based
+Feedback in a MOOC for Programming. In Proceedings of the Eleventh ACM
+Conference on Learning @ Scale (L@S ’24). ACM, New York, NY, USA, 177–187.
+doi:10.1145/3657604.3662040
+
+[11] John Hattie and Helen Timperley. 2007. The Power of Feedback. Review of
+
+Educational Research 77, 1 (2007), 81–112. doi:10.3102/003465430298487
+
+[12] Arto Hellas, Juho Leinonen, Sami Sarsa, Charles Koutcheme, Lilja Kujanpää,
+and Juha Sorva. 2023. Exploring the Responses of Large Language Models to
+Beginner Programmers’ Help Requests. In Proceedings of the 2023 ACM Conference
+on International Computing Education Research - Volume 1. ACM, New York, USA,
+93–105. doi:10.1145/3568813.3600139
+
+[13] Sven Jacobs. 2025. Data: Student Engagement with GenAI’s Tutoring Feedback:
+
+A Mixed Methods Study. doi:10.17605/OSF.IO/XDG34
+
+[14] Sven Jacobs and Steffen Jaschke. 2024. Evaluating the Application of Large
+Language Models to Generate Feedback in Programming Education. In 2024
+IEEE Global Engineering Education Conference (EDUCON). IEEE. doi:10.1109/
+EDUCON60312.2024.10578838
+
+[15] Sven Jacobs and Steffen Jaschke. 2024. Leveraging Lecture Content for Improved
+Feedback: Explorations with GPT-4 and Retrieval Augmented Generation. In 2024
+36th International Conference on Software Engineering Education and Training
+(CSEE&T). 1–5. doi:10.1109/CSEET62301.2024.10663001
+
+[16] Sven Jacobs, Maurice Kempf, and Natalie Kiesler. 2025. That’s Not the Feedback I
+Need! - Student Engagement with GenAI Feedback in the Tutor Kai. In Proceedings
+of the 2025 Conference on UK and Ireland Computing Education Research (UKICER
+’25). ACM, New York, NY, USA. doi:10.1145/3754508.3754512
+
+[17] Sven Jacobs and Natalie Kiesler. 2025. GenAI Voice Mode in Programming
+
+Education. doi:10.48550/arXiv.2509.10596
+
+[18] Sven Jacobs, Henning Peters, Steffen Jaschke, and Natalie Kiesler. 2025. Unlimited
+Practice Opportunities: Automated Generation of Comprehensive, Personalized
+Programming Tasks. In Proceedings of the 30th ACM Conference on Innovation and
+Technology in Computer Science Education V. 1 (ITiCSE 2025). ACM, New York,
+NY, USA, 319–325. doi:10.1145/3724363.3729089
+
+[19] Majeed Kazemitabaar, Runlong Ye, Xiaoning Wang, Austin Z. Henley, Paul Denny,
+Michelle Craig, and Tovi Grossman. 2024. CodeAid: Evaluating a Classroom
+Deployment of an LLM-based Programming Assistant that Balances Student and
+Educator Needs. http://arxiv.org/abs/2401.11314
+
+[20] Hieke Keuning, Johan Jeuring, and Bastiaan Heeren. 2019. A Systematic Literature
+Review of Automated Feedback Generation for Programming Exercises. ACM
+Transactions on Computing Education 19 (2019), 1–43. doi:10.1145/3231711
+[21] Natalie Kiesler. 2022. Kompetenzförderung in der Programmierausbildung durch
+Modellierung von Kompetenzen und informativem Feedback. Ph. D. Dissertation.
+[22] Natalie Kiesler. 2023. Investigating the Use and Effects of Feedback in CodingBat
+Exercises: An Exploratory Thinking Aloud Study. In 2023 Future of Educational
+Innovation-Workshop Series Data in Action. 1–12. doi:10.1109/IEEECONF56852.
+2023.10104622
+
+[23] Natalie Kiesler. 2024. Modeling programming competency: A qualitative analysis.
+
+Springer, Cham. doi:10.1007/978-3-031-47148-3
+
+[24] Charles Koutcheme, Nicola Dainese, Arto Hellas, Sami Sarsa, Juho Leinonen,
+Syed Ashraf, and Paul Denny. 2024. Evaluating Language Models for Generating
+
+and Judging Programming Feedback. doi:10.48550/arXiv.2407.04873
+
+[25] Udo Kuckartz and Stefan Rädiker. 2019. Analyzing Qualitative Data with
+MAXQDA: Text, Audio, and Video. Springer International Publishing, Cham.
+doi:10.1007/978-3-030-15671-8
+
+[26] Oka Kurniawan, Christopher M. Poskitt, Ismam Al Hoque, Norman Tiong Seng
+Lee, Cyrille Jégourel, and Nachamma Sockalingam. 2023. How Helpful do Novice
+Programmers Find the Feedback of an Automated Repair Tool?. In 2023 IEEE
+International Conference on Teaching, Assessment and Learning for Engineering
+(TALE). 1–6. doi:10.1109/TALE56641.2023.10398393
+
+[27] J. Richard Landis and Gary G. Koch. 1977. The Measurement of Observer Agree-
+ment for Categorical Data. Biometrics 33, 1 (1977), 159–174. doi:10.2307/2529310
+[28] Anastasiya A. Lipnevich and Jeffrey K. Smith. 2022. Student – Feedback In-
+teraction Model: Revised. Studies in Educational Evaluation 75 (2022), 101208.
+doi:10.1016/j.stueduc.2022.101208
+
+[29] Rongxin Liu, Carter Zenke, Charlie Liu, Andrew Holmes, Patrick Thornton, and
+David J. Malan. 2024. Teaching CS50 with AI: Leveraging Generative Artificial
+Intelligence in Computer Science Education. In Proceedings of the 55th ACM
+Technical Symposium on Computer Science Education V. 1 (SIGCSE 2024). ACM,
+New York, NY, USA, 750–756. doi:10.1145/3626252.3630938
+
+[30] Rongxin Liu, Julianna Zhao, Benjamin Xu, Christopher Perez, Yuliia Zhukovets,
+and David J. Malan. 2025. Improving AI in CS50: Leveraging Human Feedback
+for Better Learning. In Proceedings of the 56th ACM Technical Symposium on
+Computer Science Education V. 1 (SIGCSETS 2025). ACM, New York, NY, USA,
+715–721. doi:10.1145/3641554.3701945
+
+[31] Dominic Lohr, Hieke Keuning, and Natalie Kiesler. 2025. You’re (Not) My Type-
+Can LLMs Generate Feedback of Specific Types for Introductory Programming
+Tasks? Journal of Computer Assisted Learning 41, 1 (2025), e13107. doi:10.1111/
+jcal.13107
+
+[32] Luke Mandouit and John Hattie. 2023. Revisiting “The Power of Feedback” from
+the perspective of the learner. Learning and Instruction 84 (2023), 101718. doi:10.
+1016/j.learninstruc.2022.101718
+
+[33] Marcus Messer, Neil C. C. Brown, Michael Kölling, and Miaojing Shi. 2024. Auto-
+mated Grading and Feedback Tools for Programming Education: A Systematic
+Review. ACM Trans. Comput. Educ. 24, 1 (2024). doi:10.1145/3636515
+
+[34] Susanne Narciss. 2006. Informatives tutorielles Feedback. Entwicklungs- und Evalu-
+ationsprinzipien auf der Basis instruktionspsychologischer Erkenntnisse. Waxmann,
+Münster.
+
+[35] Susanne Narciss. 2008. Feedback Strategies for Interactive Learning Tasks. In
+Handbook of Research on Educational Communications and Technology, Michael
+Spector, David Merill, Jeroen Van Merrienboer, and Marcy Driscoll (Eds.).
+Lawrence Erlbaum Associates, New York, USA, 125–144.
+
+[36] Ha Nguyen and Vicki Allan. 2024. Using GPT-4 to Provide Tiered, Formative
+Code Feedback. In Proceedings of the 55th ACM Technical Symposium on Computer
+Science Education V. 1 (SIGCSE 2024). ACM, New York, NY, USA, 958–964. doi:10.
+1145/3626252.3630960
+
+[37] Anneli Olsen and Ricardo Matos. 2012. Identifying parameter values for an I-VT
+fixation filter suitable for handling data sampled with various sampling frequen-
+cies. In Proceedings of the Symposium on Eye Tracking Research and Applications.
+ACM, Santa Barbara California, 317–320. doi:10.1145/2168556.2168625
+
+[38] Tung Phung, Victor-Alexandru Pădurean, José Cambronero, Sumit Gulwani, To-
+bias Kohn, Rupak Majumdar, Adish Singla, and Gustavo Soares. 2023. Generative
+AI for Programming Education: Benchmarking ChatGPT, GPT-4, and Human
+Tutors. In Proceedings of the 2023 ACM Conference on International Computing
+Education Research - Volume 2 (ICER ’23). ACM, New York, NY, USA, 41–42.
+doi:10.1145/3568812.3603476
+
+[39] James Prather, Paul Denny, Juho Leinonen, Brett A. Becker, Ibrahim Albluwi,
+Michelle Craig, Hieke Keuning, Natalie Kiesler, Tobias Kohn, Andrew Luxton-
+Reilly, Stephen MacNeil, Andrew Petersen, Raymond Pettit, Brent N. Reeves,
+and Jaromir Savelka. 2023. The Robots Are Here: Navigating the Generative AI
+Revolution in Computing Education. In Proceedings of the 2023 Working Group
+Reports on Innovation and Technology in Computer Science Education (ITiCSE-WGR
+’23). ACM, New York, USA, 108–159. doi:10.1145/3623762.3633499
+
+[40] James Prather, Juho Leinonen, Natalie Kiesler, Jamie Gorson Benario, Sam Lau,
+Stephen MacNeil, Narges Norouzi, Simone Opel, Vee Pettit, Leo Porter, Brent N.
+Reeves, Jaromir Savelka, IV Smith, David H., Sven Strickroth, and Daniel Zingaro.
+2025. Beyond the Hype: A Comprehensive Review of Current Trends in Genera-
+tive AI Research, Teaching Practices, and Tools. In 2024 Working Group Reports
+on Innovation and Technology in Computer Science Education (ITiCSE 2024). ACM,
+New York, NY, USA, 300–338. doi:10.1145/3689187.3709614
+
+[41] Margaret Price, Handley , Karen, , and Jill Millar. 2011. Feedback: focusing
+attention on engagement. Studies in Higher Education 36, 8 (2011), 879–896.
+doi:10.1080/03075079.2010.483513
+
+[42] Yizhou Qian and James Lehman. 2018. Students’ Misconceptions and Other
+Difficulties in Introductory Programming: A Literature Review. ACM Transactions
+on Computing Education 18, 1 (2018), 1–24. doi:10.1145/3077618
+
+[43] Alec Radford, Jong Wook Kim, Tao Xu, Greg Brockman, Christine McLeavey,
+and Ilya Sutskever. 2022. Robust Speech Recognition via Large-Scale Weak
+
+Koli Calling ’25, November 11–16, 2025, Koli, Finland
+
+Jacobs, Haas, Kiesler
+
+Supervision. doi:10.48550/arXiv.2212.04356
+
+[44] Fritz Jules Roethlisberger and William J. Dickson. 1939. Management and the
+
+Worker. Harvard University Press, Cambridge.
+
+[45] Andreas Scholl and Natalie Kiesler. 2024. How Novice Programmers Use and
+Experience ChatGPT when Solving Programming Exercises in an Introductory
+Course. In 2024 IEEE Frontiers in Education Conference (FIE). 1–9. doi:10.1109/
+FIE61694.2024.10893442
+
+[46] Andreas Scholl and Natalie Kiesler. 2025. Students’ Feedback Requests and
+Interactions with the SCRIPT Chatbot: Do They Get What They Ask For? doi:10.
+48550/arXiv.2507.17258 PPIG 2025 Workshop.
+
+[47] Andreas Scholl, Daniel Schiffner, and Natalie Kiesler. 2024. Analyzing Chat
+Protocols of Novice Programmers Solving Introductory Programming Tasks with
+ChatGPT. In Proceedings of DELFI 2024, Sandra Schulz and Natalie Kiesler (Eds.).
+63–79. doi:10.18420/delfi2024_05
+
+[48] Zohreh Sharafi, Bonita Sharif, Yann-Gaël Guéhéneuc, Andrew Begel, Roman
+Bednarik, and Martha Crosby. 2020. A practical guide on conducting eye tracking
+studies in software engineering. Empirical Software Engineering 25, 5 (2020),
+3128–3174. doi:10.1007/s10664-020-09829-4
+
+[49] Valerie J Shute. 2008. Focus on formative feedback. Review of educational research
+
+78, 1 (2008), 153–189.
+
+[50] Lorenzo Lee Solano, Charles Koutcheme, Juho Leinonen, Alexandra Vassar, and
+Jake Renzella. 2025. Narrowing the Gap: Supervised Fine-Tuning of Open-Source
+LLMs as a Viable Alternative to Proprietary Models for Pedagogical Tools. doi:10.
+48550/arXiv.2507.05305
+
+[51] Paul Solomon. 1994. The think aloud method: A practical guide to modelling
+cognitive processes. Academic Press, London. doi:10.1016/0306-4573(95)90031-4
+[52] Patricia T. Spangler, Jingqing Liu, and Clara E. Hill. 2012. Consensual qualitative
+research for simple qualitative data: An introduction to CQR-M. In Consensual
+
+qualitative research: A practical resource for investigating social science phenomena.
+American Psychological Association, Washington, DC, 269–283.
+
+[53] Irene Stone. 2024. Exploring Human-Centered Approaches in Generative AI
+and Introductory Programming Research: A Scoping Review. In Proceedings of
+the 2024 Conference on United Kingdom & Ireland Computing Education Research.
+ACM, Manchester United Kingdom, 1–7. doi:10.1145/3689535.3689553
+
+[54] Fabienne M. Van der Kleij and Anastasiya A. Lipnevich. 2021. Student perceptions
+of assessment feedback: a critical scoping review and call for research. Educational
+Assessment, Evaluation and Accountability 33, 2 (2021), 345–373. doi:10.1007/
+s11092-020-09331-x
+
+[55] Naomi E. Winstone, Nash , Robert A., Parker , Michael, , and James Rowntree.
+2017. Supporting Learners’ Agentic Engagement With Feedback: A Systematic
+Review and a Taxonomy of Recipience Processes. Educational Psychologist 52, 1
+(2017), 17–37. doi:10.1080/00461520.2016.1207538
+
+[56] Naomi E. Winstone and David Carless. 2019. Designing effective feedback processes
+in higher education. A learning-focused approach. Routledge, Taylor & Francis
+Group, London.
+
+[57] Ruiwei Xiao, Xinying Hou, and John Stamper. 2024. Exploring How Multiple
+Levels of GPT-Generated Programming Hints Support or Disappoint Novices. In
+Extended Abstracts of the CHI Conference on Human Factors in Computing Systems
+(CHI EA ’24). ACM, New York, NY, USA, 1–10. doi:10.1145/3613905.3650937
+[58] Elaine Zhu, Smaran Teja, Chris Coombes, and Daniel Patterson. 2025. FEEDBOT:
+Formative Design Feedback on Programming Assignments. In Proceedings of
+the 30th ACM Conference on Innovation and Technology in Computer Science
+Education V. 1 (ITiCSE 2025). ACM, New York, NY, USA, 576–582. doi:10.1145/
+3724363.3729063
+
+

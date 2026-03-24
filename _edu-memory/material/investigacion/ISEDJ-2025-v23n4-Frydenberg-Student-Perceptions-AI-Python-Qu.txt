@@ -1,0 +1,5076 @@
+Information Systems 
+Education Journal 
+
+Volume 23, No. 4 
+July  2025 
+ISSN: 1545-679X 
+
+In this issue: 
+
+4.  
+
+Visualizing the Eras of IS Education: A Co-occurrence Analysis of the 
+Information Systems Education Journal 
+Jason H. Sharp, Utah Valley University 
+John E. Anderson, Utah Valley University 
+Guido Lang, Quinnipiac University 
+
+22.   Teaching Case 
+
+Online Maps and Route-Finding – Huge Success, With Some Nagging 
+Problems 
+Paul Witman, California Lutheran University 
+Jim Prior, California Lutheran University 
+Tracy Nicki, California Lutheran University 
+Christopher Njunge, California Lutheran University 
+Stephen Ng’etich, Strathmore University 
+Ayla Chaudhry, Lahore University of Management Science 
+
+34.   Student Perceptions of Learning through Original and AI-Generated Python 
+
+Programs from a Software Quality Perspective 
+Mark Frydenberg, Bentley University 
+Anqi Xu, Bentley University 
+Jennifer Xu, Bentley University 
+
+57.   The Virtual Stage: Virtual Reality Integration in Effective Speaking Courses  
+
+Adam Patterson, University of Connecticut 
+Cathy Temple, Nichols College 
+Nikki Anderson, Nichols College 
+Chris Rogalski, Nichols College 
+Kevin Mentzer, Nichols College 
+
+69.   Teaching Case 
+
+Leveraging Topic Modeling to Predict and Prevent Employee Attrition 
+Frank Lee, Georgia State University 
+Alex Algarra, Georgia State University 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+The  Information  Systems  Education  Journal  (ISEDJ)  is  a  double-blind  peer-reviewed 
+academic  journal  published  by  ISCAP  (Information  Systems  and  Computing  Academic 
+Professionals). Publishing frequency is five times per year. The first year of publication was 
+2003. 
+
+ISEDJ  is  published  online  (https://isedj.org).  Our  sister  publication,  the  Proceedings  of  the 
+ISCAP  Conference  (https://iscap.us/proceedings)  features  all  papers,  abstracts,  panels, 
+workshops, and presentations from the conference. 
+
+The  journal  acceptance  review  process  involves  a  minimum  of  three  double-blind  peer 
+reviews, where both the reviewer is not aware of the identities of the authors and the authors 
+are not aware of the identities of the reviewers. The initial reviews happen before the ISCAP 
+conference.  All  papers,  whether  award-winners  or  not,  are  invited  to  resubmit  for  journal 
+consideration after applying feedback from the Conference presentation. Award winning papers 
+are assured of a publication slot; however, all re-submitted papers including award winners are 
+subjected  to  a  second  round  of  three  blind  peer  reviews  to  improve  quality  and  make  final 
+accept/reject decisions. Those papers  that  are  deemed  of  sufficient  quality  are  accepted  for 
+publication in the ISEDJ journal. Currently the target acceptance rate for the journal is under 
+35%. 
+
+Information  Systems  Education  Journal  is  pleased  to  be  listed  in  the  Cabell's  Directory  of 
+Publishing Opportunities in Educational Technology and Library Science, in both the electronic 
+and printed editions. Questions should be addressed to the editor at editor@isedj.org or the 
+publisher at publisher@isedj.org. Special thanks to volunteer members of ISCAP who perform 
+the editorial and review processes for ISEDJ. 
+
+2025 ISCAP Board of Directors 
+
+Amy Connolly 
+James Madison University 
+President  
+
+Michael Smith 
+Georgia Institute of Technology 
+Vice President 
+
+Jeff Cummings  
+Univ of NC Wilmington 
+Past President 
+
+David Firth 
+University of Montana 
+Director 
+
+Leigh Mutchler 
+James Madison University 
+Director 
+
+Mark Frydenberg 
+Bentley University 
+Director/Secretary 
+
+RJ Podeschi 
+Millikin University 
+Director/Treasurer 
+
+David Gomillion 
+Texas A&M University 
+Director 
+
+Jeffry Babb 
+West Texas A&M University 
+Director/Curricular Matters 
+
+Eric Breimer 
+Siena College 
+Director/2024 Conf Chair 
+
+Tom Janicki 
+Univ of NC Wilmington 
+Director/Meeting Planner 
+
+Xihui “Paul” Zhang 
+University of North Alabama 
+Director/JISE Editor 
+
+Copyright  ©  2025  by  Information  Systems  and  Computing  Academic  Professionals  (ISCAP).  Permission  to  make 
+digital or hard copies of all or part of this journal for personal or classroom use is granted without fee provided that 
+the copies are not made or distributed for profit or commercial use. All copies must bear this notice and full citation. 
+Permission from the Editor is required to post to servers, redistribute to lists, or utilize in a for-profit or commercial 
+use. Permission requests should be sent to Paul Witman, Editor, editor@isedj.org.  
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 2 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+Information Systems 
+Education Journal 
+
+Editors 
+
+Paul Witman 
+Editor 
+California Lutheran 
+University 
+
+Thomas Janicki 
+Publisher 
+U of North Carolina 
+Wilmington 
+
+Dana Schwieger  
+Associate Editor 
+Southeast Missouri 
+State University 
+
+Kevin Mentzer 
+Associate Editor 
+Nichols College 
+
+Ira Goldstein 
+Teaching Cases & Exercises 
+Co-Editor 
+Siena College 
+
+Michelle Louch 
+Teaching Cases & Exercises 
+Co-Editor 
+Duquesne University 
+
+Donald Colton 
+Emeritus Editor  
+Brigham Young University 
+Hawaii 
+
+Jeffry Babb 
+Emeritus Editor 
+West Texas A&M 
+University 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 3 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+Visualizing the Eras of IS Education:  
+A Co-occurrence Analysis of the  
+Information Systems Education Journal 
+
+Jason H. Sharp 
+jason.sharp@uvu.edu 
+
+John E. Anderson 
+janderson@uvu.edu 
+
+Information Systems & Technology 
+Utah Valley University 
+Orem, UT 84058 USA 
+
+Guido Lang 
+guido.lang@quinnipiac.edu 
+Business Analytics & Information Systems 
+Quinnipiac University 
+Hamden, CT 06518 USA 
+
+Abstract  
+
+The Information Systems Education Journal has published uninterrupted since 2003. Over its publication 
+history,  it  has  covered  myriad  topics  related  to  information  systems  education  including  model 
+curriculum, outcomes assessment, online learning, capstone courses, service learning, data analytics, 
+and cybersecurity, just to name a few. This, first of its kind, study conducts a co-occurrence analysis 
+using article keywords on the corpus of the journal for the years 2003 through 2024. The results are 
+presented in terms of five eras and present frequency counts, clusters, and term maps of the key topics. 
+This paper presents a worthwhile endeavor of examining the past and looking forward to the future. 
+While  the  future  of  information  systems  education  is  unknown,  the  Information  Systems  Education 
+Journal provides a consistent outlet to keep information systems educators and researchers abreast of 
+the latest trends and developments.  
+
+Keywords: Co-occurrence analysis, cluster analysis, bibliometric review, term map, ISEDJ. 
+
+Recommended Citation: Sharp, J., Anderson, J., Lang, G. (2025). Visualizing the Eras of IS Education: 
+A Co-occurrence Analysis of the Information Systems Education Journal. Information Systems Education 
+Journal, v23, n4, pp.4-21. https://doi.org/10.62273/FYDF2042. 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 4 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+Visualizing the Eras of IS Education: A Co-occurrence Analysis of 
+the Information Systems Education Journal 
+
+Jason H. Sharp, John E. Anderson and Guido Lang 
+
+1. INTRODUCTION 
+
+The  study  of  individual  journals  or  groups  of 
+journals  is  well  established  and  quite  common 
+across  various  disciplines,  information  systems 
+(IS) notwithstanding (e.g., Krauskopf, 2018; Flis 
+&  van  Eck,  2018;  Liu  &  Myers,  2011;  Merigo, 
+Pedrycz, Weber, & de la Sotta, 2018; Mustafee, 
+2011; Oskos & Gencer, 2017). Often, one or more 
+techniques under the umbrella of bibliometrics or 
+bibliometric analysis are employed to gain insight 
+into  impact,  authorship,  citations,  publications, 
+themes,  trends,  and  patterns  (Broadus,  1987; 
+Pritchard, 1969). In that tradition, the purpose of 
+this paper is to conduct a co-occurrence analysis 
+of articles published in the  Information Systems 
+Education  Journal  (ISEDJ)  from  2003-2024  to 
+identify topics over the course of time as well as 
+look forward to the future of IS education. 
+
+journal 
+
+ISEDJ published its first volume on September 8, 
+2003,  and  has  published  uninterrupted  through 
+its current Volume #22 (2024). As a double-blind 
+peer-reviewed  academic 
+focused  on 
+information  systems  (IS)  education,  it  covers  a 
+wide-array of topics including, but not limited to, 
+model  curriculum,  outcomes  assessment,  online 
+and  distance  education,  capstone  and  service-
+learning projects, networking, data analytics, and 
+cybersecurity  (About,  n.d.).  ISEDJ  is  listed  in 
+Cabells and indexed in ERIC Institute of Education 
+Services.  As  a  publication  of  the  Information 
+Systems  and  Computing  Professionals  (ISCAP), 
+the submission process for ISEDJ is integrated as 
+a part of the ISCAP Conference and reports a 36% 
+acceptance  rate.  Per  ERIC,  17,800  articles  from 
+ISEDJ  were  downloaded  in  2022  (Impact,  n.d.). 
+Since its inception, five individuals have served as 
+chief  editor(s):  Donald  Colton,  Emeritus  (2003-
+2010), Wendy Ceccucci (2011-2012), Nita Brooks 
+(2013-2015), Jeffry Babb, Emeritus (2016-2021), 
+and Paul Witman (2021-present).  
+
+2. BACKGROUND 
+
+When a journal celebrates a notable anniversary,   
+researchers  often  conduct  a  bibliometric-based 
+study to commemorate this important event. This 
+was  the  case  for  both  the  European  Journal  of 
+Marketing  and  Information  Sciences  when  each 
+reached  50  years  of  publications,  respectively 
+
+(Martinez-Lopez,  Merigo,  Valenzuela-Fernandez, 
+& Nicolas, 2018; Merigo, Pedrycz, Weber, & de la 
+Sotta,  2018).  In  each  of  these  studies,  various 
+bibliometric techniques were employed including 
+publication 
+coupling, 
+counts,  bibliographic 
+citation  and  co-citation  analysis,  and  co-
+occurrence analysis of keywords. 
+
+Large-scale  discipline-specific  studies  commonly 
+necessitate  bibliometric  studies  as  well.  For 
+example, Flis and van Eck (2018) conducted a co-
+occurrence  analysis  of  psychology  literature 
+between  the  years  ranging  from  1950  to  1999, 
+representing  676,393  articles,  while  White  and 
+McCain  (1998),  conducted  an  author  co-citation 
+analysis of the information science discipline from 
+the period of 1972 to 1995. Smaller scale studies 
+often examine a specific field, such as Ozkose and 
+field  of 
+Gencer  (2017)  who  analyzed  the 
+management 
+using 
+bibliographic mapping. 
+
+information 
+
+systems 
+
+Other  well-established  approaches 
+include 
+analyzing a single journal such as the case of the 
+Journal of Infection and Public Health (Krauskopf, 
+2019),  comparing  two  journals  such  as  the 
+European  Journal  of  Information  Systems  and 
+Management  Information  Systems  Quarterly 
+(Mustafee,  2011),  or  examining  a  group  or 
+“basket” of journals. For example, the Association 
+for Information Systems (AIS) basket of journals 
+(Bernroider,  Pilkington,  &  Cordoba,  2013;  Liu  & 
+Myers,  2011).  These  types  of  studies  are  not 
+limited only to journals, as others have analyzed 
+various conference proceedings as well (Olbrich, 
+2009).  Finally,  researchers  may  examine  a 
+specific 
+topic  or  area  such  as 
+cybersecurity (Mandani & Ramirez, 2019), ethics 
+and corporate social responsibility (Weiss, 2017), 
+or gender (Zhou & Loiacono, 2023). 
+
+research 
+
+3. METHOD 
+
+For  our  study  we  employed  co-occurrence 
+analysis. Co-occurrence networks are defined as 
+the  interconnectedness  of  terms  based  on  their 
+joint  presence  within  a  specific  text  unit.  These 
+networks  are  formed  by  linking  pairs  of  terms 
+according  to  criteria  that  define  co-occurrence. 
+For instance, terms A and B are considered to "co-
+occur" if they both appear in the same article. Or 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 5 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+   
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+in  our  case,  in  the  author-supplied  keywords. 
+Another article might include terms B and C. By 
+connecting  A  to  B  and  B  to  C,  a  co-occurrence 
+network  of  these  three  terms  is  created.  The 
+criteria  for  defining  co-occurrence  within  a  text 
+corpus can be adjusted as needed. For example, 
+a  stricter  criterion  might  require  that  the  terms 
+appear  in  the  same  sentence  or  in  the  author 
+supplied  keywords.  Co-occurrence  networks  are 
+large  text 
+particularly  useful 
+datasets  and  big  data,  such  as  identifying  main 
+themes  and  topics  in  numerous  social  media 
+posts,  uncovering  biases  in  text  like  news 
+coverage,  or  mapping  the  entirety  of  a  field  of 
+(Segev,  2022).  We  applied  co-
+research 
+occurrence  analysis  to  the  author-produced 
+keywords of the corpus of ISEDJ. 
+
+for  analyzing 
+
+For  this  paper,  we  looked  at  all  of  the  articles 
+published in ISEDJ from 2003 to 2024, a total of 
+1076  articles.  We  then  focused  on  the  author 
+produced  key  words  (the  key  words  submitted 
+with each article) as our primary data, in addition 
+to  year.  We  then  chose  to  group  the  years  into 
+units of five years to make it more digestible, as 
+shown in Table 1. 
+
+Grouping Years 
+2003-2007 
+2008-2012 
+2013-2017 
+2018-2022 
+2023-2024 
+
+Number of Articles 
+288 
+332 
+222 
+174 
+60 
+
+Table 1: Grouping by Years 
+
+We defined the importance of a key word based 
+on simple frequency counts and link strength. A 
+connection between two items is called a link. The 
+strength of a link is represented by a numerical 
+value, such as the number of articles in which two 
+keywords  occur  together.  A  visualization  of  the 
+importance of the key words (called a term map) 
+was  then  created.  A  term  map  shows  the 
+relatedness of terms as a function of the distance 
+between them. The more co-occurrences  of  two 
+terms,  the  smaller  the  distance  between  them. 
+The  more  articles  in  which  a  term  occurs,  the 
+more  prominently  the  term  is  displayed  in  the 
+term  map,  such  as  with  a  larger  font  size  and 
+larger  sphere.  The  terms  are  also  grouped  into 
+clusters. 
+
+Six term maps were created to get a glimpse into 
+topics  academics  published 
+ISEDJ.  We 
+constructed  term  maps  based  on  four  five-year 
+groupings  (2003-2007,  2008-2012,  2013-2017, 
+2018-2022) and one for the new unfinished group 
+(2023-2024),  and  one  for  the  entire  data.  We 
+
+in 
+
+hoped  the  groups  would  yield  a  picture  of  the 
+evolution of topics published in ISEDJ. The term 
+maps were created using the VOSviewer software 
+(van  Eck  &  Waltman,  2010,  2014).  Part  of  the 
+term  map  construction  was  choosing 
+the 
+term  co-
+minimum  number  of  key  word 
+occurrence  frequency  that  would  be  considered 
+“interesting  enough”  to  use.  We  choose  a 
+minimum number of occurrences as three for the 
+evolutionary  term  maps,  and  five  for  the  term 
+map of the full data. 
+
+Based  on  the  co-occurrence  frequency  counts 
+VOSviewer  constructed 
+term  maps  where 
+distance between term indicated relatedness, and 
+color  was  used  to  cluster  the  terms  into  topic 
+areas. VOSviewer uses both a mapping technique 
+(to  determine  the  layout  of  terms  in  the  term 
+map)  and  a  clustering  technique  (which  assigns 
+frequently  co-occurring  terms  to  the  same 
+cluster).  The  mapping  technique  is  called  VOS 
+and is related to multidimensional scaling (Borg & 
+Groenen 2005; van Eck, Waltman, Dekker, & van 
+den Berg 2010). The clustering technique used by 
+VOSviewer 
+to  modularity-based 
+clustering  (Newman,  2004;  Newman  &  Girvan, 
+2004; Waltman et al. 2010). 
+
+related 
+
+is 
+
+4. RESULTS 
+
+including 
+
+The  results  of  the  co-occurrence  analysis  are 
+presented  below  for  each  of  the  year  range 
+frequency  counts, 
+the 
+groupings 
+clusters, and term maps. The colors assigned in 
+the  term  maps  for  each  era  were  randomly 
+generated 
+software. 
+Unfortunately, we did not have the ability to alter 
+these  assigned  colors  to  use  the  same  color  for 
+the  same  topics  across  eras.  We  did,  however, 
+attempt  to  match  the  color  in  the  associated 
+tables for frequency count and clusters.  
+
+the  VOSviewer 
+
+by 
+
+twenty-six  keywords,  14 
+
+2003-2007: IS Education 
+We used the rule that the keyword must occur a 
+minimum  of  three  times  to  be  “interesting”  (of 
+989 keywords, twenty-six met the threshold). Of 
+(54%)  are 
+the 
+“education” words such as variants of curriculum, 
+assessment,  and  pedagogy.  See  Appendix  A, 
+Table  2  for  frequency  counts.  The  clusters  are 
+made  up  of  the  terms  that  are  closest  to  each 
+other,  yet  also  farther  away  from  other  terms. 
+Nine clusters were found as shown in Appendix A, 
+Table 3. The term map is provided in Appendix B, 
+Figure 1. 
+
+2008-2012: Pedagogy and Student Issues 
+We used the rule that the keyword must occur a 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 6 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+minimum  of  three  times  to  be  “interesting”  (of 
+1117  keywords,  101  met  the  threshold).  The 
+thirty-five keywords with a total link strength of 
+10  or  greater  are  shown  in  the  table  below. 
+Looking at the top thirteen for the 2003-2007 vs 
+2008-2012 we see a movement from plain vanilla 
+curriculum  and  assessment  issues  to  broader 
+pedagogy and student issues such as mentoring, 
+retention,  scholarships,  women,  and  minorities. 
+See  Appendix  A,  Table  4  for  frequency  counts. 
+The  clusters  are  made  up  of  the  terms  that  are 
+closest to each other, yet also farther away from 
+other terms. Twelve clusters were found as shown 
+in Appendix A, Table 5. The term map is provided 
+in Appendix B, Figure 2. 
+
+2013-2017: Cybersecurity-Big Data-Analytic 
+We used the rule that the keyword must occur a 
+minimum  of  three  times  to  be  “interesting”  (of 
+735  keywords,  sixty-five  met  the  threshold). 
+There were thirty-nine keywords with a total link 
+strength of  5  or  greater.  The  clusters  are  made 
+up of the terms that are closest to each other, yet 
+from  other  terms.  See 
+also 
+frequency counts in Appendix A, Table 6. Seven 
+clusters  were  found  as  shown  in  Appendix  A, 
+Table 7. The term map is provided in Appendix B, 
+Figure 3. 
+
+farther  away 
+
+2018-2022: COVID Impact on IS Education 
+We used the rule that the keyword must occur a 
+minimum  of  three  times  to  be  “interesting”  (of 
+543  keywords,  fifty-six  met  the  threshold).  The 
+thirty keywords with a total link strength of 5 or 
+greater  are  shown  in  Appendix  A,  Table  8.  The 
+clusters are made up of the terms that are closest 
+to  each  other,  yet  also  farther  away  from  other 
+terms. Eight main clusters were found, in addition 
+to five smaller clusters as shown in Appendix A, 
+Table  9.  We  combined  the  smaller  clusters  with 
+the larger cluster. Some of the fifty-six keywords 
+in the network were not connected to each other. 
+The  largest  set  of  connected  items  consists  of 
+thirty-eight 
+less 
+cohesiveness) is interesting. This may be due to 
+the impact of the COVID-19 pandemic. The term 
+map is provided in Appendix B, Figure 4. 
+
+fracturing  (or 
+
+items.  The 
+
+2023-2024: Artificial Intelligence 
+We used the rule that the keyword must occur a 
+minimum  of  three  times  to  be  “interesting”  (of 
+215  keywords,  eighteen  met  the  threshold).  All 
+eighteen  keywords  are  shown  in  Appendix  A, 
+Table 10. The clusters are made up of the terms 
+that  are  closest  to  each  other,  yet  also  farther 
+away from other terms. Three clusters were found 
+as  provided  in  Appendix  A,  Table  11.  The  term 
+map is presented in Appendix B, Figure  5. 
+
+2003-2024: Full Network 
+We used the rule that the keyword must occur a 
+minimum  of  five  times  to  be  “interesting”  (of 
+2827 keywords, 115 met the threshold). The fifty 
+keywords with a total link strength of 16 or higher 
+are shown in Appendix A, Table 12. The clusters 
+are made up of the terms that are closest to each 
+other,  yet  also  farther  away  from  other  terms. 
+Nine clusters were found as shown in Appendix A, 
+Table 13. The term map is presented in Appendix 
+B, Figure 6. Appendix B, Figure 7 shows the time 
+overlay for the full network. 
+
+5. DISCUSSION 
+
+For  the  purpose  of  discussion  each  grouping  of 
+years is defined as an era. An examination of the 
+topics  and  factors  affecting  the  choice  of  topics 
+during each era is then presented.  
+
+and 
+
+assessment, 
+
+Era 1: 2003-2007 
+The  first  era  of  ISEDJ  is  characterized  by  topics 
+associated  with  IS  education.  Topics  such  as 
+curriculum, 
+information 
+systems,  accreditation,  ethics,  and  pedagogy 
+round out the top three occurrences of keywords. 
+As mentioned previously, these  topics represent 
+“education” words. Ethics may be considered a bit 
+of  an  outlier,  however;  it  is  hoped  that  ethics 
+underlies  all  aspects  of  IS  education.  Also 
+interesting  was  the  separation  of  curriculum 
+assessment and accreditation as seen in the term 
+map. As a young discipline in this era there was 
+greater interest in solidifying the curriculum, with 
+accreditation  just  starting  to  be  an  important 
+issue. It might be noted that in these early years 
+of the journal, all articles were included in a single 
+volume,  without  the  use  of  individual  issue 
+numbers.  Perhaps  this  was  due  to  a  more 
+heterogenous  set  of  topics  and  less  diversity  of 
+topics at the time.  
+
+Era 2: 2008-2012 
+The  evolution  from  Era  1  to  Era  2  experienced 
+several  changes.  First,  security  curriculum 
+development dropped out of the topics. Perhaps, 
+this area matured to the point that educators felt 
+they  had  gained  a  good  grasp  of  security 
+curricula.  Not  surprisingly,  retention,  social 
+networking, and outsourcing appeared in this era. 
+With the 2008 financial crisis, it is quite possible 
+that the current emphasis on retention began. It 
+is  common  sense  that  when  students  have 
+financial  difficulties  they  often  must  drop  out  of 
+school  to  take  care  of  their  responsibilities.  The 
+2010s  saw  the  growth  of  numerous  social 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 7 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+topics 
+
+including 
+
+platforms 
+
+cluster.  Traditional 
+
+Facebook, 
+networking 
+LinkedIn,  Snapchat,  and  Twitter.  Consequently, 
+the use of these platforms in higher education and 
+in IS education research saw subsequent growth. 
+Interestingly, from Era 1 to Era 2, ethics grew into 
+such  as 
+own 
+programming, assessment, accreditation, and IS 
+curriculum  continued  into  this  era.  In  the  term 
+map  we  see  the  merging  of  assessment  and 
+accreditation  with  the  emergence  of  terms  such 
+as  learning  outcomes  and  program  assessment. 
+Perhaps  this  era  shows  the  focus  shift  from 
+curriculum  assessment  to  program  assessment 
+and  accreditation.  Also  in  this  era,  Volume  11  - 
+2009,  was  the  beginning  of  creating  separate 
+issue numbers rather than publishing all articles 
+in a single volume. 
+
+Era 3: 2013-2017 
+The evolution from Era 2 to Era 3 saw the loss of 
+social  networking,  retention,  outsourcing,  and 
+ethics.  Perhaps  the  ubiquitous  nature  of  social 
+networking led to its absence in this area. It had 
+simply  become  a  normal  part  of  life  and 
+education. The tumultuous times created by the 
+2008 financial crisis were subsiding and students 
+were  returning  to  continue  their  education 
+lessening the overall emphasis on retention. After 
+two eras, ethics fell out of the topics. It is hard to 
+say  ethic  was  no  longer  important,  but  again, 
+perhaps it had become ingrained in the context of 
+IS  education.  Era  3  saw  the  reemergence  of 
+cybersecurity into its own cluster. The continued 
+growth  of  the  Internet  and  the  Web  and 
+numerous  data  leaks  and  security  breaches 
+throughout the era contributed to the growth and 
+popularity  of  cybersecurity.  Pedagogy  and  big 
+data/analytics also saw the formation of their own 
+clusters.  Along  with  cybersecurity,  this  era  saw 
+the  growth  and  popularity  of  big  data/analytics. 
+In fact, a common movement at the time was for 
+IS  programs  to  rebrand  as  Business  Analytic 
+programs.  As  in  previous  eras,  programming, 
+assessment,  IS  curriculum,  and  online  learning 
+continued  to  be  common  topics.  Interestingly 
+when looking at the term map we see a refocus 
+of assessment from program assessment back to 
+curriculum 
+the 
+assessment of experiential learning. 
+
+assessment, 
+
+especially 
+
+al.,  2010)  was  the  removal  of  application 
+development  (IS  2002.5  Programming,  Data, 
+File,  and  Object  Structures)  from  the  previous 
+curriculum guidelines. A clear explanation for the 
+loss  of  assessment  is  a  bit  more  difficult  to 
+identify. New developments include the splitting 
+of analytics into two clusters: business analytics 
+and data analytics. This split certainly reflects the 
+growth and popularity of this area. It also saw the 
+movement  of  business  analytics  as  primarily 
+housed  within  the  College  of  Business  and  data 
+analytics  housed  in  various  places  such  as 
+Business, 
+and 
+Engineering. This era also saw the appearance of 
+topics  related  to  the  COVID-19  pandemic.  In 
+particular  the  growth  of  topics  related  to 
+attendance and attentiveness might have been a 
+direct  result.  While  the  capstone  course  was  a 
+regular topic in previous eras, it became its own 
+cluster in Era 4. Cybersecurity, pedagogy, online 
+learning,  and  IS curriculum  remained consistent 
+in  this  era.  Assessment  fell  out  of  importance 
+except  as  a  part  of  cybersecurity,  which  makes 
+sense as the need to assess and solidify the new 
+cybersecurity curriculum was important. 
+
+Mathematics, 
+
+Statistics, 
+
+topics 
+
+long-standing 
+
+Era 5: 2023-2024 
+The evolution from Era 4 to Era 5 saw the loss of 
+including 
+several 
+cybersecurity,  online 
+learning,  assessment, 
+attendance,  attentiveness,  IS  Curriculum,  and 
+capstone course. The number of clusters moved 
+from  8  to  3  (Pedagogy,  Analytics,  and  AI).  This 
+may  be  due  simply  to  natural  attrition.  That  is, 
+these  topics  are  so  much  a  normal  part  of  IS 
+education that the novelty has worn off a bit and 
+so  they  fall  out  of  favor  as  research  topics.  It 
+should  be  noted,  in  regard  to  cybersecurity  in 
+particular, 
+the 
+ISCAP 
+Cybersecurity  Pedagogy  and  Practice  Journal 
+(CPPJ) in 2022 as a publication outlet associated 
+with the ISCAP Conferences. This may account for 
+the  absence  of  cybersecurity-related  topics  in 
+ISEDJ. With the release of ChatGPT in 2022 and 
+numerous other Generative Artificial Intelligence 
+platforms to follow since, it is not a surprise that 
+artificial  intelligence  appeared.  Analytics  and 
+pedagogy continued their inclusion.  
+It should be noted  that Era 5  only presents two 
+years.  
+
+introduced 
+
+that 
+
+Era 4: 2018-2022 
+The evolution from Era 3 to Era 4 experienced a 
+notable  shift.  The 
+topics  of 
+programming and assessment were absent. While 
+a  direct  connection  may  not  be  possible,  it  is 
+interesting to note that a significant change in the 
+IS 2010 Curriculum Guidelines for Undergraduate 
+Degree Programs in Information Systems (Topi et 
+
+long-standing 
+
+through 
+
+the  eras  we  see 
+
+Looking at the movement or ranking changes of 
+themes 
+that 
+Assessment/Accreditation went from 1 to 5 to 3 
+to 5 to  null (went from  first to  middle  ranking). 
+Pedagogy went from 4 to 1, to 1 to 1 to 2 (highest 
+overall ranking). Programming went from 5 to 9 
+to  6  to  partial  3  to  null  (lower-middle  ranking). 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 8 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+Cybersecurity  really  started  in  Era  3  and  was 
+ranked  4  then  5  then  null  (middle  ranking). 
+Analytics really started in Era 2 and was ranked 7 
+then 5 and 7 then 6 then 1 (moved from middle 
+to first). Student Issues came to the foreground 
+in Eras 2 and 4 ranked 3 and 4 (Era 2 blossoming 
+concern for students, COVID-19  era concern for 
+students). See Appendix A, Table 14 for the rank 
+changes from Eras 1 to 5. 
+
+From the viewpoint of the number of clusters each 
+term map shows for each era we see that era 1 
+had 9 clusters, era 2 had 12, era 3 had 7, era 4 
+had  8,  and  finally  era  5  had  just  3.  It  would 
+appear that era 2 from 2008-2012 was the richest 
+and most diverse era of IS education scholarship. 
+Also, although era 5 is only half-way completed, 
+it would appear that the diversity of IS education 
+has shrunk.  
+
+Lastly,  the  Full  Network  Term  Map  (Figure  6) 
+shows  the  wonderful  growth  and  diversity  of  IS 
+Education  scholarship  produced  in  that  past  22 
+years.  We  are  struck  by  the  continuous  central 
+focus of work produced in the areas of pedagogy 
+and curriculum, which are at the heart of student 
+success.  It  is  in  a  way  a  painting  of  the  IS 
+Educator landscape, a landscape probably vastly 
+different from that of the IS Researcher producing 
+work in the Basket of Eight.  
+
+6. CONCLUSION 
+
+This is the first known study to examine the full 
+corpus  of  ISEDJ  available  at  the  time  it  was 
+conducted. To see how IS education has changed 
+as well as has stayed the same over the years is 
+quite interesting and serves to honor the past as 
+well as inform the future. 
+
+Limitations 
+The study is not without its limitations. The most 
+obvious is that the co-occurrence analysis relies 
+solely  on  author-supplied  keywords.  Inherent  in 
+this  methodology  is  a  potential  bias  toward  the 
+terms  and buzzwords  of  any  given era.  Another 
+potential  limitation  is  the  publishing  of  special 
+issues of ISEDJ such as teaching cases which may 
+serve  to  artificially  inflate  the  occurrence  of  a 
+term(s)  in  a  particular  era.  Because  of  the 
+potential limitation resulting from the sole use of 
+author-supplied keywords, future research might 
+include the addition of title and abstract to the co-
+occurrence  analysis  to  increase  the  likelihood of 
+otherwise unforeseen or obvious topics. 
+
+Future Directions 
+For over two decades ISEDJ has kept up with the 
+
+dynamic nature of IS education as shown by the 
+evolutionary  nature  of  the  topics  contained  in 
+each era of its 1,076 articles published between 
+2003-2024. In this particular study, the authors 
+chose to establish predefined five-year groupings 
+for analysis and determination of “eras”. In future 
+research, the authors plan to implement a more 
+organic  approach,  by  allowing  the  data  itself  to 
+establish  “eras”  of  topicality.  Furthermore,  with 
+the  continued  growth  and  popularity  of  artificial 
+intelligence,  in  general,  and  generative  artificial 
+intelligence, specifically, continued co-occurrence 
+analysis of ISEDJ may reveal a preponderance of  
+research in this area in the future. 
+
+7. REFERENCES 
+
+About.  (n.d.).  Information  Systems  Education 
+
+Journal. https://isedj.org/about.html 
+
+Bernroider, E. W. N., Pilkington, A., & Cordoba, J. 
+(2013).  Research  in  information  systems:  A 
+study  of  diversity  and 
+inter-disciplinary 
+discourse in the AIS basket journals between 
+1995  and  2011.  Journal  of  Information 
+Technology, 
+74-89. 
+https://doi.org/10.1057/jit.2013.5 
+
+28, 
+
+Borg,  I.,  &  Groenen,  P.  J.  F.  (2005).  Modern 
+and 
+multidimensional 
+applications  (2nd  ed.)  Springer  Science  + 
+Business  Media.  https://doi.org/10.1007/0-
+387-28981-X  
+
+scaling: 
+
+Theory 
+
+Broadus,  R.  N.  (1987).  Toward  a  definition  of 
+“bibliometrics”. Scientometrics, 12, 373-379. 
+https://doi.org/10.1007/BF02016680  
+
+Flis,  I.,  &  van  Eck,  N.  J.  (2018).  Framing 
+Psychology  as  a  discipline  (1950-1999):  A 
+large-scale  term  co-occurrence  analysis  of 
+scientific  literature  in  Psychology.  History  of 
+Psychology, 21(4), 334-362. https://doi.org/ 
+10.1037/hop0000067 
+
+Impact.  (n.d.).  Information  Systems  Education 
+
+Journal. https://isedj.org/impact.html 
+
+Krauskopf,  E.  (2018).  A  bibliometric  analysis  of 
+the  Journal  of  Infection  and  Public  Health. 
+Journal  of  Infection  and  Public  Health,  11, 
+224-229. 
+https://doi.org/10.1016/j.jiph.2017.12.011 
+
+Liu, F., & Myers, M. D. (2011). An analysis of the 
+AIS  basket  of  top  journals.  Journal  of 
+Systems and Information Technology, 13(1), 
+5-24. 
+https://doi.org/10.1108/1328726111111832
+2 
+
+Mandani, 
+
+A.,  & 
+
+Ramirez, 
+
+R. 
+
+(2019). 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 9 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+Cybersecurity:  Current  state  of  governance 
+literature.  Proceedings  of  the  Twenty-fifth 
+Americas 
+Information 
+Systems, 16, 1-5. 
+
+Conference 
+
+on 
+
+Martinez-Lopez, F. J.,  Merigo, J. M., Valenzuela-
+Fernandez,  L.,  &  Nicolas,  C.  (2018).  Fifty 
+years of the European Journal of Marketing: 
+A  bibliometric  analysis.  European  Journal  of 
+Marketing, 
+439-468. 
+52(1/2), 
+https://doi.org/10.1108/EJM-11-2017-0853 
+
+Merigo,  J.  M.,  Pedrycz,  W.,  Weber,  R.,  &  de  la 
+Sotta,  C.  (2018).  Fifty  years  of  Information 
+overview. 
+Sciences: 
+245-268. 
+Information 
+https://doi.org/10.1016/j.ins.2017.11.054 
+
+bibliometric 
+
+Sciences, 
+
+432, 
+
+A 
+
+Mustafee,  N.  (2011).  Evolution  of  IS  research 
+based  on  literature  published  in  two  leading 
+IS journals – EJIS and MISQ. Proceedings of 
+the  Nineteenth  European  Conference  on 
+Information Systems, 228. 
+
+Newman,  M.  E.  J.  (2004).  Fast  algorithm  for 
+detecting  community  structure  in  networks. 
+Physical 
+69(6). 
+https://doi.org/10.1103/PhysRevE.69.06613
+3 
+
+Review 
+
+E, 
+
+for 
+in 
+
+Vreede,  G.  J.  (2010).  IS  2010:  Curriculum 
+guidelines 
+degree 
+Systems. 
+programs 
+Communications  of 
+for 
+Information  Systems,  26(18),  359-428. 
+https://doi.org/10.17705/1CAIS.02618 
+
+undergraduate 
+Information 
+
+the  Association 
+
+van  Eck,  N.  J.,  &  Waltman,  L.  (2010).  Software 
+survey: VOSviewer, a computer program for 
+bibliometric mapping. Scientometrics, 84(2), 
+523-538.  https://doi.org/10.1007/s11192-
+009-0146-3 
+
+van Eck, N. J., & Waltman, L. (2014). Visualizing 
+bibliometric  networks. 
+In  Y.  Ding,  R. 
+Rousseau,  &  D.  Wolfram  (Eds.),  Measuring 
+scholarly  impact:  Methods  and  practice  (pp. 
+285-320). 
+Springer. 
+https://doi.org/10.1007/978-3-319-10377-
+8_13 
+
+van  Eck,  N.  J.,  Waltman,  L.,  Dekker,  R.,  &  van 
+den  Berg,  J.  (2010).  A  comparison  of  two 
+techniques 
+bibliometric  mapping: 
+Multidimensional scaling and VOS. Journal of 
+the American Society for Information Science 
+and 
+2405-2416. 
+https://doi.org/10.1002/asi.21421 
+
+Technology, 
+
+61(12), 
+
+for 
+
+Newman, M. E. J.,  & Girvan,  M. (2004).  Finding 
+and  evaluating  community  structure 
+in 
+networks.  Physical  Review  E,  69(2). 
+https://doi.org/10.1103/PhysRevE.69.02611
+3 
+
+Olbrich, S. (2009). Reflecting the past decades of 
+ICIS,  ECIS,  and  AMCIS  proceedings  –  a 
+Design  Science  perspective.  Proceedings  of 
+the  Thirtieth  International  Conference  On 
+Information Systems, 116, 1-8. 
+
+Özköse,  H.,  &  Gencer,  C.  (2017).  Bibliometric 
+analysis  and  mapping  of  Management 
+Information  Systems  field.  Gazi  University 
+Journal of Science, 30(4), 356-371. 
+
+Pritchard,  A.  (1969).  Statistical  bibliography  or 
+bibliometrics.  Journal  of  Documentation, 
+25(4), 348-349. 
+
+Segev,  E.  (Ed.).  (2021).  Semantic  Network 
+
+Analysis in Social Sciences. Routledge. 
+
+Topi, H., Valacich, J. S., Wright, R. T., Kaiser, K. 
+M., Nunamaker, Jr., J. F., Sipior, J. C., & de 
+
+Waltman, L., van Eck, N. J., & Noyons, E. C. M. 
+(2010).  A  unified  approach  to  mapping  and 
+clustering of bibliometric networks. Journal of 
+Informetrics, 
+629-635. 
+https://doi.org/10.1016/j.joi.2010.07.002 
+
+4(4), 
+
+Weiss, J. W. (2017). Ethics and CSR research in 
+top  ranked  IS 
+journals,  1980-2013:  A 
+developing trend or anomaly? Proceedings of 
+the  Fiftieth  Hawaii  International  Conference 
+on System Sciences, 5758-5762. 
+
+White, H. D., & McCain, K. W. (1998). Visualizing 
+a discipline: An author co-citation analysis of 
+Information  Science,  1972-1955.  Journal  of 
+Information 
+the  American  Society 
+Science, 
+327-355. 
+49(4), 
+https://doi.org/10.1002/(SICI)1097-
+4571(19980401)49:43.0.CO;2-4 
+
+for 
+
+Zhou,  S.,  &  Loiacono,  E.  (2023).  A  review  of 
+gender  research  in  Information  Systems: 
+From bibliometric analysis to future research 
+directions.  Proceedings  of  the  Twenty-fifth 
+Southern 
+Information 
+Systems Conference, 56. 
+
+Association 
+
+for 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 10 
+
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+APPENDIX A 
+Frequency Count and Cluster Tables 
+
+Keyword 
+
+Occurrences 
+
+curriculum 
+assessment 
+information systems 
+accreditation 
+ethics 
+pedagogy 
+database 
+education 
+information technology 
+computer literacy 
+is education 
+systems analysis and design 
+course design 
+
+21 
+15 
+12 
+5 
+10 
+9 
+8 
+8 
+8 
+5 
+8 
+7 
+5 
+
+Total link 
+strength 
+19 
+15 
+14 
+11 
+10 
+9 
+8 
+8 
+8 
+5 
+5 
+5 
+4 
+
+Keyword 
+
+Occurrences 
+
+electronic commerce 
+is curriculum 
+model curriculum 
+curriculum development 
+distance education 
+service learning 
+computer information systems 
+distance learning 
+e-commerce 
+project management 
+technology 
+information systems curriculum 
+programming 
+
+6 
+8 
+5 
+8 
+6 
+7 
+5 
+11 
+6 
+8 
+5 
+5 
+6 
+
+Table 2: 2003-2007 Frequency Counts 
+
+23 (4) 
+July 2025 
+
+Total link 
+strength 
+4 
+4 
+4 
+3 
+3 
+3 
+2 
+2 
+2 
+2 
+2 
+1 
+1 
+
+Accreditation 
+
+accreditation 
+
+Security 
+Curriculum 
+Development 
+curriculum 
+development 
+information 
+security 
+is model 
+curriculum 
+
+pedagogy 
+
+IST 
+Computer 
+Literacy 
+capstone 
+
+computer 
+literacy 
+higher 
+education 
+
+information 
+systems 
+information 
+technology 
+
+usability 
+
+Curricula 
+
+Programming  Assessment 
+
+e-learning/ 
+e-commerce 
+
+IS Core 
+
+case study 
+
+.net 
+
+assessment 
+
+cis 
+
+abet 
+
+certification 
+
+application 
+development 
+
+computer 
+
+Systems 
+Analysis & 
+Design 
+capstone 
+course 
+course design 
+
+curriculum 
+design 
+gis 
+
+collaborative 
+learning 
+distance 
+learning 
+e-business 
+
+is curriculum  methodology 
+
+computer 
+information 
+systems 
+distance 
+education 
+information 
+systems 
+curriculum 
+information 
+systems 
+education 
+is 2002 
+model 
+curriculum 
+is curricula 
+
+it curriculum 
+it education 
+mis 
+
+online 
+education 
+outsourcing 
+
+cobol 
+
+curriculum 
+
+e-commerce 
+
+is education 
+
+database 
+
+education 
+
+electronic 
+commerce 
+
+open source 
+software 
+
+grading 
+
+innovation 
+
+ethics 
+
+sdlc 
+
+is 
+accreditation 
+
+model 
+curriculum 
+
+internet 
+
+java 
+
+security 
+
+privacy 
+
+technology 
+testing 
+
+small college 
+
+programming 
+software tools 
+systems 
+development 
+
+software 
+engineering 
+
+systems 
+analysis 
+web design 
+
+project 
+management 
+service 
+learning 
+
+significant 
+learning 
+
+systems 
+analysis and 
+design 
+
+Table 3: 2003-2007 Clusters 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 11 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+Keyword 
+
+pedagogy 
+information systems 
+information systems education 
+mentoring 
+retention 
+scholarships 
+women 
+computer science 
+education 
+web 2.0 
+minorities 
+computer literacy 
+graduates 
+curriculum 
+higher education 
+information technology 
+software engineering  
+mathematics 
+
+Occurrences  Total link 
+strength 
+43 
+33 
+24 
+22 
+22 
+21 
+21 
+20 
+20 
+20 
+19 
+18 
+18 
+17 
+17 
+17 
+16 
+15 
+
+25 
+15 
+15 
+5 
+6 
+4 
+5 
+6 
+11 
+10 
+4 
+12 
+3 
+17 
+7 
+9 
+5 
+4 
+
+Keyword 
+
+Occurrences 
+
+abet 
+accreditation 
+management information systems 
+assessment 
+is curriculum 
+is education 
+learning 
+database 
+distance education 
+enterprise systems 
+ethics 
+outsourcing 
+social networking 
+business intelligence 
+curriculum design 
+information systems curriculum 
+systems analysis and design 
+
+8 
+9 
+8 
+10 
+12 
+8 
+9 
+7 
+10 
+6 
+12 
+7 
+4 
+6 
+7 
+5 
+7 
+
+23 (4) 
+July 2025 
+
+Total link 
+strength 
+14 
+14 
+14 
+13 
+13 
+13 
+13 
+12 
+12 
+12 
+12 
+12 
+11 
+10 
+10 
+10 
+10 
+
+Table 4: 2008-2012 Frequency Counts 
+
+Computer- 
+mediated  
+learning 
+blackboard 
+
+IS 
+Curriculu
+m 
+capstone 
+experience 
+
+Data (base) 
+(analytics) 
+
+business 
+intelligence 
+
+Retention 
+
+framework 
+
+Social 
+Networking 
+
+collaborativ
+e learning 
+
+Systems 
+Analysis & 
+Design 
+active 
+learning 
+
+IST 
+Education 
+
+Assess/Accre
+d 
+
+Programmin
+g 
+
+Outsourcin
+g 
+
+Pedagog
+y 
+
+Ethics 
+
+case 
+studies 
+
+abet 
+
+alice prog 
+lang 
+
+is 2002 
+
+copyrigh
+t 
+
+ethics 
+
+is 
+research 
+toward 
+educators 
+is 
+undergrad 
+curriculum 
+pedagogy 
+
+capstone 
+
+curriculum 
+design 
+
+computer 
+literacy 
+
+gestalt 
+
+is pedagogy 
+
+capstone 
+course 
+
+distance 
+learning 
+
+accreditation 
+
+intro prog 
+
+it workers 
+
+cloud computing 
+
+computer 
+science 
+
+curriculum 
+dev 
+design 
+
+data mining 
+
+graduates 
+
+data 
+modeling 
+
+mathematic
+s 
+
+instant 
+messaging 
+internet 
+
+cis 
+
+curriculum 
+
+computers 
+
+erp 
+
+database 
+
+mentoring 
+
+distance ed 
+
+enterprise 
+systems 
+
+database 
+design 
+
+minorities 
+
+mobile 
+computing 
+outcomes 
+assessment 
+
+education 
+
+faculty 
+
+feedback 
+
+retention 
+
+privacy 
+
+elearning 
+
+higher ed 
+
+knowledge 
+management 
+
+scholarships 
+
+social 
+networking 
+
+is 2002 
+
+project 
+managemen
+t 
+service 
+learning 
+systems 
+analysis & 
+design 
+
+is 
+education 
+informatio
+n 
+technology 
+motivation 
+
+online 
+education 
+
+soft skills 
+
+assessment 
+
+java 
+
+offshoring 
+
+assurance of 
+learning 
+
+information 
+literacy 
+learning 
+outcomes 
+
+programming 
+
+outsourcing 
+
+prog lang 
+
+skills 
+
+security 
+
+security educ 
+
+tutoring 
+
+twitter 
+
+women 
+
+laboratory-
+based 
+learning 
+mis 
+
+normalizatio
+n 
+
+entrepreneurshi
+p 
+
+information 
+systems 
+
+is 
+curriculum 
+model 
+curriculum 
+sap 
+
+software 
+engineering 
+
+is curr 
+
+learning 
+
+learning 
+management 
+system 
+online learning 
+
+service-oriented 
+architecture 
+technology 
+web 2.0 
+web services 
+
+Table 5: 2008-2012 Clusters 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 12 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+Keyword 
+
+Occurrences 
+
+active learning 
+is curriculum 
+pedagogy 
+online learning 
+experiential learning 
+information systems education 
+cyberbullying 
+privacy 
+programming 
+social networking 
+analytics 
+big data 
+flipped classroom 
+cybersecurity 
+it strategy 
+inverted classroom 
+systems analysis and design 
+cyberharassment 
+distance education 
+higher education 
+
+14 
+11 
+11 
+9 
+8 
+6 
+4 
+6 
+9 
+5 
+6 
+8 
+6 
+6 
+5 
+3 
+7 
+3 
+4 
+4 
+
+Total link 
+strength 
+26 
+18 
+15 
+14 
+13 
+13 
+12 
+12 
+12 
+12 
+11 
+11 
+11 
+10 
+10 
+9 
+9 
+8 
+8 
+8 
+
+Keyword 
+
+Occurrences 
+
+assessment 
+curriculum 
+e-learning 
+engagement 
+java 
+problem solving 
+security 
+social media 
+business analytics 
+business intelligence 
+information technology 
+learning styles 
+online education 
+abet 
+accreditation 
+course design 
+data science 
+teaching 
+team-based learning 
+
+7 
+7 
+3 
+4 
+4 
+3 
+4 
+7 
+5 
+5 
+4 
+3 
+3 
+3 
+3 
+3 
+3 
+3 
+3 
+
+Total link 
+strength 
+7 
+7 
+7 
+7 
+7 
+7 
+7 
+7 
+6 
+
+6 
+6 
+6 
+5 
+5 
+5 
+5 
+5 
+5 
+
+Table 6: 2013-2017 Frequency Counts 
+
+Programming 
+collaborative 
+learning 
+curriculum 
+
+Online Learning 
+course design 
+
+Big Data 
+big data 
+
+Pedagogy 
+active learning 
+
+IS Curriculum?? 
+analytics 
+
+Assessment 
+abet 
+
+distance education 
+
+business analytics 
+
+cloud computing 
+
+database design 
+
+accreditation 
+
+Cybersecurity 
+classroom 
+innovation 
+curriculum 
+development 
+cyberbullying 
+
+it strategy 
+
+e-learning 
+
+cyberharassment 
+
+java 
+
+erp 
+
+cybersecurity 
+
+music 
+
+learning styles 
+
+education 
+
+programming 
+
+online classes 
+
+online education 
+
+online learning 
+
+higher education 
+
+information 
+technology 
+instructional 
+design 
+security 
+social networking 
+
+project 
+management 
+python 
+
+team-based 
+learning 
+
+business 
+intelligence 
+community 
+engagement 
+data science 
+
+information 
+systems 
+curriculum 
+is2002 model 
+curriculum 
+privacy 
+
+flipped classroom 
+
+engagement 
+
+assessment 
+
+information 
+systems education 
+inverted classroom 
+
+is curriculum 
+
+entrepreneurship 
+
+database 
+
+information 
+systems 
+problem solving 
+
+experiential 
+learning 
+is education 
+
+pedagogy 
+
+social media 
+
+student 
+engagement 
+
+systems analysis 
+and design 
+
+teaching 
+
+teaching case 
+
+Table 7: 2013-2017 Clusters 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 13 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+Keyword 
+
+Occurrences 
+
+pedagogy 
+online learning 
+pandemic 
+covid 19 
+faculty 
+grading impact 
+remote learning 
+capstone course 
+scrum 
+asp.net mvc 
+attendance 
+attentiveness 
+cybersecurity 
+distraction 
+participation 
+
+22 
+7 
+6 
+5 
+5 
+5 
+5 
+4 
+4 
+3 
+3 
+3 
+12 
+3 
+3 
+
+Total link 
+strength 
+32 
+26 
+26 
+25 
+25 
+25 
+25 
+13 
+13 
+12 
+12 
+12 
+12 
+12 
+12 
+
+Keyword 
+
+Occurrences 
+
+scrum project 
+student performance 
+learned helplessness 
+procrastination 
+data analytics 
+apprenticeship 
+assessment 
+education 
+information systems 
+work-based learning 
+business analytics 
+certification 
+coding bootcamps 
+content analysis 
+data science 
+
+3 
+3 
+5 
+6 
+12 
+3 
+4 
+4 
+6 
+3 
+7 
+3 
+3 
+3 
+3 
+
+Table 8: 2018-2022 Frequency Counts 
+
+23 (4) 
+July 2025 
+
+Total link 
+strength 
+12 
+12 
+10 
+10 
+10 
+9 
+6 
+6 
+6 
+6 
+5 
+5 
+5 
+5 
+5 
+
+Cybersecurity 
+
+Pedagogy 
+
+apprenticeship 
+
+active learning 
+
+assessment 
+
+certification 
+
+cybersecurity 
+
+digital badge 
+
+computing 
+education 
+covid-19 
+
+Business 
+Analytics 
+business 
+analytics 
+coding 
+bootcamps 
+content analysis 
+
+education in 
+data analytics 
+
+Online 
+Learning 
+covid 19 
+
+Data Analytics 
+
+data analytics 
+
+Attendance-
+Attentiveness 
+attendance 
+
+IS Curriculum 
+
+competency 
+
+Capstone 
+Course 
+agile 
+
+faculty 
+
+data science 
+
+attentiveness 
+
+curriculum 
+
+asp.net mvc 
+
+grading impact 
+
+education 
+
+distraction 
+
+online learning 
+
+retention 
+
+participation 
+
+capstone 
+course 
+scrum 
+
+scrum project 
+
+information 
+systems 
+information 
+systems 
+curriculum 
+project 
+management 
+higher 
+education 
+
+digital literacy 
+
+pedagogy 
+
+is curriculum 
+
+pandemic 
+
+stem 
+
+learning 
+outcomes 
+online 
+education 
+
+work-based 
+learning 
+
+raspberry pi 
+
+programming 
+
+remote learning 
+
+teaching 
+strategies 
+
+systems 
+analysis and 
+design 
+
+student 
+satisfaction 
+
+learned 
+helplessness 
+procrastination 
+
+student 
+performance 
+
+learning 
+
+self-regulated 
+learning 
+disabilities 
+
+Table 9: 2018-2022 Clusters 
+
+Keyword 
+
+Occurrences 
+
+experiential learning 
+data analytics 
+pedagogy 
+curriculum development 
+interdisciplinary 
+practicum 
+analytics 
+
+7 
+7 
+8 
+4 
+3 
+3 
+4 
+
+Total link 
+strength 
+21 
+19 
+18 
+16 
+15 
+15 
+11 
+
+Keyword 
+
+Occurrences 
+
+data literacy 
+tableau 
+artificial intelligence 
+information systems 
+business education 
+curriculum 
+chatgpt 
+
+3 
+3 
+6 
+4 
+3 
+3 
+3 
+
+Total link 
+strength 
+8 
+8 
+6 
+5 
+3 
+3 
+2 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 14 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+data visualization 
+excel 
+
+6 
+3 
+
+9 
+9 
+
+cybersecurity 
+machine learning 
+
+4 
+4 
+
+2 
+2 
+
+Table 10: 2023-2024 Frequency Counts 
+
+Analytics/Data Viz 
+analytics 
+business education 
+curriculum 
+data literacy 
+data visualization 
+excel 
+tableau 
+
+Pedagogy 
+curriculum development 
+data analytics 
+experiential learning 
+interdisciplinary 
+pedagogy 
+practicum 
+
+AI 
+artificial intelligence 
+chatgpt 
+cybersecurity 
+information systems 
+machine learning 
+
+Table 11: 2023-2024 Clusters 
+
+Keyword 
+
+Occurrences 
+
+pedagogy 
+curriculum 
+information systems 
+online learning 
+assessment 
+information systems education 
+information technology 
+is curriculum 
+education 
+faculty 
+accreditation 
+active learning 
+data analytics 
+pandemic 
+privacy 
+ethics 
+experiential learning 
+covid 19 
+grading impact 
+remote learning 
+systems analysis and design 
+computer science 
+higher education 
+curriculum development 
+database 
+programming 
+
+75 
+51 
+45 
+26 
+37 
+25 
+23 
+37 
+27 
+10 
+19 
+26 
+20 
+8 
+16 
+25 
+19 
+6 
+6 
+6 
+24 
+11 
+19 
+19 
+19 
+24 
+
+Total link 
+strength 
+106 
+63 
+62 
+51 
+44 
+44 
+42 
+42 
+39 
+39 
+37 
+37 
+35 
+32 
+32 
+31 
+31 
+30 
+30 
+30 
+29 
+28 
+26 
+25 
+25 
+25 
+
+Keyword 
+
+Occurrences 
+
+business intelligence 
+is education 
+distance education 
+abet 
+computer literacy 
+online education 
+security 
+social networking 
+information systems curriculum 
+retention 
+service learning 
+student perceptions 
+analytics 
+curriculum design 
+cybersecurity 
+internet 
+learning 
+software engineering 
+web 2.0 
+business analytics 
+capstone course 
+cyberbullying 
+entrepreneurship 
+big data 
+certification 
+distance learning 
+
+14 
+21 
+20 
+14 
+18 
+15 
+15 
+9 
+17 
+11 
+15 
+9 
+11 
+14 
+22 
+8 
+15 
+12 
+13 
+14 
+14 
+6 
+11 
+10 
+10 
+17 
+
+Total link 
+strength 
+24 
+23 
+22 
+21 
+21 
+21 
+21 
+20 
+19 
+19 
+19 
+19 
+18 
+18 
+18 
+18 
+18 
+18 
+18 
+17 
+17 
+17 
+17 
+16 
+16 
+16 
+
+Table 12: Full Network Keyword Frequency and Total Link Strength  
+(sorted by Total Link Strength) 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 15 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+23 (4) 
+July 2025 
+
+Programming 
+
+intro 
+programming 
+java 
+
+programming 
+
+programming 
+language 
+
+COVID 
+impact 
+on Online 
+Learning 
+covid 19 
+
+faculty 
+
+grading 
+impact 
+online 
+learning 
+
+pandemic 
+
+python 
+
+remote 
+learning 
+
+erp 
+
+information 
+systems 
+curriculum 
+
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+Ethics/Privacy 
+Social Net 
+
+Curriculum 
+Assessment 
+
+Analytics 
+
+Pedagogy 
+
+capstone 
+
+abet 
+
+analytics 
+
+active learning 
+
+Distance 
+Ed 
+Learning 
+
+computer 
+literacy 
+course 
+design 
+distance 
+education 
+distance 
+learning 
+
+erp 
+
+MIS Ed 
+Issues 
+
+IS Topics 
+
+computer 
+science 
+design 
+
+education 
+
+enrollment 
+
+management 
+information 
+systems 
+mentoring 
+
+outsourcing 
+
+enterprise 
+systems 
+higher 
+education 
+information 
+systems 
+information 
+systems 
+curriculum 
+information 
+technology 
+instructional 
+design 
+
+learning 
+outcomes 
+simulation 
+
+e-learning 
+
+is curricula 
+
+artificial 
+intelligence 
+big data 
+
+business 
+analytics 
+
+business 
+intelligence 
+critical 
+thinking 
+
+agile 
+
+capstone 
+course 
+covid-19 
+
+curriculum 
+development 
+experiential 
+learning 
+
+curriculum 
+design 
+cybersecurity 
+
+is curriculum 
+
+is education 
+
+flipped 
+classroom 
+framework 
+
+retention 
+
+software 
+engineering 
+
+scholarships 
+
+skills 
+
+women 
+
+information 
+systems 
+education 
+learning 
+
+learning 
+styles 
+online 
+education 
+teaching 
+
+data analytics 
+
+it strategy 
+
+data mining 
+
+motivation 
+
+data science 
+
+data 
+visualization 
+information 
+security 
+machine 
+learning 
+social media 
+
+student 
+perceptions 
+
+online 
+teaching 
+pedagogy 
+
+procrastination 
+
+project 
+management 
+service 
+learning 
+student 
+engagement 
+
+Table 13: Full Network Clusters 
+
+cloud computing 
+
+accreditation 
+
+collaborative 
+learning 
+cyberbullying 
+
+assessment 
+
+case study 
+
+e-commerce 
+
+certification 
+
+electronic 
+commerce 
+
+entrepreneurship 
+
+computer 
+information 
+systems 
+curriculum 
+
+ethics 
+
+database 
+
+information 
+systems 
+curriculum 
+innovation 
+
+internet 
+
+mobile 
+computing 
+privacy 
+
+database 
+design 
+
+is 2002 model 
+curriculum 
+is model 
+curriculum 
+it curriculum 
+
+it education 
+
+social networking 
+
+normalization 
+
+technology 
+
+web 2.0 
+
+web 
+development 
+web services 
+
+project based 
+learning 
+security 
+
+soft skills 
+
+systems 
+analysis and 
+design 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 16 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+23 (4) 
+July 2025 
+
+Era 5 
+analytics, data 
+viz 
+
+pedagogy 
+
+AI 
+
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+Rank 
+1 
+
+2 
+
+3 
+
+4 
+
+5 
+
+6 
+
+7 
+
+8 
+9 
+
+Era 1 
+curriculum, assessment, 
+accreditation, model 
+curriculum 
+ist computer literacy 
+
+Era 2 
+pedagogy 
+
+Era 3 
+pedagogy 
+
+Era 4 
+pedagogy, Covid 19 
+
+IS curriculum 
+
+online learning 
+
+ethics, e-learning, e-
+commerce 
+
+pedagogy, curriculum 
+development 
+
+Student Issues: 
+mentoring, retention, 
+scholarships, women, 
+minorities 
+online education 
+
+programming, database 
+
+accreditation, 
+assessment 
+
+assessment, 
+experiential learning 
+
+cybersecurity, 
+cyberbullying, social 
+networking 
+
+analytics, privacy 
+
+IS core 
+
+IS education 
+
+programming 
+
+SAD, course design, 
+service learning, project 
+management 
+
+Curriculum variations 
+
+Database, data analytics 
+
+analytics, 
+engagement, 
+problem solving, 
+social media 
+
+Ethics 
+Programming 
+
+online learning, 
+pandemic, faculty, 
+grading impact, remote 
+learning 
+capstone course, 
+scrum, asp.net mvc, 
+scrum project 
+
+attendance, 
+attentiveness, 
+distraction, participation, 
+student performance 
+cybersecurity, 
+apprenticeship, 
+assessment 
+data analytics, 
+education, data science 
+business analytics, 
+coding bootcamps, 
+content analysis 
+
+Table 14: Rank Changes from Eras 1 to 5 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 17 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+APPENDIX B 
+Term Maps 
+
+Figure 1: 2003-2007 Term Map 
+
+Figure 2: 2008-2012 Term Map 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 18 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+Figure  3: 2013-2017 Term Map 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 19 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+Figure 4: 2018-2022 Term Map 
+
+Figure 5: 2023-2024 Term Map 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 20 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+Figure 6: Full Network Term Map 
+
+Figure 7: Full Network Time Overlay 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 21 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+Online Maps and Route-Finding –  
+Huge Success, With Some Nagging Problems … 
+
+Paul D Witman 
+witman@ieee.org 
+
+Jim Prior 
+jr2dg.consulting@gmail.com 
+
+Tracy Nickl 
+tnickl@callutheran.edu 
+
+Christopher Njunge 
+cknjunge@yahoo.com 
+
+California Lutheran University 
+Thousand Oaks, CA 91360 
+
+Stephen Ng’etich 
+stephenngetich5@gmail.com 
+Strathmore University 
+Nairobi, Kenya 
+
+Ayla Chaudhry 
+25110213@lums.edu.pk 
+Lahore University of Management Science,  
+Lahore, Pakistan 
+
+Hook 
+
+Leverage students’ real-world experiences in the use of online maps and routes to discuss fundamental 
+IT  and  business  principles  including  maps,  routing,  multi-factor  decisions,  as  well  as  gathering, 
+evaluating, and using information. 
+
+Abstract  
+
+Technological tools continue to permeate modern life, to the extent that they can supplant previously 
+fundamental  skills.  Maps  and  route-finding  are  no  exception.  This  complex  function,  driven  by  huge 
+volumes of data, makes modern transportation easier, more resilient, and at the same time riskier and 
+more dependent on  a sometimes-opaque technology  and  revenue  model. This case  study explores a 
+variety of instances of online mapping and route-finding, and invites the student to consider how these 
+routes are identified and influenced.  
+
+Keywords: Teaching Case, Online Maps, Route-finding, Route optimization, Rerouting. 
+
+Recommended Citation: Witman, P.D., Prior, J., Nickl, T., Njunge, C., Ng’etich, S., Chaudhry, A., 
+(2025). Online Maps and Route-Finding – Huge Success, With Some Nagging Problems. Information 
+Systems Education Journal v23 n4 pp. 22-33. DOI# https://doi.org/10.62273/RIQR771 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 22 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+Online Maps and Route-Finding –  
+Huge Success, With Some Nagging Problems … 
+
+Paul D. Witman, Jim Prior, Tracy Nicki, Christopher Njunge, Stephen Ng’etich and Ayla Chaudhry 
+
+1. OPENING STORY 
+
+Helen was on a seemingly straightforward, 5-hour 
+drive northeast from Los Angeles to Las Vegas to 
+pick up  her  son at the airport, en  route to  Utah 
+for  Thanksgiving.  But  what  started  as  a  time-
+saving  detour  ended  for  her  in  a  2-hour  delay, 
+only to get back to where she started the detour.  
+
+Early  morning  on  Monday  before  Thanksgiving 
+2023,  Google  Maps  had  said  the  route  was  in 
+good shape – north on Interstate 15 (I15) from 
+Victorville  to  Las  Vegas.  All  was  well  until  she 
+approached the Nevada border. At about 2 p.m., 
+authorities  had  issued  a  closure  notice  for  that 
+section of the freeway due to dust storms. 
+
+She did not know about the closure at the time. 
+She had only relied on the visual map updates to 
+re-route  around  issues.  Google  Maps  said  she 
+should  get  off  at  an  isolated  desert  gas  station 
+exit  and  take  an  excursion  several  miles  to  the 
+north  of  I15  (see  Figure  1),  for  about  40  miles 
+total. This would (per Google Maps) save her 56 
+minutes of travel time. 
+
+Figure 1: Google Maps and its Nov 2023 
+proposed diversion around a dust storm 
+(Source: Google Maps) 
+
+More details will follow in Scenario 1, below – but 
+in  short,  the  detour  was  impassable.  She  spent 
+two  hours  on  that  diversion  –  5  minutes  going 
+away from the highway, and the rest of the time 
+
+moving  very  slowly  to  get  back  to  the  highway 
+once  she  was  alerted  to  the  impassable  route. 
+News reports the next day confirmed that Google 
+had  indeed  been  recommending  an  impassable 
+detour. 
+
+Google Maps later issued an apology for this issue 
+and  indicated  that  they  would  “no  longer 
+recommend” (DuBose, 2023) this detour.  
+
+We hope that this set of real-world cases will help 
+students understand and analyze these situations 
+from several fundamental perspectives. Note that 
+all references to people by first name only are real 
+people unless stated otherwise. 
+
+2. TECHNICAL BACKGROUND 
+
+There  are  a  number  of  technical  concepts  that 
+apply  to  various  aspects  of  this  case,  and  we 
+identify and describe them briefly here. 
+
+Theoretical Underpinnings of Online Maps 
+and Routing 
+
+The  fundamental  principle  behind  route-finding 
+treats  a  map  as  a  series  of  road  segments,  of 
+varying  length.  The  map  services  capture  static 
+data  about  those  segments  (endpoints,  length, 
+shape, speed limit, slope, etc.). They also capture 
+and can respond to dynamic (live) data, including 
+actual speeds, reported issues, and details about 
+actual  driver  behavior  in  those  areas.  Each 
+segment  (known  in  graph  mathematics  as  an 
+edge) is connected to its neighbor segments by a 
+node,  which  could  be  a  road  continuation  or  an 
+intersection of some sort, with or without traffic 
+controls. 
+
+Choosing  a  route 
+function  of  many 
+is  a 
+parameters. One of these functions examines the 
+desired  start  and  end  points  of  the  requested 
+route, and then lays out alternative graph paths 
+that  will  accomplish  the  desired  end  points. 
+Multiple  routes  are  tested  to  find  the  best  one, 
+based  on  a  range  of  criteria  (Gregory,  2011). 
+While this is not  a treatise on  the complexity of 
+the  problem,  we  outline  the  challenges  to  help 
+better understand the root causes of mapping and 
+routing issues.  
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 23 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+The fundamental algorithm for doing that step is 
+called A* (Luxen & Vetter, 2011), and its primary 
+function  is  to  find  the  best  path  between  two 
+points on a graph. There is metadata about each 
+edge  (the  connection  between  nodes)  that 
+describe  that  edge’s  speed  limit,  energy  cost, 
+tolls,  traffic,  etc.  The  combination  of  this 
+metadata aggregated across each potential route 
+is used to find the best route(s). 
+
+As  a  visual  example,  consider  the  4x4  graph 
+below, with its 16 segments or edges and its 16 
+nodes.  Getting  from  A  to  P  could  be  done 
+hundreds  of  ways,  many  of  which  would  be 
+illogical  to  a  human  traveler.  We  have  outlined 
+three of them below, in Figure 2. 
+
+Fewest turns 
+
+• 
+•  Zig-zagging diagonally across 
+•  A  more  circuitous  route  that  involves 
+
+some apparent backtracking 
+
+Figure 2: Example graph traversals 
+(adapted from (Gregory, 2011)) 
+
+That said, it is not obvious from the information 
+in Figure 2 which route is evaluated as best. We 
+do not know speed or cost in any units, and we 
+do  not  know  what  any  specific  user  would  call 
+best.  These  route  options  also  may  result  in 
+apparent irrational  routes, such as the one with 
+backtracking in Figure 2. 
+
+The  algorithm  can  also  quickly  become 
+computationally  expensive,  comparing  vast 
+numbers  of  potential  routes  even  for  short 
+distances.  The  map-routing  variants  of  this 
+
+algorithm  narrow  the  scope  of  the  potential 
+routes,  reducing  memory  and  computation 
+requirements.  
+
+Map data can change for many reasons, so map 
+data  used  for  routing  must  be  maintained  and 
+updated, usually by the company that shows the 
+maps. The map maintainers also keep track of the 
+Functional  Classification  of  each  road  segment, 
+with  slight  variations  in  definitions  at  the  lower 
+levels: 
+
+• 
+• 
+• 
+
+• 
+• 
+
+FC1 – Interstate or other major highways 
+FC2 – Other arterial highways 
+FC3 – Collector roads (US Department of 
+Transportation, 2000) 
+FC4 – Local roads – higher volume 
+FC5 – Local roads – residential and lower 
+volume (Gregory, 2011)  
+
+The objective of this information is to try to move 
+smoothly  from  lower-volume  (capacity)  and 
+lower-speed roads to higher-volume roads, so as 
+not to overload the lower-volume roads. This also 
+helps choose routes more or less appropriate for 
+other vehicles such as bicycles. 
+
+Route Finding Parameters and Constraints 
+As noted previously, the definition of  best route 
+will vary amongst users, and will depend on time, 
+weather,  preferences,  and  many  other  factors. 
+Parameters  used  in  assessing  best  route  before 
+presenting  options  to  the  user  include  shortest 
+distance, shortest travel time, most cost-efficient, 
+most  environmentally  friendly,  etc.  (Intellias, 
+2022).  
+
+Among  the  many  fine-grained  details,  thorough 
+route-finding requires knowing exactly where the 
+user  wants  to  start  and  finish.  A  university 
+campus,  for  example,  may  have  dozens  of 
+buildings and many parking or drop-off locations, 
+and just  knowing the address of  a building may 
+not be enough to get to the right place for visitors, 
+students, or staff to park. 
+
+Road  information  also  includes  other  dynamic 
+data,  collected  from  a  number  of  sources,  but 
+often from the users’ communications back to the 
+mapping service. These include actual speed at a 
+particular  point, 
+road  conditions,  weather, 
+accidents,  and  the  like.  Services  like  Google’s 
+Waze  invite  users  to  submit  information  about 
+traffic  situations  to  allow more  responsive  route 
+adjustments. 
+
+Other data (both static and dynamic) that may be 
+captured  and  used  by  map  routing  algorithms 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 24 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+include  a  variety  of  items,  as  noted  in  Table  1, 
+below.  
+
+Business Use of Online Maps and Routing 
+While  billions  of  individuals  use  online  mapping 
+and route finding apps world-wide, there is ample 
+business use as well (Wylie, 2024). For example… 
+
+Logistics and Transportation 
+Route  optimization  is  the  process  of  finding  the 
+fastest  and  most  cost-effective  way  to  deliver 
+products 
+to  customers.  Cost  savings  are 
+generated by shorter distances and travel times, 
+with 
+fuel 
+consumption,  wear  and  tear  on  vehicles  and 
+associated  maintenance.  Optimized  delivery 
+routes  lead  to  on-time  delivery,  resulting  in 
+improved customer satisfaction. 
+
+corresponding 
+
+reductions 
+
+in 
+
+Category 
+Type of transit 
+
+Weather 
+
+Road work 
+
+New roads and 
+routes 
+Changes to 
+speed limits 
+Accidents 
+
+Traffic 
+
+Viability of 
+road vs. 
+vehicle 
+Side effects of 
+routes 
+
+Avoiding 
+things 
+
+Examples 
+car, public transit, two-
+wheel motorized, bicycle, 
+walking 
+Sandstorms 
+Floods 
+Snow, ice 
+Planned 
+Emergency 
+Planned 
+Emergency or temporary 
+Temporary 
+Permanent 
+Severe, causing lane or 
+route closures 
+Moderate, causing delays 
+At route planning 
+As the trip progresses 
+Live data 
+Historical data 
+Dirt roads, wet conditions, 
+etc. 
+
+Environmental impact 
+Scenery 
+Tolls 
+Fuel costs 
+Business traffic impact – pro 
+or con 
+Neighborhood traffic impact 
+Highways 
+Tolls 
+Ferries 
+Mountain passes 
+
+Table 1: Additional parameters to consider 
+(Google Inc., 2022) 
+
+Ride-Hailing Services 
+
+Real-time  navigation  combines  historical  travel 
+times for  routes with  real-time traffic conditions 
+leading  to  a  reduction  in  travel  time  and  fuel 
+savings, benefiting both drivers and passengers. 
+Online mapping and  route-finding apps that use 
+can  provide  precise 
+real-time  navigation 
+estimated times of arrival (ETA) of drivers as well 
+as the final destination. Similarly, identifying the 
+best driver for a passenger – the one closest who 
+can arrive quickest – can be achieved in the very 
+same way. 
+
+route-finding 
+
+Public Transportation 
+Many  transit  agencies  leverage  online  mapping 
+sometimes 
+and 
+embedded  within  their  own  apps  –  to  aid 
+customers as they plan the best routes for where 
+they want to go. 
+
+systems  – 
+
+Travel and Tourism 
+The  common  features  of  online  mapping  and 
+route-finding apps provide tourists with valuable 
+tools.  Directions  can  be  provided  for  driving, 
+walking,  public  transportation,  and  cycling. 
+Underlying  search  engines  help  users  locate 
+nearby  restaurants,  hotels,  etc.  Different  views 
+like street, landscape, and earth give travelers an 
+introduction to unfamiliar locations.  
+
+Delivery Services 
+Delivery  services  require  the  same  degree  of 
+efficiency 
+route 
+planning/optimization  that  other  industries  do 
+(above). In this case, successful deliveries lead to 
+cost savings and increased customer satisfaction. 
+
+effectiveness 
+
+and 
+
+of 
+
+Retail and E-commerce 
+Store  locators  are  a  critical  component  of  retail 
+and  E-commerce  companies’  web  and  app 
+presence. They provide important information to 
+existing  and  potential  customers,  such  as 
+location(s) and directions leading to an increase 
+in website traffic and customers in stores. 
+
+Event Planning 
+Event  planners  frequently  publish  client  events 
+online  and  they  often  enhance  event  websites 
+with  dynamic  mapping  and  direction  capabilities 
+facilitating guest navigation. 
+
+Service Call Businesses 
+Organizations  that  provide  on-site  services  to 
+businesses  or  consumers  may  utilize  mapping 
+and route optimization  to deal with  their unique 
+challenges. This includes the logistical and routing 
+complexities of getting the right people, with the 
+right tools and supplies, to the right place at the 
+time  promised.  It  may  also  involve  alerting  the 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 25 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+customer to changes in schedule based on traffic, 
+prior job completion time, etc.  
+
+Scenario  1  –  Off  the  highway  and  into  the 
+desert! 
+
+Customized optimizations 
+Various  map  vendors  provide  tools  to  allow 
+businesses to customize their route planning. This 
+may include route restrictions for certain vehicle 
+lengths,  number  of  axles,  vehicle  weight,  and 
+other  factors,  such  as  avoiding  left  turns.  Some 
+of  these  are  simply  consumer  tools,  whereas 
+others  are  commercially-focused  tools,  with 
+specialized  capabilities  aimed  at  the  business 
+market.  
+
+Online Maps as a product 
+Like  many  other  free  (as  in  not  charging  an 
+explicit  fee)  services,  users  would  be  wise  to 
+recognize  that  maps  and  routes  are  products  in 
+and  of  themselves.  As  such,  the  map  provider 
+needs  to  consider  ways  to  monetize  their  map 
+presentations.  Such  mechanisms  may  include 
+advertising  to  prioritize  what  appears  on  user 
+map  displays,  as  well  as  fees  for  the  use  of 
+mapping services to find office or store locations, 
+plan travel routes, or other activities appropriate 
+to a business’ operation. 
+
+and 
+
+stakeholders 
+
+Organizational 
+stakeholder groups 
+Note that many stakeholders have an interest in 
+the  delivery  of  mapping  and  routing  services. 
+Users  want  good  directions  and  meaningful, 
+relevant  information  on  the  map.  Businesses 
+along the route want visibility for their services. 
+The map provider is interested in gathering data 
+from  map  users,  and  in  selling  advertising 
+exposure. Public services agencies are interested 
+in  travel  safety  and  efficiency.  And  individuals 
+living or working along the routes are interested 
+in  keeping  appropriate  levels  of  traffic  in  their 
+areas,  and  defending  against  excessive  traffic 
+loads.  As  such,  each  stakeholder  or  group  may 
+press  the  map  providers  to  take  steps  to  meet 
+their  specific  needs,  possibly  at  the  expense  of 
+other  stakeholders’  needs.  This  presents  a 
+challenge  for  map  providers  to  balance  all  of 
+these needs against its own interests as well.  
+
+Picking up from the Opening Story above, Helen 
+was assessing the online map routing suggestion 
+to go off into the desert. As she approached the 
+exit, she had the good fortune to be able to see 
+ahead. I15 was still moving, but slowly. The exit 
+onto the detour was moving well. However, there 
+was a long line of cars coming slowly down to the 
+I15 from that same detour – why? She had only 
+about  30  seconds  to  decide.  She  thought  those 
+cars coming off of the detour could be a queue of 
+vehicles coming southeast from Las Vegas. 
+
+Google Maps had saved her time before, so  she 
+decided  to  risk  it.  As  she  motored  north,  away 
+from  I15,  she  passed  a  solidly  packed,  barely 
+moving line of vehicles coming south. About 1.5 
+miles  off  I15,  a  southbound  driver  flagged  her 
+down, suggested  she turn around,  and reported 
+that “the road is closed up there; you will either 
+get stuck or have to join the line further back.” 
+
+She promptly headed back to I15. The entire time 
+she  was  returning  from  the  detour  to  I15,  she 
+continued to see groups of cars coming up from 
+I15.  She  does  not  know  what  prompted  those 
+folks to try the detour, or when or even if Google 
+Maps stopped recommending that detour in that 
+time period. 
+
+Others were not as lucky. News reports from the 
+following  days  indicated  that  thousands  of 
+vehicles had taken these routes, and some of the 
+earliest  to  try  the  detour  drove  well  past  their 
+vehicle capabilities, with at least one needing to 
+call a tow-service to recover their broken vehicle, 
+and reporting that for part of the detour they were 
+driving only 2-3 mph due to the dirt road’s poor 
+condition. 
+Questions 
+
+•  What data would you expect Google Maps 
+to have available that might have enabled 
+them  to  detect  this  problem  and  stop 
+sending people over this detour? 
+
+•  What  are 
+
+the  risks  of  using 
+
+this 
+information  to  disqualify  or  downrate 
+alternative routes? 
+
+3. DISCUSSION SCENARIOS 
+
+vendors obtain such data?  
+
+•  Where  could  Google  or  other  map 
+
+The following scenarios may be assigned by your 
+instructor as individual or group exercises. Each 
+is  designed  to  be  self-contained,  so  you  could 
+analyze  any  one  scenario  on  its  own,  and  from 
+either a technical level or an organizational level.  
+
+•  What were the key factors that led Helen 
+to take the detour despite potential risks? 
+•  What  role  could  social  media  play  in 
+providing  timely  updates  to  travelers 
+during emergencies like this? 
+
+•  How  might  real-time  weather  updates 
+and/or social media data improve detour 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 26 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+suggestions 
+
+•  What other questions or observations can 
+you make about this scenario as it relates 
+to  the  principles  of  online  mapping  and 
+route-finding? 
+
+Scenario 2 – A Winter Wonder Land? 
+
+Issues  that  arise  while  using  online  maps  and 
+irritating,  causing 
+navigation  apps  can  be 
+unnecessary  delays.  Winter  storms  can  make 
+these  challenges  much  more  problematic  and 
+dangerous. 
+
+Cascades  closed  due  to  heavy  snow  and 
+dangerous  travel  conditions,  Washington  State 
+Patrol troopers are warning drivers not to attempt 
+to  find  their  own  way  over  the  mountains  on 
+forest roads. Sgt. Darren Wright said that asking 
+popular  GPS  navigation  mapping  programs  to 
+plan  a  route  could  send  you  on  a  dangerous 
+detour  to  seldom-traveled  forest  roads  that  are 
+not  designed  for  regular  vehicular  traffic.  "We 
+really  discourage  this  idea  for  safety  reasons." 
+(Sistek, 2022). 
+
+Questions 
+
+Consider 
+summaries of their associated articles. 
+
+following  headlines  and 
+
+the 
+
+the 
+
+"Drivers  Say  Google  Maps  Failed  Them  in 
+Snowstorm" 
+Drivers  complained  that  when  highways  were 
+closed due to record-breaking snowfall,  services 
+like  Google  Maps  and  Waze  sent  them  on 
+hazardous  detours  through  mountain  passes. 
+Crystal  Kolden  tweeted  about  one  such  route, 
+saying "This is an abject failure. You are sending 
+people up a poorly maintained forest road to their 
+death  in  a  severe  blizzard."  No  deaths  were 
+reported,  though  one  family  from  Southern 
+California was stranded for two hours when their 
+vehicle  got  stuck  on  a  snow-covered  dirt  road. 
+They had ignored illuminated warnings signs and 
+followed  GPS 
+instead.  Caltrans 
+spokeswoman  Raquel  Borrayo  said  that  people 
+using  mapping  apps  to  dodge  closures  can  face 
+"precarious  and  dangerous  situations  with 
+unplowed  roads,  heavy  amounts  of  snow,  and 
+zero cellphone service" (Quinn, 2021).  
+
+instructions 
+
+regularly 
+
+"Google  Maps  Sending  Drivers  To  Unmaintained 
+Dirt Roads During Blizzards" 
+Every  winter,  the  Sweetwater  County  Sheriff’s 
+Office 
+rescues  people  stuck  on 
+unmaintained  seasonal  dirt  roads.  "The  drivers 
+did  not  intentionally  seek  them  out,  they  were 
+guided  there,"  said  Jason  Mower,  Sweetwater 
+County’s  public  affairs  director.  “Each  was 
+mistakenly  misled  to  the  same  remote  roads 
+thanks to their in-car GPS navigation systems.” It 
+has  gotten  so  bad  that  the  county  had  to  close 
+roads,  build  fences  and  make  signs  that  say, 
+“Your  GPS  is  wrong.  This  road  is  closed!!”  (Orr, 
+2023). 
+
+"Washington  police  urge  caution  against  using 
+Google,  Apple  Maps  detours  onto  remote  forest 
+roads" 
+With  all  main  highways  across  the  Washington 
+
+and  navigation 
+
+•  Given  these  criticisms  of  two  different 
+apps,  what 
+map 
+recommendations for improvement might 
+you  suggest  to  their  product  owners? 
+Consider  technological  approaches  as 
+well 
+internal-to-the-company 
+as 
+processes. 
+
+•  What  additional  steps  might  the  various 
+agencies  take  –  both  technological  and 
+procedural  –  to  prevent  travelers  from 
+endangering  themselves  under  these 
+sorts of circumstances? 
+
+•  What  strategies  can  be  employed  to 
+improve  road  infrastructure  and  signage 
+to  prevent  drivers 
+from  relying  on 
+potentially  dangerous  routes  suggested 
+by online map providers? 
+
+•  Can you suggest a user interface design 
+change  that  might  help  users  better 
+assess the risks of a proposed  detour in 
+adverse weather? 
+
+•  Most  information  systems  are  built  with 
+redundancy,  to  guard  against  isolated 
+failures  and  keep  operations  (driving,  in 
+this case) moving. What actions can users 
+take if their mapping app fails or tries to 
+send  them  into  a  dangerous  area  or 
+route? 
+
+•  What other questions or observations can 
+you make about this scenario as it relates 
+to  the  principles  of  online  mapping  and 
+route-finding? 
+
+Scenario 3 – A Letter from Pakistan 
+
+Ayla  is  an  undergraduate  student  in  Lahore, 
+Pakistan. She writes, sharing her experience with 
+online map and navigation apps. 
+
+But first, a bit of background. Lahore is the capital 
+and largest city in the Punjab province. It is the 
+second largest city in Pakistan, with a population 
+of  over  13  million  people  (Government  of 
+Pakistan, 2023). 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 27 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+Like  many  metropolises,  Lahore  struggles  with 
+traffic challenges. Congestion is a major problem, 
+particularly  during  peak  hours.  Numerous 
+reasons have been identified, key among them:  
+•  Rapid economic growth causing increased 
+
+migration 
+Insufficient public transportation 
+Ineffective urban management 
+Inefficient  road  engineering,  e.g.,  choke 
+points  where  three  and  four  lane  roads 
+collapse into a single lane 
+Increased traffic accidents 
+
+• 
+• 
+• 
+
+• 
+
+In  her  letter,  Ayla  highlighted  two  traffic  issues 
+unique to Lahore: 
+
+VIP Movement 
+It  is  very  common  for  government  parties  to 
+travel  in  multiple  cars,  followed  by  security  in 
+separate  cars,  leading  to  road  closures,  traffic 
+jams  and  blocked  vehicles  from  being  rerouted. 
+Ayla  has  first-hand  experience  in  this  regard. 
+Many  of  the  gates  to  her  housing  complex  are 
+closed when a VIP’s family visits another house in 
+the same complex. She often has to take a longer 
+route  to  exit  the  complex  and  get  on  the  main 
+road. 
+
+Sinkholes 
+Rain frequently causes sinkholes to appear, often 
+underneath  important  and  well-travelled  roads 
+(Our Correspondent, 2023). 
+
+timelier 
+information  delivered 
+fashion,  could  improve  route-finding  in 
+the presence of VIP convoys? 
+
+in  a 
+
+•  Beyond their  use of map and navigation 
+apps,  what  information  systems  might 
+Ayla and her friends use to avoid the “pop 
+up” / unplanned traffic challenges? 
+
+•  What  role  does  cultural  context  play  in 
+the  effectiveness  and  adoption  of  online 
+mapping services in different regions? 
+•  What other questions or observations can 
+you make about this scenario as it relates 
+to  the  principles  of  online  mapping  and 
+route-finding? 
+
+Scenario  4  –  Business  impacts  of  online 
+mapping 
+
+Brian,  a  seasoned  transporter  of  edible  oil, 
+embarked  on  a  crucial  delivery  from  Uganda  to 
+Nairobi.  This  was  a  return  trip 
+from  the 
+manufacturing  plant  to  the  distribution  center. 
+Before he embarked on his journey, he received 
+a permit from the Kenya Revenue Authority, the 
+national  body  responsible for collecting taxes as 
+well  as  providing  a  GPS  tracking  device  for  his 
+cargo. 
+
+While there are many online map and navigation 
+apps available in Pakistan, Google Maps is the go-
+to  app,  as  it  is  world-wide  (Anonymous,  N.D.). 
+And,  as  elsewhere,  there  are  the  common 
+benefits along with various challenges, such as: 
+•  Maps outdated in various locations 
+•  GPS connectivity issues 
+• 
+• 
+
+Traffic information not up to date 
+to 
+Inaccurate  directions  due 
+closures, construction, etc. 
+
+road 
+
+Ayla  and  her  friends  regularly  use  GPS  systems 
+like Google Maps. It is not uncommon for them to 
+find  that  new  locations  or  road  renovations  are 
+not  updated  on  the  app,  causing  them  to  drive 
+over unpaved roads, be blocked by construction 
+sites, and get stuck in traffic for 2-3 hours when 
+the trip could have been 15 minutes. 
+
+Questions 
+
+•  What  additional  factors  might  make 
+Pakistan’s  roads  (or  any  given  city’s 
+roads)  more  subject  to  this  type  of 
+congestion? 
+
+•  What  additional  information,  or  perhaps 
+
+Figure 3: Uganda to Nairobi 
+
+The journey began early in the morning with Brian 
+leaving  Uganda  with  a  tanker  full  of  edible  oil 
+bound for Nairobi. His route, passing through the 
+lush  landscapes  of  Uganda,  across  the  border, 
+and  through  Kisumu  (see  Figure  3  –  letter  B, 
+green  pointer),  was  well-trodden  and  familiar. 
+Brian's GPS indicated clear roads ahead, and he 
+was on schedule to make a timely delivery. 
+
+However,  as  he  approached  Ahero  (Figure  4, 
+letter  C),  a  small  town  near  Kisumu,  Brian 
+encountered an unforeseen challenge: the Ahero 
+bridge  was  heavily 
+flooded  due  to  recent 
+torrential rains causing the River Nyando to break 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 28 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+its banks. Local authorities had closed the bridge 
+to  all  traffic,  and  a  long  line  of  vehicles  had 
+already formed on either side (Obiero, 2024). The 
+flooded  bridge  was  a  critical  point  on  Brian's 
+route,  and 
+its  closure  posed  a  significant 
+dilemma. 
+
+amid weather issues? 
+
+•  How  might  the  processes  for  issuing 
+permits  and  managing  transport  routes 
+be  improved  to  account  for  unexpected 
+events such as natural disasters? 
+
+•  What  strategies  can  be  implemented  to 
+support  transporters  financially  when 
+they face penalties or additional costs due 
+to unavoidable detours or route changes? 
+solutions  be 
+designed  to  provide  contingency  routing 
+for critical business deliveries in cases of 
+unexpected road closures? 
+
+technology 
+
+•  How 
+
+can 
+
+•  What other questions or observations can 
+you make about this scenario as it relates 
+to  the  principles  of  online  mapping  and 
+route-finding? 
+
+Scenario 5 – GPS Spoofing 
+
+At  a  coffee  shop  in  Beirut,  Maya  (not  her  real 
+name)  was  reviewing  possible  matches  on 
+Bumble. Usually matches were located in Beirut. 
+But  in  the  recent  past,  since  the  onset  of  the 
+Israel-Hamas war, most matches were far away 
+– in Israel (Arraf, 2024). 
+
+Taxi  drivers  throughout  Lebanon  have  not  been 
+able  to  trust  directions  on  their  smartphones 
+because their online map apps are indicating that 
+they're  located  in  the  Beirut  airport  or  Cairo, 
+Egypt (Bulos, 2024). 
+
+In flight in 2024 from Qatar to Madrid, cruising at 
+36,000 feet, Víctor (a commercial pilot) received 
+an  alert  from  the  cockpit’s  GPS  system,  telling 
+him that he was 1,800 feet from the ground. He 
+knew  this  was  incorrect,  but  he  had  never 
+experienced such an alert in his 33 years of flying 
+(Inal, 2024). 
+
+The common thread? They are all being affected 
+by the Israel Defense Force’s use of GPS spoofing 
+to  counter  missile  strikes  from  Hamas  and  its 
+Lebanese ally Hezbollah who possess GPS-guided 
+weapons,  including  drones.  In  an  April  news 
+conference,  Israeli  military  spokesman  Rear 
+Admiral  Daniel  Hagari  said  “we  are  aware  that 
+these disruptions cause inconveniences, but it is 
+a  vital  and  necessary  tool  in  our  defensive 
+capabilities.” (Bulos, 2024). 
+
+GPS  spoofing  exploits  vulnerabilities  in  GPS 
+infrastructure;  in  particular,  the  weak  signal 
+strength of GPS satellites. The Global Positioning 
+System  sends  signals  from  satellites  to  GPS 
+receivers, such as smart phones and commercial 
+airliners. Receivers calculate their position based 
+
+Figure 4: Bridge outage at Ahero (C) above 
+
+Figure 5: alternate route (in green) running 
+north of the original route 
+
+Faced with this obstacle, Brian had two options. 
+He could wait at the bridge until the floodwaters 
+receded, and the bridge reopened, but there was 
+no  clear  indication  of  when  this  might  happen. 
+Delaying  his  journey  could  disrupt  his  delivery 
+schedule, potentially causing financial losses and 
+damaging his reputation. The other option was to 
+take an official detour (see Figure 5, green route), 
+a route that would bypass the flooded bridge but 
+attract  a  substantial  fine  of  KES  10,000  (about 
+US$80,  or  between  15  and  30%  of  his  monthly 
+salary) for deviating from the main route. Given 
+that he was on a tight budget since he had spent 
+most of his earnings to repair the chassis of the 
+lorry, the second option was daunting. 
+
+Questions 
+
+•  How  could  Brian  possibly  have  avoided 
+running into this dilemma? Is there other 
+information  that  might  have  helped  him 
+or the map services make better choices? 
+•  Why is it hard to forecast bridge closures 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 29 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4Information Systems Education Journal (ISEDJ) 
+ISSN: 1545-679X 
+
+23 (4) 
+July 2025 
+
+on the time it takes for the signals to arrive. Due 
+to the weak signal strength of the GPS satellites, 
+their signals can easily be overwhelmed by fake 
+signals, leading to inaccurate location data on the 
+receiving devices (McAfee Inc, N.D.). 
+
+While  incorrect  locations  in  a  dating  app  are  a 
+nuisance  and  delays  for  taxi  drivers  can  lead  to 
+customer dissatisfaction as well as a reduction in 
+fares  as  they  take  time  to  figure  out  directions, 
+the risks to commercial airlines are more serious. 
+Researchers  at  the  University  of  Texas  have 
+estimated  that  more  than  50,000  flights  have 
+been  spoofed  in  the  Middle  East  in  2024 
+(Gebrekidan, 2024). 
+
+When  pilots  realize  that  their  GPS  receivers  are 
+being spoofed, they are often instructed to shut 
+down  their  plane’s  GPS  receiver  and  dependent 
+components  like  the  terrain  warning  system.  In 
+these  circumstances,  pilots  will  resort  to  other 
+means  for  navigation,  such  as  referring  to 
+location  points  on  the  ground.  This  frequently 
+causes  pilots  to  ask  air  traffic  control  for 
+assistance,  which  can  prove  challenging  for 
+already stressed air traffic controllers. 
+
+With this in mind, Todd Humphreys, an aerospace 
+engineering professor at the University of Texas 
+said  "There’s  no  question  that  safety  has  been 
+reduced  in  flights  in  the  eastern  Mediterranean 
+because airlines are instructing their pilots to shut 
+off GPS” (Bulos, 2024). 
+
+Questions 
+
+search. They had a couple of clues. The name of 
+the  town  is  Jettingen,  and  many  of  Barbara’s 
+extended family – her mother, aunts, uncles and 
+cousins – had stayed at one point during the war 
+at an old castle that has since been converted to 
+a hotel named Sindlingen. 
+
+Paul  searched  Google  Maps  for  Sindlingen  and 
+initially found a neighborhood by that name near 
+Frankfurt, but no hotel. Paul found it easier to use 
+a  German  travel  app  –  DB  (Deutsche  Bahn, 
+German  Rail)  Navigator;  in  particular  because 
+Google  Maps  does  not  cover  long-distance  train 
+travel as thoroughly as DB Navigator does. Paul 
+searched for Jettingen on DB Navigator and found 
+a match. They booked two tickets for the 2+ hour 
+train ride and headed out. 
+
+When  they  arrived,  they  found  themselves  at 
+Jettingen-Scheppach (the yellow map markers at 
+bottom center of Figure A), and soon discovered 
+that  this  was  not  where  they  wanted  to  be.  It 
+turns out that the DB Navigator app displays this 
+location simply as Jettingen. They happened upon 
+two immigrant Polish workers who explained that 
+same-named  towns  are  frequently  distinguished 
+by the addition of a modifier such as a state name 
+or  postal  code.  These  good  Samaritans  further 
+explained that Barbara and Paul were about 150 
+kilometers away from where they wanted to be in 
+Unter  Jettingen  (B,  with  green  map  markers, 
+lower  left  in  Figure  6),  which  is  about  45 
+kilometers outside Stuttgart. 
+
+•  Separate 
+
+from 
+
+the 
+situations,  what  steps  could  be  taken  to 
+prepare for such a scenario? 
+
+the  politics  of 
+
+•  What  are  the  potential  impacts  of  a 
+
+breakdown of GPS service? 
+
+•  What  are  the  ethical  considerations 
+surrounding the use  of GPS  spoofing  for 
+military  purposes?  How  do  we  balance 
+national security  needs against potential 
+civilian risks? 
+
+•  What other questions or observations can 
+you make about this scenario as it relates 
+to  the  principles  of  online  mapping  and 
+route-finding? 
+
+Scenario 6 – What’s in a name? 
+
+The  goal  was  simple.  Barbara  and  Paul  were  in 
+Germany,  and  Barbara  wanted  to  see  the  small 
+town where her mother’s family had lived during 
+the Second World War. 
+
+They were in Nuremberg when they began their 
+
+Figure 6: Routing errors in finding a German 
+castle/hotel 
+
+Paul  tried  to  book  this  leg  of  the  trip  with  Uber 
+and  Bolt 
+ride-hailing 
+(a  European  Union 
+company);  both  companies  responded  with 
+“sorry,  an  error has occurred,”  meaning that no 
+drivers would  take the  ride. So,  onto a train for 
+the ride to  Stuttgart, and an Uber ride  to  Unter 
+Jettingen.  They  made  it  to  the  Hotel  Schloss 
+
+©2025 ISCAP (Information Systems and Computing Academic Professionals)                                           
+https://isedj.org/; https://iscap.us/org 
+
+ Page 30 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
