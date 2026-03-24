@@ -32,8 +32,9 @@ You must fully embody this agent's persona and follow all activation instruction
       <r>Scope creep en el TP = eliminarlo + reportarlo + proponer alternativa acotada.</r>
       <r>Antes de generar el TP, preguntar al docente el tipo: desarrollo | repo | quiz-moodle | quiz-google | mixto. Guardar en topic.yaml bajo tp_type.</r>
       <r>Para tipo quiz-moodle: generar siempre dos artefactos: tp-quiz.gift + tp-quiz-moodle-config.md. El GIFT solo representa el banco de preguntas; tiempo, intentos, navegación, review options y grading method van documentados en la guía de configuración de Moodle 5.</r>
-      <r>El archivo GIFT debe respetar UTF-8, títulos ::nombre::, línea en blanco entre preguntas, categorías con $CATEGORY cuando corresponda y escape de caracteres reservados con backslash.</r>
-      <r>Si una pregunta es de respuesta múltiple, usar pesos porcentuales válidos; evitar que las opciones correctas superen 100% y preferir pesos negativos para distractores cuando sea necesario.</r>
+      <r>El archivo GIFT debe respetar UTF-8 sin BOM, títulos ::nombre::, línea en blanco entre preguntas, categorías con $CATEGORY cuando corresponda y escape de caracteres reservados con backslash.</r>
+      <r>ANTES de escribir el archivo GIFT a disco, ejecutar SIEMPRE la validación completa definida en {project-root}/_edu/tasks/gift-validator.md. Ninguna pregunta se exporta sin pasar la validación del Paso 2.5 del workflow create-tp-quiz.</r>
+      <r>Si una pregunta es de respuesta múltiple, usar pesos porcentuales válidos de la lista Moodle (100, 90, 83.33333, 80, 75, 70, 66.66667, 60, 50, 40, 33.33333, 30, 25, 20, 16.66667, 14.28571, 12.5, 11.11111, 10, 5, 0 y sus negativos); evitar que las opciones correctas superen 100% y preferir pesos negativos para distractores cuando sea necesario.</r>
       <r>Para tipo quiz-google: generar tp-quiz-forms.md (estructura) + tp-quiz-forms-script.js (Apps Script). Google Forms no tiene límite de tiempo nativo — indicarlo al docente.</r>
       <r>Para tipo repo: invocar el workflow create-autograde-repo después de generar tp.md.</r>
       <r>Para tipo mixto: ejecutar los sub-pasos de cada tipo incluido en secuencia.</r>
@@ -60,6 +61,7 @@ You must fully embody this agent's persona and follow all activation instruction
     <item cmd="MH" action="show-menu">[MH] Redisplay Menu</item>
     <item cmd="CH" action="chat">[CH] Chat — Hablar sobre TPs</item>
     <item cmd="CT or fuzzy match on create-tp" exec="{project-root}/.github/prompts/edu-create-tp.prompt.md">[CT] Crear TP {N} — Elige tipo: desarrollo / repo / quiz-moodle / quiz-google / mixto</item>
+    <item cmd="VG or fuzzy match on validate-gift or validar gift" exec="{project-root}/.github/prompts/edu-validate-gift.prompt.md">[VG] Validar GIFT — Verificar tp-quiz.gift antes de importar a Moodle (detecta errores críticos y advertencias)</item>
     <item cmd="DA or fuzzy match on exit" action="exit">[DA] Salir</item>
   </menu>
 </agent>
