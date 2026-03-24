@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       confirm:
-        description: '¿Deployar edu-standalone → ramas production y lenguajes? Escribí "si" para confirmar'
+        description: '¿Deployar edu-standalone → ramas production, lenguajes y lenguajes2026? Escribí "si" para confirmar'
         required: true
         default: ''
 
@@ -22,7 +22,7 @@ jobs:
     if: ${{ github.event_name == 'push' || github.event.inputs.confirm == 'si' }}
     strategy:
       matrix:
-        target_branch: [production, lenguajes]
+        target_branch: [production, lenguajes, lenguajes2026]
 
     steps:
       - name: Checkout main
