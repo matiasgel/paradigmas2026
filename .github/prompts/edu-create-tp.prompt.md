@@ -23,6 +23,8 @@ tools: ['read', 'edit', 'search', 'execute', 'fetch']
      para generar `{topic_folder}/autograde-repo/`.
    - `quiz-moodle` → load `{project-root}/_edu/workflows/create-tp-quiz/workflow.md`
      para generar `{topic_folder}/tp-quiz.gift` + `{topic_folder}/tp-quiz-moodle-config.md`.
+     **El workflow incluye validación GIFT obligatoria (Paso 2.5) antes de exportar.**
+     Si la validación detecta errores críticos, corregir antes de escribir el archivo.
    - `quiz-google` → load `{project-root}/_edu/workflows/create-tp-quiz/workflow.md`
      para generar `{topic_folder}/tp-quiz-forms.md` + `{topic_folder}/tp-quiz-forms-script.js`.
    - `mixto` → ejecutar los sub-pasos de cada tipo incluido en secuencia.
