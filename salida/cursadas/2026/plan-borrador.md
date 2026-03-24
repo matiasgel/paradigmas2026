@@ -40,18 +40,20 @@ Las siguientes propuestas del documento `docs/investigacion.md` se integran en e
 
 | Instancia | Descripción | Plataforma |
 |-----------|-------------|------------|
-| **TP 1** — Blog HTML/CSS | Blog personal con Bootstrap 5 | Git (≥5 commits significativos) |
+| **TP 1** — Blog HTML/CSS | Blog personal con Bootstrap 5 | GitHub Classroom (≥5 commits significativos) |
 | **TP 2** — Python + Prompting | 7 scripts + PROMPTS.md + tests | GitHub Classroom con autograding CI |
 | **TP 3** — Django MVC | Módulo II/III integrado | GitHub Classroom con autograding |
 | **TP 4** — ORM + Persistencia | CRUD completo con migrations | GitHub Classroom con autograding |
-| **App Integradora I** | BlogApp: desde templates hasta auth | GitHub Classroom (semana 10) |
-| **App Integradora II** | BlogApp + REST API | GitHub Classroom (semana 16) |
+| **App Integradora I** | BlogApp: desde templates hasta auth | GitHub Classroom con autograding (semana 10) |
+| **App Integradora II** | BlogApp + REST API | GitHub Classroom con autograding final (semana 16) |
 | Parcial 1 | Semana 7 (teórico) | Presencial |
 | Parcial 2 | Semana 13 (teórico) | Presencial |
 
-> **GitHub Classroom autograding**: Los TPs 2–4 y apps integradoras utilizan GitHub Actions
-> (`.github/workflows/autograding.yml`) con tests pytest preconfigurados. El alumno trabaja
-> en su fork del template, hace push y ve feedback inmediato en el CI.
+> **GitHub Classroom en toda la cursada**: Todos los TPs y apps integradoras se entregan via
+> GitHub Classroom. TP 1 usa repositorio template con checklist HTML/CSS. TPs 2–4 y apps
+> integradoras incorporan GitHub Actions (`.github/workflows/autograding.yml`) con pytest.
+> El alumno trabaja en su fork del template, hace push y ve feedback inmediato en el CI.
+> GitHub Copilot habilitado en Codespaces de todos los repositorios.
 
 ---
 
@@ -93,9 +95,11 @@ Basada en Prather et al. 2024, Jacobs 2025 y Frydenberg et al. 2025:
 
 **TP 1 — Blog HTML/CSS/Bootstrap**
 - Entrega: semana 2, lunes 23:59
-- Plataforma: Git (repositorio personal, ≥5 commits significativos)
+- Plataforma: **GitHub Classroom** — repositorio template con estructura fija, ≥5 commits significativos
+- Codespaces habilitado con GitHub Copilot
 - Requisitos: `index.html`, `about.html`, `contact.html`, `assets/styles.css`, README.md
 - Criterios: HTML válido (W3C), Bootstrap correcto, responsivo, formulario con validación HTML5
+- Workflow CI: validación de archivos requeridos (`autograding.yml` con script de estructura)
 
 ---
 
@@ -364,9 +368,10 @@ Basada en Prather et al. 2024, Jacobs 2025 y Frydenberg et al. 2025:
 Antes de confirmar este plan, verificar:
 
 - [ ] Distribución de semanas: 17 semanas cubre los 7 módulos institucionales
-- [ ] TP 1 (HTML/CSS) cubre Material existente en `material/tema 01/`
-- [ ] TP 2 (Python autograding) tiene link de Classroom confirmado
-- [ ] TPs 3 y 4 tienen repositorios Classroom listos en GitHub
+- [ ] TP 1 (HTML/CSS) cubre Material existente en `material/tema 01/` — crear repositorio template en GitHub Classroom
+- [ ] TP 2 (Python autograding) tiene link de Classroom confirmado (`classroom.github.com/a/X4xiTEDQ`)
+- [ ] TPs 3, 4 y Apps Integradoras I y II tienen repositorios template en GitHub Classroom
+- [ ] Todos los repos tienen Codespaces + GitHub Copilot habilitado
 - [ ] Stack (Python 3.13, Django 5.1, Bootstrap 5.3.3) disponible en Codespaces
 - [ ] Política de IA redactada y comunicada a los alumnos desde semana 1
 - [ ] Parciales: semana 8 (parcial 1) y semana 13 (parcial 2) — confirmar con calendario académico
