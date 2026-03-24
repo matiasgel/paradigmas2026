@@ -1,9 +1,9 @@
 # Plan de Cursada — Laboratorio de Programación y Lenguajes (IF009)
 ## UNTDF — Instituto IDEI — 2026
 
-> ⚠️ **DOCUMENTO DE TRABAJO** — Este plan puede modificarse hasta su confirmación final.
+> ✅ **PLAN CONFIRMADO** — Confirmado por el docente el 2026-03-24. Modificable solo vía `/edu-propose-curriculum-change` o `/edu-adaptive-replan`.
 > Ancla institucional inmutable: `salida/cursadas/2026/plan-minimo.md`
-> Generado: 2026-03-24 | Agente: Dr. Roberto (class-writer) | Docente: Matías Gel
+> Generado: 2026-03-24 | Confirmado: 2026-03-24 | Agente: Dr. Roberto (class-writer) | Docente: Matías Gel
 
 ---
 

@@ -1,0 +1,222 @@
+Bootstrap 5.3 — Cards Component
+Fuente: https://getbootstrap.com/docs/5.3/components/card/
+==========================================================
+
+DESCRIPCIÓN
+===========
+Cards son contenedores de contenido flexibles y extensibles.
+Soportan headers, footers, colores de fondo, imágenes y opciones de display.
+Reemplazan a los panels, wells y thumbnails de Bootstrap 3.
+
+CARD BÁSICA
+===========
+<div class="card" style="width: 18rem;">
+  <img src="..." class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <p class="card-text">Texto de ejemplo para la card.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+
+TIPOS DE CONTENIDO
+==================
+
+Body (solo contenido interno):
+  <div class="card">
+    <div class="card-body">
+      Texto dentro de la card.
+    </div>
+  </div>
+
+Título, texto y links:
+  <div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">Card title</h5>
+      <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+      <p class="card-text">Texto de ejemplo.</p>
+      <a href="#" class="card-link">Card link</a>
+      <a href="#" class="card-link">Another link</a>
+    </div>
+  </div>
+
+Header y Footer:
+  <div class="card">
+    <div class="card-header">Featured</div>
+    <div class="card-body">
+      <h5 class="card-title">Special title treatment</h5>
+      <p class="card-text">Con texto de soporte.</p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+    <div class="card-footer text-body-secondary">2 days ago</div>
+  </div>
+
+IMÁGENES EN CARDS
+=================
+Imagen arriba (.card-img-top):
+  <div class="card mb-3">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Card title</h5>
+      <p class="card-text">Texto del post.</p>
+    </div>
+  </div>
+
+Imagen abajo (.card-img-bottom):
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Card title</h5>
+    </div>
+    <img src="..." class="card-img-bottom" alt="...">
+  </div>
+
+Imagen superpuesta (.card-img-overlay):
+  <div class="card text-bg-dark">
+    <img src="..." class="card-img" alt="...">
+    <div class="card-img-overlay">
+      <h5 class="card-title">Card title</h5>
+      <p class="card-text">Texto sobre la imagen.</p>
+    </div>
+  </div>
+
+TAMAÑO DE CARDS
+===============
+Con grid markup:
+  <div class="row">
+    <div class="col-sm-6 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Special title treatment</h5>
+          <p class="card-text">Con texto de soporte.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card">...</div>
+    </div>
+  </div>
+
+Con utilidades:
+  <div class="card w-75 mb-3">...</div>
+  <div class="card w-50">...</div>
+
+Con CSS custom:
+  <div class="card" style="width: 18rem;">...</div>
+
+ESTILOS DE CARDS
+================
+Color de fondo (text-bg-{color}):
+  <div class="card text-bg-primary mb-3" style="max-width: 18rem;">
+    <div class="card-header">Header</div>
+    <div class="card-body">
+      <h5 class="card-title">Primary card title</h5>
+      <p class="card-text">Texto.</p>
+    </div>
+  </div>
+
+Colores disponibles: primary, secondary, success, danger, warning, info, light, dark
+
+Solo borde de color:
+  <div class="card border-primary mb-3" style="max-width: 18rem;">
+    <div class="card-header">Header</div>
+    <div class="card-body text-primary">
+      <h5 class="card-title">Primary card title</h5>
+      <p class="card-text">Texto.</p>
+    </div>
+  </div>
+
+CARD HORIZONTAL
+===============
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="..." class="img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Texto.</p>
+        <p class="card-text">
+          <small class="text-body-secondary">Last updated 3 mins ago</small>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+GRID DE CARDS (Row Cols)
+========================
+<!-- 2 cards por fila en desktop -->
+<div class="row row-cols-1 row-cols-md-2 g-4">
+  <div class="col">
+    <div class="card">
+      <img src="..." class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Texto de la card.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">...</div>
+  </div>
+</div>
+
+<!-- 3 cards por fila en desktop, igual altura -->
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  <div class="col">
+    <div class="card h-100">  <!-- h-100 = equal height -->
+      <img src="..." class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Texto más largo...</p>
+      </div>
+      <div class="card-footer">
+        <small class="text-body-secondary">Last updated 3 mins ago</small>
+      </div>
+    </div>
+  </div>
+  <!-- más cols -->
+</div>
+
+CARD PARA BLOG TP1 (EJEMPLO)
+=============================
+<article class="col">
+  <div class="card h-100 shadow-sm">
+    <img src="img/post1.jpg" class="card-img-top"
+         alt="Imagen del post sobre Bootstrap">
+    <div class="card-body">
+      <h5 class="card-title">Mi primer post con Bootstrap</h5>
+      <p class="card-text text-muted">
+        Aprendí a usar el grid de Bootstrap para crear layouts
+        responsivos sin escribir media queries custom...
+      </p>
+      <a href="post1.html" class="btn btn-primary btn-sm">
+        Leer más →
+      </a>
+    </div>
+    <div class="card-footer">
+      <small class="text-muted">Publicado el 15 de marzo de 2026</small>
+    </div>
+  </div>
+</article>
+
+CLASES CLAVE DE CARDS
+=====================
+.card              → Contenedor principal de la card
+.card-body         → Área principal de contenido (con padding)
+.card-title        → Título de la card (<h5> o <h4>)
+.card-subtitle     → Subtítulo (<h6>)
+.card-text         → Párrafo de texto
+.card-link         → Enlace dentro de la card
+.card-img-top      → Imagen en la parte superior
+.card-img-bottom   → Imagen en la parte inferior
+.card-img-overlay  → Superponer contenido sobre imagen
+.card-header       → Cabecera de la card (fondo grisáceo)
+.card-footer       → Pie de la card
+.card-group        → Grupo de cards pegadas entre sí
+.h-100             → height: 100% (igual altura en filas)
+.shadow-sm         → Sombra pequeña
+.shadow            → Sombra media
+.shadow-lg         → Sombra grande

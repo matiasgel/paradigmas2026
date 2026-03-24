@@ -1,0 +1,152 @@
+Bootstrap 5.3 — Grid System
+Fuente: https://getbootstrap.com/docs/5.3/layout/grid/
+========================================================
+
+INTRODUCCIÓN
+============
+El grid de Bootstrap usa contenedores, filas y columnas para layoutear y alinear contenido.
+Está construido con flexbox y es completamente responsive.
+
+ESTRUCTURA BÁSICA
+=================
+<div class="container">
+  <div class="row">
+    <div class="col">Column</div>
+    <div class="col">Column</div>
+    <div class="col">Column</div>
+  </div>
+</div>
+
+CÓMO FUNCIONA
+=============
+- 12 columnas por fila
+- 6 breakpoints responsive
+- Gutters (espaciado) configurables
+- Basado en flexbox
+
+BREAKPOINTS
+===========
+xs  (Extra small)  < 576px   .col-
+sm  (Small)        >= 576px  .col-sm-  (Container max: 540px)
+md  (Medium)       >= 768px  .col-md-  (Container max: 720px)
+lg  (Large)        >= 992px  .col-lg-  (Container max: 960px)
+xl  (Extra large)  >= 1200px .col-xl-  (Container max: 1140px)
+xxl (XX large)     >= 1400px .col-xxl- (Container max: 1320px)
+
+COLUMNAS IGUALES (auto-layout)
+==============================
+<div class="container text-center">
+  <div class="row">
+    <div class="col">1 of 2</div>
+    <div class="col">2 of 2</div>
+  </div>
+  <div class="row">
+    <div class="col">1 of 3</div>
+    <div class="col">2 of 3</div>
+    <div class="col">3 of 3</div>
+  </div>
+</div>
+
+COLUMNAS CON ANCHO FIJO
+========================
+<div class="container text-center">
+  <div class="row">
+    <div class="col">1 of 3</div>
+    <div class="col-6">2 of 3 (wider)</div>
+    <div class="col">3 of 3</div>
+  </div>
+</div>
+
+STACKED TO HORIZONTAL
+=====================
+<div class="container text-center">
+  <div class="row">
+    <div class="col-sm-8">col-sm-8</div>  <!-- 8/12 desde 576px -->
+    <div class="col-sm-4">col-sm-4</div>  <!-- 4/12 desde 576px -->
+  </div>
+</div>
+
+MIX AND MATCH
+=============
+<!-- Stack en móvil, columnas en desktop -->
+<div class="container text-center">
+  <div class="row">
+    <div class="col-md-8">.col-md-8</div>
+    <div class="col-6 col-md-4">.col-6 .col-md-4</div>
+  </div>
+  <!-- 33% wide en móvil, 33% wide en desktop -->
+  <div class="row">
+    <div class="col-6 col-md-4">.col-6 .col-md-4</div>
+    <div class="col-6 col-md-4">.col-6 .col-md-4</div>
+    <div class="col-6 col-md-4">.col-6 .col-md-4</div>
+  </div>
+  <!-- Siempre 50% -->
+  <div class="row">
+    <div class="col-6">.col-6</div>
+    <div class="col-6">.col-6</div>
+  </div>
+</div>
+
+ROW COLUMNS
+===========
+<!-- 2 columnas por fila -->
+<div class="row row-cols-2">
+  <div class="col">Column</div>
+  <div class="col">Column</div>
+  <div class="col">Column</div>
+  <div class="col">Column</div>
+</div>
+
+<!-- Responsive: 1 col en móvil, 2 en sm, 4 en md -->
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+  <div class="col">Column</div>
+  <div class="col">Column</div>
+  <div class="col">Column</div>
+  <div class="col">Column</div>
+</div>
+
+GUTTERS
+=======
+<!-- g-3 = gutter horizontal y vertical de 1rem -->
+<div class="row g-3">
+  <div class="col-md-6">...</div>
+  <div class="col-md-6">...</div>
+</div>
+
+<!-- Sin gutters -->
+<div class="row g-0">...</div>
+
+<!-- Solo horizontal -->
+<div class="row gx-5">...</div>
+
+<!-- Solo vertical -->
+<div class="row gy-2">...</div>
+
+VARIABLES SASS (para referencia)
+================================
+$grid-columns:      12;
+$grid-gutter-width: 1.5rem;
+$grid-row-columns:  6;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+);
+
+NESTING
+=======
+<div class="container text-center">
+  <div class="row">
+    <div class="col-sm-3">Level 1: .col-sm-3</div>
+    <div class="col-sm-9">
+      <div class="row">
+        <div class="col-8 col-sm-6">Level 2</div>
+        <div class="col-4 col-sm-6">Level 2</div>
+      </div>
+    </div>
+  </div>
+</div>

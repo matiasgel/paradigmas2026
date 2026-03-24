@@ -1,3 +1,9 @@
-topic_folder: "temas/02-sintaxis-semantica/"
-topic_number: "02"
-topic_name: "Sintaxis y Semántica de Lenguajes"
+# active-topic.yaml — Laboratorio de Programación y Lenguajes (IF009) — 2026
+# Actualizar con /edu-design-topic cuando se inicie un nuevo tema
+topic_folder: "salida/cursadas/2026/temas/00-nivelacion-html-css-prompting"
+topic_number: "00"
+topic_name: "Nivelación — HTML/CSS/Bootstrap 5/Prompting"
+status: "en-produccion"
+semana: 1
+already_started: true
+notas: "Clase iniciada — filminas ya presentadas, TP1 y TP2 ya entregados. Ver topic.yaml para detalle."

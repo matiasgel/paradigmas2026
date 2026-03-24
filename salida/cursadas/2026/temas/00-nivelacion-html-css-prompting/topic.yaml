@@ -1,0 +1,49 @@
+topic_number: "00"
+topic_name: "Nivelación — HTML/CSS/Bootstrap 5/Prompting"
+semana: 1
+clase_duracion_min: 180
+status: "en-produccion"
+already_started: true
+notas_estado: "Clase iniciada — filminas base ya presentadas, TP1 y TP2 ya entregados a alumnos"
+
+tp_asociados:
+  - numero: "01"
+    nombre: "Blog personal HTML/CSS/Bootstrap"
+    descripcion: "Blog con index.html, about.html, contact.html — Bootstrap 5 + CSS custom + mobile-first"
+    link_classroom: "pendiente-alta"
+    commits_minimos: 5
+    validacion: "W3C HTML Validator"
+  - numero: "02"
+    nombre: "Python Autograding — Fundamentos"
+    descripcion: "7 scripts Python con tests automatizados y PROMPTS.md obligatorio"
+    link_classroom: "classroom.github.com/a/X4xiTEDQ"
+    autograding: true
+
+referencias_web:
+  - url: "https://www.w3schools.com/html/"
+    tema: "HTML5 introduccion y semantica"
+  - url: "https://www.w3schools.com/css/"
+    tema: "CSS3 box model, flexbox, media queries"
+  - url: "https://getbootstrap.com/docs/5.3/layout/grid/"
+    tema: "Bootstrap 5 — Grid system"
+  - url: "https://getbootstrap.com/docs/5.3/components/navbar/"
+    tema: "Bootstrap 5 — Navbar responsive"
+  - url: "https://getbootstrap.com/docs/5.3/components/card/"
+    tema: "Bootstrap 5 — Cards"
+
+material_local:
+  - "material/tema 01/HTML & CSS.pdf"
+  - "material/tema 01/TP 1.pdf"
+  - "material/tema 01/TP 2.pdf"
+  - "material/tema 01/txt/html-css.txt"
+  - "material/tema 01/txt/tp1.txt"
+  - "material/tema 01/txt/tp2.txt"
+  - "material/tema 01/txt/bootstrap5-grid.txt"
+  - "material/tema 01/txt/bootstrap5-navbar.txt"
+  - "material/tema 01/txt/bootstrap5-card.txt"
+  - "material/tema 01/txt/w3schools-css-flexbox.txt"
+
+artifacts:
+  diseno: "diseno.md"
+  minuta: "minuta.md"
+  filminas: "filminas.md"
