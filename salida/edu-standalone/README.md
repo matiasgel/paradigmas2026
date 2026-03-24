@@ -2,6 +2,8 @@
 
 Pipeline completo de producción docente universitaria con inteligencia pedagógica.
 
+<!-- última actualización: 2026-03-23 -->
+
 ## Quick Start
 
 1. Cloná o copiá este directorio como raíz de tu proyecto
