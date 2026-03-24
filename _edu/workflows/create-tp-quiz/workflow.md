@@ -109,6 +109,58 @@ Si alguna pregunta falla, listar el problema y corregir antes de exportar.
 
 ---
 
+## Step 2.5: Pre-validación de preguntas (tarea obligatoria antes de exportar)
+
+> **Esta etapa es obligatoria.** Ninguna pregunta puede escribirse al archivo GIFT sin pasar esta validación.
+
+Load `{project-root}/_edu/tasks/gift-validator.md` y aplicar **todas las reglas** sobre las
+preguntas generadas en memoria (todavía no escritas a disco).
+
+### Verificaciones obligatorias por pregunta
+
+Para **cada pregunta candidata**, verificar en este orden:
+
+1. **[A3] Tiene título** `::titulo::` presente y no vacío [A4].
+2. **[A5] Llaves balanceadas** — el bloque `{ ... }` abre y cierra correctamente.
+3. **[A8] Enunciado no vacío** — hay texto entre el título y el `{`.
+4. **[A6] MC simple — exactamente 1 `=`** y al menos 1 `~` (sin pesos).
+5. **[B1/B3] MC múltiple** — si usa `%N%`:
+   - No mezclar con `=`.
+   - Cada peso debe estar en la lista de valores válidos de Moodle.
+   - Suma de pesos positivos ≤ 100%.
+6. **[A9] T/F** — respuesta exactamente `{TRUE}`, `{FALSE}`, `{T}` o `{F}`.
+7. **[A7] Caracteres reservados** — `~ = # { } :` como texto literal van escapados con `\`.
+8. **[C5] Títulos únicos** — no repetir el mismo `::titulo::` en preguntas distintas.
+
+**Para el archivo completo:**
+- **[A2] Línea en blanco** entre cada par de preguntas consecutivas.
+- **[C4] $CATEGORY:** formato correcto si presente.
+
+### Resultado
+
+Si hay **errores críticos (A*, B*):**
+- Corregir en memoria ANTES de escribir al archivo.
+- Si la corrección requiere decisión pedagógica (ej. A6: no hay correcta definida), reportar al docente y esperar instrucción. No proceder hasta resolver.
+
+Si hay solo **advertencias (C*):**
+- Mostrar al docente, preguntar si desea corregir o continuar.
+
+Si todo OK → proceder a Step 3A.
+
+**Formato del reporte de validación:**
+```
+## Validación GIFT — pre-exportación
+✅ N pregunta(s) válidas
+❌ M error(es) crítico(s) — corrigiendo antes de exportar...
+⚠️  K advertencia(s) — consultar con docente
+
+Detalle de errores:
+[Q01 ::titulo:: ] A6 — Falta respuesta correcta (=). Sugerencia: marcar "..." como correcta.
+[Q03 ::titulo:: ] B1 — Peso %33% inválido. Corrección automática: %33.33333%.
+```
+
+---
+
 ## Step 3A: Generar banco de preguntas Moodle en `tp-quiz.gift`
 
 ### Regla crítica
