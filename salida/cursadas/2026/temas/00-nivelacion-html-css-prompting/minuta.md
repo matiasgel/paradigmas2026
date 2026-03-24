@@ -327,8 +327,9 @@ Se realizó un live coding construyendo la página `index.html` completa del TP1
   - `git init` / `git clone` (Classroom crea el repo)
   - `git add` → `git commit -m "mensaje"` → `git push`
   - Commits semánticos: `feat:`, `style:`, `fix:`, `docs:`
-- **TP1**: Consigna entregada. Link de Classroom será enviado por correo.
-- **TP2**: Link ya activo → `classroom.github.com/a/X4xiTEDQ`
+- **TP1**: Link activo → `classroom.github.com/a/RI8vnIt_`
+- **TP2**: Link activo → `classroom.github.com/a/X4xiTEDQ`
+- **TP3**: Tests unitarios pytest — Link activo → `classroom.github.com/a/jLxPRyso` (entrega 7/4)
 - Los repos tienen **Codespaces habilitados** y **GitHub Copilot** disponible
 
 ---
@@ -345,14 +346,17 @@ Se realizó un live coding construyendo la página `index.html` completa del TP1
 
 | Tarea | Fecha límite | Plataforma |
 |-------|-------------|------------|
-| TP1 — Blog personal HTML/CSS/Bootstrap | Semana 3 | GitHub Classroom (link a enviar) |
-| TP2 — Python fundamentos autograding | Semana 2 | `classroom.github.com/a/X4xiTEDQ` |
+| TP1 — Blog personal HTML/CSS/Bootstrap | Martes 31/3 · 23hs | `classroom.github.com/a/RI8vnIt_` |
+| TP2 — Python fundamentos autograding | Martes 31/3 · 23hs | `classroom.github.com/a/X4xiTEDQ` |
+| TP3 — Tests unitarios con pytest | Martes 7/4 · 23hs | `classroom.github.com/a/jLxPRyso` |
 
 **TP1 checklist de entrega:**
 - [ ] `index.html` con Navbar y grid de cards (mínimo 3 posts)
 - [ ] `about.html` con información personal
 - [ ] `contact.html` con formulario funcional
-- [ ] `css/styles.css` con estilos custom y media queries
+- [ ] `assets/styles.css` con estilos custom, variables CSS y media queries
+- [ ] `assets/images/` con favicon.ico e imágenes del blog
+- [ ] `README.md` con instrucciones del proyecto
 - [ ] `PROMPTS.md` con al menos 5 prompts documentados
 - [ ] ≥ 5 commits con mensajes descriptivos
 - [ ] W3C Validator: sin errores en los 3 HTMLs
@@ -368,7 +372,9 @@ Se realizó un live coding construyendo la página `index.html` completa del TP1
 - Bootstrap Navbar: https://getbootstrap.com/docs/5.3/components/navbar/
 - Bootstrap Cards: https://getbootstrap.com/docs/5.3/components/card/
 - W3C Validator: https://validator.w3.org/
-- Plantilla inicial del TP1: (se entregará con link de Classroom)
+- TP1 — Blog HTML/CSS: https://classroom.github.com/a/RI8vnIt_
+- TP2 — Python: https://classroom.github.com/a/X4xiTEDQ
+- TP3 — pytest: https://classroom.github.com/a/jLxPRyso
 
 ---
 

@@ -461,9 +461,17 @@ Los links estaban en inglés y faltaba accesibilidad
   </div>
   
   <div class="mb-3">
+    <label for="telefono" class="form-label">Teléfono <small class="text-muted">(opcional)</small></label>
+    <input type="tel" class="form-control" 
+           id="telefono" name="telefono"
+           placeholder="+54 9 2901 000000">
+  </div>
+  
+  <div class="mb-3">
     <label for="mensaje" class="form-label">Mensaje</label>
     <textarea class="form-control" id="mensaje" 
-              name="mensaje" rows="5" required></textarea>
+              name="mensaje" rows="5"
+              minlength="10" required></textarea>
   </div>
   
   <div class="d-grid">
@@ -512,12 +520,13 @@ mi-blog/
 ├── index.html          ← Lista de posts (cards)
 ├── about.html          ← Sobre el autor
 ├── contact.html        ← Formulario de contacto
-├── css/
-│   └── styles.css      ← Estilos custom
-├── img/
-│   ├── post1.jpg
-│   ├── post2.jpg
-│   └── avatar.jpg
+├── assets/
+│   ├── styles.css      ← Estilos custom
+│   └── images/
+│       ├── favicon.ico
+│       ├── avatar.jpg
+│       └── post1.jpg
+├── README.md           ← Instrucciones del proyecto
 └── PROMPTS.md          ← OBLIGATORIO: registro de IA
 ```
 
@@ -541,8 +550,10 @@ docs: documentar prompts de Copilot en PROMPTS.md
 ARCHIVOS
   ☐ index.html — Navbar + grid de cards (≥3 posts)
   ☐ about.html — Información del autor
-  ☐ contact.html — Formulario con Bootstrap
-  ☐ css/styles.css — Estilos custom + media queries
+  ☐ contact.html — Formulario con Bootstrap + campo teléfono
+  ☐ assets/styles.css — Estilos custom + media queries
+  ☐ assets/images/ — favicon.ico + imágenes del blog
+  ☐ README.md — Instrucciones del proyecto
   ☐ PROMPTS.md — ≥5 prompts documentados
 
 HTML
@@ -552,9 +563,10 @@ HTML
   ☐ W3C Validator: sin errores ✓
 
 CSS
-  ☐ Variables CSS (≥2)
-  ☐ Al menos 1 media query
+  ☐ Variables CSS (≥2: --color-primario, --font-principal...)
+  ☐ Media queries mobile (<768px) y desktop (≥768px)
   ☐ :valid/:invalid en el formulario
+  ☐ Transiciones en hover de botones/links
 
 GIT
   ☐ ≥ 5 commits con mensajes descriptivos
@@ -582,23 +594,36 @@ GIT
 
 ---
 
-## SLIDE 22 — Próxima clase
+## SLIDE 22 — TPs activos — Links y entregas
+
+**Título:** TPs de las primeras semanas
+
+| TP | Tema | Entrega | Link de Classroom |
+|----|------|---------|-------------------|
+| **TP1** | Blog Personal HTML/CSS/Bootstrap | **31/3 · 23hs** | classroom.github.com/a/RI8vnIt_ |
+| **TP2** | Introducción a Python | **31/3 · 23hs** | classroom.github.com/a/X4xiTEDQ |
+| **TP3** | Tests Unitarios con pytest | **7/4 · 23hs** | classroom.github.com/a/jLxPRyso |
+
+> Para aceptar cada TP: accedé al link → "Accept this assignment" → te crea un repo personal
+
+---
+
+## SLIDE 23 — Próxima clase
 
 **Título:** Semana 2 — Python 3.13
 
 ```
-Semana 1 ✅ HTML + CSS + Bootstrap
+Semana 1 ✅ HTML + CSS + Bootstrap (HOY)
 Semana 2    Python 3.13 — Fundamentos
 
 Qué viene:
 • Variables y tipos de datos
 • Control de flujo (if/for/while)
-• Funciones
-• Módulos y packages
-• Introducción a Git branches
+• Funciones y módulos
+• Git branches + pull requests
 
-Antes de la próxima clase:
-• Avanzar con TP1 (entrega semana 3)
-• Completar TP2 Python (entrega semana 2)
-  → classroom.github.com/a/X4xiTEDQ
+TPs que siguen corriendo:
+• TP1 (Blog HTML)   → 31/3 23hs · classroom.github.com/a/RI8vnIt_
+• TP2 (Python)      → 31/3 23hs · classroom.github.com/a/X4xiTEDQ
+• TP3 (pytest)      →  7/4 23hs · classroom.github.com/a/jLxPRyso
 ```

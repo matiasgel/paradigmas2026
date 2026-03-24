@@ -4,20 +4,29 @@ semana: 1
 clase_duracion_min: 180
 status: "en-produccion"
 already_started: true
-notas_estado: "Clase iniciada — filminas base ya presentadas, TP1 y TP2 ya entregados a alumnos"
+notas_estado: "Clase iniciada — filminas base ya presentadas, TP1, TP2 y TP3 ya entregados a alumnos"
 
 tp_asociados:
   - numero: "01"
     nombre: "Blog personal HTML/CSS/Bootstrap"
     descripcion: "Blog con index.html, about.html, contact.html — Bootstrap 5 + CSS custom + mobile-first"
-    link_classroom: "pendiente-alta"
+    link_classroom: "classroom.github.com/a/RI8vnIt_"
+    deadline: "2026-03-31 23:00"
     commits_minimos: 5
     validacion: "W3C HTML Validator"
   - numero: "02"
     nombre: "Python Autograding — Fundamentos"
     descripcion: "7 scripts Python con tests automatizados y PROMPTS.md obligatorio"
     link_classroom: "classroom.github.com/a/X4xiTEDQ"
+    deadline: "2026-03-31 23:00"
     autograding: true
+  - numero: "03"
+    nombre: "Tests Unitarios con pytest"
+    descripcion: "calculator.py con add/sub/mul/div/pow_/sqrt/mean + pytest + cobertura ≥80%"
+    link_classroom: "classroom.github.com/a/jLxPRyso"
+    deadline: "2026-04-07 23:00"
+    autograding: true
+    commits_minimos: 6
 
 referencias_web:
   - url: "https://www.w3schools.com/html/"
@@ -35,9 +44,11 @@ material_local:
   - "material/tema 01/HTML & CSS.pdf"
   - "material/tema 01/TP 1.pdf"
   - "material/tema 01/TP 2.pdf"
+  - "material/tema 01/TP 3.pdf"
   - "material/tema 01/txt/html-css.txt"
   - "material/tema 01/txt/tp1.txt"
   - "material/tema 01/txt/tp2.txt"
+  - "material/tema 01/txt/tp3.txt"
   - "material/tema 01/txt/bootstrap5-grid.txt"
   - "material/tema 01/txt/bootstrap5-navbar.txt"
   - "material/tema 01/txt/bootstrap5-card.txt"
