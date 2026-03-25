@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       confirm:
-        description: '¿Deployar edu-standalone → ramas production y lenguajes? Escribí "si" para confirmar'
+        description: '¿Deployar edu-standalone → ramas production, lenguajes y lenguajes2026? Escribí "si" para confirmar'
         required: true
         default: ''
 
@@ -22,7 +22,7 @@ jobs:
     if: ${{ github.event_name == 'push' || github.event.inputs.confirm == 'si' }}
     strategy:
       matrix:
-        target_branch: [production, lenguajes]
+        target_branch: [production, lenguajes, lenguajes2026]
 
     steps:
       - name: Checkout main
@@ -55,82 +55,81 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: "4.0.5 - Sync .github/workflows y copilot-instructions desde main"
+      - name: "4.0 — Limpiar rama destino preservando runtime"
         run: |
-          # Sync workflows y copilot-instructions - NO prompts (los maneja el paso 4.6), NO agents/ (solo edu-* van ahi)
-          rsync -av --delete main-repo/.github/workflows/ target-repo/.github/workflows/
-          cp main-repo/.github/copilot-instructions.md target-repo/.github/copilot-instructions.md 2>/dev/null || true
-          # Limpiar agentes BMAD que pudieran haber quedado
-          rm -f target-repo/.github/agents/bmad-*.agent.md
-          echo "OK .github/workflows/ y copilot-instructions sincronizados desde main (prompts y agents/ gestionados por pasos 4.6 y 4.5)"
+          preserve_dir="$(mktemp -d)"
+          mkdir -p "$preserve_dir/_edu" "$preserve_dir/salida"
 
-      - name: "4.1 — Deploy _edu/agents/"
-        run: |
-          rm -rf target-repo/_edu/agents
-          mkdir -p target-repo/_edu
-          cp -r main-repo/salida/edu-standalone/_edu/agents target-repo/_edu/agents
-          echo "✅ _edu/agents/ → $(ls target-repo/_edu/agents/ | wc -l) archivos"
-
-      - name: "4.2 — Deploy _edu/workflows/"
-        run: |
-          rm -rf target-repo/_edu/workflows
-          cp -r main-repo/salida/edu-standalone/_edu/workflows target-repo/_edu/workflows
-          echo "✅ _edu/workflows/ → $(ls target-repo/_edu/workflows/ | wc -l) carpetas"
-
-      - name: "4.3 — Deploy _edu/module-help.csv"
-        run: |
-          cp main-repo/salida/edu-standalone/_edu/module-help.csv target-repo/_edu/module-help.csv
-          echo "✅ _edu/module-help.csv actualizado"
-
-      - name: "4.4 — Deploy _edu/config.yaml (solo primer deploy)"
-        run: |
-          if [ ! -f target-repo/_edu/config.yaml ]; then
-            cp main-repo/salida/edu-standalone/_edu/config.yaml target-repo/_edu/config.yaml
-            echo "✅ _edu/config.yaml copiado del standalone (primer deploy)"
-          else
-            echo "⏭️  _edu/config.yaml PRESERVADO — ya estaba configurado"
+          if [ -f target-repo/_edu/config.yaml ]; then
+            mv target-repo/_edu/config.yaml "$preserve_dir/_edu/config.yaml"
           fi
 
-      - name: "4.5 — Deploy .github/agents/edu-*"
-        run: |
-          mkdir -p target-repo/.github/agents
-          rm -f target-repo/.github/agents/edu-*.md
-          cp main-repo/salida/edu-standalone/.github/agents/edu-*.agent.md target-repo/.github/agents/
-          echo "✅ .github/agents/ edu-* → $(ls target-repo/.github/agents/edu-*.agent.md | wc -l) archivos"
+          if [ -f target-repo/.env ]; then
+            mv target-repo/.env "$preserve_dir/.env"
+          fi
 
-      - name: "4.6 - Deploy .github/prompts/edu-* (solo edu, sin BMAD)"
-        run: |
-          mkdir -p target-repo/.github/prompts
-          # Borrar TODOS los prompts existentes (BMAD y cualquier otro) antes de copiar solo los edu-*
-          rm -f target-repo/.github/prompts/*.prompt.md
-          cp main-repo/salida/edu-standalone/.github/prompts/edu-*.prompt.md target-repo/.github/prompts/
-          echo "OK .github/prompts/ - solo edu-* -> $(ls target-repo/.github/prompts/edu-*.prompt.md | wc -l) archivos (prompts BMAD excluidos)"
+          if [ -d target-repo/_edu-memory ]; then
+            mv target-repo/_edu-memory "$preserve_dir/_edu-memory"
+          fi
 
-      - name: "4.7 — Actualizar bloque EDU en copilot-instructions.md"
+          if [ -d target-repo/salida/cursadas ]; then
+            mv target-repo/salida/cursadas "$preserve_dir/salida/cursadas"
+          fi
+
+          find target-repo -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+
+          if [ -f "$preserve_dir/_edu/config.yaml" ]; then
+            mkdir -p target-repo/_edu
+            mv "$preserve_dir/_edu/config.yaml" target-repo/_edu/config.yaml
+          fi
+
+          if [ -f "$preserve_dir/.env" ]; then
+            mv "$preserve_dir/.env" target-repo/.env
+          fi
+
+          if [ -d "$preserve_dir/_edu-memory" ]; then
+            mv "$preserve_dir/_edu-memory" target-repo/_edu-memory
+          fi
+
+          if [ -d "$preserve_dir/salida/cursadas" ]; then
+            mkdir -p target-repo/salida
+            mv "$preserve_dir/salida/cursadas" target-repo/salida/cursadas
+          fi
+
+          rm -rf "$preserve_dir"
+          echo "✅ Rama destino limpiada; runtime preservado (_edu/config.yaml, .env, _edu-memory, salida/cursadas)"
+
+      - name: "4.0.5 — Sync root de edu-standalone"
         run: |
+          rsync -av --delete \
+            --exclude='.git/' \
+            --exclude='_edu/config.yaml' \
+            --exclude='.env' \
+            --exclude='_edu-memory/' \
+            --exclude='salida/cursadas/' \
+            --exclude='.github/copilot-instructions.md' \
+            main-repo/salida/edu-standalone/ target-repo/
+          echo "✅ Root standalone sincronizado en ${{ matrix.target_branch }}"
+
+      - name: "4.0.6 — Sync .github/workflows desde main"
+        run: |
+          mkdir -p target-repo/.github
+          rsync -av --delete main-repo/.github/workflows/ target-repo/.github/workflows/
+          echo "✅ .github/workflows sincronizado desde main"
+
+      - name: "4.0.7 — Reconstruir copilot-instructions.md"
+        run: |
+          cp main-repo/.github/copilot-instructions.md target-repo/.github/copilot-instructions.md 2>/dev/null || true
           sed -i '/<!-- EDU:START -->/,/<!-- EDU:END -->/d' target-repo/.github/copilot-instructions.md || true
           echo "" >> target-repo/.github/copilot-instructions.md
           cat main-repo/salida/edu-standalone/.github/copilot-instructions.md >> target-repo/.github/copilot-instructions.md
-          echo "✅ copilot-instructions.md — bloque EDU actualizado"
+          echo "✅ copilot-instructions.md reconstruido con base main + bloque EDU"
 
-      - name: "4.8.1 — Deploy scripts/ (pipeline, setup, goproduction)"
+      - name: "4.0.8 — Garantizar .env inicial"
         run: |
-          rm -rf target-repo/scripts
-          cp -r main-repo/salida/edu-standalone/scripts target-repo/scripts
-          echo "✅ scripts/ → $(ls target-repo/scripts/ | grep -v __pycache__ | wc -l) archivos"
-
-      - name: "4.8.2 — Deploy requirements.txt y README.md"
-        run: |
-          cp main-repo/salida/edu-standalone/requirements.txt target-repo/requirements.txt
-          cp main-repo/salida/edu-standalone/README.md target-repo/README.md
-          echo "✅ requirements.txt y README.md actualizados"
-
-      - name: "4.8.3 — Deploy .env.example (solo si no existe .env real)"
-        run: |
-          cp main-repo/salida/edu-standalone/.env.example target-repo/.env.example
-          if [ ! -f target-repo/.env ]; then
-            cp main-repo/salida/edu-standalone/.env.example target-repo/.env
-            echo "✅ .env.example copiado y .env generado (primer deploy)"
+          if [ ! -f target-repo/.env ] && [ -f target-repo/.env.example ]; then
+            cp target-repo/.env.example target-repo/.env
+            echo "✅ .env generado desde .env.example (primer deploy)"
           else
             echo "⏭️  .env PRESERVADO — ya estaba configurado"
           fi

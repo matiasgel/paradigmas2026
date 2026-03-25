@@ -1,24 +1,34 @@
-# Editor / OS
-.DS_Store
-.vscode/settings.json
-*.swp
-*~
+# EDU Standalone — Ignorar en git
+# =================================
+
+# Credenciales y secretos OAuth (NUNCA commitear)
+_edu/credentials.json
+_edu/token_slides.json
+_edu/token*.json
+_edu/secrets.local.yaml
+
+# Variables de entorno con rutas locales
+.env
 
 # Python
 __pycache__/
-*.pyc
-.env
-
-# Node
-node_modules/
-
-# Temporales
-*.tmp
-*.bak
+*.py[cod]
+*.pyo
 .venv/
+venv/
+env/
 
-# EDU secrets
-_edu/secrets.local.yaml
-_edu/credentials.json
-_edu/token_slides.json
+# Assets generados localmente (imágenes/tablas = artefactos, no código)
+salida/cursadas/*/temas/*/slides/assets/
+salida/cursadas/*/temas/*/slides/slides-url.txt
+
+# Test runs (generados por test_pipeline.py)
 reporte/
+
+# Temas de prueba / fixtures temporales
+salida/cursadas/*/temas/*prueba*/
+salida/cursadas/*/temas/*pruebas*/
+
+# IDE
+.vscode/
+.idea/

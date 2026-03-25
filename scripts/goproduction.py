@@ -2,7 +2,7 @@
 """
 EDU Standalone — Publicar en rama production
 ============================================
-Despliega salida/edu-standalone/ hacia las ramas de destino (production, lenguajes).
+Despliega salida/edu-standalone/ hacia las ramas de destino (production, lenguajes, lenguajes2026).
 
 Dos modos de operación:
   trigger (defecto): hace commit+push a main → activa GitHub Actions automáticamente
@@ -127,7 +127,7 @@ def trigger_via_push(project_root: Path, dry_run: bool) -> None:
 
     print("\n📤 Haciendo push a main …")
     _run(["git", "push", "origin", current_branch], cwd=project_root, capture=False)
-    _ok("Push completado. GitHub Actions desplegará edu-standalone → production.")
+    _ok("Push completado. GitHub Actions desplegará edu-standalone → production, lenguajes y lenguajes2026.")
 
     # Construir URL de Actions según formato SSH o HTTPS
     actions_url = (
@@ -193,7 +193,7 @@ def local_deploy(
                 subprocess.run(["git", "rm", "-rf", "."], cwd=wt_path, capture_output=True)
 
             try:
-                _sync_edu_artifacts(edu_src, wt_path)
+                _sync_edu_artifacts(project_root, edu_src, wt_path)
                 _commit_and_push(wt_path, branch)
             finally:
                 # Siempre limpiar el worktree
@@ -209,95 +209,113 @@ def local_deploy(
 
 # ── Sincronización de artefactos ──────────────────────────────────────────────
 
-def _sync_edu_artifacts(edu_src: Path, target: Path) -> None:
-    """Copia artefactos de edu-standalone/ al worktree destino.
-
-    Replica la misma lógica del GitHub Actions goproduction.yml:
-      4.1  _edu/agents/
-      4.2  _edu/workflows/
-      4.3  _edu/module-help.csv
-      4.4  _edu/config.yaml (solo si no existe → preservar config del usuario)
-      4.5  .github/agents/edu-*.agent.md
-      4.6  .github/prompts/edu-*.prompt.md
-      4.7  .github/copilot-instructions.md
-           scripts/
-    """
+def _sync_edu_artifacts(project_root: Path, edu_src: Path, target: Path) -> None:
+    """Sincroniza el root de edu-standalone en el worktree destino preservando runtime."""
     print()
     _info("Sincronizando artefactos:")
 
-    def cp_dir(src_rel: str, dst_rel: str) -> None:
-        src = edu_src / src_rel
-        dst = target / dst_rel
-        if not src.exists():
-            _warn(f"  No existe: {src_rel} — omitido")
-            return
-        if dst.exists():
-            shutil.rmtree(dst)
-        shutil.copytree(src, dst)
-        count = sum(1 for _ in dst.rglob("*") if _.is_file())
-        _info(f"  {src_rel}/ → {dst_rel}/  ({count} archivos)")
+    def preserve_path(preserve_root: Path, rel_path: str) -> tuple[Path, Path] | None:
+        current = target / rel_path
+        if not current.exists():
+            return None
 
-    def cp_file(src_rel: str, dst_rel: str, *, skip_if_exists: bool = False) -> None:
-        src = edu_src / src_rel
-        dst = target / dst_rel
-        if not src.exists():
-            _warn(f"  No existe: {src_rel} — omitido")
+        saved = preserve_root / rel_path
+        saved.parent.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(current), str(saved))
+        _info(f"  preservado: {rel_path}")
+        return current, saved
+
+    def restore_path(saved_entry: tuple[Path, Path] | None) -> None:
+        if not saved_entry:
             return
-        if skip_if_exists and dst.exists():
-            _info(f"  {dst_rel} preservado (configuración del usuario)")
-            return
+
+        destination, saved = saved_entry
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(saved), str(destination))
+
+    def _display_rel(path: Path, base: Path) -> Path | str:
+        try:
+            return path.relative_to(base)
+        except ValueError:
+            return path.name
+
+    def copy_tree(src: Path, dst: Path, *, ignore=None) -> None:
+        shutil.copytree(src, dst, dirs_exist_ok=True, ignore=ignore)
+        count = sum(1 for item in dst.rglob("*") if item.is_file())
+        _info(f"  {_display_rel(src, edu_src)}/ → {dst.relative_to(target)}/  ({count} archivos)")
+
+    def copy_file(src: Path, dst: Path) -> None:
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dst)
-        _info(f"  {src_rel} → {dst_rel}")
+        _info(f"  {_display_rel(src, edu_src)} → {dst.relative_to(target)}")
 
-    # 4.1 Agentes
-    cp_dir("_edu/agents", "_edu/agents")
-    # 4.2 Workflows
-    cp_dir("_edu/workflows", "_edu/workflows")
-    # Tasks (si existen)
-    if (edu_src / "_edu/tasks").exists():
-        cp_dir("_edu/tasks", "_edu/tasks")
-    # 4.3 Module help
-    cp_file("_edu/module-help.csv", "_edu/module-help.csv")
-    # 4.4 Config (preserved si ya existe)
-    cp_file("_edu/config.yaml", "_edu/config.yaml", skip_if_exists=True)
+    with tempfile.TemporaryDirectory(prefix="edu-sync-") as tmpdir:
+        preserve_root = Path(tmpdir)
+        preserved = [
+            preserve_path(preserve_root, "_edu/config.yaml"),
+            preserve_path(preserve_root, ".env"),
+            preserve_path(preserve_root, "_edu-memory"),
+            preserve_path(preserve_root, "salida/cursadas"),
+        ]
 
-    # 4.5 Agentes GitHub edu-*
-    agents_src = edu_src / ".github/agents"
-    if agents_src.exists():
-        agents_dst = target / ".github/agents"
-        agents_dst.mkdir(parents=True, exist_ok=True)
-        for f in agents_dst.glob("edu-*.md"):
-            f.unlink()
-        copied = 0
-        for f in agents_src.glob("edu-*.agent.md"):
-            shutil.copy2(f, agents_dst / f.name)
-            copied += 1
-        _info(f"  .github/agents/edu-*  ({copied} archivos)")
+        for item in target.iterdir():
+            if item.name == ".git":
+                continue
+            if item.is_dir():
+                shutil.rmtree(item)
+            else:
+                item.unlink()
 
-    # 4.6 Prompts edu-*
-    prompts_src = edu_src / ".github/prompts"
-    if prompts_src.exists():
-        prompts_dst = target / ".github/prompts"
-        prompts_dst.mkdir(parents=True, exist_ok=True)
-        for f in prompts_dst.glob("*.prompt.md"):
-            f.unlink()
-        copied = 0
-        for f in prompts_src.glob("edu-*.prompt.md"):
-            shutil.copy2(f, prompts_dst / f.name)
-            copied += 1
-        _info(f"  .github/prompts/edu-*  ({copied} archivos)")
+        for saved_entry in preserved:
+            restore_path(saved_entry)
 
-    # 4.7 copilot-instructions.md
-    cp_file(".github/copilot-instructions.md", ".github/copilot-instructions.md")
+        for item in edu_src.iterdir():
+            if item.name in {".git", "_edu-memory"}:
+                continue
 
-    # Scripts del pipeline
-    cp_dir("scripts", "scripts")
+            destination = target / item.name
+            if item.name == ".github":
+                copy_tree(item, destination, ignore=shutil.ignore_patterns("copilot-instructions.md"))
+                continue
+            if item.name == "_edu":
+                copy_tree(item, destination, ignore=shutil.ignore_patterns("config.yaml"))
+                continue
+            if item.name == "salida":
+                copy_tree(item, destination, ignore=shutil.ignore_patterns("cursadas"))
+                continue
 
-    # README
-    cp_file("README.md", "README.md")
-    # requirements.txt raíz
-    cp_file("requirements.txt", "requirements.txt")
+            if item.is_dir():
+                copy_tree(item, destination)
+            else:
+                copy_file(item, destination)
+
+    workflows_src = project_root / ".github" / "workflows"
+    workflows_dst = target / ".github" / "workflows"
+    if workflows_src.exists():
+        copy_tree(workflows_src, workflows_dst)
+
+    base_instructions = project_root / ".github" / "copilot-instructions.md"
+    edu_instructions = edu_src / ".github" / "copilot-instructions.md"
+    target_instructions = target / ".github" / "copilot-instructions.md"
+    if base_instructions.exists():
+        target_instructions.parent.mkdir(parents=True, exist_ok=True)
+        base_content = base_instructions.read_text(encoding="utf-8")
+        start_marker = "<!-- EDU:START -->"
+        end_marker = "<!-- EDU:END -->"
+        if start_marker in base_content and end_marker in base_content:
+            start_index = base_content.index(start_marker)
+            base_content = base_content[:start_index].rstrip() + "\n"
+        edu_block = edu_instructions.read_text(encoding="utf-8") if edu_instructions.exists() else ""
+        target_instructions.write_text(base_content + "\n" + edu_block.lstrip("\n"), encoding="utf-8")
+        _info("  .github/copilot-instructions.md recompuesto desde main + EDU")
+
+    env_example = target / ".env.example"
+    env_file = target / ".env"
+    if env_example.exists() and not env_file.exists():
+        shutil.copy2(env_example, env_file)
+        _info("  .env generado desde .env.example")
+    elif env_file.exists():
+        _info("  .env preservado (configuración del usuario)")
 
 
 def _commit_and_push(wt_path: Path, branch: str) -> None:
@@ -336,9 +354,9 @@ def main() -> None:
     parser.add_argument(
         "--branches",
         nargs="+",
-        default=["production", "lenguajes"],
+        default=["production", "lenguajes", "lenguajes2026"],
         metavar="BRANCH",
-        help="Ramas destino para --local (defecto: production lenguajes).",
+        help="Ramas destino para --local (defecto: production lenguajes lenguajes2026).",
     )
     parser.add_argument(
         "--dry-run",
@@ -349,7 +367,7 @@ def main() -> None:
 
     print()
     print("╔══════════════════════════════════════════════════════╗")
-    print("║   EDU Standalone — Publicar en rama production       ║")
+    print("║   EDU Standalone — Publicar ramas de producción      ║")
     print("╚══════════════════════════════════════════════════════╝")
 
     if args.dry_run:
@@ -365,7 +383,6 @@ def main() -> None:
         edu_rel = str(edu_src)
 
     _info(f"Raíz del proyecto: {project_root}")
-    _info(f"Fuente EDU:        {edu_src}  ({edu_rel})")
 
     check_and_commit_changes(project_root, edu_rel, args.dry_run)
 

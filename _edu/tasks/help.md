@@ -63,8 +63,7 @@ Nunca mostrar todos los 28 a la vez — presentar los 3-5 más relevantes según
 ### Phase 3 — slides (opcional)
 - `edu-setup-apis` — configurar APIs (una vez)
 - `edu-slides-designer` — diseño visual (una vez por cursada)
-- `edu-publish-slides` — publicar filminas en Google Slides
-- `edu-slides-publisher` — re-exportar sin rediseñar
+- `edu-publish-slides` — único punto de entrada para publicar filminas en Google Slides
 
 ### Phase 4
 - `edu-close-course`, `edu-start-new-year`

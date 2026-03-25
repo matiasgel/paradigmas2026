@@ -2,6 +2,8 @@
 
 Pipeline completo de producción docente universitaria con inteligencia pedagógica.
 
+<!-- última actualización: 2026-03-23 -->
+
 ## Quick Start
 
 1. Cloná o copiá este directorio como raíz de tu proyecto
@@ -301,9 +303,9 @@ La primera vez que corrás el flujo completo, se abrirá el navegador para autor
 
 ---
 
-## Publicar en Rama Production
+## Publicar en Ramas de Publicación
 
-El módulo `edu-standalone/` se despliega automáticamente a las ramas `production` y `lenguajes` cuando se hace push a `main` (via [GitHub Actions](.github/workflows/goproduction.yml)).
+El módulo `edu-standalone/` se despliega automáticamente a las ramas `production`, `lenguajes` y `lenguajes2026` cuando se hace push a `main` (via [GitHub Actions](.github/workflows/goproduction.yml)).
 
 ### Método 1: Trigger via GitHub Actions (recomendado)
 
@@ -316,7 +318,7 @@ Detecta cambios sin commitear en `edu-standalone/`, ofrece hacer commit automát
 ### Método 2: Deploy local directo
 
 ```bash
-# Deploy a production y lenguajes sin GitHub Actions
+# Deploy a production, lenguajes y lenguajes2026 sin GitHub Actions
 python scripts/goproduction.py --local
 
 # Solo a una rama específica
@@ -334,7 +336,7 @@ Usa `git worktree` para no ensuciar el repo local.
 |--------|-------------|
 | _(sin opciones)_ | Trigger via push a `main` → GitHub Actions |
 | `--local` | Deploy local directo con git worktree |
-| `--branches BRANCH+` | Ramas destino para `--local` (defecto: `production lenguajes`) |
+| `--branches BRANCH+` | Ramas destino para `--local` (defecto: `production lenguajes lenguajes2026`) |
 | `--dry-run` | Mostrar qué se haría sin ejecutar cambios |
 
 ### Via Copilot Chat
