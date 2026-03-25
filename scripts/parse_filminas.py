@@ -43,6 +43,7 @@ import yaml
 # Reutiliza las funciones de parseo del pipeline principal (sin invocar APIs)
 sys.path.insert(0, str(Path(__file__).parent))
 from slides_pipeline import (
+    apply_pipeline_runtime,
     parse_filminas,
     load_filminas_schema,
     find_project_root,
@@ -67,6 +68,7 @@ def generate_draft(filminas_path: Path, config: dict, template_id: str) -> tuple
         (draft_dict, n_pending_types, n_pending_prompts)
     """
     project_root = find_project_root(filminas_path.parent)
+    apply_pipeline_runtime(project_root, config, filminas_path.parent)
     schema = load_filminas_schema(project_root)
 
     # parse_filminas() (v2) devuelve type = directives.get("type") or "pending"

@@ -19,22 +19,8 @@ from pathlib import Path
 
 import yaml
 
-# Tipos permitidos (enum cerrado — nunca inferidos)
-ALLOWED_TYPES = {
-    "portada", "concepto-abstracto", "concepto-mixto", "codigo",
-    "tabla", "tabla-comparativa", "diagrama", "socratica",
-    "demo", "cierre", "timeline",
-}
-
-# Zonas de layout permitidas
-ALLOWED_LAYOUT_ZONES = {
-    "title": {"center-middle", "full-title", "center-top", "left-top"},
-    "body":  {"center-bottom", "left-middle", "center-middle", "subtitle-only",
-              "table-intro", "full-center", "full-bottom", "none"},
-    "image": {"background", "right-half", "none"},
-    "code":  {"right-half", "full-bottom", "none"},
-    "table": {"table-main", "none"},
-}
+sys.path.insert(0, str(Path(__file__).parent))
+from slides_pipeline import load_pipeline_runtime
 
 # Estrategias de imagen permitidas
 ALLOWED_IMAGE_STRATEGIES = {"background", "content", "gemini", "none"}
@@ -59,10 +45,33 @@ def load_config(project_root: Path) -> dict:
     return {}
 
 
+def pipeline_contract(project_root: Path, topic_folder: Path, config: dict) -> tuple[set[str], dict[str, set[str]]]:
+    runtime = load_pipeline_runtime(project_root, config, topic_folder)
+    slide_types = runtime.get("slide_types", {}) or {}
+    allowed_types = set(slide_types.keys())
+    allowed_layout_zones = {
+        "title": set(),
+        "body": set(),
+        "image": set(),
+        "code": set(),
+        "table": set(),
+    }
+    for spec in slide_types.values():
+        layout = spec.get("layout", {}) or {}
+        for zone, allowed in allowed_layout_zones.items():
+            value = layout.get(zone)
+            if value is not None:
+                allowed.add(str(value))
+    for allowed in allowed_layout_zones.values():
+        allowed.add("none")
+    return allowed_types, allowed_layout_zones
+
+
 def validate_plan(topic_folder: Path) -> list[str]:
     """Valida el plan YAML y retorna lista de errores (vacía = válido)."""
     project_root = find_project_root(topic_folder)
     config = load_config(project_root)
+    allowed_types, allowed_layout_zones = pipeline_contract(project_root, topic_folder, config)
 
     # Encontrar el plan YAML
     slides_dir = topic_folder / "slides"
@@ -109,8 +118,8 @@ def validate_plan(topic_folder: Path) -> list[str]:
         slide_type = slide.get("type", "")
         if not slide_type:
             errors.append(f"{prefix}: campo 'type' faltante — DEBE ser explícito, nunca inferido")
-        elif slide_type not in ALLOWED_TYPES:
-            errors.append(f"{prefix}: type='{slide_type}' no está en el enum permitido: {sorted(ALLOWED_TYPES)}")
+        elif slide_type not in allowed_types:
+            errors.append(f"{prefix}: type='{slide_type}' no está en el enum permitido: {sorted(allowed_types)}")
 
         # 2. title no vacío
         if not slide.get("title", "").strip():
@@ -121,7 +130,7 @@ def validate_plan(topic_folder: Path) -> list[str]:
         if not layout:
             errors.append(f"{prefix}: 'layout' faltante")
         else:
-            for zone, allowed in ALLOWED_LAYOUT_ZONES.items():
+            for zone, allowed in allowed_layout_zones.items():
                 val = layout.get(zone)
                 if val is None:
                     errors.append(f"{prefix}: layout.{zone} faltante")

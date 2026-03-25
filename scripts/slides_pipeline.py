@@ -38,6 +38,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import json
 import re
 import sys
 import time
@@ -65,17 +66,20 @@ SCOPES = [
 ]
 
 DEFAULT_FILMINAS_SCHEMA = Path("_edu/templates/filminas-schema.yaml")
+DEFAULT_PIPELINE_CONFIG_JSON = Path("_edu/slides-pipeline.json")
+DEFAULT_TOPIC_PIPELINE_OVERRIDE = Path("slides/pipeline-config.json")
 
 # Dimensiones estándar 16:9 en EMU (English Metric Units)
 SLIDE_W = 9_144_000
 SLIDE_H = 5_143_500
 MARGIN = 457_200      # ~0.5 pulgada
 TITLE_H = 760_000  # alto reservado para título, compacto para maximizar espacio útil de contenido
-LOGO_CLEAR = 700_000  # y mínimo para no solapar el logo institucional del template
-TITLE_SAFE_X = 1_520_000
+LOGO_CLEAR = 430_000  # subir el título y correrlo a la derecha para liberar el logo institucional
+TITLE_SAFE_X = 2_050_000
 BOTTOM_CLEAR = 760_000
 TABLE_BOTTOM_CLEAR = 1_520_000
 EMU_PER_PT = 12_700
+PIPELINE_RUNTIME: dict[str, Any] = {}
 
 # Estrategia de imagen por tipo de filmina
 IMAGE_STRATEGY: dict[str, str] = {
@@ -95,7 +99,7 @@ IMAGE_STRATEGY: dict[str, str] = {
 
 # Directrices de layout por tipo
 LAYOUT_MAP: dict[str, dict] = {
-    "portada":            {"title": "center-middle",  "body": "center-bottom", "image": "background", "code": "none",       "table": "none"},
+    "portada":            {"title": "full-title",     "body": "center-bottom", "image": "background", "code": "none",       "table": "none"},
     "concepto-abstracto": {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none",       "table": "none"},
     "concepto-mixto":     {"title": "full-title",     "body": "left-middle",   "image": "none",       "code": "right-half", "table": "none"},
     "tabla-mixta":        {"title": "full-title",     "body": "left-top-split", "image": "none",      "code": "left-bottom-split", "table": "right-half"},
@@ -111,22 +115,26 @@ LAYOUT_MAP: dict[str, dict] = {
 
 # Geometría de zonas en EMU: (x, y, width, height)
 def _zones(w: int = SLIDE_W, h: int = SLIDE_H, m: int = MARGIN, th: int = TITLE_H) -> dict[str, tuple]:
+    geometry = PIPELINE_RUNTIME.get("geometry", {}) or {}
     half_w = w // 2
-    body_y = LOGO_CLEAR + th + 80_000
+    body_y = LOGO_CLEAR + th + int(geometry.get("body_top_gap", 80_000))
     body_h = h - body_y - max(m, BOTTOM_CLEAR)
-    table_intro_h = 620_000
-    table_gap = 220_000
+    cover_subtitle_y = LOGO_CLEAR + th + int(geometry.get("cover_subtitle_offset_y", 250_000))
+    cover_subtitle_h = int(geometry.get("cover_subtitle_height", 500_000))
+    table_intro_h = int(geometry.get("table_intro_height", 620_000))
+    table_gap = int(geometry.get("table_gap", 220_000))
     table_main_y = body_y + table_intro_h + table_gap
     table_main_h = h - table_main_y - max(m, TABLE_BOTTOM_CLEAR)
-    split_intro_h = 600_000
-    split_gap = 180_000
-    split_left_w = half_w - int(m * 1.35)
+    split_intro_h = int(geometry.get("split_intro_height", 600_000))
+    split_gap = int(geometry.get("split_gap", 180_000))
+    split_left_w = half_w - int(m * float(geometry.get("split_left_margin_factor", 1.35)))
     split_bottom_y = body_y + split_intro_h + split_gap
     split_bottom_h = max(600_000, body_h - split_intro_h - split_gap)
     return {
         "full-title":    (TITLE_SAFE_X, LOGO_CLEAR,   w - TITLE_SAFE_X - m, th),   # reserva lateral para logo
         "left-top":      (m,            LOGO_CLEAR,   half_w - m,      th),        # media anchura
         "center-top":    (m,            LOGO_CLEAR,   w - 2 * m,       th),
+        "cover-subtitle": (TITLE_SAFE_X, cover_subtitle_y, w - TITLE_SAFE_X - m, cover_subtitle_h),
         "center-middle": (m,            h // 3,       w - 2 * m,       h // 3),
         "center-bottom": (m,            h * 2 // 3,   w - 2 * m,       h // 3 - m),
         "left-middle":   (m,            body_y,       half_w - m,      body_h),
@@ -183,6 +191,127 @@ def _deep_merge_dict(base: dict[str, Any], incoming: dict[str, Any]) -> dict[str
         else:
             merged[key] = value
     return merged
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    with path.open("r", encoding="utf-8") as f:
+        return json.load(f) or {}
+
+
+def _default_pipeline_runtime() -> dict[str, Any]:
+    return {
+        "canvas": {
+            "slide_width": 9_144_000,
+            "slide_height": 5_143_500,
+            "margin": 457_200,
+            "title_height": 760_000,
+            "logo_clear": 430_000,
+            "title_safe_x": 2_050_000,
+            "bottom_clear": 760_000,
+            "table_bottom_clear": 1_520_000,
+            "emu_per_pt": 12_700,
+        },
+        "geometry": {
+            "body_top_gap": 80_000,
+            "cover_subtitle_offset_y": 250_000,
+            "cover_subtitle_height": 500_000,
+            "table_intro_height": 620_000,
+            "table_gap": 220_000,
+            "split_intro_height": 600_000,
+            "split_gap": 180_000,
+            "split_left_margin_factor": 1.35,
+        },
+        "table_rendering": {
+            "default_header_font": 13,
+            "default_body_font": 12,
+            "compact_header_font": 10,
+            "compact_body_font": 9,
+            "compact_row_threshold": 7,
+            "right_half_force_compact": True,
+            "table_main_y_offset": 110_000,
+            "table_main_height_delta": 620_000,
+        },
+        "cover_rendering": {
+            "title_short_size": 28,
+            "title_long_size": 24,
+            "title_short_threshold": 30,
+            "subtitle_zone": "cover-subtitle",
+            "subtitle_align": "LEFT",
+            "min_title_size": 24,
+            "min_default_title_size": 20,
+        },
+        "slide_types": {
+            "portada": {"layout": {"title": "full-title", "body": "center-bottom", "image": "background", "code": "none", "table": "none"}, "image_layer": "background"},
+            "concepto-abstracto": {"layout": {"title": "full-title", "body": "left-middle", "image": "right-half", "code": "none", "table": "none"}, "image_layer": "content"},
+            "concepto-mixto": {"layout": {"title": "full-title", "body": "left-middle", "image": "none", "code": "right-half", "table": "none"}, "image_layer": "none"},
+            "tabla-mixta": {"layout": {"title": "full-title", "body": "left-top-split", "image": "none", "code": "left-bottom-split", "table": "right-half"}, "image_layer": "none"},
+            "codigo": {"layout": {"title": "full-title", "body": "subtitle-only", "image": "none", "code": "full-bottom", "table": "none"}, "image_layer": "none"},
+            "tabla": {"layout": {"title": "full-title", "body": "table-intro", "image": "none", "code": "none", "table": "table-main"}, "image_layer": "none"},
+            "tabla-comparativa": {"layout": {"title": "full-title", "body": "table-intro", "image": "none", "code": "none", "table": "table-main"}, "image_layer": "none"},
+            "diagrama": {"layout": {"title": "full-title", "body": "left-middle", "image": "right-half", "code": "none", "table": "none"}, "image_layer": "content"},
+            "socratica": {"layout": {"title": "center-top", "body": "center-middle", "image": "background", "code": "none", "table": "none"}, "image_layer": "background"},
+            "demo": {"layout": {"title": "full-title", "body": "left-middle", "image": "none", "code": "right-half", "table": "none"}, "image_layer": "none"},
+            "cierre": {"layout": {"title": "center-middle", "body": "center-bottom", "image": "background", "code": "none", "table": "none"}, "image_layer": "background"},
+            "timeline": {"layout": {"title": "full-title", "body": "full-center", "image": "none", "code": "none", "table": "none"}, "image_layer": "content"},
+        },
+    }
+
+
+def _pipeline_override_paths(project_root: Path, config: dict[str, Any] | None, topic_folder: Path | None) -> list[Path]:
+    override_paths: list[Path] = []
+    root_rel = str((config or {}).get("pipeline_config_json") or DEFAULT_PIPELINE_CONFIG_JSON.as_posix())
+    root_path = project_root / Path(root_rel)
+    if root_path.exists():
+        override_paths.append(root_path)
+
+    topic_rel = (config or {}).get("topic_pipeline_config_json")
+    if topic_folder and topic_rel:
+        topic_path = topic_folder / Path(str(topic_rel))
+        if topic_path.exists():
+            override_paths.append(topic_path)
+    elif topic_folder:
+        default_topic_path = topic_folder / DEFAULT_TOPIC_PIPELINE_OVERRIDE
+        if default_topic_path.exists():
+            override_paths.append(default_topic_path)
+
+    return override_paths
+
+
+def load_pipeline_runtime(project_root: Path, config: dict[str, Any] | None = None, topic_folder: Path | None = None) -> dict[str, Any]:
+    runtime = _default_pipeline_runtime()
+    for path in _pipeline_override_paths(project_root, config, topic_folder):
+        runtime = _deep_merge_dict(runtime, load_json(path))
+    return runtime
+
+
+def apply_pipeline_runtime(project_root: Path, config: dict[str, Any] | None = None, topic_folder: Path | None = None) -> dict[str, Any]:
+    global PIPELINE_RUNTIME, SLIDE_W, SLIDE_H, MARGIN, TITLE_H, LOGO_CLEAR, TITLE_SAFE_X
+    global BOTTOM_CLEAR, TABLE_BOTTOM_CLEAR, EMU_PER_PT, IMAGE_STRATEGY, LAYOUT_MAP, ZONES
+
+    runtime = load_pipeline_runtime(project_root, config, topic_folder)
+    canvas = runtime.get("canvas", {}) or {}
+    slide_types = runtime.get("slide_types", {}) or {}
+
+    SLIDE_W = int(canvas.get("slide_width", SLIDE_W))
+    SLIDE_H = int(canvas.get("slide_height", SLIDE_H))
+    MARGIN = int(canvas.get("margin", MARGIN))
+    TITLE_H = int(canvas.get("title_height", TITLE_H))
+    LOGO_CLEAR = int(canvas.get("logo_clear", LOGO_CLEAR))
+    TITLE_SAFE_X = int(canvas.get("title_safe_x", TITLE_SAFE_X))
+    BOTTOM_CLEAR = int(canvas.get("bottom_clear", BOTTOM_CLEAR))
+    TABLE_BOTTOM_CLEAR = int(canvas.get("table_bottom_clear", TABLE_BOTTOM_CLEAR))
+    EMU_PER_PT = int(canvas.get("emu_per_pt", EMU_PER_PT))
+    IMAGE_STRATEGY = {
+        slide_type: str(spec.get("image_layer", "none"))
+        for slide_type, spec in slide_types.items()
+    }
+    LAYOUT_MAP = {
+        slide_type: dict(spec.get("layout", {}))
+        for slide_type, spec in slide_types.items()
+    }
+    PIPELINE_RUNTIME = runtime
+    ZONES = _zones()
+    return runtime
 
 
 def _default_filminas_schema() -> dict[str, Any]:
@@ -330,6 +459,134 @@ def _list_item_parts(item: Any) -> tuple[str, int]:
     if isinstance(item, dict):
         return _strip_markdown(str(item.get("content", ""))), int(item.get("level", 0) or 0)
     return _strip_markdown(str(item)), 0
+
+
+def _parse_label_value(text: str) -> tuple[str, str, str] | None:
+    plain = _strip_markdown(text).strip()
+    plain = re.sub(r"^>\s*", "", plain).strip()
+    match = re.match(r"^(?P<label>[^:]{2,50}):\s*(?P<value>.+)$", plain)
+    if not match:
+        return None
+    label = match.group("label").strip()
+    if label.count(" ") > 6:
+        return None
+    value = match.group("value").strip()
+    if not value:
+        return None
+    return label, label.lower(), value
+
+
+def _normalized_text_block(content: str) -> dict[str, Any] | None:
+    clean = re.sub(r"^>\s*", "", _strip_markdown(content).strip()).strip()
+    if not clean:
+        return None
+    return {"type": "text", "content": clean}
+
+
+def _body_block_weight(blocks: list[dict[str, Any]]) -> int:
+    weight = 0
+    for block in blocks:
+        kind = block.get("type")
+        if kind == "list":
+            weight += len(block.get("items", []))
+        elif kind in {"text", "heading"}:
+            weight += 1
+    return weight
+
+
+def _normalize_slide_semantics(slide: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(slide)
+    title = str(normalized.get("title", "") or "").strip()
+    subtitle = str(normalized.get("subtitle", "") or "").strip()
+    source_blocks = normalized.get("body_blocks") or []
+    body_blocks: list[dict[str, Any]] = []
+
+    semantic_aliases = {
+        "titulo": "title",
+        "título": "title",
+        "subtitulo": "subtitle",
+        "subtítulo": "subtitle",
+        "pie": "footer",
+    }
+
+    for block in source_blocks:
+        kind = block.get("type")
+
+        if kind == "text":
+            text_block = _normalized_text_block(str(block.get("content", "")))
+            if text_block:
+                body_blocks.append(text_block)
+            continue
+
+        if kind != "list":
+            body_blocks.append(block)
+            continue
+
+        items = [
+            {"content": str(item.get("content", "")), "level": int(item.get("level", 0) or 0)}
+            for item in block.get("items", [])
+            if _strip_markdown(str(item.get("content", ""))).strip()
+        ]
+        if not items:
+            continue
+
+        label_info = _parse_label_value(items[0]["content"])
+        if label_info:
+            label_display, label_key, value = label_info
+            semantic_kind = semantic_aliases.get(label_key)
+            remaining_items = items[1:]
+
+            if semantic_kind == "title":
+                if title.lower() == "portada":
+                    title = value
+                elif not subtitle:
+                    subtitle = value
+                else:
+                    body_blocks.append({"type": "heading", "level": 3, "content": value})
+                if remaining_items:
+                    body_blocks.append({"type": "list", "ordered": bool(block.get("ordered", False)), "items": remaining_items})
+                continue
+
+            if semantic_kind == "subtitle":
+                if not subtitle:
+                    subtitle = value
+                else:
+                    body_blocks.append({"type": "text", "content": value})
+                if remaining_items:
+                    body_blocks.append({"type": "list", "ordered": bool(block.get("ordered", False)), "items": remaining_items})
+                continue
+
+            if semantic_kind == "footer":
+                body_blocks.append({"type": "text", "content": value})
+                if remaining_items:
+                    body_blocks.append({"type": "list", "ordered": bool(block.get("ordered", False)), "items": remaining_items})
+                continue
+
+            if remaining_items:
+                body_blocks.append({"type": "heading", "level": 3, "content": label_display})
+                body_blocks.append({"type": "list", "ordered": bool(block.get("ordered", False)), "items": remaining_items})
+                continue
+
+            body_blocks.append({"type": "text", "content": f"{label_display}: {value}"})
+            continue
+
+        if len(items) == 1:
+            single_block = _normalized_text_block(items[0]["content"])
+            if single_block:
+                body_blocks.append(single_block)
+            continue
+
+        body_blocks.append({"type": "list", "ordered": bool(block.get("ordered", False)), "items": items})
+
+    layout = dict(normalized.get("layout") or LAYOUT_MAP.get(normalized.get("type", "concepto-abstracto"), LAYOUT_MAP["concepto-abstracto"]))
+    if normalized.get("tables") and not normalized.get("code_blocks") and _body_block_weight(body_blocks) >= 3:
+        layout.update({"body": "left-middle", "table": "right-half", "image": "none", "code": "none"})
+
+    normalized["title"] = title
+    normalized["subtitle"] = subtitle
+    normalized["body_blocks"] = body_blocks
+    normalized["layout"] = layout
+    return normalized
 
 
 def _parse_inline_markdown(text: str) -> tuple[str, list[dict[str, Any]]]:
@@ -608,8 +865,12 @@ def _centered_box(geo: tuple[int, int, int, int], width_ratio: float, height_rat
 
 def parse_filminas(filminas_path: Path, schema: dict[str, Any] | None = None) -> list[dict]:
     """Lee filminas.md y extrae cada slide como estructura semántica completa."""
+    project_root = find_project_root(filminas_path.parent)
+    config_path = project_root / "_edu" / "slides-config.yaml"
+    config = load_yaml(config_path) if config_path.exists() else {}
+    apply_pipeline_runtime(project_root, config, filminas_path.parent)
     if schema is None:
-        schema = load_filminas_schema(find_project_root(filminas_path.parent))
+        schema = load_filminas_schema(project_root)
 
     text = filminas_path.read_text(encoding="utf-8")
     slides: list[dict] = []
@@ -756,7 +1017,7 @@ def _finalize_slide(raw: dict, schema: dict[str, Any]) -> dict:
             combined = "\n".join(block_lines)
             body_blocks.append({"type": "text", "content": combined})
 
-    return {
+    slide = {
         "id":          raw["id"],
         # v2 (Sprint 2): el tipo viene SIEMPRE del @tipo: explícito en filminas.md.
         # Sin @tipo: → "pending". _detect_type() ya no se llama aquí.
@@ -769,6 +1030,7 @@ def _finalize_slide(raw: dict, schema: dict[str, Any]) -> dict:
         "directives":  directives,
         "asset_hints": asset_hints,
     }
+    return _normalize_slide_semantics(slide)
 
 
 def validate_filminas_contract(slides: list[dict], schema: dict[str, Any], filminas_path: Path) -> None:
@@ -1001,6 +1263,7 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
     print("📋 Generando plan (legacy — con inferencia de tipos) desde filminas.md …")
 
     project_root = find_project_root(filminas_path.parent)
+    apply_pipeline_runtime(project_root, config, filminas_path.parent)
     schema = load_filminas_schema(project_root)
     slides      = parse_filminas(filminas_path, schema)
 
@@ -1400,6 +1663,7 @@ def _drive_url(drive_id: str) -> str:
 
 def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: int) -> list:
     """Construye todos los requests de la API para una filmina."""
+    slide = _normalize_slide_semantics(slide)
     reqs:    list[dict] = []
     palette  = config.get("palette", {})
     typo     = config.get("typography", {})
@@ -1715,6 +1979,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         geo = ZONES.get(zone)
         if not geo:
             return
+        table_cfg = PIPELINE_RUNTIME.get("table_rendering", {}) or {}
         rows = []
         for ln in table_md.strip().splitlines():
             clean = ln.replace("|", "").strip()
@@ -1729,13 +1994,19 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         n_rows = len(rows)
         x, y, w, h = geo
         if zone == "table-main":
-            y += 110_000
-            h = max(360_000, h - 620_000)
-        header_font = 13
-        body_font = 12
-        if n_rows >= 7:
-            header_font = 10
-            body_font = 9
+            y += int(table_cfg.get("table_main_y_offset", 110_000))
+            h = max(360_000, h - int(table_cfg.get("table_main_height_delta", 620_000)))
+        header_font = int(table_cfg.get("default_header_font", 13))
+        body_font = int(table_cfg.get("default_body_font", 12))
+        compact_header_font = int(table_cfg.get("compact_header_font", 10))
+        compact_body_font = int(table_cfg.get("compact_body_font", 9))
+        compact_row_threshold = int(table_cfg.get("compact_row_threshold", 7))
+        if zone == "right-half" and bool(table_cfg.get("right_half_force_compact", True)):
+            header_font = compact_header_font
+            body_font = compact_body_font
+        if n_rows >= compact_row_threshold:
+            header_font = compact_header_font
+            body_font = compact_body_font
         tbl_id = nid("tbl")
         reqs.append({
             "createTable": {
@@ -1842,15 +2113,19 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     title      = slide.get("title", "")
     title_zone = layout.get("title", "left-top")
     t_size     = typo.get("title", {}).get("size", 36)
+    cover_cfg = PIPELINE_RUNTIME.get("cover_rendering", {}) or {}
     if stype == "portada":
-        t_size = 36
+        threshold = int(cover_cfg.get("title_short_threshold", 30))
+        short_size = float(cover_cfg.get("title_short_size", 28))
+        long_size = float(cover_cfg.get("title_long_size", 24))
+        t_size = short_size if len(title) <= threshold else long_size
     if len(title) > 42:
         t_size = min(t_size, 32)
     if len(title) > 60:
         t_size = min(t_size, 28)
     title_geo = ZONES.get(title_zone)
     if title_geo and title:
-        min_title_size = 24 if stype == "portada" else 20
+        min_title_size = float(cover_cfg.get("min_title_size", 24)) if stype == "portada" else float(cover_cfg.get("min_default_title_size", 20))
         t_size = _fit_text_font_size(title, title_geo, t_size, min_size=min_title_size)
     t_align    = "CENTER" if "center" in str(title_zone) else "LEFT"
     t_align    = _normalize_alignment(t_align)
@@ -1860,7 +2135,13 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     subtitle = slide.get("subtitle", "")
     if subtitle and stype == "portada":
         s_size = typo.get("subtitle", {}).get("size", 24)
-        add_textbox(subtitle, "center-middle", s_size, color=text_col, align="CENTER")
+        add_textbox(
+            subtitle,
+            str(cover_cfg.get("subtitle_zone", "cover-subtitle")),
+            s_size,
+            color=text_col,
+            align=str(cover_cfg.get("subtitle_align", "LEFT")),
+        )
 
     # ── 8. Cuerpo (texto + listas) ──────────────────────────────────────
     body_zone = layout.get("body", "left-middle")
@@ -1873,6 +2154,8 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
             b_size = min(b_size, 13)
         if body_zone == "left-top-split":
             b_size = min(b_size, 15)
+        if body_zone == "left-middle" and layout.get("table") == "right-half":
+            b_size = min(b_size, 16)
         body_geo = ZONES.get(body_zone)
         if body_geo and body_txt:
             b_size = _fit_text_font_size(body_txt, body_geo, b_size, min_size=10)
@@ -2057,6 +2340,7 @@ def main(argv: list[str] | None = None) -> None:
 
     config  = load_yaml(config_path)
     secrets = load_yaml(secrets_path) if secrets_path.exists() else {}
+    apply_pipeline_runtime(project_root, config, topic_folder)
     gemini_key   = secrets.get("gemini_api_key", "")
     template_id  = config.get("template_id", "")
 

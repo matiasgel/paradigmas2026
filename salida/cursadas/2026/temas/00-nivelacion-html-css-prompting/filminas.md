@@ -5,7 +5,7 @@
 
 ---
 
-## SLIDE 01 — Portada
+### [F-01] Portada
 
 **Título:** Nivelación HTML / CSS / Bootstrap 5
 
@@ -15,7 +15,7 @@
 
 ---
 
-## SLIDE 02 — ¿Qué vamos a construir?
+### [F-02] ¿Qué vamos a construir?
 
 **Título:** El proyecto de esta semana
 
@@ -43,7 +43,7 @@
 
 ---
 
-## SLIDE 03 — El Stack del Cuatrimestre
+### [F-03] El Stack del Cuatrimestre
 
 **Título:** ¿Por qué HTML/CSS ahora?
 
@@ -62,7 +62,7 @@ Semana 15   →  REST APIs
 
 ---
 
-## SLIDE 04 — Tu nuevo copiloto: GitHub Copilot
+### [F-04] Tu nuevo copiloto: GitHub Copilot
 
 **Título:** IA como herramienta, no como sustituto
 
@@ -83,7 +83,7 @@ Buen prompt = Buen código
 
 ---
 
-## SLIDE 05 — PROMPTS.md — Formato
+### [F-05] PROMPTS.md — Formato
 
 **Título:** Cómo documentar el uso de IA
 
@@ -112,7 +112,7 @@ Los links estaban en inglés y faltaba accesibilidad
 
 ---
 
-## SLIDE 06 — ¿Qué es HTML?
+### [F-06] ¿Qué es HTML?
 
 **Título:** HyperText Markup Language
 
@@ -144,7 +144,7 @@ Hipertexto  → vínculos (enlaces) entre contenidos y páginas
 
 ---
 
-## SLIDE 07 — HTML: Elementos y Tags
+### [F-07] HTML: Elementos y Tags
 
 **Título:** La anatomía de un elemento HTML
 
@@ -178,7 +178,7 @@ Elemento completo: <p>Un párrafo</p>
 
 ---
 
-## SLIDE 08 — HTML: Atributos esenciales
+### [F-08] HTML: Atributos esenciales
 
 **Título:** Los atributos dan información extra al elemento
 
@@ -212,7 +212,7 @@ Elemento completo: <p>Un párrafo</p>
 
 ---
 
-## SLIDE 09 — HTML: El árbol DOM
+### [F-09] HTML: El árbol DOM
 
 **Título:** Cómo HTML forma una estructura de árbol
 
@@ -247,7 +247,7 @@ document
 
 ---
 
-## SLIDE 10 — HTML5: Semántica vs Divitis
+### [F-10] HTML5: Semántica vs Divitis
 
 **Título:** El problema del `<div>` genérico
 
@@ -270,7 +270,7 @@ document
 
 ---
 
-## SLIDE 11 — HTML5: Elementos semánticos
+### [F-11] HTML5: Elementos semánticos
 
 **Título:** El vocabulario de la estructura web
 
@@ -290,7 +290,7 @@ document
 
 ---
 
-## SLIDE 12 — HTML5: Anatomía del documento completo
+### [F-12] HTML5: Anatomía del documento completo
 
 **Título:** Estructura base lista para usar
 
@@ -333,7 +333,7 @@ document
 
 ---
 
-## SLIDE 13 — Estructura del Blog (HTML completo)
+### [F-13] Estructura del Blog (HTML completo)
 
 **Título:** Arquitectura del proyecto TP1
 
@@ -371,7 +371,7 @@ document
 
 ---
 
-## SLIDE 14 — ¿Qué es CSS?
+### [F-14] ¿Qué es CSS?
 
 **Título:** Cascading Style Sheets
 
@@ -401,7 +401,7 @@ h1 { color: #CC9900; font-size: 2rem; }
 
 ---
 
-## SLIDE 15 — CSS: Selectores
+### [F-15] CSS: Selectores
 
 **Título:** Cómo apuntar a los elementos
 
@@ -437,7 +437,7 @@ button:focus { outline: 2px solid #0d6efd; }
 
 ---
 
-## SLIDE 16 — CSS: Unidades y Colores
+### [F-16] CSS: Unidades y Colores
 
 **Título:** Números en CSS — cuál usar cuándo
 
@@ -468,7 +468,7 @@ h1 { color: crimson; }             /* Literal (limitado, evitar) */
 
 ---
 
-## SLIDE 17 — CSS Box Model
+### [F-17] CSS Box Model
 
 **Título:** Todo elemento es una caja
 
@@ -504,7 +504,7 @@ h1 { color: crimson; }             /* Literal (limitado, evitar) */
 
 ---
 
-## SLIDE 18 — CSS: Variables (Custom Properties)
+### [F-18] CSS: Variables (Custom Properties)
 
 **Título:** Define una vez, usa en todo el proyecto
 
@@ -548,7 +548,7 @@ body {
 
 ---
 
-## SLIDE 19 — CSS Flexbox
+### [F-19] CSS Flexbox
 
 **Título:** Layout flexible en una dimensión
 
@@ -577,7 +577,7 @@ body {
 
 ---
 
-## SLIDE 20 — CSS Media Queries (Mobile-First)
+### [F-20] CSS Media Queries (Mobile-First)
 
 **Título:** Responsive Design — Mobile First
 
@@ -609,7 +609,7 @@ body {
 
 ---
 
-## SLIDE 21 — CSS: DevTools del Navegador
+### [F-21] CSS: DevTools del Navegador
 
 **Título:** Tu mejor herramienta de debug
 
@@ -639,7 +639,7 @@ body {
 
 ---
 
-## SLIDE 22 — CSS: Transiciones y Hover Effects
+### [F-22] CSS: Transiciones y Hover Effects
 
 **Título:** Animaciones sutiles con CSS puro
 
@@ -681,7 +681,7 @@ body {
 
 ---
 
-## SLIDE 23 — Bootstrap: ¿Qué es y por qué usarlo?
+### [F-23] Bootstrap: ¿Qué es y por qué usarlo?
 
 **Título:** El framework CSS más usado del mundo
 
@@ -710,7 +710,7 @@ Media queries manuales           row-cols-1 row-cols-md-3
 
 ---
 
-## SLIDE 24 — Bootstrap 5: CDN Setup
+### [F-24] Bootstrap 5: CDN Setup
 
 **Título:** Incluir Bootstrap en 3 líneas
 
@@ -746,7 +746,7 @@ Media queries manuales           row-cols-1 row-cols-md-3
 
 ---
 
-## SLIDE 25 — Bootstrap: Sistema de Espaciado
+### [F-25] Bootstrap: Sistema de Espaciado
 
 **Título:** Las utilidades m y p — margin y padding
 
@@ -779,7 +779,7 @@ Tamaño:  0  1  2  3  4  5   auto
 
 ---
 
-## SLIDE 26 — Bootstrap: Breakpoints
+### [F-26] Bootstrap: Breakpoints
 
 **Título:** Los 6 puntos de quiebre responsive
 
@@ -812,7 +812,7 @@ Tamaño:  0  1  2  3  4  5   auto
 
 ---
 
-## SLIDE 27 — Bootstrap Grid (12 columnas)
+### [F-27] Bootstrap Grid (12 columnas)
 
 **Título:** El sistema de grillas
 
@@ -844,7 +844,7 @@ Tamaño:  0  1  2  3  4  5   auto
 
 ---
 
-## SLIDE 28 — Bootstrap Navbar
+### [F-28] Bootstrap Navbar
 
 **Título:** Navegación responsive
 
@@ -884,7 +884,7 @@ Tamaño:  0  1  2  3  4  5   auto
 
 ---
 
-## SLIDE 29 — Bootstrap Cards
+### [F-29] Bootstrap Cards
 
 **Título:** Componente Card para posts del blog
 
@@ -916,7 +916,7 @@ Tamaño:  0  1  2  3  4  5   auto
 
 ---
 
-## SLIDE 30 — Bootstrap Cards: Variantes
+### [F-30] Bootstrap Cards: Variantes
 
 **Título:** Cards con estilos visuales adicionales
 
@@ -951,7 +951,7 @@ Tamaño:  0  1  2  3  4  5   auto
 
 ---
 
-## SLIDE 31 — Bootstrap Forms
+### [F-31] Bootstrap Forms
 
 **Título:** Formulario de contacto accesible
 
@@ -997,7 +997,7 @@ Tamaño:  0  1  2  3  4  5   auto
 
 ---
 
-## SLIDE 32 — Bootstrap: Utilidades esenciales
+### [F-32] Bootstrap: Utilidades esenciales
 
 **Título:** Las clases utilitarias más usadas en el blog
 
@@ -1033,7 +1033,7 @@ Tamaño:  0  1  2  3  4  5   auto
 
 ---
 
-## SLIDE 33 — Validación con CSS :valid/:invalid
+### [F-33] Validación con CSS :valid/:invalid
 
 **Título:** Feedback visual de formulario con CSS puro
 
@@ -1066,7 +1066,7 @@ Tamaño:  0  1  2  3  4  5   auto
 
 ---
 
-## SLIDE 34 — Git: Flujo de trabajo con Classroom
+### [F-34] Git: Flujo de trabajo con Classroom
 
 **Título:** Del link al commit — paso a paso
 
@@ -1103,7 +1103,7 @@ docs: agregar README y PROMPTS.md con 5 prompts
 
 ---
 
-## SLIDE 35 — Estructura de archivos del TP1
+### [F-35] Estructura de archivos del TP1
 
 **Título:** Organización del proyecto
 
@@ -1134,7 +1134,7 @@ docs: documentar prompts de Copilot en PROMPTS.md
 
 ---
 
-## SLIDE 36 — Checklist TP1
+### [F-36] Checklist TP1
 
 **Título:** ¿Estoy listo para entregar?
 
@@ -1167,7 +1167,7 @@ GIT
 
 ---
 
-## SLIDE 37 — Recursos y documentación
+### [F-37] Recursos y documentación
 
 **Título:** Donde buscar ayuda
 
@@ -1188,7 +1188,7 @@ GIT
 
 ---
 
-## SLIDE 38 — TPs activos — Links y entregas
+### [F-38] TPs activos — Links y entregas
 
 **Título:** TPs de las primeras semanas
 
@@ -1205,7 +1205,7 @@ GIT
 
 ---
 
-## SLIDE 39 — Próxima clase
+### [F-39] Próxima clase
 
 **Título:** Semana 2 — Python 3.13
 
