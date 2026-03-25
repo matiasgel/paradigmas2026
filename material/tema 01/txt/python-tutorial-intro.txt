@@ -1,0 +1,72 @@
+# Python 3.13 — Tutorial Oficial — Capítulo 3: Introducción Informal a Python
+# Fuente: https://docs.python.org/3.13/tutorial/introduction.html
+# Descargado: 2026-03-25 por topic-designer (EDU pipeline)
+# Relevancia: Sección 3.1 Numbers, Text (str), Lists — semana 2 teoría bloque T1-B/T1-C
+
+==============================================
+CAPÍTULO 3: INTRODUCCIÓN INFORMAL A PYTHON
+==============================================
+
+3.1 USANDO PYTHON COMO CALCULADORA
+------------------------------------
+
+3.1.1 NÚMEROS
+Los tipos numéricos principales en Python:
+- int: enteros (2, 4, 20)
+- float: números con decimales (5.0, 1.6)
+- complex: números complejos (3+5j)
+
+Operadores básicos:
+  + - * / (siempre retorna float)
+  // (floor division — cociente entero)
+  % (módulo — resto)
+  ** (potencia)
+
+Ejemplos:
+  >>> 17 / 3    → 5.666...
+  >>> 17 // 3   → 5
+  >>> 17 % 3    → 2
+  >>> 5 ** 2    → 25
+
+Variable especial '_' en modo interactivo: guarda último resultado calculado.
+
+3.1.2 TEXTO (str)
+Python trata texto como tipo 'str'. Se puede usar comillas simples o dobles.
+Caracteres especiales: \n (newline), \t (tab). Strings raw con prefijo r:
+  >>> print(r'C:\this\name')   → C:\this\name
+
+Triple-quotes para strings multilínea: """...""" o '''...'''
+
+Operaciones:
+  + concatenación
+  * repetición  
+  [] indexación (comenzando en 0, también negativos desde -1)
+  [i:j] slicing
+
+Strings son INMUTABLES — no se puede modificar un carácter individual.
+len(s) → longitud del string.
+
+3.1.3 LISTAS
+La colección más versátil de Python. Mutable (a diferencia del string).
+  >>> squares = [1, 4, 9, 16, 25]
+  >>> squares[0]     → 1
+  >>> squares[-1]    → 25
+  >>> squares[-3:]   → [9, 16, 25]   (slicing retorna nueva lista)
+
+Listas son MUTABLES:
+  >>> cubes[3] = 64   # reemplaza un elemento
+
+Métodos útiles: .append(), .extend(), .insert(), .remove(), .pop(), .sort()
+
+3.2 PRIMEROS PASOS HACIA LA PROGRAMACIÓN
+------------------------------------------
+Múltiple asignación: a, b = 0, 1
+Bucle while: while a < 10: ...
+Indentación: Python usa indentación para agrupar sentencias (no llaves {}).
+
+==============================================
+FUENTES PARA DESCARGA EN PDF:
+==============================================
+- PDF completo docs Python 3.13: https://docs.python.org/3.13/download.html
+  → Archivo: python-3.13-docs-pdf-letter.zip (incluye tutorial como PDF)
+- Tutorial HTML → PDF via print browser: https://docs.python.org/3.13/tutorial/
