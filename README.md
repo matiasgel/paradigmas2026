@@ -307,6 +307,8 @@ La primera vez que corrás el flujo completo, se abrirá el navegador para autor
 
 El módulo `edu-standalone/` se despliega automáticamente a las ramas `production`, `lenguajes` y `lenguajes2026` cuando se hace push a `main` (via [GitHub Actions](.github/workflows/goproduction.yml)).
 
+Durante la publicación se reemplaza el módulo standalone, pero se preservan los paths operativos de la rama destino: `_edu/config.yaml`, `_edu/active-topic.yaml`, `.env`, `_edu-memory/`, `salida/`, `material/` y `docs/`.
+
 ### Método 1: Trigger via GitHub Actions (recomendado)
 
 ```bash

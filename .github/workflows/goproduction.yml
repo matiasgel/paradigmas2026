@@ -58,10 +58,14 @@ jobs:
       - name: "4.0 — Limpiar rama destino preservando runtime"
         run: |
           preserve_dir="$(mktemp -d)"
-          mkdir -p "$preserve_dir/_edu" "$preserve_dir/salida"
+          mkdir -p "$preserve_dir/_edu"
 
           if [ -f target-repo/_edu/config.yaml ]; then
             mv target-repo/_edu/config.yaml "$preserve_dir/_edu/config.yaml"
+          fi
+
+          if [ -f target-repo/_edu/active-topic.yaml ]; then
+            mv target-repo/_edu/active-topic.yaml "$preserve_dir/_edu/active-topic.yaml"
           fi
 
           if [ -f target-repo/.env ]; then
@@ -72,8 +76,16 @@ jobs:
             mv target-repo/_edu-memory "$preserve_dir/_edu-memory"
           fi
 
-          if [ -d target-repo/salida/cursadas ]; then
-            mv target-repo/salida/cursadas "$preserve_dir/salida/cursadas"
+          if [ -d target-repo/salida ]; then
+            mv target-repo/salida "$preserve_dir/salida"
+          fi
+
+          if [ -d target-repo/material ]; then
+            mv target-repo/material "$preserve_dir/material"
+          fi
+
+          if [ -d target-repo/docs ]; then
+            mv target-repo/docs "$preserve_dir/docs"
           fi
 
           find target-repo -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
@@ -81,6 +93,11 @@ jobs:
           if [ -f "$preserve_dir/_edu/config.yaml" ]; then
             mkdir -p target-repo/_edu
             mv "$preserve_dir/_edu/config.yaml" target-repo/_edu/config.yaml
+          fi
+
+          if [ -f "$preserve_dir/_edu/active-topic.yaml" ]; then
+            mkdir -p target-repo/_edu
+            mv "$preserve_dir/_edu/active-topic.yaml" target-repo/_edu/active-topic.yaml
           fi
 
           if [ -f "$preserve_dir/.env" ]; then
@@ -91,22 +108,32 @@ jobs:
             mv "$preserve_dir/_edu-memory" target-repo/_edu-memory
           fi
 
-          if [ -d "$preserve_dir/salida/cursadas" ]; then
-            mkdir -p target-repo/salida
-            mv "$preserve_dir/salida/cursadas" target-repo/salida/cursadas
+          if [ -d "$preserve_dir/salida" ]; then
+            mv "$preserve_dir/salida" target-repo/salida
+          fi
+
+          if [ -d "$preserve_dir/material" ]; then
+            mv "$preserve_dir/material" target-repo/material
+          fi
+
+          if [ -d "$preserve_dir/docs" ]; then
+            mv "$preserve_dir/docs" target-repo/docs
           fi
 
           rm -rf "$preserve_dir"
-          echo "✅ Rama destino limpiada; runtime preservado (_edu/config.yaml, .env, _edu-memory, salida/cursadas)"
+          echo "✅ Rama destino limpiada; estado preservado (_edu/config.yaml, _edu/active-topic.yaml, .env, _edu-memory, salida/, material/, docs/)"
 
       - name: "4.0.5 — Sync root de edu-standalone"
         run: |
           rsync -av --delete \
             --exclude='.git/' \
             --exclude='_edu/config.yaml' \
+            --exclude='_edu/active-topic.yaml' \
             --exclude='.env' \
             --exclude='_edu-memory/' \
-            --exclude='salida/cursadas/' \
+            --exclude='salida/' \
+            --exclude='material/' \
+            --exclude='docs/' \
             --exclude='.github/copilot-instructions.md' \
             main-repo/salida/edu-standalone/ target-repo/
           echo "✅ Root standalone sincronizado en ${{ matrix.target_branch }}"
@@ -158,8 +185,11 @@ jobs:
           echo ""
           echo "=== PRESERVACIÓN VALIDADA ==="
           [ -d target-repo/_edu-memory ]       && echo "  ✅ _edu-memory/" || echo "  ℹ️  _edu-memory/ (se crea en runtime)"
-          [ -d target-repo/salida/cursadas ]   && echo "  ✅ salida/cursadas/" || echo "  ℹ️  salida/cursadas/ (se crea al usar el módulo)"
+          [ -d target-repo/salida ]            && echo "  ✅ salida/ preservada" || echo "  ℹ️  salida/ no encontrada"
+          [ -d target-repo/material ]          && echo "  ✅ material/ preservada" || echo "  ℹ️  material/ no encontrada"
+          [ -d target-repo/docs ]              && echo "  ✅ docs/ preservada" || echo "  ℹ️  docs/ no encontrada"
           [ -f target-repo/_edu/config.yaml ]  && echo "  ✅ _edu/config.yaml presente"
+          [ -f target-repo/_edu/active-topic.yaml ] && echo "  ✅ _edu/active-topic.yaml preservado" || echo "  ℹ️  _edu/active-topic.yaml no encontrado"
           [ -f target-repo/.env ]              && echo "  ✅ .env presente (preservado)" || echo "  ℹ️  .env no encontrado"
 
   cancelled:
