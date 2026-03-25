@@ -253,9 +253,12 @@ def _sync_edu_artifacts(project_root: Path, edu_src: Path, target: Path) -> None
         preserve_root = Path(tmpdir)
         preserved = [
             preserve_path(preserve_root, "_edu/config.yaml"),
+            preserve_path(preserve_root, "_edu/active-topic.yaml"),
             preserve_path(preserve_root, ".env"),
             preserve_path(preserve_root, "_edu-memory"),
-            preserve_path(preserve_root, "salida/cursadas"),
+            preserve_path(preserve_root, "salida"),
+            preserve_path(preserve_root, "material"),
+            preserve_path(preserve_root, "docs"),
         ]
 
         for item in target.iterdir():
@@ -270,7 +273,7 @@ def _sync_edu_artifacts(project_root: Path, edu_src: Path, target: Path) -> None
             restore_path(saved_entry)
 
         for item in edu_src.iterdir():
-            if item.name in {".git", "_edu-memory"}:
+            if item.name in {".git", "_edu-memory", "salida", "material", "docs"}:
                 continue
 
             destination = target / item.name
@@ -278,10 +281,7 @@ def _sync_edu_artifacts(project_root: Path, edu_src: Path, target: Path) -> None
                 copy_tree(item, destination, ignore=shutil.ignore_patterns("copilot-instructions.md"))
                 continue
             if item.name == "_edu":
-                copy_tree(item, destination, ignore=shutil.ignore_patterns("config.yaml"))
-                continue
-            if item.name == "salida":
-                copy_tree(item, destination, ignore=shutil.ignore_patterns("cursadas"))
+                copy_tree(item, destination, ignore=shutil.ignore_patterns("config.yaml", "active-topic.yaml"))
                 continue
 
             if item.is_dir():
