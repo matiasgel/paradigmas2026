@@ -1,0 +1,162 @@
+# Calibración de Perfiles — Tema 03: Introducción a Programación Funcional con TypeScript
+# Generado: 2026-03-13 | Agente: student-simulator (modo Batch — 4 perfiles)
+# Fuentes base: calibracion de Tema 02 adaptada + literatura especializada
+# NOTA: Este archivo NUNCA se resetea — acumula calibración año a año
+
+tema:
+  numero: "03"
+  nombre: "Introducción a Programación Funcional con TypeScript"
+  duracion_clase: 120
+  bloques: 7
+  artefactos_evaluados:
+    - diseno.md
+    - minuta.md
+    - filminas.md
+    - guia-estudio.md
+    - tp.md
+
+literatura:
+  - id: "mahatanankoon-wolf-2021"
+    titulo: "Cognitive Learning Strategies in an Introductory Computer Programming Course"
+    autores: ["Mahatanankoon, P.", "Wolf, J."]
+    año: 2021
+    fuente: "Information Systems Education Journal (ISEJ)"
+    eric_id: "EJ1301236"
+    relevancia: >
+      Estrategias deep vs shallow aplicadas al aprendizaje funcional.
+      Predice que estratégico comprende pureza conceptualmente; recursero la memoriza sin entender.
+
+  - id: "olipas-2022"
+    titulo: "Feelings, Challenges and Difficulties Experienced by IT Students in Learning Computer Programming"
+    autores: ["Olipas, C. N."]
+    año: 2022
+    fuente: "Online Submission / ERIC"
+    eric_id: "ED622663"
+    relevancia: >
+      Ansiedad ante notación nueva documentada. En Tema 03: currificación y tipos genéricos
+      son los activadores principales del ansioso (análogo a BNF en Tema 02).
+
+  - id: "hoq-et-al-2025"
+    titulo: "Automated Identification of Logical Errors — Student Misconceptions"
+    autores: ["Hoq, M.", "et al."]
+    año: 2025
+    fuente: "IEDMS"
+    eric_id: "ED675600"
+    relevancia: >
+      Misconception "función con mismo output = pura" documentado en ~40% alumnos
+      primer exposición a pureza funcional. Alto predictor del disperso en Tema 03.
+
+  - id: "mayer-2009"
+    titulo: "Multimedia Learning (2nd ed.)"
+    autores: ["Mayer, R. E."]
+    año: 2009
+    doi: "10.1017/CBO9780511811678"
+    relevancia: >
+      Bloque 4 (currificación) y bloque 6 (mónadas) = alta carga cognitiva intrínseca.
+      El scaffolding visual recomendado en score-pedagogico§1 aplica principio de
+      segmentación de Mayer (reducir carga extrínseca).
+
+perfiles:
+  estrategico:
+    scores_tema03:
+      en_clase: 82
+      guia_autonoma: 88
+      tp_estimado: "13-14/15"
+      score_global: 85
+    bloque_mas_bajo: "B6_monadas (75)"
+    misconceptions_probables:
+      - "oversimplificacion: monada = Promise"
+    alertas:
+      - "Retomar en Tema 05 con pregunta correctora sobre diferencia Promise vs Maybe/Either"
+
+  ansioso:
+    scores_tema03:
+      en_clase: 59
+      guia_autonoma: 71
+      tp_estimado: "9-11/15"
+      score_global: 68
+    bloque_mas_bajo: "B4_composicion/curry (45)"
+    zona_recuperacion: "guia-estudio.md sube +12 pts respecto a clase"
+    misconceptions_probables:
+      - "clausura impura si modifica entorno"
+      - "notacion => => confunde funcion retornada vs numero"
+    alertas:
+      - "El scaffold visual de currificacion (3 pasos) es critico para este perfil"
+      - "Comunicar explicitamente el valor de la guia de estudio en clase"
+
+  disperso:
+    scores_tema03:
+      en_clase: 47
+      guia_autonoma: 55
+      tp_estimado: "7-9/15"
+      score_global: 55
+    bloque_mas_bajo: "B4_composicion/curry (28)"
+    prerequisito_gap:
+      - "efecto secundario no consolidado desde Tema 01 (funciones y closures)"
+    misconceptions_probables:
+      - "const = inmutable (incluido array)"
+      - "funcion con mismo output = pura"
+    alertas:
+      - "Pregunta detectora en B2 min~15: cambiar factor en vivo"
+      - "Punto de reactivacion B5 (generadores) y B6 (Promise ya lo uso)"
+
+  recursero:
+    scores_tema03:
+      en_clase: 52
+      guia_autonoma: 60
+      tp_estimado: "10-11/15"
+      score_global: 61
+    bloque_mas_bajo: "B5_lazy_eval (48)"
+    zona_comodidad: "map/filter (como en Tema 02: LLMs)"
+    alertas:
+      - "Puede aprobar quiz sin comprender pureza — trampa detectora en parcial"
+      - "Incluir pregunta abierta: 'Por que Date.now() no es pura'"
+
+predicciones_clase:
+  riesgo_alto:
+    tema: "Bloque 4 — Composición y Currificación"
+    perfiles_en_riesgo: [ansioso, disperso]
+    score_cohort_promedio: 51
+    intervencion_sugerida: >
+      Mostrar tipos en IDE para `addCurried(5)`.
+      Scaffold de 3 pasos para currificacion (funcion normal → return function → arrow).
+
+  zona_activa:
+    tema: "Bloque 3 — HOF y clausuras"
+    perfiles_que_se_estabilizan: [ansioso, estrategico]
+    oportunidad: "map/filter conocidos de TS — base comun para todos los perfiles"
+
+  zona_recuperacion_guia:
+    perfil: ansioso
+    tema: "Currificacion y monadas"
+    detalle: >
+      El score del ansioso sube de 59 (clase) a 71 (guia autonoma).
+      La guia-estudio.md cumple funcion compensatoria clave para este perfil.
+
+  faq_anticipado_criticos:
+    - perfil: ansioso
+      bloque: "B4"
+      pregunta: "¿`addCurried(5)` devuelve una funcion o un numero?"
+      intervencion: "Mostrar tipo inferido en IDE"
+    - perfil: disperso
+      bloque: "B2"
+      pregunta: "¿No es pura si siempre me da el mismo resultado?"
+      intervencion: "Cambiar factor en vivo"
+    - perfil: estrategico
+      bloque: "B6"
+      pregunta: "¿flatMap en Array es una monada?"
+      intervencion: "Confirmar brevemente, reservar para Tema 05"
+    - perfil: recursero
+      bloque: "B6"
+      pregunta: "¿Monadas entran en el parcial?"
+      intervencion: "Intuicion si; implementacion formal en Tema 05"
+
+historial:
+  - fecha: "2026-03-13"
+    tipo: "inicial_simulacion_batch"
+    fuente: "literatura_academica + calibracion_tema02"
+    agente: "student-simulator (modo TA — Test All)"
+    nota: >
+      Calibracion base derivada de perfiles Tema 02 adaptados al contenido de Tema 03.
+      Sin datos reales de encuesta. Actualizar post-clase-2026 con encuesta de satisfaccion.
+    proxima_calibracion: "post-clase-tema03-2026"

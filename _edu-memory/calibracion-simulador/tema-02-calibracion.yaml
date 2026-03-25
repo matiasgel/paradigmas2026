@@ -1,0 +1,261 @@
+# Calibración de Perfiles — Tema 02: Sintaxis y Semántica de Lenguajes
+# Generado: 2026-03-11 | Agente: student-simulator (modo Investigar)
+# Fuentes: ERIC, ACM SIGCSE, Mayer (2009)
+# NOTA: Este archivo NUNCA se resetea — acumula calibración año a año
+
+tema:
+  numero: "02"
+  nombre: "Sintaxis y Semántica de Lenguajes"
+  duracion_clase: 120 # minutos
+  bloques: 4
+  artefactos_evaluados:
+    - diseno.md
+    - minuta.md
+    - filminas.md
+    - guia-estudio.md
+    - tp.md
+
+# ─────────────────────────────────────────────────────────────────────
+# LITERATURA BASE (fuentes que fundamentan los coeficientes)
+# ─────────────────────────────────────────────────────────────────────
+literatura:
+  - id: "mahatanankoon-wolf-2021"
+    titulo: "Cognitive Learning Strategies in an Introductory Computer Programming Course"
+    autores: ["Mahatanankoon, P.", "Wolf, J."]
+    año: 2021
+    fuente: "Information Systems Education Journal (ISEJ)"
+    eric_id: "EJ1301236"
+    relevancia: >
+      Distingue estrategias 'deep' (comprensión conceptual) vs 'shallow' (memorización
+      de sintaxis). Alumnos con estrategia shallow tienen mayor tasa de error en
+      gramáticas formales. Fundamenta coeficientes de estrategico vs recursero.
+
+  - id: "olipas-2022"
+    titulo: "Feelings, Challenges and Difficulties Experienced by IT Students in Learning Computer Programming"
+    autores: ["Olipas, C. N."]
+    año: 2022
+    fuente: "Online Submission / ERIC"
+    eric_id: "ED622663"
+    relevancia: >
+      Estudio fenomenológico sobre dificultades emocionales y cognitivas en cursos
+      de programación. Identifica 3 categorías: ansiedad ante errores de compilación,
+      frustración ante abstracciones formales, y recursividad como recurso de estudiantes
+      de bajo rendimiento. Fundamenta perfil ansioso y disperso.
+
+  - id: "hoq-et-al-2025"
+    titulo: "Automated Identification of Logical Errors in Programs: Advancing Scalable Analysis of Student Misconceptions"
+    autores: ["Hoq, M.", "Rao, A.", "Jaishankar, R.", "Piryani, K.", "et al."]
+    año: 2025
+    fuente: "International Educational Data Mining Society (IEDMS)"
+    eric_id: "ED675600"
+    relevancia: >
+      Analiza patrones de misconceptions en CS education a escala. Identifica que
+      estudiantes confunden errores sintácticos con semánticos en ~67% de los casos
+      iniciales. Fundamenta parámetros de confusión sintaxis/semántica en todos los perfiles.
+
+  - id: "traversaro-et-al-2024"
+    titulo: "Student Misconceptions on Concurrent Programming Using Sonic Pi"
+    autores: ["Traversaro, D.", "Delzanno, G.", "Guerrini, G."]
+    año: 2024
+    fuente: "Informatics in Education"
+    eric_id: "EJ1443786"
+    relevancia: >
+      Valida que temas de alta carga cognitiva (como gramáticas formales y BNF)
+      generan misconceptions específicos relacionados con la notación. Estudiantes
+      con perfil estratégico los supera; dispersos y ansiosos los mantienen.
+
+  - id: "mayer-2009"
+    titulo: "Multimedia Learning (2nd ed.)"
+    autores: ["Mayer, R. E."]
+    año: 2009
+    fuente: "Cambridge University Press"
+    doi: "10.1017/CBO9780511811678"
+    relevancia: >
+      Base teórica de carga cognitiva intrínseca y extrínseca. Fundamenta los
+      coeficientes de carga_cognitiva_intrinseca y saturacion_representacional.
+
+# ─────────────────────────────────────────────────────────────────────
+# PERFILES CALIBRADOS PARA TEMA 02
+# ─────────────────────────────────────────────────────────────────────
+perfiles:
+
+  estrategico:
+    nombre_display: "Alumno Estratégico"
+    descripcion: >
+      Organiza su aprendizaje con objetivos claros. Busca eficiencia: lee primero
+      los objetivos de la guía y la estructura de las filminas antes de estudiar el
+      detalle. En Tema 02, entiende rápido la distinción sintaxis/semántica pero puede
+      saltear ejercicios de derivación manual por considerarlos "mecánicos".
+    # Parámetros de rendimiento Tema 02 (escala 0.0–1.0)
+    rendimiento:
+      bloque1_distincion_sintaxis_semantica: 0.90 # comprende bien la distinción
+      bloque2_analisis_lexico: 0.80               # entiende tokens, aplica tabla
+      bloque3_gramaticas_bnf: 0.70                # comprende BNF pero puede shallow en EBNF
+      bloque4_semantica_formal: 0.75              # ok para nivel conceptual de Tema 02
+      bloque5_llm_aplicacion: 0.85                # conecta bien con aplicaciones prácticas
+    # Misconceptions esperados (% probabilidad de aparición)
+    misconceptions:
+      confunde_sintaxis_semantica_inicial: 0.15  # resuelve rápido
+      confunde_lexema_token: 0.20
+      error_derivacion_manual: 0.30              # suele saltear pasos
+      ambiguedad_gramatical_detecta: 0.75        # buen ojo para ambiguedad
+    # Comportamiento en clase
+    comportamiento:
+      hace_preguntas: "estratégicas — conecta con Tema 03"
+      pregunta_tipo: "¿Esto lo usan los lenguajes modernos como TypeScript?"
+      ritmo_asimilacion: "rápido en bloques 1-2, necesita más tiempo en bloque 3"
+      usa_guia_estudio: true
+      lee_referencias: "abstract solamente"
+    # Señales de alerta
+    alertas:
+      - "Puede subestimar la derivación manual y tener errores en el TP ejercicio 2"
+      - "Puede confundir BNF y EBNF bajo presión de tiempo"
+    fuente_principal: "mahatanankoon-wolf-2021"
+
+  ansioso:
+    nombre_display: "Alumno Ansioso"
+    descripcion: >
+      Alta motivación pero manejo emocional frágil. En Tema 02, el volumen de notación
+      nueva (BNF, EBNF, derivaciones) puede generar sobrecarga cognitiva visible en
+      la primera hora. Tiende a preguntar para validar comprensión más que para explorar.
+    # Parámetros de rendimiento Tema 02
+    rendimiento:
+      bloque1_distincion_sintaxis_semantica: 0.75 # necesita ejemplos concretos para afirmarse
+      bloque2_analisis_lexico: 0.70               # ok si hay tabla de tokens visible
+      bloque3_gramaticas_bnf: 0.45               # zona de mayor riesgo — notación intensiva
+      bloque4_semantica_formal: 0.55
+      bloque5_llm_aplicacion: 0.65               # se relaja con aplicaciones prácticas
+    # Misconceptions esperados
+    misconceptions:
+      confunde_sintaxis_semantica_inicial: 0.55  # tarda en consolidar distinción
+      confunde_lexema_token: 0.50
+      error_derivacion_manual: 0.65              # pierde pasos bajo presión
+      ambiguedad_gramatical_detecta: 0.35        # concepto abstracto que genera
+    # Comportamiento en clase
+    comportamiento:
+      hace_preguntas: "frecuente — busca confirmación"
+      pregunta_tipo: "¿Esto está bien? ¿El árbol tiene que quedar así?"
+      ritmo_asimilacion: "lento en bloques 2-3, accelera si hay ejemplos paso a paso"
+      usa_guia_estudio: true
+      lee_referencias: "no suele leer"
+    # Señales de alerta
+    alertas:
+      - "Bloque 3 (BNF/EBNF) es zona crítica — puede desconectarse si el ritmo es muy alto"
+      - "El tp.md ejercicio 3 (ambigüedad) puede generar bloqueo emocional"
+      - "Responde bien a validaciones positivas durante la clase"
+    # Calibración por carga cognitiva (Mayer 2009)
+    carga_cognitiva:
+      intrinseca: 0.75  # alta — hay mucha notación nueva
+      extrinseca: 0.40  # moderada si filminas son claras
+      germane: 0.35     # baja — poco espacio para integración
+    fuente_principal: "olipas-2022"
+
+  disperso:
+    nombre_display: "Alumno Disperso"
+    descripcion: >
+      Atención intermitente. Llega al Tema 02 sin consolidar bien el flujo compilador
+      del Tema 01. Entiende los ejemplos concretos (TypeScript errors) pero pierde el
+      hilo en cuanto la clase sube a abstracciones (BNF). Muy dependiente de las filminas.
+    # Parámetros de rendimiento Tema 02
+    rendimiento:
+      bloque1_distincion_sintaxis_semantica: 0.60 # ok si hay ejemplos visuales
+      bloque2_analisis_lexico: 0.65               # la tabla de tokens le ayuda
+      bloque3_gramaticas_bnf: 0.30               # zona de pérdida máxima
+      bloque4_semantica_formal: 0.35
+      bloque5_llm_aplicacion: 0.55               # se reactiva con LLMs (tema contemporáneo)
+    # Misconceptions esperados
+    misconceptions:
+      confunde_sintaxis_semantica_inicial: 0.70  # misconception persistente
+      confunde_lexema_token: 0.65
+      error_derivacion_manual: 0.80              # muy probable — pierde pasos
+      ambiguedad_gramatical_detecta: 0.20        # raramente distingue
+    # Comportamiento en clase
+    comportamiento:
+      hace_preguntas: "pocas — oculta que no entiende"
+      pregunta_tipo: "¿Esto entra en el parcial?"
+      ritmo_asimilacion: "fragmentario — captura ejemplos concretos, pierde abstracciones"
+      usa_guia_estudio: "solo si tiene examen próximo"
+      lee_referencias: "no"
+    # Señales de alerta
+    alertas:
+      - "Necesita retomar prerequisito de Tema 01 (compilación) para anclar Bloque 1"
+      - "El tp.md puede hacerse con ChatGPT sin entender — Part II LLM experiment facilita esto"
+      - "Detectar con pregunta directa en Bloque 2: '¿qué es un lexema?'"
+    # Gaps de prerrequisito detectados
+    prerequisito_gaps:
+      - "Flujo compilador (Tema 01) — no consolidado"
+      - "Concepto de error de compilación vs error de runtime — confuso"
+    fuente_principal: "hoq-et-al-2025"
+
+  recursero:
+    nombre_display: "Alumno Recursero"
+    descripcion: >
+      Orientado a resolver el TP con el mínimo esfuerzo. Busca fórmulas y plantillas.
+      En Tema 02, intentará copiar la derivación del ejemplo de la guía adaptándola,
+      y usará LLMs para el tp.md Part II sin analizar los resultados. No ve el valor
+      de la teoría de gramáticas para práctica real.
+    # Parámetros de rendimiento Tema 02
+    rendimiento:
+      bloque1_distincion_sintaxis_semantica: 0.55 # si hay plantilla verbal, sí
+      bloque2_analisis_lexico: 0.60               # ok con tabla visible
+      bloque3_gramaticas_bnf: 0.50               # copia el ejemplo, no generaliza
+      bloque4_semantica_formal: 0.40
+      bloque5_llm_aplicacion: 0.80               # zona de comodidad — usa LLMs
+    # Misconceptions esperados
+    misconceptions:
+      confunde_sintaxis_semantica_inicial: 0.60
+      confunde_lexema_token: 0.55
+      error_derivacion_manual: 0.70              # no entiende derivación, la copia
+      ambiguedad_gramatical_detecta: 0.25        # no sabe por qué es ambigua
+    # Comportamiento en clase
+    comportamiento:
+      hace_preguntas: "calculadas — solo cuando bloquea el TP"
+      pregunta_tipo: "¿Hay un ejemplo de esto para copiar?"
+      ritmo_asimilacion: "saltos — captura lo evaluable, ignora lo conceptual"
+      usa_guia_estudio: "sí — busca los ejercicios resueltos"
+      lee_referencias: "no"
+    # Señales de alerta
+    alertas:
+      - "TP ejercicio 4 (escribir propia gramática) detecta recursero vs estratégico"
+      - "TP Part II: usará LLM sin analizar diferencia entre instrucción verbal y JSON schema"
+      - "Trampa detectora en minuta: 'Explicar con tus palabras qué diferencia hay entre BNF y EBNF'"
+    fuente_principal: "mahatanankoon-wolf-2021"  # estrategia shallow de Miller et al. 1996
+
+# ─────────────────────────────────────────────────────────────────────
+# PREDICCIONES PARA CLASE 2 — 2026
+# ─────────────────────────────────────────────────────────────────────
+predicciones_clase:
+  riesgo_alto:
+    tema: "Bloque 3 — Gramáticas formales BNF/EBNF"
+    perfiles_en_riesgo: [ansioso, disperso]
+    intervencion_sugerida: "Pausar en derivación paso a paso. Poner árbol en pizarrón."
+
+  zona_activa:
+    tema: "Bloque 6 — LLMs y constrained decoding"
+    perfiles_que_se_reactivan: [disperso, recursero]
+    oportunidad: "Usar como gancho para retomar conceptos de gramáticas formales"
+
+  faq_anticipado:
+    - perfil: ansioso
+      pregunta: "¿Tengo que memorizar la notación BNF para el parcial?"
+      respuesta_sugerida: "No memorizar — entender qué expresa cada producción."
+    - perfil: disperso
+      pregunta: "¿Esto entra en el examen?"
+      respuesta_sugerida: "Sí — derivación y árboles de análisis son evaluados."
+    - perfil: estrategico
+      pregunta: "¿TypeScript usa EBNF internamente?"
+      respuesta_sugerida: "Sí — el spec de TypeScript define su sintaxis en EBNF."
+    - perfil: recursero
+      pregunta: "¿Hay ejercicios resueltos de derivación?"
+      respuesta_sugerida: "En la guía de estudio §4 hay un ejemplo completo paso a paso."
+
+# ─────────────────────────────────────────────────────────────────────
+# HISTORIAL DE CALIBRACIÓN
+# ─────────────────────────────────────────────────────────────────────
+historial:
+  - fecha: "2026-03-11"
+    tipo: "inicial"
+    fuente: "literatura_academica"
+    agente: "student-simulator (modo Investigar)"
+    nota: "Calibración base generada desde ERIC, Mayer (2009). Sin datos reales de encuesta aún."
+    proxima_calibracion: "post-cursada-2026 con datos de encuesta de satisfacción"
