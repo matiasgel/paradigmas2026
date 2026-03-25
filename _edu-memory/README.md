@@ -39,5 +39,5 @@ _edu-memory/
 - **TP 2 link real**: `https://classroom.github.com/a/X4xiTEDQ`
 - **GitHub Classroom autograding**: `autograding.yml` con pytest, estructura `src/` + `tests/`
 - **Codespaces**: GitHub Copilot habilitado en devcontainer para todos los repos classroom
-- **Entregas TP 1**: git normal (no classroom), ≥5 commits significativos
-- **Política IA**: obligatorio PROMPTS.md en todos los TPs desde TP 2
+- **Entregas TP 1**: GitHub Classroom con repositorio template, revisión manual W3C y ≥5 commits significativos
+- **Política IA**: obligatorio PROMPTS.md en todos los TPs desde TP 1

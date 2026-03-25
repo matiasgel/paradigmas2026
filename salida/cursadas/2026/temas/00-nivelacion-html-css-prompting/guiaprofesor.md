@@ -274,25 +274,25 @@ Mostrar los criterios de autograding (si aplica) en la interfaz del Classroom.
 
 ## Extractos clave del material fuente
 
-### De `material/tema 01/HTML & CSS.pdf`
+### De `_edu-memory/material/tema-01/html-css.txt`
 
 > "HTML (HyperText Markup Language) nos permite definir la **estructura** de una página web. Estructura: párrafos, headings, tablas, listas. Contenido: textos, imágenes, links. **CSS** controla los estilos: color, tipografía, alineación, espaciado, fondos."
 
 > "Árbol de HTML: cada etiqueta es un nodo. `<div>` puede tener hijos `<h1>` y `<span>` que son hermanos entre sí."
 
-### De `material/tema 01/bootstrap5-grid.pdf`
+### De `_edu-memory/material/tema-01/tp1.txt`
 
-> "Bootstrap grid usa contenedores, filas y columnas para layoutear y alinear contenido. Está construido con flexbox y es completamente responsive. **12 columnas** por fila, **6 breakpoints** responsive, gutters configurables."
+> "Dominio: Desarrollar una página web de un blog personal usando HTML5, CSS3 y Bootstrap 5."
 
-> **Breakpoints:** xs < 576px, sm ≥ 576px, md ≥ 768px, lg ≥ 992px, xl ≥ 1200px, xxl ≥ 1400px
+> "Un sitio de blog con: página de inicio, página 'Acerca de mí', formulario de contacto, barra de navegación responsiva, footer con redes sociales y diseño mobile-first."
 
-### De `material/tema 01/bootstrap5-navbar.pdf`
+> "Criterios de aceptación: HTML válido, páginas sin 404, formulario con feedback, navbar responsiva, Bootstrap usado apropiadamente, README y commits significativos en Git."
 
-> "La Navbar colapsa en mobile: el botón hamburguesa tiene `data-bs-target` que **debe coincidir exactamente** con el `id` del `<div class='collapse'>`. Este es el error más frecuente."
+### De `_edu-memory/material/tema-01/tp2.txt`
 
-### De `material/tema 01/bootstrap5-card.pdf`
+> "Trabajo Práctico N°2: Introducción a Python con prompting. Link: https://classroom.github.com/a/X4xiTEDQ"
 
-> "Cards son contenedores de contenido flexibles y extensibles. Soportan headers, footers, colores de fondo, imágenes. Para igualar alturas: `d-flex flex-column` en `.card-body` + `mt-auto` en el último elemento."
+> "Además, deberán documentar un ejemplo de prompt por ejercicio, usando el patrón indicado, en un archivo `PROMPTS.md`."
 
 ---
 
@@ -372,19 +372,12 @@ salida/cursadas/2026/temas/00-nivelacion-html-css-prompting/
 └── topic.yaml          ← Metadata, TPs, links
 
 material/tema 01/
-├── HTML & CSS.pdf                ← PDF fuente teórico
-├── bootstrap5-grid.pdf           ← Referencia grid Bootstrap
-├── bootstrap5-navbar.pdf         ← Referencia navbar Bootstrap
-├── bootstrap5-card.pdf           ← Referencia cards Bootstrap
-├── TP 1.pdf / tp1-consigna.pdf   ← Consigna oficial del TP1
-├── TP 3.pdf / tp3-consigna.pdf   ← Consigna oficial del TP3
-└── txt/                          ← Versiones texto de los PDF (para Copilot)
-    ├── html-css.txt
-    ├── bootstrap5-grid.txt
-    ├── bootstrap5-navbar.txt
-    ├── bootstrap5-card.txt
-    ├── tp1.txt
-    └── tp3.txt
+_edu-memory/material/tema-01/
+├── html-css.txt                  ← Material base consolidado de HTML/CSS
+├── tp1.txt                       ← Consigna consolidada del TP1
+└── tp2.txt                       ← Consigna consolidada del TP2
+
+Nota: en este workspace se conservaron los TXT consolidados en `_edu-memory/`; los PDFs fuente originales no están versionados localmente.
 ```
 
 ---

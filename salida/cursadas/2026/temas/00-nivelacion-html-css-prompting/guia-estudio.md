@@ -16,12 +16,13 @@
    - 4.2 [CSS3 — Estilos y layout (Filminas 14–22)](#42-css3--estilos-y-layout)
    - 4.3 [Bootstrap 5 — Framework responsive (Filminas 23–33)](#43-bootstrap-5--framework-responsive)
    - 4.4 [Prompting con IA asistida (Filminas 04–05)](#44-prompting-con-ia-asistida)
-   - 4.5 [Git y GitHub Classroom (Filminas 34–36)](#45-git-y-github-classroom)
+    - 4.5 [Resumen operativo de entrega (Filminas 34–36)](#45-resumen-operativo-de-entrega)
 5. [Ejemplos trabajados](#5-ejemplos-trabajados)
 6. [Puntos clave y resumen](#6-puntos-clave-y-resumen)
 7. [Autoevaluación](#7-autoevaluación)
 8. [Glosario](#8-glosario)
 9. [Referencias y lecturas recomendadas](#9-referencias-y-lecturas-recomendadas)
+10. [Anexos operativos](#10-anexos-operativos)
 
 ---
 
@@ -750,106 +751,25 @@ El `PROMPTS.md` no es burocracia. Es evidencia de que:
 2. Fuiste el autor — usaste la IA como herramienta, no como reemplazo
 3. Podés defender el código en una consulta
 
-**Formato oficial del PROMPTS.md:**
+El formato completo y reutilizable quedó movido al **Anexo 10.1** para que la lectura principal de la guía siga centrada en HTML, CSS y Bootstrap.
 
-```markdown
-# PROMPTS.md — TP{N} {Nombre del TP}
-## {Tu Nombre} — IF009 Laboratorio de Programación y Lenguajes 2026
+> **Mínimo 5 prompts documentados en el TP1.** Uno por cada componente principal: navbar, grid de cards, card individual, formulario de contacto y CSS custom. Ver **Anexo 10.1**.
 
 ---
 
-## Prompt #{N} — {Descripción breve de qué construiste}
-
-**Fecha:** YYYY-MM-DD
-**Herramienta:** GitHub Copilot Chat / GitHub Copilot completions / ChatGPT
-**Contexto del prompt:**
-{Contexto que le diste a la IA — quién sos, para qué es el proyecto}
-
-**Prompt exacto:**
-```
-{El texto exacto que copiaste en la IA}
-```
-
-**Resultado obtenido:**
-{Qué generó la IA — describir en 1-2 líneas}
-
-**Modificaciones que hice:**
-{Qué cambiaste respecto al output original y por qué}
-
-**Qué aprendí:**
-{Una cosa concreta que aprendiste de este intercambio}
-
----
-```
-
-> **Mínimo 5 prompts documentados en el TP1.** Uno por cada componente principal: navbar, grid de cards, card individual, formulario de contacto, y CSS custom.
-
----
-
-### 4.5 Git y GitHub Classroom
+### 4.5 Resumen operativo de entrega
 
 > **Ver Filminas 34–36**
 
-#### Flujo básico con GitHub Classroom
+Antes de entregar el TP1:
 
-```bash
-# 1. Aceptar la asignación → GitHub te crea un repo
-#    Link del TP1: classroom.github.com/a/RI8vnIt_
-#    Esto te crea: github.com/Laboratorio-de-Programacion-Y-lenguajes-2026/tp1-blog-TuUsuario
+1. Aceptá la asignación en GitHub Classroom.
+2. Trabajá sobre tu repositorio con commits pequeños y descriptivos.
+3. Validá los tres HTML con W3C Validator.
+4. Completá `PROMPTS.md` con al menos 5 entradas.
+5. Hacé `push` y verificá que la entrega quedó visible.
 
-# 2. Clonar el repo en tu máquina
-git clone https://github.com/Laboratorio-de-Programacion-Y-lenguajes-2026/tp1-blog-TuUsuario
-
-# 3. Entrar al directorio
-cd tp1-blog-TuUsuario
-
-# 4. Crear la estructura de archivos
-mkdir assets
-mkdir assets/images
-
-# 5. Flujo de trabajo diario
-git status                  # ver qué cambió
-git add index.html          # agregar archivo específico
-git add .                   # agregar todo
-git commit -m "feat: agrego navbar Bootstrap"
-git push                    # subir al repo
-```
-
-#### Commits semánticos — Formato correcto
-
-El formato **Conventional Commits** es el estándar en la industria:
-
-```
-tipo: descripción en minúsculas y tiempo presente
-```
-
-**Tipos principales:**
-
-| Tipo | Cuándo usarlo |
-|------|--------------|
-| `feat:` | Agregás una nueva funcionalidad |
-| `fix:` | Corregís un bug o un error visual |
-| `style:` | Cambios de CSS / apariencia (sin cambios funcionales) |
-| `refactor:` | Reorganizás código sin cambiar su comportamiento |
-| `docs:` | Actualizás README, PROMPTS.md, comentarios |
-| `chore:` | Tareas de mantenimiento (agregar imágenes, favicon, etc.) |
-
-**Ejemplos buenos vs. malos:**
-
-```bash
-# ❌ Malos — no dicen nada útil
-git commit -m "cambios"
-git commit -m "arreglé cosas"
-git commit -m "subi"
-
-# ✅ Buenos — claros y descriptivos
-git commit -m "feat: agrego navbar Bootstrap con menú responsive"
-git commit -m "feat: implemento grid de 3 cards en index.html"
-git commit -m "style: aplico variables CSS y paleta de colores custom"
-git commit -m "feat: construyo formulario de contacto con validación HTML5"
-git commit -m "docs: completo PROMPTS.md con 6 prompts documentados"
-git commit -m "fix: corrijo error W3C en atributo alt faltante"
-```
+El flujo completo de GitHub Classroom y la tabla de commits semánticos quedaron movidos al **Anexo 10.2**.
 
 ---
 
@@ -1155,25 +1075,117 @@ Respondé estas preguntas sin mirar la guía. Si podés contestarlas todas, est�
 ### Documentación oficial (fuente primaria)
 - **MDN Web Docs — HTML:** https://developer.mozilla.org/es/docs/Web/HTML
 - **MDN Web Docs — CSS:** https://developer.mozilla.org/es/docs/Web/CSS
+- **MDN Web Docs — Flexbox:** https://developer.mozilla.org/es/docs/Web/CSS/CSS_flexible_box_layout
+- **MDN Web Docs — CSS Grid:** https://developer.mozilla.org/es/docs/Web/CSS/CSS_grid_layout
 - **Bootstrap 5.3 Docs:** https://getbootstrap.com/docs/5.3/
 
 ### Herramientas de práctica
-- **W3Schools HTML:** https://www.w3schools.com/html/ — ejercicios interactivos
-- **W3Schools CSS:** https://www.w3schools.com/css/ — referencia rápida
-- **Flexbox Froggy:** https://flexboxfroggy.com/#es — aprende Flexbox jugando
-- **Grid Garden:** https://cssgridgarden.com/ — aprende CSS Grid jugando
 - **W3C Validator:** https://validator.w3.org/ — validar tu HTML antes de entregar
 
 ### Material del curso
 - **Filminas Tema 00:** `filminas.md` en el repositorio
 - **Minuta de clase:** `minuta.md` con la guía docente
-- **TP1 consigna oficial:** `material/tema 01/TP 1.pdf`
-- **Material HTML/CSS:** `material/tema 01/HTML & CSS.pdf`
+- **TP1 consigna oficial consolidada:** `_edu-memory/material/tema-01/tp1.txt`
+- **Material HTML/CSS consolidado:** `_edu-memory/material/tema-01/html-css.txt`
 
 ### Lecturas adicionales opcionales
-- **CSS-Tricks — A Complete Guide to Flexbox:** https://css-tricks.com/snippets/css/a-guide-to-flexbox/
 - **Bootstrap — About (filosofía del framework):** https://getbootstrap.com/docs/5.3/about/overview/
 - **Conventional Commits:** https://www.conventionalcommits.org/es/v1.0.0/
+
+---
+
+## 10. Anexos operativos
+
+### 10.1 Plantilla oficial de `PROMPTS.md`
+
+````markdown
+# PROMPTS.md — TP{N} {Nombre del TP}
+## {Tu Nombre} — IF009 Laboratorio de Programación y Lenguajes 2026
+
+---
+
+## Prompt #{N} — {Descripción breve de qué construiste}
+
+**Fecha:** YYYY-MM-DD
+**Herramienta:** GitHub Copilot Chat / GitHub Copilot completions / ChatGPT
+**Contexto del prompt:**
+{Contexto que le diste a la IA — quién sos, para qué es el proyecto}
+
+**Prompt exacto:**
+```
+{El texto exacto que copiaste en la IA}
+```
+
+**Resultado obtenido:**
+{Qué generó la IA — describir en 1-2 líneas}
+
+**Modificaciones que hice:**
+{Qué cambiaste respecto al output original y por qué}
+
+**Qué aprendí:**
+{Una cosa concreta que aprendiste de este intercambio}
+
+---
+````
+
+### 10.2 Flujo de GitHub Classroom y commits semánticos
+
+#### Flujo básico con GitHub Classroom
+
+```bash
+# 1. Aceptar la asignación → GitHub te crea un repo
+#    Link del TP1: classroom.github.com/a/RI8vnIt_
+#    Esto te crea: github.com/Laboratorio-de-Programacion-Y-lenguajes-2026/tp1-blog-TuUsuario
+
+# 2. Clonar el repo en tu máquina
+git clone https://github.com/Laboratorio-de-Programacion-Y-lenguajes-2026/tp1-blog-TuUsuario
+
+# 3. Entrar al directorio
+cd tp1-blog-TuUsuario
+
+# 4. Crear la estructura de archivos
+mkdir assets
+mkdir assets/images
+
+# 5. Flujo de trabajo diario
+git status
+git add index.html
+git add .
+git commit -m "feat: agrego navbar Bootstrap"
+git push
+```
+
+#### Commits semánticos — Formato correcto
+
+El formato **Conventional Commits** es el estándar recomendado:
+
+```
+tipo: descripción en minúsculas y tiempo presente
+```
+
+| Tipo | Cuándo usarlo |
+|------|--------------|
+| `feat:` | Agregás una nueva funcionalidad |
+| `fix:` | Corregís un bug o un error visual |
+| `style:` | Cambios de CSS / apariencia (sin cambios funcionales) |
+| `refactor:` | Reorganizás código sin cambiar su comportamiento |
+| `docs:` | Actualizás README, PROMPTS.md, comentarios |
+| `chore:` | Tareas de mantenimiento (agregar imágenes, favicon, etc.) |
+
+```bash
+# ❌ Malos — no dicen nada útil
+git commit -m "cambios"
+git commit -m "arreglé cosas"
+git commit -m "subi"
+
+# ✅ Buenos — claros y descriptivos
+git commit -m "feat: agrego navbar Bootstrap con menú responsive"
+git commit -m "feat: implemento grid de 3 cards en index.html"
+git commit -m "style: aplico variables CSS y paleta de colores custom"
+git commit -m "feat: construyo formulario de contacto con validación HTML5"
+git commit -m "docs: completo PROMPTS.md con 6 prompts documentados"
+git commit -m "fix: corrijo error W3C en atributo alt faltante"
+```
 
 ---
 

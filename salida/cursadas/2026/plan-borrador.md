@@ -13,7 +13,7 @@
 |--------|-------------|
 | `salida/cursadas/2026/plan-minimo.md` | Programa institucional — 7 módulos obligatorios |
 | `docs/investigacion.md` | Investigación académica — 12 papers, 8 propuestas (P1–P8) |
-| `material/tema 01/TP 1.pdf` | TP 1: Blog HTML/CSS/Bootstrap — entrega via Git |
+| `material/tema 01/TP 1.pdf` | TP 1: Blog HTML/CSS/Bootstrap — entrega via GitHub Classroom |
 | `material/tema 01/TP 2.pdf` | TP 2: Python + Prompting — GitHub Classroom autograding |
 | `material/tema 01/HTML & CSS.pdf` | Material de nivelación HTML/CSS |
 

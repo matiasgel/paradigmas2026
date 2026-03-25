@@ -1173,8 +1173,8 @@ GIT
 
 | Recurso | Para qué |
 |---------|----------|
-| W3Schools HTML | Referencia rápida de etiquetas |
-| W3Schools CSS | Propiedades CSS con ejemplos |
+| MDN HTML | Referencia oficial de etiquetas y semántica |
+| MDN CSS | Referencia oficial de propiedades y selectores |
 | Bootstrap 5 Docs | Clases y componentes de Bootstrap |
 | W3C Validator | Verificar que el HTML está bien |
 | MDN Web Docs | Documentación detallada técnica |

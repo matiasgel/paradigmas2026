@@ -1,6 +1,10 @@
 # Tema 00 — Nivelación HTML/CSS/Bootstrap 5/Prompting
 ## Diseño Pedagógico
 
+> **STATUS:** `approved`  
+> **Aprobado por docente:** Sí  
+> **Fecha de aprobación:** 2026-03-25
+
 **Curso:** IF009 — Laboratorio de Programación y Lenguajes  
 **Institución:** UNTDF IDEI  
 **Año:** 2026  
@@ -94,7 +98,7 @@ Al finalizar esta unidad el alumno será capaz de:
 
 ### TP1 — Blog Personal
 - **Tipo:** Proyecto individual con GitHub Classroom
-- **Entrega:** Via GitHub Classroom (link pendiente de alta)
+- **Entrega:** Via GitHub Classroom (`classroom.github.com/a/RI8vnIt_`)
 - **Requerimientos mínimos:**
   - `index.html`: lista de posts como Cards Bootstrap, Navbar
   - `about.html`: sobre el autor
@@ -127,8 +131,8 @@ Al finalizar esta unidad el alumno será capaz de:
 
 | Recurso | URL | Tipo |
 |---------|-----|------|
-| W3Schools HTML | https://www.w3schools.com/html/ | Tutorial interactivo |
-| W3Schools CSS | https://www.w3schools.com/css/ | Tutorial interactivo |
+| MDN HTML | https://developer.mozilla.org/es/docs/Web/HTML | Documentación oficial |
+| MDN CSS | https://developer.mozilla.org/es/docs/Web/CSS | Documentación oficial |
 | Bootstrap 5 Docs | https://getbootstrap.com/docs/5.3/ | Documentación oficial |
 | W3C Validator | https://validator.w3.org/ | Herramienta de validación |
 | GitHub Classroom | https://classroom.github.com/ | Plataforma de entrega |
@@ -140,5 +144,5 @@ Al finalizar esta unidad el alumno será capaz de:
 - **Clase ya iniciada**: Las filminas base fueron presentadas usando el material de `HTML & CSS.pdf`
 - **TP1 ya entregado**: Los alumnos tienen la consigna de TP1 (Blog HTML/CSS Bootstrap)
 - **TP2 ya entregado**: El link de GitHub Classroom para TP2 Python ya fue compartido
-- **Estrategia diferenciada**: Alumnos con experiencia previa en HTML/CSS pueden avanzar al TP1 directamente; alumnos sin experiencia usan los tutoriales de W3Schools como soporte
+- **Estrategia diferenciada**: Alumnos con experiencia previa en HTML/CSS pueden avanzar al TP1 directamente; alumnos sin experiencia usan MDN Web Docs y el material del curso como soporte
 - **Memoria del simulador**: Ver investigación en `_edu-memory/material/investigacion/` — especialmente papers sobre scaffolding de IA y mobile-first pedagogy

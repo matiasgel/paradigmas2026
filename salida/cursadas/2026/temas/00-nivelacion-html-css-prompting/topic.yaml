@@ -29,10 +29,10 @@ tp_asociados:
     commits_minimos: 6
 
 referencias_web:
-  - url: "https://www.w3schools.com/html/"
-    tema: "HTML5 introduccion y semantica"
-  - url: "https://www.w3schools.com/css/"
-    tema: "CSS3 box model, flexbox, media queries"
+  - url: "https://developer.mozilla.org/es/docs/Web/HTML"
+    tema: "HTML5 introduccion, semantica y formularios"
+  - url: "https://developer.mozilla.org/es/docs/Web/CSS"
+    tema: "CSS3 box model, flexbox, media queries y variables"
   - url: "https://getbootstrap.com/docs/5.3/layout/grid/"
     tema: "Bootstrap 5 — Grid system"
   - url: "https://getbootstrap.com/docs/5.3/components/navbar/"
@@ -41,18 +41,9 @@ referencias_web:
     tema: "Bootstrap 5 — Cards"
 
 material_local:
-  - "material/tema 01/HTML & CSS.pdf"
-  - "material/tema 01/TP 1.pdf"
-  - "material/tema 01/TP 2.pdf"
-  - "material/tema 01/TP 3.pdf"
-  - "material/tema 01/txt/html-css.txt"
-  - "material/tema 01/txt/tp1.txt"
-  - "material/tema 01/txt/tp2.txt"
-  - "material/tema 01/txt/tp3.txt"
-  - "material/tema 01/txt/bootstrap5-grid.txt"
-  - "material/tema 01/txt/bootstrap5-navbar.txt"
-  - "material/tema 01/txt/bootstrap5-card.txt"
-  - "material/tema 01/txt/w3schools-css-flexbox.txt"
+  - "_edu-memory/material/tema-01/html-css.txt"
+  - "_edu-memory/material/tema-01/tp1.txt"
+  - "_edu-memory/material/tema-01/tp2.txt"
 
 artifacts:
   diseno: "diseno.md"

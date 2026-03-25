@@ -25,7 +25,7 @@ Primera semana de cursada. Se presentó la materia, se introdujo el uso de IA (G
 >
 > **Demo de apertura (2 min):** Abrir VS Code con la extensión GitHub Copilot activa. Mostrá que el ícono del copiloto está en la barra de estado inferior. Crear un archivo `hola.html`, escribir `<!`, esperar la sugerencia de Copilot y aceptarla con **Tab**. Decir: *"Así trabajan hoy los devs."*
 >
-> **Mostrar en pantalla:** La estructura del cuatrimestre (SLIDE 03) — señalar que todo el stack va sumándose semana a semana. Hacer énfasis en que TP0 ya debería estar entregado.
+> **Mostrar en pantalla:** La estructura del cuatrimestre (SLIDE 03) — señalar que todo el stack va sumándose semana a semana. Hacer énfasis en que el tema 00 ya inició y que TP1 y TP2 ya fueron publicados.
 >
 > **Política de IA — punto importante:** Aclarar desde el principio que usar Copilot/ChatGPT **no es trampa**, pero que el `PROMPTS.md` es obligatorio en cada entrega. Sin `PROMPTS.md`, el TP se devuelve sin calificar. Mostrar el formato del archivo en SLIDE 05.
 >
@@ -748,8 +748,8 @@ Se realizó un live coding construyendo la página `index.html` completa del TP1
 
 ## Recursos Compartidos en Clase
 
-- W3Schools HTML: https://www.w3schools.com/html/
-- W3Schools CSS: https://www.w3schools.com/css/
+- MDN HTML: https://developer.mozilla.org/es/docs/Web/HTML
+- MDN CSS: https://developer.mozilla.org/es/docs/Web/CSS
 - Bootstrap 5 Docs: https://getbootstrap.com/docs/5.3/
 - Bootstrap Grid: https://getbootstrap.com/docs/5.3/layout/grid/
 - Bootstrap Navbar: https://getbootstrap.com/docs/5.3/components/navbar/
