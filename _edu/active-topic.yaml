@@ -1,13 +1,3 @@
-# active-topic.yaml — Laboratorio de Programación y Lenguajes (IF009) — 2026
-# Actualizar con /edu-design-topic cuando se inicie un nuevo tema
-topic_folder: "salida/cursadas/2026/temas/01-diseno-agil-python"
-topic_number: "01"
-topic_name: "Módulo I — Diseño Ágil + Python"
-status: "design"
-semana: "2-3"
-already_started: false
-notas: "Tema iniciado 2026-03-25. Tema 00 queda en estado en-produccion."
-tema_anterior:
-  topic_folder: "salida/cursadas/2026/temas/00-nivelacion-html-css-prompting"
-  topic_number: "00"
-  status: "en-produccion"
+topic_folder: "salida/cursadas/2026/temas/04-pruebas-filminas"
+topic_number: "04"
+topic_name: "pruebas-filminas"

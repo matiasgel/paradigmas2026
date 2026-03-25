@@ -1,0 +1,57 @@
+version: "slides-plan/v2"
+description: "Contrato canónico entre el agente de planeamiento de filminas y el pipeline técnico de publicación"
+changelog: "v2 (2026-03-19): modelo de un único plan YAML por tema. Elimina assets-manifest.yaml y publish-context.yaml como artefactos separados. Alinea campos de slide con filmina-slide-schema v2."
+
+# --- Archivo único requerido ---
+# El agente produce UN SOLO archivo. El pipeline lo lee y ejecuta.
+required_files:
+  - plan-filminas-{tema}.yaml
+
+# --- Estructura del plan ---
+plan:
+  meta:
+    required:
+      - topic_id       # ej: 03-paradigmas-programacion
+      - title          # título del tema
+      - source         # ruta a filminas.md de origen
+      - generated_at   # ISO 8601
+      - template_id    # Google Slides template ID
+      - topics_folder  # ruta base de temas
+      - topic_folder   # ruta completa del tema activo
+
+  slides:
+    # Cada slide debe cumplir el filmina-slide-schema v2
+    # Ver: _edu/templates/filmina-slide-schema.yaml
+    each_slide_required:
+      - id             # F-00, F-01, ... (pattern: ^F-[0-9]{2}$)
+      - type           # OBLIGATORIO — enum cerrado, nunca inferido
+      - title
+      - body_blocks    # puede ser []
+      - layout         # zonas explícitas: title, body, image, code, table
+      - image          # siempre presente; image.layer puede ser "none"
+
+    image_rules:
+      - "Si image.layer != none → image.prompt OBLIGATORIO y no vacío"
+      - "REGLA ANTI-BUG 3: prompt debe usar SOLO lenguaje visual puro (geometría, colores, posiciones)"
+      - "NUNCA nombrar conceptos técnicos en el prompt — Gemini los convierte en etiquetas de texto"
+      - "SIEMPRE terminar con: Sin texto, sin letras, sin etiquetas, sin código, sin números."
+      - "Ver _edu/templates/prompt-imagen-guide.md para vocabulario permitido y ejemplos probados"
+      - "Las imágenes deben ser originales — no pedir imitación de obras o estilos protegidos"
+
+    coherence_requirements:
+      - "El contenido de cada slide debe ser coherente con minuta.md y diseno.md del tema"
+      - "El tipo de slide debe corresponder al layout asignado (ver slide_types en slides-config.yaml)"
+      - "La suma de slides con image.layer != none no debe superar gemini_image_strategy.max_per_presentation"
+
+validation:
+  pre_pipeline_required: true
+  validator_script: "scripts/validate_plan.py"
+  run_before: "slides_pipeline.py"
+  on_failure: "STOP — el agente debe corregir solo los campos reportados con error"
+  max_repair_attempts: 3
+
+validation_rules:
+  - "El pipeline no infiere tipos ni genera prompts — solo lee el contrato y ejecuta"
+  - "Si falta un campo obligatorio → ValidationError con ruta exacta (ej: F-12.image.prompt)"
+  - "La responsabilidad de planeamiento pertenece al agente invocado por el prompt"
+  - "La publicación completa tiene un único punto de entrada: /edu-publish-slides"
