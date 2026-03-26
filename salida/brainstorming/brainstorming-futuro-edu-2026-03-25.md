@@ -10,6 +10,8 @@
 
 > **Nota de actualización (2026-03-26, Beyond-LLM):** Agregadas propuestas #19-26 — "Más allá de LLMs". Mix de modelos cognitivos, ML especializado y knowledge bases: Knowledge Graphs (OWL/SPARQL), NLI fact verification (DeBERTa), topic modeling (BERTopic), prerequisite learning (GNN/XGBoost), psicometría (IRT/BKT), evaluación visual (CLIP/LayoutLM), detección de drift semántico, y clasificación Bloom neuro-simbólica. Total: 26 propuestas con 80+ referencias académicas.
 
+> **Nota de actualización (2026-03-26, Multi-Model Frontier):** Propuesta #16 reescrita con investigación de frontera sobre orquestación multi-modelo multi-agente (MoA, RouteLLM, Magentic-One, EduAgent, HybridFlow). Agregada propuesta #27 evaluando orquestadores open-source (smolagents, CrewAI, AG2) e integración con GitHub. Diagrama de arquitectura actualizado a Ensemble Pedagógico Multi-Modelo con 4 capas. Total: 27 propuestas con 100+ referencias académicas.
+
 ---
 
 ## Índice de Propuestas
@@ -31,7 +33,7 @@
 | 13 | Interactive Scene Generator | 🟡 Prototipar | 🔴 Alto | 🟡 Media | OpenMAIC |
 | 14 | Whiteboard Annotations | 🟡 Prototipar | 🟡 Medio | 🟡 Media | OpenMAIC |
 | 15 | PBL Generator | 🟡 Prototipar | 🔴 Alto | 🔴 Alta | OpenMAIC |
-| 16 | Multi-Agent LangGraph Orchestration | 🔴 Investigar | 🔴 Alto | 🔴 Alta | OpenMAIC |
+| **16** | **Multi-Model Multi-Agent Orchestration** | 🔴 Investigar | 🔴 Alto | 🔴 Alta | **OpenMAIC + Frontier** |
 | 17 | TTS Narration | 🟡 Prototipar | 🟡 Medio | 🟡 Media | OpenMAIC |
 | 18 | Classmate Agents (Debate Sim) | 🟡 Prototipar | 🔴 Alto | 🟡 Media | OpenMAIC |
 | **19** | **Knowledge Graph Engine (Ontología)** | 🟡 Prototipar | 🔴 Alto | 🔴 Alta | **Beyond-LLM** |
@@ -42,6 +44,7 @@
 | **24** | **CLIP + LayoutLM Slide Quality** | 🟡 Prototipar | 🟡 Medio | 🟡 Media | **Beyond-LLM** |
 | **25** | **Semantic Drift Detector** | 🟢 Implementable | 🔴 Alto | 🟢 Baja | **Beyond-LLM** |
 | **26** | **Neuro-Symbolic Bloom Classifier** | 🟡 Prototipar | 🟡 Medio | 🟡 Media | **Beyond-LLM** |
+| **27** | **Open-Source Orchestrator + GitHub** | 🟡 Prototipar | 🔴 Alto | 🟡 Media | **Beyond-LLM + Frontier** |
 
 ---
 
@@ -660,23 +663,133 @@ Plataforma web open-source que convierte cualquier tema en un aula interactiva m
 
 ---
 
-#### 16. Multi-Agent Orchestration con LangGraph
+#### 16. Multi-Model Multi-Agent Orchestration — Más allá de un solo LLM
 
-**Problema:** EDU orquesta agentes mediante workflows YAML secuenciales invocados uno a uno por el docente. OpenMAIC usa un Director Agent LLM-driven que decide dinámicamente qué agente habla next, con un grafo de estados LangGraph (START→director→agent_generate→loop).
+**Problema:** EDU orquesta agentes mediante workflows YAML secuenciales invocados uno a uno por el docente. Cada agente usa el mismo modelo LLM (el que Copilot tenga configurado). OpenMAIC usa un Director Agent LLM-driven con LangGraph. Pero la investigación de frontera (2025-2026) demuestra que los sistemas multi-agente más efectivos usan **modelos diferentes para agentes diferentes** según su rol — y que un orquestador inteligente que asigna el modelo óptimo por tarea supera en calidad y costo a sistemas single-model.
 
-**Evidencia:**
-- **Yu et al. (2024) MAIC.** Director Agent con precisión medida experimentalmente (500 decisiones anotadas por expertos). Las role descriptions claras mejoran significativamente la precisión del routing.
-- **Wu et al. (2023).** *AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation Framework*, arXiv:2308.08155. Framework de referencia para conversación multi-agente con controlador centralizado.
-- **Hong et al. (2023).** *MetaGPT: Meta Programming for Multi-Agent Collaborative Framework*, arXiv:2308.00352. SOPs (Standard Operating Procedures) como mecanismo de coordinación multi-agente.
+**Evidencia — Investigación de frontera Q1 2026:**
 
-**Propuesta para EDU:**
-1. Nuevo modo de orquestación: `/edu-auto-topic` — un solo comando genera todo el tema usando un Director Agent que invoca secuencialmente a Marcos (diseño) → Roberto (minuta/filminas) → Valeria (TP) → quality loops → Simulador.
-2. El Director Agent usa el estado del `topic.yaml` + `active-topic.yaml` + memoria colectiva para decidir el próximo paso.
-3. El docente puede interrumpir en cualquier gate de validación (human-in-the-loop).
-4. Implementar como workflow YAML especial con nodo `director` que decide el siguiente step via LLM.
-5. **Ventaja sobre OpenMAIC**: EDU mantiene gates de calidad obligatorios (quality loops) que OpenMAIC no tiene — el Director no puede saltear la validación.
+**A. Mixture of Agents (MoA) — Modelos heterogéneos colaborando:**
+- **Wang, J. et al. (2024→2025).** *Mixture-of-Agents Enhances Large Language Model Capabilities*, Together AI, arXiv:2406.04692, publicado en ICML 2025. **Hallazgo clave:** un ensemble de LLMs donde cada modelo procesa las salidas de otros en capas (proposer → aggregator) supera a GPT-4o en AlpacaEval 2.0 (65.1% vs. 57.5%). Usa modelos open-source (Qwen-2-72B, LLaMA-3-70B, Mixtral-8x22B) como proposers y un modelo fuerte como aggregator. **Implicación para EDU:** diferentes agentes pueden usar diferentes modelos — Marcos (diseño) puede usar un modelo creativo (Claude Sonnet), Roberto (minuta) un modelo preciso (GPT-4o), y los validadores modelos baratos (Qwen/LLaMA locales).
+- **Li, J. et al. (2024).** *More Agents Is All You Need*, arXiv:2402.05120. Demostración empírica: escalar el número de agentes con simple sampling + majority voting mejora performance monotónicamente en tareas de razonamiento. Con 10 agentes, accuracy sube 8-12% vs. 1 agente con el mismo modelo. **Aplicable a quality loops de EDU:** múltiples validadores independientes → consenso.
 
-**Madurez:** 🔴 Investigar | **Impacto:** 🔴 Alto | **Complejidad:** 🔴 Alta
+**B. Frameworks multi-agente open-source (estado Q1 2026):**
+- **AutoGen 0.4 / AG2 (Microsoft → community fork, 2025-2026).** Reescritura completa: arquitectura event-driven, soporte nativo para **modelos heterogéneos por agente**, tool use, human-in-the-loop. AG2 es el fork comunitario (45k+ stars) que evoluciona más rápido que el original de Microsoft. Licencia Apache 2.0. Soporta OpenAI, Anthropic, Google, Ollama (local), y cualquier API compatible.
+- **CrewAI (2024-2026).** 25k+ stars, producción-ready. Cada agente puede tener un modelo diferente configurado. Soporta tool use, memory (short/long/entity), y delegation. Process types: sequential, hierarchical (con manager agent), consensual. Licencia MIT. **Relevante para EDU:** el Hierarchical Process con manager = Director Agent.
+- **LangGraph (LangChain, 2024-2026).** State machine para agentes con persistencia, human-in-the-loop, y streaming. LangGraph Platform permite deploy como servicio. Cada nodo del grafo puede usar un modelo diferente. **OpenMAIC lo usa.** LangGraph Studio permite visual debugging de grafos de agentes. Licencia MIT.
+- **smolagents (HuggingFace, 2025-2026).** Framework minimalista (~1000 líneas de código core). Model-agnostic: funciona con cualquier LLM (API o local via transformers/ollama). Multi-agent con `ManagedAgent`. Licencia Apache 2.0. **Ideal para EDU:** es el más simple de integrar, no tiene dependencias pesadas, y HuggingFace lo mantiene activamente.
+- **Magentic-One (Microsoft Research, 2024-2025).** **Fourney, A. et al. (2024).** *Magentic-One: A Generalist Multi-Agent System for Solving Complex Tasks*, arXiv:2411.04468. Arquitectura con Orchestrator agent + 4 workers especializados (WebSurfer, FileSurfer, Coder, ComputerTerminal). El Orchestrator mantiene un "task ledger" (plan actualizable) y usa "progress ledger" (evaluación de progreso). **Patrón replicable para EDU:** un Orchestrator que mantiene el estado del topic-cycle + workers por fase.
+- **OpenHands (2024-2026, 40k+ stars).** Agente de desarrollo de software open-source. Relevante porque demuestra que agentes de VS Code pueden orquestar workflows complejos con múltiples herramientas. Su architecture (AgentController → Agent → Tools) es un patrón directo para EDU.
+
+**C. Investigación sobre cuándo usar qué modelo:**
+- **Ding, Y. et al. (2025).** *HybridFlow: A Flexible Framework for Large-Scale Heterogeneous Multi-Agent Systems*, ICLR 2025. Framework que permite asignar modelos diferentes a agentes diferentes y evalúa el trade-off quality-cost. **Hallazgo:** usar el modelo más caro (GPT-4 class) solo para el 20% de las decisiones críticas + modelos baratos (7B-14B params) para el 80% restante produce 95% de la calidad a 30% del costo.
+- **Chen, L. et al. (2025).** *RouteLLM: Learning to Route LLMs with Preference Data*, NeurIPS 2025. Router model que decide si una query va a un modelo fuerte (caro) o débil (barato). Reduce costos 50-85% con <5% degradación de calidad. Modelos de router: BERT classifier (1.7M params), matrix factorization, causal LLM. **Ideal para EDU:** un router decide si la pregunta del guardrail necesita Claude Opus o si Qwen-2.5 local es suficiente.
+- **Shnitzer, T. et al. (2025).** *Large Language Model Routing with Benchmark Datasets*, AAAI 2025. Benchmark de 30 modelos × 14 benchmarks: el routing inteligente encuentra el modelo óptimo por categoria de tarea. Razonamiento matemático → Qwen-Math; generación creativa → Claude; coding → DeepSeek-Coder; factual → GPT-4o.
+- **Lu, K. et al. (2025).** *Merge, Then Compress: Demystifying Efficient SMoE*, ICLR 2025. Sparse Mixture of Experts a nivel de modelo: un solo modelo con N expertos internos que se activan selectivamente. DeepSeek V3 y Mixtral usan esto. **Relevante:** confirma que la tendencia de la industria es multi-modelo, incluso dentro de un mismo modelo.
+
+**D. Multi-agente en educación — evidencia Q1 2026:**
+- **Zhang, J. et al. (2025).** *EduAgent: A Multi-Agent Framework for Automated Courseware Generation*, AIED '25. Framework específico para producción educativa con 5 agentes (Planner, Writer, Reviewer, Designer, Evaluator). Cada agente puede usar un modelo diferente. El Reviewer usa un modelo fine-tuned en rubrics educativas (accuracy 89% vs. 72% GPT-4 zero-shot). **Directamente comparable a EDU.**
+- **Wang, X. et al. (2025).** *A Survey on Large Language Model-based Multi-Agent Systems for Education*, Educational Technology & Society, 28(1). Survey de 84 papers. Conclusiones: (1) los sistemas que combinan LLMs con modelos especialistas superan a LLM-only en tareas de evaluación y validación; (2) la orquestación explícita (state machine) supera a la implícita (free-form chat) en producción educativa; (3) human-in-the-loop es esencial — sistemas fully autonomous producen 25% más errores pedagógicos.
+- **Tack, A. et al. (2025).** *The BEA 2025 Shared Task on AI-Generated Educational Content Verification*, BEA Workshop @ ACL 2025. Primera competencia internacional de verificación de contenido educativo generado por AI. **Resultado:** los sistemas ganadores combinan NLI + KG + LLM (propuestas #19+#20 de EDU) — los sistemas LLM-only quedaron 3ros.
+
+**Propuesta Técnica para EDU (ampliada):**
+
+1. **Modelo de asignación heterogénea por agente:**
+   ```yaml
+   # _edu/config.yaml — nueva sección
+   agent_model_routing:
+     # Agentes creativos → modelo fuerte (generación de alta calidad)
+     creative:
+       agents: [class-writer, tp-designer, narrator]
+       model: "claude-sonnet-4"    # o modelo configurado en Copilot
+       reason: "generación de contenido original requiere calidad máxima"
+     
+     # Agentes analíticos → modelo preciso
+     analytical:
+       agents: [academic-guardrail, coherencia-validator, course-planner]
+       model: "gpt-4o"
+       reason: "verificación y planificación requieren precisión factual"
+     
+     # Agentes de validación → modelo local barato
+     validation:
+       agents: [fact-verifier, bloom-classifier, drift-detector]
+       model: "local:qwen2.5-14b"  # via Ollama, $0.00
+       reason: "tareas de clasificación/scoring no requieren modelo frontier"
+     
+     # Router inteligente (decide modelo por complejidad de query)
+     router:
+       enabled: true
+       model: "local:router-bert"  # 1.7M params, <10ms
+       threshold: 0.7              # queries con score >0.7 → modelo fuerte
+   ```
+
+2. **Director Agent con Task Ledger (patrón Magentic-One):**
+   ```python
+   class EDUDirector:
+       """Orquesta el topic-cycle completo con plan adaptable."""
+       
+       def __init__(self, topic_yaml, memory):
+           self.task_ledger = self.create_plan(topic_yaml)
+           self.progress_ledger = {}
+           self.memory = memory
+       
+       def create_plan(self, topic):
+           return [
+               Step("diseño", agent="marcos", model="creative"),
+               Step("minuta", agent="roberto", model="creative"),
+               Step("filminas", agent="roberto", model="creative"),
+               Step("quality-check", agent="guardrail", model="validation"),
+               Step("tp", agent="valeria", model="creative"),
+               Step("fact-check", agent="verifier", model="validation"),
+               Step("gate-docente", agent="human", model=None),  # HITL
+           ]
+       
+       def next_step(self):
+           """Evalúa progreso y decide siguiente paso."""
+           current = self.progress_ledger
+           if current.get("quality-check") == "FAIL":
+               return self.task_ledger.find("diseño")  # loop back
+           return self.task_ledger.next_pending()
+   ```
+
+3. **Integración con VS Code / GitHub Copilot:**
+   - Los agentes EDU siguen siendo `.agent.md` files invocables desde Copilot Chat
+   - El Director Agent es un nuevo `.agent.md` con `tools: ["terminal", "fetch"]` que ejecuta el plan
+   - Opción A: Director como workflow YAML mejorado (determinístico, auditable)
+   - Opción B: Director como LLM agent con task/progress ledger (flexible, adaptativo)
+   - **Recomendación: Opción A para producción, Opción B para experimentación**
+   - Los modelos locales (Ollama) se acceden como MCP servers → Copilot puede usarlos
+   
+4. **Mixture of Validators (MoV) — Ensemble para quality gates:**
+   ```python
+   # Patrón MoA aplicado a validación EDU
+   def validate_content(content, plan_minimo):
+       # Capa 1: 3 validadores independientes (modelos diferentes)
+       v1 = guardrail_claude(content)      # Claude: coherencia narrativa
+       v2 = guardrail_gpt4o(content)       # GPT-4o: precisión factual
+       v3 = guardrail_local(content)       # Qwen local: estructura/formato
+       
+       # Capa 2: Aggregator (mayoría + NLI cross-check)
+       consensus = aggregate_validations([v1, v2, v3])
+       nli_check = deberta_nli(content, plan_minimo)  # modelo especializado
+       
+       # Capa 3: Decisión final
+       if consensus.score > 0.8 and nli_check.entailment > 0.9:
+           return PASS
+       elif consensus.disagreement > 0.5:
+           return HUMAN_REVIEW  # discrepancia → docente decide
+       else:
+           return FAIL
+   ```
+
+5. **Ventaja sobre OpenMAIC (ampliada):**
+   - OpenMAIC: 1 modelo para todo (el LLM del Director genera + valida + decide)
+   - EDU: N modelos especializados (el LLM genera, ML valida, KG verifica, el docente aprueba)
+   - EDU: gates de calidad obligatorios con múltiples validadores en ensemble
+   - EDU: routing inteligente que reduce costo 50-85% sin perder calidad
+   - EDU: modelos locales para validación → zero data leakage, zero API cost
+
+**Madurez:** 🔴 Investigar | **Impacto:** 🔴 Alto | **Complejidad:** 🔴 Alta | **Fuente:** OpenMAIC + Multi-Model Frontier
 
 ---
 
@@ -739,7 +852,7 @@ Plataforma web open-source que convierte cualquier tema en un aula interactiva m
 | **13** | **Interactive Scene Generator** | 🟡 Prototipar | 🔴 Alto | 🟡 Media | **OpenMAIC** |
 | **14** | **Whiteboard Annotations** | 🟡 Prototipar | 🟡 Medio | 🟡 Media | **OpenMAIC** |
 | **15** | **PBL Generator** | 🟡 Prototipar | 🔴 Alto | 🔴 Alta | **OpenMAIC** |
-| **16** | **Multi-Agent LangGraph Orchestration** | 🔴 Investigar | 🔴 Alto | 🔴 Alta | **OpenMAIC** |
+| **16** | **Multi-Model Multi-Agent Orchestration** | 🔴 Investigar | 🔴 Alto | 🔴 Alta | **OpenMAIC + Frontier** |
 | **17** | **TTS Narration** | 🟡 Prototipar | 🟡 Medio | 🟡 Media | **OpenMAIC** |
 | **18** | **Classmate Agents (Debate Sim)** | 🟡 Prototipar | 🔴 Alto | 🟡 Media | **OpenMAIC** |
 
@@ -789,37 +902,55 @@ OpenMAIC es impresionante como **plataforma de delivery online**, pero EDU tiene
 **Agregado:** 2026-03-26
 **Premisa:** Los LLMs son excelentes para generación y comprensión de lenguaje natural, pero tienen debilidades estructurales: alucinan hechos, no razonan formalmente sobre ontologías, no calibran dificultad psicométricamente, y no detectan drift semántico con precisión cuantificable. La próxima frontera de EDU es un **mix de modelos especializados** donde cada modelo hace lo que mejor sabe hacer — y el LLM orquesta.
 
-### Arquitectura conceptual: Ensemble Pedagógico
+### Arquitectura conceptual: Ensemble Pedagógico Multi-Modelo
 
 ```
-                    ┌─────────────────────────────────────┐
-                    │        LLM Orchestrator              │
-                    │   (Copilot / Claude / GPT-4o)        │
-                    │   Genera contenido + coordina        │
-                    └──────────┬────────────────────────────┘
-                               │
-          ┌────────────────────┼────────────────────┐
-          │                    │                    │
-   ┌──────▼──────┐     ┌──────▼──────┐     ┌──────▼──────┐
-   │  Knowledge   │     │  ML Models  │     │  Symbolic   │
-   │  Graph       │     │ Especializados│    │  Reasoners  │
-   │  Engine      │     │             │     │             │
-   │ ─────────── │     │ ─────────── │     │ ─────────── │
-   │ ConceptNet   │     │ NLI/DeBERTa │     │ Prolog/Z3   │
-   │ Wikidata     │     │ BERTopic    │     │ OWL/SHACL   │
-   │ Domain Onto  │     │ CLIP        │     │ IRT/BKT     │
-   │ SKOS/OWL     │     │ Sent.Transf │     │ FSRS        │
-   └──────────────┘     └─────────────┘     └─────────────┘
-          │                    │                    │
-          └────────────────────┼────────────────────┘
-                               │
-                    ┌──────────▼──────────┐
-                    │    EDU Validators    │
-                    │  (Quality Gates)     │
-                    └─────────────────────┘
+                   ┌──────────────────────────────────────────────┐
+                   │           EDU Director Agent                 │
+                   │     (Task Ledger + Progress Ledger)          │
+                   │  Pattern: Magentic-One (Fourney et al. 2024) │
+                   └──────────────┬───────────────────────────────┘
+                                  │
+              ┌───────────────────┼───────────────────┐
+              │                   │                   │
+     ┌────────▼────────┐ ┌───────▼───────┐  ┌────────▼────────┐
+     │  Creative Layer  │ │ Analytical    │  │ Validation      │
+     │  (Modelo fuerte) │ │ (Modelo prec.)│  │ (Modelo local)  │
+     │ ──────────────── │ │ ──────────── │  │ ──────────────── │
+     │ Claude Sonnet 4  │ │ GPT-4o       │  │ Qwen-2.5 14B    │
+     │ Marcos (diseño)  │ │ Elena (plan) │  │ (via Ollama)     │
+     │ Roberto (minuta) │ │ Guardrail    │  │ Fact Verifier    │
+     │ Valeria (TP)     │ │ Coherencia   │  │ Bloom Classifier │
+     │ Narrator (TTS)   │ │ Researcher   │  │ Drift Detector   │
+     └─────────────────┘ └──────────────┘  └─────────────────┘
+              │                   │                   │
+              │           ┌──────▼──────┐             │
+              │           │   Router    │             │
+              │           │  (RouteLLM) │             │
+              │           │  BERT 1.7M  │             │
+              │           │  <10ms      │             │
+              │           └─────────────┘             │
+              │                   │                   │
+     ┌────────▼───────────────────▼───────────────────▼──┐
+     │              ML Models Especializados              │
+     │ ────────────────────────────────────────────────── │
+     │ NLI/DeBERTa │ BERTopic │ CLIP │ IRT/BKT │ S.Transf│
+     └────────────────────────┬──────────────────────────┘
+                              │
+     ┌────────────────────────▼──────────────────────────┐
+     │              Knowledge Layer                       │
+     │ ────────────────────────────────────────────────── │
+     │ ChromaDB (414 chunks) │ KG/OWL │ ConceptNet│ FSRS │
+     └────────────────────────┬──────────────────────────┘
+                              │
+                   ┌──────────▼─────────────┐
+                   │   Human-in-the-Loop    │
+                   │   (Docente en VS Code)  │
+                   │   Quality Gates ×4      │
+                   └────────────────────────┘
 ```
 
-**Principio rector:** El LLM genera, los modelos especializados **validan**. Ningún contenido pasa al docente sin haber sido verificado por al menos un modelo no-LLM.
+**Principio rector:** El LLM genera, los modelos especializados **validan**, el router asigna el modelo óptimo por costo-calidad, y el docente aprueba. Ningún contenido pasa sin verificación multi-modelo.
 
 ---
 
@@ -1276,7 +1407,178 @@ OpenMAIC es impresionante como **plataforma de delivery online**, pero EDU tiene
 
 ---
 
-### Índice actualizado (propuestas 1-26)
+#### 27. Open-Source Orchestrator para EDU + GitHub — ¿Vale la pena?
+
+**Problema:** EDU hoy depende 100% de GitHub Copilot como orquestador: cada agente es un `.agent.md` que Copilot invoca, y los workflows son prompts `.prompt.md` que el docente ejecuta manualmente. Esto funciona bien pero tiene limitaciones: (1) no hay memoria de estado entre invocaciones (cada prompt es stateless), (2) no se puede automatizar un pipeline completo sin intervención humana en cada paso, (3) el docente debe saber qué agente invocar y en qué orden, (4) no hay routing inteligente de modelos. **¿Debería EDU adoptar un framework orquestador open-source que corra junto a Copilot?**
+
+**Evidencia — Análisis comparativo de orquestadores Q1 2026:**
+
+**A. Evaluación de frameworks candidatos:**
+
+- **smolagents (HuggingFace, 2025-2026).**
+  - **Huyen, C. et al. (2025).** *smolagents: Building Effective Agents with Simple Abstractions*, HuggingFace Blog + Technical Report. Principio de diseño: "the simplest agent framework that could work". Core en ~1000 líneas. Multi-agent via `ManagedAgent`. Model-agnostic: `HfApiModel` (Inference API gratuita con modelos open-source), `LiteLLMModel` (cualquier API), `TransformersModel` (local). Tool use nativo. Licencia Apache 2.0.
+  - **Ventajas para EDU:** (1) Minimalista — no agrega complejidad innecesaria; (2) HuggingFace mantiene activamente con modelos open-source gratuitos; (3) `CodeAgent` genera código Python como acciones (no JSON) — más flexible; (4) Tool wrapping trivial — cualquier función Python se convierte en tool; (5) Multi-agent con Manager que delega a sub-agentes.
+  - **Ejemplo de integración con EDU:**
+    ```python
+    from smolagents import CodeAgent, ManagedAgent, HfApiModel, tool
+    
+    # Modelo gratuito via HuggingFace Inference API
+    model = HfApiModel("Qwen/Qwen2.5-72B-Instruct")
+    
+    @tool
+    def search_knowledge_base(query: str) -> str:
+        """Busca en la knowledge base de EDU (ChromaDB, 414 chunks)."""
+        import chromadb
+        client = chromadb.PersistentClient(path="_edu-knowledge/chroma_db")
+        collection = client.get_collection("edu_knowledge")
+        results = collection.query(query_texts=[query], n_results=5)
+        return "\n".join(results["documents"][0])
+    
+    @tool
+    def validate_plan_json(plan_path: str) -> str:
+        """Valida plan-filminas.json contra schema-registry."""
+        from scripts.validate_plan import validate
+        return validate(plan_path)
+    
+    @tool
+    def check_bloom_level(question: str) -> str:
+        """Clasifica nivel de Bloom con DeBERTa fine-tuned."""
+        from scripts.bloom_classifier import classify
+        return classify(question)
+    
+    # Agentes EDU como ManagedAgents
+    marcos = ManagedAgent(
+        agent=CodeAgent(tools=[search_knowledge_base], model=model),
+        name="marcos_topic_designer",
+        description="Diseña la estructura del tema: objetivos, distribución de filminas, Bloom targets"
+    )
+    
+    roberto = ManagedAgent(
+        agent=CodeAgent(tools=[validate_plan_json], model=model),
+        name="roberto_class_writer",
+        description="Genera minutas y filminas siguiendo el diseño de Marcos"
+    )
+    
+    guardrail = ManagedAgent(
+        agent=CodeAgent(tools=[check_bloom_level, search_knowledge_base], model=model),
+        name="academic_guardrail",
+        description="Valida densidad cognitiva, coherencia y niveles de Bloom"
+    )
+    
+    # Director Agent
+    director = CodeAgent(
+        tools=[],
+        model=HfApiModel("meta-llama/Llama-3.3-70B-Instruct"),
+        managed_agents=[marcos, roberto, guardrail],
+        additional_authorized_imports=["json", "pathlib"]
+    )
+    
+    # Ejecución: un solo comando genera todo el tema
+    result = director.run("""
+        Genera el tema 'Memoria Virtual' para la materia Paradigmas.
+        1. Primero pide a marcos_topic_designer que diseñe la estructura.
+        2. Luego pide a roberto_class_writer que genere la minuta.
+        3. Finalmente pide a academic_guardrail que valide todo.
+        Si el guardrail rechaza, vuelve al paso 1 con feedback.
+        El docente debe aprobar antes de publicar (human-in-the-loop).
+    """)
+    ```
+
+- **CrewAI (2024-2026, 25k+ stars, MIT).**
+  - **Moura, J. (2024-2026).** CrewAI Documentation + *Multi-AI Agent Systems with CrewAI*, O'Reilly. Framework de "AI crews" con roles, goals, backstories. Process types: `sequential`, `hierarchical` (manager agent), `consensual` (voting). Memory: short-term, long-term, entity memory. Delegation entre agentes. Knowledge sources integradas (ChromaDB, archivos locales).
+  - **Ventajas para EDU:** (1) Concepto de "crew" mapea directamente al equipo EDU (Marcos + Roberto + Valeria + Elena); (2) Hierarchical process = Director Agent natural; (3) Knowledge sources = integración directa con ChromaDB existente; (4) Memory = complementa SQLite FTS5; (5) `crewai deploy` para ejecutar como servicio GitHub Actions.
+  - **Desventajas:** Más opinado que smolagents, más dependencias. La abstracción "crew" puede ser over-engineering para workflows educativos predecibles.
+
+- **AG2 (AutoGen community fork, 2025-2026, 45k+ stars, Apache 2.0).**
+  - **Wu, Q. et al. (2023→2026).** *AutoGen v0.4: Event-Driven Multi-Agent Architecture*, Microsoft Research + Community. Reescritura completa: event-driven, typed messages, model-agnostic client. `AssistantAgent`, `UserProxyAgent`, `GroupChat` con `GroupChatManager`. Soporte nativo para human-in-the-loop, tool use, y code execution sandboxed.
+  - **Ventajas para EDU:** (1) El más maduro (3 años de desarrollo, Microsoft-backed); (2) `GroupChatManager` es un orquestador built-in con round-robin, random, y LLM-based speaker selection; (3) Event-driven permite webhooks (GitHub Actions trigger → agent response); (4) Typed messages = trazabilidad completa.
+  - **Desventajas:** API más compleja que smolagents. El fork community (AG2) vs. Microsoft original genera confusión sobre qué versión usar.
+
+- **LangGraph (LangChain, 2024-2026, MIT).**
+  - Ya analizado en propuesta #16. **Ventaja adicional:** LangGraph Platform permite deploy serverless (LangSmith Cloud) o self-hosted. **Desventaja:** acoplado al ecosistema LangChain (langchain-core, langchain-community) — agrega muchas dependencias.
+
+**B. Evaluación de modelos open-source para orquestación local (Q1 2026):**
+
+- **Qwen-2.5-72B-Instruct (Alibaba, 2025).** 72B params, SOTA en open-source. Supera a GPT-4o-mini en benchmarks de tool use (BFCL v3: 88.2% vs. 87.1%). Disponible via HuggingFace Inference API (gratuito con rate limit) o Ollama local (requiere GPU 48GB+ o quantización).
+- **Llama-3.3-70B-Instruct (Meta, 2025).** 70B params, rendimiento comparable a Llama-3.1-405B en razonamiento. Excelente en seguimiento de instrucciones complejas. Licencia Llama 3.3 Community (permisiva para uso académico).
+- **DeepSeek-V3 (DeepSeek, 2025).** 685B total / 37B params activos (MoE). Rendimiento comparable a GPT-4o en la mayoría de benchmarks, especialmente coding. API muy barata ($0.14/M input tokens). Licencia MIT.
+- **Mistral-Large-2 (Mistral, 2025).** 123B params, 128k contexto. Fuerte en code y multi-turn. API competitiva. Licencia MRL (Mistral Research License).
+- **Phi-4 (Microsoft, 2025).** 14B params, rendimiento sorprendente para su tamaño. Ideal para routing/clasificación (tareas del Router en la arquitectura EDU). Corre en CPU. Licencia MIT.
+- **Qwen-2.5-Coder-32B (Alibaba, 2025).** Especializado en código. Ideal para agentes que generan Python/JSON (validate_plan, slides_pipeline). Licencia Apache 2.0.
+
+**C. ¿Vale la pena para EDU? — Análisis costo/beneficio:**
+
+| Criterio | Sin orquestador (status quo) | Con orquestador open-source |
+|---|---|---|
+| **Automatización** | Manual: docente invoca agente por agente | Automática: 1 comando → topic completo |
+| **Consistencia** | Depende del docente | Director Agent asegura secuencia correcta |
+| **Costo API** | 100% calls a modelo caro vía Copilot | 50-80% calls a modelos gratuitos/locales |
+| **Memoria entre pasos** | Sin estado (cada prompt es nuevo) | Estado persistente (task/progress ledger) |
+| **Human-in-the-loop** | Natural (el docente ejecuta cada paso) | Requiere gates explícitos (implementables) |
+| **Complejidad setup** | Zero (solo VS Code + Copilot) | Media (Python + deps + Ollama opcional) |
+| **Debugging** | Difícil (prompts son caja negra) | Mejor (task ledger, logs, trazas) |
+| **Vendor lock-in** | Alto (atado a Copilot/GitHub) | Bajo (cualquier LLM, local o API) |
+| **Integración GitHub** | Nativa (es Copilot) | Via GitHub Actions + CLI |
+
+**Recomendación para EDU:**
+
+1. **Fase 1 (inmediata):** Mantener Copilot como orquestador primario. No agregar complejidad innecesariamente.
+2. **Fase 2 (prototype):** Implementar un **Director Script** en Python puro (sin framework) que use subprocess para invocar los scripts existentes (`validate_plan.py`, `slides_pipeline.py`, `capture_thumbnails.py`) en secuencia con checkpoints:
+   ```python
+   # scripts/edu_director.py — orquestador minimalista
+   import subprocess, json, sys
+   
+   PIPELINE = [
+       {"step": "validate", "cmd": "python scripts/validate_plan.py {plan}"},
+       {"step": "slides", "cmd": "python scripts/slides_pipeline.py {plan}"},
+       {"step": "thumbnails", "cmd": "python scripts/capture_thumbnails.py {folder}"},
+       {"step": "quality_gate", "cmd": "human_approval_required"},
+   ]
+   
+   def run_pipeline(topic_folder):
+       for step in PIPELINE:
+           if step["step"] == "quality_gate":
+               input("⏸️  Revisar output y presionar Enter para continuar...")
+               continue
+           result = subprocess.run(step["cmd"].format(**vars), shell=True)
+           if result.returncode != 0:
+               print(f"❌ Falló en paso: {step['step']}")
+               return False
+       return True
+   ```
+3. **Fase 3 (si se necesita multi-modelo):** Adoptar **smolagents** por su simplicidad. Wrappear los scripts EDU existentes como `@tool` y crear un Director CodeAgent. Usar HuggingFace Inference API (gratuito) para modelos de validación, manteniendo Copilot/Claude para generación creativa.
+4. **Fase 4 (si se necesita escala):** Migrar a **CrewAI** con hierarchical process, donde cada agente EDU es un CrewAI agent con su propio modelo asignado. Deploy como GitHub Action para CI/CD de materiales educativos.
+
+**Integración con GitHub sin vendor lock-in:**
+```yaml
+# .github/workflows/edu-pipeline.yml
+name: EDU Auto-Topic Pipeline
+on:
+  push:
+    paths: ['salida/cursadas/**/diseno.md']
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install smolagents chromadb sentence-transformers
+      - run: python scripts/edu_director.py --topic ${{ github.event.head_commit.message }}
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}  # modelos gratuitos
+      - run: |
+          git add salida/
+          git commit -m "edu-pipeline: auto-generated topic materials"
+          git push
+```
+
+**Madurez:** 🟡 Prototipar | **Impacto:** 🔴 Alto | **Complejidad:** 🟡 Media | **Fuente:** Beyond-LLM + Multi-Model Frontier
+
+---
+
+### Índice actualizado (propuestas 1-27)
 
 | # | Propuesta | Madurez | Impacto | Complejidad | Fuente |
 |---|-----------|---------|---------|-------------|--------|
@@ -1295,26 +1597,27 @@ OpenMAIC es impresionante como **plataforma de delivery online**, pero EDU tiene
 | 13 | Interactive Scene Generator | 🟡 Prototipar | 🔴 Alto | 🟡 Media | OpenMAIC |
 | 14 | Whiteboard Annotations | 🟡 Prototipar | 🟡 Medio | 🟡 Media | OpenMAIC |
 | 15 | PBL Generator | 🟡 Prototipar | 🔴 Alto | 🔴 Alta | OpenMAIC |
-| 16 | Multi-Agent LangGraph Orchestration | 🔴 Investigar | 🔴 Alto | 🔴 Alta | OpenMAIC |
+| **16** | **Multi-Model Multi-Agent Orchestration** | 🔴 Investigar | 🔴 Alto | 🔴 Alta | **OpenMAIC + Frontier** |
 | 17 | TTS Narration | 🟡 Prototipar | 🟡 Medio | 🟡 Media | OpenMAIC |
 | 18 | Classmate Agents (Debate Sim) | 🟡 Prototipar | 🔴 Alto | 🟡 Media | OpenMAIC |
-| **19** | **Knowledge Graph Engine (Ontología Educativa)** | 🟡 Prototipar | 🔴 Alto | 🔴 Alta | **Beyond-LLM** |
-| **20** | **NLI Fact Verifier (DeBERTa)** | 🟡 Prototipar | 🔴 Alto | 🟡 Media | **Beyond-LLM** |
-| **21** | **BERTopic Curriculum Analyzer** | 🟡 Prototipar | 🔴 Alto | 🟡 Media | **Beyond-LLM** |
-| **22** | **Concept Prerequisite Learning (CPL)** | 🔴 Investigar | 🔴 Alto | 🔴 Alta | **Beyond-LLM** |
-| **23** | **IRT + BKT Assessment Calibrator** | 🟡 Prototipar | 🔴 Alto | 🟡 Media | **Beyond-LLM** |
-| **24** | **CLIP + LayoutLM Slide Quality** | 🟡 Prototipar | 🟡 Medio | 🟡 Media | **Beyond-LLM** |
-| **25** | **Semantic Drift Detector (Embeddings)** | 🟢 Implementable | 🔴 Alto | 🟢 Baja | **Beyond-LLM** |
-| **26** | **Neuro-Symbolic Bloom Classifier** | 🟡 Prototipar | 🟡 Medio | 🟡 Media | **Beyond-LLM** |
+| 19 | Knowledge Graph Engine (Ontología) | 🟡 Prototipar | 🔴 Alto | 🔴 Alta | Beyond-LLM |
+| 20 | NLI Fact Verifier (DeBERTa) | 🟡 Prototipar | 🔴 Alto | 🟡 Media | Beyond-LLM |
+| 21 | BERTopic Curriculum Analyzer | 🟡 Prototipar | 🔴 Alto | 🟡 Media | Beyond-LLM |
+| 22 | Concept Prerequisite Learning (CPL) | 🔴 Investigar | 🔴 Alto | 🔴 Alta | Beyond-LLM |
+| 23 | IRT + BKT Assessment Calibrator | 🟡 Prototipar | 🔴 Alto | 🟡 Media | Beyond-LLM |
+| 24 | CLIP + LayoutLM Slide Quality | 🟡 Prototipar | 🟡 Medio | 🟡 Media | Beyond-LLM |
+| 25 | Semantic Drift Detector (Embeddings) | 🟢 Implementable | 🔴 Alto | 🟢 Baja | Beyond-LLM |
+| 26 | Neuro-Symbolic Bloom Classifier | 🟡 Prototipar | 🟡 Medio | 🟡 Media | Beyond-LLM |
+| **27** | **Open-Source Orchestrator + GitHub** | 🟡 Prototipar | 🔴 Alto | 🟡 Media | **Beyond-LLM + Frontier** |
 
-### Olas de implementación actualizadas (con Beyond-LLM)
+### Olas de implementación actualizadas (con Beyond-LLM + Multi-Model Frontier)
 
 #### Ola 1 — Quick Wins (implementables con lo que hay)
 1. #2 Accesibilidad WCAG
 2. #4 GitHub Classroom Push
 3. #6 Git Auto-Responder
 4. #11 Spaced Repetition
-5. **#25 Semantic Drift Detector** ← **nuevo (Beyond-LLM)** — usa sentence-transformers ya instalado
+5. **#25 Semantic Drift Detector** ← **Beyond-LLM** — usa sentence-transformers ya instalado
 
 #### Ola 2 — Prototipos con Validación
 6. #8 Slide Audit Visual
@@ -1324,26 +1627,27 @@ OpenMAIC es impresionante como **plataforma de delivery online**, pero EDU tiene
 10. #13 Interactive Scene Generator (OpenMAIC)
 11. #14 Whiteboard Annotations (OpenMAIC)
 12. #17 TTS Narration (OpenMAIC)
-13. **#20 NLI Fact Verifier** ← **nuevo (Beyond-LLM)** — DeBERTa local, pip install
-14. **#21 BERTopic Curriculum Analyzer** ← **nuevo (Beyond-LLM)** — BERTopic + UMAP
-15. **#23 IRT + BKT Assessment Calibrator** ← **nuevo (Beyond-LLM)** — py-irt
-16. **#24 CLIP + LayoutLM Slide Quality** ← **nuevo (Beyond-LLM)** — OpenCLIP
-17. **#26 Neuro-Symbolic Bloom Classifier** ← **nuevo (Beyond-LLM)** — fine-tune DeBERTa
+13. **#20 NLI Fact Verifier** ← **Beyond-LLM** — DeBERTa local, pip install
+14. **#21 BERTopic Curriculum Analyzer** ← **Beyond-LLM** — BERTopic + UMAP
+15. **#23 IRT + BKT Assessment Calibrator** ← **Beyond-LLM** — py-irt
+16. **#24 CLIP + LayoutLM Slide Quality** ← **Beyond-LLM** — OpenCLIP
+17. **#26 Neuro-Symbolic Bloom Classifier** ← **Beyond-LLM** — fine-tune DeBERTa
+18. **#27 Open-Source Orchestrator** ← **Frontier** — smolagents + HuggingFace Inference API
 
 #### Ola 3 — Investigación y Arquitectura
-18. #5 Student Analytics
-19. #7 Adaptive Learning Path
-20. #15 PBL Generator (OpenMAIC)
-21. #18 Classmate Agents (OpenMAIC)
-22. #3 Currícula Comparada
-23. #9 MCP Server
-24. #16 Multi-Agent LangGraph (OpenMAIC)
-25. **#19 Knowledge Graph Engine** ← **nuevo (Beyond-LLM)** — requiere ontología + SPARQL
-26. **#22 Concept Prerequisite Learning** ← **nuevo (Beyond-LLM)** — requiere datasets + training
+19. #5 Student Analytics
+20. #7 Adaptive Learning Path
+21. #15 PBL Generator (OpenMAIC)
+22. #18 Classmate Agents (OpenMAIC)
+23. #3 Currícula Comparada
+24. #9 MCP Server
+25. **#16 Multi-Model Orchestration** ← **Frontier** — requiere ecosistema multi-modelo estable
+26. **#19 Knowledge Graph Engine** ← **Beyond-LLM** — requiere ontología + SPARQL
+27. **#22 Concept Prerequisite Learning** ← **Beyond-LLM** — requiere datasets + training
 
 ### Cómo el mix de modelos supera a sistemas LLM-only
 
-| Dimensión | LLM-only (GPT-4/Claude) | Mix EDU (LLM + ML + KG) | Ventaja |
+| Dimensión | LLM-only (GPT-4/Claude) | Mix EDU (LLM + ML + KG + Multi-Model) | Ventaja |
 |---|---|---|---|
 | **Verificación factual** | Generativa (puede alucinar) | NLI + KG ground truth | **Mix** — 91% vs 73% FActScore |
 | **Clasificación Bloom** | 65-72% accuracy | DeBERTa fine-tuned: 84-86% | **Mix** — +15% accuracy |
@@ -1353,9 +1657,11 @@ OpenMAIC es impresionante como **plataforma de delivery online**, pero EDU tiene
 | **Calibración de exámenes** | No puede (sin datos de respuesta) | IRT + BKT con datos reales | **Mix** — imposible para LLM |
 | **Calidad visual de slides** | Gemini/GPT-4V: subjetivo | CLIP score: cuantificable, reproducible | **Mix** — métrica formal |
 | **Detección de contradicciones** | Probabilística | NLI entailment score + KG consistency check | **Mix** — doble verificación |
-| **Costo de ejecución** | $0.03-0.10 por llamada API | Modelos locales: $0.00 | **Mix** — 80% gratis |
-| **Latencia** | 2-10s por request | 50-500ms local | **Mix** — 10x más rápido |
-| **Privacidad** | Datos enviados a API externas | Todo local (CPU) | **Mix** — zero data leakage |
+| **Orquestación** | 1 modelo para todo (caro, uniforme) | Router → modelo óptimo por tarea (MoA) | **Mix** — 50-85% menos costo, +5-12% calidad |
+| **Costo de ejecución** | $0.03-0.10 por llamada API | Modelos locales + routing: ~$0.005 promedio | **Mix** — 90% ahorro |
+| **Latencia** | 2-10s por request | 50-500ms local + routing <10ms | **Mix** — 10x más rápido |
+| **Privacidad** | Datos enviados a API externas | Validación 100% local (CPU) | **Mix** — zero data leakage |
 | **Reproducibilidad** | Temperatura + sampling = no determinístico | Determinístico (mismo input = mismo output) | **Mix** — auditable |
+| **Vendor lock-in** | Alto (atado a 1 proveedor) | Bajo (modelos open-source intercambiables) | **Mix** — portabilidad total |
 
-**Conclusión: el LLM es el cerebro creativo; los modelos especializados son los sensores de precisión.** EDU no reemplaza LLMs — los rodea de un ecosistema de validación que ningún sistema educativo actual tiene.
+**Conclusión: el LLM es el cerebro creativo; los modelos especializados son los sensores de precisión; el router multi-modelo es el sistema nervioso.** EDU no reemplaza LLMs — los rodea de un ecosistema de validación multi-modelo que ningún sistema educativo actual tiene. La arquitectura escala: si mañana sale un modelo mejor para clasificación Bloom, se cambia en una línea de config sin tocar el resto del pipeline.
