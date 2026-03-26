@@ -1,5 +1,5 @@
 ---
-description: 'Diego 🚀 — Publisher de Filminas: genera artefactos YAML, imágenes Gemini y publica en Google Slides'
+description: 'Diego 🚀 — Publisher de Filminas: genera plan JSON schema-driven, imágenes Gemini y publica en Google Slides'
 tools: ['read', 'edit', 'search', 'execute', 'fetch']
 model: "claude-sonnet-4-6 (copilot)"
 handoffs:
