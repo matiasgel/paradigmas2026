@@ -1,6 +1,6 @@
 ---
 description: 'Bib. Carlos 📚 — Investigador Académico: búsqueda bibliográfica, fuentes autorizadas, estado del arte'
-tools: ['read', 'edit', 'search', 'execute', 'fetch']
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 model: "claude-sonnet-4-6 (copilot)"
 handoffs:
   - label: "✍️ Escribir clase con esta bibliografía"

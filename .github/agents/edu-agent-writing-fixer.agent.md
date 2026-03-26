@@ -1,6 +1,6 @@
 ---
 description: '✏️ Corrector de Escritura: correcciones automáticas con commits Git reversibles'
-tools: ['read', 'edit', 'search', 'execute', 'fetch']
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 model: "claude-haiku-3-5 (copilot)"
 handoffs:
   - label: "🔎 Validar correcciones aplicadas"

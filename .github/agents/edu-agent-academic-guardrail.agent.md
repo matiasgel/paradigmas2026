@@ -1,6 +1,6 @@
 ---
 description: '🛡️ Guardrail Académico: formalidad, scope, densidad cognitiva'
-tools: ['read', 'edit', 'search', 'execute', 'fetch']
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 model: "claude-haiku-3-5 (copilot)"
 handoffs:
   - label: "✏️ Corregir escritura detectada"
