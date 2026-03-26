@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITLE}} — EDU Interactive</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #1a1a2e; color: #e0e0e0;
+            display: flex; flex-direction: column;
+            align-items: center; min-height: 100vh;
+            padding: 1rem;
+        }
+        h1 { font-size: 1.4rem; margin-bottom: 0.5rem; color: #00d4ff; }
+        .subtitle { font-size: 0.9rem; color: #888; margin-bottom: 1rem; }
+        #canvas-container {
+            width: 100%; max-width: 800px;
+            background: #16213e; border-radius: 8px;
+            padding: 1rem; position: relative;
+            min-height: 400px;
+        }
+        .controls {
+            display: flex; gap: 0.5rem; margin-top: 1rem;
+            flex-wrap: wrap; justify-content: center;
+        }
+        button {
+            padding: 0.5rem 1rem; border: none; border-radius: 4px;
+            background: #0f3460; color: #e0e0e0; cursor: pointer;
+            font-size: 0.9rem; transition: background 0.2s;
+        }
+        button:hover { background: #1a5276; }
+        button:focus { outline: 2px solid #00d4ff; outline-offset: 2px; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .info-panel {
+            max-width: 800px; width: 100%; margin-top: 1rem;
+            background: #16213e; border-radius: 8px; padding: 1rem;
+            font-size: 0.85rem; line-height: 1.5;
+        }
+        /* High contrast mode */
+        .high-contrast { background: #000 !important; color: #fff !important; }
+        .high-contrast #canvas-container { background: #111 !important; border: 2px solid #fff; }
+        /* Keyboard nav indicator */
+        [tabindex]:focus { outline: 3px solid #ff6b6b; }
+        /* Screen reader only */
+        .sr-only {
+            position: absolute; width: 1px; height: 1px;
+            padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0,0,0,0); border: 0;
+        }
+    </style>
+</head>
+<body role="main" aria-label="Simulación interactiva: {{TITLE}}">
+    <h1>{{TITLE}}</h1>
+    <p class="subtitle">{{CONCEPT}} — {{TOPIC_ID}}</p>
+    <div id="canvas-container" role="application" aria-label="Área de simulación" tabindex="0">
+        <!-- Simulation content injected here -->
+    </div>
+    <div class="controls" role="toolbar" aria-label="Controles de simulación">
+        <!-- Control buttons injected here -->
+    </div>
+    <div class="info-panel" role="log" aria-live="polite" aria-label="Panel de información">
+        <p>Presiona los controles para interactuar con la simulación.</p>
+        <p><kbd>Tab</kbd> para navegar · <kbd>Enter</kbd>/<kbd>Space</kbd> para activar · <kbd>Esc</kbd> para reiniciar</p>
+    </div>
+    <div class="sr-only" id="sr-announcer" aria-live="assertive"></div>
+    <script>
+        // {{SIMULATION_JS}}
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && typeof resetSimulation === 'function') {
+                resetSimulation();
+                announce('Simulación reiniciada');
+            }
+        });
+        function announce(msg) {
+            document.getElementById('sr-announcer').textContent = msg;
+        }
+    </script>
+</body>
+</html>

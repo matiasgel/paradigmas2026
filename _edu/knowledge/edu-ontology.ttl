@@ -1,0 +1,95 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix edu: <https://edu-module.org/ontology#> .
+
+# ═══════════════════════════════════════════════════════════════════════
+# EDU Ontología — OWL Lite para Knowledge Graph Educativo
+# ═══════════════════════════════════════════════════════════════════════
+
+edu: a owl:Ontology ;
+    rdfs:label "EDU Module Ontology"@es ;
+    rdfs:comment "Ontología educativa para representar conceptos, temas, niveles cognitivos y competencias."@es .
+
+# --- Clases ---
+
+edu:Concepto a owl:Class ;
+    rdfs:label "Concepto"@es ;
+    rdfs:comment "Unidad mínima de conocimiento dentro de un tema."@es .
+
+edu:Tema a owl:Class ;
+    rdfs:label "Tema"@es ;
+    rdfs:comment "Agrupación de conceptos que forma una unidad didáctica."@es .
+
+edu:NivelBloom a owl:Class ;
+    rdfs:label "Nivel de Bloom"@es ;
+    rdfs:comment "Nivel de la taxonomía de Bloom revisada."@es .
+
+edu:Competencia a owl:Class ;
+    rdfs:label "Competencia"@es ;
+    rdfs:comment "Capacidad observable que se espera del estudiante."@es .
+
+# --- Individuos de NivelBloom ---
+
+edu:Recordar a edu:NivelBloom ; rdfs:label "Recordar"@es ; edu:orden 1 .
+edu:Comprender a edu:NivelBloom ; rdfs:label "Comprender"@es ; edu:orden 2 .
+edu:Aplicar a edu:NivelBloom ; rdfs:label "Aplicar"@es ; edu:orden 3 .
+edu:Analizar a edu:NivelBloom ; rdfs:label "Analizar"@es ; edu:orden 4 .
+edu:Evaluar a edu:NivelBloom ; rdfs:label "Evaluar"@es ; edu:orden 5 .
+edu:Crear a edu:NivelBloom ; rdfs:label "Crear"@es ; edu:orden 6 .
+
+# --- Object Properties ---
+
+edu:tienePrerequisito a owl:ObjectProperty, owl:TransitiveProperty ;
+    rdfs:label "tiene prerequisito"@es ;
+    rdfs:domain edu:Concepto ;
+    rdfs:range edu:Concepto ;
+    rdfs:comment "A tienePrerequisito B significa que B debe enseñarse antes que A."@es .
+
+edu:perteneceA a owl:ObjectProperty ;
+    rdfs:label "pertenece a"@es ;
+    rdfs:domain edu:Concepto ;
+    rdfs:range edu:Tema ;
+    rdfs:comment "El concepto es parte del tema."@es .
+
+edu:nivelCognitivo a owl:ObjectProperty ;
+    rdfs:label "nivel cognitivo"@es ;
+    rdfs:domain edu:Concepto ;
+    rdfs:range edu:NivelBloom ;
+    rdfs:comment "Nivel de Bloom esperado para este concepto."@es .
+
+edu:contradice a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:label "contradice"@es ;
+    rdfs:domain edu:Concepto ;
+    rdfs:range edu:Concepto ;
+    rdfs:comment "Relación de contradicción entre conceptos (simétrica)."@es .
+
+edu:ejemplificadoPor a owl:ObjectProperty ;
+    rdfs:label "ejemplificado por"@es ;
+    rdfs:domain edu:Concepto ;
+    rdfs:range rdfs:Resource ;
+    rdfs:comment "Recurso (filmina, TP, ejercicio) que ejemplifica el concepto."@es .
+
+edu:requiereCompetencia a owl:ObjectProperty ;
+    rdfs:label "requiere competencia"@es ;
+    rdfs:domain edu:Tema ;
+    rdfs:range edu:Competencia ;
+    rdfs:comment "El tema espera que el estudiante desarrolle esta competencia."@es .
+
+# --- Datatype Properties ---
+
+edu:orden a owl:DatatypeProperty ;
+    rdfs:label "orden"@es ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Orden numérico (1-6 para Bloom, secuencial para temas)."@es .
+
+edu:confianza a owl:DatatypeProperty ;
+    rdfs:label "confianza"@es ;
+    rdfs:range xsd:float ;
+    rdfs:comment "Nivel de confianza de una relación inferida (0.0-1.0)."@es .
+
+edu:fuente a owl:DatatypeProperty ;
+    rdfs:label "fuente"@es ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Origen de la aserción: manual, plan-minimo, cpl-ml, conceptnet, wikidata."@es .

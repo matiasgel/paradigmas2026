@@ -23,3 +23,28 @@ requests>=2.31.0
 # Renderizado de tablas como imágenes
 matplotlib>=3.7.0
 Pillow>=10.0.0
+
+# --- Dependencias opcionales por sprint (instalar según necesidad) ---
+
+# Sprint 7 — TTS (narración de filminas)
+# edge-tts>=6.1.0
+
+# Sprint 9 — NLP Semántico (drift, topic analysis, fact verification)
+# sentence-transformers>=2.2.0
+# chromadb>=0.4.0
+
+# Sprint 10 — Psicometría + Visual Quality
+# transformers>=4.30.0      # Bloom classifier (DeBERTa)
+# open-clip-torch>=2.20.0   # CLIP visual quality
+# py-irt>=0.1.0             # IRT 2PL calibración
+
+# Sprint 11 — Knowledge Engineering
+# rdflib>=6.3.0             # OWL/RDF/SPARQL
+# networkx>=3.0             # Grafo de prerequisitos
+# scikit-learn>=1.3.0       # CPL classifier
+
+# Sprint 12 — Orchestration
+# smolagents>=0.1.0         # HuggingFace agent framework
+
+# Sprint 13 — Adaptive Learning
+# streamlit>=1.30.0         # UI opcional
