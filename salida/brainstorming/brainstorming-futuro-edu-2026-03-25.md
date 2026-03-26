@@ -530,3 +530,236 @@ Media. Requiere un agente nuevo (`exam-designer`) o extensión de `tp-designer` 
 | Creatividad | Templates | Layout engine cognitivo con assertion-evidence |
 
 EDU no necesita "ser mejor que BMAD" sino ser **lo que BMAD no pretende ser:** un sistema experto en producción educativa con evidencia comprobable, validación cognitiva automatizada, y alcance inter-institucional.
+
+---
+
+## Análisis Competitivo: OpenMAIC (THU-MAIC/OpenMAIC)
+
+**Agregado:** 2026-03-26
+**Fuente:** [github.com/THU-MAIC/OpenMAIC](https://github.com/THU-MAIC/OpenMAIC) — 12.3k stars, 1.9k forks, AGPL-3.0, Next.js/TypeScript
+**Paper:** Yu et al. (2024/2026). "From MOOC to MAIC", arXiv:2409.03512, publicado en JCST 2026.
+
+### Qué hace OpenMAIC
+
+Plataforma web open-source que convierte cualquier tema en un aula interactiva multi-agente:
+- **Generation Pipeline** (2 etapas): Outline → Scene content (slides, quizzes, simulaciones HTML, PBL)
+- **Multi-Agent Orchestration**: LangGraph StateGraph con Director Agent que decide qué agente habla next
+- **28+ acciones**: speech, spotlight, laser, whiteboard (draw/text/shape/chart/latex/table/line), play_video
+- **Tipos de escena**: Slides con TTS, Quiz (single/multiple/short), Interactive HTML, Project-Based Learning
+- **Export**: `.pptx` editables + `.html` interactivos
+- **Integración**: OpenClaw (Feishu, Slack, Discord, Telegram), MinerU (OCR/tablas complejas)
+
+### Arquitectura clave (código fuente analizado)
+
+| Componente | Implementación | Relevancia para EDU |
+|---|---|---|
+| `director-graph.ts` | LangGraph StateGraph: START→director→agent_generate→director (loop) | Modelo de orquestación formal que EDU podría adoptar |
+| `director-prompt.ts` | LLM decide next agent/USER/END basado en estado del aula | Alternativa a orquestación por workflow fijo |
+| `tool-schemas.ts` | 13+ acciones tipadas (whiteboard, spotlight, laser, video) | Actions como lenguaje de representación |
+| `scene-generator.ts` | Generación de contenido por tipo de escena (1292 líneas) | Pipeline de generación comparable a parse_filminas+slides_pipeline |
+| `outline-generator.ts` | Genera outline estructurado desde tema/materiales | Equivalente a diseño de tema de EDU |
+| `pipeline-types.ts` | Tipos: AgentInfo, SceneGenerationContext, GeneratedSlideData | Cross-page context para coherencia |
+
+### Comparación directa: OpenMAIC vs EDU
+
+| Dimensión | OpenMAIC | EDU | Ventaja |
+|---|---|---|---|
+| **Target** | Online learning (alumnos autónomos) | Producción de cursos presenciales (docentes) | **Diferente** |
+| **Delivery** | Web app con TTS + whiteboard en tiempo real | Google Slides + minutas + guías impresas | **OpenMAIC** en interactividad; **EDU** en presencialidad |
+| **Pipeline** | Tema → outline → scenes (automático) | Diseño → minuta → filminas → plan JSON → Google Slides | **EDU** más riguroso (gates de calidad, validación schema) |
+| **Agentes** | Teacher + TA + 4 classmates (LangGraph) | 17 agentes especializados (VS Code) | **EDU** más granular y trazable |
+| **Calidad** | Sin validación formal (el LLM genera todo) | Quality loops × 4, guardrails, coherencia-validator | **EDU** por amplio margen |
+| **Curricula** | Sin concepto de plan mínimo/cobertura | Plan mínimo inmutable + matriz de cobertura | **EDU** |
+| **Evaluación** | Quiz inline (single/multi/short) | GIFT para Moodle + TPs repo + autograding | **EDU** más completo |
+| **Accesibilidad** | No mencionada | WCAG 2.2 (Sprint 1) | **EDU** |
+| **Memoria** | No tiene | SQLite FTS5 cross-curso | **EDU** |
+| **Knowledge base** | No tiene | ChromaDB con 27 docs + 399 chunks | **EDU** |
+| **Whiteboard** | ✅ SVG real-time con draw/text/shape/chart/latex | ❌ No tiene | **OpenMAIC** |
+| **TTS/ASR** | ✅ Múltiples proveedores, voz personalizable | ❌ No tiene | **OpenMAIC** |
+| **Simulación interactiva** | ✅ HTML-based interactive experiments | ❌ No tiene | **OpenMAIC** |
+| **PBL** | ✅ Project-Based Learning con milestones | ❌ No tiene (solo TPs) | **OpenMAIC** |
+| **Export** | PPTX + HTML interactivo | Google Slides (vía API) | **Empate** (diferentes formatos) |
+| **i18n** | zh-CN, en-US | es (monolingüe) | **OpenMAIC** |
+| **Deploy** | Vercel/Docker web app | VS Code + GitHub (offline-first) | **Diferente** |
+
+### Propuestas nuevas inspiradas por OpenMAIC
+
+#### 13. Interactive Scene Generator (HTML Simulations)
+
+**Problema:** EDU solo produce slides estáticas y guías de texto. OpenMAIC genera simulaciones HTML interactivas (simuladores de física, flowcharts, visualizaciones) que el alumno manipula directamente.
+
+**Evidencia:**
+- **Wieman, C.E. & Perkins, K.K. (2005→2023).** PhET Interactive Simulations, University of Colorado. Meta-análisis 2023: simulaciones interactivas mejoran comprensión conceptual en STEM (d=0.82 vs. lectura pasiva), retención a 4 semanas (d=0.64). Escalado a 200M+ usuarios, 159 simulaciones traducidas a 99 idiomas.
+- **Yu et al. (2024) MAIC.** OpenMAIC implementa generación de "Interactive Scenes" como HTML autocontenido con Claude/GPT, ejecutable en browser. Código fuente en `scene-generator.ts` (1292 líneas).
+- **Freeman, S. et al. (2014→actualizado 2023).** *Active Learning Increases Performance in STEM*, PNAS, 111(23), 8410-8415. Meta-análisis con 225 estudios: aprendizaje activo reduce reprobación 33%, aumenta exámenes 0.47 SD. Las simulaciones interactivas son una forma de active learning.
+
+**Propuesta para EDU:**
+1. Nuevo tipo de artefacto: `simulacion.html` — HTML autocontenido que el agente class-writer genera para conceptos que se benefician de interactividad (ej: visualizar recursión, simular scheduling, manipular árboles).
+2. Integrar en `filminas.md` como bloque especial `<!-- interactive: simulacion-recursion.html -->`.
+3. El pipeline detecta estos bloques y los incluye como enlace/QR en las filminas de Google Slides.
+4. Validación: el agente QA verifica que el HTML es funcional y accesible (WCAG).
+
+**Madurez:** 🟡 Prototipar | **Impacto:** 🔴 Alto | **Complejidad:** 🟡 Media
+
+---
+
+#### 14. Whiteboard Annotations para Filminas
+
+**Problema:** Las filminas de EDU son estáticas. OpenMAIC permite que agentes "dibujen" en un whiteboard SVG (fórmulas LaTeX, diagramas, shapes, tablas, charts, líneas) superpuesto sobre los slides, creando explicaciones visuales paso-a-paso.
+
+**Evidencia:**
+- **Fiorella, L. & Mayer, R.E. (2023).** Principio de Drawing (nuevo en 3rd ed.): cuando el instructor dibuja paso-a-paso en vez de mostrar una imagen completa, la retención mejora (d=0.40). El efecto se amplifica cuando el dibujo se sincroniza con narración.
+- **OpenMAIC `tool-schemas.ts`:** 13 acciones de whiteboard tipadas (wb_draw_text, wb_draw_shape, wb_draw_chart, wb_draw_latex, wb_draw_table, wb_draw_line, wb_open, wb_clear, wb_delete, wb_close).
+- **Ainsworth, S. (2006→2023).** *DeFT: A Conceptual Framework for Considering Learning with Multiple Representations*, Learning and Instruction, actualizado en contexto de GenAI. Múltiples representaciones (texto + diagrama + animación) mejoran comprensión si están integradas.
+
+**Propuesta para EDU:**
+1. Nuevo campo en `plan-filminas.json`: `"annotations": [{ "type": "step_by_step", "steps": [...] }]` por slide.
+2. El pipeline genera "speaker notes extendidas" que incluyen instrucciones de dibujo para el docente.
+3. Opción futura: generar GIF/video de la secuencia de anotaciones para modo online.
+4. Integración con `guia-profesor.md`: sección "Desarrollo visual paso-a-paso" por filmina.
+
+**Madurez:** 🟡 Prototipar | **Impacto:** 🟡 Medio | **Complejidad:** 🟡 Media
+
+---
+
+#### 15. Project-Based Learning (PBL) Generator
+
+**Problema:** EDU genera TPs individuales (desarrollo, quiz, repo). OpenMAIC tiene un módulo de PBL con roles, milestones, deliverables y colaboración con agentes IA. EDU no tiene concepto de proyecto extendido multi-clase.
+
+**Evidencia:**
+- **Krajcik, J.S. & Shin, N. (2022).** *Project-Based Learning*, en Sawyer, R.K. (ed.), *The Cambridge Handbook of the Learning Sciences* (3rd ed.), Cambridge University Press. PBL mejora comprensión profunda (d=0.50), motivación intrínseca, y transferencia a problemas nuevos. Requiere: driving question, situated inquiry, collaboration, artifacts, reflection.
+- **Kokotsaki, D. et al. (2016→actualizado 2023).** *Project-Based Learning: A Review of the Literature*, Improving Schools, 19(3), 267-277. Condiciones de efectividad: scaffolding adecuado, milestones claros, instrucción directa previa, y evaluación auténtica.
+- **Denny, P. et al. (2024).** *Computing Education in the Era of Generative AI*, Communications of the ACM, 67(2), 56-67. PBL con asistencia de IA requiere diseño explícito para evitar que los alumnos deleguen el pensamiento crítico al LLM.
+
+**Propuesta para EDU:**
+1. Nuevo tipo de TP: `tp-pbl.md` — proyecto multi-clase con fases, roles, milestones y rubrica.
+2. El agente tp-designer genera la estructura; el docente la valida.
+3. Cada milestone produce un deliverable evaluable (commit, documento, presentación).
+4. Integración con GitHub Classroom: repo grupal con branches por milestone.
+5. El simulador pedagógico evalúa la factibilidad del PBL con perfiles de alumnos.
+
+**Madurez:** 🟡 Prototipar | **Impacto:** 🔴 Alto | **Complejidad:** 🔴 Alta
+
+---
+
+#### 16. Multi-Agent Orchestration con LangGraph
+
+**Problema:** EDU orquesta agentes mediante workflows YAML secuenciales invocados uno a uno por el docente. OpenMAIC usa un Director Agent LLM-driven que decide dinámicamente qué agente habla next, con un grafo de estados LangGraph (START→director→agent_generate→loop).
+
+**Evidencia:**
+- **Yu et al. (2024) MAIC.** Director Agent con precisión medida experimentalmente (500 decisiones anotadas por expertos). Las role descriptions claras mejoran significativamente la precisión del routing.
+- **Wu et al. (2023).** *AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation Framework*, arXiv:2308.08155. Framework de referencia para conversación multi-agente con controlador centralizado.
+- **Hong et al. (2023).** *MetaGPT: Meta Programming for Multi-Agent Collaborative Framework*, arXiv:2308.00352. SOPs (Standard Operating Procedures) como mecanismo de coordinación multi-agente.
+
+**Propuesta para EDU:**
+1. Nuevo modo de orquestación: `/edu-auto-topic` — un solo comando genera todo el tema usando un Director Agent que invoca secuencialmente a Marcos (diseño) → Roberto (minuta/filminas) → Valeria (TP) → quality loops → Simulador.
+2. El Director Agent usa el estado del `topic.yaml` + `active-topic.yaml` + memoria colectiva para decidir el próximo paso.
+3. El docente puede interrumpir en cualquier gate de validación (human-in-the-loop).
+4. Implementar como workflow YAML especial con nodo `director` que decide el siguiente step via LLM.
+5. **Ventaja sobre OpenMAIC**: EDU mantiene gates de calidad obligatorios (quality loops) que OpenMAIC no tiene — el Director no puede saltear la validación.
+
+**Madurez:** 🔴 Investigar | **Impacto:** 🔴 Alto | **Complejidad:** 🔴 Alta
+
+---
+
+#### 17. TTS Narration para Clases Online/Asíncronas
+
+**Problema:** EDU produce minutas con guiones de clase, pero son solo texto. OpenMAIC genera audio TTS (Text-to-Speech) con múltiples proveedores de voz, creando clases narradas que los alumnos pueden escuchar asíncronamente.
+
+**Evidencia:**
+- **Fiorella, L. & Mayer, R.E. (2023).** Principio de Modalidad (3rd ed.): presentar texto como narración oral + gráficos es superior a texto escrito + gráficos (d=0.72). La narración libera el canal visual para los gráficos.
+- **Mayer, R.E. & DaPra, C.S. (2012→replicado 2023).** Principio de Personalización: narración en tono conversacional mejora comprensión (d=0.79) vs. tono formal. Efecto robusto incluso con voces sintéticas de alta calidad.
+- **Craig, S.D. & Schroeder, N.L. (2017→actualizado 2023).** *Reconsidering the Voice Principle*, Computers & Education, 114, 264-272. Voces TTS modernas (neurales) son equivalentes a voces humanas si la calidad supera un umbral mínimo. ElevenLabs y servicios 2024+ lo superan.
+
+**Propuesta para EDU:**
+1. Nuevo agente: `edu-agent-narrator` — genera audio MP3 por filmina usando la minuta como script.
+2. Proveedores: Google Cloud TTS, ElevenLabs, o edge-tts (gratuito, offline).
+3. Output: carpeta `slides/audio/` con un MP3 por filmina + archivo de timestamps.
+4. Integración con Google Slides: notas del orador + enlace al audio.
+5. Uso: clases asíncronas, repaso, accesibilidad (alumnos con dificultades de lectura).
+
+**Madurez:** 🟡 Prototipar | **Impacto:** 🟡 Medio | **Complejidad:** 🟡 Media
+
+---
+
+#### 18. Classmate Agents para Simulación de Debate
+
+**Problema:** El Simulador Pedagógico de EDU simula alumnos individuales respondiendo a material. OpenMAIC tiene 4 "Classmate Agents" con personalidades definidas (Class Clown, Deep Thinker, Note Taker, Inquisitive Mind) que interactúan entre sí y con el alumno, creando una dinámica de aula completa.
+
+**Evidencia:**
+- **Yu et al. (2024) MAIC.** Taxonomía Schwanke (1981) de interacciones en aula: TI (Teaching & Initiation), ID (In-depth Discussion), EC (Emotional Companionship), CM (Classroom Management). Los 4 agentes-compañero cubren los 4 tipos.
+- **Park et al. (2023).** *Generative Agents: Interactive Simulacra of Human Behavior*, UIST 2023. Agentes generativos con personalidades persistentes producen comportamientos emergentes realistas en simulaciones sociales.
+- **Yue et al. (2024).** *MathVC: An LLM-Simulated Multi-Character Virtual Classroom for Mathematics Education*, arXiv:2404.06711. Validación de que aulas virtuales multi-agente mejoran engagement y comprensión en matemáticas.
+
+**Propuesta para EDU:**
+1. Evolucionar `/edu-test-topic` para simular una clase completa con N perfiles interactuando (no solo respuestas individuales).
+2. Perfiles basados en Schwanke: el que pregunta todo (TI), el que profundiza (ID), el que se distrae (CM), el que necesita apoyo emocional (EC).
+3. Output del simulador: transcripción del debate simulado + métricas de cobertura de Bloom por perfil.
+4. El docente revisa la transcripción y ajusta material antes de la clase real.
+5. **Ventaja sobre OpenMAIC**: EDU puede comparar la simulación vs. encuestas reales post-clase (`/edu-compare-survey-simulator`).
+
+**Madurez:** 🟡 Prototipar | **Impacto:** 🔴 Alto | **Complejidad:** 🟡 Media
+
+---
+
+### Índice actualizado (propuestas 1-18)
+
+| # | Propuesta | Madurez | Impacto | Complejidad | Fuente |
+|---|-----------|---------|---------|-------------|--------|
+| 1 | Layout Engine con Ciencia Cognitiva | 🟡 Prototipar | 🔴 Alto | 🟡 Media | EDU original |
+| 2 | Accesibilidad Universal (WCAG) | 🟢 Implementable | 🔴 Alto | 🟢 Baja | EDU original |
+| 3 | Currícula Comparada (MCP) | 🟡 Prototipar | 🔴 Alto | 🔴 Alta | EDU original |
+| 4 | GitHub Classroom Push | 🟢 Implementable | 🟡 Medio | 🟢 Baja | EDU original |
+| 5 | Student Analytics Dashboard | 🟡 Prototipar | 🔴 Alto | 🟡 Media | EDU original |
+| 6 | Git Auto-Responder | 🟢 Implementable | 🟡 Medio | 🟢 Baja | EDU original |
+| 7 | Adaptive Learning Path | 🟡 Prototipar | 🔴 Alto | 🔴 Alta | EDU original |
+| 8 | Evidence-Based Slide Audit | 🟢 Implementable | 🔴 Alto | 🟡 Media | EDU original |
+| 9 | Cross-Campus MCP Server | 🔴 Investigar | 🔴 Alto | 🔴 Alta | EDU original |
+| 10 | Cognitive Load Optimizer | 🟡 Prototipar | 🔴 Alto | 🟡 Media | EDU original |
+| 11 | Spaced Repetition Engine | 🟢 Implementable | 🟡 Medio | 🟢 Baja | EDU original |
+| 12 | Exam Blueprint Generator | 🟢 Implementable | 🟡 Medio | 🟡 Media | EDU original |
+| **13** | **Interactive Scene Generator** | 🟡 Prototipar | 🔴 Alto | 🟡 Media | **OpenMAIC** |
+| **14** | **Whiteboard Annotations** | 🟡 Prototipar | 🟡 Medio | 🟡 Media | **OpenMAIC** |
+| **15** | **PBL Generator** | 🟡 Prototipar | 🔴 Alto | 🔴 Alta | **OpenMAIC** |
+| **16** | **Multi-Agent LangGraph Orchestration** | 🔴 Investigar | 🔴 Alto | 🔴 Alta | **OpenMAIC** |
+| **17** | **TTS Narration** | 🟡 Prototipar | 🟡 Medio | 🟡 Media | **OpenMAIC** |
+| **18** | **Classmate Agents (Debate Sim)** | 🟡 Prototipar | 🔴 Alto | 🟡 Media | **OpenMAIC** |
+
+### Olas de implementación actualizadas
+
+#### Ola 1 — Quick Wins (implementables con lo que hay)
+1. #2 Accesibilidad WCAG
+2. #4 GitHub Classroom Push
+3. #6 Git Auto-Responder
+4. #11 Spaced Repetition
+
+#### Ola 2 — Prototipos con Validación
+5. #8 Slide Audit Visual
+6. #10 Cognitive Load Optimizer
+7. #12 Exam Blueprint
+8. #1 Layout Engine Cognitivo
+9. #13 Interactive Scene Generator ← **nuevo (OpenMAIC)**
+10. #14 Whiteboard Annotations ← **nuevo (OpenMAIC)**
+11. #17 TTS Narration ← **nuevo (OpenMAIC)**
+
+#### Ola 3 — Investigación y Arquitectura
+12. #5 Student Analytics
+13. #7 Adaptive Learning Path
+14. #15 PBL Generator ← **nuevo (OpenMAIC)**
+15. #18 Classmate Agents ← **nuevo (OpenMAIC)**
+16. #3 Currícula Comparada
+17. #9 MCP Server
+18. #16 Multi-Agent LangGraph ← **nuevo (OpenMAIC)**
+
+### Cómo EDU puede superar a OpenMAIC
+
+OpenMAIC es impresionante como **plataforma de delivery online**, pero EDU tiene ventajas estructurales que OpenMAIC no aborda:
+
+1. **Rigor pedagógico formal**: EDU tiene quality loops obligatorios, validación JSON Schema, coherencia-validator, guardrails. OpenMAIC pasa todo por el LLM sin validación formal.
+2. **Trazabilidad curricular**: Plan mínimo inmutable → diseño → cobertura. OpenMAIC no tiene concepto de programa oficial o cobertura.
+3. **Memoria institucional**: SQLite FTS5 cross-año + ChromaDB knowledge base. OpenMAIC es stateless — cada sesión empieza de cero.
+4. **Evaluación auténtica**: GIFT para Moodle + autograding con GitHub Actions + rúbricas Bloom. OpenMAIC solo tiene quiz inline.
+5. **Human-in-the-loop**: El docente valida en cada gate. OpenMAIC genera todo automáticamente sin intervención.
+6. **Producción para aula presencial**: EDU produce material para clases reales (slides, guías impresas, minutas de 2 horas). OpenMAIC es solo online.
+
+**Estrategia para superar OpenMAIC:** Adoptar sus mejores features (interactividad, TTS, simulaciones) pero integrandolos dentro del framework de calidad y trazabilidad de EDU. La clave es que EDU produce material **validado contra evidencia académica** — algo que OpenMAIC no hace.
