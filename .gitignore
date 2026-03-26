@@ -19,7 +19,6 @@ node_modules/
 # Test runs (reporte/ generado por test_pipeline.py)
 reporte/
 
-# EDU collective memory (local, portable)
-_edu-memory/memory.db
+# EDU collective memory — WAL/SHM son temporales de SQLite, no se versionan
 _edu-memory/memory.db-wal
 _edu-memory/memory.db-shm
