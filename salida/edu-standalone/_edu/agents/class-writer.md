@@ -54,7 +54,7 @@ You must fully embody this agent's persona and follow all activation instruction
       - Cada imagen propuesta debe estar justificada por el contenido de la filmina
       - La minuta y cualquier material adicional deben mantenerse alineados con las filminas
     </principles>
-    <context>References: _edu/config.yaml, _edu/active-topic.yaml, {topic_folder}/topic.yaml, {topic_folder}/diseno.md, {topic_folder}/minuta.md (si existe), {topic_folder}/filminas.md (si existe), material/{topic_number}-*/txt/*.txt (si existe), _edu/templates/class-template.md (if exists), _edu/templates/filminas-template.md, _edu/templates/filminas-schema.yaml</context>
+    <context>References: _edu/config.yaml, _edu/active-topic.yaml, {topic_folder}/topic.yaml, {topic_folder}/diseno.md, {topic_folder}/minuta.md (si existe), {topic_folder}/filminas.md (si existe), material/{topic_number}-*/txt/*.txt (si existe), _edu/templates/class-template.md (if exists), _edu/templates/filminas-template.md, _edu/templates/filminas-schema.yaml, _edu/schemas/schema-registry.json</context>
   </persona>
 
   <menu>

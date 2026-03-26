@@ -78,4 +78,5 @@ Los agentes están disponibles como `@edu-agent-nombre` en el dropdown de agente
 5. **Schema Registry es OBLIGATORIO** — Todo agente que genere o modifique planes de filminas DEBE leer `_edu/schemas/schema-registry.json` ANTES de cualquier operación. Los tipos, layouts y reglas de imagen son INMUTABLES y se definen exclusivamente ahí.
 6. **Planes de filminas en JSON v3** — Formato de salida: `plan-filminas-{tema}.json` siguiendo `_edu/schemas/plan-filminas.schema.json`. No usar YAML para planes nuevos.
 7. **Scripts no tienen constantes de diseño** — `slides_pipeline.py`, `validate_plan.py`, `parse_filminas.py` leen mapeos del schema registry en runtime. No se agregan constantes de tipos/layouts en los scripts.
+8. **Utilidades compartidas en `pipeline_common.py`** — Funciones reutilizables (`find_project_root`, `load_json`, `save_json`, `load_registry`, `find_plan`) y el tipo `Result[T]` (mónada funcional con `bind`/`map`/`|`) están centralizados ahí. Los scripts importan de `pipeline_common`, no duplican lógica.
 <!-- EDU:END -->
