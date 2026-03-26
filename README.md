@@ -76,6 +76,31 @@ Activa a Vera 🎨, que te guía para definir paleta, tipografía, layouts por t
 
 ---
 
+#### 5. Inicializar la Knowledge Base (ChromaDB)
+
+Inicializa la base de conocimiento vectorial. Necesario una sola vez; se puede regenerar en cualquier momento.
+
+```bash
+# Ingestar solo referencias académicas + docs de herramientas
+source .venv/bin/activate
+python scripts/knowledge_base.py ingest
+
+# Ingestar también material del curso (PDFs propios)
+# → colocar los PDFs en ingesta/ primero
+python scripts/knowledge_base.py ingest --force --include-material
+```
+
+El MCP server `chroma-mcp` se inicia automáticamente por VS Code — no requiere acción adicional.
+
+**Watchdog (opcional) — auto-ingesta de PDFs:**
+
+```bash
+# Monitorea ingesta/ y agrega PDFs automáticamente en background
+python scripts/knowledge_watcher.py &
+```
+
+---
+
 ### 📚 Fase 1 — Configuración del Cursado (una vez por año)
 
 ```
@@ -442,14 +467,18 @@ La memoria colectiva es **cross-curso**: un insight de `leng-2025` es visible de
 
 ## Knowledge Base (ChromaDB)
 
-Base de conocimiento vectorial con **414 chunks semánticos** de **28 documentos**, accesible a todos los agentes para consultas durante el desarrollo de mejoras.
+Base de conocimiento vectorial accesible a **todos los agentes EDU** via MCP (`chroma-mcp`) y CLI.
+Colección: `edu_knowledge` · Similaridad coseno · Embedding: `all-MiniLM-L6-v2` (ONNX local).
 
-**Contenido:**
+**Contenido por tipo:**
 
-| Tipo | Documentos | Temas |
-|---|---|---|
-| Referencias académicas (12) | Fiorella/Mayer 2023, Sweller/Chen 2023, WCAG 2.2/3.0, FSRS v4, Bloom/Haladyna 2024, Learning Analytics, CS Education/GitHub, Slide Composition, Adaptive Learning/ITS, MCP Protocol, MAIC (Yu et al. 2024), **OpenMAIC Platform (THU-MAIC 2026)** | Principios multimedia, carga cognitiva, accesibilidad, repetición espaciada, evaluación, analítica educativa, GitHub Classroom, diseño visual, sistemas tutoriales, protocolo MCP, multi-agentes LLM para educación, **arquitectura OpenMAIC (LangGraph, whiteboard, PBL)** |
-| Documentación de herramientas (16) | py-fsrs, MCP SDK, ChromaDB, GitHub CLI, GitHub Classroom, GitHub Actions, Google Slides API, JSON Schema, WCAG Quick Reference, **OpenMAIC (6 archivos fuente)** | Código fuente, APIs, configuración, ejemplos |
+| `type` | Documentos | Descripción |
+|--------|------------|-------------|
+| `reference` | 12 documentos académicos | Fiorella/Mayer 2023, Sweller/Chen 2023, WCAG 2.2/3.0, FSRS v4, Bloom/Haladyna 2024, Learning Analytics, CS Education/GitHub, Slide Composition, Adaptive Learning/ITS, MCP Protocol, MAIC (Yu et al. 2024), OpenMAIC Platform (THU-MAIC 2026) |
+| `tool` | 16 docs de herramientas | py-fsrs, MCP SDK, ChromaDB, GitHub CLI, GitHub Classroom, GitHub Actions, Google Slides API, JSON Schema, WCAG Quick Reference, OpenMAIC (6 archivos fuente) |
+| `material` | PDFs del docente | Libros y apuntes del cursado activo, colocados en `ingesta/`, convertidos automáticamente a TXT con chunk size 800 chars |
+
+**Chunk sizes:** `reference` y `tool` → 1500 chars · `material` → 800 chars (optimizado para texto denso de libros).
 
 **Búsqueda:**
 
@@ -461,22 +490,110 @@ O desde la terminal:
 
 ```bash
 # Buscar en toda la KB
-python scripts/knowledge_base.py search "WCAG contrast ratio"
+python scripts/knowledge_base.py search "cognitive load theory"
 
 # Filtrar por tipo
-python scripts/knowledge_base.py search "FSRS algorithm" --type reference
+python scripts/knowledge_base.py search "WCAG contrast ratio" --type reference
 python scripts/knowledge_base.py search "MCP server" --type tool
+python scripts/knowledge_base.py search "programación funcional" --type material
 
-# Listar documentos disponibles
+# Controlar cantidad de resultados
+python scripts/knowledge_base.py search "Bloom taxonomy" --n 10
+
+# Listar todos los documentos indexados
 python scripts/knowledge_base.py list
-
-# Reconstruir la KB (tras agregar documentos)
-python scripts/knowledge_base.py ingest --force
 ```
 
-**Embedding model:** `all-MiniLM-L6-v2` (ONNX, descargado automáticamente por ChromaDB).
+**Via MCP (en Copilot Chat, cualquier agente):**
 
-**Agregar documentos:** colocar archivos `.md` o `.py` en `_edu-knowledge/references/` o `_edu-knowledge/tools/`, luego ejecutar `ingest --force`.
+```
+@edu-agent-class-writer busca en la KB el concepto de carga cognitiva intrínseca
+```
+
+Los agentes usan `chroma_query_documents` internamente. También podés usar el MCP directamente:
+- Tool: `chroma_query_documents` con `collection_name: "edu_knowledge"`
+- Filtrar por tipo: `where: {"type": "material"}` o `{"type": "reference"}`
+
+---
+
+## Ingesta de Material del Curso
+
+Para ingestar los libros y PDFs del cursado en ChromaDB:
+
+**Paso 1 — Colocar PDFs en `ingesta/`:**
+
+```
+ingesta/
+  libro-gabbrielli-martini.pdf
+  louden-lambert-2013.pdf
+  sebesta-programming-languages.pdf
+  intro-paradigmas.pdf
+```
+
+**Paso 2 — Ingestar:**
+
+```bash
+# Ingestar solo el material (PDFs de ingesta/)
+python scripts/knowledge_base.py ingest --include-material
+
+# Re-ingestar todo desde cero (incluye references + tools + material)
+python scripts/knowledge_base.py ingest --force --include-material
+```
+
+El script convierte PDFs a TXT automáticamente usando `pdfminer.six` antes de ingestar.
+Los TXT convertidos quedan en `ingesta/` junto a los PDFs.
+
+**Agregar referencias o herramientas:**
+- Colocar `.md` o `.py` en `_edu-knowledge/references/` o `_edu-knowledge/tools/`
+- Ejecutar `python scripts/knowledge_base.py ingest --force`
+
+---
+
+## Watchdog de Ingesta Automática
+
+El `knowledge_watcher.py` monitorea `ingesta/` continuamente. Cuando detecta un PDF nuevo lo convierte e ingesta automáticamente sin intervención manual.
+
+```bash
+# Iniciar el watcher (en foreground)
+python scripts/knowledge_watcher.py
+
+# En background (Linux/macOS)
+python scripts/knowledge_watcher.py &
+```
+
+**Comportamiento:**
+1. Crea `ingesta/` si no existe
+2. Detecta archivos `.pdf` nuevos o movidos a la carpeta
+3. Convierte PDF → TXT con `pdfminer.six` (chunk size 800 chars)
+4. Inserta los chunks en la colección `edu_knowledge` con `type=material`
+5. Imprime progreso en consola
+
+**Requisito:** `watchdog` instalado (incluido en `requirements.txt`).
+
+> **Nota:** el watcher solo agrega documentos nuevos — no elimina ni re-ingesta documentos ya presentes.
+> Para reconstruir desde cero usar `ingest --force --include-material`.
+
+---
+
+## chroma-mcp — MCP Server de ChromaDB
+
+El workspace tiene configurado `chroma-mcp` como servidor MCP en `.vscode/mcp.json`.
+VS Code lo inicia automáticamente al abrir el workspace.
+
+**Sin configuración adicional:** todos los agentes EDU tienen acceso a las herramientas MCP de Chroma:
+
+| Tool MCP | Descripción |
+|----------|-------------|
+| `chroma_query_documents` | Búsqueda semántica con filtros opcionales (`where`) |
+| `chroma_get_documents` | Recuperar chunks por ID |
+| `chroma_list_collections` | Listar colecciones disponibles |
+| `chroma_get_collection_info` | Metadata e info de la colección |
+| `chroma_get_collection_count` | Cantidad de documentos indexados |
+| `chroma_peek_collection` | Ver muestra de documentos |
+
+**Reiniciar el servidor MCP:** `Ctrl+Shift+P → MCP: Restart Server → chroma`
+
+**Verificar estado:** `Ctrl+Shift+P → MCP: List Servers`
 
 ---
 
@@ -548,11 +665,14 @@ tu-materia/
 │   ├── references/                 ← 11 documentos académicos (Mayer, Sweller, WCAG, FSRS, Bloom, MAIC...)
 │   ├── tools/                      ← 16 documentos de herramientas (MCP, GitHub, Slides API...)
 │   └── chroma_db/                  ← Almacén vectorial ChromaDB (en .gitignore, regenerable)
+├── .vscode/
+│   └── mcp.json                    ← MCP Server: chroma-mcp (auto-start, todos los agentes)
 ├── scripts/                        ← Pipeline técnico de filminas
 │   ├── pipeline_common.py          ← Utilidades compartidas + Result[T] monad FP
 │   ├── slides_pipeline.py          ← Validación + assets + publicación Google Slides
 │   ├── edu_memory.py               ← CLI + API de memoria colectiva (SQLite FTS5)
-│   ├── knowledge_base.py           ← CLI + API de knowledge base (ChromaDB)
+│   ├── knowledge_base.py           ← CLI + API de knowledge base (ChromaDB + material)
+│   ├── knowledge_watcher.py        ← Watchdog: auto-ingesta PDFs desde ingesta/
 │   ├── validate_plan.py            ← Validación JSON Schema del plan
 │   ├── parse_filminas.py           ← Genera plan DRAFT desde filminas.md
 │   ├── repair_plan.py              ← Loop de reparación automática
@@ -564,6 +684,7 @@ tu-materia/
 │   ├── validate_layout_cognition.py ← Reglas cognitivas Mayer/Fiorella por tipo (S4)
 │   ├── cognitive_budget.py         ← Presupuesto cognitivo CLT + curva (S4)
 │   └── requirements.txt
+├── ingesta/                        ← PDFs del docente para ingestar en ChromaDB (en .gitignore)
 ├── salida/
 │   └── cursadas/
 │       └── {course_id}/
@@ -582,7 +703,7 @@ tu-materia/
 │                       ├── plan-filminas-NN-nombre.json
 │                       ├── assets/
 │                       └── slides-url.txt
-└── material/                       ← PDFs/PPTX del docente (opcional, en .gitignore)
+└── material/                       ← PDFs/PPTX del docente para crear clases (opcional, en .gitignore)
 ```
 
 ---
@@ -636,7 +757,7 @@ Invocar con `@edu-agent-nombre` en Copilot Chat o seleccionarlos en el dropdown 
 | `/edu-edit-class-template` | Personalizar la estructura de minutas y filminas |
 | `/edu-switch-course` | Cambiar la materia activa (multi-clase) |
 | `/edu-memory-search` | Buscar en la memoria colectiva |
-| `/edu-knowledge-search` | Buscar en la knowledge base ChromaDB |
+| `/edu-knowledge-search` | Buscar en la KB ChromaDB (references + tools + material) |
 
 ### Fase 1
 
