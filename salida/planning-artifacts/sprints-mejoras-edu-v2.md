@@ -1,8 +1,9 @@
-# Sprints de Mejoras v2 — EDU Module (18 propuestas)
+# Sprints de Mejoras v2 — EDU Module (27 propuestas)
 
-**Fecha:** 2026-03-26  
+**Fecha:** 2026-03-26 | **Actualizado:** 2026-03-26 (Beyond-LLM + Multi-Model Frontier)  
 **Supersede:** `sprints-mejoras-edu-v1.md` (12 propuestas, 6 sprints)  
-**Cambios v1→v2:** Integra 6 propuestas nuevas del análisis competitivo OpenMAIC (#13-#18). Reorganiza sprints en 8 (antes 6). Las stories de S1-S6 originales se mantienen intactas con ajustes menores de numeración.
+**Cambios v1→v2:** Integra 6 propuestas OpenMAIC (#13-#18) → 8 sprints.  
+**Cambios v2 (this):** Agrega 9 propuestas Beyond-LLM + Frontier (#19-27) → **12 sprints**. Propuesta #16 actualizada a Multi-Model Multi-Agent Orchestration. Nueva propuesta #27 (Open-Source Orchestrator).
 
 **Regla cardinal:** CERO modificaciones destructivas. Todo es aditivo. Los tests actuales deben seguir pasando. Ningún archivo existente pierde funcionalidad.
 
@@ -42,7 +43,16 @@
 | 17 | TTS Narration | **S7** | OpenMAIC | 🟡 Media |
 | 18 | Classmate Agents (Debate Sim) | **S7** | OpenMAIC | 🔴 Alta |
 | 15 | PBL Generator | **S8** | OpenMAIC | 🔴 Alta |
-| 16 | Multi-Agent LangGraph Orchestration | **S8** | OpenMAIC | 🔴 Alta |
+| **16** | **Multi-Model Multi-Agent Orchestration** | **S8** | **OpenMAIC + Frontier** | 🔴 Alta |
+| **19** | **Knowledge Graph Engine (Ontología)** | **S11** | **Beyond-LLM** | 🔴 Alta |
+| **20** | **NLI Fact Verifier (DeBERTa)** | **S9** | **Beyond-LLM** | 🔴 Alta |
+| **21** | **BERTopic Curriculum Analyzer** | **S9** | **Beyond-LLM** | 🔴 Alta |
+| **22** | **Concept Prerequisite Learning (CPL)** | **S11** | **Beyond-LLM** | 🔴 Alta |
+| **23** | **IRT + BKT Assessment Calibrator** | **S10** | **Beyond-LLM** | 🔴 Alta |
+| **24** | **CLIP + LayoutLM Slide Quality** | **S10** | **Beyond-LLM** | 🟡 Media |
+| **25** | **Semantic Drift Detector** | **S9** | **Beyond-LLM** | 🔴 Alta |
+| **26** | **Neuro-Symbolic Bloom Classifier** | **S10** | **Beyond-LLM** | 🟡 Media |
+| **27** | **Open-Source Orchestrator + GitHub** | **S12** | **Beyond-LLM + Frontier** | 🔴 Alta |
 
 ---
 
@@ -57,9 +67,13 @@
 | **S5** | Analytics y adaptativo | #5, #7 | Tablas SQLite nuevas + scripts | Bajo | — |
 | **S6** | Investigación | #3, #9 | Agente nuevo + MCP server | Bajo | S1-S5 |
 | **S7** | Interactividad y simulación | #13, #14, #17, #18 | Nuevos tipos de artefactos + agentes | Medio | S1, S4 |
-| **S8** | Orquestación avanzada | #15, #16 | PBL multi-clase + Director Agent | Alto | S3, S5, S7 |
+| **S8** | Orquestación avanzada | #15, #16 | PBL multi-clase + Director Agent multi-modelo | Alto | S3, S5, S7 |
+| **S9** | Analizadores semánticos | #25, #21, #20 | Drift detector + BERTopic + NLI verifier | Medio | S1 |
+| **S10** | Psicometría + calidad visual | #26, #23, #24 | Bloom ML + IRT/BKT + CLIP | Medio | S2, S7 |
+| **S11** | Knowledge engineering | #19, #22 | Knowledge Graph (OWL) + CPL (GNN) | Alto | S9, S10 |
+| **S12** | Full-stack orquestación | #27 | Open-source orchestrator + GitHub Actions | Alto | S8, S11 |
 
-**S1-S4 son paralelizables.** S5 es independiente. S6 requiere estabilización previa. S7 requiere S1 (WCAG para validar HTML) y S4 (reglas cognitivas). S8 requiere la mayoría de los anteriores.
+**S1-S4 son paralelizables.** S5 es independiente. S6 requiere estabilización previa. S7 requiere S1 (WCAG para validar HTML) y S4 (reglas cognitivas). S8 requiere la mayoría de los anteriores. **S9 puede iniciarse en paralelo con S7-S8** (solo requiere S1). S10 requiere S2 (exam) y S7 (simulador para datos IRT). S11 requiere S9 (embeddings ya computados) y S10 (Bloom para el KG). S12 es el sprint final que integra todo.
 
 ---
 
@@ -1010,16 +1024,586 @@ tts_output_format: "mp3"                   # mp3 | wav
 
 ---
 
+## Sprint 9 — Analizadores Semánticos
+
+**Objetivo:** Tres scripts de análisis semántico que validan la coherencia global del curso sin tocar el pipeline de slides. Orden de implementación recomendado: S9.1 (más simple) → S9.3 → S9.2.
+
+**Dependencias:** S1 (embeddings de ChromaDB ya disponibles + model MiniLM ya instalado).
+
+### S9.1 — Semantic Drift Detector (#25)
+
+**Story:** Como docente, quiero detectar definiciones inconsistentes y saltos temáticos bruscos entre clases, para garantizar que el vocabulario del curso es coherente de principio a fin.
+
+**KB consultar:** `python scripts/knowledge_base.py search "semantic coherence embedding drift curriculum" --type reference`
+
+**Archivos NUEVOS a crear:**
+
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `scripts/semantic_drift_detector.py` | Script | Comparación de embeddings inter-clase |
+| `.github/prompts/edu-check-semantic-drift.prompt.md` | Prompt | `/edu-check-semantic-drift` |
+
+**Qué hace `semantic_drift_detector.py`:**
+- Reutiliza `sentence-transformers` (ya instalado para ChromaDB, modelo `all-MiniLM-L6-v2`)
+- Extrae definiciones explícitas de cada minuta/filmina: patrones "X se define como", "X es un/una", "X significa"
+- Para cada concepto con múltiples definiciones en distintas clases: calcula cosine similarity entre embeddings
+  - < 0.70 → inconsistencia semántica 🔴 (el mismo término se explica de forma contradictoria)
+  - 0.70-0.85 → complementaria ⚠️ (definición parcial en cada clase, posiblemente intencional)
+  - > 0.85 → consistente ✅
+- Coherencia narrativa inter-clase: embedding promedio de cada tema → curva de similitud secuencial
+  - Caída < 0.30 entre temas consecutivos → salto temático abrupto
+- Detección de "vocabulary drift": si el mismo concepto se llama "variable" en tema 2 e "identificador" en tema 8 sin redefinición, lo detecta via clustering de embeddings
+- Genera `{course_output_folder}/coherence-analysis/consistency-report.md` + gráfico Mermaid
+
+**Criterios de aceptación:**
+- [ ] `python scripts/semantic_drift_detector.py --course leng-2026` genera reporte
+- [ ] Sin minutas/filminas disponibles, sale con 0 y mensaje informativo
+- [ ] Reutiliza modelo MiniLM ya instalado (no agrega dependencias nuevas)
+- [ ] `test_pipeline.py` sigue pasando
+
+---
+
+### S9.2 — BERTopic Curriculum Analyzer (#21)
+
+**Story:** Como docente, quiero detectar automáticamente gaps curriculares (temas del plan no cubiertos) y redundancias (temas repetidos en exceso), comparando el plan mínimo contra los artefactos producidos.
+
+**KB consultar:** `python scripts/knowledge_base.py search "topic modeling curriculum gaps coverage BERTopic" --type reference`
+
+**Archivos NUEVOS a crear:**
+
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `scripts/curriculum_topic_analyzer.py` | Script | BERTopic sobre corpus de artefactos del curso |
+| `.github/prompts/edu-check-curriculum-gaps.prompt.md` | Prompt | `/edu-check-curriculum-gaps` |
+
+**Qué hace `curriculum_topic_analyzer.py`:**
+- Corpus: `plan-minimo.md` + todos los `diseno.md` + `minuta.md` + filminas del curso
+- `BERTopic` con guided topics extraídos del `plan-minimo.md` (semi-supervised)
+- Por cada tópico del plan: verifica presencia en ≥1 diseño + ≥1 minuta + ≥1 filmina
+  - Ausencia en todos → **GAP** 🔴
+  - Ausencia en filminas pero presente en minuta → **GAP parcial** 🟡
+- Tópicos en filminas que no están en el plan → **DRIFT** 🟡 (el docente agregó contenido no oficial)
+- Tópicos en >3 temas distintos → **REDUNDANCIA** ⚠️
+- Output: `{course_output_folder}/topic-analysis/gaps-report.md` + matriz de cobertura + visualización HTML interactiva
+
+**Config nuevos (opcionales):**
+```yaml
+# --- Topic Analysis (Sprint 9) ---
+topic_analysis_enabled: false
+topic_gap_threshold: 0.3     # distancia mínima para considerar tópico cubierto
+topic_redundancy_threshold: 3 # apariciones máximas antes de flaggear redundancia
+```
+
+**Dependencias Python:** `bertopic`, `umap-learn`, `hdbscan` (nuevas)
+
+**Criterios de aceptación:**
+- [ ] `python scripts/curriculum_topic_analyzer.py --course leng-2026` genera reporte + HTML
+- [ ] Sin `topic_analysis_enabled: true`, imprime aviso y sale con 0
+- [ ] `test_pipeline.py` sigue pasando
+
+---
+
+### S9.3 — NLI Fact Verifier (#20)
+
+**Story:** Como docente, quiero verificar automáticamente que el contenido generado por la IA no contiene alucinaciones factuales, usando un modelo de inferencia de lenguaje natural que compare cada afirmación contra las fuentes primarias del curso.
+
+**KB consultar:** `python scripts/knowledge_base.py search "NLI fact verification hallucination DeBERTa entailment" --type reference`
+
+**Archivos NUEVOS a crear:**
+
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `scripts/fact_verifier.py` | Script | Pipeline NLI: claims → evidencia → veredicto |
+| `.github/prompts/edu-verify-facts.prompt.md` | Prompt | `/edu-verify-facts` |
+
+**Qué hace `fact_verifier.py`:**
+- **Fase 1:** LLM descompone el texto (minuta/filmina) en claims atómicos: oraciones con una sola afirmación verificable
+- **Fase 2:** Por cada claim, retrieval de evidencia: ChromaDB (top-3) + `plan-minimo.md` + KB semántica
+- **Fase 3:** NLI scoring con `cross-encoder/nli-deberta-v3-large` (HuggingFace, ~355M params, ~500ms/par en CPU):
+  - ENTAILMENT → ✅ Verificado
+  - CONTRADICTION → ❌ Refutado → flag obligatorio al docente
+  - NEUTRAL → ⚠️ Evidencia insuficiente
+- **Gate de calidad:** ningún claim con veredicto ❌ puede pasar al pipeline de publicación sin aprobación humana explicita
+- Output: `{topic_folder}/fact-check-report.md` con tabla veredictos + confianza
+
+**Dependencias Python:** `sentence-transformers` (ya instalado) — solo agregar el modelo cross-encoder al primer uso
+
+**Criterios de aceptación:**
+- [ ] `python scripts/fact_verifier.py --topic 05-sorting --course leng-2026` genera reporte
+- [ ] Claims con veredicto ❌ generan salida de proceso con código 1 (error) para bloquear pipelines CI
+- [ ] Sin texto de entrada, sale con 0
+- [ ] `test_pipeline.py` sigue pasando
+
+---
+
+### Entregables Sprint 9
+
+| Archivo | Estado |
+|---------|--------|
+| `scripts/semantic_drift_detector.py` | NUEVO |
+| `scripts/curriculum_topic_analyzer.py` | NUEVO |
+| `scripts/fact_verifier.py` | NUEVO |
+| `.github/prompts/edu-check-semantic-drift.prompt.md` | NUEVO |
+| `.github/prompts/edu-check-curriculum-gaps.prompt.md` | NUEVO |
+| `.github/prompts/edu-verify-facts.prompt.md` | NUEVO |
+| `_edu/config.yaml` | EXTEND — bloque `# --- Topic Analysis (S9) ---` |
+| `_edu/module-help.csv` | EXTEND — 3 filas |
+| `WORKFLOW_PROMPT_MAP.md` | EXTEND — 3 filas |
+| `README.md` | EXTEND — sección "Analizadores Semánticos" |
+
+**NO tocar:** coherencia-validator, guardrail, ChromaDB, schema-registry.json
+
+---
+
+## Sprint 10 — Psicometría + Calidad Visual
+
+**Objetivo:** Tres herramientas que mejoran la calidad de las evaluaciones (IRT/BKT, Bloom ML) y de las slides visuales (CLIP). Independientes entre sí — pueden implementarse en paralelo.
+
+**Dependencias:** S2 (exam blueprint, para datos de respuesta IRT), S7 (thumbnails generados, para CLIP).
+
+### S10.1 — Neuro-Symbolic Bloom Classifier (#26)
+
+**Story:** Como docente, quiero clasificar automáticamente cada pregunta de TP/examen por nivel de Bloom con mayor precisión que el LLM, usando un clasificador ML fine-tuned específicamente en taxonomía de Bloom.
+
+**KB consultar:** `python scripts/knowledge_base.py search "Bloom taxonomy classification DeBERTa fine-tuning education" --type reference`
+
+**Archivos NUEVOS a crear:**
+
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `scripts/bloom_classifier.py` | Script | Clasificador DeBERTa fine-tuned para Bloom |
+| `scripts/train_bloom_model.py` | Script | One-time: fine-tuning del modelo (Colab-friendly) |
+| `.github/prompts/edu-classify-bloom.prompt.md` | Prompt | `/edu-classify-bloom` |
+
+**Qué hace `bloom_classifier.py`:**
+- Modelo: `microsoft/deberta-v3-base` fine-tuned en datasets de Bloom (Yusof 2024: 12k ítems, Mohammed 2020: 5k ítems)
+- Clasifica cada pregunta en 6 niveles: Recordar / Comprender / Aplicar / Analizar / Evaluar / Crear
+- Accuracy esperada: 82-86% (vs. 65-72% del LLM zero-shot según benchmarks)
+- Cross-validation LLM ↔ ML: si hay discrepancia, flag para revisión humana
+- Extiende la salida de `exam-blueprint` con columnas `bloom_ml` + `bloom_confidence` + `bloom_agree`
+
+**`train_bloom_model.py`** — script auxiliar para que el docente entrene el modelo en Google Colab T4 gratuito (~2 horas). Se ejecuta una vez y el modelo queda en `_edu-knowledge/models/bloom-classifier/`. No es parte del pipeline regular.
+
+**Criterios de aceptación:**
+- [ ] `python scripts/bloom_classifier.py --course leng-2026 --exam parcial-1` genera tabla de clasificación
+- [ ] Sin modelo fine-tuned disponible, usa LLM como fallback con aviso
+- [ ] La tabla de clasificación es compatible con `exam-blueprint` existente
+- [ ] `test_pipeline.py` sigue pasando
+
+---
+
+### S10.2 — IRT + BKT Assessment Calibrator (#23)
+
+**Story:** Como docente, quiero calibrar la dificultad real de mis preguntas de examen usando psicometría formal (IRT) y estimar el conocimiento de cada alumno con Bayesian Knowledge Tracing.
+
+**KB consultar:** `python scripts/knowledge_base.py search "IRT item response theory psychometrics assessment calibration" --type reference`
+
+**Archivos NUEVOS a crear:**
+
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `scripts/assessment_calibrator.py` | Script | IRT 2PL + BKT por concepto |
+| `.github/prompts/edu-calibrate-assessment.prompt.md` | Prompt | `/edu-calibrate-assessment` |
+
+**Qué hace `assessment_calibrator.py`:**
+- **IRT 2PL** (librería `py-irt`): lee matriz alumno × respuesta (CSV de Moodle o GitHub Classroom)
+  - Por ítem: dificultad (b: −3 a +3), discriminación (a: >0.5 = bueno), guessing implícito
+  - Items con discriminación < 0.2: flag para revisión/reescritura
+  - Items con dificultad > 2.5 o < −2.5: posiblemente triviales/imposibles
+- **BKT** (implementación Python puro, sin deps extra): estima `P(alumno sabe concepto)` a partir de secuencia de respuestas por concepto
+  - Umbrales: `P(mastery) > 0.95` = concepto dominado; `< 0.50` = requiere repaso urgente
+  - Se integra con Spaced Repetition Engine (S2.1) para priorizar repasos automáticamente
+- Output: `{course_output_folder}/assessment-calibration/`:
+  - `irt-report.md` — parámetros por ítem + flags de revisión
+  - `bkt-mastery.md` — mapa de dominio conceptual por alumno (anonimizado)
+  - `items-to-revise.md` — lista de preguntas problemáticas con recomendaciones
+
+**Dependencias Python:** `py-irt` (nueva — `pip install py-irt`)
+
+**Criterios de aceptación:**
+- [ ] `python scripts/assessment_calibrator.py --course leng-2026 --gradebook parcial-1.csv` genera reportes
+- [ ] Sin datos de respuesta, genera template CSV de ejemplo y sale con 0
+- [ ] EL BKT se alimenta de los mismos concepts del knowledge graph (S11) si está disponible
+- [ ] `test_pipeline.py` sigue pasando
+
+---
+
+### S10.3 — CLIP + LayoutLM Slide Quality (#24)
+
+**Story:** Como docente, quiero evaluar si las imágenes de mis slides son visualmente relevantes al contenido y si el layout transmite hierarquía correcta, usando modelos de visión en lugar de solo análisis de texto.
+
+**KB consultar:** `python scripts/knowledge_base.py search "CLIP visual quality slide assessment multimodal layout" --type reference`
+
+**Archivos NUEVOS a crear:**
+
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `scripts/slide_quality_vision.py` | Script | CLIP score + layout metrics |
+| `.github/prompts/edu-check-visual-quality.prompt.md` | Prompt | `/edu-check-visual-quality` |
+
+**Qué hace `slide_quality_vision.py`:**
+- **CLIP score (OpenCLIP ViT-B/32, 400MB, CPU-friendly)**:
+  - Relevancia imagen-texto por filmina: cosine_similarity(CLIP(thumbnail), CLIP(title + body))
+  - Umbral: < 0.15 = imagen irrelevante ❌, 0.15-0.25 = marginal ⚠️, > 0.25 = relevante ✅
+  - Coherencia visual inter-slide: CLIP similarity entre thumbnails consecutivos; caída brusca = posible slide fuera de contexto
+  - Detector de clipart genérico: CLIP score vs. prompt negativo "generic decorative stock photo"
+- **Layout quality** (basado en coordenadas EMU de `plan-filminas.json`, sin inferencia adicional):
+  - Balance horizontal: distribución de masa visual izquierda vs. derecha (ideal ±20%)
+  - Alineación a grilla: % de elementos en posiciones redondeadas
+  - Whitespace ratio: área libre / área total (ideal 40-60%, < 30% = sobredensidad ❌)
+  - Regla de tercios: % de elementos cerca de las intersecciones
+- Integración con `capture_thumbnails.py` (ya existente): procesa thumbnails generados automáticamente
+- Output: `{topic_folder}/visual-quality-report.md` con tabla CLIP score + layout grade (A/B/C/F) por filmina
+
+**Dependencias Python:** `open-clip-torch` (nueva — `pip install open-clip-torch`)
+
+**Criterios de aceptación:**
+- [ ] `python scripts/slide_quality_vision.py --topic 05-sorting --course leng-2026` genera reporte
+- [ ] Requiere thumbnails existentes (generados por `capture_thumbnails.py`); si no existen, informa y sale con 0
+- [ ] Primer uso: descarga modelo OpenCLIP ViT-B/32 a `_edu-knowledge/models/` (~400MB)
+- [ ] `test_pipeline.py` sigue pasando
+
+---
+
+### Entregables Sprint 10
+
+| Archivo | Estado |
+|---------|--------|
+| `scripts/bloom_classifier.py` | NUEVO |
+| `scripts/train_bloom_model.py` | NUEVO |
+| `scripts/assessment_calibrator.py` | NUEVO |
+| `scripts/slide_quality_vision.py` | NUEVO |
+| `.github/prompts/edu-classify-bloom.prompt.md` | NUEVO |
+| `.github/prompts/edu-calibrate-assessment.prompt.md` | NUEVO |
+| `.github/prompts/edu-check-visual-quality.prompt.md` | NUEVO |
+| `_edu/module-help.csv` | EXTEND — 3 filas |
+| `WORKFLOW_PROMPT_MAP.md` | EXTEND — 3 filas |
+| `README.md` | EXTEND — sección "Psicometría + Calidad Visual" |
+
+**NO tocar:** exam-blueprint (S2.2), tp-designer, schema-registry.json
+
+---
+
+## Sprint 11 — Knowledge Engineering
+
+**Objetivo:** Los dos proyectos más complejos del roadmap. Se recomienda iniciar #19 primero (Knowledge Graph como base) y #22 después (CPL usa el KG como input).
+
+**Dependencias:** S9 (embeddings computados, ChromaDB maduro), S10 (Bloom classifier para enriquecer el KG con niveles cognitivos), S6 (Wikidata MCP server, si implementado).
+
+### S11.1 — Knowledge Graph Engine — Ontología Educativa Formal (#19)
+
+**Story:** Como docente, quiero una representación formal de relaciones entre conceptos de mi materia (prerequisito-de, parte-de, contradice-a), validable con queries SPARQL, para garantizar que el orden de enseñanza es lógicamente coherente.
+
+**KB consultar:** `python scripts/knowledge_base.py search "knowledge graph OWL ontology educational prerequisite SPARQL" --type reference`
+
+**Archivos NUEVOS a crear:**
+
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `scripts/knowledge_graph.py` | Script | Builder + validador del KG educativo |
+| `_edu/knowledge/edu-ontology.ttl` | Ontología | OWL Lite en Turtle con clases EDU |
+| `_edu/schemas/knowledge-graph.schema.json` | Schema | JSON-LD output format |
+| `.github/prompts/edu-build-kg.prompt.md` | Prompt | `/edu-build-kg` |
+| `.github/prompts/edu-validate-kg.prompt.md` | Prompt | `/edu-validate-kg` |
+
+**Qué hace:**
+
+1. **Ontología OWL Lite** (`edu-ontology.ttl`): Define clases y propiedades base:
+   - Clases: `:Concepto`, `:Tema`, `:NivelBloom`, `:Competencia`
+   - Propiedades: `:tienePrerequisito` (transitiva), `:perteneceA`, `:nivelCognitivo`, `:contradice` (simétrica), `:ejemplificadoPor`
+
+2. **Poblado automático (LLM + validación ConceptNet/Wikidata)**:
+   - LLM extrae pares (concepto, relación, concepto) de `plan-minimo.md` y `diseno.md`
+   - Cada relación se verifica contra ConceptNet API o Wikidata SPARQL endpoint
+   - Confianza alta (>0.8): acepta automáticamente. Confianza media: flag para docente.
+
+3. **Validaciones formales (SPARQL queries)**:
+   - Prerequisitos faltantes: "¿Todo concepto tiene sus prerequisitos enseñados antes?"
+   - Ciclos: "¿Hay A→B→A en el grafo de prerequisitos?" (ciclo = error curricular)
+   - Huérfanos: "¿Hay conceptos en filminas que no están en el grafo?"
+   - Bloom monotónico: "¿Los niveles cognitivos crecen a lo largo del curso?"
+
+4. **Output**: `{course_output_folder}/knowledge-graph.json` (JSON-LD) + visualización Mermaid
+
+5. **Librerías**: `rdflib` + `owlready2` + `networkx` + `SPARQLWrapper`
+
+**Criterios de aceptación:**
+- [ ] `python scripts/knowledge_graph.py --course leng-2026 build` genera KG JSON-LD
+- [ ] `python scripts/knowledge_graph.py --course leng-2026 validate` ejecuta queries SPARQL y reporta ciclos/huérfanos
+- [ ] Detecta correctamente un ciclo sintético inyectado en tests
+- [ ] Si Wikidata no está disponible, construye el KG sin validación externa (modo offline)
+- [ ] `test_pipeline.py` sigue pasando
+
+---
+
+### S11.2 — Concept Prerequisite Learning — CPL con ML (#22)
+
+**Story:** Como docente, quiero que el sistema aprenda automáticamente qué concepto es prerequisito de cuál, usando ML sobre corpus de libros de texto y datasets públicos de CS, reduciendo la carga de anotación manual al mínimo.
+
+**KB consultar:** `python scripts/knowledge_base.py search "prerequisite learning concept dependency graph neural network active learning" --type reference`
+
+**Archivos NUEVOS a crear:**
+
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `scripts/prerequisite_learner.py` | Script | Classifier + active learning para prerequisitos |
+| `scripts/train_prerequisite_model.py` | Script | One-time: entrenamiento con LectureBank dataset |
+| `.github/prompts/edu-learn-prerequisites.prompt.md` | Prompt | `/edu-learn-prerequisites` |
+
+**Qué hace `prerequisite_learner.py`:**
+- **Features por par de conceptos (A, B):**
+  - `semantic_similarity`: cosine(embed(A), embed(B)) con MiniLM
+  - `order_in_course`: índice_tema(A) − índice_tema(B)
+  - `co_occurrence_jaccard`: Jaccard entre documentos que contienen A y B
+  - `conceptnet_has_prereq`: flag si ConceptNet tiene relación `HasPrerequisite(A,B)`
+  - `wikidata_path_length`: longitud del camino más corto en Wikidata
+- **Classifier**: XGBoost o LightGBM (CPU-friendly, <100ms de inferencia)
+- **Pre-entrenado** en LectureBank (Johns Hopkins, 1.5k pares anotados de CS) via `train_prerequisite_model.py`
+- **Active learning**: presenta al docente solo los pares más inciertos (top-30 pares con probabilidad más cercana a 0.5). Con ~30 anotaciones manuales, el modelo alcanza >90% del rendimiento del oráculo completo.
+- **Output**: extiende `{course_output_folder}/knowledge-graph.json` con bordes inferidos por ML, con campo `source: "cpl-ml"` + `confidence`
+- **Anomalías automáticas**: conceptos con muchos prerequisitos no cubiertos → flag ordenado por confianza
+
+**Criterios de aceptación:**
+- [ ] `python scripts/prerequisite_learner.py --course leng-2026 predict` genera sugerencias de prerequisitos
+- [ ] `python scripts/prerequisite_learner.py --course leng-2026 annotate` inicia sesión de active learning (30 preguntas Y/N)
+- [ ] Detecta ciclos en los prerequisitos sugeridos y los reporta antes de agregarlos al KG
+- [ ] Sin modelo pre-entrenado, descarga LectureBank automáticamente y muestra instrucciones de entrenamiento
+- [ ] `test_pipeline.py` sigue pasando
+
+---
+
+### Entregables Sprint 11
+
+| Archivo | Estado |
+|---------|--------|
+| `scripts/knowledge_graph.py` | NUEVO |
+| `scripts/prerequisite_learner.py` | NUEVO |
+| `scripts/train_prerequisite_model.py` | NUEVO |
+| `_edu/knowledge/edu-ontology.ttl` | NUEVO |
+| `_edu/schemas/knowledge-graph.schema.json` | NUEVO |
+| `.github/prompts/edu-build-kg.prompt.md` | NUEVO |
+| `.github/prompts/edu-validate-kg.prompt.md` | NUEVO |
+| `.github/prompts/edu-learn-prerequisites.prompt.md` | NUEVO |
+| `_edu/module-help.csv` | EXTEND — 3 filas |
+| `WORKFLOW_PROMPT_MAP.md` | EXTEND — 3 filas |
+| `README.md` | EXTEND — sección "Knowledge Engineering" |
+
+**NO tocar:** semantic_drift_detector.py, fact_verifier.py, coherencia-validator, schema-registry.json
+
+---
+
+## Sprint 12 — Full-Stack Orchestration (Open-Source Orchestrator)
+
+**Objetivo:** Integrar todo el stack beyondLLM + Director Agent en un orquestador open-source que corre junto a Copilot, con deploy automático vía GitHub Actions. Este es el sprint más complejo y requiere que S8 (Director Agent), S9 (analizadores semánticos), S10 (psicometría) y S11 (KG) estén estables.
+
+**Dependencias:** S8.2 (Director Agent base), S11 (Knowledge Graph como contexto del orquestador), S9.3 (NLI verifier como gate de calidad del orquestador).
+
+### S12.1 — Python Director Script Minimalista (fase 2 de la propuesta #27)
+
+**Story:** Como docente, quiero un script Python puro que orqueste todo el pipeline de producción de un tema con un solo comando, sin vendor lock-in, usando checkpoints persistentes.
+
+**KB consultar:** `python scripts/knowledge_base.py search "orchestration pipeline automation subprocess checkpoint" --type reference`
+
+**Archivos NUEVOS a crear:**
+
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `scripts/edu_director.py` | Script | Orquestador Python puro — pipeline completo |
+| `.github/prompts/edu-run-pipeline.prompt.md` | Prompt | `/edu-run-pipeline` |
+| `.github/prompts/edu-resume-pipeline.prompt.md` | Prompt | `/edu-resume-pipeline` |
+
+**Qué hace `edu_director.py`:**
+```
+/edu-run-pipeline --topic 05-sorting --course leng-2026
+
+PIPELINE STEPS:
+1. validate_plan         → validate_plan.py
+2. fact_check            → fact_verifier.py (S9.3, si habilitado)
+3. slides_pipeline       → slides_pipeline.py
+4. capture_thumbnails    → capture_thumbnails.py
+5. visual_quality        → slide_quality_vision.py (S10.3, si habilitado)
+6. [HUMAN GATE]          → "Revisar output y presionar Enter..."
+7. semantic_drift        → semantic_drift_detector.py (S9.1, si habilitado)
+8. bloom_classify        → bloom_classifier.py (S10.1, si habilitado)
+9. [FINAL GATE]          → "Publicar? [S/n]"
+```
+- Cada paso guarda checkpoint en `{topic_folder}/.pipeline-state.json`
+- `/edu-resume-pipeline` retoma desde el último checkpoint completado
+- Flag `--dry-run` para simular sin ejecutar
+- Flag `--skip-gates` para CI/CD (GitHub Actions)
+- Cada paso tiene timeout configurable (default: 300s)
+- Log completo en `memory.db`: categoría `pipeline-run`
+
+**Criterios de aceptación:**
+- [ ] `python scripts/edu_director.py --topic 05-sorting --course leng-2026` ejecuta pipeline completo
+- [ ] Interrupción a mitad → `edu_director.py --resume --topic 05-sorting` retoma desde el paso siguiente al último exitoso
+- [ ] `--skip-gates` permite ejecución no interactiva (para GitHub Actions)
+- [ ] Log en `memory.db` con duración, pasos, errores
+- [ ] Pasos opcionales se omiten automáticamente si el script correspondiente no está disponible
+
+---
+
+### S12.2 — smolagents Director Agent (fase 3 de la propuesta #27)
+
+**Story:** Como docente avanzado, quiero invocar un agente orquestador que use LLMs para decidir qué hacer en situaciones no previstas (pasos que fallan, contenido rechazado por el guardrail, feedback del docente), usando modelos open-source gratuitos vía HuggingFace Inference API.
+
+**KB consultar:** `python scripts/knowledge_base.py search "multi-agent orchestration smolagents HuggingFace open-source model routing" --type reference`
+
+**Archivos NUEVOS a crear:**
+
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `scripts/edu_smolagent_director.py` | Script | Director con smolagents + modelo Qwen/Llama |
+| `.github/prompts/edu-agent-director.prompt.md` | Prompt | `/edu-agent-director` |
+
+**Qué hace `edu_smolagent_director.py`:**
+- Director `CodeAgent` (smolagents) con acceso a tools:
+  - `search_knowledge_base(query)` → ChromaDB
+  - `validate_plan(topic, course)` → validate_plan.py
+  - `run_slides_pipeline(topic, course)` → slides_pipeline.py
+  - `check_facts(topic, course)` → fact_verifier.py
+  - `check_bloom_coverage(topic, course)` → bloom_classifier.py
+  - `query_knowledge_graph(sparql)` → knowledge_graph.py
+- Sub-agentes gestionados como `ManagedAgent`:
+  - `topic_designer` (genera diseño)
+  - `academic_guardrail` (valida contenido)
+- Modelo: `Qwen/Qwen2.5-72B-Instruct` vía HuggingFace Inference API (gratuito con token)
+  - Fallback: `meta-llama/Llama-3.3-70B-Instruct`
+- Human-in-the-loop gates implementados como `input()` en el CodeAgent (interrumpibles)
+- Compatible con el Director Agent de S8.2 (lo extiende, no lo reemplaza)
+
+**Config nuevos:**
+```yaml
+# --- Orchestrator (Sprint 12) ---
+orchestrator_enabled: false
+orchestrator_mode: "minimal"          # minimal | smolagents | crewai
+orchestrator_model: "Qwen/Qwen2.5-72B-Instruct"
+hf_inference_api: true                # usa HuggingFace Inference API gratuita
+local_model_path: null                # alternativa: ruta a modelo Ollama local
+```
+
+**Dependencias Python:** `smolagents` (nueva — `pip install smolagents`)
+
+**Criterios de aceptación:**
+- [ ] `python scripts/edu_smolagent_director.py --topic 05-sorting --course leng-2026` genera topic completo
+- [ ] Sin `HF_TOKEN` configurado, usa modo minimal (edu_director.py) automáticamente como fallback
+- [ ] El flujo se detiene en gates humanos esperando aprobación
+- [ ] Los tools EDU envueltos son los mismos scripts de S9-S11 — no duplicación
+- [ ] `test_pipeline.py` sigue pasando
+
+---
+
+### S12.3 — GitHub Actions Integration (#27 — integración CI/CD)
+
+**Story:** Como docente, quiero que el pipeline de generación se ejecute automáticamente cuando hago push de un `diseno.md` aprobado, sin intervención manual adicional.
+
+**KB consultar:** `python scripts/knowledge_base.py search "GitHub Actions CI/CD automation pipeline education" --type reference`
+
+**Archivos NUEVOS a crear:**
+
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `.github/workflows/edu-auto-pipeline.yml` | GitHub Actions | CI/CD de generación automática |
+| `.github/workflows/edu-fact-check.yml` | GitHub Actions | Gate de verificación factual en PR |
+
+**`edu-auto-pipeline.yml`:**
+```yaml
+name: EDU Auto-Pipeline
+on:
+  push:
+    paths:
+      - 'salida/cursadas/**/diseno.md'
+      - 'salida/cursadas/**/topic.yaml'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -r salida/edu-standalone/requirements.txt
+      - name: Extract topic from changed files
+        run: |
+          TOPIC=$(git diff --name-only HEAD~1 | grep diseno.md | cut -d'/' -f4)
+          COURSE=$(git diff --name-only HEAD~1 | grep diseno.md | cut -d'/' -f3)
+          echo "TOPIC=$TOPIC" >> $GITHUB_ENV
+          echo "COURSE=$COURSE" >> $GITHUB_ENV
+      - name: Run EDU pipeline (no-gates mode)
+        run: |
+          python scripts/edu_director.py \
+            --topic $TOPIC --course $COURSE \
+            --skip-gates --skip-steps visual_quality,semantic_drift
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      - name: Commit generated artifacts
+        run: |
+          git config user.name "EDU Pipeline Bot"
+          git config user.email "edu-bot@noreply.github.com"
+          git add salida/cursadas/
+          git diff --cached --quiet || git commit -m "edu-pipeline: auto-generated $TOPIC materials"
+          git push
+```
+
+**`edu-fact-check.yml`:**
+```yaml
+name: EDU Fact Check on PR
+on:
+  pull_request:
+    paths: ['salida/cursadas/**/minuta.md', 'salida/cursadas/**/*.pptx']
+
+jobs:
+  fact-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install sentence-transformers chromadb
+      - name: Run NLI fact check
+        run: |
+          python scripts/fact_verifier.py --course $COURSE --topic $TOPIC
+        # Exits with code 1 if any claim is CONTRADICTED → blocks merge
+```
+
+**Criterios de aceptación:**
+- [ ] Push de `diseno.md` → GitHub Actions se activa → pipeline corre automáticamente
+- [ ] Si `fact_verifier.py` detecta contradictions, la PR no puede mergearse
+- [ ] El bot commitea solo si hay cambios reales (evita commits vacíos)
+- [ ] Sin `HF_TOKEN` configurado, el pipeline corre en modo minimal (sin smolagents)
+
+---
+
+### Entregables Sprint 12
+
+| Archivo | Estado |
+|---------|--------|
+| `scripts/edu_director.py` | NUEVO |
+| `scripts/edu_smolagent_director.py` | NUEVO |
+| `.github/workflows/edu-auto-pipeline.yml` | NUEVO |
+| `.github/workflows/edu-fact-check.yml` | NUEVO |
+| `.github/prompts/edu-run-pipeline.prompt.md` | NUEVO |
+| `.github/prompts/edu-resume-pipeline.prompt.md` | NUEVO |
+| `.github/prompts/edu-agent-director.prompt.md` | NUEVO |
+| `_edu/config.yaml` | EXTEND — bloque `# --- Orchestrator (S12) ---` |
+| `_edu/module-help.csv` | EXTEND — 3 filas |
+| `WORKFLOW_PROMPT_MAP.md` | EXTEND — 3 filas |
+| `README.md` | EXTEND — sección "Orquestación Full-Stack" |
+
+**NO tocar:** edu_director (S8.2 topic-director.md), agents existentes, schema-registry.json
+
+---
+
 ## Registro de Impacto — Archivos Existentes (v2)
 
 | Archivo | Sprints | Cambio |
 |---------|---------|--------|
-| `_edu/config.yaml` | S1, S3, S4, S7, S8 | Bloques de config nuevos al final |
-| `_edu/module-help.csv` | S1-S8 | Filas nuevas al final |
-| `WORKFLOW_PROMPT_MAP.md` | S1-S8 | Filas nuevas al final |
-| `README.md` | S1-S8 | Secciones nuevas al final |
+| `_edu/config.yaml` | S1, S3, S4, S7, S8, S9, S12 | Bloques de config nuevos al final |
+| `_edu/module-help.csv` | S1-S12 | Filas nuevas al final |
+| `WORKFLOW_PROMPT_MAP.md` | S1-S12 | Filas nuevas al final |
+| `README.md` | S1-S12 | Secciones nuevas al final |
 | `.gitignore` | S5 | 1 línea nueva |
-| `scripts/requirements.txt` | S7 | `edge-tts>=6.1.0` (condicional) |
+| `scripts/requirements.txt` | S7, S9, S10, S11, S12 | Dependencias nuevas (bertopic, py-irt, open-clip-torch, smolagents, rdflib) |
 
 **Total archivos existentes afectados: 6** (de ~80+ en el módulo)  
 **Archivos NUNCA tocados:** agents existentes, workflows existentes, schemas/schema-registry.json, scripts existentes, tests
@@ -1046,7 +1630,22 @@ S6 (investigación) ← requiere S1-S5        │
                     │
                     ├── S8.1 (PBL) ← S3 + S5 + S7.4
                     └── S8.2 (Director) ← todos
+
+S9 (semánticos) ─── requiere S1 (MiniLM ya instalado)
+       │   S9.1 + S9.2 + S9.3 paralelizables entre sí
+       ▼
+S10 (psicometría) ─── requiere S2 (exam) + S7.4 (simulador para IRT data)
+       │   S10.1 + S10.2 + S10.3 paralelizables entre sí
+       ▼
+S11 (knowledge eng) ─── requiere S9 (embeddings) + S10 (Bloom para KG)
+       │   S11.1 (KG) primero → S11.2 (CPL usa el KG)
+       ▼
+S12 (full-stack) ─── requiere S8.2 (Director) + S9.3 (NLI) + S11 (KG)
+       │   S12.1 → S12.2 → S12.3 (secuencial — cada fase extiende la anterior)
 ```
+
+**S9-S11 pueden iniciarse en paralelo con S6-S8** — son independientes del pipeline de slides.  
+**S12 es el sprint de integración final** — no iniciar hasta que S8.2, S9.3, S11.1 estén estables.
 
 ---
 
@@ -1085,6 +1684,26 @@ S6.1 (comparator) ── en paralelo ── S6.2 (MCP)
 S8.1 (PBL) ────── S8.2 (Director) ← el Director es lo último
 ```
 
+### Fase 6 — Beyond-LLM (S9 + S10, en paralelo con S8)
+```
+S9.1 (semantic drift) ───┐
+S9.2 (BERTopic)       ───┤── paralelizables entre sí
+S9.3 (NLI verifier)   ───┘
+S10.1 (Bloom ML)      ───┐
+S10.2 (IRT/BKT)       ───┤── paralelizables entre sí
+S10.3 (CLIP)          ───┘
+```
+
+### Fase 7 — Knowledge Engineering (S11)
+```
+S11.1 (Knowledge Graph) ────── S11.2 (CPL) ← CPL usa el KG
+```
+
+### Fase 8 — Full-Stack Orchestration (S12)
+```
+S12.1 (Director Script) ── S12.2 (smolagents) ── S12.3 (GitHub Actions)
+```
+
 ---
 
 ## Total de archivos nuevos por sprint
@@ -1099,4 +1718,8 @@ S8.1 (PBL) ────── S8.2 (Director) ← el Director es lo último
 | S6 | 1 | 0 | 1 | 1 | 3 | **6** |
 | S7 | 2 | 2 | 1 | 4 | 3 | **12** |
 | S8 | 0 | 2 | 2 | 4 | 3 | **11** |
-| **Total** | **12** | **6** | **4** | **20** | **12** | **54** |
+| S9 | 3 | 0 | 0 | 3 | 0 | **6** |
+| S10 | 4 | 0 | 0 | 3 | 0 | **7** |
+| S11 | 3 | 1 | 0 | 3 | 1 | **8** |
+| S12 | 2 | 0 | 0 | 3 | 2 | **7** |
+| **Total** | **24** | **7** | **4** | **32** | **15** | **82** |
