@@ -1,0 +1,478 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "edu-schemas/filmina-slide",
+  "title": "Filmina Slide Schema v3 — Contrato Inmutable por Filmina",
+  "description": "Define el objeto canónico de cada slide individual en el plan JSON. El agente es responsable de llenar TODOS los campos explícitamente. El script NUNCA infiere, completa ni corrige campos faltantes. Este schema es la fuente de verdad que validate_plan.py y slides_pipeline.py usan para verificar completitud.",
+  "version": "3.0.0",
+  "date": "2026-03-25",
+  "type": "object",
+  "required": ["id", "type", "title", "subtitle", "body_blocks", "code_blocks", "tables", "layout", "image", "table_assets"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^F-[0-9]{2,3}$",
+      "description": "Identificador único de la filmina. Formato: F-00, F-01, ..., F-99. Secuencial sin saltos."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "portada",
+        "concepto-abstracto",
+        "concepto-mixto",
+        "codigo",
+        "tabla",
+        "tabla-comparativa",
+        "tabla-mixta",
+        "diagrama",
+        "socratica",
+        "demo",
+        "cierre",
+        "timeline"
+      ],
+      "description": "Tipo canónico de la filmina. OBLIGATORIO. NUNCA inferido por el script. Si falta → ValidationError. El agente asigna el tipo explícitamente consultando type_layout_map en schema-registry.json."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Texto del título visible en la slide. No puede estar vacío."
+    },
+    "subtitle": {
+      "type": "string",
+      "description": "Subtítulo opcional mostrado debajo del título. Cadena vacía si no hay."
+    },
+    "body_blocks": {
+      "type": "array",
+      "description": "Bloques de contenido del cuerpo. Array vacío [] para slides sin cuerpo (ej: portada solo con título).",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["type", "content"],
+            "additionalProperties": false,
+            "properties": {
+              "type": {"const": "text"},
+              "content": {"type": "string", "minLength": 1}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["type", "level", "content"],
+            "additionalProperties": false,
+            "properties": {
+              "type": {"const": "heading"},
+              "level": {"type": "integer", "minimum": 1, "maximum": 6},
+              "content": {"type": "string", "minLength": 1}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["type", "ordered", "items"],
+            "additionalProperties": false,
+            "properties": {
+              "type": {"const": "list"},
+              "ordered": {"type": "boolean"},
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["content"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "content": {"type": "string"},
+                    "level": {"type": "integer", "minimum": 0, "maximum": 3, "default": 0}
+                  }
+                },
+                "minItems": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    "code_blocks": {
+      "type": "array",
+      "description": "Bloques de código para slides tipo codigo, concepto-mixto, demo, tabla-mixta. Array vacío si no hay código.",
+      "items": {
+        "type": "object",
+        "required": ["lang", "content"],
+        "additionalProperties": false,
+        "properties": {
+          "lang": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Lenguaje del bloque: python, typescript, haskell, prolog, html, css, javascript, etc."
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Código fuente. Preservar indentación original."
+          }
+        }
+      }
+    },
+    "tables": {
+      "type": "array",
+      "description": "Tablas Markdown como strings. Cada string es una tabla completa con headers y filas, formato pipe Markdown.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "layout": {
+      "type": "object",
+      "description": "Distribución de zonas DETERMINISTA. El agente DEBE copiar el layout de type_layout_map en schema-registry.json según el type asignado. NO hay libertad para inventar combinaciones.",
+      "required": ["title", "body", "image", "code", "table"],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "enum": ["center-middle", "full-title", "center-top", "left-top"]
+        },
+        "body": {
+          "type": "string",
+          "enum": ["center-bottom", "left-middle", "center-middle", "subtitle-only", "table-intro", "full-center", "full-bottom", "left-top-split", "none"]
+        },
+        "image": {
+          "type": "string",
+          "enum": ["background", "right-half", "none"]
+        },
+        "code": {
+          "type": "string",
+          "enum": ["right-half", "full-bottom", "left-bottom-split", "none"]
+        },
+        "table": {
+          "type": "string",
+          "enum": ["table-main", "right-half", "none"]
+        }
+      }
+    },
+    "image": {
+      "type": "object",
+      "description": "Objeto de imagen. SIEMPRE presente. Si la slide no lleva imagen: layer='none' y prompt=''.",
+      "required": ["layer", "prompt", "local_asset", "drive_id"],
+      "additionalProperties": false,
+      "properties": {
+        "layer": {
+          "type": "string",
+          "enum": ["background", "content", "none"],
+          "description": "Capa de imagen. DETERMINISTA: debe coincidir con image_layer de type_layout_map. background=fondo completo, content=panel derecho, none=sin imagen."
+        },
+        "prompt": {
+          "type": "string",
+          "description": "Prompt para Gemini Imagen. OBLIGATORIO cuando layer!='none'. Debe usar EXCLUSIVAMENTE lenguaje visual puro (geometría, colores, posiciones). NUNCA conceptos técnicos. SIEMPRE terminar con: 'Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.' Vacío solo cuando layer='none'."
+        },
+        "local_asset": {
+          "type": "string",
+          "description": "Ruta relativa al asset generado (ej: slides/assets/F-00-bg.png). Vacío antes de generar."
+        },
+        "drive_id": {
+          "type": ["string", "null"],
+          "description": "Google Drive file ID después de subir el asset. null=aún no subido."
+        }
+      }
+    },
+    "table_assets": {
+      "type": "array",
+      "description": "Assets de tabla renderizados como PNG con matplotlib. Uno por tabla en el campo tables.",
+      "items": {
+        "type": "object",
+        "required": ["index", "table_markdown", "local_asset", "drive_id"],
+        "additionalProperties": false,
+        "properties": {
+          "index": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Índice de la tabla en el array tables (0-based)."
+          },
+          "table_markdown": {
+            "type": "string",
+            "description": "Copia exacta del Markdown de la tabla (para regeneración)."
+          },
+          "local_asset": {
+            "type": "string",
+            "description": "Ruta relativa al PNG generado (ej: slides/assets/F-01-table-1.png)."
+          },
+          "drive_id": {
+            "type": ["string", "null"],
+            "description": "Google Drive file ID tras subir. null=pendiente."
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "image": {
+            "properties": {"layer": {"not": {"const": "none"}}}
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "image": {
+            "properties": {
+              "prompt": {"minLength": 20}
+            }
+          }
+        }
+      },
+      "$comment": "VALIDACIÓN CRUZADA: Si image.layer != 'none' → image.prompt debe tener al menos 20 caracteres."
+    },
+    {
+      "if": {
+        "properties": {"type": {"const": "portada"}}
+      },
+      "then": {
+        "properties": {
+          "layout": {
+            "properties": {
+              "title": {"const": "full-title"},
+              "body": {"const": "center-bottom"},
+              "image": {"const": "background"},
+              "code": {"const": "none"},
+              "table": {"const": "none"}
+            }
+          },
+          "image": {
+            "properties": {"layer": {"const": "background"}}
+          }
+        }
+      },
+      "$comment": "DETERMINISMO: portada SIEMPRE tiene layout y image_layer fijos."
+    },
+    {
+      "if": {
+        "properties": {"type": {"const": "concepto-abstracto"}}
+      },
+      "then": {
+        "properties": {
+          "layout": {
+            "properties": {
+              "title": {"const": "full-title"},
+              "body": {"const": "left-middle"},
+              "image": {"const": "right-half"},
+              "code": {"const": "none"},
+              "table": {"const": "none"}
+            }
+          },
+          "image": {
+            "properties": {"layer": {"const": "content"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"type": {"const": "concepto-mixto"}}
+      },
+      "then": {
+        "properties": {
+          "layout": {
+            "properties": {
+              "title": {"const": "full-title"},
+              "body": {"const": "left-middle"},
+              "image": {"const": "none"},
+              "code": {"const": "right-half"},
+              "table": {"const": "none"}
+            }
+          },
+          "image": {
+            "properties": {"layer": {"const": "none"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"type": {"const": "tabla-mixta"}}
+      },
+      "then": {
+        "properties": {
+          "layout": {
+            "properties": {
+              "title": {"const": "full-title"},
+              "body": {"const": "left-top-split"},
+              "image": {"const": "none"},
+              "code": {"const": "left-bottom-split"},
+              "table": {"const": "right-half"}
+            }
+          },
+          "image": {
+            "properties": {"layer": {"const": "none"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"type": {"const": "codigo"}}
+      },
+      "then": {
+        "properties": {
+          "layout": {
+            "properties": {
+              "title": {"const": "full-title"},
+              "body": {"const": "subtitle-only"},
+              "image": {"const": "none"},
+              "code": {"const": "full-bottom"},
+              "table": {"const": "none"}
+            }
+          },
+          "image": {
+            "properties": {"layer": {"const": "none"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"type": {"const": "tabla"}}
+      },
+      "then": {
+        "properties": {
+          "layout": {
+            "properties": {
+              "title": {"const": "full-title"},
+              "body": {"const": "table-intro"},
+              "image": {"const": "none"},
+              "code": {"const": "none"},
+              "table": {"const": "table-main"}
+            }
+          },
+          "image": {
+            "properties": {"layer": {"const": "none"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"type": {"const": "tabla-comparativa"}}
+      },
+      "then": {
+        "properties": {
+          "layout": {
+            "properties": {
+              "title": {"const": "full-title"},
+              "body": {"const": "table-intro"},
+              "image": {"const": "none"},
+              "code": {"const": "none"},
+              "table": {"const": "table-main"}
+            }
+          },
+          "image": {
+            "properties": {"layer": {"const": "none"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"type": {"const": "diagrama"}}
+      },
+      "then": {
+        "properties": {
+          "layout": {
+            "properties": {
+              "title": {"const": "full-title"},
+              "body": {"const": "left-middle"},
+              "image": {"const": "right-half"},
+              "code": {"const": "none"},
+              "table": {"const": "none"}
+            }
+          },
+          "image": {
+            "properties": {"layer": {"const": "content"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"type": {"const": "socratica"}}
+      },
+      "then": {
+        "properties": {
+          "layout": {
+            "properties": {
+              "title": {"const": "center-top"},
+              "body": {"const": "center-middle"},
+              "image": {"const": "background"},
+              "code": {"const": "none"},
+              "table": {"const": "none"}
+            }
+          },
+          "image": {
+            "properties": {"layer": {"const": "background"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"type": {"const": "demo"}}
+      },
+      "then": {
+        "properties": {
+          "layout": {
+            "properties": {
+              "title": {"const": "full-title"},
+              "body": {"const": "left-middle"},
+              "image": {"const": "none"},
+              "code": {"const": "right-half"},
+              "table": {"const": "none"}
+            }
+          },
+          "image": {
+            "properties": {"layer": {"const": "none"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"type": {"const": "cierre"}}
+      },
+      "then": {
+        "properties": {
+          "layout": {
+            "properties": {
+              "title": {"const": "center-middle"},
+              "body": {"const": "center-bottom"},
+              "image": {"const": "background"},
+              "code": {"const": "none"},
+              "table": {"const": "none"}
+            }
+          },
+          "image": {
+            "properties": {"layer": {"const": "background"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"type": {"const": "timeline"}}
+      },
+      "then": {
+        "properties": {
+          "layout": {
+            "properties": {
+              "title": {"const": "full-title"},
+              "body": {"const": "full-center"},
+              "image": {"const": "none"},
+              "code": {"const": "none"},
+              "table": {"const": "none"}
+            }
+          },
+          "image": {
+            "properties": {"layer": {"const": "none"}}
+          }
+        }
+      }
+    }
+  ]
+}

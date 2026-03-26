@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 """
-validate_plan.py — Validador de plan-filminas YAML
+validate_plan.py — Validador de plan-filminas (v3 schema-driven)
 
-Valida que el plan YAML de un tema cumpla el contrato canónico antes
+Valida que el plan JSON de un tema cumpla el contrato canónico antes
 de ejecutar el pipeline de generación y publicación de filminas.
+
+Carga JSON Schemas desde _edu/schemas/ y valida con jsonschema.
+Lee TODOS los enums y mapeos desde schema-registry.json — no tiene
+constantes propias de diseño.
 
 Uso:
     python scripts/validate_plan.py salida/cursadas/2026/temas/02-sintaxis-semantica
@@ -17,154 +21,216 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-import yaml
+try:
+    import jsonschema
+except ImportError:
+    jsonschema = None  # type: ignore[assignment]
 
-sys.path.insert(0, str(Path(__file__).parent))
-from slides_pipeline import load_pipeline_runtime
-
-# Estrategias de imagen permitidas
-ALLOWED_IMAGE_STRATEGIES = {"background", "content", "gemini", "none"}
-
-
-def find_project_root(start: Path) -> Path:
-    cur = start.resolve()
-    while True:
-        if (cur / ".git").exists() or (cur / "_edu").exists():
-            return cur
-        if cur == cur.parent:
-            break
-        cur = cur.parent
-    raise FileNotFoundError("No se encontró la raíz del proyecto.")
+from pipeline_common import (
+    Result,
+    find_plan,
+    find_project_root,
+    load_config,
+    load_json,
+    load_registry,
+)
 
 
-def load_config(project_root: Path) -> dict:
-    config_path = project_root / "_edu" / "slides-config.yaml"
-    if config_path.exists():
-        with config_path.open(encoding="utf-8") as f:
-            return yaml.safe_load(f) or {}
-    return {}
+# ═══════════════════════════════════════════════════════════════════════
+# VALIDACIÓN v3 (JSON Schema)
+# ═══════════════════════════════════════════════════════════════════════
 
 
-def pipeline_contract(project_root: Path, topic_folder: Path, config: dict) -> tuple[set[str], dict[str, set[str]]]:
-    runtime = load_pipeline_runtime(project_root, config, topic_folder)
-    slide_types = runtime.get("slide_types", {}) or {}
-    allowed_types = set(slide_types.keys())
-    allowed_layout_zones = {
-        "title": set(),
-        "body": set(),
-        "image": set(),
-        "code": set(),
-        "table": set(),
-    }
-    for spec in slide_types.values():
-        layout = spec.get("layout", {}) or {}
-        for zone, allowed in allowed_layout_zones.items():
-            value = layout.get(zone)
-            if value is not None:
-                allowed.add(str(value))
-    for allowed in allowed_layout_zones.values():
-        allowed.add("none")
-    return allowed_types, allowed_layout_zones
+def _validate_v3_schema(plan: dict, project_root: Path) -> Result[dict]:
+    """Valida un plan JSON v3 contra los JSON Schemas.
 
+    Retorna Result[dict] con el plan si pasa, o errores de schema.
+    """
+    if jsonschema is None:
+        return Result.fail(
+            "FATAL: paquete 'jsonschema' no instalado. "
+            "Ejecutar: pip install jsonschema"
+        )
 
-def validate_plan(topic_folder: Path) -> list[str]:
-    """Valida el plan YAML y retorna lista de errores (vacía = válido)."""
-    project_root = find_project_root(topic_folder)
-    config = load_config(project_root)
-    allowed_types, allowed_layout_zones = pipeline_contract(project_root, topic_folder, config)
+    schemas_dir = project_root / "_edu" / "schemas"
+    plan_schema_path = schemas_dir / "plan-filminas.schema.json"
+    slide_schema_path = schemas_dir / "filmina-slide.schema.json"
 
-    # Encontrar el plan YAML
-    slides_dir = topic_folder / "slides"
-    topic_id = topic_folder.name
-    plan_path = slides_dir / f"plan-filminas-{topic_id}.yaml"
+    if not plan_schema_path.exists():
+        return Result.fail(
+            f"SCHEMA: No se encontró {plan_schema_path.relative_to(project_root)}"
+        )
 
-    if not plan_path.exists():
-        # Buscar cualquier plan-filminas-*.yaml
-        candidates = list(slides_dir.glob("plan-filminas-*.yaml"))
-        if not candidates:
-            return [f"ERROR: No se encontró plan-filminas-*.yaml en {slides_dir}"]
-        plan_path = candidates[0]
+    plan_schema = load_json(plan_schema_path)
+    slide_schema = load_json(slide_schema_path) if slide_schema_path.exists() else None
 
-    with plan_path.open(encoding="utf-8") as f:
-        plan = yaml.safe_load(f) or {}
+    # Construir resolver para $ref
+    schema_store: dict[str, dict] = {}
+    if slide_schema:
+        schema_store[slide_schema.get("$id", "filmina-slide.schema.json")] = slide_schema
+        schema_store["filmina-slide.schema.json"] = slide_schema
 
-    errors: list[str] = []
-    meta = plan.get("meta", {})
-    slides = plan.get("slides", [])
+    registry = jsonschema.RefResolver.from_schema(plan_schema, store=schema_store)
 
-    # Validar meta
-    for field in ("topic_id", "title", "source", "generated_at", "template_id"):
-        if not meta.get(field):
-            errors.append(f"META: campo '{field}' faltante o vacío")
+    try:
+        validator_cls = jsonschema.Draft202012Validator
+    except AttributeError:
+        validator_cls = jsonschema.Draft7Validator  # fallback
 
-    if not slides:
-        errors.append("PLAN: no contiene slides")
-        return errors
+    validator = validator_cls(plan_schema, resolver=registry)
 
-    # Leer max_per_presentation del config
-    gem_strategy = config.get("gemini_image_strategy", {})
-    max_images = int(
-        gem_strategy.get("max_per_presentation",
-        gem_strategy.get("max_images_per_presentation", 12))
+    errors = tuple(
+        f"SCHEMA [{'.'.join(str(p) for p in e.absolute_path) or '(root)'}]: {e.message}"
+        for e in validator.iter_errors(plan)
     )
+    return Result.fail(*errors) if errors else Result.ok(plan)
 
-    images_planned = 0
 
+def _validate_v3_semantic(plan: dict, project_root: Path) -> Result[dict]:
+    """Validaciones semánticas que complementan el JSON Schema.
+
+    Retorna Result[dict] con el plan si pasa, o errores semánticos.
+    Acumula todos los errores encontrados (no cortocircuita).
+    """
+    errors: list[str] = []
+    registry_data = load_registry(project_root)
+    config = load_config(project_root)
+
+    slides = plan.get("slides", [])
+    summary = plan.get("summary", {})
+    type_layout_map = registry_data.get("type_layout_map", {})
+
+    # 1. Verificar conteo de slides
+    actual_total = len(slides)
+    declared_total = summary.get("total_slides", 0)
+    if actual_total != declared_total:
+        errors.append(
+            f"SUMMARY: total_slides={declared_total} pero hay {actual_total} slides reales"
+        )
+
+    # 2. Verificar IDs únicos
+    seen_ids: set[str] = set()
     for slide in slides:
         sid = slide.get("id", "?")
-        prefix = f"Slide {sid}"
+        if sid in seen_ids:
+            errors.append(f"DUPLICADO: id='{sid}' aparece más de una vez")
+        seen_ids.add(sid)
 
-        # 1. type explícito y en el enum
-        slide_type = slide.get("type", "")
-        if not slide_type:
-            errors.append(f"{prefix}: campo 'type' faltante — DEBE ser explícito, nunca inferido")
-        elif slide_type not in allowed_types:
-            errors.append(f"{prefix}: type='{slide_type}' no está en el enum permitido: {sorted(allowed_types)}")
+    # 3. Verificar type_distribution vs slides reales
+    real_distribution: dict[str, int] = {}
+    for slide in slides:
+        stype = slide.get("type", "")
+        real_distribution[stype] = real_distribution.get(stype, 0) + 1
 
-        # 2. title no vacío
-        if not slide.get("title", "").strip():
-            errors.append(f"{prefix}: 'title' está vacío")
+    declared_dist = summary.get("type_distribution", {})
+    if declared_dist and declared_dist != real_distribution:
+        errors.append(
+            f"SUMMARY: type_distribution declarada no coincide con la distribución real. "
+            f"Real: {real_distribution}"
+        )
 
-        # 3. layout — todas las zonas presentes
-        layout = slide.get("layout", {})
-        if not layout:
-            errors.append(f"{prefix}: 'layout' faltante")
-        else:
-            for zone, allowed in allowed_layout_zones.items():
-                val = layout.get(zone)
-                if val is None:
-                    errors.append(f"{prefix}: layout.{zone} faltante")
-                elif val not in allowed:
-                    errors.append(f"{prefix}: layout.{zone}='{val}' inválido — permitidos: {sorted(allowed)}")
-
-        # 4. image — strategy/layer y prompt
-        bg_image = slide.get("background_image", {})
-        content_image = slide.get("content_image", {})
-
-        for img_field, img_data in [("background_image", bg_image), ("content_image", content_image)]:
-            if not img_data:
-                continue
-            strategy = img_data.get("strategy", "none")
-            if strategy not in ALLOWED_IMAGE_STRATEGIES:
-                errors.append(f"{prefix}: {img_field}.strategy='{strategy}' inválido")
-            if strategy in ("gemini", "background", "content"):
-                prompt = (img_data.get("prompt") or "").strip()
-                if not prompt:
-                    errors.append(
-                        f"{prefix}: {img_field}.strategy='{strategy}' pero prompt está vacío — "
-                        "el agente DEBE especificar un prompt de imagen visual puro"
-                    )
-                else:
-                    images_planned += 1
+    # 4. Verificar images_planned
+    images_count = sum(
+        1 for s in slides
+        if (s.get("image") or {}).get("layer", "none") != "none"
+    )
+    declared_images = summary.get("images_planned", 0)
+    if images_count != declared_images:
+        errors.append(
+            f"SUMMARY: images_planned={declared_images} pero hay {images_count} slides con image.layer != 'none'"
+        )
 
     # 5. Verificar budget de imágenes
-    if images_planned > max_images:
+    gem_strategy = config.get("gemini_image_strategy", {}) or {}
+    max_images = int(gem_strategy.get("max_per_presentation",
+                     gem_strategy.get("max_images_per_presentation", 12)))
+    if images_count > max_images:
         errors.append(
-            f"BUDGET: {images_planned} imágenes planificadas pero max_per_presentation={max_images} en config. "
+            f"BUDGET: {images_count} imágenes planificadas pero max_per_presentation={max_images}. "
             "Reducir imágenes o actualizar slides-config.yaml."
         )
 
-    return errors
+    # 6. Verificar determinismo tipo→layout contra schema registry
+    if type_layout_map:
+        for slide in slides:
+            sid = slide.get("id", "?")
+            stype = slide.get("type", "")
+            if stype not in type_layout_map:
+                continue
+            expected = type_layout_map[stype]
+            expected_layout = expected.get("layout", {})
+            actual_layout = slide.get("layout", {})
+            for zone in ("title", "body", "image", "code", "table"):
+                exp_val = expected_layout.get(zone)
+                act_val = actual_layout.get(zone)
+                if exp_val and act_val and exp_val != act_val:
+                    errors.append(
+                        f"DETERMINISMO [{sid}]: layout.{zone}='{act_val}' "
+                        f"pero schema registry dice '{exp_val}' para type='{stype}'"
+                    )
+            expected_layer = expected.get("image_layer", "none")
+            actual_layer = (slide.get("image") or {}).get("layer", "none")
+            if expected_layer != actual_layer:
+                errors.append(
+                    f"DETERMINISMO [{sid}]: image.layer='{actual_layer}' "
+                    f"pero schema registry dice '{expected_layer}' para type='{stype}'"
+                )
+
+    # 7. Verificar pending_types y pending_prompts
+    pending_types = sum(1 for s in slides if not s.get("type"))
+    declared_pending = summary.get("pending_types", 0)
+    if pending_types != declared_pending:
+        errors.append(
+            f"SUMMARY: pending_types={declared_pending} pero hay {pending_types} slides sin tipo"
+        )
+
+    pending_prompts = sum(
+        1 for s in slides
+        if (s.get("image") or {}).get("layer", "none") != "none"
+        and not (s.get("image") or {}).get("prompt", "").strip()
+    )
+    declared_pending_prompts = summary.get("pending_prompts", 0)
+    if pending_prompts != declared_pending_prompts:
+        errors.append(
+            f"SUMMARY: pending_prompts={declared_pending_prompts} pero hay {pending_prompts} prompts vacíos"
+        )
+
+    return Result.fail(*errors) if errors else Result.ok(plan)
+
+
+def validate_plan_v3(plan: dict, project_root: Path) -> Result[dict]:
+    """Validación completa v3: JSON Schema + semántica.
+
+    Ejecuta ambas validaciones y acumula todos los errores.
+    """
+    schema_result = _validate_v3_schema(plan, project_root)
+    semantic_result = _validate_v3_semantic(plan, project_root)
+
+    # Acumular errores de ambas validaciones
+    all_errors = schema_result.errors + semantic_result.errors
+    if all_errors:
+        return Result.fail(*all_errors)
+    return Result.ok(plan)
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# API PÚBLICA
+# ═══════════════════════════════════════════════════════════════════════
+
+
+def validate_plan(topic_folder: Path) -> list[str]:
+    """Valida el plan JSON v3 del tema y retorna lista de errores (vacía = válido)."""
+    project_root = find_project_root(topic_folder)
+    plan_result = find_plan(topic_folder)
+
+    if not plan_result.is_ok:
+        return list(plan_result.errors)
+
+    plan_path = plan_result.unwrap()
+    plan = load_json(plan_path)
+
+    result = validate_plan_v3(plan, project_root)
+    return list(result.errors)
 
 
 def main() -> None:

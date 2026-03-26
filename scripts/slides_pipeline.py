@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-EDU Slides Pipeline — Módulo EDU
-=================================
-Consume artefactos YAML ya resueltos → assets (imágenes/tablas) → Google Slides.
+EDU Slides Pipeline — Módulo EDU (v3 — Schema-Driven)
+======================================================
+Consume plan JSON schema-driven → assets (imágenes/tablas) → Google Slides.
 
 Fases:
-    1. validate — Valida plan-filminas-{tema}.yaml, assets-manifest.yaml y
-                                publish-context.yaml generados por el agente.
+    1. validate — Valida plan-filminas-{tema}.json contra JSON Schemas.
+                  (soporta legacy YAML v2 con validación ad hoc)
     2. assets   — Genera imágenes con Gemini, renderiza tablas como PNG,
-               sube todo a Google Drive.
+                  sube todo a Google Drive.
     3. publish  — Lee el plan + assets y crea la presentación en Google Slides.
 
 Uso:
@@ -17,21 +17,16 @@ Uso:
   python slides_pipeline.py <ruta-tema> --assets-only
   python slides_pipeline.py <ruta-tema> --publish-only
 
-Ejemplos:
-  python slides_pipeline.py salida/cursadas/2026/temas/01-conceptos-introductorios
-  python slides_pipeline.py salida/cursadas/2026/temas/01-conceptos-introductorios --plan-only
-
 Requiere:
   pip install -r requirements.txt
 
 Archivos de configuración requeridos (en la raíz del proyecto):
-  _edu/secrets.local.yaml  — google_credentials_path + gemini_api_key
-  _edu/slides-config.yaml  — sistema de diseño generado por /edu-slides-designer
+  _edu/secrets.local.yaml       — google_credentials_path + gemini_api_key
+  _edu/slides-config.yaml       — sistema de diseño generado por /edu-slides-designer
+  _edu/schemas/schema-registry.json — mapeos y enums (fuente única de verdad)
 
-Artefactos requeridos en la carpeta del tema (generados por el agente):
-    slides/plan-filminas-{tema}.yaml
-    slides/assets-manifest.yaml
-    slides/publish-context.yaml
+Artefacto requerido en la carpeta del tema (generado por el agente):
+    slides/plan-filminas-{tema}.json  (un solo archivo JSON v3)
 """
 
 from __future__ import annotations
@@ -42,7 +37,6 @@ import json
 import re
 import sys
 import time
-from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -56,6 +50,16 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
+# Pipeline compartido
+from pipeline_common import (
+    Result,
+    find_project_root,
+    load_json,
+    load_registry,
+    load_yaml,
+    save_json,
+)
+
 # ═══════════════════════════════════════════════════════════════════════
 # CONSTANTES
 # ═══════════════════════════════════════════════════════════════════════
@@ -66,38 +70,20 @@ SCOPES = [
 ]
 
 DEFAULT_FILMINAS_SCHEMA = Path("_edu/templates/filminas-schema.yaml")
-DEFAULT_PIPELINE_CONFIG_JSON = Path("_edu/slides-pipeline.json")
-DEFAULT_TOPIC_PIPELINE_OVERRIDE = Path("slides/pipeline-config.json")
 
 # Dimensiones estándar 16:9 en EMU (English Metric Units)
 SLIDE_W = 9_144_000
 SLIDE_H = 5_143_500
 MARGIN = 457_200      # ~0.5 pulgada
 TITLE_H = 760_000  # alto reservado para título, compacto para maximizar espacio útil de contenido
-LOGO_CLEAR = 430_000  # subir el título y correrlo a la derecha para liberar el logo institucional
-TITLE_SAFE_X = 2_050_000
+LOGO_CLEAR = 700_000  # y mínimo para no solapar el logo institucional del template
+TITLE_SAFE_X = 1_520_000
 BOTTOM_CLEAR = 760_000
 TABLE_BOTTOM_CLEAR = 1_520_000
 EMU_PER_PT = 12_700
-PIPELINE_RUNTIME: dict[str, Any] = {}
 
-# Estrategia de imagen por tipo de filmina
-IMAGE_STRATEGY: dict[str, str] = {
-    "portada":           "background",  # imagen de fondo full-slide
-    "cierre":            "background",
-    "socratica":         "background",
-    "concepto-abstracto": "content",    # imagen en panel derecho
-    "diagrama":          "content",
-    "timeline":          "content",
-    "codigo":            "none",
-    "concepto-mixto":    "none",         # body izq + código der: no imagen
-    "tabla-mixta":       "none",         # texto + código izq, tabla der
-    "tabla":             "none",
-    "tabla-comparativa": "none",
-    "demo":              "none",
-}
-
-# Directrices de layout por tipo
+# Directrices de layout por tipo — fuente canónica: schema-registry.json
+# En runtime se sobreescriben desde el registry via _override_maps_from_registry().
 LAYOUT_MAP: dict[str, dict] = {
     "portada":            {"title": "full-title",     "body": "center-bottom", "image": "background", "code": "none",       "table": "none"},
     "concepto-abstracto": {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none",       "table": "none"},
@@ -113,28 +99,57 @@ LAYOUT_MAP: dict[str, dict] = {
     "timeline":           {"title": "full-title",     "body": "full-center",   "image": "none",       "code": "none",       "table": "none"},
 }
 
+
+def _override_maps_from_registry(registry: dict) -> None:
+    """Sobreescribe LAYOUT_MAP desde el schema registry (fuente única de verdad)."""
+    global LAYOUT_MAP
+    type_layout_map = registry.get("type_layout_map", {})
+    if not type_layout_map:
+        return
+    new_layout: dict[str, dict] = {
+        stype: mapping.get("layout", {})
+        for stype, mapping in type_layout_map.items()
+        if isinstance(mapping, dict)
+    }
+    if new_layout:
+        LAYOUT_MAP = new_layout
+
+
+def _load_plan_file(plan_path: Path) -> dict:
+    """Carga un plan desde JSON."""
+    return load_json(plan_path)
+
+
+def _save_plan_file(plan_path: Path, data: dict) -> None:
+    """Guarda un plan como JSON."""
+    save_json(plan_path, data)
+
+
+def _get_slide_image(slide: dict) -> dict:
+    """Lee datos de imagen de un slide (formato v3 unificado)."""
+    img = slide.get("image")
+    if img and isinstance(img, dict) and "layer" in img:
+        return img
+    return {"layer": "none", "prompt": "", "local_asset": "", "drive_id": None}
+
 # Geometría de zonas en EMU: (x, y, width, height)
 def _zones(w: int = SLIDE_W, h: int = SLIDE_H, m: int = MARGIN, th: int = TITLE_H) -> dict[str, tuple]:
-    geometry = PIPELINE_RUNTIME.get("geometry", {}) or {}
     half_w = w // 2
-    body_y = LOGO_CLEAR + th + int(geometry.get("body_top_gap", 80_000))
+    body_y = LOGO_CLEAR + th + 80_000
     body_h = h - body_y - max(m, BOTTOM_CLEAR)
-    cover_subtitle_y = LOGO_CLEAR + th + int(geometry.get("cover_subtitle_offset_y", 250_000))
-    cover_subtitle_h = int(geometry.get("cover_subtitle_height", 500_000))
-    table_intro_h = int(geometry.get("table_intro_height", 620_000))
-    table_gap = int(geometry.get("table_gap", 220_000))
+    table_intro_h = 620_000
+    table_gap = 220_000
     table_main_y = body_y + table_intro_h + table_gap
     table_main_h = h - table_main_y - max(m, TABLE_BOTTOM_CLEAR)
-    split_intro_h = int(geometry.get("split_intro_height", 600_000))
-    split_gap = int(geometry.get("split_gap", 180_000))
-    split_left_w = half_w - int(m * float(geometry.get("split_left_margin_factor", 1.35)))
+    split_intro_h = 600_000
+    split_gap = 180_000
+    split_left_w = half_w - int(m * 1.35)
     split_bottom_y = body_y + split_intro_h + split_gap
     split_bottom_h = max(600_000, body_h - split_intro_h - split_gap)
     return {
         "full-title":    (TITLE_SAFE_X, LOGO_CLEAR,   w - TITLE_SAFE_X - m, th),   # reserva lateral para logo
         "left-top":      (m,            LOGO_CLEAR,   half_w - m,      th),        # media anchura
         "center-top":    (m,            LOGO_CLEAR,   w - 2 * m,       th),
-        "cover-subtitle": (TITLE_SAFE_X, cover_subtitle_y, w - TITLE_SAFE_X - m, cover_subtitle_h),
         "center-middle": (m,            h // 3,       w - 2 * m,       h // 3),
         "center-bottom": (m,            h * 2 // 3,   w - 2 * m,       h // 3 - m),
         "left-middle":   (m,            body_y,       half_w - m,      body_h),
@@ -157,29 +172,7 @@ ZONES = _zones()
 # HELPERS
 # ═══════════════════════════════════════════════════════════════════════
 
-def find_project_root(start: Path) -> Path:
-    cur = start.resolve()
-    while True:
-        if (cur / ".git").exists() or (cur / "module.yaml").exists():
-            return cur
-        # Modo standalone: edu-standalone/ tiene su propio _edu/
-        if (cur / "_edu").exists() and (cur / "scripts").exists():
-            return cur
-        if cur == cur.parent:
-            break
-        cur = cur.parent
-    raise FileNotFoundError(f"No se encontró la raíz del proyecto desde {start}.")
-
-
-def load_yaml(path: Path) -> dict:
-    with path.open("r", encoding="utf-8") as f:
-        return yaml.safe_load(f) or {}
-
-
-def save_yaml(path: Path, data: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as f:
-        yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+# find_project_root, load_yaml — importados de pipeline_common
 
 
 def _deep_merge_dict(base: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
@@ -191,127 +184,6 @@ def _deep_merge_dict(base: dict[str, Any], incoming: dict[str, Any]) -> dict[str
         else:
             merged[key] = value
     return merged
-
-
-def load_json(path: Path) -> dict[str, Any]:
-    with path.open("r", encoding="utf-8") as f:
-        return json.load(f) or {}
-
-
-def _default_pipeline_runtime() -> dict[str, Any]:
-    return {
-        "canvas": {
-            "slide_width": 9_144_000,
-            "slide_height": 5_143_500,
-            "margin": 457_200,
-            "title_height": 760_000,
-            "logo_clear": 430_000,
-            "title_safe_x": 2_050_000,
-            "bottom_clear": 760_000,
-            "table_bottom_clear": 1_520_000,
-            "emu_per_pt": 12_700,
-        },
-        "geometry": {
-            "body_top_gap": 80_000,
-            "cover_subtitle_offset_y": 250_000,
-            "cover_subtitle_height": 500_000,
-            "table_intro_height": 620_000,
-            "table_gap": 220_000,
-            "split_intro_height": 600_000,
-            "split_gap": 180_000,
-            "split_left_margin_factor": 1.35,
-        },
-        "table_rendering": {
-            "default_header_font": 13,
-            "default_body_font": 12,
-            "compact_header_font": 10,
-            "compact_body_font": 9,
-            "compact_row_threshold": 7,
-            "right_half_force_compact": True,
-            "table_main_y_offset": 110_000,
-            "table_main_height_delta": 620_000,
-        },
-        "cover_rendering": {
-            "title_short_size": 28,
-            "title_long_size": 24,
-            "title_short_threshold": 30,
-            "subtitle_zone": "cover-subtitle",
-            "subtitle_align": "LEFT",
-            "min_title_size": 24,
-            "min_default_title_size": 20,
-        },
-        "slide_types": {
-            "portada": {"layout": {"title": "full-title", "body": "center-bottom", "image": "background", "code": "none", "table": "none"}, "image_layer": "background"},
-            "concepto-abstracto": {"layout": {"title": "full-title", "body": "left-middle", "image": "right-half", "code": "none", "table": "none"}, "image_layer": "content"},
-            "concepto-mixto": {"layout": {"title": "full-title", "body": "left-middle", "image": "none", "code": "right-half", "table": "none"}, "image_layer": "none"},
-            "tabla-mixta": {"layout": {"title": "full-title", "body": "left-top-split", "image": "none", "code": "left-bottom-split", "table": "right-half"}, "image_layer": "none"},
-            "codigo": {"layout": {"title": "full-title", "body": "subtitle-only", "image": "none", "code": "full-bottom", "table": "none"}, "image_layer": "none"},
-            "tabla": {"layout": {"title": "full-title", "body": "table-intro", "image": "none", "code": "none", "table": "table-main"}, "image_layer": "none"},
-            "tabla-comparativa": {"layout": {"title": "full-title", "body": "table-intro", "image": "none", "code": "none", "table": "table-main"}, "image_layer": "none"},
-            "diagrama": {"layout": {"title": "full-title", "body": "left-middle", "image": "right-half", "code": "none", "table": "none"}, "image_layer": "content"},
-            "socratica": {"layout": {"title": "center-top", "body": "center-middle", "image": "background", "code": "none", "table": "none"}, "image_layer": "background"},
-            "demo": {"layout": {"title": "full-title", "body": "left-middle", "image": "none", "code": "right-half", "table": "none"}, "image_layer": "none"},
-            "cierre": {"layout": {"title": "center-middle", "body": "center-bottom", "image": "background", "code": "none", "table": "none"}, "image_layer": "background"},
-            "timeline": {"layout": {"title": "full-title", "body": "full-center", "image": "none", "code": "none", "table": "none"}, "image_layer": "content"},
-        },
-    }
-
-
-def _pipeline_override_paths(project_root: Path, config: dict[str, Any] | None, topic_folder: Path | None) -> list[Path]:
-    override_paths: list[Path] = []
-    root_rel = str((config or {}).get("pipeline_config_json") or DEFAULT_PIPELINE_CONFIG_JSON.as_posix())
-    root_path = project_root / Path(root_rel)
-    if root_path.exists():
-        override_paths.append(root_path)
-
-    topic_rel = (config or {}).get("topic_pipeline_config_json")
-    if topic_folder and topic_rel:
-        topic_path = topic_folder / Path(str(topic_rel))
-        if topic_path.exists():
-            override_paths.append(topic_path)
-    elif topic_folder:
-        default_topic_path = topic_folder / DEFAULT_TOPIC_PIPELINE_OVERRIDE
-        if default_topic_path.exists():
-            override_paths.append(default_topic_path)
-
-    return override_paths
-
-
-def load_pipeline_runtime(project_root: Path, config: dict[str, Any] | None = None, topic_folder: Path | None = None) -> dict[str, Any]:
-    runtime = _default_pipeline_runtime()
-    for path in _pipeline_override_paths(project_root, config, topic_folder):
-        runtime = _deep_merge_dict(runtime, load_json(path))
-    return runtime
-
-
-def apply_pipeline_runtime(project_root: Path, config: dict[str, Any] | None = None, topic_folder: Path | None = None) -> dict[str, Any]:
-    global PIPELINE_RUNTIME, SLIDE_W, SLIDE_H, MARGIN, TITLE_H, LOGO_CLEAR, TITLE_SAFE_X
-    global BOTTOM_CLEAR, TABLE_BOTTOM_CLEAR, EMU_PER_PT, IMAGE_STRATEGY, LAYOUT_MAP, ZONES
-
-    runtime = load_pipeline_runtime(project_root, config, topic_folder)
-    canvas = runtime.get("canvas", {}) or {}
-    slide_types = runtime.get("slide_types", {}) or {}
-
-    SLIDE_W = int(canvas.get("slide_width", SLIDE_W))
-    SLIDE_H = int(canvas.get("slide_height", SLIDE_H))
-    MARGIN = int(canvas.get("margin", MARGIN))
-    TITLE_H = int(canvas.get("title_height", TITLE_H))
-    LOGO_CLEAR = int(canvas.get("logo_clear", LOGO_CLEAR))
-    TITLE_SAFE_X = int(canvas.get("title_safe_x", TITLE_SAFE_X))
-    BOTTOM_CLEAR = int(canvas.get("bottom_clear", BOTTOM_CLEAR))
-    TABLE_BOTTOM_CLEAR = int(canvas.get("table_bottom_clear", TABLE_BOTTOM_CLEAR))
-    EMU_PER_PT = int(canvas.get("emu_per_pt", EMU_PER_PT))
-    IMAGE_STRATEGY = {
-        slide_type: str(spec.get("image_layer", "none"))
-        for slide_type, spec in slide_types.items()
-    }
-    LAYOUT_MAP = {
-        slide_type: dict(spec.get("layout", {}))
-        for slide_type, spec in slide_types.items()
-    }
-    PIPELINE_RUNTIME = runtime
-    ZONES = _zones()
-    return runtime
 
 
 def _default_filminas_schema() -> dict[str, Any]:
@@ -338,8 +210,8 @@ def _default_filminas_schema() -> dict[str, Any]:
             "asset": "@asset:",
         },
         "allowed": {
-            "slide_types": sorted(LAYOUT_MAP.keys()),
-            "layout_presets": sorted(LAYOUT_MAP.keys()),
+            "slide_types": sorted(LAYOUT_MAP.keys()) if LAYOUT_MAP else [],
+            "layout_presets": sorted(LAYOUT_MAP.keys()) if LAYOUT_MAP else [],
             "image_strategies": ["background", "content", "none"],
         },
     }
@@ -459,134 +331,6 @@ def _list_item_parts(item: Any) -> tuple[str, int]:
     if isinstance(item, dict):
         return _strip_markdown(str(item.get("content", ""))), int(item.get("level", 0) or 0)
     return _strip_markdown(str(item)), 0
-
-
-def _parse_label_value(text: str) -> tuple[str, str, str] | None:
-    plain = _strip_markdown(text).strip()
-    plain = re.sub(r"^>\s*", "", plain).strip()
-    match = re.match(r"^(?P<label>[^:]{2,50}):\s*(?P<value>.+)$", plain)
-    if not match:
-        return None
-    label = match.group("label").strip()
-    if label.count(" ") > 6:
-        return None
-    value = match.group("value").strip()
-    if not value:
-        return None
-    return label, label.lower(), value
-
-
-def _normalized_text_block(content: str) -> dict[str, Any] | None:
-    clean = re.sub(r"^>\s*", "", _strip_markdown(content).strip()).strip()
-    if not clean:
-        return None
-    return {"type": "text", "content": clean}
-
-
-def _body_block_weight(blocks: list[dict[str, Any]]) -> int:
-    weight = 0
-    for block in blocks:
-        kind = block.get("type")
-        if kind == "list":
-            weight += len(block.get("items", []))
-        elif kind in {"text", "heading"}:
-            weight += 1
-    return weight
-
-
-def _normalize_slide_semantics(slide: dict[str, Any]) -> dict[str, Any]:
-    normalized = dict(slide)
-    title = str(normalized.get("title", "") or "").strip()
-    subtitle = str(normalized.get("subtitle", "") or "").strip()
-    source_blocks = normalized.get("body_blocks") or []
-    body_blocks: list[dict[str, Any]] = []
-
-    semantic_aliases = {
-        "titulo": "title",
-        "título": "title",
-        "subtitulo": "subtitle",
-        "subtítulo": "subtitle",
-        "pie": "footer",
-    }
-
-    for block in source_blocks:
-        kind = block.get("type")
-
-        if kind == "text":
-            text_block = _normalized_text_block(str(block.get("content", "")))
-            if text_block:
-                body_blocks.append(text_block)
-            continue
-
-        if kind != "list":
-            body_blocks.append(block)
-            continue
-
-        items = [
-            {"content": str(item.get("content", "")), "level": int(item.get("level", 0) or 0)}
-            for item in block.get("items", [])
-            if _strip_markdown(str(item.get("content", ""))).strip()
-        ]
-        if not items:
-            continue
-
-        label_info = _parse_label_value(items[0]["content"])
-        if label_info:
-            label_display, label_key, value = label_info
-            semantic_kind = semantic_aliases.get(label_key)
-            remaining_items = items[1:]
-
-            if semantic_kind == "title":
-                if title.lower() == "portada":
-                    title = value
-                elif not subtitle:
-                    subtitle = value
-                else:
-                    body_blocks.append({"type": "heading", "level": 3, "content": value})
-                if remaining_items:
-                    body_blocks.append({"type": "list", "ordered": bool(block.get("ordered", False)), "items": remaining_items})
-                continue
-
-            if semantic_kind == "subtitle":
-                if not subtitle:
-                    subtitle = value
-                else:
-                    body_blocks.append({"type": "text", "content": value})
-                if remaining_items:
-                    body_blocks.append({"type": "list", "ordered": bool(block.get("ordered", False)), "items": remaining_items})
-                continue
-
-            if semantic_kind == "footer":
-                body_blocks.append({"type": "text", "content": value})
-                if remaining_items:
-                    body_blocks.append({"type": "list", "ordered": bool(block.get("ordered", False)), "items": remaining_items})
-                continue
-
-            if remaining_items:
-                body_blocks.append({"type": "heading", "level": 3, "content": label_display})
-                body_blocks.append({"type": "list", "ordered": bool(block.get("ordered", False)), "items": remaining_items})
-                continue
-
-            body_blocks.append({"type": "text", "content": f"{label_display}: {value}"})
-            continue
-
-        if len(items) == 1:
-            single_block = _normalized_text_block(items[0]["content"])
-            if single_block:
-                body_blocks.append(single_block)
-            continue
-
-        body_blocks.append({"type": "list", "ordered": bool(block.get("ordered", False)), "items": items})
-
-    layout = dict(normalized.get("layout") or LAYOUT_MAP.get(normalized.get("type", "concepto-abstracto"), LAYOUT_MAP["concepto-abstracto"]))
-    if normalized.get("tables") and not normalized.get("code_blocks") and _body_block_weight(body_blocks) >= 3:
-        layout.update({"body": "left-middle", "table": "right-half", "image": "none", "code": "none"})
-
-    normalized["title"] = title
-    normalized["subtitle"] = subtitle
-    normalized["body_blocks"] = body_blocks
-    normalized["layout"] = layout
-    return normalized
 
 
 def _parse_inline_markdown(text: str) -> tuple[str, list[dict[str, Any]]]:
@@ -865,12 +609,8 @@ def _centered_box(geo: tuple[int, int, int, int], width_ratio: float, height_rat
 
 def parse_filminas(filminas_path: Path, schema: dict[str, Any] | None = None) -> list[dict]:
     """Lee filminas.md y extrae cada slide como estructura semántica completa."""
-    project_root = find_project_root(filminas_path.parent)
-    config_path = project_root / "_edu" / "slides-config.yaml"
-    config = load_yaml(config_path) if config_path.exists() else {}
-    apply_pipeline_runtime(project_root, config, filminas_path.parent)
     if schema is None:
-        schema = load_filminas_schema(project_root)
+        schema = load_filminas_schema(find_project_root(filminas_path.parent))
 
     text = filminas_path.read_text(encoding="utf-8")
     slides: list[dict] = []
@@ -1017,10 +757,9 @@ def _finalize_slide(raw: dict, schema: dict[str, Any]) -> dict:
             combined = "\n".join(block_lines)
             body_blocks.append({"type": "text", "content": combined})
 
-    slide = {
+    return {
         "id":          raw["id"],
-        # v2 (Sprint 2): el tipo viene SIEMPRE del @tipo: explícito en filminas.md.
-        # Sin @tipo: → "pending". _detect_type() ya no se llama aquí.
+        # El tipo viene del @tipo: explícito en filminas.md; sin @tipo: → "pending".
         "type":        directives.get("type") or "pending",
         "title":       title,
         "subtitle":    subtitle,
@@ -1030,7 +769,6 @@ def _finalize_slide(raw: dict, schema: dict[str, Any]) -> dict:
         "directives":  directives,
         "asset_hints": asset_hints,
     }
-    return _normalize_slide_semantics(slide)
 
 
 def validate_filminas_contract(slides: list[dict], schema: dict[str, Any], filminas_path: Path) -> None:
@@ -1082,346 +820,43 @@ def validate_filminas_contract(slides: list[dict], schema: dict[str, Any], filmi
         )
 
 
-# DEPRECATED (v2 — Sprint 2): _detect_type() ya no se llama desde _finalize_slide().
-# La inferencia automática de tipo fue la causa del Bug 1 (tipo 'codigo' tapaba el cuerpo).
-# Usar @tipo: en filminas.md. Se mantiene solo para generate_plan() (backwards compat).
-# El nuevo flujo usa parse_filminas.py → agente asigna tipo explícito → validate_plan.py.
-def _detect_type(slide_id: str, title: str, code_blocks, tables, directives: dict[str, Any] | None = None, body_blocks: list | None = None) -> str:
-    forced_type = str((directives or {}).get("type", "")).strip()
-    if forced_type in LAYOUT_MAP:
-        return forced_type
-    num = int(slide_id.split("-")[1])
-    if num == 0:
-        return "portada"
-    if code_blocks and tables:
-        return "tabla-mixta"
-    if code_blocks:
-        # Si hay cuerpo sustancial (listas o varios bloques de texto), usar diseño mixto
-        if body_blocks:
-            substantial = sum(
-                len(b.get("items", []))
-                if b.get("type") == "list"
-                else (1 if b.get("type") in ("text", "heading") else 0)
-                for b in body_blocks
-            )
-            if substantial >= 2:
-                return "concepto-mixto"
-        return "codigo"
-    if tables:
-        return "tabla"
-    tl = title.lower()
-    if any(k in tl for k in ["demo ", "en vivo", "práctica", "ejercicio"]):
-        return "demo"
-    if any(k in tl for k in ["cierre", "adelanto", "mapa de la materia", "fin de"]):
-        return "cierre"
-    if any(k in tl for k in ["timeline", "línea del tiempo", "historia"]):
-        return "timeline"
-    if any(k in tl for k in ["¿", "pregunta", "reflexión", "socrát"]):
-        return "socratica"
-    if any(k in tl for k in ["diagrama", "pipeline", "flujo", "arquitectura", "cuello de botella"]):
-        return "diagrama"
-    return "concepto-abstracto"
-
-
 # ═══════════════════════════════════════════════════════════════════════
-# FASE 1 — GENERADOR DE PLAN
+# VALIDACIÓN DE ARTEFACTOS
 # ═══════════════════════════════════════════════════════════════════════
 
-def _preferred_image_prompt(slide: dict) -> str:
-    directives = slide.get("directives") or {}
-    explicit = str(directives.get("image_prompt", "")).strip()
-    if explicit:
-        return explicit
 
-    for asset in slide.get("asset_hints") or []:
-        if not isinstance(asset, dict):
-            continue
-        prompt = str(asset.get("prompt", "")).strip()
-        if prompt:
-            return prompt
+def validate_publish_artifacts(plan_path: Path) -> Result[dict]:
+    """Valida artefactos de publicación (plan JSON v3).
 
-    return ""
-
-
-def _slide_visual_context(slide: dict) -> str:
-    parts: list[str] = []
-    title = _strip_markdown(str(slide.get("title", "")).strip())
-    subtitle = _strip_markdown(str(slide.get("subtitle", "")).strip())
-
-    if title:
-        parts.append(title)
-    if subtitle:
-        parts.append(subtitle)
-
-    return ". ".join(part for part in parts if part)
-
-
-def _palette_prompt_fragment(config: dict) -> str:
-    palette = config.get("palette", {}) or {}
-    color_names = {
-        "#8B0000": "bordo institucional",
-        "#FFFFFF": "blanco",
-        "#1A1A1A": "gris carbon",
-        "#000000": "negro",
-    }
-    mapped = [
-        color_names.get(str(color).strip().upper())
-        for color in [palette.get("primary"), palette.get("secondary"), palette.get("text")]
-        if color
-    ]
-    mapped = [color for color in mapped if color]
-    if not mapped:
-        return "paleta sobria universitaria"
-    return "paleta " + ", ".join(dict.fromkeys(mapped))
-
-
-def _image_safety_rules() -> str:
-    return (
-        "Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. "
-        "Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. "
-        "Estilo vectorial limpio, fondo claro, académico."
-    )
-
-
-# DEPRECATED (v2 — Sprint 2): _append_image_guardrails() y _image_prompt() ya no se
-# llaman desde el flujo principal. La inferencia automática de prompts fue la causa del
-# Bug 3 (etiquetas de texto en inglés en imágenes). El agente escribe los prompts con
-# lenguaje visual puro (ver _edu/templates/prompt-imagen-guide.md). Se mantienen solo
-# para generate_plan() (backwards compat).
-
-
-def _append_image_guardrails(prompt: str, config: dict) -> str:
-    base = re.sub(r"\s+", " ", prompt).strip().rstrip(".")
-    style = f"Alta resolución, {_palette_prompt_fragment(config)}. {_image_safety_rules()}"
-    return f"{base}. {style}"
-
-
-def _max_images_per_presentation(config: dict) -> int:
-    strategy = config.get("gemini_image_strategy", {}) or {}
-    raw = strategy.get("max_per_presentation", strategy.get("max_images_per_presentation", 8))
-    if raw is None or raw == "":
-        return 8
-    return int(raw)
-
-def _image_prompt(slide: dict, config: dict) -> str:
-    """Genera un prompt Gemini para imagen de fondo o contenido."""
-    preferred = _preferred_image_prompt(slide)
-    if preferred:
-        return _append_image_guardrails(preferred, config)
-
-    stype = slide.get("type", "concepto-abstracto")
-    title = _strip_markdown(str(slide.get("title", "")).strip()) or "lenguajes de programación"
-
-    if stype == "portada":
-        prompt = (
-            f"Portada académica universitaria: bloques geométricos y flechas representando etapas de un compilador, "
-            f"aula y materiales de estudio. Tema: {title}"
-        )
-    elif stype == "cierre":
-        prompt = (
-            f"Composición visual de síntesis: árbol sintáctico, bloques de pipeline y símbolo de completitud. "
-            f"Tema: {title}"
-        )
-    elif stype == "socratica":
-        prompt = (
-            f"Escena de debate académico: dos caminos visuales opuestos con íconos contrastantes. "
-            f"Tema: {title}"
-        )
-    elif stype == "diagrama":
-        prompt = (
-            f"Infografía técnica con cajas y flechas representando un pipeline o flujo de procesamiento. "
-            f"Tema: {title}"
-        )
-    elif stype == "timeline":
-        prompt = (
-            f"Línea de tiempo con hitos visuales concretos, íconos mudos, sin texto. "
-            f"Tema: {title}"
-        )
-    else:
-        prompt = (
-            f"Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, "
-            f"sin elementos decorativos. Tema: {title}"
-        )
-    return _append_image_guardrails(prompt, config)
-
-
-# DEPRECATED (v2 — Sprint 2): generate_plan() fue movido a scripts/parse_filminas.py.
-# El nuevo flujo: parse_filminas.py → agente completa → validate_plan.py → slides_pipeline.py
-# Esta función se mantiene SOLO para compatibilidad con --regen-plan legacy.
-def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
-    """Fase 1: filminas.md → plan-filminas-{tema}.yaml.
-
-    DEPRECATED (v2): Usar scripts/parse_filminas.py en su lugar.
+    Retorna Result[dict] con el plan cargado si es válido, o errores.
     """
-    import warnings
-    warnings.warn(
-        "generate_plan() está deprecado (v2). Usar scripts/parse_filminas.py en su lugar.",
-        DeprecationWarning,
-        stacklevel=2,
-    )
-    print("⚠️  DEPRECADO: generate_plan() → usar scripts/parse_filminas.py (flujo v2)")
-    print("📋 Generando plan (legacy — con inferencia de tipos) desde filminas.md …")
+    if not plan_path.exists():
+        return Result.fail(f"Falta el plan de publicación: {plan_path}")
 
-    project_root = find_project_root(filminas_path.parent)
-    apply_pipeline_runtime(project_root, config, filminas_path.parent)
-    schema = load_filminas_schema(project_root)
-    slides      = parse_filminas(filminas_path, schema)
+    plan = _load_plan_file(plan_path)
+    errors: list[str] = []
 
-    # Backwards compat: re-inferir tipos para slides con type: "pending" (sin @tipo:)
-    for s in slides:
-        if s.get("type") == "pending":
-            s["type"] = _detect_type(
-                s["id"], s["title"], s["code_blocks"], s["tables"],
-                s.get("directives"), s.get("body_blocks")
-            )
-
-    topic_id    = filminas_path.parent.name
-    topic_title = topic_id.replace("-", " ").title()
-    if slides:
-        first_title = (slides[0].get("title") or "").strip()
-        first_subtitle = (slides[0].get("subtitle") or "").strip()
-        topic_title = first_subtitle or first_title or topic_title
-        if first_title.lower() == "portada" and first_subtitle:
-            topic_title = first_subtitle
-
-    # Budget de imágenes: máximo 12 por presentación
-    max_images  = _max_images_per_presentation(config)
-    if max_images < 12:
-        max_images = 12
-    img_count   = 0
-    priority    = ["portada", "cierre", "concepto-abstracto", "diagrama", "socratica", "timeline"]
-
-    assigned: dict[str, str] = {}
-    for stype in priority:
-        for s in slides:
-            if s["id"] in assigned:
-                continue
-            if s["type"] == stype and IMAGE_STRATEGY.get(stype, "none") != "none":
-                assigned[s["id"]] = IMAGE_STRATEGY[stype] if img_count < max_images else "none"
-                if IMAGE_STRATEGY.get(stype, "none") != "none" and img_count < max_images:
-                    img_count += 1
-    for s in slides:
-        assigned.setdefault(s["id"], "none")
-
-    plan_slides = []
-    for slide in slides:
-        directives = slide.get("directives") or {}
-        layout_key = directives.get("layout") or slide["type"]
-        layout   = LAYOUT_MAP.get(layout_key, LAYOUT_MAP[slide["type"]])
-        strategy = directives.get("image") or assigned[slide["id"]]
-
-        bg_strategy = strategy if strategy == "background" else "none"
-        ct_strategy = strategy if strategy == "content"    else "none"
-
-        bg_prompt = _image_prompt(slide, config) if bg_strategy == "gemini" or bg_strategy == "background" else ""
-        ct_prompt = _image_prompt(slide, config) if ct_strategy == "gemini" or ct_strategy == "content"    else ""
-
-        # Si la estrategia es "background" o "content", el medio de generación es "gemini"
-        bg_gen = "gemini" if bg_strategy == "background" else "none"
-        ct_gen = "gemini" if ct_strategy == "content"    else "none"
-
-        table_assets = [
-            {
-                "index":          idx,
-                "table_markdown": tmd,
-                "local_asset":    f"slides/assets/{slide['id']}-table-{idx + 1}.png",
-                "drive_id":       None,
-            }
-            for idx, tmd in enumerate(slide["tables"])
-        ]
-
-        plan_slides.append({
-            "id":       slide["id"],
-            "type":     slide["type"],
-            # Contenido completo de filminas.md
-            "title":       slide["title"],
-            "subtitle":    slide["subtitle"],
-            "body_blocks": slide["body_blocks"],
-            "code_blocks": slide["code_blocks"],
-            "tables":      slide["tables"],
-            "directives":  directives,
-            "asset_hints": slide.get("asset_hints") or [],
-            # Directrices de layout
-            "layout": layout,
-            # Imágenes
-            "background_image": {
-                "strategy":    bg_gen,
-                "prompt":      bg_prompt,
-                "local_asset": f"slides/assets/{slide['id']}-bg.png" if bg_gen == "gemini" else "",
-                "drive_id":    None,
-            },
-            "content_image": {
-                "strategy":    ct_gen,
-                "prompt":      ct_prompt,
-                "local_asset": f"slides/assets/{slide['id']}-content.png" if ct_gen == "gemini" else "",
-                "drive_id":    None,
-            },
-            "table_assets": table_assets,
-        })
-
-    plan = {
-        "meta": {
-            "topic_id":      topic_id,
-            "title":         topic_title,
-            "source":        "filminas.md",
-            "schema_version": schema.get("version", "filminas/v1"),
-            "schema_path": schema.get("_path", str(DEFAULT_FILMINAS_SCHEMA)),
-            "generated_at":  datetime.now().isoformat(timespec="seconds"),
-            "template_id":   template_id,
-            "total_slides":  len(slides),
-            "images_planned": img_count,
-        },
-        "slides": plan_slides,
-    }
-
-    print(f"  ✅ {len(slides)} filminas procesadas, {img_count} imágenes planificadas.")
-    return plan
-
-
-def validate_publish_artifacts(
-    topic_folder: Path,
-    plan_path: Path,
-    assets_manifest_path: Path,
-    publish_context_path: Path,
-) -> dict[str, Any]:
-    missing = []
-    for path, label in [
-        (plan_path, "slides/plan-filminas-{tema}.yaml"),
-        (assets_manifest_path, "slides/assets-manifest.yaml"),
-        (publish_context_path, "slides/publish-context.yaml"),
-    ]:
-        if not path.exists():
-            missing.append(f"- {label} ({path})")
-
-    if missing:
-        raise FileNotFoundError(
-            "Faltan artefactos de publicación generados por el agente:\n" + "\n".join(missing)
-        )
-
-    plan = load_yaml(plan_path)
     if not plan.get("meta") or not plan.get("slides"):
-        raise ValueError(f"Plan inválido: {plan_path} debe incluir 'meta' y 'slides'.")
+        errors.append(f"Plan inválido: {plan_path} debe incluir 'meta' y 'slides'.")
+        return Result.fail(*errors)
 
     meta = plan.get("meta", {}) or {}
     required_meta = {"topic_id", "title", "source", "template_id"}
     missing_meta = required_meta - set(meta.keys())
     if missing_meta:
-        raise ValueError(
+        errors.append(
             f"Plan inválido: faltan campos en meta: {', '.join(sorted(missing_meta))}"
         )
 
     for slide in plan.get("slides", []):
         slide_id = slide.get("id", "?")
-        bg = slide.get("background_image") or {}
-        ci = slide.get("content_image") or {}
-        if bg.get("strategy") == "gemini" and not str(bg.get("prompt", "")).strip():
-            raise ValueError(f"Plan inválido: {slide_id} requiere background_image.prompt no vacío.")
-        if ci.get("strategy") == "gemini" and not str(ci.get("prompt", "")).strip():
-            raise ValueError(f"Plan inválido: {slide_id} requiere content_image.prompt no vacío.")
+        img = _get_slide_image(slide)
+        if img.get("layer") in ("background", "content") and not str(img.get("prompt", "")).strip():
+            errors.append(
+                f"Plan inválido: {slide_id} requiere image.prompt no vacío para layer='{img['layer']}'."
+            )
 
-    load_yaml(assets_manifest_path)
-    load_yaml(publish_context_path)
-    return plan
+    return Result.fail(*errors) if errors else Result.ok(plan)
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -1579,27 +1014,18 @@ def generate_assets(
     for slide in plan["slides"]:
         s = dict(slide)
 
-        # ── Imagen de fondo ─────────────────────────────────────────────
-        bg = dict(slide.get("background_image") or {})
-        if bg.get("strategy") == "gemini" and bg.get("prompt") and bg.get("local_asset"):
-            lp = topic_folder / bg["local_asset"]
+        # ── Imagen (v3 unificado) ──────────────────────────────────────
+        img = _get_slide_image(slide)
+        layer = img.get("layer", "none")
+        if layer != "none" and img.get("prompt") and img.get("local_asset"):
+            lp = topic_folder / img["local_asset"]
             if not lp.exists():
-                print(f"  🖼️  Generando fondo para {slide['id']} …")
-                _gemini_image(bg["prompt"], lp, gemini_api_key)
-            if lp.exists() and not bg.get("drive_id"):
-                bg["drive_id"] = _upload_drive(drive_svc, lp, folder_id)
-            s["background_image"] = bg
-
-        # ── Imagen de contenido ─────────────────────────────────────────
-        ci = dict(slide.get("content_image") or {})
-        if ci.get("strategy") == "gemini" and ci.get("prompt") and ci.get("local_asset"):
-            lp = topic_folder / ci["local_asset"]
-            if not lp.exists():
-                print(f"  🖼️  Generando imagen de contenido para {slide['id']} …")
-                _gemini_image(ci["prompt"], lp, gemini_api_key)
-            if lp.exists() and not ci.get("drive_id"):
-                ci["drive_id"] = _upload_drive(drive_svc, lp, folder_id)
-            s["content_image"] = ci
+                print(f"  🖼️  Generando imagen ({layer}) para {slide['id']} …")
+                _gemini_image(img["prompt"], lp, gemini_api_key)
+            if lp.exists() and not img.get("drive_id"):
+                img["drive_id"] = _upload_drive(drive_svc, lp, folder_id)
+            # Actualizar en el slide
+            s["image"] = img
 
         # ── Tablas como PNG ─────────────────────────────────────────────
         updated_ta = []
@@ -1663,7 +1089,6 @@ def _drive_url(drive_id: str) -> str:
 
 def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: int) -> list:
     """Construye todos los requests de la API para una filmina."""
-    slide = _normalize_slide_semantics(slide)
     reqs:    list[dict] = []
     palette  = config.get("palette", {})
     typo     = config.get("typography", {})
@@ -1979,7 +1404,6 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         geo = ZONES.get(zone)
         if not geo:
             return
-        table_cfg = PIPELINE_RUNTIME.get("table_rendering", {}) or {}
         rows = []
         for ln in table_md.strip().splitlines():
             clean = ln.replace("|", "").strip()
@@ -1994,19 +1418,13 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         n_rows = len(rows)
         x, y, w, h = geo
         if zone == "table-main":
-            y += int(table_cfg.get("table_main_y_offset", 110_000))
-            h = max(360_000, h - int(table_cfg.get("table_main_height_delta", 620_000)))
-        header_font = int(table_cfg.get("default_header_font", 13))
-        body_font = int(table_cfg.get("default_body_font", 12))
-        compact_header_font = int(table_cfg.get("compact_header_font", 10))
-        compact_body_font = int(table_cfg.get("compact_body_font", 9))
-        compact_row_threshold = int(table_cfg.get("compact_row_threshold", 7))
-        if zone == "right-half" and bool(table_cfg.get("right_half_force_compact", True)):
-            header_font = compact_header_font
-            body_font = compact_body_font
-        if n_rows >= compact_row_threshold:
-            header_font = compact_header_font
-            body_font = compact_body_font
+            y += 110_000
+            h = max(360_000, h - 620_000)
+        header_font = 13
+        body_font = 12
+        if n_rows >= 7:
+            header_font = 10
+            body_font = 9
         tbl_id = nid("tbl")
         reqs.append({
             "createTable": {
@@ -2079,17 +1497,19 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
                     })
 
     # ── 3. Imagen de fondo ──────────────────────────────────────────────
-    bg = slide.get("background_image") or {}
-    if bg.get("drive_id"):
-        add_image(_drive_url(bg["drive_id"]), "background")
+    img = _get_slide_image(slide)
+    img_layer = img.get("layer", "none")
+    img_drive_id = img.get("drive_id")
+
+    if img_layer == "background" and img_drive_id:
+        add_image(_drive_url(img_drive_id), "background")
         add_bg_overlay("background", opacity=0.6)
 
     # ── 4. Imagen de contenido ──────────────────────────────────────────
-    ci = slide.get("content_image") or {}
-    if ci.get("drive_id"):
+    if img_layer == "content" and img_drive_id:
         img_zone = layout.get("image", "right-half")
         if img_zone != "none":
-            add_image(_drive_url(ci["drive_id"]), img_zone)
+            add_image(_drive_url(img_drive_id), img_zone)
 
     # ── 5. Tablas (preferir nativas cuando entren bien) ─────────────────
     table_zone = layout.get("table", "full-bottom")
@@ -2113,19 +1533,15 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     title      = slide.get("title", "")
     title_zone = layout.get("title", "left-top")
     t_size     = typo.get("title", {}).get("size", 36)
-    cover_cfg = PIPELINE_RUNTIME.get("cover_rendering", {}) or {}
     if stype == "portada":
-        threshold = int(cover_cfg.get("title_short_threshold", 30))
-        short_size = float(cover_cfg.get("title_short_size", 28))
-        long_size = float(cover_cfg.get("title_long_size", 24))
-        t_size = short_size if len(title) <= threshold else long_size
+        t_size = 36
     if len(title) > 42:
         t_size = min(t_size, 32)
     if len(title) > 60:
         t_size = min(t_size, 28)
     title_geo = ZONES.get(title_zone)
     if title_geo and title:
-        min_title_size = float(cover_cfg.get("min_title_size", 24)) if stype == "portada" else float(cover_cfg.get("min_default_title_size", 20))
+        min_title_size = 24 if stype == "portada" else 20
         t_size = _fit_text_font_size(title, title_geo, t_size, min_size=min_title_size)
     t_align    = "CENTER" if "center" in str(title_zone) else "LEFT"
     t_align    = _normalize_alignment(t_align)
@@ -2135,13 +1551,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     subtitle = slide.get("subtitle", "")
     if subtitle and stype == "portada":
         s_size = typo.get("subtitle", {}).get("size", 24)
-        add_textbox(
-            subtitle,
-            str(cover_cfg.get("subtitle_zone", "cover-subtitle")),
-            s_size,
-            color=text_col,
-            align=str(cover_cfg.get("subtitle_align", "LEFT")),
-        )
+        add_textbox(subtitle, "center-middle", s_size, color=text_col, align="CENTER")
 
     # ── 8. Cuerpo (texto + listas) ──────────────────────────────────────
     body_zone = layout.get("body", "left-middle")
@@ -2154,8 +1564,6 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
             b_size = min(b_size, 13)
         if body_zone == "left-top-split":
             b_size = min(b_size, 15)
-        if body_zone == "left-middle" and layout.get("table") == "right-half":
-            b_size = min(b_size, 16)
         body_geo = ZONES.get(body_zone)
         if body_geo and body_txt:
             b_size = _fit_text_font_size(body_txt, body_geo, b_size, min_size=10)
@@ -2295,7 +1703,7 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
-        description="EDU Slides Pipeline — YAML de publicación → Google Slides",
+        description="EDU Slides Pipeline — Plan JSON → Assets → Google Slides",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
@@ -2303,8 +1711,7 @@ def main(argv: list[str] | None = None) -> None:
         "topic_folder",
         help="Ruta a la carpeta del tema (ej: salida/cursadas/2026/temas/01-conceptos-introductorios)",
     )
-    parser.add_argument("--plan-only",    action="store_true", help="Solo valida los YAML de publicación")
-    parser.add_argument("--regen-plan",   action="store_true", help="Regenera plan-filminas YAML desde filminas.md")
+    parser.add_argument("--plan-only",    action="store_true", help="Solo valida los artefactos de publicación")
     parser.add_argument("--assets-only",  action="store_true", help="Solo genera assets (requiere plan previo)")
     parser.add_argument("--publish-only", action="store_true", help="Solo publica (requiere plan + assets)")
     args = parser.parse_args(argv)
@@ -2316,16 +1723,29 @@ def main(argv: list[str] | None = None) -> None:
 
     project_root = find_project_root(topic_folder)
 
+    # ── Cargar schema registry y sobreescribir mapeos ────────────────────
+    registry = load_registry(project_root)
+    if registry:
+        _override_maps_from_registry(registry)
+        print("  ✓ Schema registry cargado — mapeos actualizados desde _edu/schemas/schema-registry.json")
+    else:
+        print("  ⚠️  Schema registry no encontrado — usando mapeos por defecto")
+
     secrets_path  = project_root / "_edu" / "secrets.local.yaml"
     config_path   = project_root / "_edu" / "slides-config.yaml"
     token_path    = project_root / "_edu" / "token_slides.json"
-    plan_name     = f"plan-filminas-{topic_folder.name}.yaml"
-    plan_path     = topic_folder / "slides" / plan_name
-    assets_manifest_path = topic_folder / "slides" / "assets-manifest.yaml"
-    publish_context_path = topic_folder / "slides" / "publish-context.yaml"
+
+    # ── Buscar plan JSON v3 ──────────────────────────────────────────────
+    from pipeline_common import find_plan
+    plan_result = find_plan(topic_folder)
+    if not plan_result.is_ok:
+        # Default path para mensajes de error
+        plan_path = topic_folder / "slides" / f"plan-filminas-{topic_folder.name}.json"
+    else:
+        plan_path = plan_result.unwrap()
 
     required_paths = [(config_path, "_edu/slides-config.yaml")]
-    if not args.plan_only and not args.regen_plan:
+    if not args.plan_only:
         required_paths.insert(0, (secrets_path, "_edu/secrets.local.yaml"))
 
     # Verificar prerequisitos
@@ -2339,71 +1759,46 @@ def main(argv: list[str] | None = None) -> None:
             sys.exit(1)
 
     config  = load_yaml(config_path)
-    secrets = load_yaml(secrets_path) if secrets_path.exists() else {}
-    apply_pipeline_runtime(project_root, config, topic_folder)
-    gemini_key   = secrets.get("gemini_api_key", "")
-    template_id  = config.get("template_id", "")
-
-    # ── --regen-plan: DEPRECADO — redirige a parse_filminas.py (v2) ──────────
-    if args.regen_plan:
-        print("⚠️  DEPRECADO: --regen-plan")
-        print("   El flujo v2 usa scripts/parse_filminas.py para generar el plan DRAFT.")
-        print("   parse_filminas.py produce type: pending para slides sin @tipo: explícito.")
-        print("   El agente completa los tipos y prompts. validate_plan.py verifica el contrato.\n")
-        filminas_path = topic_folder / "filminas.md"
-        if not filminas_path.exists():
-            print(f"❌ No se encontró filminas.md en {topic_folder}")
-            sys.exit(1)
-        parse_script = Path(__file__).parent / "parse_filminas.py"
-        if parse_script.exists():
-            import subprocess as _sp
-            result = _sp.run([sys.executable, str(parse_script), str(topic_folder)], check=False)
-            sys.exit(result.returncode)
-        # Fallback: comportamiento legacy (si parse_filminas.py no existe aún)
-        print("   (parse_filminas.py no encontrado — usando generate_plan() legacy)")
-        if not template_id:
-            print("❌ template_id no configurado en slides-config.yaml")
-            sys.exit(1)
-        new_plan = generate_plan(filminas_path, config, template_id)
-        plan_path.parent.mkdir(parents=True, exist_ok=True)
-        save_yaml(plan_path, new_plan)
-        print(f"  📄 Plan regenerado (legacy): {plan_path.relative_to(project_root)}")
-        print(f"     {new_plan['meta']['total_slides']} filminas, {new_plan['meta']['images_planned']} imágenes.")
-        print("\n✅ Plan listo (legacy). Verificar con validate_plan.py antes de ejecutar.")
-        return
 
     # ── Fase 1: Validar artefactos generados por el agente ────────────────
-    try:
-        plan = validate_publish_artifacts(topic_folder, plan_path, assets_manifest_path, publish_context_path)
-    except (FileNotFoundError, ValueError) as exc:
-        print(f"❌ {exc}")
-        print("   Ejecutar primero el prompt/agente que genera los YAML de publicación.")
+    result = validate_publish_artifacts(plan_path)
+    if not result.is_ok:
+        for err in result.errors:
+            print(f"❌ {err}")
+        print("   Ejecutar primero el prompt/agente que genera el plan de publicación.")
         sys.exit(1)
 
+    plan = result.unwrap()
     print(f"  📄 Plan cargado desde: {plan_path.relative_to(project_root)}")
     if args.plan_only:
         print("\n✅ Artefactos validados. Podés ejecutar sin --plan-only para generar assets y publicar.")
         return
 
     # ── Autenticar con Google ─────────────────────────────────────────────
+    secrets = load_yaml(secrets_path) if secrets_path.exists() else {}
+    gemini_key   = secrets.get("gemini_api_key", "")
     creds = _get_creds(secrets_path, token_path)
 
     # ── Fase 2: Generar assets ─────────────────────────────────────────────
     if not args.publish_only:
         plan = generate_assets(plan, config, creds, gemini_key, topic_folder)
-        save_yaml(plan_path, plan)
+        _save_plan_file(plan_path, plan)
         print(f"  📄 Plan actualizado con drive_ids: {plan_path.relative_to(project_root)}")
         if args.assets_only:
             print("\n✅ Assets generados. Ejecutar con --publish-only para publicar.")
             return
 
     # ── Fase 3: Publicar ─────────────────────────────────────────────────
+    topic_id = topic_folder.name
     url = publish_slides(plan, config, creds, topic_folder)
+
+    total = plan.get("summary", plan.get("meta", {})).get("total_slides", len(plan.get("slides", [])))
+    title = plan.get("meta", {}).get("title", topic_id)
 
     print(f"""
 🎉 Pipeline completado!
-   Tema:    {plan['meta']['title']}
-   Slides:  {plan['meta']['total_slides']}
+   Tema:    {title}
+   Slides:  {total}
    Plan:    {plan_path.relative_to(project_root)}
    URL:     {url}
 """)

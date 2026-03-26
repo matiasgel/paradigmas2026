@@ -1,10 +1,6 @@
 # Sistema de diseño para la exportación de filminas (Google Slides)
 # Generado por /edu_slides_designer
 
-# Config reusable del pipeline: geometría, zonas, layouts y estrategia por tipo.
-# Puede sobreescribirse por tema con {topic}/slides/pipeline-config.json
-pipeline_config_json: "_edu/slides-pipeline.json"
-
 # --- Template Google Slides ---
 # 0 = "Simple Light" (default). Cambiar por el ID de un template propio si tenés.
 template_id: "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI"
