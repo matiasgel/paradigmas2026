@@ -1,6 +1,6 @@
 ---
 description: 'Vera 🎨 — UX Designer de Filminas: paleta, tipografía, layouts por tipo de slide y render semántico Markdown. Ejecutar una sola vez por cursada.'
-tools: ['read', 'edit', 'search', 'execute', 'fetch']
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 model: "claude-sonnet-4-6 (copilot)"
 handoffs:
   - label: "🚀 Publicar filminas en Slides"

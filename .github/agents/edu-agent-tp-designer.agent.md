@@ -1,6 +1,6 @@
 ---
 description: 'Aux. Valeria 📝 — Diseñadora de Trabajos Prácticos: TPs trazables a la minuta del tema. Genera tp.md + tp-quiz.gift validado para Moodle + guía de configuración. Incluye validador GIFT con detección de errores críticos (pesos inválidos, títulos faltantes, caracteres sin escapar) y advertencias antes de exportar.'
-tools: ['read', 'edit', 'search', 'execute', 'fetch']
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 model: "claude-sonnet-4-6 (copilot)"
 handoffs:
   - label: "🎓 Configurar GitHub Classroom"
