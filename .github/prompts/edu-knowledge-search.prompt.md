@@ -11,7 +11,7 @@ tools: ['read', 'execute', 'search']
    > Opciones de filtro (opcionales):
    > - **Tipo:** `reference` (referencias académicas), `tool` (documentación de herramientas), o ambas (por defecto)
    >
-   > **Referencias disponibles:** Multimedia Learning (Mayer/Fiorella), Cognitive Load (Sweller/Chen), WCAG 2.2/3.0, FSRS v4, Bloom/Haladyna, Learning Analytics, CS Education/GitHub, Slide Composition, Adaptive Learning/ITS, MCP Protocol.
+   > **Referencias disponibles:** Multimedia Learning (Mayer/Fiorella), Cognitive Load (Sweller/Chen), WCAG 2.2/3.0, FSRS v4, Bloom/Haladyna, Learning Analytics, CS Education/GitHub, Slide Composition, Adaptive Learning/ITS, MCP Protocol, **MAIC — Multi-agent LLM Education (Yu et al. 2024, Tsinghua)**.
    >
    > **Herramientas disponibles:** FSRS (py-fsrs), MCP SDK, ChromaDB, GitHub CLI, GitHub Classroom, GitHub Actions, Google Slides API, JSON Schema, WCAG Quick Reference.
 3. Construct the command:

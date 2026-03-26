@@ -442,13 +442,13 @@ La memoria colectiva es **cross-curso**: un insight de `leng-2025` es visible de
 
 ## Knowledge Base (ChromaDB)
 
-Base de conocimiento vectorial con 383 chunks semánticos de **26 documentos**, accesible a todos los agentes para consultas durante el desarrollo de mejoras.
+Base de conocimiento vectorial con **399 chunks semánticos** de **27 documentos**, accesible a todos los agentes para consultas durante el desarrollo de mejoras.
 
 **Contenido:**
 
 | Tipo | Documentos | Temas |
 |---|---|---|
-| Referencias académicas (10) | Fiorella/Mayer 2023, Sweller/Chen 2023, WCAG 2.2/3.0, FSRS v4, Bloom/Haladyna 2024, Learning Analytics, CS Education/GitHub, Slide Composition, Adaptive Learning/ITS, MCP Protocol | Principios multimedia, carga cognitiva, accesibilidad, repetición espaciada, evaluación, analítica educativa, GitHub Classroom, diseño visual, sistemas tutoriales, protocolo MCP |
+| Referencias académicas (11) | Fiorella/Mayer 2023, Sweller/Chen 2023, WCAG 2.2/3.0, FSRS v4, Bloom/Haladyna 2024, Learning Analytics, CS Education/GitHub, Slide Composition, Adaptive Learning/ITS, MCP Protocol, **MAIC (Yu et al. 2024)** | Principios multimedia, carga cognitiva, accesibilidad, repetición espaciada, evaluación, analítica educativa, GitHub Classroom, diseño visual, sistemas tutoriales, protocolo MCP, **multi-agentes LLM para educación** |
 | Documentación de herramientas (16) | py-fsrs, MCP SDK, ChromaDB, GitHub CLI, GitHub Classroom, GitHub Actions, Google Slides API, JSON Schema, WCAG Quick Reference | Código fuente, APIs, configuración, ejemplos |
 
 **Búsqueda:**
@@ -543,7 +543,7 @@ tu-materia/
 ├── _edu-memory/                    ← Memoria colectiva (memory.db + sidecars)
 │   └── memory.db                   ← SQLite FTS5: errores, correcciones, insights
 ├── _edu-knowledge/                 ← Knowledge base (ChromaDB)
-│   ├── references/                 ← 10 documentos académicos (Mayer, Sweller, WCAG, FSRS, Bloom...)
+│   ├── references/                 ← 11 documentos académicos (Mayer, Sweller, WCAG, FSRS, Bloom, MAIC...)
 │   ├── tools/                      ← 16 documentos de herramientas (MCP, GitHub, Slides API...)
 │   └── chroma_db/                  ← Almacén vectorial ChromaDB (en .gitignore, regenerable)
 ├── scripts/                        ← Pipeline técnico de filminas
