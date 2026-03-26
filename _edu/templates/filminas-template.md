@@ -1,6 +1,6 @@
 # Plantilla canónica de filminas EDU
 
-Usar esta plantilla para que `filminas.md`, el plan YAML y la publicación a Slides hablen el mismo idioma.
+Usar esta plantilla para que `filminas.md`, el plan JSON y la publicación a Slides hablen el mismo idioma.
 
 ## Reglas mínimas
 

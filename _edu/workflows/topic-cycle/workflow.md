@@ -151,28 +151,31 @@ Según `tp_type` guardado en Step 5, ejecutar el sub-paso correspondiente:
 
 ### Step 9.5: Publish Slides (Optional)
 - **Prompt:** `/edu-publish-slides`
-- **Condition:** Solo si `_edu/secrets.local.yaml` y `_edu/slides-config.yaml` existen
+- **Condition:** Solo si `_edu/secrets.local.yaml`, `_edu/slides-config.yaml` y `_edu/schemas/schema-registry.json` existen
 - **Input:** `{topic_folder}/filminas.md` (aprobadas y corregidas)
 - **Output:**
-  - `{topic_folder}/slides/plan-filminas-{tema}.yaml` — plan completo validado
+  - `{topic_folder}/slides/plan-filminas-{tema}.json` — plan JSON v3 validado contra schema
   - `{topic_folder}/slides/assets/` — imágenes generadas (Gemini + matplotlib)
   - `{topic_folder}/slides/slides-url.txt` — URL de la presentación publicada
 
-**Flujo v2 (inmutable):**
+**Flujo v3 (schema-driven):**
 
 **Paso 1 — Generar plan DRAFT:**
 ```bash
 python scripts/parse_filminas.py {topic_folder}
 ```
-Produce `slides/plan-draft-{tema}.yaml` con `type: pending` para slides sin `@tipo:`.
+Produce `slides/plan-draft-{tema}.json` con `type: pending` para slides sin `@tipo:`.
 
 **Paso 2 — El agente (invocado por `/edu-publish-slides`) completa el plan:**
-- Asigna un `type` explícito del enum canónico a cada slide con `type: pending`
-- Escribe `image.prompt` con **lenguaje visual puro** para cada slide con imagen
+- Lee `_edu/schemas/schema-registry.json` → `type_layout_map`, `canonical_types`, `image_prompt_rules`
+- Asigna un `type` explícito del enum `canonical_types` a cada slide con `type: pending`
+- COPIA `layout` = `type_layout_map[type].layout` (EXACTO, determinista)
+- COPIA `image.layer` = `type_layout_map[type].image_layer`
+- Si `image.layer != "none"` → escribe `image.prompt` con **lenguaje visual puro**
   (ver `_edu/templates/prompt-imagen-guide.md` — REGLA ANTI-BUG 3)
-- Completa `layout` para slides incompletos (usar tabla `slide_types` en `slides-config.yaml`)
-- Elimina la clave `_draft_instructions` del YAML
-- Renombra el archivo a `slides/plan-filminas-{tema}.yaml`
+- Elimina la clave `_draft_instructions`
+- Renombra el archivo a `slides/plan-filminas-{tema}.json`
+- Incluye `$schema_version: "plan-filminas/v3"` y `meta` con rutas de trazabilidad
 
 **Paso 3 — Validación con loop de reparación (máximo 3 intentos):**
 ```bash
@@ -186,14 +189,15 @@ python scripts/repair_plan.py {topic_folder} --attempt 1 --max-attempts 3
 ```bash
 python scripts/slides_pipeline.py {topic_folder}
 ```
-El script solo ejecuta: assets (Gemini + Drive) → publicación en Google Slides.
+El script carga el plan JSON, valida contra JSON Schema, genera assets y publica en Google Slides.
 
-**Correción de imágenes sin tocar el script:**
-1. Editar `image.prompt` en el plan YAML con lenguaje visual puro
-2. Limpiar `drive_id` (poner `null`) y eliminar el asset local si existe
-3. `python scripts/slides_pipeline.py {topic_folder} --assets-only`
-4. `python scripts/slides_pipeline.py {topic_folder} --publish-only`
-5. Verificar: `python scripts/capture_thumbnails.py <id> {topic_folder}/slides/thumbnails/`
+**Corrección de imágenes sin tocar el script:**
+1. Editar `image.prompt` en el plan JSON con lenguaje visual puro
+2. Poner `image.drive_id: null` para forzar regeneración
+3. Eliminar `slides/assets/F-XX-*.png` si existe localmente
+4. `python scripts/slides_pipeline.py {topic_folder} --assets-only`
+5. `python scripts/slides_pipeline.py {topic_folder} --publish-only`
+6. Verificar: `python scripts/capture_thumbnails.py <id> {topic_folder}/slides/thumbnails/`
 
 - **Note:** Si `_edu/slides-config.yaml` no existe, activar `/edu-slides-designer` primero (una sola vez por cursada)
 

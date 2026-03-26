@@ -1,7 +1,8 @@
-version: "filminas/v2"
-description: "Contrato canónico para autoria, parseo, plan y publicación de filminas EDU"
-changelog: "v2 (2026-03-19): agrega concepto-mixto y tabla-mixta al enum; alinea nombres con slide_types en slides-config.yaml"
+version: "filminas/v3"
+description: "Contrato de autoría de filminas.md — directivas y estructura del archivo fuente Markdown"
+changelog: "v3 (2026-03-25): alinea con JSON schemas en _edu/schemas/; el plan y validación se definen allá"
 template_path: "_edu/templates/filminas-template.md"
+schema_registry: "_edu/schemas/schema-registry.json"
 
 markers:
   slide_heading_pattern: "^###\\s+\\[F-(\\d+)\\]\\s*(.*)$"
@@ -48,7 +49,7 @@ allowed:
     - demo
     - cierre
     - timeline
-  image_strategies:
+  image_layers:
     - background
     - content
     - none
