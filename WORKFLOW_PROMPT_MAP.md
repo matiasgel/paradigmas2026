@@ -79,3 +79,24 @@ Este documento mapea los workflows del módulo EDU con los prompts `/edu-*` que 
 | `/edu-switch-course` | Cambiar materia activa (multi-clase) |
 | `/edu-memory-search` | Buscar en la memoria colectiva (SQLite FTS5) |
 | `/edu-knowledge-search` | Buscar en la knowledge base ChromaDB (referencias académicas + herramientas) |
+
+### Sprint 1 — Validadores Pasivos
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-check-accessibility` | Validar accesibilidad WCAG: contraste, alt_text, tipografía → `accessibility-report.md` |
+| `/edu-check-composition` | Auditar composición visual: densidad, márgenes, superposiciones → `composition-report.md` |
+
+### Sprint 2 — Herramientas de Planificación Docente
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-spaced-review` | Calendario de repasos distribuidos FSRS v4 → `repaso-calendario.md` + `slides-repaso.md` |
+| `/edu-create-exam` | Blueprint de examen con distribución Bloom → `blueprint-parcial-N.json/.md` |
+
+### Sprint 4 — Inteligencia Cognitiva
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-check-cognition` | Validar reglas cognitivas (assertion-evidence, densidad, contiguidad) → `cognition-report.md` |
+| `/edu-check-cognitive-load` | Presupuesto cognitivo por clase con curva visual → `cognitive-budget-report.md` |

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "edu-schemas/layout-rules",
+  "title": "Layout Rules Schema — Reglas Cognitivas por Tipo de Filmina",
+  "description": "Define las reglas de diseño cognitivo aplicadas por validate_layout_cognition.py. Schema independiente del Schema Registry (no modifica schema-registry.json). Referencia: Mayer (2021), Fiorella (2023), Garner & Alley (2016).",
+  "version": "1.0.0",
+  "date": "2026-03-26",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "rules_by_type": {
+      "type": "object",
+      "description": "Reglas cognitivas indexadas por tipo canónico de filmina.",
+      "patternProperties": {
+        "^[a-z-]+$": {
+          "type": "object",
+          "properties": {
+            "max_body_words": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Máximo de palabras en body_blocks. Principio de segmentación."
+            },
+            "max_code_lines": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Máximo de líneas de código. Working memory limits."
+            },
+            "max_nodes": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Máximo de nodos en diagramas. Miller 7±2."
+            },
+            "max_rows": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Máximo de filas en tablas."
+            },
+            "max_columns": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Máximo de columnas en tablas."
+            },
+            "image_required": {
+              "type": "boolean",
+              "description": "Si la imagen de apoyo es obligatoria. Principio multimedia."
+            },
+            "assertion_evidence": {
+              "type": "boolean",
+              "description": "Si el título debe seguir patrón assertion-evidence. Garner & Alley (2016)."
+            },
+            "title_is_question": {
+              "type": "boolean",
+              "description": "Si el título debe ser una pregunta (socráticas)."
+            },
+            "no_decorative_clipart": {
+              "type": "boolean",
+              "description": "Prohibir imágenes decorativas sin función pedagógica."
+            },
+            "no_mixed_languages": {
+              "type": "boolean",
+              "description": "No mezclar lenguajes de programación en la misma slide."
+            },
+            "suggest_pause": {
+              "type": "boolean",
+              "description": "Sugerir pausa para reflexión del alumno."
+            },
+            "max_options": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Máximo de opciones de respuesta (socráticas)."
+            }
+          }
+        }
+      }
+    },
+    "global_rules": {
+      "type": "object",
+      "properties": {
+        "max_consecutive_theory": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 3,
+          "description": "Máximo de filminas teóricas consecutivas sin attention reset."
+        },
+        "concepts_per_30min": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 6,
+          "description": "Máximo de conceptos nuevos por bloque de 30 minutos."
+        },
+        "ideal_density_range": {
+          "type": "object",
+          "properties": {
+            "min": {"type": "number", "default": 35},
+            "max": {"type": "number", "default": 55}
+          },
+          "description": "Rango ideal de densidad visual (%). Scheiter & Eitel (2017)."
+        }
+      }
+    },
+    "references": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Referencias académicas que fundamentan las reglas."
+    }
+  }
+}
