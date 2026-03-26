@@ -1,0 +1,47 @@
+topic_number: "01"
+topic_name: "Módulo I — Diseño Ágil + Python"
+topic_slug: "diseno-agil-python"
+topic_folder: "salida/cursadas/2026/temas/01-diseno-agil-python"
+class_duration: "180"
+git_branch: "tema-01-diseno-agil-python"
+created_at: "2026-03-25"
+status: "design"
+
+sesiones:
+  - tipo: "teoria"
+    semana: 2
+    duracion_min: 180
+    bloques: ["T1-A Modelo Ágil + IDEs", "T1-B Python 3.13 fundamentos", "T1-C Control de flujo", "T1-D Ruff + PEP 8"]
+  - tipo: "practica"
+    semana: 2
+    duracion_min: 180
+    bloques: ["P1-A Ejercicios guiados Python", "P1-B Prompting para Python", "P1-C GitHub Classroom TP2", "P1-D Revisión commits"]
+  - tipo: "teoria"
+    semana: 3
+    duracion_min: 180
+    bloques: ["T2-A Colecciones + comprensiones", "T2-B Módulos + HOF + lambdas + decoradores", "T2-C Type hints Python 3.10+", "T2-D Prompting para debugging"]
+  - tipo: "practica"
+    semana: 3
+    duracion_min: 180
+    bloques: ["P2-A Taller TP2 en Codespaces", "P2-B PROMPTS.md obligatorio", "P2-C Revisión colectiva commits", "P2-D Retrospectiva + preview Módulo II"]
+
+tp_asociados:
+  - numero: "02"
+    nombre: "Python + Prompting con Autograding"
+    link_classroom: "classroom.github.com/a/X4xiTEDQ"
+    deadline: "2026-04-07 23:00"
+    autograding: true
+
+modulo_plan_minimo: "Módulo I"
+total_sesiones: 4
+total_horas: 12
+
+artifacts:
+  diseno: "diseno.md"
+  minuta: "minuta.md"
+  filminas: "filminas.md"
+  guia_estudio: "guia-estudio.md"
+  tp: "tp.md"
+  score: "score-pedagogico.md"
+  faq: "faq-anticipado.md"
+  slides_url: "slides/slides-url.txt"

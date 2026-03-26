@@ -1,0 +1,1953 @@
+meta:
+  topic_id: 00-nivelacion-html-css-prompting
+  title: Laboratorio de Programación y Lenguajes · Semana 1
+  source: filminas.md
+  schema_version: filminas/v2
+  schema_path: _edu\templates\filminas-schema.yaml
+  generated_at: '2026-03-25T13:59:05'
+  template_id: 1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI
+  total_slides: 39
+  known_types: 0
+  pending_types: 39
+  pending_prompts: 0
+  status: 'DRAFT — INCOMPLETO: completar campos pendientes antes de publicar'
+slides:
+- id: F-01
+  type: pending
+  title: Nivelación HTML / CSS / Bootstrap 5
+  subtitle: Laboratorio de Programación y Lenguajes · Semana 1
+  body_blocks:
+  - type: text
+    content: UNTDF IDEI · 2026 · Prof. __
+  code_blocks: []
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-02
+  type: pending
+  title: ¿Qué vamos a construir?
+  subtitle: El proyecto de esta semana
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Un blog personal con:**'
+      level: 0
+    - content: '`index.html` — lista de posts (cards Bootstrap)'
+      level: 0
+    - content: '`about.html` — sobre el autor'
+      level: 0
+    - content: '`contact.html` — formulario de contacto con validación CSS'
+      level: 0
+    - content: '`assets/styles.css` — estilos custom + media queries'
+      level: 0
+    - content: 'TP1: entrega vía **GitHub Classroom**'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: "[IMAGEN: Wireframe de un blog en 3 dispositivos]\n\n  \U0001F4F1 Móvil\
+      \          \U0001F4BB Tablet          \U0001F5A5️ Desktop\n  ┌──────┐      \
+      \    ┌──────────┐       ┌────────────────┐\n  │Navbar │          │  Navbar \
+      \ │       │     Navbar     │\n  ├──────┤          ├──────────┤       ├────────────────┤\n\
+      \  │ Card │          │Card│Card │       │Card │Card│Card │\n  │      │     \
+      \     │    │     │       │     │    │     │\n  │ Card │          │Card│Card\
+      \ │       ├─────┴────┴─────┤\n  │      │          └──────────┘       │     Footer\
+      \     │\n  │Footer│                             └────────────────┘\n  └──────┘"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-03
+  type: pending
+  title: El Stack del Cuatrimestre
+  subtitle: ¿Por qué HTML/CSS ahora?
+  body_blocks:
+  - type: text
+    content: El HTML que aprenden hoy aparece de nuevo en Django Templates.
+  - type: text
+    content: Las variables de Python {{ nombre }} y los bloques {% block %} son exactamente
+      la estructura que ven hoy, pero con datos dinámicos.
+  code_blocks:
+  - lang: text
+    content: 'Semana 1-2  →  HTML + CSS + Bootstrap   ← HOY
+
+      Semana 3    →  Python 3.13 fundamentos
+
+      Semana 5    →  Django 5.1 (web framework)
+
+      Semana 7    →  Django Templates (↔ HTML ← acá se une)
+
+      Semana 11   →  Django Auth + Admin
+
+      Semana 15   →  REST APIs'
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-04
+  type: pending
+  title: 'Tu nuevo copiloto: GitHub Copilot'
+  subtitle: IA como herramienta, no como sustituto
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**La regla del cursado:**'
+      level: 0
+    - content: '> Podés usar IA. **Debés entender lo que usás.**'
+      level: 0
+    - content: '> Cada TP requiere `PROMPTS.md` documentando el proceso.'
+      level: 0
+  - type: text
+    content: No alcanza con copiar y pegar — el docente puede preguntar sobre cualquier
+      línea de código.
+  code_blocks:
+  - lang: text
+    content: "Buen prompt = Buen código\n\n❌ \"Haceme una web\"\n✅ \"Crea un Navbar\
+      \ Bootstrap 5 con logo y 3 links:\n    Inicio, Sobre mí, Contacto. Que sea responsive\n\
+      \    y colapse en dispositivos móviles.\""
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-05
+  type: pending
+  title: PROMPTS.md — Formato
+  subtitle: Cómo documentar el uso de IA
+  body_blocks:
+  - type: text
+    content: 'Mínimo requerido: 5 prompts completos con este formato'
+  code_blocks:
+  - lang: markdown
+    content: '## Prompt 1 — Navbar Bootstrap
+
+
+      **Fecha:** 15/03/2026
+
+      **Herramienta:** GitHub Copilot
+
+
+      **Lo que pedí:**
+
+      > Crear un navbar bootstrap 5 responsive con 3 links
+
+
+      **Lo que recibí:**
+
+      [snippet del código]
+
+
+      **Lo que modifiqué:**
+
+      - Cambié el texto de los links a español
+
+      - Agregué aria-label al botón de toggle
+
+      - Agregué la clase ms-auto para alinear a la derecha
+
+
+      **Por qué lo modifiqué:**
+
+      Los links estaban en inglés y faltaba accesibilidad'
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-06
+  type: pending
+  title: ¿Qué es HTML?
+  subtitle: HyperText Markup Language
+  body_blocks:
+  - type: text
+    content: 'Define la ESTRUCTURA de una página web:'
+  code_blocks:
+  - lang: text
+    content: 'Marcado     → usa <etiquetas> para etiquetar contenido
+
+      Hipertexto  → vínculos (enlaces) entre contenidos y páginas'
+  - lang: html
+    content: "<!DOCTYPE html>       <!-- declara HTML5 al navegador -->\n<html lang=\"\
+      es\">      <!-- raíz del documento, idioma español -->\n<head>\n    <meta charset=\"\
+      UTF-8\">\n    <title>Un título</title>    <!-- aparece en la pestaña -->\n</head>\n\
+      <body>\n    <p>Un párrafo</p>           <!-- contenido visible -->\n</body>\n\
+      </html>"
+  tables:
+  - '| HTML define... | Ejemplos |
+
+    |----------------|----------|
+
+    | Estructura | párrafos, encabezados, tablas, listas |
+
+    | Contenido | textos, imágenes, links, videos |
+
+    | **No** define | colores, fuentes, márgenes (eso es CSS) |'
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| HTML define... | Ejemplos |
+
+      |----------------|----------|
+
+      | Estructura | párrafos, encabezados, tablas, listas |
+
+      | Contenido | textos, imágenes, links, videos |
+
+      | **No** define | colores, fuentes, márgenes (eso es CSS) |'
+    local_asset: slides/assets/F-06-table-1.png
+    drive_id: null
+- id: F-07
+  type: pending
+  title: 'HTML: Elementos y Tags'
+  subtitle: La anatomía de un elemento HTML
+  body_blocks:
+  - type: text
+    content: 'Elementos sin tag de cierre (auto-closing):'
+  - type: text
+    content: 'Tags más usados:'
+  code_blocks:
+  - lang: text
+    content: "         tag de apertura    contenido    tag de cierre\n           \
+      \   ↓                 ↓              ↓\n         <p>               Un párrafo\
+      \         </p>\n\nElemento completo: <p>Un párrafo</p>"
+  - lang: html
+    content: '<img src="foto.jpg" alt="descripción">
+
+      <input type="text" placeholder="Tu nombre">
+
+      <br>
+
+      <hr>'
+  tables:
+  - '| Tag | Para qué | Ejemplo |
+
+    |-----|----------|---------|
+
+    | `<h1>`–`<h6>` | Encabezados | `<h1>Título principal</h1>` |
+
+    | `<p>` | Párrafo | `<p>Texto...</p>` |
+
+    | `<a>` | Enlace | `<a href="about.html">Sobre mí</a>` |
+
+    | `<img>` | Imagen | `<img src="foto.jpg" alt="Foto">` |
+
+    | `<ul>` / `<li>` | Lista no ordenada | `<ul><li>Ítem</li></ul>` |
+
+    | `<div>` | Contenedor bloque genérico | `<div class="card">...</div>` |
+
+    | `<span>` | Contenedor inline genérico | `<span class="badge">Nuevo</span>` |'
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Tag | Para qué | Ejemplo |
+
+      |-----|----------|---------|
+
+      | `<h1>`–`<h6>` | Encabezados | `<h1>Título principal</h1>` |
+
+      | `<p>` | Párrafo | `<p>Texto...</p>` |
+
+      | `<a>` | Enlace | `<a href="about.html">Sobre mí</a>` |
+
+      | `<img>` | Imagen | `<img src="foto.jpg" alt="Foto">` |
+
+      | `<ul>` / `<li>` | Lista no ordenada | `<ul><li>Ítem</li></ul>` |
+
+      | `<div>` | Contenedor bloque genérico | `<div class="card">...</div>` |
+
+      | `<span>` | Contenedor inline genérico | `<span class="badge">Nuevo</span>`
+      |'
+    local_asset: slides/assets/F-07-table-1.png
+    drive_id: null
+- id: F-08
+  type: pending
+  title: 'HTML: Atributos esenciales'
+  subtitle: Los atributos dan información extra al elemento
+  body_blocks:
+  - type: text
+    content: 'Atributos globales (van en cualquier elemento):'
+  - type: text
+    content: 'Atributos específicos por tag:'
+  - type: text
+    content: El atributo alt en imágenes es OBLIGATORIO para accesibilidad y SEO.
+  code_blocks:
+  - lang: text
+    content: "               atributo    valor\n                  ↓          ↓\n<a\
+      \ href=\"about.html\" class=\"nav-link\" id=\"link-about\">\n   Sobre mí\n</a>"
+  tables:
+  - '| Atributo | Función | Ejemplo |
+
+    |----------|---------|--------|
+
+    | `id` | Identificador único en la página | `id="navbar"` |
+
+    | `class` | Clase(s) CSS (puede repetirse) | `class="card shadow-sm"` |
+
+    | `style` | CSS inline (evitar en producción) | `style="color: red"` |'
+  - '| Tag | Atributo | Para qué |
+
+    |-----|----------|----------|
+
+    | `<a>` | `href` | URL de destino |
+
+    | `<img>` | `src`, `alt` | Fuente e imagen alternativa |
+
+    | `<input>` | `type`, `placeholder`, `required` | Tipo, hint, obligatoriedad |
+
+    | `<form>` | `action`, `method` | Destino y método HTTP |
+
+    | `<link>` | `rel`, `href` | Tipo de recurso y ruta |'
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Atributo | Función | Ejemplo |
+
+      |----------|---------|--------|
+
+      | `id` | Identificador único en la página | `id="navbar"` |
+
+      | `class` | Clase(s) CSS (puede repetirse) | `class="card shadow-sm"` |
+
+      | `style` | CSS inline (evitar en producción) | `style="color: red"` |'
+    local_asset: slides/assets/F-08-table-1.png
+    drive_id: null
+  - index: 1
+    table_markdown: '| Tag | Atributo | Para qué |
+
+      |-----|----------|----------|
+
+      | `<a>` | `href` | URL de destino |
+
+      | `<img>` | `src`, `alt` | Fuente e imagen alternativa |
+
+      | `<input>` | `type`, `placeholder`, `required` | Tipo, hint, obligatoriedad
+      |
+
+      | `<form>` | `action`, `method` | Destino y método HTTP |
+
+      | `<link>` | `rel`, `href` | Tipo de recurso y ruta |'
+    local_asset: slides/assets/F-08-table-2.png
+    drive_id: null
+- id: F-09
+  type: pending
+  title: 'HTML: El árbol DOM'
+  subtitle: Cómo HTML forma una estructura de árbol
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Conceptos clave:**'
+      level: 0
+    - content: '**parent** → el elemento que contiene a otro (`nav` es parent de `ul`)'
+      level: 0
+    - content: '**child/hijo** → elemento dentro de otro (`ul` es child de `nav`)'
+      level: 0
+    - content: '**siblings/hermanos** → elementos al mismo nivel (`li` son hermanos
+        entre sí)'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: "document\n└── html\n    ├── head\n    │   ├── meta (charset)\n    │\
+      \   ├── meta (viewport)\n    │   ├── title\n    │   └── link (stylesheet)\n\
+      \    └── body\n        ├── header\n        │   └── nav\n        │       ├──\
+      \ a.navbar-brand  ← hijo de nav\n        │       └── ul.navbar-nav\n       \
+      \ │           ├── li.nav-item ← hermanos entre sí\n        │           └── li.nav-item\n\
+      \        ├── main\n        │   └── section\n        │       └── div.row\n  \
+      \      │           ├── article.col-md-4 ← hermanos\n        │           ├──\
+      \ article.col-md-4\n        │           └── article.col-md-4\n        └── footer"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-10
+  type: pending
+  title: 'HTML5: Semántica vs Divitis'
+  subtitle: El problema del <div> genérico
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**¿Por qué importa?**'
+      level: 0
+    - content: 👁️ **Lectores de pantalla** entienden la estructura → accesibilidad
+        real
+      level: 0
+    - content: '🔍 **SEO**: Google/Bing indexan mejor el contenido semántico'
+      level: 0
+    - content: '👨‍💻 **Mantenibilidad**: código que se puede leer 6 meses después'
+      level: 0
+  code_blocks:
+  - lang: text
+    content: "❌ HTML sin semántica (divitis)     ✅ HTML semántico\n──────────────────────────\
+      \         ──────────────────────\n<div id=\"header\">                  <header>\n\
+      \  <div id=\"menu\">...</div>           <nav>...</nav>\n</div>             \
+      \                </header>\n<div id=\"content\">                 <main>\n  <div\
+      \ class=\"post\">...</div>        <article>...</article>\n</div>           \
+      \                  </main>\n<div id=\"footer\">...</div>         <footer>...</footer>"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-11
+  type: pending
+  title: 'HTML5: Elementos semánticos'
+  subtitle: El vocabulario de la estructura web
+  body_blocks:
+  - type: text
+    content: 'Regla: Solo un <main> por página. <header> y <footer> pueden repetirse
+      dentro de <article> o <section>.'
+  code_blocks: []
+  tables:
+  - '| Elemento | Descripción | Ejemplo de uso |
+
+    |----------|-------------|----------------|
+
+    | `<header>` | Cabecera de página/sección | Logo + Navbar |
+
+    | `<nav>` | Bloque de navegación | Menú principal |
+
+    | `<main>` | Contenido principal (1 por página) | La sección de posts |
+
+    | `<section>` | Sección temática | "Mis últimos posts" |
+
+    | `<article>` | Contenido independiente y reutilizable | Un post del blog |
+
+    | `<aside>` | Contenido complementario lateral | Sidebar con categorías |
+
+    | `<footer>` | Pie de página/sección | Copyright, redes sociales |
+
+    | `<figure>` | Imagen con descripción | Ilustración de un post |
+
+    | `<figcaption>` | Leyenda de una `<figure>` | "Foto tomada en Ushuaia" |'
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Elemento | Descripción | Ejemplo de uso |
+
+      |----------|-------------|----------------|
+
+      | `<header>` | Cabecera de página/sección | Logo + Navbar |
+
+      | `<nav>` | Bloque de navegación | Menú principal |
+
+      | `<main>` | Contenido principal (1 por página) | La sección de posts |
+
+      | `<section>` | Sección temática | "Mis últimos posts" |
+
+      | `<article>` | Contenido independiente y reutilizable | Un post del blog |
+
+      | `<aside>` | Contenido complementario lateral | Sidebar con categorías |
+
+      | `<footer>` | Pie de página/sección | Copyright, redes sociales |
+
+      | `<figure>` | Imagen con descripción | Ilustración de un post |
+
+      | `<figcaption>` | Leyenda de una `<figure>` | "Foto tomada en Ushuaia" |'
+    local_asset: slides/assets/F-11-table-1.png
+    drive_id: null
+- id: F-12
+  type: pending
+  title: 'HTML5: Anatomía del documento completo'
+  subtitle: Estructura base lista para usar
+  body_blocks: []
+  code_blocks:
+  - lang: html
+    content: "<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n  <!-- Codificación obligatoria\
+      \ -->\n  <meta charset=\"UTF-8\">\n\n  <!-- OBLIGATORIO para Bootstrap responsive\
+      \ -->\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"\
+      >\n\n  <!-- SEO básico -->\n  <meta name=\"description\" content=\"Blog personal\
+      \ — UNTDF 2026\">\n  <meta name=\"author\" content=\"Tu Nombre\">\n\n  <title>Mi\
+      \ Blog Personal</title>\n\n  <!-- Favicon -->\n  <link rel=\"icon\" type=\"\
+      image/x-icon\" href=\"assets/images/favicon.ico\">\n\n  <!-- Bootstrap CSS (primero)\
+      \ -->\n  <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\"\
+      \n        rel=\"stylesheet\">\n\n  <!-- CSS custom (después de Bootstrap para\
+      \ poder sobreescribir) -->\n  <link rel=\"stylesheet\" href=\"assets/styles.css\"\
+      >\n</head>\n<body>\n\n  <!-- contenido aquí -->\n\n  <!-- Bootstrap JS al final\
+      \ del body -->\n  <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js\"\
+      >\n  </script>\n</body>\n</html>"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-13
+  type: pending
+  title: Estructura del Blog (HTML completo)
+  subtitle: Arquitectura del proyecto TP1
+  body_blocks:
+  - type: text
+    content: row-cols-1 row-cols-md-3 = 1 columna en móvil, 3 columnas en desktop
+  code_blocks:
+  - lang: html
+    content: "<body>\n  <header>\n    <nav class=\"navbar navbar-expand-lg bg-body-tertiary\"\
+      >\n      <!-- Bootstrap Navbar responsive -->\n    </nav>\n  </header>\n\n \
+      \ <main class=\"container mt-4\">\n    <section id=\"posts\">\n      <h2 class=\"\
+      mb-4\">Mis últimos posts</h2>\n      <div class=\"row row-cols-1 row-cols-md-3\
+      \ g-4\">\n        <article class=\"col\">\n          <div class=\"card h-100\
+      \ shadow-sm\">\n            <!-- Card Bootstrap completa -->\n          </div>\n\
+      \        </article>\n        <!-- más articles/cards -->\n      </div>\n   \
+      \ </section>\n  </main>\n\n  <footer class=\"bg-dark text-light mt-5 py-3\"\
+      >\n    <div class=\"container text-center\">\n      <p class=\"mb-0\">© 2026\
+      \ Mi Blog · UNTDF · Laboratorio de Lenguajes</p>\n    </div>\n  </footer>\n\
+      </body>"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-14
+  type: pending
+  title: ¿Qué es CSS?
+  subtitle: Cascading Style Sheets
+  body_blocks:
+  - type: text
+    content: 'CSS controla TODO lo visual de la página:'
+  - type: text
+    content: 'Regla CSS = Selector + Declaraciones:'
+  - type: text
+    content: '"Cascading" = cuando múltiples reglas aplican al mismo elemento, gana
+      la más específica.'
+  code_blocks:
+  - lang: css
+    content: "           selector\n              ↓\nh1 { color: #CC9900; font-size:\
+      \ 2rem; }\n     ────────────────────────────────\n           declaraciones\n\
+      \           (propiedad: valor;)"
+  tables:
+  - '| Controla | Ejemplos |
+
+    |----------|---------|
+
+    | Color | `color: #333; background-color: #f8f9fa;` |
+
+    | Tipografía | `font-size: 1.2rem; font-weight: bold;` |
+
+    | Espaciado | `margin: 16px; padding: 8px 16px;` |
+
+    | Disposición | `display: flex; grid-template-columns: ...` |
+
+    | Responsive | `@media (min-width: 768px) { ... }` |
+
+    | Animaciones | `transition: all 0.3s ease;` |'
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Controla | Ejemplos |
+
+      |----------|---------|
+
+      | Color | `color: #333; background-color: #f8f9fa;` |
+
+      | Tipografía | `font-size: 1.2rem; font-weight: bold;` |
+
+      | Espaciado | `margin: 16px; padding: 8px 16px;` |
+
+      | Disposición | `display: flex; grid-template-columns: ...` |
+
+      | Responsive | `@media (min-width: 768px) { ... }` |
+
+      | Animaciones | `transition: all 0.3s ease;` |'
+    local_asset: slides/assets/F-14-table-1.png
+    drive_id: null
+- id: F-15
+  type: pending
+  title: 'CSS: Selectores'
+  subtitle: Cómo apuntar a los elementos
+  body_blocks:
+  - type: text
+    content: 'Especificidad (quién gana cuando hay conflicto):'
+  code_blocks:
+  - lang: css
+    content: '/* 1. Selector de ELEMENTO — aplica a todos los h1 */
+
+      h1 { color: #333; }
+
+
+      /* 2. Selector de CLASE — aplica a todo lo que tenga class="card" */
+
+      .card { border-radius: 8px; }
+
+
+      /* 3. Selector de ID — aplica solo al elemento con id="navbar" */
+
+      #navbar { background-color: white; }
+
+
+      /* 4. Selector DESCENDIENTE — solo p dentro de article */
+
+      article p { line-height: 1.7; }
+
+
+      /* 5. Selector de HIJO DIRECTO */
+
+      nav > ul { list-style: none; }
+
+
+      /* 6. Selector de ATRIBUTO */
+
+      input[type="email"] { border-color: #0d6efd; }
+
+
+      /* 7. Pseudo-clase */
+
+      a:hover { color: #0d6efd; text-decoration: underline; }
+
+      button:focus { outline: 2px solid #0d6efd; }'
+  - lang: text
+    content: "!important > inline style > #id > .class > element\n    ∞          \
+      \    1000       100     10       1"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-16
+  type: pending
+  title: 'CSS: Unidades y Colores'
+  subtitle: Números en CSS — cuál usar cuándo
+  body_blocks:
+  - type: text
+    content: 'Unidades de medida:'
+  - type: text
+    content: 'Colores:'
+  - type: text
+    content: 'Buena práctica: Usar variables CSS para los colores del proyecto → un
+      solo lugar para cambiar toda la paleta.'
+  code_blocks:
+  - lang: css
+    content: '/* Las 3 notaciones equivalentes para el mismo color */
+
+      h1 { color: rgb(220, 53, 69); }    /* RGB: 0-255 por canal */
+
+      h1 { color: #dc3545; }             /* Hexadecimal: 00-FF por canal */
+
+      h1 { color: crimson; }             /* Literal (limitado, evitar) */
+
+
+      /* Con transparencia (alpha) */
+
+      .overlay { background: rgba(0, 0, 0, 0.5); }   /* 50% opaco */
+
+      .card-hover { background: #0d6efd20; }          /* hex + alpha */'
+  tables:
+  - '| Unidad | Tipo | Cuándo usar |
+
+    |--------|------|-------------|
+
+    | `px` | Absoluta | Bordes, sombras, valores fijos precisos |
+
+    | `rem` | Relativa a root `<html>` | Font sizes (accesibilidad) |
+
+    | `em` | Relativa al padre | Padding/margin proporcional al texto |
+
+    | `%` | Relativa al padre | Anchos fluidos de contenedores |
+
+    | `vw` / `vh` | Relativa al viewport | Secciones hero full-screen |'
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Unidad | Tipo | Cuándo usar |
+
+      |--------|------|-------------|
+
+      | `px` | Absoluta | Bordes, sombras, valores fijos precisos |
+
+      | `rem` | Relativa a root `<html>` | Font sizes (accesibilidad) |
+
+      | `em` | Relativa al padre | Padding/margin proporcional al texto |
+
+      | `%` | Relativa al padre | Anchos fluidos de contenedores |
+
+      | `vw` / `vh` | Relativa al viewport | Secciones hero full-screen |'
+    local_asset: slides/assets/F-16-table-1.png
+    drive_id: null
+- id: F-17
+  type: pending
+  title: CSS Box Model
+  subtitle: Todo elemento es una caja
+  body_blocks:
+  - type: text
+    content: 'Con box-sizing: border-box, el padding y border se incluyen dentro del
+      width declarado.'
+  code_blocks:
+  - lang: text
+    content: '┌─────────────────────────────────────┐
+
+      │  MARGIN (espacio externo)            │
+
+      │  ┌───────────────────────────────┐  │
+
+      │  │  BORDER (borde visible)        │  │
+
+      │  │  ┌─────────────────────────┐  │  │
+
+      │  │  │  PADDING (espacio intern │  │  │
+
+      │  │  │  ┌───────────────────┐  │  │  │
+
+      │  │  │  │  CONTENT          │  │  │  │
+
+      │  │  │  └───────────────────┘  │  │  │
+
+      │  │  └─────────────────────────┘  │  │
+
+      │  └───────────────────────────────┘  │
+
+      └─────────────────────────────────────┘'
+  - lang: css
+    content: "/* SIEMPRE incluir esto — evita sorpresas de ancho */\n*, *::before,\
+      \ *::after { box-sizing: border-box; }\n\n.card-post {\n  width: 300px;    \
+      \   /* ancho del contenido */\n  padding: 20px;      /* espacio interno */\n\
+      \  border: 1px solid #dee2e6;\n  border-radius: 8px;\n  margin-bottom: 24px;\
+      \ /* espacio externo abajo */\n}"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-18
+  type: pending
+  title: 'CSS: Variables (Custom Properties)'
+  subtitle: Define una vez, usa en todo el proyecto
+  body_blocks:
+  - type: text
+    content: 'Ventaja: Cambiar el color primario en una sola línea actualiza todo
+      el sitio.'
+  code_blocks:
+  - lang: css
+    content: "/* Declarar variables en :root → disponibles en todo el CSS */\n:root\
+      \ {\n  /* Paleta de colores */\n  --color-primario:   #0d6efd;\n  --color-secundario:\
+      \ #6c757d;\n  --color-fondo:      #f8f9fa;\n  --color-texto:      #212529;\n\
+      \n  /* Tipografía */\n  --fuente-principal: 'Segoe UI', system-ui, sans-serif;\n\
+      \  --size-base:        1rem;      /* 16px en la mayoría de browsers */\n\n \
+      \ /* Espaciado */\n  --espacio-sm:  8px;\n  --espacio-md:  16px;\n  --espacio-lg:\
+      \  32px;\n\n  /* Bordes */\n  --border-radius: 8px;\n}\n\n/* Usar las variables\
+      \ con var() */\nbody {\n  font-family: var(--fuente-principal);\n  color: var(--color-texto);\n\
+      \  background-color: var(--color-fondo);\n}\n\n.btn-custom {\n  background-color:\
+      \ var(--color-primario);\n  padding: var(--espacio-sm) var(--espacio-md);\n\
+      \  border-radius: var(--border-radius);\n}"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-19
+  type: pending
+  title: CSS Flexbox
+  subtitle: Layout flexible en una dimensión
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Flexbox vs Bootstrap Grid:**'
+      level: 0
+    - content: '**Flexbox** → CSS puro, control total'
+      level: 0
+    - content: '**Bootstrap Grid** → clases predefinidas, más rápido'
+      level: 0
+  - type: text
+    content: 'Para el TP1: usá Bootstrap Grid + Flexbox en styles.css'
+  code_blocks:
+  - lang: css
+    content: "/* Flex container */\n.posts-row {\n  display: flex;      /* activa\
+      \ flexbox */\n  flex-wrap: wrap;    /* salto de línea automático */\n  gap:\
+      \ 24px;          /* espacio entre items */\n  justify-content: flex-start;\n\
+      }\n\n/* Flex items */\n.post-card {\n  flex: 1 1 280px;    /* grow shrink basis\
+      \ */\n  min-width: 280px;\n  max-width: 400px;\n}"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-20
+  type: pending
+  title: CSS Media Queries (Mobile-First)
+  subtitle: Responsive Design — Mobile First
+  body_blocks:
+  - type: text
+    content: Mobile-first = menos código = mejor rendimiento
+  code_blocks:
+  - lang: css
+    content: "/* BASE: estilos para móvil (< 768px) */\n.posts-grid {\n  display:\
+      \ flex;\n  flex-direction: column;  /* apilado */\n  padding: 16px;\n}\n\n/*\
+      \ TABLET: 768px y arriba */\n@media (min-width: 768px) {\n  .posts-grid {\n\
+      \    flex-direction: row;\n    flex-wrap: wrap;\n  }\n}\n\n/* DESKTOP: 992px\
+      \ y arriba */\n@media (min-width: 992px) {\n  .posts-grid .card {\n    width:\
+      \ calc(33.33% - 16px);\n  }\n}"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-21
+  type: pending
+  title: 'CSS: DevTools del Navegador'
+  subtitle: Tu mejor herramienta de debug
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Flujo de trabajo recomendado:**'
+      level: 0
+    - content: Diseñar en DevTools (cambios instantáneos, sin guardar)
+      level: 0
+    - content: Copiar el CSS que funciona al archivo `assets/styles.css`
+      level: 0
+    - content: Verificar en móvil con Responsive Design Mode antes de hacer commit
+      level: 0
+  code_blocks:
+  - lang: text
+    content: '┌─────────────────────────────────────────────────────┐
+
+      │  F12  →  Abre DevTools                               │
+
+      ├─────────────────────────────────────────────────────┤
+
+      │  Elements (Inspector)                                │
+
+      │  ├── Seleccionar elemento con 🖱️ → ver su HTML        │
+
+      │  ├── Panel Styles → ver qué CSS aplica y de dónde    │
+
+      │  ├── Editar CSS en vivo (sin guardar el archivo)     │
+
+      │  └── Ver Box Model visual (margin/border/padding)    │
+
+      ├─────────────────────────────────────────────────────┤
+
+      │  Responsive Design Mode  (Ctrl+Shift+M)              │
+
+      │  ├── Simular iPhone / Android / iPad                 │
+
+      │  └── Arrastrar para probar cualquier ancho           │
+
+      ├─────────────────────────────────────────────────────┤
+
+      │  Console                                             │
+
+      │  └── Ver errores de JavaScript y de recursos        │
+
+      └─────────────────────────────────────────────────────┘'
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-22
+  type: pending
+  title: 'CSS: Transiciones y Hover Effects'
+  subtitle: Animaciones sutiles con CSS puro
+  body_blocks: []
+  code_blocks:
+  - lang: css
+    content: ".btn-custom {\n  background-color: var(--color-primario);\n  color:\
+      \ white;\n  padding: 8px 20px;\n  border: none;\n  border-radius: var(--border-radius);\n\
+      \  cursor: pointer;\n  transition: background-color 0.2s ease, transform 0.1s\
+      \ ease;\n}\n\n.btn-custom:hover {\n  background-color: #0b5ed7;   /* más oscuro\
+      \ */\n  transform: translateY(-2px); /* sube 2px */\n}\n\n.btn-custom:active\
+      \ {\n  transform: translateY(0);    /* vuelve al lugar al hacer clic */\n}\n\
+      \n/* Links de navegación */\n.nav-link {\n  transition: color 0.15s ease;\n\
+      }\n.nav-link:hover { color: var(--color-primario) !important; }\n\n/* Cards\
+      \ con efecto de elevación */\n.card {\n  transition: box-shadow 0.2s ease, transform\
+      \ 0.2s ease;\n}\n.card:hover {\n  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);\n\
+      \  transform: translateY(-4px);\n}"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-23
+  type: pending
+  title: 'Bootstrap: ¿Qué es y por qué usarlo?'
+  subtitle: El framework CSS más usado del mundo
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Bootstrap provee:**'
+      level: 0
+    - content: '**Sistema de grilla** de 12 columnas responsive con 6 breakpoints'
+      level: 0
+    - content: '**Componentes** listos: Navbar, Card, Form, Button, Modal, Alert…'
+      level: 0
+    - content: '**Utilidades** CSS: márgenes, padding, colores, flex, display…'
+      level: 0
+    - content: '**JavaScript** integrado para componentes interactivos'
+      level: 0
+  - type: text
+    content: 'Versión del cursado: Bootstrap 5.3.3 (última estable, sin jQuery)'
+  code_blocks:
+  - lang: text
+    content: "Sin Bootstrap                    Con Bootstrap\n────────────────────\
+      \            ──────────────────────────\nEscribir 200 líneas CSS         Agregar\
+      \ 2 clases al HTML\npara hacer una grilla\n\nInventar el Navbar            \
+      \   <nav class=\"navbar\n responsive desde cero             navbar-expand-lg\"\
+      >\n\nDebugguear diferencias            Funciona igual en\nentre Chrome/Safari/Firefox\
+      \       todos los browsers\n\nMedia queries manuales           row-cols-1 row-cols-md-3"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-24
+  type: pending
+  title: 'Bootstrap 5: CDN Setup'
+  subtitle: Incluir Bootstrap en 3 líneas
+  body_blocks:
+  - type: text
+    content: ⚠️ Tu CSS va DESPUÉS de Bootstrap para poder sobreescribir estilos
+  - type: text
+    content: CDN = Content Delivery Network → el archivo viene del servidor de Bootstrap,
+      el browser lo cachea y no lo descarga de nuevo.
+  code_blocks:
+  - lang: html
+    content: "<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n  <meta charset=\"UTF-8\"\
+      >\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"\
+      >\n  <title>Mi Blog</title>\n  \n  <!-- ① Bootstrap CSS -->\n  <link href=\"\
+      https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\" \n\
+      \        rel=\"stylesheet\">\n  \n  <!-- ② Tu CSS custom (DESPUÉS de Bootstrap)\
+      \ -->\n  <link rel=\"stylesheet\" href=\"css/styles.css\">\n</head>\n<body>\n\
+      \n  <!-- ... contenido ... -->\n\n  <!-- ③ Bootstrap JS (con Popper incluido)\
+      \ -->\n  <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js\"\
+      >\n  </script>\n</body>\n</html>"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-25
+  type: pending
+  title: 'Bootstrap: Sistema de Espaciado'
+  subtitle: Las utilidades m y p — margin y padding
+  body_blocks: []
+  code_blocks:
+  - lang: text
+    content: "m = margin (externo)       p = padding (interno)\n\nDirección:\n  t\
+      \ = top       b = bottom\n  s = start (izquierda)   e = end (derecha)\n  x =\
+      \ horizontal (s + e)  y = vertical (t + b)\n  (sin letra) = los 4 lados\n\n\
+      Tamaño:  0  1  2  3  4  5   auto\n         0  4  8  16 24 48  auto   px (default)"
+  - lang: html
+    content: "<!-- Ejemplos reales del proyecto -->\n<div class=\"container mt-4\"\
+      >           <!-- margin-top: 24px -->\n  <h2 class=\"mb-4\">Posts</h2>     \
+      \    <!-- margin-bottom: 24px -->\n\n  <div class=\"card p-3 mb-3\">       \
+      \  <!-- padding: 16px, margin-bottom: 16px -->\n    <p class=\"px-2 py-0 mb-0\"\
+      >Texto</p>\n  </div>\n\n  <footer class=\"mt-5 py-3\">          <!-- margin-top:\
+      \ 48px, padding-y: 16px -->\n  </footer>\n</div>"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-26
+  type: pending
+  title: 'Bootstrap: Breakpoints'
+  subtitle: Los 6 puntos de quiebre responsive
+  body_blocks:
+  - type: text
+    content: 'Para el blog usamos principalmente col-md-*:'
+  code_blocks:
+  - lang: html
+    content: "<!-- Comportamiento en cada breakpoint -->\n<div class=\"col-12 col-sm-6\
+      \ col-md-4 col-lg-3\">\n  ↑ móvil   ↑ tablet  ↑ desktop ↑ full-hd\n  100%  \
+      \     50%        33%       25%\n</div>"
+  - lang: html
+    content: "<!-- 1 columna en móvil → 3 en desktop -->\n<div class=\"row row-cols-1\
+      \ row-cols-md-3 g-4\">\n  <div class=\"col\"><div class=\"card\">...</div></div>\n\
+      \  <div class=\"col\"><div class=\"card\">...</div></div>\n  <div class=\"col\"\
+      ><div class=\"card\">...</div></div>\n</div>"
+  tables:
+  - '| Nombre | Prefijo clase | Desde | Container máx |
+
+    |--------|--------------|-------|--------------|
+
+    | Extra small (móvil) | `col-` | < 576px | 100% |
+
+    | Small | `col-sm-` | ≥ 576px | 540px |
+
+    | Medium (tablet) | `col-md-` | ≥ 768px | 720px |
+
+    | Large | `col-lg-` | ≥ 992px | 960px |
+
+    | Extra large | `col-xl-` | ≥ 1200px | 1140px |
+
+    | XX large | `col-xxl-` | ≥ 1400px | 1320px |'
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Nombre | Prefijo clase | Desde | Container máx |
+
+      |--------|--------------|-------|--------------|
+
+      | Extra small (móvil) | `col-` | < 576px | 100% |
+
+      | Small | `col-sm-` | ≥ 576px | 540px |
+
+      | Medium (tablet) | `col-md-` | ≥ 768px | 720px |
+
+      | Large | `col-lg-` | ≥ 992px | 960px |
+
+      | Extra large | `col-xl-` | ≥ 1200px | 1140px |
+
+      | XX large | `col-xxl-` | ≥ 1400px | 1320px |'
+    local_asset: slides/assets/F-26-table-1.png
+    drive_id: null
+- id: F-27
+  type: pending
+  title: Bootstrap Grid (12 columnas)
+  subtitle: El sistema de grillas
+  body_blocks: []
+  code_blocks:
+  - lang: text
+    content: '                    12 columnas
+
+      ┌──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┐
+
+      │  col-4  │  col-4  │  col-4  │
+
+      └─────────┴─────────┴─────────┘
+
+
+      ┌──────────────┬───────┐
+
+      │    col-8     │ col-4 │
+
+      └──────────────┴───────┘
+
+
+      ┌──┬──┬──┬──┬──┬──┬──────────────────┐
+
+      │col-2│col-2│    col-8               │
+
+      └─────┴─────┴────────────────────────┘'
+  - lang: html
+    content: "<!-- 3 columnas iguales -->\n<div class=\"container\">\n  <div class=\"\
+      row g-3\">  <!-- g-3 = gap entre columnas -->\n    <div class=\"col-12 col-md-4\"\
+      >Columna 1</div>\n    <div class=\"col-12 col-md-4\">Columna 2</div>\n    <div\
+      \ class=\"col-12 col-md-4\">Columna 3</div>\n  </div>\n</div>"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-28
+  type: pending
+  title: Bootstrap Navbar
+  subtitle: Navegación responsive
+  body_blocks:
+  - type: text
+    content: 'Claves: navbar-expand-lg = colapsa en < 992px · ms-auto = links a la
+      derecha · sticky-top = Navbar fijo al hacer scroll'
+  code_blocks:
+  - lang: html
+    content: "<nav class=\"navbar navbar-expand-lg bg-body-tertiary\">\n  <div class=\"\
+      container\">\n    <!-- Logo / Brand -->\n    <a class=\"navbar-brand fw-bold\"\
+      \ href=\"index.html\">Mi Blog</a>\n    \n    <!-- Botón hamburguesa (solo móvil)\
+      \ -->\n    <button class=\"navbar-toggler\" type=\"button\" \n            data-bs-toggle=\"\
+      collapse\" \n            data-bs-target=\"#navMenu\"\n            aria-label=\"\
+      Toggle navigation\">\n      <span class=\"navbar-toggler-icon\"></span>\n  \
+      \  </button>\n    \n    <!-- Links -->\n    <div class=\"collapse navbar-collapse\"\
+      \ id=\"navMenu\">\n      <ul class=\"navbar-nav ms-auto\">  <!-- ms-auto = derecha\
+      \ -->\n        <li class=\"nav-item\">\n          <a class=\"nav-link active\"\
+      \ href=\"index.html\">Inicio</a>\n        </li>\n        <li class=\"nav-item\"\
+      >\n          <a class=\"nav-link\" href=\"about.html\">Sobre mí</a>\n      \
+      \  </li>\n        <li class=\"nav-item\">\n          <a class=\"nav-link\" href=\"\
+      contact.html\">Contacto</a>\n        </li>\n      </ul>\n    </div>\n  </div>\n\
+      </nav>"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-29
+  type: pending
+  title: Bootstrap Cards
+  subtitle: Componente Card para posts del blog
+  body_blocks:
+  - type: text
+    content: flex-grow-1 en el texto + mt-auto en el botón = el botón siempre al fondo
+      sin importar el largo del texto.
+  code_blocks:
+  - lang: html
+    content: "<div class=\"card h-100 shadow-sm\">\n  <!-- Imagen superior -->\n \
+      \ <img src=\"img/post1.jpg\" class=\"card-img-top\" \n       alt=\"Imagen del\
+      \ post 1\">\n  \n  <!-- Cuerpo de la card -->\n  <div class=\"card-body\">\n\
+      \    <h5 class=\"card-title\">Título del Post</h5>\n    <p class=\"card-text\
+      \ text-muted\">\n      Descripción breve del contenido...\n    </p>\n    <a\
+      \ href=\"post1.html\" class=\"btn btn-primary btn-sm\">\n      Leer más\n  \
+      \  </a>\n  </div>\n  \n  <!-- Pie de card -->\n  <div class=\"card-footer\"\
+      >\n    <small class=\"text-muted\">Publicado el 15/03/2026</small>\n  </div>\n\
+      </div>"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-30
+  type: pending
+  title: 'Bootstrap Cards: Variantes'
+  subtitle: Cards con estilos visuales adicionales
+  body_blocks:
+  - type: text
+    content: 'Colores disponibles: primary secondary success danger warning info light
+      dark'
+  code_blocks:
+  - lang: html
+    content: "<!-- Card con color de fondo (text-bg-{color}) -->\n<div class=\"card\
+      \ text-bg-primary mb-3\" style=\"max-width: 18rem;\">\n  <div class=\"card-header\"\
+      >Destacado</div>\n  <div class=\"card-body\">\n    <h5 class=\"card-title\"\
+      >Post especial</h5>\n    <p class=\"card-text\">Nota importante del blog.</p>\n\
+      \  </div>\n</div>\n\n<!-- Card con solo borde de color -->\n<div class=\"card\
+      \ border-success mb-3\">\n  <div class=\"card-header text-success\">Completado</div>\n\
+      \  <div class=\"card-body\">\n    <p class=\"card-text text-success\">TP entregado\
+      \ con éxito.</p>\n  </div>\n</div>\n\n<!-- Grid de cards con row-cols -->\n\
+      <div class=\"row row-cols-1 row-cols-md-3 g-4\">\n  <div class=\"col\">\n  \
+      \  <div class=\"card h-100\">...</div>\n  </div>\n  <!-- se repite para cada\
+      \ card -->\n</div>"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-31
+  type: pending
+  title: Bootstrap Forms
+  subtitle: Formulario de contacto accesible
+  body_blocks: []
+  code_blocks:
+  - lang: html
+    content: "<form>\n  <div class=\"mb-3\">\n    <label for=\"nombre\" class=\"form-label\"\
+      >Nombre</label>\n    <input type=\"text\" class=\"form-control\" \n        \
+      \   id=\"nombre\" name=\"nombre\" \n           placeholder=\"Tu nombre completo\"\
+      \n           required>\n  </div>\n  \n  <div class=\"mb-3\">\n    <label for=\"\
+      email\" class=\"form-label\">Email</label>\n    <input type=\"email\" class=\"\
+      form-control\" \n           id=\"email\" name=\"email\"\n           placeholder=\"\
+      tu@email.com\"\n           required>\n  </div>\n  \n  <div class=\"mb-3\">\n\
+      \    <label for=\"telefono\" class=\"form-label\">Teléfono <small class=\"text-muted\"\
+      >(opcional)</small></label>\n    <input type=\"tel\" class=\"form-control\"\
+      \ \n           id=\"telefono\" name=\"telefono\"\n           placeholder=\"\
+      +54 9 2901 000000\">\n  </div>\n  \n  <div class=\"mb-3\">\n    <label for=\"\
+      mensaje\" class=\"form-label\">Mensaje</label>\n    <textarea class=\"form-control\"\
+      \ id=\"mensaje\" \n              name=\"mensaje\" rows=\"5\"\n             \
+      \ minlength=\"10\" required></textarea>\n  </div>\n  \n  <div class=\"d-grid\"\
+      >\n    <button type=\"submit\" class=\"btn btn-primary btn-lg\">\n      Enviar\
+      \ mensaje\n    </button>\n  </div>\n</form>"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-32
+  type: pending
+  title: 'Bootstrap: Utilidades esenciales'
+  subtitle: Las clases utilitarias más usadas en el blog
+  body_blocks:
+  - type: text
+    content: 'Display y Flexbox:'
+  - type: text
+    content: 'Texto:'
+  - type: text
+    content: 'Fondos, Bordes y Sombras:'
+  - type: text
+    content: 'Width / Height:'
+  code_blocks:
+  - lang: html
+    content: '<div class="d-flex justify-content-between align-items-center">
+
+      <div class="d-grid gap-2">           <!-- botones full-width -->
+
+      <div class="d-none d-md-block">      <!-- oculto en móvil -->'
+  - lang: html
+    content: '<p class="text-muted">Texto gris secundario</p>
+
+      <p class="text-primary fw-bold">Azul en negrita</p>
+
+      <p class="text-center fs-5">Centrado, tamaño 5</p>
+
+      <p class="text-truncate" style="max-width: 200px;">Texto largo…</p>'
+  - lang: html
+    content: '<div class="bg-light border rounded-3 p-3">
+
+      <div class="bg-dark text-light rounded p-4">
+
+      <div class="shadow-sm">   <!-- sombra sutil (cards) -->
+
+      <div class="shadow-lg">   <!-- sombra grande (modals) -->'
+  - lang: html
+    content: '<div class="w-100">      <!-- width: 100% -->
+
+      <div class="h-100">      <!-- height: 100% (cards igual alto) -->
+
+      <img class="img-fluid">  <!-- max-width: 100%, responsive -->'
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-33
+  type: pending
+  title: Validación con CSS :valid/:invalid
+  subtitle: Feedback visual de formulario con CSS puro
+  body_blocks:
+  - type: list
+    ordered: false
+    items:
+    - content: '**Explicación:**'
+      level: 0
+    - content: '`:valid` → cuando el valor cumple las restricciones HTML5'
+      level: 0
+    - content: '`:invalid` → cuando no cumple (email mal formado, required vacío)'
+      level: 0
+    - content: '`:not(:placeholder-shown)` → no mostrar errores hasta que el usuario
+        empiece a escribir'
+      level: 0
+  code_blocks:
+  - lang: css
+    content: "/* styles.css */\n\n/* Campo válido → borde verde */\n.form-control:valid:not(:placeholder-shown)\
+      \ {\n  border-color: #198754;\n  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84,\
+      \ 0.25);\n}\n\n/* Campo inválido → borde rojo */\n.form-control:invalid:not(:placeholder-shown)\
+      \ {\n  border-color: #dc3545;\n  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69,\
+      \ 0.25);\n}"
+  tables:
+  - '| Pseudo-clase | Cuándo activa |
+
+    |--------------|---------------|
+
+    | `:valid` | El valor cumple las restricciones HTML5 (`required`, `type="email"`,
+    `minlength`) |
+
+    | `:invalid` | No cumple las restricciones |
+
+    | `:not(:placeholder-shown)` | El usuario ya escribió algo (campo no vacío) |'
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Pseudo-clase | Cuándo activa |
+
+      |--------------|---------------|
+
+      | `:valid` | El valor cumple las restricciones HTML5 (`required`, `type="email"`,
+      `minlength`) |
+
+      | `:invalid` | No cumple las restricciones |
+
+      | `:not(:placeholder-shown)` | El usuario ya escribió algo (campo no vacío)
+      |'
+    local_asset: slides/assets/F-33-table-1.png
+    drive_id: null
+- id: F-34
+  type: pending
+  title: 'Git: Flujo de trabajo con Classroom'
+  subtitle: Del link al commit — paso a paso
+  body_blocks:
+  - type: text
+    content: 'Mensajes de commit recomendados:'
+  code_blocks:
+  - lang: text
+    content: "1. ACEPTAR el TP\n   → Ir a classroom.github.com/a/RI8vnIt_\n   → \"\
+      Accept this assignment\"\n   → GitHub crea: github.com/lab-lenguajes-2026/tp1-blog-TuUsuario\n\
+      \n2. CLONAR el repo\n   $ git clone https://github.com/lab-lenguajes-2026/tp1-blog-TuUsuario.git\n\
+      \   $ cd tp1-blog-TuUsuario\n\n3. CREAR la estructura\n   → Crear index.html,\
+      \ about.html, contact.html, assets/styles.css\n\n4. CICLO de trabajo (repetir\
+      \ para cada funcionalidad)\n   $ git add index.html\n   $ git commit -m \"feat:\
+      \ agregar navbar Bootstrap 5 responsive\"\n   $ git push\n\n5. VERIFICAR en\
+      \ GitHub.com que el archivo está actualizado"
+  - lang: text
+    content: 'feat: estructura base HTML + Bootstrap CDN
+
+      feat: navbar responsive con hamburguesa
+
+      feat: grid de 3 cards en index.html
+
+      feat: formulario de contacto con validación
+
+      style: CSS custom — variables, :valid/:invalid, transiciones
+
+      docs: agregar README y PROMPTS.md con 5 prompts'
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-35
+  type: pending
+  title: Estructura de archivos del TP1
+  subtitle: Organización del proyecto
+  body_blocks:
+  - type: text
+    content: 'En Git (GitHub Classroom):'
+  code_blocks:
+  - lang: text
+    content: 'mi-blog/
+
+      ├── index.html          ← Lista de posts (cards)
+
+      ├── about.html          ← Sobre el autor
+
+      ├── contact.html        ← Formulario de contacto
+
+      ├── assets/
+
+      │   ├── styles.css      ← Estilos custom
+
+      │   └── images/
+
+      │       ├── favicon.ico
+
+      │       ├── avatar.jpg
+
+      │       └── post1.jpg
+
+      ├── README.md           ← Instrucciones del proyecto
+
+      └── PROMPTS.md          ← OBLIGATORIO: registro de IA'
+  - lang: text
+    content: 'feat: agregar estructura base HTML + Bootstrap
+
+      style: aplicar estilos custom en styles.css
+
+      feat: navbar responsive con Bootstrap 5
+
+      feat: grid de cards para lista de posts
+
+      feat: formulario de contacto con validación
+
+      docs: documentar prompts de Copilot en PROMPTS.md'
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-36
+  type: pending
+  title: Checklist TP1
+  subtitle: ¿Estoy listo para entregar?
+  body_blocks: []
+  code_blocks:
+  - lang: text
+    content: "ARCHIVOS\n  ☐ index.html — Navbar + grid de cards (≥3 posts)\n  ☐ about.html\
+      \ — Información del autor\n  ☐ contact.html — Formulario con Bootstrap + campo\
+      \ teléfono\n  ☐ assets/styles.css — Estilos custom + media queries\n  ☐ assets/images/\
+      \ — favicon.ico + imágenes del blog\n  ☐ README.md — Instrucciones del proyecto\n\
+      \  ☐ PROMPTS.md — ≥5 prompts documentados\n\nHTML\n  ☐ Estructura semántica\
+      \ (header/main/footer)\n  ☐ Bootstrap incluido via CDN\n  ☐ Viewport meta en\
+      \ todos los HTMLs\n  ☐ W3C Validator: sin errores ✓\n\nCSS\n  ☐ Variables CSS\
+      \ (≥2: --color-primario, --font-principal...)\n  ☐ Media queries mobile (<768px)\
+      \ y desktop (≥768px)\n  ☐ :valid/:invalid en el formulario\n  ☐ Transiciones\
+      \ en hover de botones/links\n\nGIT\n  ☐ ≥ 5 commits con mensajes descriptivos\n\
+      \  ☐ Pushes al repositorio de Classroom"
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+- id: F-37
+  type: pending
+  title: Recursos y documentación
+  subtitle: Donde buscar ayuda
+  body_blocks:
+  - type: text
+    content: 'Horarios de consulta: (completar con el docente)'
+  - type: text
+    content: 'Campus virtual: (completar con link)'
+  - type: text
+    content: 'En clase: podés abrir issues en tu repo de Classroom para marcar dudas.'
+  code_blocks: []
+  tables:
+  - '| Recurso | Para qué |
+
+    |---------|----------|
+
+    | MDN HTML | Referencia oficial de etiquetas y semántica |
+
+    | MDN CSS | Referencia oficial de propiedades y selectores |
+
+    | Bootstrap 5 Docs | Clases y componentes de Bootstrap |
+
+    | W3C Validator | Verificar que el HTML está bien |
+
+    | MDN Web Docs | Documentación detallada técnica |
+
+    | GitHub Copilot | Generar código con prompts |'
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| Recurso | Para qué |
+
+      |---------|----------|
+
+      | MDN HTML | Referencia oficial de etiquetas y semántica |
+
+      | MDN CSS | Referencia oficial de propiedades y selectores |
+
+      | Bootstrap 5 Docs | Clases y componentes de Bootstrap |
+
+      | W3C Validator | Verificar que el HTML está bien |
+
+      | MDN Web Docs | Documentación detallada técnica |
+
+      | GitHub Copilot | Generar código con prompts |'
+    local_asset: slides/assets/F-37-table-1.png
+    drive_id: null
+- id: F-38
+  type: pending
+  title: TPs activos — Links y entregas
+  subtitle: TPs de las primeras semanas
+  body_blocks:
+  - type: text
+    content: 'Para aceptar cada TP: accedé al link → "Accept this assignment" → te
+      crea un repo personal'
+  - type: list
+    ordered: false
+    items:
+    - content: '**TP4 próximamente:**'
+      level: 0
+    - content: Django ORM · Entrega 14/4 · 23hs · classroom.github.com/a/mZttlvBE
+      level: 0
+  code_blocks: []
+  tables:
+  - '| TP | Tema | Entrega | Link de Classroom |
+
+    |----|------|---------|-------------------|
+
+    | **TP1** | Blog Personal HTML/CSS/Bootstrap | **31/3 · 23hs** | classroom.github.com/a/RI8vnIt_
+    |
+
+    | **TP2** | Introducción a Python | **31/3 · 23hs** | classroom.github.com/a/X4xiTEDQ
+    |
+
+    | **TP3** | Tests Unitarios con pytest | **7/4 · 23hs** | classroom.github.com/a/jLxPRyso
+    |'
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets:
+  - index: 0
+    table_markdown: '| TP | Tema | Entrega | Link de Classroom |
+
+      |----|------|---------|-------------------|
+
+      | **TP1** | Blog Personal HTML/CSS/Bootstrap | **31/3 · 23hs** | classroom.github.com/a/RI8vnIt_
+      |
+
+      | **TP2** | Introducción a Python | **31/3 · 23hs** | classroom.github.com/a/X4xiTEDQ
+      |
+
+      | **TP3** | Tests Unitarios con pytest | **7/4 · 23hs** | classroom.github.com/a/jLxPRyso
+      |'
+    local_asset: slides/assets/F-38-table-1.png
+    drive_id: null
+- id: F-39
+  type: pending
+  title: Próxima clase
+  subtitle: Semana 2 — Python 3.13
+  body_blocks:
+  - type: text
+    content: 'Tip: Avanzar con el TP1 mientras el material de hoy está fresco — al
+      menos completar la estructura base y el Navbar.'
+  code_blocks:
+  - lang: text
+    content: 'Semana 1 ✅ HTML + CSS + Bootstrap (HOY)
+
+      Semana 2    Python 3.13 — Fundamentos
+
+
+      Qué viene:
+
+      • Variables y tipos de datos
+
+      • Control de flujo (if/for/while)
+
+      • Funciones y módulos
+
+      • Git branches + pull requests
+
+
+      TPs que siguen corriendo:
+
+      • TP1 (Blog HTML)  → 31/3 23hs · classroom.github.com/a/RI8vnIt_
+
+      • TP2 (Python)     → 31/3 23hs · classroom.github.com/a/X4xiTEDQ
+
+      • TP3 (pytest)     →  7/4 23hs · classroom.github.com/a/jLxPRyso'
+  tables: []
+  directives: {}
+  asset_hints: []
+  layout: {}
+  background_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  content_image:
+    strategy: none
+    prompt: ''
+    local_asset: ''
+    drive_id: null
+  table_assets: []
+_draft_instructions:
+  pending_type_ids:
+  - F-01
+  - F-02
+  - F-03
+  - F-04
+  - F-05
+  - F-06
+  - F-07
+  - F-08
+  - F-09
+  - F-10
+  - F-11
+  - F-12
+  - F-13
+  - F-14
+  - F-15
+  - F-16
+  - F-17
+  - F-18
+  - F-19
+  - F-20
+  - F-21
+  - F-22
+  - F-23
+  - F-24
+  - F-25
+  - F-26
+  - F-27
+  - F-28
+  - F-29
+  - F-30
+  - F-31
+  - F-32
+  - F-33
+  - F-34
+  - F-35
+  - F-36
+  - F-37
+  - F-38
+  - F-39
+  pending_prompt_ids: []
+  enum_types:
+  - portada
+  - concepto-abstracto
+  - concepto-mixto
+  - codigo
+  - tabla
+  - tabla-comparativa
+  - tabla-mixta
+  - diagrama
+  - socratica
+  - demo
+  - cierre
+  - timeline
+  next_steps:
+  - 1. Asignar type explícito a cada slide en pending_type_ids (ver filmina-slide-schema.yaml)
+  - 2. Completar layout para slides con type anterior a pending
+  - '3. Para slides con image.strategy=gemini: escribir prompt VISUAL PURO (ver prompt-imagen-guide.md)'
+  - 4. Eliminar la clave '_draft_instructions' de este archivo
+  - '5. Renombrar a: slides/plan-filminas-00-nivelacion-html-css-prompting.yaml'
+  - '6. Validar: python scripts/repair_plan.py <topic_folder> --attempt 1'
+  - '7. Publicar: python scripts/slides_pipeline.py <topic_folder>'

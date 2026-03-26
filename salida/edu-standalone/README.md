@@ -90,16 +90,24 @@ Escribí `/edu-` en Copilot Chat para ver todos los comandos disponibles.
 
 ## Contrato canónico de filminas
 
-El módulo define un contrato único para las filminas en dos archivos:
+El módulo define el contrato de filminas en dos niveles:
 
+### Autoría (input)
 - `_edu/templates/filminas-template.md`: plantilla humana para autores y modelos.
-- `_edu/templates/filminas-schema.yaml`: contrato canónico legible por scripts, prompts y validadores.
+- `_edu/templates/filminas-schema.yaml`: reglas de parseo Markdown → slides (markers, directivas).
+
+### Validación y pipeline (output — v3 schema-driven)
+- `_edu/schemas/schema-registry.json`: **fuente única de verdad** — enums canónicos, mapeos tipo→layout, reglas de prompts.
+- `_edu/schemas/filmina-slide.schema.json`: JSON Schema por slide individual.
+- `_edu/schemas/plan-filminas.schema.json`: JSON Schema del plan completo.
+- `_edu/schemas/design-system.schema.json`: JSON Schema del sistema de diseño.
+- `_edu/schemas/pipeline-runtime.schema.json`: JSON Schema de geometría del pipeline.
 
 Objetivo:
 
-- que el creador de `filminas.md`, el generador del plan YAML y el publicador de Google Slides lean la misma estructura,
-- evitar heurísticas incompatibles entre fases,
-- permitir que incluso un modelo simple produzca filminas válidas siguiendo una plantilla explícita.
+- que el creador de `filminas.md`, el generador del plan JSON y el publicador de Google Slides lean la misma estructura,
+- que los schemas sean la fuente ejecutable y verificable del contrato,
+- que los scripts no tengan constantes de diseño propias — todo viene del schema registry.
 
 Reglas base del contrato:
 

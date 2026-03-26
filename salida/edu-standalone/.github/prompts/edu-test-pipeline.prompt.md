@@ -20,7 +20,7 @@ Ejecutar el test de integración completo del pipeline de producción de filmina
 
    Modos disponibles:
    [1] Test completo (plan + assets IA + publicar + capturas)    ~5-10 min
-   [2] Solo plan     (parseo filminas.md → YAML, sin APIs)       ~5 seg
+   [2] Solo plan     (parseo filminas.md → JSON, sin APIs)       ~5 seg
    [3] Sin imágenes  (plan + publish, sin Imagen 4.0)            ~2-3 min
    [4] Desde filminas.md alternativo (pedir ruta)
    ```
@@ -46,13 +46,13 @@ Ejecutar el test de integración completo del pipeline de producción de filmina
 reporte/test{YYYYMMDD_HHMMSS}/
   filminas.md           — copia del filminas.md de entrada
   slides-config.yaml    — copia de la config usada
-  plan.yaml             — plan YAML generado (copia del tema-test/)
+  plan.json             — plan JSON v3 generado (copia del tema-test/)
   assets/               — imágenes IA + tablas PNG locales
   filminas/             — capturas de Google Slides (filmina_01.png, ...)
   report.html           — informe visual con thumbnails y estado de fases
   test-meta.yaml        — metadatos del run (timings, errores)
   tema-test/            — carpeta de trabajo del pipeline
     slides/
-      plan-filminas-tema-test.yaml
+      plan-filminas-tema-test.json
       assets/
 ```

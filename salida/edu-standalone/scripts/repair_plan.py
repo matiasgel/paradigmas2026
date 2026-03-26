@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-repair_plan.py — Orquesta el ciclo validación → corrección → revalidación (Sprint 3)
-======================================================================================
+repair_plan.py — Orquesta el ciclo validación → corrección → revalidación (v3)
+================================================================================
 Diseñado para ser llamado en un loop por un agente. El agente corrige el plan
 entre intentos; repair_plan.py solo normaliza, valida y reporta.
 
+Solo soporta planes JSON v3.
+
 Flujo del agente:
-    1. Agente genera/corrige plan-filminas-{tema}.yaml
+    1. Agente genera/corrige plan-filminas-{tema}.json
     2. python scripts/repair_plan.py {topic_folder} --attempt 1
        → exit 0: plan válido → ejecutar slides_pipeline.py
        → exit 1: errores → agente corrige SOLO los campos reportados → --attempt 2
@@ -26,14 +28,18 @@ Exit codes:
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
-import yaml
-
-sys.path.insert(0, str(Path(__file__).parent))
+from pipeline_common import (
+    Result,
+    find_plan,
+    find_project_root,
+    load_json,
+    save_json,
+)
 import validate_plan as vp
-from slides_pipeline import find_project_root
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -41,52 +47,39 @@ from slides_pipeline import find_project_root
 # ═══════════════════════════════════════════════════════════════════════
 
 def normalize_plan(plan_path: Path) -> None:
+    """Re-serializa el plan JSON en forma canónica (indentación 2, UTF-8)."""
+    data = load_json(plan_path)
+    save_json(plan_path, data)
+
+
+def _check_draft_not_used(plan_path: Path) -> Result[Path]:
+    """Verifica que el plan no sea todavía un DRAFT sin completar.
+
+    Retorna Result[Path] con el path si no es draft, o errores.
     """
-    Re-serializa el plan YAML en forma canónica.
-    Elimina variaciones de formato (ordenación de claves, indentación, comillas)
-    para que las diffs entre intentos reflejen solo cambios de contenido.
-    """
-    with plan_path.open("r", encoding="utf-8") as f:
-        data = yaml.safe_load(f) or {}
-    with plan_path.open("w", encoding="utf-8") as f:
-        yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
-
-
-def _find_plan(topic_folder: Path) -> Path | None:
-    """Busca el plan-filminas-*.yaml en slides/. Retorna None si no existe."""
-    slides_dir = topic_folder / "slides"
-    topic_id = topic_folder.name
-    candidate = slides_dir / f"plan-filminas-{topic_id}.yaml"
-    if candidate.exists():
-        return candidate
-    if slides_dir.exists():
-        found = sorted(slides_dir.glob("plan-filminas-*.yaml"))
-        if found:
-            return found[0]
-    return None
-
-
-def _check_draft_not_used(plan_path: Path) -> list[str]:
-    """Verifica que el plan no sea todavía un DRAFT sin completar."""
+    data = load_json(plan_path)
     warnings: list[str] = []
-    with plan_path.open("r", encoding="utf-8") as f:
-        data = yaml.safe_load(f) or {}
-    meta = data.get("meta", {})
+
     if "_draft_instructions" in data:
         warnings.append(
             "DRAFT: el plan contiene '_draft_instructions' — eliminar esa clave "
             "y completar todos los campos pendientes antes de validar"
         )
-    if str(meta.get("status", "")).startswith("DRAFT"):
+
+    summary = data.get("summary", {})
+    status = summary.get("status", "")
+    if status == "DRAFT":
         warnings.append(
-            f"DRAFT: meta.status='{meta.get('status')}' — el plan aún no fue completado por el agente"
+            f"DRAFT: summary.status='{status}' — el plan aún no fue completado por el agente"
         )
-    pending_count = int(meta.get("pending_types", 0) or 0)
+
+    pending_count = int(summary.get("pending_types", 0) or 0)
     if pending_count > 0:
         warnings.append(
-            f"DRAFT: meta.pending_types={pending_count} — hay slides con type: pending sin resolver"
+            f"DRAFT: summary.pending_types={pending_count} — hay slides con type pendiente sin resolver"
         )
-    return warnings
+
+    return Result.fail(*warnings) if warnings else Result.ok(plan_path)
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -95,7 +88,7 @@ def _check_draft_not_used(plan_path: Path) -> list[str]:
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
-        description="repair_plan.py — Valida plan YAML y reporta errores estructurados por campo",
+        description="repair_plan.py — Valida plan JSON y reporta errores estructurados por campo",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
@@ -132,36 +125,38 @@ def main(argv: list[str] | None = None) -> None:
 
     project_root = find_project_root(topic_folder)
 
-    # ── Buscar el plan ────────────────────────────────────────────────
-    plan_path = _find_plan(topic_folder)
-    if not plan_path:
-        slides_dir = topic_folder / "slides"
-        print(f"❌ No se encontró plan-filminas-*.yaml en {slides_dir}")
+    # ── Buscar el plan JSON v3 ────────────────────────────────────────
+    plan_result = find_plan(topic_folder)
+    if not plan_result.is_ok:
+        for err in plan_result.errors:
+            print(f"❌ {err}")
         print("   Ejecutar primero: python scripts/parse_filminas.py <topic_folder>")
-        print("   Luego completar el DRAFT y renombrar a plan-filminas-{tema}.yaml")
+        print("   Luego completar el DRAFT y renombrar a plan-filminas-{tema}.json")
         sys.exit(1)
+
+    plan_path = plan_result.unwrap()
 
     rel_path = plan_path.relative_to(project_root)
     print(f"🔧 Intento {attempt}/{max_attempts} — {rel_path}")
 
     # ── Verificar que no sea un DRAFT sin completar ───────────────────
-    draft_warnings = _check_draft_not_used(plan_path)
-    if draft_warnings:
-        print(f"\n⚠️  El plan parece estar incompleto ({len(draft_warnings)} advertencia(s)):\n")
-        for w in draft_warnings:
+    draft_result = _check_draft_not_used(plan_path)
+    if not draft_result.is_ok:
+        print(f"\n⚠️  El plan parece estar incompleto ({len(draft_result.errors)} advertencia(s)):\n")
+        for w in draft_result.errors:
             print(f"   • {w}")
         print("\n   Completar el plan antes de validar.")
         if attempt < max_attempts:
             print(f"\n   Volver a ejecutar con --attempt {attempt + 1} cuando el plan esté completo.")
         sys.exit(1)
 
-    # ── 1. Normalizar YAML ────────────────────────────────────────────
+    # ── 1. Normalizar plan ───────────────────────────────────────────
     try:
         normalize_plan(plan_path)
-        print("   ✓ YAML normalizado")
+        print("   ✓ JSON normalizado")
     except Exception as e:
-        print(f"   ❌ Error al normalizar YAML: {e}")
-        print("   El archivo puede estar mal formado. Verificar sintaxis YAML.")
+        print(f"   ❌ Error al normalizar JSON: {e}")
+        print("   El archivo puede estar mal formado. Verificar sintaxis JSON.")
         sys.exit(1)
 
     # ── 2. Validar ────────────────────────────────────────────────────
@@ -204,7 +199,8 @@ def main(argv: list[str] | None = None) -> None:
    3. Si pasa: python scripts/slides_pipeline.py {args.topic_folder}
 
    Referencia:
-     Tipos permitidos:  _edu/templates/filmina-slide-schema.yaml
+     Schema registry:   _edu/schemas/schema-registry.json
+     Schema de plan:    _edu/schemas/plan-filminas.schema.json
      Guía de prompts:   _edu/templates/prompt-imagen-guide.md
 """)
         sys.exit(2)
@@ -217,6 +213,7 @@ def main(argv: list[str] | None = None) -> None:
 
    IMPORTANTE: NO regenerar el plan completo. Solo corregir los campos con error.
    Para prompts vacíos: usar LENGUAJE VISUAL PURO (ver _edu/templates/prompt-imagen-guide.md).
+   Schema registry: _edu/schemas/schema-registry.json
 
    Luego volver a ejecutar:
    python scripts/repair_plan.py {args.topic_folder} --attempt {next_attempt} --max-attempts {max_attempts}
