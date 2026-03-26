@@ -1,9 +1,9 @@
 # EDU — Academic Course Production Suite
 
 Pipeline completo de producción docente universitaria con inteligencia pedagógica.
-Desde el programa institucional hasta el cierre de cursada, con validación automática y memoria acumulada año a año.
+Desde el programa institucional hasta el cierre de cursada, con validación automática, memoria colectiva buscable y soporte multi-clase en un solo workspace.
 
-<!-- última actualización: 2026-03-25 · Arquitectura v3 JSON Schema-driven -->
+<!-- última actualización: 2026-03-25 · Arquitectura v3 JSON Schema-driven · Memoria SQLite FTS5 · Multi-clase -->
 
 ---
 
@@ -25,9 +25,19 @@ Editá `_edu/config.yaml`:
 project_name: "Paradigmas de Programación"
 institution:  "Universidad XYZ"
 user_name:    "Prof. Matías"
+course_prefix: "para"                           # prefijo corto de la materia
+course_year:   "2026"                           # año académico
+# course_id se calcula: para-2026
 default_professor_profile: "profesor-practico"   # ver tabla de perfiles al final
 default_class_duration:    "90"                  # minutos
 ```
+
+> **Multi-clase:** Si dás más de una materia, usá `/edu-switch-course` para cambiar el `course_prefix` activo.
+> Las carpetas se organizan automáticamente por `course_id`:
+> ```
+> salida/cursadas/para-2026/temas/   ← Paradigmas 2026
+> salida/cursadas/leng-2026/temas/   ← Lenguajes 2026
+> ```
 
 #### 2. Configurar el entorno Python
 
@@ -77,7 +87,7 @@ Activa a Vera 🎨, que te guía para definir paleta, tipografía, layouts por t
 | Paso | Descripción | Artefacto generado |
 |------|-------------|-------------------|
 | 1 | Configurar nombre de materia, perfil del docente, LMS y duración de clase | `_edu/config.yaml` (actualiza) |
-| 2 | Cargar el programa institucional (PDF) y extraer los tópicos mínimos | `salida/cursadas/{year}/plan-minimo.md` |
+| 2 | Cargar el programa institucional (PDF) y extraer los tópicos mínimos | `salida/cursadas/{course_id}/plan-minimo.md` |
 | 3 | Confirmar el plan mínimo como **contrato inmutable** de la cursada | `plan-minimo.md` bloqueado |
 
 > **Importante:** Una vez confirmado, `plan-minimo.md` no puede ser modificado por ningún agente.
@@ -97,7 +107,7 @@ Con el plan mínimo confirmado, construís el plan de trabajo real.
 - **Desde material existente** — sube tus PDFs/PPTX a `material/` y el módulo extrae los tópicos
 - **Desde investigación** — el módulo busca fuentes académicas y propone un plan
 
-**Artefacto generado:** `salida/cursadas/{year}/plan-borrador.md` — cronograma de temas con duraciones.
+**Artefacto generado:** `salida/cursadas/{course_id}/plan-borrador.md` — cronograma de temas con duraciones.
 
 **Comandos adicionales de fase 2:**
 
@@ -344,13 +354,89 @@ python scripts/slides_pipeline.py temas/NN-nombre --publish-only # solo publicar
 /edu-close-course
 ```
 
-Retrospectiva del año: qué funcionó, qué no, resumen de cobertura y traspaso de memoria acumulada.
+Retrospectiva del año: qué funcionó, qué no, resumen de cobertura y traspaso de memoria a la base colectiva.
 
 ```
 /edu-start-new-year
 ```
 
-Prepara el workspace para el año siguiente conservando toda la memoria del simulador y las calibraciones previas.
+Prepara el workspace para el año siguiente conservando toda la memoria colectiva, calibraciones del simulador y lecciones aprendidas.
+
+---
+
+## Memoria Colectiva
+
+Todos los agentes comparten una **base de conocimiento** persistente en `_edu-memory/memory.db` (SQLite FTS5, zero dependencias externas).
+
+**Qué se guarda automáticamente:**
+
+| Evento | Categoría | Quién escribe |
+|---|---|---|
+| `/edu-quality` detecta error crítico | `quality-finding` | Loops de calidad |
+| Usuario corrige output de un agente | `agent-correction` | El agente corregido |
+| `/edu-close-topic` | `cross-topic` | Elena |
+| `/edu-close-course` | `retrospective` | Elena |
+| `/edu-compare-survey-simulator` | `student-feedback` | Simulador |
+| Error en scripts del pipeline | `tool-issue` | El script |
+
+**Qué se consulta automáticamente:**
+
+| Evento | Qué busca |
+|---|---|
+| `/edu-design-topic` | Insights pedagógicos y feedback de alumnos del tema |
+| `/edu-create-class` | Errores y correcciones previas del class-writer |
+| `/edu-quality` | Patrones de error recurrentes cross-tema |
+| `/edu-start-new-year` | Toda la memoria del año anterior |
+
+**Búsqueda manual:**
+
+```
+/edu-memory-search
+```
+
+O directamente desde la terminal:
+
+```bash
+# Buscar en la materia activa
+python scripts/edu_memory.py search "coherencia filminas"
+
+# Cross-curso (todas las materias)
+python scripts/edu_memory.py search "recursión" --all
+
+# Por categoría específica
+python scripts/edu_memory.py search "error" --category agent-error
+
+# Agregar una entrada manual
+python scripts/edu_memory.py add --course para-2026 --topic 03 --category pedagogy-insight \
+  --summary "Evitar recursión en tema 03 por feedback de 2025"
+
+# Exportar toda la memoria de un curso
+python scripts/edu_memory.py export --course para-2026
+```
+
+**Categorías:**
+`agent-error`, `agent-correction`, `quality-finding`, `pedagogy-insight`, `student-feedback`, `cross-topic`, `retrospective`, `tool-issue`
+
+---
+
+## Multi-Clase
+
+Un solo workspace puede contener múltiples materias. La clave es `course_id` = `{course_prefix}-{course_year}`.
+
+```
+/edu-switch-course
+```
+
+Cambia la materia activa. Actualiza `course_prefix` en `config.yaml` y recalcula todas las rutas.
+
+```
+salida/cursadas/
+  para-2026/temas/    ← Paradigmas 2026
+  leng-2026/temas/    ← Lenguajes 2026
+  leng-2025/temas/    ← Lenguajes 2025 (archivado)
+```
+
+La memoria colectiva es **cross-curso**: un insight de `leng-2025` es visible desde `para-2026` buscando con `--all`.
 
 ---
 
@@ -414,10 +500,12 @@ tu-materia/
 │   ├── templates/                  ← Templates de autoría (filminas-template.md, etc.)
 │   ├── tasks/                      ← Tasks internas (gift-validator, etc.)
 │   └── workflows/                  ← Definiciones de workflows por fase
-├── _edu-memory/                    ← Memoria persistente inter-sesión (en runtime)
+├── _edu-memory/                    ← Memoria colectiva (memory.db + sidecars)
+│   └── memory.db                   ← SQLite FTS5: errores, correcciones, insights
 ├── scripts/                        ← Pipeline técnico de filminas
 │   ├── pipeline_common.py          ← Utilidades compartidas + Result[T] monad FP
 │   ├── slides_pipeline.py          ← Validación + assets + publicación Google Slides
+│   ├── edu_memory.py               ← CLI + API de memoria colectiva (SQLite FTS5)
 │   ├── validate_plan.py            ← Validación JSON Schema del plan
 │   ├── parse_filminas.py           ← Genera plan DRAFT desde filminas.md
 │   ├── repair_plan.py              ← Loop de reparación automática
@@ -425,7 +513,7 @@ tu-materia/
 │   └── requirements.txt
 ├── salida/
 │   └── cursadas/
-│       └── {year}/
+│       └── {course_id}/
 │           ├── plan-minimo.md      ← Plan institucional inmutable
 │           ├── plan-borrador.md    ← Cronograma de trabajo
 │           └── temas/
@@ -493,6 +581,8 @@ Invocar con `@edu-agent-nombre` en Copilot Chat o seleccionarlos en el dropdown 
 | `/edu-status` | Estado detallado del tema activo |
 | `/edu-update-context` | Refrescar contexto de Copilot al retomar sesión |
 | `/edu-edit-class-template` | Personalizar la estructura de minutas y filminas |
+| `/edu-switch-course` | Cambiar la materia activa (multi-clase) |
+| `/edu-memory-search` | Buscar en la memoria colectiva |
 
 ### Fase 1
 

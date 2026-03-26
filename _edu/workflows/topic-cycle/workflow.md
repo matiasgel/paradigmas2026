@@ -15,12 +15,13 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
 ### Step 0: Initialize Topic Directory
 - **Precondition:** `_edu/active-topic.yaml` must exist (written by /edu-design-topic or /edu-topic)
 - **Actions:**
-  1. Read `{project-root}/_edu/config.yaml` → store `{topics_folder}` como variable de sesión (ej: `salida/cursadas/2026/temas`)
+  1. Read `{project-root}/_edu/config.yaml` → store `{topics_folder}`, `{course_id}` como variables de sesión
   2. Read `{project-root}/_edu/active-topic.yaml` → store `{topic_folder}`, `{topic_number}`, `{topic_name}` as session variables
-     - **⚠️ VALIDACIÓN DE RUTA:** `topic_folder` DEBE ser ruta bajo `{topics_folder}` (ej: `salida/cursadas/2026/temas/01-intro`). Si es una ruta bare como `temas/NN-nombre`, corregir automáticamente a `{topics_folder}/NN-nombre` y actualizar `active-topic.yaml`.
+     - **⚠️ VALIDACIÓN DE RUTA:** `topic_folder` DEBE ser ruta bajo `{topics_folder}` (ej: `salida/cursadas/leng-2026/temas/01-intro`). Si es una ruta bare como `temas/NN-nombre`, corregir automáticamente a `{topics_folder}/NN-nombre` y actualizar `active-topic.yaml`.
   3. Read `{project-root}/{topic_folder}/topic.yaml` → store all fields (`class_duration`, `git_branch`, `status`, `artifacts` map)
   4. Use `{class_duration}` from `topic.yaml` as the duration constraint for ALL subsequent steps
   5. Resolve all artifact paths as `{project-root}/{topic_folder}/{artifact}` (e.g. `diseno.md`, `minuta.md`, `filminas.md`, `guia-estudio.md`, `tp.md`)
+  6. **Consultar memoria colectiva:** ejecutar `python scripts/edu_memory.py search "{topic_name}" --course {course_id}` y también `python scripts/edu_memory.py list --course {course_id} --topic {topic_number} --unresolved`. Los resultados se pasan como contexto a todos los agentes del ciclo (errores previos a evitar, correcciones ya aplicadas, insights pedagógicos del tema).
 - **Crear si falta:** Si `active-topic.yaml` no existe Y se dispone de número/nombre del tema → CREAR con `topic_folder: {topics_folder}/NN-nombre` y continuar.
 - **Error:** If `active-topic.yaml` is missing AND no topic info available → STOP and instruct: "Primero iniciá un tema con /edu-design-topic"
 
