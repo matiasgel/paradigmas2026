@@ -39,7 +39,7 @@ Este documento mapea los workflows del módulo EDU con los prompts `/edu-*` que 
 | `/edu-approve-design` | `topic-cycle/` (Step 3) | Elena 🎓 | Aprobar el diseño del tema |
 | `/edu-create-class` | `topic-cycle/` (Step 4) | Roberto ✍️ | Generar `minuta.md` + `filminas.md` |
 | `/edu-create-study-guide` | `topic-cycle/` (Step 4.5) | Sofía 📖 | Guía de estudio autónoma para alumnos |
-| `/edu-create-teacher-guide` | `create-teacher-guide/` | Roberto ✍️ / Sofía 📖 | Guía del profesor con plan de clase |
+| `/edu-create-teacher-guide` | `create-teacher-guide/` | Roberto ✍️ | Guía del profesor autocontenida |
 | `/edu-create-tp` | `topic-cycle/` (Step 5) | Valeria 📝 | TP trazable (desarrollo/repo/quiz/mixto) |
 | `/edu-validate-gift` | `create-tp-quiz/` | Valeria 📝 | Validar archivo GIFT para Moodle |
 | `/edu-create-autograde-repo` | `create-autograde-repo/` | Rodrigo | Repo con GitHub Actions autograding |
@@ -76,3 +76,5 @@ Este documento mapea los workflows del módulo EDU con los prompts `/edu-*` que 
 | `/edu-edit-class-template` | Editar template canónico de clases |
 | `/edu-update-context` | Actualizar `copilot-instructions.md` con estado actual |
 | `/edu-compare-survey-simulator` | Comparar encuesta real vs simulación |
+| `/edu-switch-course` | Cambiar materia activa (multi-clase) |
+| `/edu-memory-search` | Buscar en la memoria colectiva (SQLite FTS5) |
