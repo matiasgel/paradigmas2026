@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EDU Annotation Steps",
+  "description": "Secuencia de anotaciones de pizarra por filmina (Drawing principle, Fiorella & Mayer 2023)",
+  "type": "object",
+  "required": ["slide_number", "slide_type", "steps"],
+  "properties": {
+    "slide_number": { "type": "integer", "minimum": 1 },
+    "slide_type": { "type": "string" },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["action", "description", "duration_seconds"],
+        "properties": {
+          "action": { "enum": ["draw_text", "draw_shape", "draw_arrow", "draw_line", "highlight", "erase", "label"] },
+          "description": { "type": "string" },
+          "duration_seconds": { "type": "integer", "minimum": 5, "maximum": 120 },
+          "position": { "type": "string", "description": "Ubicación relativa: centro, derecha, arriba-izq, etc." }
+        }
+      },
+      "minItems": 2
+    },
+    "total_duration_seconds": { "type": "integer" },
+    "bloom_progression": { "type": "string" }
+  }
+}

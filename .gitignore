@@ -29,6 +29,24 @@ reporte/
 salida/cursadas/*/temas/*prueba*/
 salida/cursadas/*/temas/*pruebas*/
 
+# Sprint 5 — Analytics (datos de alumnos)
+analytics/*.csv
+
+# Sprint 7 — Audio generado
+salida/cursadas/*/temas/*/audio/
+
+# Sprint 7 — Interactivos generados
+salida/cursadas/*/temas/*/interactivos/
+
+# Sprint 10 — Modelos ML descargados
+_edu-knowledge/models/
+
+# Sprint 11 — Knowledge Graph artifacts
+_edu-knowledge/universal-kg.json
+
+# Sprint 13 — Student state
+salida/cursadas/*/students/
+
 # IDE
 .vscode/
 .idea/

@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://edu-module.org/schemas/knowledge-graph.schema.json",
+  "title": "Knowledge Graph (JSON-LD)",
+  "description": "Formato de salida del Knowledge Graph educativo en JSON-LD",
+  "type": "object",
+  "required": ["@context", "@graph", "edges"],
+  "properties": {
+    "@context": {
+      "type": "object",
+      "description": "Contexto JSON-LD con prefijos de la ontología EDU"
+    },
+    "@graph": {
+      "type": "array",
+      "description": "Nodos del grafo (conceptos, temas)",
+      "items": {
+        "type": "object",
+        "required": ["@id", "label"],
+        "properties": {
+          "@id": {
+            "type": "string",
+            "description": "IRI del concepto (edu:nombre)"
+          },
+          "label": {
+            "type": "string",
+            "description": "Etiqueta legible del concepto"
+          },
+          "source": {
+            "type": "string",
+            "description": "Origen: plan-minimo, manual, ACM/IEEE CC2023, etc."
+          },
+          "layer": {
+            "type": "string",
+            "enum": ["concept", "subtopic", "KA", "KU", "course"],
+            "description": "Capa del concepto en la jerarquía"
+          },
+          "bloom_level": {
+            "type": ["string", "null"],
+            "enum": ["recordar", "comprender", "aplicar", "analizar", "evaluar", "crear", null],
+            "description": "Nivel de Bloom asignado al concepto"
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "description": "Relaciones entre conceptos",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "relation"],
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "ID del concepto origen"
+          },
+          "to": {
+            "type": "string",
+            "description": "ID del concepto destino"
+          },
+          "relation": {
+            "type": "string",
+            "enum": ["hasPrerequisite", "partOf", "contradicts", "exemplifiedBy"],
+            "description": "Tipo de relación"
+          },
+          "source": {
+            "type": "string",
+            "description": "Origen de la relación"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Confianza de la relación (1.0 = manual confirmado)"
+          }
+        }
+      }
+    }
+  }
+}
