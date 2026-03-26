@@ -36,16 +36,6 @@ from pipeline_common import find_plan, find_project_root, load_json, load_yaml
 
 
 def _hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
-    """Convierte #RRGGBB a (R, G, B) 0-255."""
-    h = hex_color.lstrip("#")
-    if len(h) == 3:
-        h = h[0] * 2 + h[1] * 2 + h[2] * 2
-    return int(h[0:2], 16), int(h[1:2] + h[2:4][:1], 16) if len(h) != 6 else (
-        int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
-    )
-
-
-def _hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
     """Convierte #RRGGBB o #RGB a (R, G, B) 0-255."""
     h = hex_color.lstrip("#")
     if len(h) == 3:

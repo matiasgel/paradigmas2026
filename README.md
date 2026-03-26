@@ -535,7 +535,9 @@ tu-materia/
 │   │   ├── filmina-slide.schema.json
 │   │   ├── plan-filminas.schema.json
 │   │   ├── design-system.schema.json
-│   │   └── pipeline-runtime.schema.json
+│   │   ├── pipeline-runtime.schema.json
+│   │   ├── exam-blueprint.schema.json   ← Schema de blueprints de examen (S2)
+│   │   └── layout-rules.schema.json     ← Reglas cognitivas de referencia (S4)
 │   ├── agents/                     ← Definiciones completas de agentes
 │   ├── templates/                  ← Templates de autoría (filminas-template.md, etc.)
 │   ├── tasks/                      ← Tasks internas (gift-validator, etc.)
@@ -555,6 +557,12 @@ tu-materia/
 │   ├── parse_filminas.py           ← Genera plan DRAFT desde filminas.md
 │   ├── repair_plan.py              ← Loop de reparación automática
 │   ├── test_pipeline.py            ← Test de integración end-to-end
+│   ├── validate_accessibility.py   ← Validador WCAG: contraste, alt_text, tipografía (S1)
+│   ├── validate_slide_composition.py ← Auditor visual: densidad, márgenes, overlap (S1)
+│   ├── spaced_repetition.py        ← Motor FSRS v4 de repaso espaciado (S2)
+│   ├── generate_exam_blueprint.py  ← Blueprints de examen con Bloom (S2)
+│   ├── validate_layout_cognition.py ← Reglas cognitivas Mayer/Fiorella por tipo (S4)
+│   ├── cognitive_budget.py         ← Presupuesto cognitivo CLT + curva (S4)
 │   └── requirements.txt
 ├── salida/
 │   └── cursadas/
@@ -673,6 +681,62 @@ Invocar con `@edu-agent-nombre` en Copilot Chat o seleccionarlos en el dropdown 
 | `/edu-slides-designer` | Definir sistema visual del cursado (una vez) |
 | `/edu-publish-slides` | Pipeline completo v3: plan JSON → imágenes → Google Slides |
 | `/edu-test-pipeline` | Test de integración end-to-end del pipeline |
+
+### Validadores Pasivos (Sprint 1)
+
+Herramientas de solo lectura que auditan filminas sin modificar archivos. Se activan con `accessibility_check_enabled: true` en `config.yaml`.
+
+| Comando | Descripción |
+|---------|-------------|
+| `/edu-check-accessibility` | Validación WCAG 2.1: contraste AA/AAA, alt_text, tipografía mínima por distancia de aula |
+| `/edu-check-composition` | Auditoría visual: densidad Scheiter & Eitel 2017, márgenes seguros 5%, solapamientos |
+
+```bash
+# CLI directo
+python scripts/validate_accessibility.py --topic 01-intro --course leng-2026
+python scripts/validate_slide_composition.py --topic 01-intro --course leng-2026
+```
+
+**Reportes generados:** `accessibility-report.md` y `composition-report.md` en la carpeta del tema.
+
+### Herramientas de Planificación Docente (Sprint 2)
+
+Herramientas activas para planificación de evaluaciones y repaso espaciado.
+
+| Comando | Descripción |
+|---------|-------------|
+| `/edu-spaced-review` | Motor FSRS v4 (Ye 2023): genera calendario de repaso, registra scores, genera slides socrático |
+| `/edu-create-exam` | Blueprint de examen con distribución Bloom (4 perfiles: default, práctico, investigación, introductorio) |
+
+```bash
+# Generar calendario de repaso
+python scripts/spaced_repetition.py generate --course para-2026
+
+# Registrar resultado de repaso
+python scripts/spaced_repetition.py record --course para-2026 --topic 01 --score 4
+
+# Generar blueprint de parcial
+python scripts/generate_exam_blueprint.py --course para-2026 --exam-number 1 --profile practical
+```
+
+### Inteligencia Cognitiva (Sprint 4)
+
+Validación basada en ciencia cognitiva. Se activan con `cognitive_validation_enabled: true` en `config.yaml`.
+
+| Comando | Descripción |
+|---------|-------------|
+| `/edu-check-cognition` | Reglas cognitivas por tipo de filmina: assertion-evidence (Garner & Alley 2016), límite Miller 7±2, máx. teoría consecutiva |
+| `/edu-check-cognitive-load` | Presupuesto cognitivo CLT (Chen & Sweller 2023): curva acumulativa, umbrales fatiga/crítico, patrón U-invertida |
+
+```bash
+# Validar reglas cognitivas
+python scripts/validate_layout_cognition.py --topic 01-intro --course leng-2026
+
+# Calcular presupuesto cognitivo
+python scripts/cognitive_budget.py --topic 01-intro --course leng-2026
+```
+
+**Reportes generados:** `cognition-report.md` y `cognitive-budget-report.md` en la carpeta del tema.
 
 ### Fase 4
 
