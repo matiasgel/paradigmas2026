@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "edu-schemas/registry",
+  "title": "EDU Schema Registry — Manifiesto Inmutable",
+  "description": "Punto de entrada único para todos los schemas del pipeline de filminas. Los agentes DEBEN leer este archivo ANTES de generar cualquier configuración. Los scripts DEBEN validar contra estos schemas ANTES de ejecutar.",
+  "version": "3.0.0",
+  "date": "2026-03-25",
+  "immutability_rule": "Este archivo y todos los schemas referenciados son INMUTABLES. Solo cambian con bump de versión mayor planificado y aprobado. Los scripts leen de aquí, no tienen constantes propias.",
+  "schemas": {
+    "filmina-slide": {
+      "path": "_edu/schemas/filmina-slide.schema.json",
+      "version": "3.0.0",
+      "purpose": "Contrato canónico por filmina individual. Define TODOS los campos requeridos para una slide.",
+      "consumers": ["validate_plan.py", "slides_pipeline.py", "slides-publisher agent", "slides-designer agent"],
+      "producers": ["slides-publisher agent", "parse_filminas.py (DRAFT)"]
+    },
+    "plan-filminas": {
+      "path": "_edu/schemas/plan-filminas.schema.json",
+      "version": "3.0.0",
+      "purpose": "Contrato de plan completo por tema. Un solo archivo JSON por tema.",
+      "consumers": ["validate_plan.py", "slides_pipeline.py", "repair_plan.py"],
+      "producers": ["slides-publisher agent"]
+    },
+    "design-system": {
+      "path": "_edu/schemas/design-system.schema.json",
+      "version": "3.0.0",
+      "purpose": "Contrato del sistema de diseño visual. Define paleta, tipografía, layouts canónicos y estrategia de imágenes.",
+      "consumers": ["slides_pipeline.py", "slides-publisher agent", "slides-designer agent"],
+      "producers": ["slides-designer agent"]
+    },
+    "pipeline-runtime": {
+      "path": "_edu/schemas/pipeline-runtime.schema.json",
+      "version": "3.0.0",
+      "purpose": "Configuración de geometría, rendering y constantes EMU del pipeline técnico.",
+      "consumers": ["slides_pipeline.py", "validate_plan.py"],
+      "producers": ["architect (manual, por versión)"]
+    }
+  },
+  "canonical_types": {
+    "description": "Enum cerrado de tipos de filmina. Esta es la ÚNICA fuente de verdad. No hay otro lugar donde se definan tipos.",
+    "enum": [
+      "portada",
+      "concepto-abstracto",
+      "concepto-mixto",
+      "codigo",
+      "tabla",
+      "tabla-comparativa",
+      "tabla-mixta",
+      "diagrama",
+      "socratica",
+      "demo",
+      "cierre",
+      "timeline"
+    ]
+  },
+  "canonical_image_layers": {
+    "description": "Enum cerrado de capas de imagen.",
+    "enum": ["background", "content", "none"]
+  },
+  "canonical_layout_zones": {
+    "title": ["center-middle", "full-title", "center-top", "left-top"],
+    "body": ["center-bottom", "left-middle", "center-middle", "subtitle-only", "table-intro", "full-center", "full-bottom", "left-top-split", "none"],
+    "image": ["background", "right-half", "none"],
+    "code": ["right-half", "full-bottom", "left-bottom-split", "none"],
+    "table": ["table-main", "right-half", "none"]
+  },
+  "type_layout_map": {
+    "description": "Mapeo DETERMINISTA tipo → layout + image_layer. El agente DEBE copiar estos valores al plan. No hay libertad de elección.",
+    "portada":            {"layout": {"title": "full-title",    "body": "center-bottom",   "image": "background", "code": "none",             "table": "none"},       "image_layer": "background"},
+    "concepto-abstracto": {"layout": {"title": "full-title",    "body": "left-middle",     "image": "right-half", "code": "none",             "table": "none"},       "image_layer": "content"},
+    "concepto-mixto":     {"layout": {"title": "full-title",    "body": "left-middle",     "image": "none",       "code": "right-half",       "table": "none"},       "image_layer": "none"},
+    "tabla-mixta":        {"layout": {"title": "full-title",    "body": "left-top-split",  "image": "none",       "code": "left-bottom-split", "table": "right-half"}, "image_layer": "none"},
+    "codigo":             {"layout": {"title": "full-title",    "body": "subtitle-only",   "image": "none",       "code": "full-bottom",      "table": "none"},       "image_layer": "none"},
+    "tabla":              {"layout": {"title": "full-title",    "body": "table-intro",     "image": "none",       "code": "none",             "table": "table-main"}, "image_layer": "none"},
+    "tabla-comparativa":  {"layout": {"title": "full-title",    "body": "table-intro",     "image": "none",       "code": "none",             "table": "table-main"}, "image_layer": "none"},
+    "diagrama":           {"layout": {"title": "full-title",    "body": "left-middle",     "image": "right-half", "code": "none",             "table": "none"},       "image_layer": "content"},
+    "socratica":          {"layout": {"title": "center-top",    "body": "center-middle",   "image": "background", "code": "none",             "table": "none"},       "image_layer": "background"},
+    "demo":               {"layout": {"title": "full-title",    "body": "left-middle",     "image": "none",       "code": "right-half",       "table": "none"},       "image_layer": "none"},
+    "cierre":             {"layout": {"title": "center-middle", "body": "center-bottom",   "image": "background", "code": "none",             "table": "none"},       "image_layer": "background"},
+    "timeline":           {"layout": {"title": "full-title",    "body": "full-center",     "image": "none",       "code": "none",             "table": "none"},       "image_layer": "none"}
+  },
+  "image_prompt_rules": {
+    "description": "Reglas INMUTABLES para prompts de imagen. El agente DEBE seguirlas.",
+    "language": "visual-pure",
+    "allowed_vocabulary": ["formas geométricas", "colores", "posiciones", "tamaños", "conectores", "íconos abstractos"],
+    "forbidden": ["conceptos técnicos", "nombres de tecnologías", "palabras del dominio del tema"],
+    "mandatory_suffix": "Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+    "template": "[Elemento]: [forma] [color] [posición]. [Relación posicional]. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+    "guide_path": "_edu/templates/prompt-imagen-guide.md"
+  },
+  "validation": {
+    "pre_pipeline_required": true,
+    "validator_script": "scripts/validate_plan.py",
+    "max_repair_attempts": 3,
+    "on_failure": "STOP — el agente corrige solo los campos reportados con error"
+  },
+  "file_conventions": {
+    "plan_format": "json",
+    "plan_filename": "plan-filminas-{tema}.json",
+    "plan_location": "{topic_folder}/slides/",
+    "draft_filename": "plan-draft-{tema}.json",
+    "assets_folder": "{topic_folder}/slides/assets/",
+    "slides_url_file": "{topic_folder}/slides/slides-url.txt"
+  }
+}

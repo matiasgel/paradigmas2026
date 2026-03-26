@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "edu-schemas/pipeline-runtime",
+  "title": "Pipeline Runtime Schema v3 — Geometría y Rendering",
+  "description": "Define la configuración técnica del canvas, geometría de zonas, rendering de tablas y covers. Inmutable entre versiones. El script lee estos valores; no tiene constantes propias.",
+  "version": "3.0.0",
+  "date": "2026-03-25",
+  "type": "object",
+  "required": ["canvas", "geometry", "table_rendering", "cover_rendering", "slide_types"],
+  "additionalProperties": false,
+  "properties": {
+    "canvas": {
+      "type": "object",
+      "description": "Dimensiones del canvas en EMU (English Metric Units). 16:9 estándar.",
+      "required": ["slide_width", "slide_height", "margin", "title_height", "logo_clear", "title_safe_x", "bottom_clear", "table_bottom_clear", "emu_per_pt"],
+      "additionalProperties": false,
+      "properties": {
+        "slide_width":       {"type": "integer", "const": 9144000, "description": "Ancho slide 16:9 en EMU"},
+        "slide_height":      {"type": "integer", "const": 5143500, "description": "Alto slide 16:9 en EMU"},
+        "margin":            {"type": "integer", "description": "Margen general en EMU (~0.5 pulgada)"},
+        "title_height":      {"type": "integer", "description": "Alto reservado para título en EMU"},
+        "logo_clear":        {"type": "integer", "description": "Espacio vertical para logo institucional en EMU"},
+        "title_safe_x":      {"type": "integer", "description": "X seguro para título (evita logo) en EMU"},
+        "bottom_clear":      {"type": "integer", "description": "Espacio inferior libre en EMU"},
+        "table_bottom_clear": {"type": "integer", "description": "Espacio inferior para slides con tabla en EMU"},
+        "emu_per_pt":        {"type": "integer", "const": 12700, "description": "Factor de conversión puntos → EMU"}
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "description": "Geometría de zonas de contenido.",
+      "required": ["body_top_gap", "cover_subtitle_offset_y", "cover_subtitle_height", "table_intro_height", "table_gap", "split_intro_height", "split_gap", "split_left_margin_factor"],
+      "additionalProperties": false,
+      "properties": {
+        "body_top_gap":             {"type": "integer"},
+        "cover_subtitle_offset_y":  {"type": "integer"},
+        "cover_subtitle_height":    {"type": "integer"},
+        "table_intro_height":       {"type": "integer"},
+        "table_gap":                {"type": "integer"},
+        "split_intro_height":       {"type": "integer"},
+        "split_gap":                {"type": "integer"},
+        "split_left_margin_factor": {"type": "number"}
+      }
+    },
+    "table_rendering": {
+      "type": "object",
+      "description": "Configuración de rendering de tablas como PNG.",
+      "required": ["default_header_font", "default_body_font", "compact_header_font", "compact_body_font", "compact_row_threshold", "right_half_force_compact", "table_main_y_offset", "table_main_height_delta"],
+      "additionalProperties": false,
+      "properties": {
+        "default_header_font":   {"type": "integer", "minimum": 8,  "maximum": 20},
+        "default_body_font":     {"type": "integer", "minimum": 8,  "maximum": 20},
+        "compact_header_font":   {"type": "integer", "minimum": 6,  "maximum": 16},
+        "compact_body_font":     {"type": "integer", "minimum": 6,  "maximum": 16},
+        "compact_row_threshold": {"type": "integer", "minimum": 3,  "maximum": 20},
+        "right_half_force_compact": {"type": "boolean"},
+        "table_main_y_offset":   {"type": "integer"},
+        "table_main_height_delta": {"type": "integer"}
+      }
+    },
+    "cover_rendering": {
+      "type": "object",
+      "description": "Configuración de rendering de portada.",
+      "required": ["title_short_size", "title_long_size", "title_short_threshold", "subtitle_zone", "subtitle_align", "min_title_size", "min_default_title_size"],
+      "additionalProperties": false,
+      "properties": {
+        "title_short_size":       {"type": "integer"},
+        "title_long_size":        {"type": "integer"},
+        "title_short_threshold":  {"type": "integer"},
+        "subtitle_zone":          {"type": "string"},
+        "subtitle_align":         {"type": "string"},
+        "min_title_size":         {"type": "integer"},
+        "min_default_title_size": {"type": "integer"}
+      }
+    },
+    "slide_types": {
+      "type": "object",
+      "description": "Espejo de slide_types del design system. Para override por tema si es necesario.",
+      "patternProperties": {
+        "^[a-z-]+$": {
+          "type": "object",
+          "properties": {
+            "layout": {"type": "object"},
+            "image_layer": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}

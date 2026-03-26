@@ -14,25 +14,6 @@ SPEC.loader.exec_module(slides_pipeline)
 
 
 class SlidesContractTests(unittest.TestCase):
-    def test_generate_plan_exposes_schema_metadata(self) -> None:
-        """Backwards compat: generate_plan() (deprecated) aún expone metadata de schema."""
-        fixture = Path(__file__).parents[3] / "informe" / "filminas.md"
-        config = {
-            "palette": {},
-            "typography": {},
-            "gemini_image_strategy": {"max_per_presentation": 0},
-        }
-
-        import warnings
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", DeprecationWarning)
-            plan = slides_pipeline.generate_plan(fixture, config, "template-id")
-
-        # El schema_version depende de qué filminas-schema.yaml encuentra find_project_root.
-        # Lo importante es que el campo exista y el path sea el esperado.
-        self.assertIn("schema_version", plan["meta"])
-        self.assertEqual(plan["meta"]["schema_path"], "_edu/templates/filminas-schema.yaml")
-
     def test_parse_filminas_returns_pending_without_directive(self) -> None:
         """v2 (Sprint 2): slides sin @tipo: explícito deben tener type='pending', no inferido."""
         with tempfile.TemporaryDirectory() as tmp:

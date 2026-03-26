@@ -13,7 +13,7 @@ Estructura del reporte generado:
     test-meta.yaml        — metadatos del run (timings, resultados, errores)
     tema-test/            — carpeta de trabajo del pipeline
       slides/             — artefactos generados
-        plan-filminas-tema-test.yaml
+        plan-filminas-tema-test.json
         assets/           — imágenes IA + tablas PNG generadas
           F-00-bg.png
           F-01-bg.png
@@ -166,16 +166,11 @@ def validate_semantic_rendering(project_root: Path, meta: dict) -> bool:
             "inline_code_font": "Roboto Mono",
             "inline_code_color": "#8B0000",
         },
-        "gemini_image_strategy": {"max_per_presentation": 0},
     }
 
     findings: list[str] = []
 
-    fixture = project_root / "informe" / "filminas.md"
-    plan = slides_pipeline.generate_plan(fixture, config, "template-id")
-    if plan["meta"]["title"] != "Conceptos Introductorios + Intro a TypeScript":
-        findings.append("La portada no usa el subtítulo inicial como título del plan")
-
+    # Fixture de slide para test de bullets — formato v3 unificado
     bullet_slide = {
         "id": "F-10",
         "type": "concepto-abstracto",
@@ -195,8 +190,7 @@ def validate_semantic_rendering(project_root: Path, meta: dict) -> bool:
         "table_assets": [],
         "code_blocks": [],
         "layout": slides_pipeline.LAYOUT_MAP["concepto-abstracto"],
-        "background_image": {},
-        "content_image": {},
+        "image": {"layer": "none", "prompt": "", "local_asset": "", "drive_id": None},
     }
     reqs = slides_pipeline._build_slide_requests(bullet_slide, config, "page_semantic_1", 0)
     inserted = [
@@ -222,8 +216,7 @@ def validate_semantic_rendering(project_root: Path, meta: dict) -> bool:
         "table_assets": [],
         "code_blocks": [],
         "layout": slides_pipeline.LAYOUT_MAP["concepto-abstracto"],
-        "background_image": {},
-        "content_image": {},
+        "image": {"layer": "none", "prompt": "", "local_asset": "", "drive_id": None},
     }
     reqs = slides_pipeline._build_slide_requests(inline_slide, config, "page_semantic_2", 0)
     inserted = [
@@ -261,8 +254,7 @@ def validate_semantic_rendering(project_root: Path, meta: dict) -> bool:
         "table_assets": [{"index": 0, "table_markdown": "", "local_asset": "", "drive_id": "fake-drive-id"}],
         "code_blocks": [],
         "layout": slides_pipeline.LAYOUT_MAP["tabla"],
-        "background_image": {},
-        "content_image": {},
+        "image": {"layer": "none", "prompt": "", "local_asset": "", "drive_id": None},
     }
     reqs = slides_pipeline._build_slide_requests(table_slide, config, "page_semantic_3", 0)
     if not any("createTable" in req for req in reqs):
@@ -278,8 +270,7 @@ def validate_semantic_rendering(project_root: Path, meta: dict) -> bool:
         "table_assets": [],
         "code_blocks": [],
         "layout": slides_pipeline.LAYOUT_MAP["concepto-abstracto"],
-        "background_image": {},
-        "content_image": {},
+        "image": {"layer": "none", "prompt": "", "local_asset": "", "drive_id": None},
     }
     reqs = slides_pipeline._build_slide_requests(long_title_slide, config, "page_semantic_4", 0)
     title_styles = [
@@ -399,7 +390,7 @@ def run_pipeline(
     if reuse_plan:
         plan_dest = topic_folder / "slides"
         plan_dest.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(reuse_plan, plan_dest / f"plan-filminas-{TOPIC_NAME}.yaml")
+        shutil.copy2(reuse_plan, plan_dest / f"plan-filminas-{TOPIC_NAME}.json")
         meta["phases"]["plan"]["status"] = "skipped_reuse"
         _info(f"Plan reutilizado desde: {reuse_plan}")
     else:
@@ -416,9 +407,11 @@ def run_pipeline(
             print(out[-1000:])
             return False, None
         # Contar slides del plan
-        plan_path = topic_folder / "slides" / f"plan-filminas-{TOPIC_NAME}.yaml"
+        plan_path = topic_folder / "slides" / f"plan-filminas-{TOPIC_NAME}.json"
         if plan_path.exists():
-            plan_data = load_yaml(plan_path)
+            import json as _json
+            with plan_path.open("r", encoding="utf-8") as _f:
+                plan_data = _json.load(_f)
             meta["phases"]["plan"]["slides"] = plan_data.get("meta", {}).get("total_slides", 0)
         meta["phases"]["plan"]["status"] = "ok"
         _ok(f"Plan generado ({elapsed}s, {meta['phases']['plan']['slides']} filminas)")
@@ -442,20 +435,17 @@ def run_pipeline(
             meta["phases"]["assets"]["status"] = "ok"
             _ok(f"Assets generados ({elapsed}s)")
     else:
-        # En modo --no-images seguimos renderizando tablas y subiéndolas a Drive,
-        # pero anulamos las imágenes Gemini para que el test siga siendo barato y
-        # mantenga layouts equivalentes a producción para tablas.
-        plan_path = topic_folder / "slides" / f"plan-filminas-{TOPIC_NAME}.yaml"
-        plan_data = load_yaml(plan_path)
+        # En modo --no-images anulamos las imágenes para que el test sea barato.
+        import json as _json
+        plan_path = topic_folder / "slides" / f"plan-filminas-{TOPIC_NAME}.json"
+        with plan_path.open("r", encoding="utf-8") as _f:
+            plan_data = _json.load(_f)
         for slide in plan_data.get("slides", []):
-            bg = slide.get("background_image") or {}
-            bg.update({"strategy": "none", "prompt": "", "local_asset": "", "drive_id": None})
-            slide["background_image"] = bg
-
-            ci = slide.get("content_image") or {}
-            ci.update({"strategy": "none", "prompt": "", "local_asset": "", "drive_id": None})
-            slide["content_image"] = ci
-        save_yaml(plan_path, plan_data)
+            img = slide.get("image") or {}
+            img.update({"layer": "none", "prompt": "", "local_asset": "", "drive_id": None})
+            slide["image"] = img
+        with plan_path.open("w", encoding="utf-8") as _f:
+            _json.dump(plan_data, _f, ensure_ascii=False, indent=2)
 
         t0 = time.time()
         print("  Generando assets de tablas (sin Gemini)...")
@@ -781,10 +771,10 @@ def copy_assets_to_report(test_dir: Path, topic_folder: Path, meta: dict) -> Non
         shutil.rmtree(assets_dst)
     shutil.copytree(assets_src, assets_dst)
 
-    # Copiar también el plan YAML
-    plan_src = topic_folder / "slides" / f"plan-filminas-{TOPIC_NAME}.yaml"
+    # Copiar también el plan JSON
+    plan_src = topic_folder / "slides" / f"plan-filminas-{TOPIC_NAME}.json"
     if plan_src.exists():
-        shutil.copy2(plan_src, test_dir / "plan.yaml")
+        shutil.copy2(plan_src, test_dir / "plan.json")
 
     _ok("Assets y plan copiados al directorio del reporte")
 
@@ -825,7 +815,7 @@ def main(argv: list[str] | None = None) -> None:
         "--reuse-plan",
         metavar="PATH",
         default=None,
-        help="Reutilizar plan.yaml existente, omitir Fase 1",
+        help="Reutilizar plan.json existente, omitir Fase 1",
     )
     parser.add_argument(
         "--python",
