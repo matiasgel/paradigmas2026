@@ -15,3 +15,6 @@ requests>=2.31.0
 # Renderizado de tablas como imágenes
 matplotlib>=3.7.0
 Pillow>=10.0.0
+
+# Knowledge Base (ChromaDB)
+chromadb>=1.5.0
