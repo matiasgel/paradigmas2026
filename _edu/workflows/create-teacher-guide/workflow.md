@@ -2,7 +2,7 @@
 
 **Module:** edu
 **Phase:** 3 — Producción de Temas
-**Owner Agent:** course-planner (orchestrator), class-writer, study-guide-writer
+**Owner Agent:** class-writer (Roberto)
 
 ---
 
@@ -29,17 +29,16 @@ El objetivo es ofrecer un único punto de repaso para el docente, con todo lo ne
 - **Input adicional (recomendado):** todo el material fuente en `{project-root}/material/{topic_number}-{topic_name}/` (PDFs + txt extraídos) y cualquier archivo en el folder del tema.
 
 ### Step 2: Generar `guiaprofesor.md`
-- **Agent:** class-writer (Roberto) o study-guide-writer (Sofía)
+- **Agent:** class-writer (Roberto)
 - **Output:** `{topic_folder}/guiaprofesor.md`
-- **Estructura sugerida:**
-  1. Portada (título, fecha, docente)
-  2. Objetivos de aprendizaje y competencias
-  3. Plan de clase por bloques (tiempos, actividades, recursos)
-  4. Resumen rápido de cada sección de `minuta.md` + link a `filminas.md`
-  5. Fragmentos clave de los PDFs fuente (extraídos de `material/.../txt/`)
-  6. Sugerencias para preguntas en clase, debates y trabajos prácticos
-  7. Consulta rápida (dónde buscar cada cosa en el repositorio)
-  8. Referencias y bibliografía (con enlaces locales a los PDFs y textos)
+- **Estructura canónica (obligatoria):**
+  1. Portada: título, fecha, docente, duración de clase
+  2. Objetivos de aprendizaje y competencias (de `diseno.md`)
+  3. Plan de clase por filmina (tabla: F-XX | título | tiempo | qué decir en síntesis | recurso)
+  4. Extractos clave de los PDFs fuente (citas textuales o tablas relevantes, con referencia al archivo)
+  5. Sugerencias de preguntas para clase, debates y evaluaciones
+  6. Índice de artefactos: ruta local de `minuta.md`, `filminas.md`, `guia-estudio.md`, `tp.md` y PDFs
+  7. Referencias y bibliografía (con rutas locales a los PDFs y textos extraídos)
 
 ### Step 3: Guardar y versionar
 - Recomendar al docente que revise `guiaprofesor.md` y haga commit.

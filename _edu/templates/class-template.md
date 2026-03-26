@@ -4,9 +4,43 @@ Este archivo define el marco estructural general de `minuta.md` y `filminas.md`.
 
 ## minuta.md
 
+La minuta es el **guion de clase del docente**: autocontenida, usable slide a slide sin abrir otros archivos.
+
 - Debe seguir la estructura aprobada en `diseno.md`.
 - Debe ser proporcional a la duración de clase.
 - Debe mantener coherencia total con `filminas.md`.
+- **Es per-filmina:** cada `[F-XX]` de `filminas.md` tiene una sección correspondiente en la minuta.
+
+### Estructura canónica de minuta.md
+
+```
+# Clase: [Nombre del Tema]
+**Materia:** {project_name} | **Fecha:** | **Duración:** X min
+
+## Objetivos
+[objetivos de diseno.md]
+
+---
+
+### [F-01] Título de la filmina
+**Tiempo:** X min
+**Qué decir:** [guion del docente — 3-5 bullets con qué explica, cómo introduce y qué ejemplo usa]
+**Conceptos clave:** [1-3 conceptos que el alumno DEBE retener de esta slide]
+**Preguntas anticipadas:** [qué preguntas suelen surgir en este punto]
+**Transición:** [cómo se conecta con F-02]
+
+### [F-02] ...
+...
+
+---
+
+## Cierre (2-3 min)
+**Resumen:** [2-3 puntos clave de toda la clase]
+**Anuncio del TP:** [tipo y fecha]
+**Próxima clase:** [tema siguiente del plan-borrador.md]
+```
+
+El orden de secciones en `minuta.md` espeja exactamente el orden de filminas en `filminas.md`.
 
 ## filminas.md
 

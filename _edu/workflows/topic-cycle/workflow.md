@@ -78,17 +78,17 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
 - **Note:** Recuperable con `/edu-create-study-guide` si se necesita regenerar de forma aislada. Exportable a PDF final con `/edu-export-pdf`.
 
 ### Step 4.6: Create Teacher Guide (Guía del Profesor)
-- **Agent:** class-writer (Roberto) o study-guide-writer (Sofía)
+- **Agent:** class-writer (Roberto)
 - **Input:** `diseno.md`, `minuta.md`, `filminas.md`, `guia-estudio.md`, y cualquier material de `{project-root}/material/{topic_number}-{topic_name}/` (PDFs + txt extraídos)
 - **Output:** `{topic_folder}/guiaprofesor.md`
-- **Purpose:** Documento único de revisión para el docente. Contiene:
-  - Plan de clase detallado (por bloques/tiempo)
-  - Resumen de los recursos creados (minuta, filminas, guía de estudio)
-  - Extractos clave de los PDFs fuente (texto importante/ejemplos)
-  - Sugerencias para uso en clase, debate y evaluaciones
-  - Referencias y ruta hacia cada recurso del repo
-- **Constraint:** Debe ser autosuficiente para repasar el tema sin necesidad de abrir otros archivos (aunque apunta a ellos).
-- **Tip:** Ejecutar `/edu-create-teacher-guide` para regenerar esta guía cuando el contenido de la clase cambie.
+- **Purpose:** Documento autocontenido para el docente — el único archivo que necesita abrir para repasar el tema. Contiene:
+  - Plan de clase por bloques de tiempo (derivado de la minuta per-filmina)
+  - Índice de artefactos (minuta, filminas, guía de estudio, TP) con rutas del repo
+  - Extractos clave de los PDFs fuente (citas textuales, tablas, ejemplos relevantes)
+  - Sugerencias de preguntas para clase, debates y evaluaciones
+  - Resumen ejecutivo: qué enseñar, cómo enseñarlo y dónde está cada recurso
+- **Constraint:** Autocontenido — el docente repasa el tema sin abrir otros archivos (aunque todos se referencian con rutas locales).
+- **Note:** Recuperable con `/edu-create-teacher-guide`. Regenerar cuando cambie minuta.md o filminas.md.
 
 ### Step 5: Create TP
 - **Agent:** tp-designer (Valeria)

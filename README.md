@@ -198,6 +198,20 @@ Convierte `guia-estudio.md` a PDF con portada institucional (requiere pandoc + L
 
 ---
 
+#### Paso 3.4.5 — Crear la guía del profesor
+
+```
+/edu-create-teacher-guide
+```
+
+**¿Qué hace?** Roberto ✍️ genera `guiaprofesor.md`: el único documento que el docente necesita abrir para repasar el tema antes de dar clase. Contiene el plan de clase por filmina (tabla de tiempos), extractos clave de los PDFs fuente, sugerencias de preguntas y el índice de todos los artefactos del tema.
+
+**Requiere:** `minuta.md` + `filminas.md` generados; `guia-estudio.md` recomendado.
+
+**Artefacto generado:** `temas/NN-nombre/guiaprofesor.md`
+
+---
+
 #### Paso 3.5 — Crear el TP
 
 ```
@@ -360,10 +374,11 @@ FASE 3 — Por cada tema del cronograma
   └── /edu-topic  ← punto de entrada inteligente
         ├── /edu-design-topic       → diseno.md
         ├── /edu-approve-design     → diseno.md aprobado
-        ├── /edu-create-class       → minuta.md + filminas.md
-        ├── /edu-create-study-guide → guia-estudio.md
-        │     └── /edu-export-pdf   → guia-estudio.pdf (opcional)
-        ├── /edu-create-tp          → tp.md + output según tipo
+        ├── /edu-create-class            → minuta.md + filminas.md
+        ├── /edu-create-study-guide      → guia-estudio.md
+        │     └── /edu-export-pdf        → guia-estudio.pdf (opcional)
+        ├── /edu-create-teacher-guide    → guiaprofesor.md
+        ├── /edu-create-tp               → tp.md + output según tipo
         ├── /edu-quality            → reportes + fixes en Git
         ├── /edu-test-topic         → score-pedagogico.md + faq-anticipado.md
         ├── /edu-close-topic        → topic.yaml status: "closed"
@@ -504,6 +519,7 @@ Invocar con `@edu-agent-nombre` en Copilot Chat o seleccionarlos en el dropdown 
 | `/edu-create-class` | Generar `minuta.md` + `filminas.md` |
 | `/edu-create-study-guide` | Generar guía de estudio para el alumno |
 | `/edu-export-pdf` | Exportar guía de estudio a PDF |
+| `/edu-create-teacher-guide` | Generar guía del profesor (`guiaprofesor.md`) |
 | `/edu-create-tp` | Generar TP (desarrollo / repo / quiz / mixto) |
 | `/edu-validate-gift` | Validar archivo GIFT antes de importar a Moodle |
 | `/edu-create-autograde-repo` | Regenerar repo de autograding |
