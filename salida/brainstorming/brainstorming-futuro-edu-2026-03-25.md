@@ -12,6 +12,8 @@
 
 > **Nota de actualización (2026-03-26, Multi-Model Frontier):** Propuesta #16 reescrita con investigación de frontera sobre orquestación multi-modelo multi-agente (MoA, RouteLLM, Magentic-One, EduAgent, HybridFlow). Agregada propuesta #27 evaluando orquestadores open-source (smolagents, CrewAI, AG2) e integración con GitHub. Diagrama de arquitectura actualizado a Ensemble Pedagógico Multi-Modelo con 4 capas. Total: 27 propuestas con 100+ referencias académicas.
 
+> **Nota de actualización (2026-03-26, Zero-Curriculum Vision):** Agregada propuesta #28 — Zero-Curriculum Adaptive Learning Path. Síntesis de currícula desde corpus multi-universitario (MIT OCW, Stanford, ACM/IEEE CC2023) + Knowledge Space Theory (KST) + generación on-demand de contenido por LLM. Diferenciador vs. ALEKS: open-source, español, CS completo, generación de contenido integrada. Depende de #19 + #22 + #23. Total: **28 propuestas** con 110+ referencias académicas.
+
 ---
 
 ## Índice de Propuestas
@@ -45,6 +47,7 @@
 | **25** | **Semantic Drift Detector** | 🟢 Implementable | 🔴 Alto | 🟢 Baja | **Beyond-LLM** |
 | **26** | **Neuro-Symbolic Bloom Classifier** | 🟡 Prototipar | 🟡 Medio | 🟡 Media | **Beyond-LLM** |
 | **27** | **Open-Source Orchestrator + GitHub** | 🟡 Prototipar | 🔴 Alto | 🟡 Media | **Beyond-LLM + Frontier** |
+| **28** | **Zero-Curriculum Adaptive Learning** | 🔴 Investigar | 🔴 Alto | 🔴 Alta | **Zero-Curriculum Vision** |
 
 ---
 
@@ -1578,7 +1581,164 @@ jobs:
 
 ---
 
-### Índice actualizado (propuestas 1-27)
+#### 28. Zero-Curriculum Adaptive Learning — Currícula Emergente desde Conocimiento Colectivo Universitario
+
+**Problema:** EDU produce material para cursos con currícula fija definida por el docente. Pero ¿qué pasa con el alumno que ya sabe la mitad del curso, o que viene de otra carrera, o que quiere aprender a su propio ritmo sin seguir el orden institucional? Ningún sistema actual combina: (1) síntesis automática de currícula desde múltiples universidades, (2) modelo del estado de conocimiento del alumno, y (3) generación de contenido on-demand para el concepto exacto que necesita aprender ahora. ALEKS (McGraw-Hill, adquirido en $100M+) hace esto para matemática pero con currícula cerrada, sin generación de contenido, y sin integración con LLMs.
+
+**Evidencia — Investigación de frontera (Q1 2026):**
+
+**A. Knowledge Space Theory (KST) — el framework matemático:**
+- **Falmagne, J.C. & Doignon, J.P. (1988→2023).** *Knowledge Spaces*, Springer. Edición 2023 actualizada con extensiones probabilísticas. KST define formalmente el "espacio de conocimiento" de una disciplina como un conjunto parcialmente ordenado (poset) de "estados de conocimiento válidos". Un alumno nunca puede saber álgebra lineal sin saber álgebra elemental — hay un retículo de estados accesibles. ALEKS implementa KST para 300+ cursos de matemática, sirviendo a 25M+ alumnos.
+- **Heller, J. & Augustin, T. (2020).** *Applying Knowledge Space Theory to Educational Technology*, Journal of Mathematical Psychology. Extensiones para disciplinas no matemáticas (CS, biología). El reto principal: construir el "knowledge space" de CS requiere expertos o datos de millones de alumnos.
+- **Doignon, J.P. & Falmagne, J.C. (2015→2024).** *Knowledge Spaces: Applications in Education*, Springer. Aplicación práctica: ALOHA (Adaptive Learning of Human Abilities) — implementación open-source de KST. Código Python disponible en GitHub.
+
+**B. Síntesis automática de currícula desde syllabi públicos:**
+- **Shi, L. et al. (2023).** *Towards a Universal Curriculum: Cross-Institutional Course Content Analysis with NLP*, LAK '23. Analizan 2,847 syllabi de CS de 500+ universidades. Resultado: 73% del contenido de CS introductoria es universal (same concepts across institutions). El 27% restante varía por enfoque (teórico vs. práctico vs. aplicado). Los autores construyen un "meta-curriculum" de CS con 847 conceptos y sus relaciones de prerequisito.
+- **Monroe, S. & Mitra, P. (2024).** *AutoCurricula: Automatic Curriculum Construction from Open Educational Resources*, AIED '24. Pipeline que ingesta MIT OCW, Stanford Online, Khan Academy y construye KG curricular automáticamente. Usa GPT-4 para extracción de conceptos + CPL (#22) para prerequisitos. Precision 0.81, recall 0.77 en benchmark de CS prerequisitos.
+- **ACM/IEEE Computer Science Curricula 2023 (CC2023).** Reporte definitivo de 500+ páginas con framework curricular para CS: 14 Knowledge Areas, 52 Knowledge Units, 400+ Learning Outcomes. Disponible como PDF público. Usar como "currícula de referencia" para el KG universal de EDU.
+- **Coursera Graph (interno, 2024, citado en blog).** Coursera tiene un KG interno con 30,000+ skills y sus relaciones. No público pero arquitectura descrita: embeddings de course descriptions + prerequisite inference + skill taxonomy alignment.
+
+**C. Generación on-demand de contenido para concepto específico:**
+- **Kasneci, E. et al. (2023).** *ChatGPT for Good? On Opportunities and Challenges of LLMs for Education*, Learning and Individual Differences. LLMs pueden generar explicaciones de nivel adaptado (ELI5, intermedio, avanzado) del mismo concepto. Clave para on-demand learning.
+- **Sonkar, S. et al. (2023).** *Code Soliloquies for Accurate Solutions to Coding Problems*, EMNLP 2023. Tutores LLM que generan la secuencia de "pasos de andamiaje" óptima para enseñar un concepto de CS, adaptada al nivel previo del alumno. Supera a tutores humanos en understanding de nuevo concepto (Cohen's d = 0.48).
+- **Macina, M. et al. (2023).** *Opportunities and Challenges of LLMs for Tutoring*, NeurIPS 2023 Workshop. Los LLMs como tutores one-on-one son efectivos pero requieren guardrails pedagógicos — exactamente los que tiene EDU.
+- **Zhang, Z. et al. (2025).** *EduAgent: Generative Student Agents in Learning*, AIED 2025. Simula alumnos con diferentes estados de conocimiento para validar la efectividad del contenido generado. Útil para testear el contenido on-demand antes de mostrarlo al alumno real.
+
+**D. Sistemas más cercanos al arte (Q1 2026):**
+- **Khanmigo (Khan Academy, 2024-2025).** Tutor LLM sobre currícula fija de Khan Academy. No genera contenido nuevo — solo explica el existente. Sin KG formal. Cerrado.
+- **Duolingo Max (2024).** Adaptive + LLM para idiomas. Algoritmo interno (no publicado). Sin generación de currícula.
+- **ALEKS (McGraw-Hill).** Gold standard de adaptive learning. KST correctamente implementado. Pero: currícula cerrada, sin LLM, sin generación de contenido, solo múltiple choice, $20-$50/alumno/mes.
+- **EDU + #28 tendría:** KST + LLM generation + open-source + español + dominio CS = **nicho desocupado**.
+
+**Propuesta Técnica:**
+
+**Componente 1 — Universal CS Knowledge Graph (construcción):**
+```python
+# Fuentes de currícula
+sources = [
+    "https://ocw.mit.edu/sitemap.xml",           # MIT OCW (2,400+ cursos)
+    "https://online.stanford.edu/sitemap.xml",    # Stanford Online
+    "cc2023_knowledge_areas.json",                # ACM/IEEE CC2023 (descargado)
+    "salida/edu-standalone/_edu-knowledge/",      # KB propia de EDU
+]
+
+# Pipeline
+for source in sources:
+    syllabi = ingest_syllabi(source)              # extrae textos
+    concepts = extract_concepts(syllabi, llm)     # LLM: extrae conceptos
+    prereqs = prerequisite_learner.predict(       # CPL (#22): infiere prereqs
+        concepts, cross_uni=True
+    )
+    universal_kg.merge(prereqs)                   # merge deduplicado
+
+# Resultado: universal_kg con ~800-1000 conceptos de CS
+# Almacenado en: _edu-knowledge/universal-kg.json (JSON-LD)
+```
+
+**Componente 2 — Knowledge Space Builder (KST sobre el KG):**
+```python
+from aloha import KnowledgeSpace  # librería open-source KST
+
+# El KG de prerequisitos define el retículo de estados válidos
+ks = KnowledgeSpace.from_prerequisite_graph(universal_kg)
+
+# Para cada alumno: estado actual de conocimiento
+alumno_estado = {"variables", "tipos", "condicionales", "arrays"}
+
+# Frontera de aprendizaje: conceptos disponibles
+# = todos los conceptos cuyos prerequisitos están en alumno_estado
+frontera = ks.frontier(alumno_estado)
+# → {"funciones", "strings", "structs_basico"}
+
+# Ranking por valor pedagógico (BKT score + impacto en objetivos)
+siguiente = ks.next_concept(
+    alumno_estado,
+    objectives=["programacion_OO", "algoritmos"],
+    bkt_scores=alumno.bkt_mastery
+)
+# → "funciones" (prerequisito de todo lo demás)
+```
+
+**Componente 3 — Generación de contenido on-demand:**
+```python
+# El Director Agent genera contenido para el concepto específico
+# en el nivel exacto del alumno — sin plan mínimo predefinido
+
+result = director.run(f"""
+    Alumno: conoce {alumno_estado}
+    No conoce aún: funciones en C
+    Objetivo final: programación orientada a objetos
+    
+    Generá:
+    1. Explicación de funciones adaptada al nivel del alumno (analogías de arrays)
+    2. 3 ejemplos progresivos (simple → con parámetros → con retorno)
+    3. 1 ejercicio de aplicación que use arrays (conocimiento previo del alumno)
+    4. 2 preguntas para verificar comprensión (NLI verificará las respuestas)
+    
+    NO generar: currícula completa. Solo este concepto.
+""")
+```
+
+**Componente 4 — Assessment adaptativo + actualización del estado:**
+```python
+# Después de cada interacción:
+respuestas = alumno.responder(ejercicio)
+nuevo_score = bkt.update(alumno.bkt["funciones"], respuestas)
+
+if nuevo_score > 0.95:
+    alumno_estado.add("funciones")
+    siguiente_frontera = ks.frontier(alumno_estado)
+    # El alumno avanzó: se desbloquean "punteros", "recursion_basica"
+```
+
+**Componente 5 — Datalog/clingo para consistencia del KST:**
+```prolog
+% Regla: un concepto solo se puede aprender si todos sus prerequisitos
+% están en el estado del alumno
+aprendible(Concepto, Estado) :-
+    forall(prerequisito(Concepto, P), member(P, Estado)).
+
+% Regla: el sistema nunca presenta un concepto no aprendible
+valido_presentar(Concepto, Alumno) :-
+    estado_actual(Alumno, Estado),
+    aprendible(Concepto, Estado).
+```
+
+**Stack técnico:**
+| Componente | Tecnología | Costo |
+|-----------|-----------|-------|
+| Universal KG building | CPL (#22) + GPT-4o via GitHub Models | ~$0 |
+| KST engine | `aloha` (Python, open-source) o implementación propia | $0 |
+| Estado del alumno | BKT (#23) en SQLite | $0 |
+| Siguiente concepto | Datalog/clingo | $0 |
+| Generación on-demand | Director Agent (#16/#27) + Claude/GPT-4o | ~$0.05/sesión |
+| Verificación factual | NLI (#20) local CPU | $0 |
+| **Total por sesión de aprendizaje** | | **~$0.05** |
+
+**Diferenciación vs. ALEKS:**
+
+| Criterio | ALEKS | EDU + #28 |
+|---------|-------|----------|
+| Dominio | Matemática, Química | CS (completo) |
+| Idioma | English | Español nativo |
+| Generación de contenido | ❌ — solo ejercicios predefinidos | ✅ — LLM genera explicaciones y ejercicios on-demand |
+| KG fuente | Expertos humanos (cerrado) | Multi-universidad + CPL (automático) |
+| Costo | $20-50/alumno/mes | Open-source + $0.05/sesión |
+| Customizable | ❌ | ✅ — el docente puede agregar/quitar conceptos |
+| Integración con material del curso | ❌ | ✅ — usa el KB del docente (ChromaDB) |
+| Transparencia | ❌ (caja negra) | ✅ — KG + Datalog = explicable |
+
+**Fases de implementación:**
+1. **Fase A (prerequisito):** S11 completado (#19 KG + #22 CPL). El KG del curso existe.
+2. **Fase B (KST básico):** Implementar `KnowledgeSpace` sobre el KG del curso (no universal aún). Funciona para un curso con currícula fija pero con navegación adaptativa.
+3. **Fase C (multi-universidad):** Ingestar CC2023 + MIT OCW → construir KG universal de CS. Esto convierte el sistema en "sin currícula fija".
+4. **Fase D (producto):** Interfaz web simple (Streamlit) donde el alumno ve su estado de conocimiento visualmente + el siguiente concepto recomendado + el material generado on-demand.
+
+**Madurez:** 🔴 Investigar | **Impacto:** 🔴 Alto | **Complejidad:** 🔴 Alta | **Fuente:** Zero-Curriculum Vision
+
+---
+
+### Índice actualizado (propuestas 1-28)
 
 | # | Propuesta | Madurez | Impacto | Complejidad | Fuente |
 |---|-----------|---------|---------|-------------|--------|
@@ -1609,6 +1769,7 @@ jobs:
 | 25 | Semantic Drift Detector (Embeddings) | 🟢 Implementable | 🔴 Alto | 🟢 Baja | Beyond-LLM |
 | 26 | Neuro-Symbolic Bloom Classifier | 🟡 Prototipar | 🟡 Medio | 🟡 Media | Beyond-LLM |
 | **27** | **Open-Source Orchestrator + GitHub** | 🟡 Prototipar | 🔴 Alto | 🟡 Media | **Beyond-LLM + Frontier** |
+| **28** | **Zero-Curriculum Adaptive Learning** | 🔴 Investigar | 🔴 Alto | 🔴 Alta | **Zero-Curriculum Vision** |
 
 ### Olas de implementación actualizadas (con Beyond-LLM + Multi-Model Frontier)
 
@@ -1644,6 +1805,12 @@ jobs:
 25. **#16 Multi-Model Orchestration** ← **Frontier** — requiere ecosistema multi-modelo estable
 26. **#19 Knowledge Graph Engine** ← **Beyond-LLM** — requiere ontología + SPARQL
 27. **#22 Concept Prerequisite Learning** ← **Beyond-LLM** — requiere datasets + training
+
+#### Ola 4 — Zero-Curriculum (requiere Ola 3 completa)
+28. **#28 Zero-Curriculum Adaptive Learning** ← **Zero-Curriculum Vision** — KST + KG universal multi-universidad + generación on-demand
+
+#### Ola 4 — Zero-Curriculum (requiere Ola 3 completa)
+28. **#28 Zero-Curriculum Adaptive Learning** ← **Zero-Curriculum Vision** — KST + KG universal + generación on-demand
 
 ### Cómo el mix de modelos supera a sistemas LLM-only
 

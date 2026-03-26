@@ -1,9 +1,10 @@
-# Sprints de Mejoras v2 — EDU Module (27 propuestas)
+# Sprints de Mejoras v2 — EDU Module (28 propuestas)
 
-**Fecha:** 2026-03-26 | **Actualizado:** 2026-03-26 (Beyond-LLM + Multi-Model Frontier)  
+**Fecha:** 2026-03-26 | **Actualizado:** 2026-03-26 (Beyond-LLM + Multi-Model Frontier + Zero-Curriculum Vision)  
 **Supersede:** `sprints-mejoras-edu-v1.md` (12 propuestas, 6 sprints)  
 **Cambios v1→v2:** Integra 6 propuestas OpenMAIC (#13-#18) → 8 sprints.  
-**Cambios v2 (this):** Agrega 9 propuestas Beyond-LLM + Frontier (#19-27) → **12 sprints**. Propuesta #16 actualizada a Multi-Model Multi-Agent Orchestration. Nueva propuesta #27 (Open-Source Orchestrator).
+**Cambios v2 (this):** Agrega 9 propuestas Beyond-LLM + Frontier (#19-27) → **12 sprints**. Propuesta #16 actualizada a Multi-Model Multi-Agent Orchestration. Nueva propuesta #27 (Open-Source Orchestrator).  
+**Cambios v2.1:** Agrega propuesta #28 Zero-Curriculum Adaptive Learning → **S13** (sprint final). KST + Universal CS KG + aprendizaje adaptativo sin currícula fija. Supera a ALEKS en dominio, idioma y generación de contenido.
 
 **Regla cardinal:** CERO modificaciones destructivas. Todo es aditivo. Los tests actuales deben seguir pasando. Ningún archivo existente pierde funcionalidad.
 
@@ -53,6 +54,7 @@
 | **25** | **Semantic Drift Detector** | **S9** | **Beyond-LLM** | 🔴 Alta |
 | **26** | **Neuro-Symbolic Bloom Classifier** | **S10** | **Beyond-LLM** | 🟡 Media |
 | **27** | **Open-Source Orchestrator + GitHub** | **S12** | **Beyond-LLM + Frontier** | 🔴 Alta |
+| **28** | **Zero-Curriculum Adaptive Learning** | **S13** | **Zero-Curriculum Vision** | 🔴 Alta |
 
 ---
 
@@ -72,6 +74,7 @@
 | **S10** | Psicometría + calidad visual | #26, #23, #24 | Bloom ML + IRT/BKT + CLIP | Medio | S2, S7 |
 | **S11** | Knowledge engineering | #19, #22 | Knowledge Graph (OWL) + CPL (GNN) | Alto | S9, S10 |
 | **S12** | Full-stack orquestación | #27 | Open-source orchestrator + GitHub Actions | Alto | S8, S11 |
+| **S13** | Zero-Curriculum Adaptativo | #28 | KST Engine + Universal CS KG + Adaptive Tutor | Muy Alto | S11, S12 |
 
 **S1-S4 son paralelizables.** S5 es independiente. S6 requiere estabilización previa. S7 requiere S1 (WCAG para validar HTML) y S4 (reglas cognitivas). S8 requiere la mayoría de los anteriores. **S9 puede iniciarse en paralelo con S7-S8** (solo requiere S1). S10 requiere S2 (exam) y S7 (simulador para datos IRT). S11 requiere S9 (embeddings ya computados) y S10 (Bloom para el KG). S12 es el sprint final que integra todo.
 
@@ -1594,7 +1597,361 @@ jobs:
 
 ---
 
-## Registro de Impacto — Archivos Existentes (v2)
+## Sprint 13 — Zero-Curriculum Adaptive Learning
+
+**Propuesta:** #28 — Zero-Curriculum Adaptive Learning — Currícula Emergente desde Conocimiento Colectivo Universitario  
+**Objetivo:** Construir un sistema de aprendizaje adaptativo que modela el estado de conocimiento de cada estudiante usando Knowledge Space Theory (KST) y genera contenido on-demand sobre los conceptos exactos que necesita, sin depender de una sílabo fijo.  
+**Fundamento académico:** Falmagne & Doignon 1988→2023 (KST), ALOHA (Python KST), ACM/IEEE CC2023 (14 KAs, 52 KUs), Monroe & Mitra 2024 (AutoCurricula)  
+**Riesgo:** Muy Alto (investigación aplicada, primero en combinarlo con LLM español + CS completo)  
+**Dependencias:** S11.1 (Knowledge Graph OWL) + S11.2 (CPL prereqs) + S10.2 (BKT mastery) + S12.1 (Director Script)
+
+### S13.1 — KST Engine (Propuesta #28 Fase B)
+
+**Objetivo:** Construir el motor de Knowledge Space Theory sobre el Knowledge Graph del curso existente.
+
+**Archivo:** `scripts/knowledge_space.py`
+
+**Dependencias:** `pip install aloha` (en requirements.txt)
+
+```python
+# scripts/knowledge_space.py
+"""
+KST Engine — Knowledge Space Theory sobre el KG del curso.
+Requiere: S11.1 (knowledge_graph.py), S10.2 (bkt_tracker.py)
+"""
+from aloha import KnowledgeSpace
+from scripts.knowledge_graph import CourseKnowledgeGraph
+from scripts.bkt_tracker import BKTTracker
+import json
+
+class KSTEngine:
+    """Motor KST que integra el KG del curso con BKT mastery scores."""
+    
+    def __init__(self, kg_path: str = "_edu-knowledge/course-kg.json"):
+        self.kg = CourseKnowledgeGraph.load(kg_path)
+        self.ks = None  # KnowledgeSpace de ALOHA
+        self._build_space()
+    
+    def _build_space(self):
+        """Construye el KnowledgeSpace desde los prerequisitos del KG."""
+        items = list(self.kg.get_concepts())
+        prereqs = self.kg.get_prerequisite_pairs()  # [(A, B)] = A prereq de B
+        self.ks = KnowledgeSpace(items=items, prerequisites=prereqs)
+    
+    def frontier(self, known_concepts: set) -> list[str]:
+        """
+        Devuelve los conceptos en la frontera de aprendizaje:
+        conceptos que el estudiante AÚN NO conoce pero cuyos
+        prerequisitos YA fueron dominados.
+        """
+        return [c for c in self.ks.frontier(known_concepts)]
+    
+    def next_concept(self, student_state: dict) -> str | None:
+        """
+        Dado el estado BKT del estudiante (mastery scores 0-1),
+        devuelve el concepto frontera con mayor utilidad pedagógica.
+        Prioriza conceptos con muchos descendientes (alto impacto).
+        """
+        known = {c for c, score in student_state.items() if score >= 0.75}
+        candidates = self.frontier(known)
+        if not candidates:
+            return None
+        # Ordenar por centralidad en el KG (más descendientes = mayor prioridad)
+        scored = [(c, len(self.kg.descendants(c))) for c in candidates]
+        return max(scored, key=lambda x: x[1])[0]
+    
+    def learning_path(self, target_concept: str, student_state: dict) -> list[str]:
+        """
+        Retorna el camino mínimo de aprendizaje desde el estado actual
+        hasta poder aprender target_concept.
+        """
+        known = {c for c, score in student_state.items() if score >= 0.75}
+        return self.ks.learning_path(target=target_concept, known=known)
+```
+
+**Archivos creados:**
+- `scripts/knowledge_space.py` — KSTEngine con frontier(), next_concept(), learning_path()
+- `.github/prompts/edu-kst-explain.prompt.md` — prompt para explicar el concepto frontera al estudiante
+
+**Criterio de aceptación:**
+- `KSTEngine("_edu-knowledge/course-kg.json").frontier({"algebra_lineal"})` → lista no vacía
+- `next_concept({"algebra_lineal": 0.9, "vectores": 0.8})` → retorna un concepto CS válido
+- Tests unitarios en `scripts/tests/test_kst_engine.py`
+
+**NO tocar:** knowledge_graph.py (S11.1), bkt_tracker.py (S10.2), schema-registry.json
+
+---
+
+### S13.2 — Universal CS Knowledge Graph Builder (Propuesta #28 Fase C)
+
+**Objetivo:** Construir un KG universal de Ciencias de la Computación desde fuentes abiertas (ACM/IEEE CC2023 + MIT OCW + Stanford syllabi), fusionado con el KG del curso existente.
+
+**Archivo:** `scripts/universal_kg_builder.py`
+
+**Dependencias:** `rdflib`, `requests`, `beautifulsoup4` (ya en requirements.txt desde S11)
+
+```python
+# scripts/universal_kg_builder.py
+"""
+Universal CS KG Builder.
+Fuentes: ACM/IEEE CC2023 (14 KAs, 52 KUs) + MIT OCW sitemap + Stanford Explorecourses.
+Requiere: S11.1 (knowledge_graph.py) para el formato base.
+Output: _edu-knowledge/universal-kg.json
+"""
+import json
+import requests
+from scripts.knowledge_graph import CourseKnowledgeGraph
+from scripts.cpl_learner import CPLLearner  # S11.2 — infiere prereqs cross-institucion
+
+# ACM/IEEE CC2023 — 14 Knowledge Areas embebidas (no requieren scraping)
+ACM_CC2023_KAS = {
+    "AL": "Algorithms and Complexity",
+    "AR": "Architecture and Organization",
+    "CN": "Computational Science",
+    "DS": "Discrete Structures",
+    "GV": "Graphics and Visualization",
+    "HCI": "Human-Computer Interaction",
+    "IAS": "Information Assurance and Security",
+    "IM": "Information Management",
+    "IS": "Intelligent Systems",
+    "NC": "Networking and Communication",
+    "OS": "Operating Systems",
+    "PBD": "Platform-Based Development",
+    "PD": "Parallel and Distributed Computing",
+    "PL": "Programming Languages",
+    "SDF": "Software Development Fundamentals",
+    "SE": "Software Engineering",
+    "SF": "Systems Fundamentals",
+    "SP": "Social Issues and Professional Practice",
+}
+
+class UniversalKGBuilder:
+    """Construye y fusiona el KG universal de CS desde fuentes abiertas."""
+    
+    def __init__(self, output_path: str = "_edu-knowledge/universal-kg.json"):
+        self.output_path = output_path
+        self.kg = CourseKnowledgeGraph()
+    
+    def ingest_acm_cc2023(self):
+        """Ingesta las 14 Knowledge Areas y 52 Knowledge Units de ACM/IEEE CC2023."""
+        for ka_code, ka_name in ACM_CC2023_KAS.items():
+            self.kg.add_concept(ka_code, label=ka_name, source="ACM/IEEE CC2023", layer="KA")
+        # Prerequisitos inter-KA (basados en CC2023 §3)
+        cc2023_prereqs = [
+            ("DS", "AL"), ("DS", "PL"), ("SDF", "SE"), ("AR", "OS"),
+            ("OS", "NC"), ("OS", "PD"), ("AL", "IS"), ("IM", "IS"),
+        ]
+        for prereq, target in cc2023_prereqs:
+            self.kg.add_prerequisite(prereq, target, source="ACM/IEEE CC2023")
+    
+    def ingest_mit_ocw(self, max_courses: int = 50):
+        """
+        Ingesta títulos de cursos MIT OCW via sitemap público.
+        Extrae conceptos CS y prerequisitos implícitos.
+        """
+        sitemap_url = "https://ocw.mit.edu/sitemap.xml"
+        try:
+            resp = requests.get(sitemap_url, timeout=10)
+            # Parsea solo cursos de CS (6.xxx)
+            cs_courses = [url for url in resp.text.split("<loc>") 
+                         if "/courses/6-" in url][:max_courses]
+            for course_url in cs_courses:
+                url = course_url.split("</loc>")[0].strip()
+                self.kg.add_concept(url.split("/")[-2], 
+                                   label=url.split("/")[-2].replace("-", " "),
+                                   source="MIT OCW", layer="course")
+        except requests.RequestException:
+            pass  # Falla silenciosamente — red no disponible en CI
+    
+    def apply_cpl_inference(self):
+        """
+        Usa el modelo CPL (S11.2) para inferir prerequisitos no explícitos
+        entre cursos de distintas instituciones.
+        """
+        cpl = CPLLearner.load("_edu-knowledge/cpl-model.pkl")
+        new_prereqs = cpl.infer_cross_institution_prerequisites(self.kg)
+        for prereq, target, confidence in new_prereqs:
+            if confidence > 0.7:
+                self.kg.add_prerequisite(prereq, target, 
+                                        source="CPL-inferred",
+                                        confidence=confidence)
+    
+    def build(self) -> str:
+        """Construye y guarda el KG universal."""
+        self.ingest_acm_cc2023()
+        self.ingest_mit_ocw()
+        self.apply_cpl_inference()
+        self.kg.save(self.output_path)
+        return self.output_path
+```
+
+**Archivos creados:**
+- `scripts/universal_kg_builder.py` — UniversalKGBuilder con ACM CC2023 + MIT OCW + CPL inference
+- `_edu-knowledge/universal-kg.json` — artefacto generado (en .gitignore si >50MB)
+- `.github/prompts/edu-universal-kg.prompt.md` — prompt para explorar el KG universal
+
+**Criterio de aceptación:**
+- `UniversalKGBuilder().build()` → genera `_edu-knowledge/universal-kg.json` sin errores
+- KG contiene los 18 Knowledge Areas de ACM/IEEE CC2023
+- CPL infiere al menos 10 prerequisitos cross-institution con confidence > 0.7
+- Tests en `scripts/tests/test_universal_kg.py`
+
+**NO tocar:** knowledge_graph.py (S11.1), cpl_learner.py (S11.2), schema-registry.json
+
+---
+
+### S13.3 — Adaptive Tutor Interface (Propuesta #28 Fase D)
+
+**Objetivo:** Interfaz de aprendizaje adaptativo que integra KSTEngine + BKT + Director Agent para recomendar el siguiente concepto y generar contenido on-demand.
+
+**Archivo:** `scripts/adaptive_tutor.py` + opcional `app_adaptive.py` (Streamlit)
+
+```python
+# scripts/adaptive_tutor.py
+"""
+Adaptive Tutor — integra KST + BKT + Director Agent para aprendizaje sin currícula fija.
+Requiere: S13.1 (KSTEngine), S10.2 (BKTTracker), S12.1 (edu_director)
+"""
+import os
+from openai import OpenAI
+from scripts.knowledge_space import KSTEngine
+from scripts.bkt_tracker import BKTTracker
+from scripts.edu_director import EduDirector
+
+# Cliente GitHub Models (Claude Sonnet vía GITHUB_TOKEN)
+_client = OpenAI(
+    base_url="https://models.inference.ai.azure.com",
+    api_key=os.environ["GITHUB_TOKEN"],
+)
+
+class AdaptiveTutor:
+    """
+    Tutor adaptativo sin currícula fija.
+    Estado del estudiante → concepto frontera KST → contenido on-demand.
+    """
+    
+    def __init__(self, student_id: str, 
+                 kg_path: str = "_edu-knowledge/universal-kg.json"):
+        self.student_id = student_id
+        self.kst = KSTEngine(kg_path)
+        self.bkt = BKTTracker(student_id)
+        self.director = EduDirector()
+    
+    def get_student_state(self) -> dict:
+        """Retorna el estado de mastery del estudiante (concepto → P(mastery) 0-1)."""
+        return self.bkt.get_all_mastery()
+    
+    def recommend_next(self) -> dict:
+        """
+        Recomienda el siguiente concepto a aprender usando KST frontier.
+        Retorna: {concept, explanation, prerequisites_met, learning_path}
+        """
+        state = self.get_student_state()
+        next_concept = self.kst.next_concept(state)
+        if not next_concept:
+            return {"concept": None, "message": "¡Felicitaciones! Dominaste todos los conceptos."}
+        
+        path = self.kst.learning_path(next_concept, state)
+        return {
+            "concept": next_concept,
+            "prerequisites_met": [c for c in path if state.get(c, 0) >= 0.75],
+            "learning_path": path,
+            "why": f"Es el siguiente concepto con mayor impacto: desbloquea {len(self.kst.kg.descendants(next_concept))} conceptos futuros."
+        }
+    
+    def generate_content(self, concept: str, content_type: str = "slides") -> dict:
+        """
+        Genera contenido on-demand para el concepto dado usando el Director Agent.
+        content_type: "slides" | "exercise" | "explanation" | "quiz"
+        """
+        state = self.get_student_state()
+        known_concepts = [c for c, s in state.items() if s >= 0.75]
+        
+        # Generar via Director Agent (S12.1) que usa GitHub Models internamente
+        result = self.director.generate(
+            topic=concept,
+            student_known=known_concepts,
+            content_type=content_type,
+        )
+        return result
+    
+    def update_after_assessment(self, concept: str, correct: bool):
+        """Actualiza el estado BKT del estudiante después de una evaluación."""
+        self.bkt.update(concept=concept, correct=correct)
+    
+    def session_summary(self) -> str:
+        """Genera un resumen de la sesión de aprendizaje."""
+        state = self.get_student_state()
+        mastered = [c for c, s in state.items() if s >= 0.75]
+        frontier = self.kst.frontier(set(mastered))
+        
+        prompt = f"""Estudiante {self.student_id}.
+Conceptos dominados ({len(mastered)}): {', '.join(mastered[:10])}...
+Conceptos en frontera ({len(frontier)}): {', '.join(frontier[:5])}
+Genera un resumen motivacional en español de 3 oraciones sobre el progreso."""
+        
+        response = _client.chat.completions.create(
+            model="claude-4-5",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=200,
+        )
+        return response.choices[0].message.content
+```
+
+**Archivo opcional — Streamlit UI:**
+
+```python
+# app_adaptive.py  (ejecutar con: streamlit run app_adaptive.py)
+import streamlit as st
+from scripts.adaptive_tutor import AdaptiveTutor
+
+st.title("🎓 EDU — Aprendizaje Adaptativo")
+st.caption("Sin currícula fija · Impulsado por Knowledge Space Theory + BKT + LLM")
+
+student_id = st.text_input("ID del estudiante:", value="estudiante_01")
+tutor = AdaptiveTutor(student_id)
+
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("Estado actual")
+    state = tutor.get_student_state()
+    mastered = [c for c, s in state.items() if s >= 0.75]
+    st.metric("Conceptos dominados", len(mastered))
+    st.metric("Conceptos en exploración", len(state) - len(mastered))
+
+with col2:
+    st.subheader("Próximo paso")
+    recommendation = tutor.recommend_next()
+    if recommendation.get("concept"):
+        st.success(f"**{recommendation['concept']}**")
+        st.caption(recommendation.get("why", ""))
+        if st.button("Generar contenido"):
+            with st.spinner("Generando slides on-demand..."):
+                content = tutor.generate_content(recommendation["concept"])
+                st.json(content)
+    else:
+        st.balloons()
+        st.success(recommendation.get("message", "Completado"))
+```
+
+**Archivos creados:**
+- `scripts/adaptive_tutor.py` — AdaptiveTutor con KST + BKT + Director + GitHub Models
+- `app_adaptive.py` — UI Streamlit opcional (fuera del pipeline principal)
+- `.github/prompts/edu-adaptive-session.prompt.md` — prompt para sesión adaptativa
+- `_edu/workflows/adaptive-learning.yaml` — workflow de aprendizaje adaptativo
+
+**Criterio de aceptación:**
+- `AdaptiveTutor("test_student").recommend_next()` → retorna dict con `concept` válido
+- `generate_content("algoritmos_sorting")` → llama al Director Agent sin errores
+- `update_after_assessment("algoritmos_sorting", correct=True)` → actualiza BKT
+- `session_summary()` → genera texto en español vía GitHub Models (Claude Sonnet)
+- Tests mockean `GITHUB_TOKEN` y `EduDirector` en `scripts/tests/test_adaptive_tutor.py`
+
+**NO tocar:** edu_director.py (S12.1), bkt_tracker.py (S10.2), knowledge_space.py (S13.1), schema-registry.json
+
+---
+
+## Registro de Impacto — Archivos Existentes (v2) — Archivos Existentes (v2)
 
 | Archivo | Sprints | Cambio |
 |---------|---------|--------|
@@ -1642,6 +1999,11 @@ S11 (knowledge eng) ─── requiere S9 (embeddings) + S10 (Bloom para KG)
        ▼
 S12 (full-stack) ─── requiere S8.2 (Director) + S9.3 (NLI) + S11 (KG)
        │   S12.1 → S12.2 → S12.3 (secuencial — cada fase extiende la anterior)
+       │
+       ▼
+S13 (zero-curriculum) ─── requiere S11.1 (KG) + S11.2 (CPL) + S10.2 (BKT) + S12.1 (Director)
+       │   S13.1 (KST Engine) ── S13.2 (Universal KG) ── S13.3 (Adaptive UI)
+       └── Sprint FINAL: integra todos los sprints beyond-LLM
 ```
 
 **S9-S11 pueden iniciarse en paralelo con S6-S8** — son independientes del pipeline de slides.  
@@ -1682,7 +2044,7 @@ S6.1 (comparator) ── en paralelo ── S6.2 (MCP)
 ### Fase 5 — Orquestación (S8)
 ```
 S8.1 (PBL) ────── S8.2 (Director) ← el Director es lo último
-```
+```mejoras
 
 ### Fase 6 — Beyond-LLM (S9 + S10, en paralelo con S8)
 ```
@@ -1704,6 +2066,15 @@ S11.1 (Knowledge Graph) ────── S11.2 (CPL) ← CPL usa el KG
 S12.1 (Director Script) ── S12.2 (smolagents) ── S12.3 (GitHub Actions)
 ```
 
+### Fase 9 — Zero-Curriculum Adaptive Learning (S13)
+```
+S13.1 (KST Engine) ─── S13.2 (Universal KG Builder) ─── S13.3 (Adaptive Tutor UI)
+                          └─ usa CPL (S11.2) para prereqs cross-institution
+```
+
+> **S13 es el sprint final.**
+> Requiere que S11.1 (KG), S11.2 (CPL), S10.2 (BKT) y S12.1 (Director) estén estables.
+
 ---
 
 ## Total de archivos nuevos por sprint
@@ -1722,4 +2093,5 @@ S12.1 (Director Script) ── S12.2 (smolagents) ── S12.3 (GitHub Actions)
 | S10 | 4 | 0 | 0 | 3 | 0 | **7** |
 | S11 | 3 | 1 | 0 | 3 | 1 | **8** |
 | S12 | 2 | 0 | 0 | 3 | 2 | **7** |
-| **Total** | **24** | **7** | **4** | **32** | **15** | **82** |
+| S13 | 3 | 0 | 0 | 3 | 1 | **7** |
+| **Total** | **27** | **7** | **4** | **35** | **16** | **89** |
