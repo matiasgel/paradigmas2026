@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "edu-schemas/exam-blueprint",
+  "title": "Exam Blueprint Schema — Tabla de Especificaciones",
+  "description": "Define la estructura de un blueprint de examen con distribución por temas y niveles de Bloom. Schema independiente del Schema Registry (no modifica schema-registry.json).",
+  "version": "1.0.0",
+  "date": "2026-03-26",
+  "type": "object",
+  "required": ["exam_blueprint_version", "course_id", "generated_at", "parameters", "bloom_profile_used", "matrix", "bloom_totals"],
+  "additionalProperties": false,
+  "properties": {
+    "exam_blueprint_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "course_id": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "parameters": {
+      "type": "object",
+      "required": ["total_points", "exam_time_minutes", "bloom_profile", "topic_count"],
+      "properties": {
+        "total_points": {"type": "integer", "minimum": 1},
+        "exam_time_minutes": {"type": "integer", "minimum": 1},
+        "bloom_profile": {"type": "string"},
+        "topic_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "bloom_profile_used": {
+      "type": "object",
+      "description": "Porcentajes de cada nivel Bloom aplicados.",
+      "properties": {
+        "recordar": {"type": "number", "minimum": 0, "maximum": 1},
+        "comprender": {"type": "number", "minimum": 0, "maximum": 1},
+        "aplicar": {"type": "number", "minimum": 0, "maximum": 1},
+        "analizar": {"type": "number", "minimum": 0, "maximum": 1},
+        "evaluar": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "matrix": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["topic_id", "points", "time_minutes", "bloom_distribution", "weight_pct"],
+        "properties": {
+          "topic_id": {"type": "string"},
+          "points": {"type": "integer", "minimum": 0},
+          "time_minutes": {"type": "integer", "minimum": 0},
+          "bloom_distribution": {
+            "type": "object",
+            "properties": {
+              "recordar": {"type": "integer", "minimum": 0},
+              "comprender": {"type": "integer", "minimum": 0},
+              "aplicar": {"type": "integer", "minimum": 0},
+              "analizar": {"type": "integer", "minimum": 0},
+              "evaluar": {"type": "integer", "minimum": 0}
+            }
+          },
+          "weight_pct": {"type": "number", "minimum": 0, "maximum": 100}
+        }
+      }
+    },
+    "bloom_totals": {
+      "type": "object",
+      "properties": {
+        "recordar": {"type": "integer", "minimum": 0},
+        "comprender": {"type": "integer", "minimum": 0},
+        "aplicar": {"type": "integer", "minimum": 0},
+        "analizar": {"type": "integer", "minimum": 0},
+        "evaluar": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}
