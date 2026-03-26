@@ -77,3 +77,13 @@ Antes de procesar el report, el writing-fixer ejecuta el siguiente sub-paso:
 - **Output:** `scope-report.md`, `density-report.md`
 - **Auto-fix:** Only if `academic_guardrail_enabled: true`
 
+### Post-Quality: Write Findings to Collective Memory
+- **Condition:** Al menos un loop detectó issues clasificados como [CRITICAL] o [ERROR]
+- **Action:** Por cada hallazgo crítico, ejecutar:
+  ```
+  python scripts/edu_memory.py add --course {course_id} --topic {topic_number} \
+    --category quality-finding --agent {agent_que_detecto} \
+    --summary "{resumen del hallazgo}" --detail "{detalle con contexto}"
+  ```
+- **Purpose:** Los patrones de error quedan registrados para detección cross-tema y cross-año.
+
