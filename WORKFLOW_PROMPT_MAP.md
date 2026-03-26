@@ -78,3 +78,4 @@ Este documento mapea los workflows del módulo EDU con los prompts `/edu-*` que 
 | `/edu-compare-survey-simulator` | Comparar encuesta real vs simulación |
 | `/edu-switch-course` | Cambiar materia activa (multi-clase) |
 | `/edu-memory-search` | Buscar en la memoria colectiva (SQLite FTS5) |
+| `/edu-knowledge-search` | Buscar en la knowledge base ChromaDB (referencias académicas + herramientas) |
