@@ -10,12 +10,17 @@ communication_language: "spanish"
 document_output_language: "spanish"
 user_name: ""              # Nombre del docente
 
+# --- Multi-Class ---
+course_prefix: ""                                          # Prefijo corto de la materia (ej: leng, para, algo). Usar /edu-switch-course para cambiar.
+course_year: "2026"                                        # Año académico activo — actualizar en /edu-start-new-year
+course_id: "{course_prefix}-{course_year}"                 # Clave compuesta materia+año (ej: leng-2026). Se deriva automáticamente.
+
 # --- Folder Structure ---
 output_folder: "{project-root}/salida"
-course_year: "2026"                                        # Año académico activo — actualizar en /edu-start-new-year
-course_output_folder: "{output_folder}/cursadas/{course_year}"
+course_output_folder: "{output_folder}/cursadas/{course_id}"
 topics_folder: "{course_output_folder}/temas"              # Carpeta raíz de temas del año activo
-memory_folder: "{project-root}/_edu-memory"
+memory_folder: "{project-root}/_edu-memory"                # Memoria colectiva: memory.db + sidecars
+memory_db: "{memory_folder}/memory.db"                     # SQLite FTS5 — búsqueda full-text cross-curso
 
 # --- Module ---
 code: edu
