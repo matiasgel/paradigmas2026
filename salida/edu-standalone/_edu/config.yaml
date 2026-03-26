@@ -38,3 +38,8 @@ command_aliases: "true"
 # --- Professor Profiles ---
 # Available: profesor-teorico, profesor-practico, profesor-socratico, profesor-flipped, profesor-investigador
 # Each profile affects cognitive density metrics used by academic-guardrail agent
+
+# --- Knowledge Base (ChromaDB) ---
+knowledge_base_enabled: true
+knowledge_base_path: "{project-root}/_edu-knowledge"        # Referencias académicas + docs de herramientas
+knowledge_base_chroma_path: "{project-root}/_edu-knowledge/chroma_db"
