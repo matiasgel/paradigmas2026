@@ -32,6 +32,3 @@ salida/cursadas/*/temas/*pruebas*/
 # IDE
 .vscode/
 .idea/
-
-# ChromaDB persistent storage (regenerable con `python scripts/knowledge_base.py ingest`)
-_edu-knowledge/chroma_db/
