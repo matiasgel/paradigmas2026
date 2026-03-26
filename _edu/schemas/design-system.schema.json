@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "edu-schemas/design-system",
+  "title": "Design System Schema v3 — Sistema de Diseño Visual",
+  "description": "Define la estructura del sistema de diseño (slides-config). Generado por Vera (slides-designer). Consumido por el pipeline y por Diego (slides-publisher).",
+  "version": "3.0.0",
+  "date": "2026-03-25",
+  "type": "object",
+  "required": ["template_id", "palette", "typography", "slide_types", "gemini_image_strategy", "markdown_rendering"],
+  "properties": {
+    "pipeline_config_json": {
+      "type": "string",
+      "description": "Ruta al JSON de pipeline runtime. Default: _edu/slides-pipeline.json"
+    },
+    "template_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Google Slides template ID. '0' para Simple Light default."
+    },
+    "palette": {
+      "type": "object",
+      "required": ["primary", "secondary", "accent", "background", "text"],
+      "additionalProperties": false,
+      "properties": {
+        "primary":    {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "secondary":  {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "accent":     {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "background": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "text":       {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"}
+      }
+    },
+    "typography": {
+      "type": "object",
+      "required": ["title", "subtitle", "body", "code"],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "object",
+          "required": ["font", "size", "weight"],
+          "properties": {
+            "font":   {"type": "string"},
+            "size":   {"type": "integer", "minimum": 14, "maximum": 48},
+            "weight": {"type": "string", "enum": ["regular", "bold", "light"]}
+          }
+        },
+        "subtitle": {
+          "type": "object",
+          "required": ["font", "size", "weight"],
+          "properties": {
+            "font":   {"type": "string"},
+            "size":   {"type": "integer", "minimum": 12, "maximum": 40},
+            "weight": {"type": "string", "enum": ["regular", "bold", "light"]}
+          }
+        },
+        "body": {
+          "type": "object",
+          "required": ["font", "size", "weight"],
+          "properties": {
+            "font":   {"type": "string"},
+            "size":   {"type": "integer", "minimum": 10, "maximum": 28},
+            "weight": {"type": "string", "enum": ["regular", "bold", "light"]}
+          }
+        },
+        "code": {
+          "type": "object",
+          "required": ["font", "size", "weight"],
+          "properties": {
+            "font":   {"type": "string"},
+            "size":   {"type": "integer", "minimum": 8, "maximum": 24},
+            "weight": {"type": "string", "enum": ["regular", "bold", "light"]}
+          }
+        }
+      }
+    },
+    "layouts": {
+      "type": "object",
+      "description": "Definiciones de estilo visual por tipo de layout (colores, fuentes por zona). Informativo para Vera. El pipeline usa slide_types y pipeline-runtime para geometría."
+    },
+    "slide_types": {
+      "type": "object",
+      "description": "Tabla canónica INMUTABLE de tipos → layout + image_layer. ÚNICA fuente de verdad.",
+      "required": [
+        "portada", "concepto-abstracto", "concepto-mixto", "codigo",
+        "tabla", "tabla-comparativa", "tabla-mixta", "diagrama",
+        "socratica", "demo", "cierre", "timeline"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^(portada|concepto-abstracto|concepto-mixto|codigo|tabla|tabla-comparativa|tabla-mixta|diagrama|socratica|demo|cierre|timeline)$": {
+          "type": "object",
+          "required": ["layout", "image_layer"],
+          "properties": {
+            "layout": {
+              "type": "object",
+              "required": ["title", "body", "image", "code", "table"],
+              "properties": {
+                "title": {"type": "string"},
+                "body":  {"type": "string"},
+                "image": {"type": "string"},
+                "code":  {"type": "string"},
+                "table": {"type": "string"}
+              }
+            },
+            "image_layer": {
+              "type": "string",
+              "enum": ["background", "content", "none"]
+            },
+            "note": {"type": "string"}
+          }
+        }
+      }
+    },
+    "gemini_image_strategy": {
+      "type": "object",
+      "required": ["max_per_presentation", "safety_rules"],
+      "properties": {
+        "default":                    {"type": "string"},
+        "max_per_presentation":       {"type": "integer", "minimum": 1, "maximum": 20},
+        "max_images_per_presentation": {"type": "integer"},
+        "fallback":                   {"type": "string"},
+        "safety_rules":               {"type": "string", "minLength": 10},
+        "prompt_guide":               {"type": "string"}
+      }
+    },
+    "markdown_rendering": {
+      "type": "object",
+      "required": ["unordered_bullet_preset", "ordered_bullet_preset", "inline_code_font", "inline_code_color"],
+      "properties": {
+        "unordered_bullet_preset": {"type": "string"},
+        "ordered_bullet_preset":   {"type": "string"},
+        "inline_code_font":        {"type": "string"},
+        "inline_code_color":       {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "lead_scale":              {"type": "number"},
+        "heading_scale":           {"type": "number"}
+      }
+    }
+  }
+}

@@ -183,4 +183,7 @@ Los agentes están disponibles como `@edu-agent-nombre` en el dropdown de agente
 2. **Loops de calidad son secuenciales** — Loop 1 (escritura) → Loop 2 (coherencia) → Loop 3 (referencias) → Guardrail
 3. **La memoria del simulador NUNCA se resetea** — `_edu-memory/calibracion-simulador/` acumula año a año
 4. **Fuentes prohibidas** — Wikipedia, blogs y fuentes no peer-reviewed son rechazadas automáticamente
+5. **Schema Registry es OBLIGATORIO** — Todo agente que genere o modifique planes de filminas DEBE leer `_edu/schemas/schema-registry.json` ANTES de cualquier operación. Los tipos, layouts y reglas de imagen son INMUTABLES y se definen exclusivamente ahí.
+6. **Planes de filminas en JSON v3** — Formato de salida: `plan-filminas-{tema}.json` siguiendo `_edu/schemas/plan-filminas.schema.json`. No usar YAML para planes nuevos.
+7. **Scripts no tienen constantes de diseño** — `slides_pipeline.py`, `validate_plan.py`, `parse_filminas.py` leen mapeos del schema registry en runtime. No se agregan constantes de tipos/layouts en los scripts.
 <!-- EDU:END -->
