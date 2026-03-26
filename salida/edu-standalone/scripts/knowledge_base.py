@@ -3,11 +3,18 @@
 EDU Knowledge Base — ChromaDB ingestion & query system.
 
 Ingesta documentos de _edu-knowledge/ (referencias académicas + docs de herramientas)
-en ChromaDB para que todos los agentes puedan consultar durante el desarrollo de sprints.
+y material del curso de ingesta/ en ChromaDB. Si los PDFs de ingesta/ no tienen TXT
+generados, los convierte automáticamente con pdfminer.
 
 Uso:
-    # Ingestar todo
+    # Ingestar conocimiento base
     python scripts/knowledge_base.py ingest
+
+    # Ingestar incluyendo material del curso (ingesta/)
+    python scripts/knowledge_base.py ingest --include-material
+
+    # Re-ingestar todo (borra y recrea)
+    python scripts/knowledge_base.py ingest --force --include-material
 
     # Buscar
     python scripts/knowledge_base.py search "cognitive load theory slides"
@@ -15,12 +22,15 @@ Uso:
     # Buscar filtrando por tipo
     python scripts/knowledge_base.py search "WCAG contrast" --type reference
     python scripts/knowledge_base.py search "FSRS algorithm" --type tool
+    python scripts/knowledge_base.py search "paradigmas funcional" --type material
 
     # Listar documentos indexados
     python scripts/knowledge_base.py list
 
-    # Re-ingestar (borra y recrea)
-    python scripts/knowledge_base.py ingest --force
+Chunk sizes:
+    - reference/tool: max 1500 chars (markdown con headings)
+    - material: max 800 chars (texto denso de libros → chunks pequeños para
+      mejor retrieval semántico)
 """
 
 import argparse
@@ -50,7 +60,22 @@ CHROMA_DIR = KNOWLEDGE_DIR / "chroma_db"
 TOOLS_DIR = KNOWLEDGE_DIR / "tools"
 REFS_DIR = KNOWLEDGE_DIR / "references"
 
+# ingesta/ lives at the top-level workspace root, which may differ from ROOT
+# when this script lives inside salida/edu-standalone/
+def _find_workspace_root() -> Path:
+    """Find the top-level workspace root (contains .git or ingesta/)."""
+    p = ROOT
+    while p != p.parent:
+        if (p / ".git").exists() or (p / "ingesta").is_dir():
+            return p
+        p = p.parent
+    return ROOT
+
+WORKSPACE_ROOT = _find_workspace_root()
+INGESTA_DIR = WORKSPACE_ROOT / "ingesta"
+
 COLLECTION_NAME = "edu_knowledge"
+MATERIAL_CHUNK_SIZE = 800  # chars — chunks pequeños para texto denso de libros
 
 # ---------------------------------------------------------------------------
 # ChromaDB client
@@ -67,6 +92,47 @@ def get_or_create_collection(client):
         name=COLLECTION_NAME,
         metadata={"hnsw:space": "cosine"},
     )
+
+# ---------------------------------------------------------------------------
+# PDF → TXT conversion (integrated)
+# ---------------------------------------------------------------------------
+
+def convert_pdfs_to_txt(folder: Path) -> int:
+    """Convert all PDFs under folder to TXT if not already done. Returns count."""
+    try:
+        from pdfminer.high_level import extract_text
+    except ImportError:
+        print("  ⚠️  pdfminer.six no instalado — omitiendo conversión PDF→TXT")
+        print("     Instalar con: pip install pdfminer.six")
+        return 0
+
+    converted = 0
+    for pdf in sorted(folder.rglob("*.pdf")):
+        txt_dir = pdf.parent / "txt"
+        txt_path = txt_dir / f"{pdf.stem}.txt"
+        if txt_path.exists():
+            continue
+        txt_dir.mkdir(parents=True, exist_ok=True)
+        try:
+            text = extract_text(str(pdf))
+            if not text or not text.strip():
+                text = f"[PDF sin texto extraíble: {pdf.name}]\n"
+            from datetime import datetime
+            timestamp = datetime.now().isoformat(timespec="seconds")
+            output = (
+                f"# Fuente\n"
+                f"- archivo: {pdf.name}\n"
+                f"- ruta: {pdf}\n"
+                f"- extraido: {timestamp}\n\n"
+                f"# Contenido\n\n"
+                f"{text.strip()}\n"
+            )
+            txt_path.write_text(output, encoding="utf-8")
+            converted += 1
+            print(f"  📄 PDF→TXT: {pdf.name}")
+        except Exception as exc:
+            print(f"  ❌ Error convirtiendo {pdf.name}: {exc}")
+    return converted
 
 # ---------------------------------------------------------------------------
 # Document chunking
@@ -171,11 +237,96 @@ def chunk_code(text: str, source: str, max_chars: int = 2000) -> list[dict]:
     return chunks
 
 # ---------------------------------------------------------------------------
+# Ingestion — material del curso
+# ---------------------------------------------------------------------------
+
+def book_label(txt_path: Path) -> str:
+    """Derive a short book label from the TXT file path inside ingesta/."""
+    parts = txt_path.relative_to(INGESTA_DIR).parts
+    if len(parts) >= 3:  # <book-dir>/txt/<file>
+        return parts[0]
+    return "misc"
+
+
+def chunk_ingesta_txt(text: str, source: str, book: str, max_chars: int = MATERIAL_CHUNK_SIZE) -> list[dict]:
+    """Chunk a TXT extracted from PDF (format: # Fuente / # Contenido).
+
+    Uses small chunks (800 chars default) because many academic books lack
+    double‑newline paragraph separators.
+    """
+    content_match = re.search(r'# Contenido\s*\n(.*)', text, re.DOTALL)
+    content = content_match.group(1).strip() if content_match else text.strip()
+
+    # Normalize page-breaks (\x0c) to paragraph separators
+    content = content.replace('\x0c', '\n\n')
+
+    chunks = []
+
+    def emit(blob: str) -> None:
+        """Split a potentially large blob by line boundaries into max_chars pieces."""
+        if len(blob) <= max_chars:
+            if blob.strip():
+                chunks.append({"text": blob.strip(), "source": source,
+                               "type": "material", "heading": book})
+            return
+        lines = blob.split('\n')
+        buf = ""
+        for line in lines:
+            if len(buf) + len(line) + 1 > max_chars and buf:
+                if buf.strip():
+                    chunks.append({"text": buf.strip(), "source": source,
+                                   "type": "material", "heading": book})
+                buf = line
+            else:
+                buf = buf + '\n' + line if buf else line
+        if buf.strip():
+            chunks.append({"text": buf.strip(), "source": source,
+                           "type": "material", "heading": book})
+
+    paragraphs = re.split(r'\n{2,}', content)
+    buffer = ""
+    for para in paragraphs:
+        para = para.strip()
+        if not para:
+            continue
+        if len(buffer) + len(para) + 2 > max_chars and buffer:
+            emit(buffer)
+            buffer = para
+        else:
+            buffer = buffer + "\n\n" + para if buffer else para
+    if buffer.strip():
+        emit(buffer)
+    return chunks
+
+
+def collect_material_documents() -> list[dict]:
+    """Collect all TXT files from ingesta/**/txt/. Auto‑converts PDFs first."""
+    all_chunks = []
+    if not INGESTA_DIR.is_dir():
+        print("  ⚠️  Carpeta ingesta/ no encontrada, omitiendo material del curso.")
+        return all_chunks
+
+    n_converted = convert_pdfs_to_txt(INGESTA_DIR)
+    if n_converted:
+        print(f"  ✅ Convertidos {n_converted} PDFs nuevos a TXT\n")
+
+    txt_files = sorted(INGESTA_DIR.rglob("txt/*.txt"))
+    for f in txt_files:
+        book = book_label(f)
+        source = str(f.relative_to(INGESTA_DIR))
+        text = f.read_text(encoding="utf-8", errors="replace")
+        chunks = chunk_ingesta_txt(text, source, book)
+        if chunks:
+            all_chunks.extend(chunks)
+            print(f"  📖 {source}: {len(chunks)} chunks  [{book[:50]}]")
+    return all_chunks
+
+# ---------------------------------------------------------------------------
 # Ingestion
 # ---------------------------------------------------------------------------
 
-def collect_documents() -> list[dict]:
-    """Collect all documents from _edu-knowledge/."""
+def collect_documents(include_material: bool = False) -> list[dict]:
+    """Collect all documents from _edu-knowledge/ (and optionally ingesta/)."""
     all_chunks = []
 
     # References (markdown)
@@ -204,10 +355,16 @@ def collect_documents() -> list[dict]:
                 # Skip large HTML files (WCAG quickref etc.)
                 print(f"  ⏭️  {f.name}: skipped (HTML, use markdown refs instead)")
 
+    # Course material (ingesta/**/txt/*.txt)
+    if include_material:
+        print("\n📥 Recolectando material del curso (ingesta/)...")
+        material_chunks = collect_material_documents()
+        all_chunks.extend(material_chunks)
+
     return all_chunks
 
 
-def ingest(force: bool = False):
+def ingest(force: bool = False, include_material: bool = False):
     """Ingest all documents into ChromaDB."""
     client = get_client()
 
@@ -227,7 +384,7 @@ def ingest(force: bool = False):
         return
 
     print("📥 Recolectando documentos...")
-    chunks = collect_documents()
+    chunks = collect_documents(include_material=include_material)
 
     if not chunks:
         print("⚠️  No se encontraron documentos en _edu-knowledge/")
@@ -390,11 +547,13 @@ def main():
     # ingest
     p_ingest = sub.add_parser("ingest", help="Ingestar documentos en ChromaDB")
     p_ingest.add_argument("--force", action="store_true", help="Re-ingestar borrando datos previos")
+    p_ingest.add_argument("--include-material", action="store_true",
+                          help="Incluir material del curso (ingesta/**/txt/). Auto-convierte PDFs.")
 
     # search
     p_search = sub.add_parser("search", help="Buscar en la knowledge base")
     p_search.add_argument("query", help="Texto de búsqueda")
-    p_search.add_argument("--type", choices=["reference", "tool"], help="Filtrar por tipo")
+    p_search.add_argument("--type", choices=["reference", "tool", "material"], help="Filtrar por tipo")
     p_search.add_argument("-n", type=int, default=8, help="Cantidad de resultados")
 
     # list
@@ -403,7 +562,7 @@ def main():
     args = parser.parse_args()
 
     if args.command == "ingest":
-        ingest(force=args.force)
+        ingest(force=args.force, include_material=args.include_material)
     elif args.command == "search":
         entries = search(args.query, doc_type=args.type, n_results=args.n)
         print_results(entries)

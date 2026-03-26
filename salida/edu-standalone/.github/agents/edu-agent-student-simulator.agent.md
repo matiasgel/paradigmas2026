@@ -1,6 +1,6 @@
 ---
 description: '🎓 Simulador de Alumno: testing pedagógico con perfiles empíricos (estratégico, ansioso, disperso, recursero)'
-tools: ['read', 'edit', 'search', 'execute', 'fetch']
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 model: "claude-sonnet-4-6 (copilot)"
 handoffs:
   - label: "✏️ Corregir contenido según feedback"

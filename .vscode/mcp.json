@@ -1,3 +1,13 @@
 {
-  "servers": {}
+  "servers": {
+    "chroma": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "chroma-mcp",
+        "--client-type", "persistent",
+        "--data-dir", "${workspaceFolder}/salida/edu-standalone/_edu-knowledge/chroma_db"
+      ]
+    }
+  }
 }

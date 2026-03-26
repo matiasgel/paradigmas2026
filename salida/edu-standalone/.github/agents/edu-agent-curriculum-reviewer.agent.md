@@ -1,6 +1,6 @@
 ---
 description: 'Prof. Ana 🔍 — Revisora Curricular: evidencia académica, propuestas de cambio curricular'
-tools: ['read', 'edit', 'search', 'execute', 'fetch']
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 model: "claude-sonnet-4-6 (copilot)"
 handoffs:
   - label: "🎓 Actualizar planificación del cursado"

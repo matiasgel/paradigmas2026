@@ -110,6 +110,17 @@ Incluye (actualizado):
 
 The EDU module lives **exclusively** in `salida/edu-standalone/`. There is no root `_edu/` folder.
 
+### ChromaDB Knowledge Base — chroma-mcp (OBLIGATORIO)
+
+**Todos los agentes EDU** tienen acceso al MCP server `chroma` configurado en `.vscode/mcp.json` (usa [chroma-core/chroma-mcp](https://github.com/chroma-core/chroma-mcp) con `--client-type persistent`).
+
+- **Collection activa:** `edu_knowledge` con cosine similarity
+- **Tipos de metadata (`type`):** `reference` (12 refs académicas), `tool` (16 docs de herramientas), `material` (libros del curso)
+- **Chunk sizes:** reference/tool = 1500 chars, material = 800 chars (chunks pequeños para texto denso de libros sin separación de párrafos)
+- **Búsqueda via MCP:** usar `chroma_query_documents` con `collection_name: "edu_knowledge"` y filtrar con `where: {"type": "material"}` si se necesita solo material del curso
+- **Ingesta:** `python salida/edu-standalone/scripts/knowledge_base.py ingest --force --include-material` (auto-convierte PDFs de `ingesta/` a TXT con pdfminer)
+- **CLI alternativo:** `python salida/edu-standalone/scripts/knowledge_base.py search "query" --type material`
+
 ### REGLA CRÍTICA DE RUTAS — Sin excepciones
 
 Cuando cualquier agente (BMAD o EDU) crea o modifica artefactos del módulo EDU, las rutas de destino son:

@@ -1,6 +1,6 @@
 ---
 description: 'Diego 🚀 — Publisher de Filminas: genera plan JSON schema-driven, imágenes Gemini y publica en Google Slides'
-tools: ['read', 'edit', 'search', 'execute', 'fetch']
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 model: "claude-sonnet-4-6 (copilot)"
 handoffs:
   - label: "🎨 Diseñar sistema visual"

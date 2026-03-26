@@ -1,6 +1,6 @@
 ---
 description: 'Prof. Elena 🎓 — Planificadora de Cursado: diseño curricular, orquestación del ciclo de temas, cronograma, cobertura'
-tools: ['read', 'edit', 'search', 'execute', 'fetch']
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 model: "claude-sonnet-4-6 (copilot)"
 handoffs:
   - label: "🗂️ Diseñar temas del plan"

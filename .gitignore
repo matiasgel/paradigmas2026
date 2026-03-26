@@ -22,3 +22,9 @@ reporte/
 # EDU collective memory — WAL/SHM son temporales de SQLite, no se versionan
 _edu-memory/memory.db-wal
 _edu-memory/memory.db-shm
+
+# Material del curso (PDFs y TXT — no versionar)
+material/
+
+# Ingesta (PDFs fuente — no versionar)
+ingesta/
