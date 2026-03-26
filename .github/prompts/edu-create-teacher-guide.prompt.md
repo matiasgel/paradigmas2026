@@ -1,6 +1,6 @@
 ---
 description: 'EDU Fase 3: Crear guía del profesor — genera guiaprofesor.md con todo el contexto, recursos y extractos clave para repaso docente.'
-agent: 'edu-agent-study-guide-writer'
+agent: 'edu-agent-class-writer'
 tools: ['read', 'edit', 'search', 'execute', 'fetch']
 ---
 
