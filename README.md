@@ -442,14 +442,14 @@ La memoria colectiva es **cross-curso**: un insight de `leng-2025` es visible de
 
 ## Knowledge Base (ChromaDB)
 
-Base de conocimiento vectorial con **399 chunks semánticos** de **27 documentos**, accesible a todos los agentes para consultas durante el desarrollo de mejoras.
+Base de conocimiento vectorial con **414 chunks semánticos** de **28 documentos**, accesible a todos los agentes para consultas durante el desarrollo de mejoras.
 
 **Contenido:**
 
 | Tipo | Documentos | Temas |
 |---|---|---|
-| Referencias académicas (11) | Fiorella/Mayer 2023, Sweller/Chen 2023, WCAG 2.2/3.0, FSRS v4, Bloom/Haladyna 2024, Learning Analytics, CS Education/GitHub, Slide Composition, Adaptive Learning/ITS, MCP Protocol, **MAIC (Yu et al. 2024)** | Principios multimedia, carga cognitiva, accesibilidad, repetición espaciada, evaluación, analítica educativa, GitHub Classroom, diseño visual, sistemas tutoriales, protocolo MCP, **multi-agentes LLM para educación** |
-| Documentación de herramientas (16) | py-fsrs, MCP SDK, ChromaDB, GitHub CLI, GitHub Classroom, GitHub Actions, Google Slides API, JSON Schema, WCAG Quick Reference | Código fuente, APIs, configuración, ejemplos |
+| Referencias académicas (12) | Fiorella/Mayer 2023, Sweller/Chen 2023, WCAG 2.2/3.0, FSRS v4, Bloom/Haladyna 2024, Learning Analytics, CS Education/GitHub, Slide Composition, Adaptive Learning/ITS, MCP Protocol, MAIC (Yu et al. 2024), **OpenMAIC Platform (THU-MAIC 2026)** | Principios multimedia, carga cognitiva, accesibilidad, repetición espaciada, evaluación, analítica educativa, GitHub Classroom, diseño visual, sistemas tutoriales, protocolo MCP, multi-agentes LLM para educación, **arquitectura OpenMAIC (LangGraph, whiteboard, PBL)** |
+| Documentación de herramientas (16) | py-fsrs, MCP SDK, ChromaDB, GitHub CLI, GitHub Classroom, GitHub Actions, Google Slides API, JSON Schema, WCAG Quick Reference, **OpenMAIC (6 archivos fuente)** | Código fuente, APIs, configuración, ejemplos |
 
 **Búsqueda:**
 
