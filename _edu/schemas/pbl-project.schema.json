@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EDU PBL Project",
+  "description": "Contrato para proyectos PBL multi-clase con milestones y rúbricas",
+  "type": "object",
+  "required": ["title", "driving_question", "duration_weeks", "milestones", "topics_covered"],
+  "properties": {
+    "title": { "type": "string" },
+    "driving_question": { "type": "string", "minLength": 20, "description": "Pregunta motivadora del proyecto" },
+    "duration_weeks": { "type": "integer", "minimum": 2, "maximum": 16 },
+    "team_size": { "type": "integer", "minimum": 1, "maximum": 6, "default": 3 },
+    "topics_covered": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 2,
+      "description": "IDs de temas del plan mínimo cubiertos por el PBL"
+    },
+    "bloom_target": {
+      "type": "string",
+      "enum": ["apply", "analyze", "evaluate", "create"],
+      "default": "create"
+    },
+    "milestones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "week", "deliverable", "weight_percent"],
+        "properties": {
+          "name": { "type": "string" },
+          "week": { "type": "integer" },
+          "deliverable": { "type": "string", "description": "Qué entrega: commit, documento, presentación, demo" },
+          "weight_percent": { "type": "number", "minimum": 5, "maximum": 50 },
+          "rubric_criteria": { "type": "array", "items": { "type": "string" } },
+          "prerequisite_topics": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "minItems": 3
+    },
+    "github_classroom": {
+      "type": "object",
+      "properties": {
+        "template_repo": { "type": "string" },
+        "branch_per_milestone": { "type": "boolean", "default": true },
+        "autograding_enabled": { "type": "boolean", "default": false }
+      }
+    },
+    "anti_delegation_measures": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Medidas para evitar delegación al LLM (Denny et al. 2024)"
+    }
+  }
+}

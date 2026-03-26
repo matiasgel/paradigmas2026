@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EDU Interactive Scene",
+  "description": "Contrato para simulaciones HTML interactivas generadas por generate_interactive.py",
+  "type": "object",
+  "required": ["type", "title", "topic_id", "concept"],
+  "properties": {
+    "type": {
+      "enum": ["sorting-visualizer", "tree-explorer", "stack-simulator",
+               "fsm-simulator", "memory-layout", "custom"]
+    },
+    "title": { "type": "string", "minLength": 5 },
+    "topic_id": { "type": "string" },
+    "concept": { "type": "string", "description": "Concepto pedagógico que la simulación aborda" },
+    "bloom_level": { "enum": ["apply", "analyze", "evaluate", "create"] },
+    "inputs": {
+      "type": "object",
+      "description": "Parámetros específicos del tipo de simulación"
+    },
+    "accessibility": {
+      "type": "object",
+      "properties": {
+        "keyboard_navigable": { "type": "boolean", "default": true },
+        "screen_reader_labels": { "type": "boolean", "default": true },
+        "high_contrast_mode": { "type": "boolean", "default": false }
+      }
+    }
+  }
+}

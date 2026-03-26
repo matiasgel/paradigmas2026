@@ -1,0 +1,70 @@
+# Git Auto-Responder — GitHub Action para repos de alumnos (S3.2)
+# Este archivo se copia al repo template de GitHub Classroom.
+# Detecta 7 errores comunes y responde automáticamente.
+
+name: Student Helper Bot
+on:
+  push:
+    branches-ignore: [main]
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  check-common-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check for large binary files
+        run: |
+          LARGE_FILES=$(find . -type f -size +1M ! -path './.git/*' | head -5)
+          if [ -n "$LARGE_FILES" ]; then
+            echo "⚠️ Archivos binarios >1MB detectados:" >> $GITHUB_STEP_SUMMARY
+            echo "$LARGE_FILES" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "💡 **Solución:** Usar .gitignore para excluir archivos binarios grandes." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Check for IDE/editor files
+        run: |
+          IDE_FILES=$(find . -name ".idea" -o -name ".vscode" -o -name "*.iml" -o -name ".DS_Store" | head -5)
+          if [ -n "$IDE_FILES" ]; then
+            echo "⚠️ Archivos de IDE detectados:" >> $GITHUB_STEP_SUMMARY
+            echo "$IDE_FILES" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "💡 **Solución:** Agregar al .gitignore: .idea/, .vscode/, *.iml, .DS_Store" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Check for dependency directories
+        run: |
+          if [ -d "node_modules" ] || [ -d ".venv" ] || [ -d "venv" ] || [ -d "__pycache__" ]; then
+            echo "⚠️ Directorio de dependencias detectado en el repo." >> $GITHUB_STEP_SUMMARY
+            echo "💡 **Solución:** Nunca commitear node_modules/, .venv/, __pycache__/" >> $GITHUB_STEP_SUMMARY
+            echo "   Agregar al .gitignore y ejecutar: git rm -r --cached <directorio>" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Check for merge conflicts
+        run: |
+          CONFLICTS=$(grep -rl "<<<<<<< " --include="*.py" --include="*.js" --include="*.java" --include="*.md" . 2>/dev/null | head -5)
+          if [ -n "$CONFLICTS" ]; then
+            echo "❌ Conflictos de merge no resueltos:" >> $GITHUB_STEP_SUMMARY
+            echo "$CONFLICTS" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "💡 **Solución:** Abrir cada archivo, buscar <<<<<<< y resolver manualmente." >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      - name: Check commit messages
+        run: |
+          MSG=$(git log -1 --pretty=%B)
+          if echo "$MSG" | grep -qiE "^(update|fix|changes|commit|asdf|test|wip)$"; then
+            echo "⚠️ Mensaje de commit poco descriptivo: '$MSG'" >> $GITHUB_STEP_SUMMARY
+            echo "💡 **Solución:** Usar mensajes descriptivos. Ejemplo:" >> $GITHUB_STEP_SUMMARY
+            echo '   git commit -m "feat: agregar función de ordenamiento por burbuja"' >> $GITHUB_STEP_SUMMARY
+          fi

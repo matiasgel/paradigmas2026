@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EDU Director State",
+  "description": "Estado del Director Agent para checkpoints persistentes",
+  "type": "object",
+  "required": ["topic_id", "course_id", "current_step", "status"],
+  "properties": {
+    "topic_id": { "type": "string" },
+    "course_id": { "type": "string" },
+    "current_step": {
+      "enum": ["init", "design", "design-review", "content", "quality-check",
+               "pipeline", "tp", "simulation", "final-review", "complete", "error"]
+    },
+    "status": { "enum": ["running", "waiting-human", "paused", "complete", "error"] },
+    "checkpoints": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "timestamp": { "type": "string", "format": "date-time" },
+          "artifacts": { "type": "array", "items": { "type": "string" } },
+          "validation_passed": { "type": "boolean" }
+        }
+      }
+    },
+    "errors": { "type": "array", "items": { "type": "string" } },
+    "started_at": { "type": "string", "format": "date-time" },
+    "completed_at": { "type": "string", "format": "date-time" }
+  }
+}
