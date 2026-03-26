@@ -39,6 +39,17 @@ command_aliases: "true"
 # Available: profesor-teorico, profesor-practico, profesor-socratico, profesor-flipped, profesor-investigador
 # Each profile affects cognitive density metrics used by academic-guardrail agent
 
+# --- Accessibility (Sprint 1) ---
+accessibility_check_enabled: false
+delivery_mode: "presencial"                 # presencial | remoto | hybrid
+classroom_distance_meters: 6
+screen_resolution: "1080p"
+
+# --- Cognitive Science (Sprint 4) ---
+cognitive_validation_enabled: false
+cognitive_max_consecutive_theory: 3
+cognitive_concepts_per_30min: 6
+
 # --- Knowledge Base (ChromaDB) ---
 knowledge_base_enabled: true
 knowledge_base_path: "{project-root}/_edu-knowledge"        # Referencias académicas + docs de herramientas
