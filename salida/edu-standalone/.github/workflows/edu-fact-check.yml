@@ -1,0 +1,36 @@
+name: EDU Fact Check on PR
+on:
+  pull_request:
+    paths:
+      - 'salida/cursadas/**/minuta.md'
+      - 'salida/cursadas/**/*.pptx'
+
+jobs:
+  fact-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install sentence-transformers chromadb
+
+      - name: Extract topic from changed files
+        id: extract
+        run: |
+          CHANGED=$(git diff --name-only origin/main...HEAD || echo "")
+          TOPIC=$(echo "$CHANGED" | grep -oP 'salida/cursadas/[^/]+/\K[^/]+' | head -1)
+          COURSE=$(echo "$CHANGED" | grep -oP 'salida/cursadas/\K[^/]+' | head -1)
+          echo "TOPIC=$TOPIC" >> "$GITHUB_OUTPUT"
+          echo "COURSE=$COURSE" >> "$GITHUB_OUTPUT"
+
+      - name: Run NLI fact check
+        if: steps.extract.outputs.TOPIC != ''
+        run: |
+          python salida/edu-standalone/scripts/fact_verifier.py \
+            --course "${{ steps.extract.outputs.COURSE }}" \
+            --topic "${{ steps.extract.outputs.TOPIC }}"
+        # Exits with code 1 if any claim is CONTRADICTED → blocks merge

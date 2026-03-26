@@ -100,3 +100,82 @@ Este documento mapea los workflows del módulo EDU con los prompts `/edu-*` que 
 |--------|-------------|
 | `/edu-check-cognition` | Validar reglas cognitivas (assertion-evidence, densidad, contiguidad) → `cognition-report.md` |
 | `/edu-check-cognitive-load` | Presupuesto cognitivo por clase con curva visual → `cognitive-budget-report.md` |
+
+### Sprint 3 — GitHub Classroom Integration
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-publish-classroom` | Publicar TPs y materiales a GitHub Classroom con gh CLI |
+| `/edu-classroom-grades` | Importar notas de GitHub Classroom al dashboard de analytics |
+| `/edu-setup-auto-responder` | Configurar GitHub Action auto-responder para errores de Git de alumnos |
+
+### Sprint 5 — Student Analytics + Adaptive Path
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-student-analytics` | Dashboard de progreso: tendencias, alertas tempranas, distribución |
+| `/edu-adaptive-path` | Rutas de aprendizaje personalizadas por nivel de rendimiento |
+
+### Sprint 6 — Investigation + MCP Server
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-compare-curriculum` | Comparar currícula contra estándares ACM/IEEE y universidades internacionales |
+
+### Sprint 7 — Interactivity + Multimedia
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-create-interactive` | Simulación interactiva HTML5: drag-drop, slider, code-trace, etc. |
+| `/edu-create-annotations` | Secuencia de anotaciones tipo pizarra con pasos JSON |
+| `/edu-generate-audio` | Narración TTS por filmina con edge-tts |
+| `/edu-simulate-classroom` | Simulación pedagógica grupal con 4 arquetipos de Schwanke |
+
+### Sprint 8 — Orchestration + PBL
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-create-pbl` | Proyecto PBL multi-clase con milestones, rúbricas y anti-delegación |
+| `/edu-pbl-status` | Estado de proyectos PBL activos por milestone |
+| `/edu-auto-topic` | Producción automática de tema completo con Director Agent |
+| `/edu-resume-topic` | Reanudar producción desde último checkpoint |
+
+### Sprint 9 — Semantic Analyzers
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-check-semantic-drift` | Detectar drift semántico entre contenido y fuentes originales |
+| `/edu-check-curriculum-gaps` | Detectar gaps y redundancias temáticas en el cursado |
+| `/edu-verify-facts` | NLI fact-checking: entailment/contradiction/neutral por claim |
+
+### Sprint 10 — Psychometrics + Visual Quality
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-classify-bloom` | Clasificar preguntas por nivel de Bloom con DeBERTa ML + fallback keyword |
+| `/edu-calibrate-assessment` | Calibrar dificultad IRT 2PL + estimar mastery BKT |
+| `/edu-check-visual-quality` | Evaluar relevancia visual CLIP + layout quality de slides |
+
+### Sprint 11 — Knowledge Engineering
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-build-kg` | Construir Knowledge Graph educativo desde plan mínimo |
+| `/edu-validate-kg` | Validar KG: ciclos, huérfanos, monotonía de Bloom |
+| `/edu-learn-prerequisites` | Inferir prerequisitos con ML + active learning |
+
+### Sprint 12 — Full-Stack Orchestration
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-run-pipeline` | Pipeline completo de producción con 9 pasos + checkpoints |
+| `/edu-resume-pipeline` | Reanudar pipeline desde último checkpoint exitoso |
+| `/edu-agent-director` | Director inteligente con smolagents + Qwen/Llama |
+
+### Sprint 13 — Zero-Curriculum Adaptive Learning
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-kst-explain` | Explicar concepto frontera KST al estudiante |
+| `/edu-universal-kg` | Construir KG universal de CS desde ACM CC2023 + MIT OCW |
+| `/edu-adaptive-session` | Sesión de aprendizaje adaptativo sin currícula fija |

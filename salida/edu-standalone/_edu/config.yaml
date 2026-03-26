@@ -50,6 +50,36 @@ cognitive_validation_enabled: false
 cognitive_max_consecutive_theory: 3
 cognitive_concepts_per_30min: 6
 
+# --- GitHub Classroom (Sprint 3) ---
+classroom_enabled: false
+github_org: ""                          # Organización de GitHub Classroom
+classroom_prefix: ""                    # Prefijo para repos de alumnos
+
+# --- Interactive Content (Sprint 7) ---
+interactive_enabled: false
+tts_enabled: false
+tts_provider: "edge-tts"               # edge-tts (gratuito)
+tts_voice: "es-AR-TomasNeural"          # Voz por defecto para TTS
+simulation_enabled: false
+
+# --- PBL (Sprint 8) ---
+pbl_enabled: false
+
+# --- Topic Analysis (Sprint 9) ---
+semantic_drift_enabled: false
+topic_analysis_enabled: false
+fact_check_enabled: false
+
+# --- Knowledge Graph (Sprint 11) ---
+knowledge_graph_enabled: false
+
+# --- Orchestrator (Sprint 12) ---
+orchestrator_enabled: false
+orchestrator_mode: "minimal"            # minimal | smolagents
+orchestrator_model: "Qwen/Qwen2.5-72B-Instruct"
+hf_inference_api: true                  # usa HuggingFace Inference API gratuita
+local_model_path: null                  # alternativa: ruta a modelo Ollama local
+
 # --- Knowledge Base (ChromaDB) ---
 knowledge_base_enabled: true
 knowledge_base_path: "{project-root}/_edu-knowledge"        # Referencias académicas + docs de herramientas

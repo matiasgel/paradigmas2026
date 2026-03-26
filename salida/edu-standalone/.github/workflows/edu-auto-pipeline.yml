@@ -1,0 +1,50 @@
+name: EDU Auto-Pipeline
+on:
+  push:
+    paths:
+      - 'salida/cursadas/**/diseno.md'
+      - 'salida/cursadas/**/topic.yaml'
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r salida/edu-standalone/requirements.txt
+
+      - name: Extract topic from changed files
+        id: extract
+        run: |
+          CHANGED=$(git diff --name-only HEAD~1 HEAD || echo "")
+          TOPIC=$(echo "$CHANGED" | grep -oP 'salida/cursadas/[^/]+/\K[^/]+(?=/diseno\.md|/topic\.yaml)' | head -1)
+          COURSE=$(echo "$CHANGED" | grep -oP 'salida/cursadas/\K[^/]+' | head -1)
+          echo "TOPIC=$TOPIC" >> "$GITHUB_OUTPUT"
+          echo "COURSE=$COURSE" >> "$GITHUB_OUTPUT"
+
+      - name: Run EDU pipeline (no-gates mode)
+        if: steps.extract.outputs.TOPIC != ''
+        run: |
+          python salida/edu-standalone/scripts/edu_director.py \
+            --topic "${{ steps.extract.outputs.TOPIC }}" \
+            --course "${{ steps.extract.outputs.COURSE }}" \
+            --skip-gates \
+            --skip-steps visual_quality,semantic_drift
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+
+      - name: Commit generated artifacts
+        if: steps.extract.outputs.TOPIC != ''
+        run: |
+          git config user.name "EDU Pipeline Bot"
+          git config user.email "edu-bot@noreply.github.com"
+          git add salida/cursadas/
+          git diff --cached --quiet || git commit -m "edu-pipeline: auto-generated ${{ steps.extract.outputs.TOPIC }} materials"
+          git push
