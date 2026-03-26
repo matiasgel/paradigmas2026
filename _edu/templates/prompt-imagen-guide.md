@@ -1,7 +1,7 @@
 # Guía de Prompts de Imagen para Filminas EDU
 ## Template de "Lenguaje Visual Puro" para Gemini Imagen
 
-**Propósito:** Esta guía es para el agente `slides-designer` (Vera) y para el docente al corregir prompts manualmente en el plan YAML.
+**Propósito:** Esta guía es para el agente `slides-designer` (Vera) y para el docente al corregir prompts manualmente en el plan JSON.
 
 ---
 
@@ -106,10 +106,10 @@ Pure geometric abstract composition. Alta resolución. Sin texto, sin letras.
 ## Proceso de corrección cuando hay texto en una imagen
 
 1. Identificar el slide problemático en los thumbnails capturados
-2. Abrir `slides/plan-filminas-{tema}.yaml`  
+2. Abrir `slides/plan-filminas-{tema}.json`  
 3. Localizar el slide por `id`
-4. Reescribir `background_image.prompt` o `content_image.prompt` siguiendo este template
-5. Poner `drive_id: null` para forzar regeneración
+4. Reescribir `image.prompt` siguiendo este template
+5. Poner `image.drive_id: null` para forzar regeneración
 6. Eliminar `slides/assets/F-XX-*.png` si existe localmente
 7. Ejecutar: `python scripts/slides_pipeline.py <tema> --assets-only`
 8. Ejecutar: `python scripts/slides_pipeline.py <tema> --publish-only`

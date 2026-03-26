@@ -1,59 +1,78 @@
 # Mapa de Workflows y Prompts (EDU)
 
-Este documento lista los workflows del módulo EDU y los prompts `/edu-*` que se usan para invocarlos.
+Este documento mapea los workflows del módulo EDU con los prompts `/edu-*` que los invocan.
 
-## Workflows y su prompt correspondiente
+> **Actualizado:** 2026-03-25 · Arquitectura v3 (JSON Schema-driven)
 
-| Workflow | Prompt `/edu-*` | Comentarios |
-|---------|---------------|-----------|
-| adaptive-replan |  | Falta prompt |
-| build-course-from-materials |  | Falta prompt |
-| build-course-from-research |  | Falta prompt |
-| check-coverage |  | Falta prompt |
-| close-course |  | Falta prompt |
-| create-autograde-repo |  | Falta prompt |
-| create-teacher-guide |  | Falta prompt |
-| create-tp-quiz |  | Falta prompt |
-| curriculum-change |  | Falta prompt |
-| debate-topic |  | Falta prompt |
-| load-official-plan |  | Falta prompt |
-| manage-student-profiles |  | Falta prompt |
-| new-year |  | Falta prompt |
-| pedagogical-testing |  | Falta prompt |
-| quality-loops |  | Falta prompt |
-| reopen-topic |  | Falta prompt |
-| student-feedback-loop |  | Falta prompt |
-| topic-cycle |  | Falta prompt |
-| update-copilot-context |  | Falta prompt |
+## Flujo principal del docente
 
-## Prompts sin workflow directo
+```
+/edu-start-course → /edu-design-topic → /edu-create-class → /edu-create-study-guide
+→ /edu-create-tp → /edu-quality → /edu-test-topic → /edu-close-topic
+→ /edu-publish-slides (opcional, en cualquier momento post-clase)
+```
 
-Estos prompts pueden corresponder a acciones compuestas o a workflows internos.
+## Mapa completo
 
-| Prompt | Posible workflow relacionado |
-|--------|---------------------------|
-| /edu-approve-design | (no hay workflow `approve-design`) |
-| /edu-build-course | (no hay workflow `build-course`) |
-| /edu-close-topic | (no hay workflow `close-topic`) |
-| /edu-compare-survey-simulator | (no hay workflow `compare-survey-simulator`) |
-| /edu-create-class | (no hay workflow `create-class`) |
-| /edu-create-study-guide | (no hay workflow `create-study-guide`) |
-| /edu-create-tp | (no hay workflow `create-tp`) |
-| /edu-design-topic | (no hay workflow `design-topic`) |
-| /edu-edit-class-template | (no hay workflow `edit-class-template`) |
-| /edu-export-pdf | (no hay workflow `export-pdf`) |
-| /edu-help | (no hay workflow `help`) |
-| /edu-propose-curriculum-change | (no hay workflow `propose-curriculum-change`) |
-| /edu-publish-slides | (no hay workflow `publish-slides`) |
-| /edu-quality | (no hay workflow `quality`) |
-| /edu-setup-apis | (no hay workflow `setup-apis`) |
-| /edu-slides-designer | (no hay workflow `slides-designer`) |
-| /edu-slides-publisher | (no hay workflow `slides-publisher`) |
-| /edu-start-course | (no hay workflow `start-course`) |
-| /edu-start-new-year | (no hay workflow `start-new-year`) |
-| /edu-status | (no hay workflow `status`) |
-| /edu-student-profiles | (no hay workflow `student-profiles`) |
-| /edu-test-topic | (no hay workflow `test-topic`) |
-| /edu-test-pipeline | scripts/test_pipeline.py — test de integración end-to-end del pipeline de filminas |
-| /edu-topic | (no hay workflow `topic`) |
-| /edu-update-context | (no hay workflow `update-context`) |
+### Fase 1 — Configuración Inicial
+
+| Prompt | Workflow | Agente | Descripción |
+|--------|----------|--------|-------------|
+| `/edu-start-course` | `load-official-plan/` | Elena 🎓 | Configura materia + carga programa oficial + congela plan mínimo |
+| `/edu-build-course` | `build-course-from-materials/` o `build-course-from-research/` | Elena 🎓 | Construye plan-borrador desde PDFs o investigación |
+| `/edu-setup-apis` | — | — | Configura credenciales Google + Gemini en `secrets.local.yaml` |
+
+### Fase 2 — Planificación
+
+| Prompt | Workflow | Agente | Descripción |
+|--------|----------|--------|-------------|
+| `/edu-check-coverage` | `check-coverage/` | Elena 🎓 | Matriz de cobertura del plan mínimo |
+| `/edu-adaptive-replan` | `adaptive-replan/` | Elena 🎓 | Ajustar cronograma post-clase |
+| `/edu-propose-curriculum-change` | `curriculum-change/` | Ana 🔍 | Proponer cambio curricular con evidencia |
+
+### Fase 3 — Producción de Temas
+
+| Prompt | Workflow | Agente | Descripción |
+|--------|----------|--------|-------------|
+| `/edu-topic` | `topic-cycle/` | Marcos 🗂️ | Detecta estado del tema activo, guía próximo paso |
+| `/edu-design-topic` | `topic-cycle/` (Step 1) | Marcos 🗂️ | Diseñar tema con duración como constraint → `diseno.md` |
+| `/edu-approve-design` | `topic-cycle/` (Step 3) | Elena 🎓 | Aprobar el diseño del tema |
+| `/edu-create-class` | `topic-cycle/` (Step 4) | Roberto ✍️ | Generar `minuta.md` + `filminas.md` |
+| `/edu-create-study-guide` | `topic-cycle/` (Step 4.5) | Sofía 📖 | Guía de estudio autónoma para alumnos |
+| `/edu-create-teacher-guide` | `create-teacher-guide/` | Roberto ✍️ / Sofía 📖 | Guía del profesor con plan de clase |
+| `/edu-create-tp` | `topic-cycle/` (Step 5) | Valeria 📝 | TP trazable (desarrollo/repo/quiz/mixto) |
+| `/edu-validate-gift` | `create-tp-quiz/` | Valeria 📝 | Validar archivo GIFT para Moodle |
+| `/edu-create-autograde-repo` | `create-autograde-repo/` | Rodrigo | Repo con GitHub Actions autograding |
+| `/edu-quality` | `quality-loops/` | Validadores 🔎 | Loops de calidad: escritura → coherencia → referencias → guardrail |
+| `/edu-test-topic` | `pedagogical-testing/` | Simulador 🎓 | Testing pedagógico con perfiles de alumno |
+| `/edu-close-topic` | `topic-cycle/` (Step 8) | Elena 🎓 | Cerrar tema: commit + merge + cobertura |
+
+### Pipeline de Filminas (v3 — Schema-Driven)
+
+| Prompt | Workflow | Agente/Script | Descripción |
+|--------|----------|---------------|-------------|
+| `/edu-slides-designer` | — | Vera 🎨 | Define sistema de diseño visual → `slides-config.yaml` (una vez por cursada) |
+| `/edu-publish-slides` | `topic-cycle/` (Step 9.5) | Diego 🚀 + scripts | Plan JSON determinista + Gemini + Google Slides |
+| `/edu-slides-publisher` | → redirige a `/edu-publish-slides` | — | Alias unificado |
+| `/edu-test-pipeline` | — | `scripts/test_pipeline.py` | Test de integración end-to-end del pipeline |
+
+### Fase 4 — Cierre y Continuidad
+
+| Prompt | Workflow | Agente | Descripción |
+|--------|----------|--------|-------------|
+| `/edu-close-course` | `close-course/` | Elena 🎓 | Retrospectiva y traspaso de memoria |
+| `/edu-start-new-year` | `new-year/` | Elena 🎓 | Reutilizar memoria del año anterior |
+| `/edu-student-profiles` | `manage-student-profiles/` | Simulador 🎓 | Gestionar perfiles empíricos de alumnos |
+| `/edu-debate-topic` | `debate-topic/` | Panel multi-agente | Debate para decisiones complejas |
+| `/edu-reopen-topic` | `reopen-topic/` | Elena 🎓 | Reabrir tema cerrado |
+
+### Utilidades
+
+| Prompt | Descripción |
+|--------|-------------|
+| `/edu-help` | Orientación contextual sobre comandos EDU |
+| `/edu-status` | Estado de producción del tema activo |
+| `/edu-export-pdf` | Exportar guía de estudio a PDF |
+| `/edu-edit-class-template` | Editar template canónico de clases |
+| `/edu-update-context` | Actualizar `copilot-instructions.md` con estado actual |
+| `/edu-compare-survey-simulator` | Comparar encuesta real vs simulación |
