@@ -28,3 +28,4 @@ material/
 
 # Ingesta (PDFs fuente — no versionar)
 ingesta/
+salida/cursadas/**/slides/
