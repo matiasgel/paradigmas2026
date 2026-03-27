@@ -3567,7 +3567,7 @@ Las bases de Startup dicen textualmente sobre ejes temáticos:
 
 **El puerto tiene una ventaja ENORME:** No necesitás buscar sector vertical. Los puertos son **infraestructura de exportación** de commodities (pesca, minería, energía). Eso es:
 - **Agroindustria:** Puerto pesquero (merluza negra, centolla, calamar)
-- **Energía/Minería:** Logística de exportación de productos patagónicos
+- **Energía/Minería:** Logística de exportación de productos patagónicospolo antartico https://www.argentina.gob.ar/servicio/economia-del-conocimiento-con-aplicacion-de-ia
 - **Salud:** Control sanitario de importaciones/exportaciones (SENASA)
 
 **ES TRISECTORIAL.** No forzás nada — el puerto toca los 3 ejes más las transversales.
@@ -3970,7 +3970,7 @@ Cada convocatoria del BID se repite periódicamente. El Programa de Innovación 
 **Tipo:** Definición de empresa
 **Prioridad:** 🟡 Alta
 
-**No estás creando "un proyecto". Estás creando una empresa.**
+**No estás creando "un proyecto". Estás creando una empresa.**polo antartico https://www.argentina.gob.ar/servicio/economia-del-conocimiento-con-aplicacion-de-ia
 
 | Aspecto | Definición |
 |---|---|
