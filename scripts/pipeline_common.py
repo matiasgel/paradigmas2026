@@ -33,35 +33,17 @@ U = TypeVar("U")
 
 @dataclass(frozen=True)
 class Result(Generic[T]):
-    """Mónada Result para composición funcional con manejo de errores.
-
-    Encapsula un valor exitoso (Ok) o una tupla de errores (Err).
-    Soporta bind (>>=), map, y el operador | como alias de bind.
-
-    Ejemplos::
-
-        # Encadenar operaciones que pueden fallar
-        result = (
-            Result.ok(path)
-            | load_plan_result
-            | validate_schema_result
-        )
-
-        # Acumular errores de múltiples validaciones
-        combined = collect_results([check_a(), check_b(), check_c()])
-    """
+    """Mónada Result para composición funcional con manejo de errores."""
 
     value: T | None
     errors: tuple[str, ...]
 
     @staticmethod
     def ok(value: T) -> Result[T]:
-        """Construye un Result exitoso."""
         return Result(value=value, errors=())
 
     @staticmethod
     def fail(*errors: str) -> Result[Any]:
-        """Construye un Result fallido con uno o más mensajes de error."""
         return Result(value=None, errors=errors)
 
     @property
@@ -69,23 +51,16 @@ class Result(Generic[T]):
         return len(self.errors) == 0
 
     def bind(self, f: Callable[[T], Result[U]]) -> Result[U]:
-        """Monadic bind (>>=). Encadena operaciones que pueden fallar.
-
-        Si self es Ok, aplica f al valor y devuelve el nuevo Result.
-        Si self es Err, propaga los errores sin ejecutar f.
-        """
         if not self.is_ok:
             return Result(value=None, errors=self.errors)
         return f(self.value)  # type: ignore[arg-type]
 
     def map(self, f: Callable[[T], U]) -> Result[U]:
-        """Functor map. Transforma el valor si es Ok, propaga errores si es Err."""
         if not self.is_ok:
             return Result(value=None, errors=self.errors)
         return Result.ok(f(self.value))  # type: ignore[arg-type]
 
     def unwrap(self) -> T:
-        """Extrae el valor. Lanza ValueError si hay errores."""
         if not self.is_ok:
             raise ValueError(
                 "Result.unwrap() en Err:\n- " + "\n- ".join(self.errors)
@@ -93,23 +68,13 @@ class Result(Generic[T]):
         return self.value  # type: ignore[return-value]
 
     def unwrap_or(self, default: T) -> T:
-        """Extrae el valor o devuelve un default si es Err."""
         return self.value if self.is_ok else default  # type: ignore[return-value]
 
     def __or__(self, f: Callable[[T], Result[U]]) -> Result[U]:
-        """Operador | como alias de bind para sintaxis fluida.
-
-        Permite escribir: Result.ok(x) | f | g  en lugar de  Result.ok(x).bind(f).bind(g)
-        """
         return self.bind(f)
 
 
 def collect_results(results: list[Result[T]]) -> Result[list[T]]:
-    """Combina múltiples Results. Acumula TODOS los errores si alguno falla.
-
-    A diferencia de bind (que cortocircuita en el primer error),
-    collect_results evalúa todos los results y reúne todos los mensajes.
-    """
     all_errors: list[str] = []
     values: list[T] = []
     for r in results:
@@ -123,14 +88,6 @@ def collect_results(results: list[Result[T]]) -> Result[list[T]]:
 
 
 def pipe(value: T, *fns: Callable) -> Any:
-    """Composición secuencial de funciones (pipe).
-
-    Aplica cada función al resultado de la anterior::
-
-        pipe(x, f, g, h)  ≡  h(g(f(x)))
-
-    Para encadenar con manejo de errores, usar Result.bind o el operador |.
-    """
     result = value
     for fn in fns:
         result = fn(result)
@@ -143,7 +100,6 @@ def pipe(value: T, *fns: Callable) -> Any:
 
 
 def find_project_root(start: Path) -> Path:
-    """Busca la raíz del proyecto subiendo hasta encontrar .git, module.yaml, o _edu/+scripts/."""
     cur = start.resolve()
     while True:
         if (cur / ".git").exists() or (cur / "module.yaml").exists():
@@ -157,26 +113,22 @@ def find_project_root(start: Path) -> Path:
 
 
 def load_json(path: Path) -> dict:
-    """Lee un archivo JSON y retorna el dict."""
     with path.open("r", encoding="utf-8") as f:
         return json.load(f)
 
 
 def save_json(path: Path, data: dict) -> None:
-    """Escribe un dict como JSON con indentación de 2 espacios."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
 def load_yaml(path: Path) -> dict:
-    """Lee un archivo YAML y retorna el dict."""
     with path.open("r", encoding="utf-8") as f:
         return yaml.safe_load(f) or {}
 
 
 def load_registry(project_root: Path) -> dict:
-    """Carga schema-registry.json. Retorna {} si no existe."""
     registry_path = project_root / "_edu" / "schemas" / "schema-registry.json"
     if registry_path.exists():
         return load_json(registry_path)
@@ -184,7 +136,6 @@ def load_registry(project_root: Path) -> dict:
 
 
 def load_config(project_root: Path) -> dict:
-    """Carga slides-config.yaml. Retorna {} si no existe."""
     config_path = project_root / "_edu" / "slides-config.yaml"
     if config_path.exists():
         return load_yaml(config_path)
@@ -192,10 +143,7 @@ def load_config(project_root: Path) -> dict:
 
 
 def find_plan(topic_folder: Path) -> Result[Path]:
-    """Busca el plan JSON v3 del tema. Retorna Result con el path.
-
-    Solo busca archivos .json — los planes YAML v2 ya no son soportados.
-    """
+    """Busca el plan JSON v3 del tema. Retorna Result con el path."""
     slides_dir = topic_folder / "slides"
     topic_id = topic_folder.name
 
@@ -203,7 +151,6 @@ def find_plan(topic_folder: Path) -> Result[Path]:
     if json_path.exists():
         return Result.ok(json_path)
 
-    # Buscar por glob
     json_candidates = (
         sorted(slides_dir.glob("plan-filminas-*.json"))
         if slides_dir.exists()

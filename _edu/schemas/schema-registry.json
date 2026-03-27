@@ -77,7 +77,7 @@
     "socratica":          {"layout": {"title": "center-top",    "body": "center-middle",   "image": "background", "code": "none",             "table": "none"},       "image_layer": "background"},
     "demo":               {"layout": {"title": "full-title",    "body": "left-middle",     "image": "none",       "code": "right-half",       "table": "none"},       "image_layer": "none"},
     "cierre":             {"layout": {"title": "center-middle", "body": "center-bottom",   "image": "background", "code": "none",             "table": "none"},       "image_layer": "background"},
-    "timeline":           {"layout": {"title": "full-title",    "body": "full-center",     "image": "none",       "code": "none",             "table": "none"},       "image_layer": "none"}
+    "timeline":           {"layout": {"title": "full-title",    "body": "left-top-split", "image": "none",       "code": "none",             "table": "right-half"},  "image_layer": "none"}
   },
   "image_prompt_rules": {
     "description": "Reglas INMUTABLES para prompts de imagen. El agente DEBE seguirlas.",
@@ -100,6 +100,25 @@
     "plan_location": "{topic_folder}/slides/",
     "draft_filename": "plan-draft-{tema}.json",
     "assets_folder": "{topic_folder}/slides/assets/",
-    "slides_url_file": "{topic_folder}/slides/slides-url.txt"
+    "slides_url_file": "{topic_folder}/slides/slides-url.txt",
+    "calibration_config": "_edu/calibracion-config.json",
+    "calibration_folder": "calibracion/"
+  },
+  "table_split": {
+    "strategy": "split-slides",
+    "description": "Si una tabla supera max_rows_per_slide, se parte en 2 slides consecutivas con mismo título + sufijo (1/2)/(2/2). No se reduce fuente.",
+    "max_rows_per_slide": 8,
+    "title_suffix_part1": " (1/2)",
+    "title_suffix_part2": " (2/2)",
+    "id_strategy": "renumber"
+  },
+  "calibration": {
+    "render_engine": "python-pptx",
+    "description": "Calibración local con python-pptx. Descarga el template de Google Slides al mismo tamaño (1280x720px) para fidelidad sin OAuth.",
+    "trigger": "auto-and-command",
+    "auto_trigger_condition": "calibracion-config.json ausente",
+    "command": "/edu-calibrate-slides",
+    "output_folder": "calibracion/",
+    "config_output": "_edu/calibracion-config.json"
   }
 }
