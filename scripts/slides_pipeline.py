@@ -1,43 +1,40 @@
 #!/usr/bin/env python3
 """
-EDU Slides Pipeline — Módulo EDU
-=================================
-Consume artefactos YAML ya resueltos → assets (imágenes/tablas) → Google Slides.
+EDU Slides Pipeline — Módulo EDU (v4 — Schema-Driven)
+======================================================
+Pipeline canónico: filminas.md → plan JSON v3 → assets → Google Slides.
 
 Fases:
-    1. validate — Valida plan-filminas-{tema}.yaml, assets-manifest.yaml y
-                                publish-context.yaml generados por el agente.
-    2. assets   — Genera imágenes con Gemini, renderiza tablas como PNG,
-               sube todo a Google Drive.
-    3. publish  — Lee el plan + assets y crea la presentación en Google Slides.
+    1. plan     — Parsea filminas.md y genera plan-filminas-{tema}.json
+    2. validate — Valida plan JSON contra contratos v3
+    3. assets   — Genera imágenes con Gemini, renderiza tablas como PNG (matplotlib),
+                  sube todo a Google Drive.
+    4. publish  — Crea la presentación en Google Slides desde el plan.
 
 Uso:
   python slides_pipeline.py <ruta-tema>
   python slides_pipeline.py <ruta-tema> --plan-only
+  python slides_pipeline.py <ruta-tema> --regen-plan
   python slides_pipeline.py <ruta-tema> --assets-only
   python slides_pipeline.py <ruta-tema> --publish-only
-
-Ejemplos:
-  python slides_pipeline.py salida/cursadas/2026/temas/01-conceptos-introductorios
-  python slides_pipeline.py salida/cursadas/2026/temas/01-conceptos-introductorios --plan-only
 
 Requiere:
   pip install -r requirements.txt
 
-Archivos de configuración requeridos (en la raíz del proyecto):
-  _edu/secrets.local.yaml  — google_credentials_path + gemini_api_key
-  _edu/slides-config.yaml  — sistema de diseño generado por /edu-slides-designer
+Archivos de configuración (en la raíz del proyecto):
+  _edu/secrets.local.yaml              — google_credentials_path + gemini_api_key
+  _edu/slides-config.yaml              — sistema de diseño
+  _edu/schemas/schema-registry.json    — mapeos y enums (fuente única de verdad)
 
-Artefactos requeridos en la carpeta del tema (generados por el agente):
-    slides/plan-filminas-{tema}.yaml
-    slides/assets-manifest.yaml
-    slides/publish-context.yaml
+Artefacto requerido en la carpeta del tema:
+    slides/plan-filminas-{tema}.json   (un solo archivo JSON v3)
 """
 
 from __future__ import annotations
 
 import argparse
 import base64
+import json
 import re
 import sys
 import time
@@ -54,6 +51,16 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
+
+# Pipeline compartido
+from pipeline_common import (
+    Result,
+    find_project_root,
+    load_json,
+    load_registry,
+    load_yaml,
+    save_json,
+)
 
 # ═══════════════════════════════════════════════════════════════════════
 # CONSTANTES
@@ -77,27 +84,55 @@ BOTTOM_CLEAR = 760_000
 TABLE_BOTTOM_CLEAR = 1_520_000
 EMU_PER_PT = 12_700
 
-# Estrategia de imagen por tipo de filmina
-IMAGE_STRATEGY: dict[str, str] = {
-    "portada":           "background",  # imagen de fondo full-slide
-    "cierre":            "background",
-    "socratica":         "background",
-    "concepto-abstracto": "content",    # imagen en panel derecho
-    "diagrama":          "content",
-    "timeline":          "content",
-    "codigo":            "none",
-    "concepto-mixto":    "none",         # body izq + código der: no imagen
-    "tabla":             "none",
-    "tabla-comparativa": "none",
-    "demo":              "none",
+# Directrices de layout por tipo — fuente canónica: schema-registry.json
+# En runtime se sobreescriben desde el registry via _override_maps_from_registry().
+LAYOUT_MAP: dict[str, dict] = {
+    "portada":            {"title": "full-title",     "body": "center-bottom",   "image": "background", "code": "none",             "table": "none"},
+    "concepto-abstracto": {"title": "full-title",     "body": "left-middle",     "image": "right-half", "code": "none",             "table": "none"},
+    "concepto-mixto":     {"title": "full-title",     "body": "left-middle",     "image": "none",       "code": "right-half",       "table": "none"},
+    "tabla-mixta":        {"title": "full-title",     "body": "left-top-split",  "image": "none",       "code": "left-bottom-split", "table": "right-half"},
+    "codigo":             {"title": "full-title",     "body": "subtitle-only",   "image": "none",       "code": "full-bottom",      "table": "none"},
+    "tabla":              {"title": "full-title",     "body": "table-intro",     "image": "none",       "code": "none",             "table": "table-main"},
+    "tabla-comparativa":  {"title": "full-title",     "body": "table-intro",     "image": "none",       "code": "none",             "table": "table-main"},
+    "diagrama":           {"title": "full-title",     "body": "left-middle",     "image": "right-half", "code": "none",             "table": "none"},
+    "socratica":          {"title": "center-top",     "body": "center-middle",   "image": "background", "code": "none",             "table": "none"},
+    "demo":               {"title": "full-title",     "body": "left-middle",     "image": "none",       "code": "right-half",       "table": "none"},
+    "cierre":             {"title": "center-middle",  "body": "center-bottom",   "image": "background", "code": "none",             "table": "none"},
+    "timeline":           {"title": "full-title",     "body": "left-top-split",  "image": "none",       "code": "none",             "table": "right-half"},
 }
 
-# Directrices de layout por tipo
-LAYOUT_MAP: dict[str, dict] = {
-    "portada":            {"title": "center-middle",  "body": "center-bottom", "image": "background", "code": "none",       "table": "none"},
-    "concepto-abstracto": {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none",       "table": "none"},
-    "concepto-mixto":     {"title": "full-title",     "body": "left-middle",   "image": "none",       "code": "right-half", "table": "none"},
-    "codigo":             {"title": "full-title",     "body": "subtitle-only", "image": "none",       "code": "full-bottom", "table": "none"},
+
+def _override_maps_from_registry(registry: dict) -> None:
+    """Sobreescribe LAYOUT_MAP desde el schema registry (fuente única de verdad)."""
+    global LAYOUT_MAP
+    type_layout_map = registry.get("type_layout_map", {})
+    if not type_layout_map:
+        return
+    new_layout: dict[str, dict] = {
+        stype: mapping.get("layout", {})
+        for stype, mapping in type_layout_map.items()
+        if isinstance(mapping, dict)
+    }
+    if new_layout:
+        LAYOUT_MAP = new_layout
+
+
+def _image_layer_from_registry(registry: dict) -> dict[str, str]:
+    """Extrae mapeo tipo → image_layer desde el registry."""
+    type_layout_map = registry.get("type_layout_map", {})
+    return {
+        stype: mapping.get("image_layer", "none")
+        for stype, mapping in type_layout_map.items()
+        if isinstance(mapping, dict)
+    }
+
+
+def _get_slide_image(slide: dict) -> dict:
+    """Lee datos de imagen de un slide (formato v3 unificado)."""
+    img = slide.get("image")
+    if img and isinstance(img, dict) and "layer" in img:
+        return img
+    return {"layer": "none", "prompt": "", "local_asset": "", "drive_id": None}
     "tabla":              {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none",       "table": "table-main"},
     "tabla-comparativa":  {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none",       "table": "table-main"},
     "diagrama":           {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none",       "table": "none"},
@@ -140,29 +175,7 @@ ZONES = _zones()
 # HELPERS
 # ═══════════════════════════════════════════════════════════════════════
 
-def find_project_root(start: Path) -> Path:
-    cur = start.resolve()
-    while True:
-        if (cur / ".git").exists() or (cur / "module.yaml").exists():
-            return cur
-        # Modo standalone: edu-standalone/ tiene su propio _edu/
-        if (cur / "_edu").exists() and (cur / "scripts").exists():
-            return cur
-        if cur == cur.parent:
-            break
-        cur = cur.parent
-    raise FileNotFoundError(f"No se encontró la raíz del proyecto desde {start}.")
-
-
-def load_yaml(path: Path) -> dict:
-    with path.open("r", encoding="utf-8") as f:
-        return yaml.safe_load(f) or {}
-
-
-def save_yaml(path: Path, data: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as f:
-        yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+# find_project_root, load_yaml, load_json, save_json — importados de pipeline_common
 
 
 def _deep_merge_dict(base: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:

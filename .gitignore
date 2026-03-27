@@ -19,6 +19,10 @@ node_modules/
 # Test runs (reporte/ generado por test_pipeline.py)
 reporte/
 
+# Calibración de slides (slides de prueba locales, no committear)
+calibracion/
+_edu/calibracion-config.json
+
 # EDU collective memory — WAL/SHM son temporales de SQLite, no se versionan
 _edu-memory/memory.db-wal
 _edu-memory/memory.db-shm
