@@ -1,0 +1,1988 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "03-intro-funcional-ts",
+    "title": "Introducción a Programación Funcional con TypeScript",
+    "source": "filminas.md",
+    "generated_at": "2026-03-26T18:24:54",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas",
+    "topic_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas/03-intro-funcional-ts",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/slides-pipeline.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 35,
+    "images_planned": 12,
+    "tables_planned": 12,
+    "code_slides": 18,
+    "status": "READY_FOR_VALIDATION",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "portada": 1,
+      "concepto-abstracto": 8,
+      "tabla-comparativa": 5,
+      "timeline": 3,
+      "socratica": 2,
+      "codigo": 15,
+      "cierre": 1
+    }
+  },
+  "slides": [
+    {
+      "id": "F-01",
+      "type": "portada",
+      "title": "Portada",
+      "subtitle": "Introducción a Programación Funcional con TypeScript",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Paradigmas y Lenguajes de Programación 2026 — UNTDF / IDEI\nTema 03 · Módulo II"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "fondo oscuro abstracto con circuitos y símbolos matemáticos lambda (λ) y letras griegas en tonos azul profundo, estilo académico-tecnológico",
+        "local_asset": "slides/assets/F-01-bg.png",
+        "drive_id": "1I7oMH9LiytPGbuqV0CCAbyuqkpWVtXX5"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-02",
+      "type": "concepto-abstracto",
+      "title": "El origen: una pregunta de 1928",
+      "subtitle": "El Entscheidungsproblem",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "David Hilbert, 1928"
+        },
+        {
+          "type": "text",
+          "content": "> \"¿Existe un procedimiento mecánico que, dado cualquier enunciado matemático, determine si es verdadero o falso?\""
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué importa"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Hilbert buscaba fundamentar *toda* la matemática en un sistema formal decidible",
+              "level": 0
+            },
+            {
+              "content": "Esta pregunta define qué pueden y qué no pueden hacer las computadoras",
+              "level": 0
+            },
+            {
+              "content": "La respuesta llegó en 1936 — desde dos lugares a la vez, sin coordinación",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "retrato estilizado de David Hilbert frente a un pizarrón con fórmulas matemáticas formales, estilo ilustración académica en blanco y negro con acentos azul",
+        "local_asset": "slides/assets/F-02-content.png",
+        "drive_id": "1WhGu1iLYrr5MzVsT_gYYpVYIahyTnuNT"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-03",
+      "type": "concepto-abstracto",
+      "title": "Alan Turing — La Máquina (Cambridge, 1936)",
+      "subtitle": "La Máquina de Turing",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El modelo"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Dispositivo abstracto: cinta infinita + cabeza de lectura/escritura + tabla de estados",
+              "level": 0
+            },
+            {
+              "content": "Computa **modificando** el estado de la cinta paso a paso",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El resultado"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Demostró el **halting problem**: ningún algoritmo puede decidir si un programa arbitrario termina",
+              "level": 0
+            },
+            {
+              "content": "→ El Entscheidungsproblem **no tiene solución general**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El legado en LP"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Máquina de Turing → arquitectura von Neumann → **paradigma imperativo**",
+              "level": 0
+            },
+            {
+              "content": "*\"On Computable Numbers\"*, 1936, Proceedings of the London Mathematical Society",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "diagrama simple de una Máquina de Turing: cinta infinita con celdas, cabeza lectora/escritora y tabla de estados, estilo diagrama técnico en colores azul y gris",
+        "local_asset": "slides/assets/F-03-content.png",
+        "drive_id": "1oP4H5sHniYXp0Fgb7G6qvbgJMNQg4cuv"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-04",
+      "type": "concepto-abstracto",
+      "title": "Alonzo Church — El λ-cálculo (Princeton, 1936)",
+      "subtitle": "El λ-cálculo de Church",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El modelo"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Sistema formal donde todo es **función** — el cómputo es **sustitución de expresiones**",
+              "level": 0
+            },
+            {
+              "content": "No hay estado, no hay memoria: solo transformaciones de expresiones",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El resultado"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Demostró que el problema de equivalencia de funciones tampoco tiene solución",
+              "level": 0
+            },
+            {
+              "content": "→ El Entscheidungsproblem **no tiene solución general** (camino independiente)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El legado en LP"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "λ-cálculo → Lisp (1958) → **paradigma funcional**",
+              "level": 0
+            },
+            {
+              "content": "*\"An Unsolvable Problem of Elementary Number Theory\"*, 1936, Annals of Mathematics",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "retrato estilizado de Alonzo Church con fórmulas de lambda cálculo flotando alrededor — β-reducción: (λx.x*x) 3 → 3*3 → 9 — estilo ilustración académica azul",
+        "local_asset": "slides/assets/F-04-content.png",
+        "drive_id": "1gBL0XEqPY226FLMIRJE1lyGTdIRlIx_X"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "tabla-comparativa",
+      "title": "Dos filosofías de computación",
+      "subtitle": "Church vs Turing: misma respuesta, distinto legado",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La Tesis Church-Turing"
+        },
+        {
+          "type": "text",
+          "content": "Todo lo computable por uno es computable por el otro → **equivalentes en poder**"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Dos formas de computar"
+        },
+        {
+          "type": "text",
+          "content": "> ⚠️ El λ-cálculo no nació como lenguaje de programación — nació para demostrar que un problema matemático era **imposible**"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| | **Turing → von Neumann → Imperativo** | **Church → λ-cálculo → Funcional** |\n|---|---|---|\n| **Computar es…** | Modificar el estado de una cinta/memoria | Reducir una expresión a su forma normal |\n| **Elemento central** | Variable mutable + asignación | Función + sustitución |\n| **Control de flujo** | Instrucciones secuenciales, loops | Recursión, composición de funciones |\n| **Primer lenguaje** | Fortran (1957) | Lisp (1958) |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| | **Turing → von Neumann → Imperativo** | **Church → λ-cálculo → Funcional** |\n|---|---|---|\n| **Computar es…** | Modificar el estado de una cinta/memoria | Reducir una expresión a su forma normal |\n| **Elemento central** | Variable mutable + asignación | Función + sustitución |\n| **Control de flujo** | Instrucciones secuenciales, loops | Recursión, composición de funciones |\n| **Primer lenguaje** | Fortran (1957) | Lisp (1958) |",
+          "local_asset": "slides/assets/F-05-table-1.png",
+          "drive_id": "1SI96KxIHq6Vg5ACd6jMa7twMixozr66L"
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "type": "timeline",
+      "title": "Recorrido de lenguajes funcionales — parte 1 (1958–1990)",
+      "subtitle": "Lenguajes funcionales: cada uno responde a su época (1958–1990)",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Cada lenguaje nació para **resolver un problema concreto**, no como ejercicio académico"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Año | Lenguaje | Creador / Origen | Nicho actual |\n|---|---|---|---|\n| 1958 | **Lisp** | John McCarthy — MIT | IA simbólica, Emacs Lisp, primer funcional |\n| 1962 | **APL** | Kenneth Iverson — IBM | Computación matricial, precursor del data science |\n| 1973 | **ML** | Robin Milner — Edinburgh | Compiladores, verificación formal, inferencia de tipos |\n| 1975 | **Scheme** | Steele/Sussman — MIT | Educación, investigación — base teórica de muchos cursos |\n| 1985 | **Miranda** | David Turner — Kent | Primer lenguaje puramente lazy; origen directo de Haskell |\n| 1986 | **Erlang** | Armstrong — Ericsson | Telecomunicaciones, concurrencia masiva (*WhatsApp* en producción) |\n| 1990 | **Haskell** | Comité académico | Finanzas cuantitativas, compiladores, criptografía |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "full-center",
+        "image": "none",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Año | Lenguaje | Creador / Origen | Nicho actual |\n|---|---|---|---|\n| 1958 | **Lisp** | John McCarthy — MIT | IA simbólica, Emacs Lisp, primer funcional |\n| 1962 | **APL** | Kenneth Iverson — IBM | Computación matricial, precursor del data science |\n| 1973 | **ML** | Robin Milner — Edinburgh | Compiladores, verificación formal, inferencia de tipos |\n| 1975 | **Scheme** | Steele/Sussman — MIT | Educación, investigación — base teórica de muchos cursos |\n| 1985 | **Miranda** | David Turner — Kent | Primer lenguaje puramente lazy; origen directo de Haskell |\n| 1986 | **Erlang** | Armstrong — Ericsson | Telecomunicaciones, concurrencia masiva (*WhatsApp* en producción) |\n| 1990 | **Haskell** | Comité académico | Finanzas cuantitativas, compiladores, criptografía |",
+          "local_asset": "slides/assets/F-06-table-1.png",
+          "drive_id": "1RrgvD7zGHTh1hUEzrMPdzyW_eRk9vDN8"
+        }
+      ]
+    },
+    {
+      "id": "F-07",
+      "type": "timeline",
+      "title": "Recorrido de lenguajes funcionales — parte 2 (2003–2012)",
+      "subtitle": "Lenguajes funcionales: modernos y sus nichos (2003–2012)",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué esta época"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Los problemas de **concurrencia y escala** se volvieron inmanejables con estado mutable compartido",
+              "level": 0
+            },
+            {
+              "content": "El funcional los **elimina por diseño** — no por disciplina del programador",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Año | Lenguaje | Creador / Origen | Nicho actual |\n|---|---|---|---|\n| 2003 | **Scala** | Odersky — EPFL | Big Data (*Apache Spark*, *Kafka*), backend JVM |\n| 2005 | **F#** | Don Syme — Microsoft | Finanzas cuantitativas, modelado científico en .NET |\n| 2007 | **Clojure** | Rich Hickey | Concurrencia, datos inmutables, **blockchain** (*Datomic*) |\n| 2012 | **Elixir** | José Valim | Web en tiempo real, IoT, telecomunicaciones (corre sobre BEAM/Erlang) |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "full-center",
+        "image": "none",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Año | Lenguaje | Creador / Origen | Nicho actual |\n|---|---|---|---|\n| 2003 | **Scala** | Odersky — EPFL | Big Data (*Apache Spark*, *Kafka*), backend JVM |\n| 2005 | **F#** | Don Syme — Microsoft | Finanzas cuantitativas, modelado científico en .NET |\n| 2007 | **Clojure** | Rich Hickey | Concurrencia, datos inmutables, **blockchain** (*Datomic*) |\n| 2012 | **Elixir** | José Valim | Web en tiempo real, IoT, telecomunicaciones (corre sobre BEAM/Erlang) |",
+          "local_asset": "slides/assets/F-07-table-1.png",
+          "drive_id": "1M68IK6KIGkTdZIKnBsw7jCR3rBO8TSK4"
+        }
+      ]
+    },
+    {
+      "id": "F-08",
+      "type": "tabla-comparativa",
+      "title": "¿Por qué el funcional entró en los lenguajes multiparadigma?",
+      "subtitle": "El funcional en los multiparadigma: causa y adopción",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La causa: el fin del clock scaling"
+        },
+        {
+          "type": "text",
+          "content": "A mediados de los 2000s los CPUs dejaron de crecer en frecuencia → pasaron a **múltiples núcleos**\n→ Estado mutable compartido entre threads genera condiciones de carrera\n→ El funcional **elimina el problema de raíz**"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La adopción"
+        },
+        {
+          "type": "text",
+          "content": "> La tendencia **no reemplazó al imperativo — lo enriqueció**: I/O + performance en imperativo, transformación de datos + concurrencia en funcional"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Lenguaje | Año | Qué incorporó |\n|---|---|---|\n| **Java** | 2014 (Java 8) | Lambdas, Stream API, `Optional` |\n| **JavaScript** | 2015 (ES6) | Arrow functions, `.map()`, `.filter()`, `.reduce()` |\n| **TypeScript** | desde 2012 | Todo JS funcional + tipos estáticos, `readonly`, union types |\n| **C++** | 2011 (C++11) | Lambdas, `std::function`, `std::transform` |\n| **Python** | desde 2.x | `map`, `filter`, `functools`, list comprehensions |\n| **Rust** | 2015 | Immutability by default, closures, ownership sin GC |\n| **Kotlin / Swift** | 2011 / 2014 | `val`, colecciones funcionales, closures, value semantics |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Lenguaje | Año | Qué incorporó |\n|---|---|---|\n| **Java** | 2014 (Java 8) | Lambdas, Stream API, `Optional` |\n| **JavaScript** | 2015 (ES6) | Arrow functions, `.map()`, `.filter()`, `.reduce()` |\n| **TypeScript** | desde 2012 | Todo JS funcional + tipos estáticos, `readonly`, union types |\n| **C++** | 2011 (C++11) | Lambdas, `std::function`, `std::transform` |\n| **Python** | desde 2.x | `map`, `filter`, `functools`, list comprehensions |\n| **Rust** | 2015 | Immutability by default, closures, ownership sin GC |\n| **Kotlin / Swift** | 2011 / 2014 | `val`, colecciones funcionales, closures, value semantics |",
+          "local_asset": "slides/assets/F-08-table-1.png",
+          "drive_id": "1FSZ7sxt29b9aUxpKKakC8bYmJT1g29IA"
+        }
+      ]
+    },
+    {
+      "id": "F-09",
+      "type": "socratica",
+      "title": "Frase de anclaje",
+      "subtitle": "\"Si el paradigma imperativo es la Máquina de Turing hecha lenguaje…",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "…el funcional es el λ-cálculo de Church hecho lenguaje.\""
+        },
+        {
+          "type": "text",
+          "content": "Aprender ambos no es aprender dos herramientas —\nes entender las **dos formas fundamentales** de formalizar la computación."
+        },
+        {
+          "type": "text",
+          "content": "> **Para reflexionar:** ¿Cuándo conviene computar modificando estado vs computando reduciendo expresiones?"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "fondo abstracto con símbolo λ grande y circuitos digitales difuminados, tonos azul oscuro y plateado, estilo minimalista",
+        "local_asset": "slides/assets/F-09-bg.png",
+        "drive_id": "1EDrFUy5QTsW13xtNjLnuYeCZbX9kZlXx"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-10",
+      "type": "codigo",
+      "title": "Dos formas de resolver el mismo problema — imperativo",
+      "subtitle": "El mismo problema: sumar cuadrados de pares — versión imperativa",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué queremos? Sumar el cuadrado de los números pares"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Identificar los problemas"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`suma` vive afuera del loop: cualquier código puede modificarla",
+              "level": 0
+            },
+            {
+              "content": "El loop mezcla *cómo iterar* con *qué hacer*",
+              "level": 0
+            },
+            {
+              "content": "Para entender el resultado hay que simular mentalmente el estado paso a paso",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// ❌ Estilo imperativo — describe el CÓMO\n\nconst numeros = [1, 2, 3, 4, 5, 6];\nlet suma = 0;                           // acumulador mutable externo\n\nfor (let i = 0; i < numeros.length; i++) {  // loop — detalle de iteración\n  if (numeros[i] % 2 === 0) {               // filtro inline\n    suma += numeros[i] * numeros[i];         // acumulación con mutación\n  }\n}\n\nconsole.log(suma); // 56"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "codigo",
+      "title": "Dos formas de resolver el mismo problema — funcional",
+      "subtitle": "El mismo problema — versión funcional",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué queremos? Sumar el cuadrado de los números pares"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué ganamos?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Trazabilidad**: cada línea hace *una sola cosa*, con nombre explícito",
+              "level": 0
+            },
+            {
+              "content": "**Testeable por partes**: puedo testear `filter`, `map` y `reduce` por separado",
+              "level": 0
+            },
+            {
+              "content": "**Paralelizable**: ninguna operación depende del estado externo",
+              "level": 0
+            },
+            {
+              "content": "Lee como una especificación del problema, no como instrucciones de máquina",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// ✅ Estilo funcional — describe el QUÉ\n\nconst numeros = [1, 2, 3, 4, 5, 6];\n\nconst suma = numeros\n  .filter(n => n % 2 === 0)          // seleccionar pares: [2, 4, 6]\n  .map(n => n * n)                    // elevar al cuadrado: [4, 16, 36]\n  .reduce((acc, n) => acc + n, 0);   // sumar: 56\n\n// suma = 56 — sin variables intermedias mutables"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-12",
+      "type": "concepto-abstracto",
+      "title": "El modelo funcional — cómputo como reescritura de expresiones",
+      "subtitle": "Computar = reducir expresiones (no modificar estado)",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ejemplo de reducción (β-reducción del λ-cálculo)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La consecuencia fundamental"
+        },
+        {
+          "type": "text",
+          "content": "En cada paso no se \"modifica\" nada — se **reemplaza** una expresión por su equivalente"
+        },
+        {
+          "type": "text",
+          "content": "→ El mismo input **siempre** produce el mismo output\n→ El resultado no depende del \"estado de la máquina\" en ese momento"
+        },
+        {
+          "type": "text",
+          "content": "> Este es el modelo del λ-cálculo de Church (§11.1, Gabbrielli-Martini)"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "suma(suma(1, 2), suma(3, 4))\n  → suma(3, suma(3, 4))          // se sustituye suma(1,2) por 3\n  → suma(3, 7)                    // se sustituye suma(3,4) por 7\n  → 10                            // resultado final"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "diagrama de reducción de expresiones: árbol con nodos que se reemplazan por sus valores paso a paso, arrows mostrando sustitución, fondo blanco con colores azul y verde",
+        "local_asset": "slides/assets/F-12-content.png",
+        "drive_id": "1O8MnsVn-V7RtNneDtkpTDfyv1NdueBJa"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "concepto-abstracto",
+      "title": "Pilar 1: Funciones puras — definición",
+      "subtitle": "Pilar 1: Funciones Puras",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición"
+        },
+        {
+          "type": "text",
+          "content": "Una función es **pura** si:\n1. Su salida depende **únicamente** de su entrada\n2. No produce **efectos colaterales** observables (no modifica variables externas, no hace I/O, no lanza excepciones con side effects)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Por qué importa?"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Propiedad | Consecuencia |\n|---|---|\n| Predecible | Mismos args → mismo resultado — siempre |\n| Testeable en aislamiento | No necesita setup/teardown de estado global |\n| Segura en paralelo | No compite por estado compartido con otros threads |\n| Razonable localmente | Para entender la función, solo hay que leer la función |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "diagrama caja negra de una función: flecha de entrada, caja con \"f(x)\" y flecha de salida, sin flechas laterales (sin efectos), fondo blanco con azul",
+        "local_asset": "slides/assets/F-13-content.png",
+        "drive_id": "1XbZWyz6twh91PpuA91Wd9DLhUU9Gza1_"
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Propiedad | Consecuencia |\n|---|---|\n| Predecible | Mismos args → mismo resultado — siempre |\n| Testeable en aislamiento | No necesita setup/teardown de estado global |\n| Segura en paralelo | No compite por estado compartido con otros threads |\n| Razonable localmente | Para entender la función, solo hay que leer la función |",
+          "local_asset": "slides/assets/F-13-table-1.png",
+          "drive_id": "1Hj02o0-xJmVylEl0mF6Md02CGKoLbMJt"
+        }
+      ]
+    },
+    {
+      "id": "F-14",
+      "type": "codigo",
+      "title": "Pilar 1: Funciones puras — impura vs pura en TypeScript",
+      "subtitle": "Función impura vs función pura — TypeScript",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "❌ Impura: lee y modifica estado externo"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "✅ Pura: entrada → salida, sin efectos"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "let contador = 0;\n\n// Esta función NO es pura:\n// - lee `contador` del scope externo\n// - lo modifica como efecto colateral\nconst incrementar = (): number => {\n  contador++;          // ← efecto colateral: modifica estado externo\n  return contador;    // ← resultado depende del estado externo\n};\n\nincrementar(); // → 1\nincrementar(); // → 2   ← mismo llamado, distinto resultado"
+        },
+        {
+          "lang": "typescript",
+          "content": "// Esta función SÍ es pura:\n// - solo usa sus argumentos\n// - devuelve siempre el mismo resultado para los mismos inputs\nconst sumar = (a: number, b: number): number => a + b;\n\nsumar(3, 4); // → 7   — siempre 7, sin importar cuándo se llame\nsumar(3, 4); // → 7   — predecible como una función matemática"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-15",
+      "type": "codigo",
+      "title": "Pilar 1: Funciones puras — en Clojure",
+      "subtitle": "Funciones puras en Clojure",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En Clojure, las funciones son puras por defecto"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué Clojure facilita la pureza"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "No hay asignación destructiva: `def` crea una ligadura nueva, no modifica la anterior",
+              "level": 0
+            },
+            {
+              "content": "Las estructuras de datos no tienen métodos mutadores",
+              "level": 0
+            },
+            {
+              "content": "Los efectos colaterales deben ser explícitos (el lenguaje los hace \"ruidosos\")",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": ";; ✅ Función pura — mismo resultado siempre\n(defn sumar [a b]\n  (+ a b))              ; solo usa sus argumentos\n\n(sumar 3 4)  ; → 7\n(sumar 3 4)  ; → 7 — siempre\n\n;; ✅ Función pura con múltiples pasos\n(defn cuadrado-de-par? [n]\n  (if (even? n)        ; even? es una función pura\n    (* n n)            ; devuelve el cuadrado si es par\n    nil))              ; nil si no lo es\n\n(cuadrado-de-par? 4)   ; → 16\n(cuadrado-de-par? 3)   ; → nil"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-16",
+      "type": "codigo",
+      "title": "Pilar 2: Inmutabilidad — `const` en TypeScript",
+      "subtitle": "Pilar 2: Inmutabilidad — TypeScript",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "`const`: la referencia no se puede reasignar"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "⚠️ Pero el contenido sí puede mutar (si no tomamos precauciones)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "✅ Estilo funcional: crear nueva colección en lugar de mutar"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const x = 10;\n// x = 20;  // ❌ Error de compilación: no se puede reasignar const\n\nconst numeros = [1, 2, 3];\n// numeros = [4, 5, 6];  // ❌ Error: la referencia no puede cambiar"
+        },
+        {
+          "lang": "typescript",
+          "content": "const numeros = [1, 2, 3];\nnumeros.push(4);  // ✅ Compila — pero es mutación oculta, rompe el paradigma\nconsole.log(numeros); // [1, 2, 3, 4] — el array \"cambió\""
+        },
+        {
+          "lang": "typescript",
+          "content": "const numeros = [1, 2, 3] as const;  // readonly array\nconst masNumeros = [...numeros, 4];   // nuevo array — el original intacto\n\nconsole.log(numeros);     // [1, 2, 3]   — intacto\nconsole.log(masNumeros);  // [1, 2, 3, 4]"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-17",
+      "type": "codigo",
+      "title": "Pilar 2: Inmutabilidad nativa en Clojure",
+      "subtitle": "Pilar 2: Inmutabilidad — Clojure (nativa, no opt-in)",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En Clojure: ninguna estructura es mutable por defecto"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Structural sharing — sin overhead real"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Clojure usa **persistent data structures**: la nueva colección comparte la memoria interna de la original",
+              "level": 0
+            },
+            {
+              "content": "Crear `mas-numeros` no copia todos los elementos — solo agrega el puntero al nuevo nodo",
+              "level": 0
+            },
+            {
+              "content": "Es eficiente **y** seguro en múltiples threads simultáneos (nadie puede ver un estado intermedio)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La diferencia con TypeScript"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": ";; Una lista en Clojure\n(def numeros '(1 2 3))\n\n;; conj agrega un elemento — devuelve una NUEVA lista\n(def mas-numeros (conj numeros 4))\n\n(println numeros)       ; → (1 2 3)     ← intacta, siempre\n(println mas-numeros)   ; → (4 1 2 3)   ← nueva lista\n\n;; No existe ningún método para \"push\" en la original\n;; La \"mutación\" es imposible por diseño del runtime"
+        }
+      ],
+      "tables": [
+        "| | TypeScript | Clojure |\n|---|---|---|\n| Inmutabilidad | Opt-in (`as const`, `readonly`) | **Nativa — siempre** |\n| Quién la garantiza | El programador (disciplina) | El lenguaje (diseño) |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| | TypeScript | Clojure |\n|---|---|---|\n| Inmutabilidad | Opt-in (`as const`, `readonly`) | **Nativa — siempre** |\n| Quién la garantiza | El programador (disciplina) | El lenguaje (diseño) |",
+          "local_asset": "slides/assets/F-17-table-1.png",
+          "drive_id": "1ahdW-d9WdM5eAyTSpdlgFpncbThpLMzz"
+        }
+      ]
+    },
+    {
+      "id": "F-18",
+      "type": "concepto-abstracto",
+      "title": "Pilar 3: Transparencia referencial",
+      "subtitle": "Pilar 3: Transparencia Referencial",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición"
+        },
+        {
+          "type": "text",
+          "content": "Una expresión tiene **transparencia referencial** si puede ser reemplazada por su valor sin cambiar el comportamiento del programa"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ejemplo — expresión referencialmente transparente"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Contraejemplos — no son transparentes"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Por qué importa?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Permite **memoización automática** (el compilador puede cachear resultados)",
+              "level": 0
+            },
+            {
+              "content": "Permite **evaluación lazy** (no calcular hasta que se necesite)",
+              "level": 0
+            },
+            {
+              "content": "Permite **razonar localmente**: para entender una expresión, no hay que conocer el estado global",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const cuadrado = (n: number): number => n * n;\n\n// Puedo reemplazar cuadrado(3) por 9 en cualquier parte del código\n// sin cambiar el resultado:\nconst a = cuadrado(3) + cuadrado(3);  // → 18\nconst b = 9 + 9;                       // → 18 — equivalente"
+        },
+        {
+          "lang": "typescript",
+          "content": "Date.now()    // ← distinto valor cada vez que se llama\nMath.random() // ← distinto valor cada vez\nconsole.log() // ← efecto colateral (I/O)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "diagrama de sustitución: expresión \"cuadrado(3)\" con flecha rotulada \"reemplazar por valor\" apuntando a \"9\", sin cambios de contexto alrededor, colores azul y verde claro",
+        "local_asset": "slides/assets/F-18-content.png",
+        "drive_id": "1tIa1b53iCHavi8_2-6-W1_ngW7_Uk0At"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "tabla-comparativa",
+      "title": "Las reglas del modo funcional en TypeScript",
+      "subtitle": "Modo funcional en TypeScript: las reglas",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Las restricciones (y por qué existen)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Importante"
+        },
+        {
+          "type": "text",
+          "content": "TypeScript **no obliga** a estas restricciones — las imponemos nosotros para aprender el paradigma.\nLuego Clojure nos muestra qué pasa cuando el **lenguaje** sí las impone."
+        },
+        {
+          "type": "text",
+          "content": "> La disciplina autoimpuesta enseña más que la disciplina del compilador, porque obliga a entender el **porqué**."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Restricción | Por qué |\n|---|---|\n| Sin `let` ni `var` | Una variable reasignable rompe la trazabilidad del dato |\n| Sin `for` / `while` | El loop mezcla *cómo iterar* con *qué hacer* |\n| Sin `push`, `splice`, mutación de arrays | Un array que cambia puede afectar código que no lo esperaba |\n| Sin `class` con estado mutable | El estado encapsulado en un objeto es estado oculto |\n| Solo `const` + arrow functions | Las funciones son valores, no procedimientos |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Restricción | Por qué |\n|---|---|\n| Sin `let` ni `var` | Una variable reasignable rompe la trazabilidad del dato |\n| Sin `for` / `while` | El loop mezcla *cómo iterar* con *qué hacer* |\n| Sin `push`, `splice`, mutación de arrays | Un array que cambia puede afectar código que no lo esperaba |\n| Sin `class` con estado mutable | El estado encapsulado en un objeto es estado oculto |\n| Solo `const` + arrow functions | Las funciones son valores, no procedimientos |",
+          "local_asset": "slides/assets/F-19-table-1.png",
+          "drive_id": "1WdtB5tNAv9KuyufCeYlIC7E2NQcASVYZ"
+        }
+      ]
+    },
+    {
+      "id": "F-20",
+      "type": "codigo",
+      "title": "`map` — el problema (código imperativo)",
+      "subtitle": "`map` — ¿qué tiene de problemático el estilo imperativo?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "❌ Estilo imperativo: transformar cada elemento de una lista"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Los tres problemas"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Acumulador mutable externo** (`dobles`): cualquier código entre el `[]` y el `for` podría modificarlo",
+              "level": 0
+            },
+            {
+              "content": "**Mezcla iteración y lógica**: el `for` dice *cómo* recorrer; `n * 2` dice *qué* hacer — están entrelazados",
+              "level": 0
+            },
+            {
+              "content": "**Lectura no declarativa**: hay que simular el loop mentalmente para saber qué produce",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const numeros = [1, 2, 3, 4, 5];\nconst dobles: number[] = [];          // ← acumulador mutable externo\n\nfor (const n of numeros) {            // ← loop: detalle de cómo iterar\n  dobles.push(n * 2);                 // ← mutación del acumulador\n}\n\n// dobles = [2, 4, 6, 8, 10]"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-21",
+      "type": "codigo",
+      "title": "`map` — la solución funcional",
+      "subtitle": "`map` — transformar sin mutar",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "✅ Estilo funcional"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué `map` y no `for`"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`map` expresa el **QUÉ**: \"transformar cada elemento aplicando esta función\"",
+              "level": 0
+            },
+            {
+              "content": "La iteración es un **detalle de implementación** — `map` la abstrae",
+              "level": 0
+            },
+            {
+              "content": "La función que le paso (`n => n * 2`) es **pura**: solo depende de `n`",
+              "level": 0
+            },
+            {
+              "content": "`map` siempre devuelve un array nuevo del **mismo largo**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "`map` es una función de orden superior"
+        },
+        {
+          "type": "text",
+          "content": "Recibe una función como argumento → las funciones son valores de primera clase en el paradigma funcional"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const numeros = [1, 2, 3, 4, 5];\n\nconst dobles = numeros.map(n => n * 2);\n// → [2, 4, 6, 8, 10]\n\n// El array original no cambia:\nconsole.log(numeros); // [1, 2, 3, 4, 5]  ← intacto"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-22",
+      "type": "codigo",
+      "title": "`filter` — seleccionar sin mutar",
+      "subtitle": "`filter` — conservar solo los elementos que cumplen una condición",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "✅ Estilo funcional"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El predicado es una función pura"
+        },
+        {
+          "type": "text",
+          "content": "`n => n % 2 === 0` : dado un número, devuelve `true` o `false` — sin efectos"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Encadenamiento: filter + map"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const numeros = [1, 2, 3, 4, 5, 6];\n\nconst pares = numeros.filter(n => n % 2 === 0);\n// → [2, 4, 6]\n\n// El array original no cambia:\nconsole.log(numeros); // [1, 2, 3, 4, 5, 6]  ← intacto"
+        },
+        {
+          "lang": "typescript",
+          "content": "const cuadradosDePares = [1, 2, 3, 4, 5, 6]\n  .filter(n => n % 2 === 0)   // [2, 4, 6]\n  .map(n => n * n);            // [4, 16, 36]\n\n// Pipeline de transformaciones — sin variables intermedias mutables"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "codigo",
+      "title": "`reduce` — el problema (código imperativo)",
+      "subtitle": "`reduce` — ¿qué tiene de problemático el acumulador mutable?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "❌ Estilo imperativo: sumar todos los elementos"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El problema: state leakage"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`suma` existe **antes y después** del loop — puede ser leída o modificada desde afuera",
+              "level": 0
+            },
+            {
+              "content": "Si el loop está en una función larga, `suma` \"contamina\" el scope local",
+              "level": 0
+            },
+            {
+              "content": "Para paralelizar este loop, necesitaría sincronización explícita (mutex/lock) para proteger `suma`",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const numeros = [1, 2, 3, 4];\nlet suma = 0;                        // ← acumulador externo mutable\n\nfor (const n of numeros) {\n  suma += n;                         // ← mutación en cada iteración\n}\n\n// suma = 10"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "codigo",
+      "title": "`reduce` — la solución funcional",
+      "subtitle": "`reduce` — el acumulador viaja adentro",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "✅ Estilo funcional"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué `reduce` resuelve el problema"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El acumulador (`acc`) **solo existe dentro de `reduce`** — nadie puede tocarlo desde afuera",
+              "level": 0
+            },
+            {
+              "content": "En cada llamada, se pasa el acumulador como **argumento explícito** — el estado \"viaja\" visible",
+              "level": 0
+            },
+            {
+              "content": "Es paralizable: `reduce` (con variante `reduce` paralelo) puede dividir el array sin coordinación",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "`reduce` es el más general"
+        },
+        {
+          "type": "text",
+          "content": "`map` y `filter` pueden implementarse con `reduce` — es la operación de plegado fundamental\n(también llamado `fold` en Haskell, ML, Clojure)"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const numeros = [1, 2, 3, 4];\n\nconst suma = numeros.reduce(\n  (acc, n) => acc + n,  // función: acumulador actual + elemento → nuevo acumulador\n  0                      // valor inicial del acumulador\n);\n\n// suma = 10"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "codigo",
+      "title": "Composición de funciones — `pipe`",
+      "subtitle": "Composición: construir pipelines desde funciones puras",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Encadenamiento directo (para arrays)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "`pipe` — composición general de funciones"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué `pipe` importa"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Construir transformaciones complejas desde **piezas simples y puras**",
+              "level": 0
+            },
+            {
+              "content": "Cada pieza es testeable por separado",
+              "level": 0
+            },
+            {
+              "content": "El pipeline es una **función** — es un valor, puede pasarse como argumento",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const resultado = [1, -2, 3, -4, 5]\n  .filter(n => n > 0)         // [1, 3, 5]\n  .map(n => n * 2);            // [2, 6, 10]"
+        },
+        {
+          "lang": "typescript",
+          "content": "// pipe aplica funciones en secuencia: pipe(f, g, h)(x) = h(g(f(x)))\nconst pipe = <T>(...fns: Array<(x: T) => T>) =>\n  (valor: T): T =>\n    fns.reduce((v, fn) => fn(v), valor);\n    // ← pipe usa reduce internamente: los pilares se componen entre sí\n\n// Crear un pipeline reutilizable\nconst procesarPositivos = pipe(\n  (nums: number[]) => nums.filter(n => n > 0),\n  (nums: number[]) => nums.map(n => n * 2),\n  (nums: number[]) => nums.filter(n => n < 8),\n);\n\nprocesarPositivos([1, -2, 3, -4, 5]);  // → [2, 6]\nprocesarPositivos([-1, 4, 2, -3]);     // → [8 filtrado] → [4] reutilizable"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-26",
+      "type": "tabla-comparativa",
+      "title": "Resumen: las restricciones y sus raíces en los pilares",
+      "subtitle": "Por qué las restricciones funcionales existen",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La conexión entre pilar y restricción"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En TypeScript: disciplina elegida"
+        },
+        {
+          "type": "text",
+          "content": "Estas restricciones las imponemos **nosotros** — `tslint`/`eslint` puede ayudar a verificarlas"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En Clojure: garantizadas por el lenguaje"
+        },
+        {
+          "type": "text",
+          "content": "El compilador/runtime de Clojure hace que las tres primeras sean **imposibles de violar**"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Restricción | Pilar que protege | Sin esta restricción… |\n|---|---|---|\n| Sin `let` / `var` | Inmutabilidad | Las variables reasignables crean estado mutable oculto |\n| Sin `for` / `while` | Funciones puras + abstracción | El loop mezcla iteración con lógica; dificulta reutilización |\n| Sin `push` / mutación | Inmutabilidad | Los efectos en colecciones se propagan de forma impredecible |\n| Sin `class` con estado | Funciones puras | El estado encapsulado rompe la transparencia referencial |\n| Solo `const` | Transparencia referencial | Si un nombre puede cambiar de valor, no es transparente |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Restricción | Pilar que protege | Sin esta restricción… |\n|---|---|---|\n| Sin `let` / `var` | Inmutabilidad | Las variables reasignables crean estado mutable oculto |\n| Sin `for` / `while` | Funciones puras + abstracción | El loop mezcla iteración con lógica; dificulta reutilización |\n| Sin `push` / mutación | Inmutabilidad | Los efectos en colecciones se propagan de forma impredecible |\n| Sin `class` con estado | Funciones puras | El estado encapsulado rompe la transparencia referencial |\n| Solo `const` | Transparencia referencial | Si un nombre puede cambiar de valor, no es transparente |",
+          "local_asset": "slides/assets/F-26-table-1.png",
+          "drive_id": "1717SthHVWkOow_D9JK4X7M-wdOU_khje"
+        }
+      ]
+    },
+    {
+      "id": "F-27",
+      "type": "concepto-abstracto",
+      "title": "Contexto de Clojure",
+      "subtitle": "Clojure: el funcional hecho lenguaje",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Quién y cuándo"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Rich Hickey, 2007 — diseñado para resolver la concurrencia en sistemas reales",
+              "level": 0
+            },
+            {
+              "content": "Dialecto de Lisp que corre en la JVM (puede usar cualquier librería Java)",
+              "level": 0
+            },
+            {
+              "content": "En producción: **Nubank** (banco digital más grande de Latinoamérica), Datomic, sistemas financieros",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Propiedades de diseño"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Propiedad | Descripción |\n|---|---|\n| Inmutabilidad estructural | Todas las estructuras son persistentes e inmutables **por defecto** |\n| Todo es expresión | No hay sentencias, no hay `return` implícito diferente del body |\n| Funciones como valores | No hay diferencia entre función y dato |\n| Sintaxis Lisp | `(función arg1 arg2)` — directamente el λ-cálculo |\n| Concurrencia segura | Las referencias mutables son explícitas y coordinadas (STM, atoms) |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "logo de Clojure (símbolo λ estilizado en verde) sobre fondo oscuro con código Lisp flotando en tipografía monoespaciada, estilo ilustración tech minimal",
+        "local_asset": "slides/assets/F-27-content.png",
+        "drive_id": "1DKqJun-ECvkcOpsLphh8wpU8TQhQN_Dn"
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Propiedad | Descripción |\n|---|---|\n| Inmutabilidad estructural | Todas las estructuras son persistentes e inmutables **por defecto** |\n| Todo es expresión | No hay sentencias, no hay `return` implícito diferente del body |\n| Funciones como valores | No hay diferencia entre función y dato |\n| Sintaxis Lisp | `(función arg1 arg2)` — directamente el λ-cálculo |\n| Concurrencia segura | Las referencias mutables son explícitas y coordinadas (STM, atoms) |",
+          "local_asset": "slides/assets/F-27-table-1.png",
+          "drive_id": "1flIMHw8hNqyTjgPPXW2vUqDX57M_Mklp"
+        }
+      ]
+    },
+    {
+      "id": "F-28",
+      "type": "codigo",
+      "title": "Sintaxis básica de Clojure",
+      "subtitle": "Clojure: sintaxis — la notación prefija del λ-cálculo",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Aritmética y definición"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Listas de datos"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición de funciones"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Una sola forma sintáctica para todo"
+        },
+        {
+          "type": "text",
+          "content": "En TS hay muchas formas de definir funciones, iterar, condicionar — en Clojure hay **una**: `(f a b)`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": "(+ 1 2)          ; → 3      (operador primero, siempre)\n(* 3 4)          ; → 12\n(- 10 3)         ; → 7\n\n(def x 5)        ; define una constante — no se puede reasignar\n(def pi 3.14159)"
+        },
+        {
+          "lang": "clojure",
+          "content": "'(1 2 3 4 5)     ; lista de datos (el apóstrofe evita la evaluación)\n\n(first '(1 2 3)) ; → 1\n(rest  '(1 2 3)) ; → (2 3)\n(count '(1 2 3)) ; → 3"
+        },
+        {
+          "lang": "clojure",
+          "content": "(defn cuadrado [x]   ; defn: nombre + vector de parámetros + cuerpo\n  (* x x))\n\n(cuadrado 5)  ; → 25"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-29",
+      "type": "codigo",
+      "title": "`map`, `filter`, `reduce` en Clojure",
+      "subtitle": "`map`, `filter`, `reduce` en Clojure",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "`map` — transformar cada elemento"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "`filter` — conservar los que cumplen la condición"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "`reduce` — acumular"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Pipeline con `->>` (thread-last macro)"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": "(map #(* % 2) '(1 2 3 4 5))\n;; → (2 4 6 8 10)\n;;   #(* % 2) es la función anónima: % es el argumento\n;;   El original '(1 2 3 4 5) no cambia — nunca puede cambiar"
+        },
+        {
+          "lang": "clojure",
+          "content": "(filter even? '(1 2 3 4 5 6))\n;; → (2 4 6)\n;;   even? es una función pura predefinida: (even? 4) → true"
+        },
+        {
+          "lang": "clojure",
+          "content": "(reduce + 0 '(1 2 3 4))\n;; → 10\n;;   + es una función normal que se pasa como argumento\n;;   0 es el valor inicial del acumulador"
+        },
+        {
+          "lang": "clojure",
+          "content": "(->> '(1 2 3 4 5 6)\n     (filter even?)          ; → (2 4 6)\n     (map #(* % %))          ; → (4 16 36)\n     (reduce + 0))            ; → 56\n\n;; Lee de arriba a abajo: igual que el encadenamiento en TS"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-30",
+      "type": "codigo",
+      "title": "Funciones anónimas en Clojure — `fn`",
+      "subtitle": "Funciones anónimas en Clojure: `fn` y la notación `#()`",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Forma completa con `fn`"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Forma abreviada `#()`"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Funciones como valores de primera clase"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": ";; (fn [parámetros] cuerpo) — directamente el λ-cálculo\n(fn [x] (* x x))          ; función anónima: eleva al cuadrado\n\n;; Aplicación inmediata: define y aplica en el mismo lugar\n((fn [x y] (+ x y)) 3 4)  ; → 7\n;; equivale a: (λx.λy. x+y) 3 4 → 7\n\n;; Guardar en un nombre\n(def doble (fn [x] (* x 2)))\n(doble 5)  ; → 10"
+        },
+        {
+          "lang": "clojure",
+          "content": "#(* % 2)           ; equivale a (fn [x] (* x 2))   — % es el único argumento\n#(+ %1 %2)         ; dos argumentos: %1 y %2\n#(* % %)           ; cuadrado"
+        },
+        {
+          "lang": "clojure",
+          "content": ";; Una función puede ser argumento de otra función\n(map (fn [x] (* x x)) '(1 2 3 4))  ; → (1 4 9 16)\n\n;; Una función puede retornar una función (currying manual)\n(defn multiplicador [factor]\n  (fn [x] (* x factor)))    ; devuelve una función\n\n((multiplicador 3) 7)  ; → 21"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-31",
+      "type": "tabla-comparativa",
+      "title": "Comparativa completa TypeScript ↔ Clojure",
+      "subtitle": "TypeScript (funcional) vs Clojure (puro) — comparativa",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Concepto | TypeScript (funcional) | Clojure (puro) |\n|---|---|---|\n| Valor inmutable | `const x = 5` | `(def x 5)` |\n| Función pura con nombre | `const f = (x: number) => x * 2` | `(defn f [x] (* x 2))` |\n| Función anónima | `(x) => x * 2` | `(fn [x] (* x 2))` o `#(* % 2)` |\n| Aplicación inmediata | `((x) => x * 2)(5)` | `((fn [x] (* x 2)) 5)` |\n| Map | `arr.map(fn)` | `(map fn coll)` |\n| Filter | `arr.filter(pred)` | `(filter pred coll)` |\n| Reduce | `arr.reduce(fn, init)` | `(reduce fn init coll)` |\n| Pipeline | `.filter().map().reduce()` o `pipe()` | `(->> coll (filter) (map) (reduce))` |\n| Inmutabilidad de colecciones | **Opt-in** (`as const`, `readonly`) | **Nativa — siempre** |\n| Garantía de pureza | Disciplina del programador | Diseño del lenguaje |\n| Sintaxis | Múltiples formas (arrow, function, method) | Una sola forma: `(f a b)` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Concepto | TypeScript (funcional) | Clojure (puro) |\n|---|---|---|\n| Valor inmutable | `const x = 5` | `(def x 5)` |\n| Función pura con nombre | `const f = (x: number) => x * 2` | `(defn f [x] (* x 2))` |\n| Función anónima | `(x) => x * 2` | `(fn [x] (* x 2))` o `#(* % 2)` |\n| Aplicación inmediata | `((x) => x * 2)(5)` | `((fn [x] (* x 2)) 5)` |\n| Map | `arr.map(fn)` | `(map fn coll)` |\n| Filter | `arr.filter(pred)` | `(filter pred coll)` |\n| Reduce | `arr.reduce(fn, init)` | `(reduce fn init coll)` |\n| Pipeline | `.filter().map().reduce()` o `pipe()` | `(->> coll (filter) (map) (reduce))` |\n| Inmutabilidad de colecciones | **Opt-in** (`as const`, `readonly`) | **Nativa — siempre** |\n| Garantía de pureza | Disciplina del programador | Diseño del lenguaje |\n| Sintaxis | Múltiples formas (arrow, function, method) | Una sola forma: `(f a b)` |",
+          "local_asset": "slides/assets/F-31-table-1.png",
+          "drive_id": "1DGcP4cn3FsqKGFpHZz6Ip0k9bUTUyPa-"
+        }
+      ]
+    },
+    {
+      "id": "F-32",
+      "type": "concepto-abstracto",
+      "title": "Por qué Clojure muestra el paradigma en su forma más pura",
+      "subtitle": "La diferencia que importa: disciplina vs garantía",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En TypeScript"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En Clojure"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La consecuencia"
+        },
+        {
+          "type": "text",
+          "content": "En Clojure, cuando el código compila y corre:\n- **Ninguna función modificó una estructura compartida** — es una garantía del sistema de tipos y el runtime\n- En concurrencia: múltiples threads pueden leer la misma estructura sin locks → correctitud por diseño"
+        },
+        {
+          "type": "text",
+          "content": "> En TS, confías en la disciplina del equipo.\n> En Clojure, confías en el diseño del lenguaje."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const numeros = [1, 2, 3];\nnumeros.push(4);  // ← el compilador lo permite aunque lo hayamos \"prohibido\"\n                   // la inmutabilidad es una convención del equipo, no del lenguaje"
+        },
+        {
+          "lang": "clojure",
+          "content": "(def numeros '(1 2 3))\n;; No existe ninguna operación para mutar 'numeros en su lugar\n;; Todas las operaciones devuelven nuevas colecciones\n;; Es imposible violar la inmutabilidad — el runtime lo garantiza"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "dos columnas visuales: izquierda \"TypeScript\" con un candado abierto (opt-in), derecha \"Clojure\" con un candado cerrado (garantizado), fondo blanco colores azul y verde",
+        "local_asset": "slides/assets/F-32-content.png",
+        "drive_id": "1HGsCxcRJ2HHjOMu5M-a6-GEWxh5hNZiC"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-33",
+      "type": "timeline",
+      "title": "Línea de tiempo — síntesis visual",
+      "subtitle": "Del λ-cálculo al TypeScript funcional: 90 años de paradigma",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Cada lenguaje nació para resolver el problema concreto de su época"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Año | Hito |\n|---|---|\n| **1936** | Church: λ-cálculo / Turing: Máquina de Turing — dos modelos de computación |\n| **1958** | Lisp — primer lenguaje funcional (McCarthy, MIT) |\n| **1973–75** | ML y Scheme — inferencia de tipos y minimalismo |\n| **1985–86** | Miranda y Erlang — lazy evaluation y concurrencia por actores |\n| **1990** | Haskell — primer lenguaje puramente funcional de uso académico amplio |\n| **2003–05** | Scala, F# — funcional en plataformas .NET y JVM, Big Data |\n| **2007** | Clojure — funcional puro moderno, blockchain, concurrencia |\n| **2011–15** | Kotlin, Rust, JS ES6, Java 8 — funcional entra en todos los multiparadigma |\n| **2015+** | TypeScript funcional — el paradigma disponible en el lenguaje del ecosistema web |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "full-center",
+        "image": "none",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Año | Hito |\n|---|---|\n| **1936** | Church: λ-cálculo / Turing: Máquina de Turing — dos modelos de computación |\n| **1958** | Lisp — primer lenguaje funcional (McCarthy, MIT) |\n| **1973–75** | ML y Scheme — inferencia de tipos y minimalismo |\n| **1985–86** | Miranda y Erlang — lazy evaluation y concurrencia por actores |\n| **1990** | Haskell — primer lenguaje puramente funcional de uso académico amplio |\n| **2003–05** | Scala, F# — funcional en plataformas .NET y JVM, Big Data |\n| **2007** | Clojure — funcional puro moderno, blockchain, concurrencia |\n| **2011–15** | Kotlin, Rust, JS ES6, Java 8 — funcional entra en todos los multiparadigma |\n| **2015+** | TypeScript funcional — el paradigma disponible en el lenguaje del ecosistema web |",
+          "local_asset": "slides/assets/F-33-table-1.png",
+          "drive_id": "1QALBhg_4USYENk9TYIDnhoYQGAxBWGc5"
+        }
+      ]
+    },
+    {
+      "id": "F-34",
+      "type": "socratica",
+      "title": "Pregunta de debate",
+      "subtitle": "Pregunta de debate",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> *\"Si TypeScript permite el estilo funcional pero no lo obliga, ¿tiene sentido aprender Clojure o Haskell?*\n> *¿O alcanza con disciplina y convenciones en TypeScript?\"*"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ejes para el debate"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Escala del equipo**: la disciplina individual no escala con 50 desarrolladores",
+              "level": 0
+            },
+            {
+              "content": "**Dominio de aplicación**: sistemas financieros de alta criticidad vs aplicaciones web",
+              "level": 0
+            },
+            {
+              "content": "**Profundidad de comprensión**: un lenguaje puro fuerza a entender el paradigma a fondo",
+              "level": 0
+            },
+            {
+              "content": "**Interoperabilidad**: TypeScript accede al ecosistema npm; Clojure a la JVM",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "No hay respuesta única — depende del contexto"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "sala de debate con siluetas de personas alrededor de una mesa, pizarrón al fondo con λ y el símbolo de TypeScript, tonos azul y naranja cálido",
+        "local_asset": "slides/assets/F-34-bg.png",
+        "drive_id": "1EE-dV_LPjUYmXJd0NCs6SU0ZMvcm7KU1"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-35",
+      "type": "cierre",
+      "title": "Cierre — síntesis y próximas clases",
+      "subtitle": "Síntesis de la clase",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Los tres hilos que conectan toda la clase"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**El origen** — Church (1936) y Turing (1936): dos modelos equivalentes, dos filosofías opuestas → funcional e imperativo",
+              "level": 0
+            },
+            {
+              "content": "**Los tres pilares** — funciones puras + inmutabilidad + transparencia referencial → código predecible, testeable y paralelizable",
+              "level": 0
+            },
+            {
+              "content": "**De la teoría al código** — TypeScript nos deja elegir ser funcionales; Clojure nos obliga",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Próximas clases"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "TP"
+        },
+        {
+          "type": "text",
+          "content": "→ Ver próxima clase para tipo y fecha de entrega"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Tema | Contenido |\n|---|---|\n| **Tema 04** | Aspectos avanzados: currying, aplicación parcial, tipos algebraicos, pattern matching |\n| **Tema 05** | Mónadas en TypeScript — cómo manejar `null`, errores e I/O sin romper los pilares |"
+      ],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "fondo oscuro con símbolo lambda λ grande en azul luminoso, línea de tiempo abajo con puntos brillantes, estilo ilustración académica de cierre de clase",
+        "local_asset": "slides/assets/F-35-bg.png",
+        "drive_id": "1m66Qg7nsvSQbARXAbs4-sMgM8aZ3RIns"
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Tema | Contenido |\n|---|---|\n| **Tema 04** | Aspectos avanzados: currying, aplicación parcial, tipos algebraicos, pattern matching |\n| **Tema 05** | Mónadas en TypeScript — cómo manejar `null`, errores e I/O sin romper los pilares |",
+          "local_asset": "slides/assets/F-35-table-1.png",
+          "drive_id": "17qeLt2Ng8pGt9XR1h_MHHg9LG4HKFBWC"
+        }
+      ]
+    }
+  ]
+}

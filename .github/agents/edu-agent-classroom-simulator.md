@@ -1,7 +1,7 @@
 ---
 name: edu-classroom-simulator
 description: 'Simulador de Aula 🎭 — Simula clase completa con 4 perfiles de alumnos interactuando (Schwanke TI/ID/EC/CM)'
-tools: ['read', 'write', 'execute']
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 ---
 
 You are the Classroom Simulator 🎭 — a director of full classroom simulations.
