@@ -172,9 +172,7 @@ $CATEGORY: TP/03-intro-funcional-ts/C-funciones-puras
 }
 
 ::TP03-Q21-impura-push::[markdown]Considerá la siguiente función TypeScript\:
-
 `const agregar \= (arr\: number[], elem\: number) \=> \{ arr.push(elem); return arr; \}`
-
 ¿Es pura? {
 =No, porque `arr.push(elem)` modifica el array original recibido como argumento — produce un efecto colateral#Correcto. `push` muta el array en su lugar, lo cual es un side effect observable.
 ~Sí, porque recibe todos los datos como argumentos y devuelve un resultado#Incorrecto. Recibir datos como argumentos no es suficiente — también modifica la referencia original.
@@ -184,9 +182,7 @@ $CATEGORY: TP/03-intro-funcional-ts/C-funciones-puras
 }
 
 ::TP03-Q22-impura-incrementar::[markdown]Dado el siguiente código\:
-
 `let x \= 0; const siguiente \= ()\: number \=> ++x;`
-
 Si ejecutás `siguiente() + siguiente()`, ¿qué resultado obtenés y por qué? {
 =`3` — la primera llamada devuelve 1 (x pasa a 1) y la segunda devuelve 2 (x pasa a 2), sumando 1+2\=3. La función no es pura porque depende de y modifica `x` externo#Correcto. `++x` modifica `x` como efecto colateral, haciendo que cada llamada devuelva un valor distinto.
 ~`2` — ambas llamadas devuelven 1 porque `x` se reinicia entre llamadas#Incorrecto. `x` no se reinicia; `++x` lo incrementa permanentemente.
@@ -360,9 +356,7 @@ $CATEGORY: TP/03-intro-funcional-ts/E-transparencia-referencial
 }
 
 ::TP03-Q44-tr-contraejemplo-avanzado::[markdown]Considerá\:
-
 `let c \= 0; const f \= () \=> \{ c++; return c; \};`
-
 Si sustituimos `f() + f()` por `1 + 1` (asumiendo que la primera llamada devuelve 1), ¿qué ocurre? {
 =La sustitución es **inválida**\: `f() + f()` da `1 + 2 \= 3`, pero `1 + 1 \= 2`  — la expresión `f()` **no** es referencialmente transparente porque tiene side effects#Correcto. `f()` incrementa `c` como efecto colateral, haciendo que cada llamada devuelva un valor distinto.
 ~La sustitución es válida porque ambas formas son numéricamente consistentes#Incorrecto. `f() + f()` da 3, no 2.
@@ -400,7 +394,6 @@ $CATEGORY: TP/03-intro-funcional-ts/F-map-filter-reduce
 }
 
 ::TP03-Q48-chain-resultado::[markdown]¿Qué devuelve el siguiente pipeline?
-
 `[1, 2, 3, 4, 5, 6].filter(n \=> n % 2 \=\=\= 0).map(n \=> n * n).reduce((a, n) \=> a + n, 0)` {
 =`56`#Correcto. filter→[2,4,6], map→[4,16,36], reduce→4+16+36\=56.
 ~`91`#Incorrecto. Eso sería aplicar map antes del filter (1+4+9+16+25+36\=91).
@@ -424,11 +417,8 @@ $CATEGORY: TP/03-intro-funcional-ts/F-map-filter-reduce
 }
 
 ::TP03-Q51-pipe-evaluar::[markdown]Dadas\:
-
 `const doble \= (n\: number) \=> n * 2`
-
 `const sumaUno \= (n\: number) \=> n + 1`
-
 Si `pipe(doble, sumaUno)(3)` aplica las funciones de izquierda a derecha, ¿qué devuelve? {
 =`7` — primero `doble(3) \= 6`, luego `sumaUno(6) \= 7`#Correcto. Pipe aplica las funciones en secuencia de izquierda a derecha.
 ~`8` — primero `sumaUno(3) \= 4`, luego `doble(4) \= 8`#Incorrecto. Pipe aplica de izquierda a derecha, no de derecha a izquierda.
