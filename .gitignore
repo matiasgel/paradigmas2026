@@ -50,4 +50,3 @@ salida/cursadas/*/students/
 # IDE
 .vscode/
 .idea/
-ingesta/**

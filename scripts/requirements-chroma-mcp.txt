@@ -1,3 +1,0 @@
-# Chroma MCP — Integración
-# https://github.com/chroma-core/chroma-mcp
-chroma-mcp
