@@ -71,11 +71,11 @@ $CATEGORY: TP/03-intro-funcional-ts/A-historia-fundamentos
 ~Ser un lenguaje funcional para frontend web que compile a JavaScript#Incorrecto. Aunque existe ClojureScript, el objetivo primario de Clojure fue la concurrencia segura en la JVM.
 }
 
-::TP03-Q09-arrow-lambda::[markdown]¿Cuál es la relación directa entre la notación `n => n * 2` de TypeScript y el λ-cálculo de Church de 1936? {
-=`n => n * 2` es una función anónima (lambda) — la misma idea de `(λn. n * 2)` del λ-cálculo, con sintaxis moderna#Correcto. Las arrow functions son lambdas, y la palabra "lambda" proviene directamente del cálculo de Church.
+::TP03-Q09-arrow-lambda::[markdown]¿Cuál es la relación directa entre la notación `n \=> n * 2` de TypeScript y el λ-cálculo de Church de 1936? {
+=`n \=> n * 2` es una función anónima (lambda) — la misma idea de `(λn. n * 2)` del λ-cálculo, con sintaxis moderna#Correcto. Las arrow functions son lambdas, y la palabra "lambda" proviene directamente del cálculo de Church.
 ~No hay relación directa; la arrow function es una innovación de ES6 sin precedente teórico#Incorrecto. Las arrow functions son lambdas, concepto que viene directamente del λ-cálculo.
 ~La relación es solo nominal — se llaman "lambda" por convención pero operan de forma completamente distinta#Incorrecto. La operación fundamental es la misma: definir una función anónima que toma un parámetro y produce un resultado.
-~`n => n * 2` corresponde a la Máquina de Turing porque modifica el valor de `n`#Incorrecto. No modifica `n` — produce un nuevo valor. Esto es sustitución funcional, no mutación de estado.
+~`n \=> n * 2` corresponde a la Máquina de Turing porque modifica el valor de `n`#Incorrecto. No modifica `n` — produce un nuevo valor. Esto es sustitución funcional, no mutación de estado.
 }
 
 ::TP03-Q10-lenguajes-comun::[markdown]¿Qué característica comparten Erlang (1986), Scala (2003) y Elixir (2012) como lenguajes funcionales, según la historia del paradigma? {
@@ -163,29 +163,29 @@ $CATEGORY: TP/03-intro-funcional-ts/C-funciones-puras
 ~Está definida con `const` y arrow function en TypeScript#Incorrecto. La sintaxis no determina la pureza. Una arrow function puede ser impura si lee estado externo o produce side effects.
 }
 
-::TP03-Q20-impura-date::[markdown]¿Por qué la función `const ahora = () => Date.now()` **no** es una función pura? {
+::TP03-Q20-impura-date::[markdown]¿Por qué la función `const ahora \= () \=> Date.now()` **no** es una función pura? {
 =Porque su resultado depende del estado externo (el reloj del sistema) — llamarla dos veces consecutivas puede dar resultados distintos#Correcto. La salida varía sin cambio en los argumentos, violando la primera condición de pureza.
 ~Porque `Date.now()` es un método estático y los métodos estáticos no son funcionales#Incorrecto. El hecho de ser estático no determina la pureza.
 ~Porque devuelve un número y las funciones puras deben devolver objetos inmutables#Incorrecto. Los números son inmutables; el problema es la dependencia del estado externo.
-~Porque no recibe argumentos y las funciones puras deben recibir al menos uno#Incorrecto. Una función sin argumentos puede ser pura si siempre devuelve el mismo valor (ej\: `() => 42`).
+~Porque no recibe argumentos y las funciones puras deben recibir al menos uno#Incorrecto. Una función sin argumentos puede ser pura si siempre devuelve el mismo valor (ej\: `() \=> 42`).
 ####La misma llamada `ahora()` devuelve un valor distinto en cada ejecución porque lee el reloj del sistema — no es determinista respecto a sus argumentos (vacíos).
 }
 
 ::TP03-Q21-impura-push::[markdown]Considerá la siguiente función TypeScript\:
 
-`const agregar = (arr\: number[], elem\: number) => \{ arr.push(elem); return arr; \}`
+`const agregar \= (arr\: number[], elem\: number) \=> \{ arr.push(elem); return arr; \}`
 
 ¿Es pura? {
 =No, porque `arr.push(elem)` modifica el array original recibido como argumento — produce un efecto colateral#Correcto. `push` muta el array en su lugar, lo cual es un side effect observable.
 ~Sí, porque recibe todos los datos como argumentos y devuelve un resultado#Incorrecto. Recibir datos como argumentos no es suficiente — también modifica la referencia original.
 ~Sí, porque devuelve el mismo array con el elemento agregado, lo cual es predecible#Incorrecto. Modifica el array original, afectando cualquier otra referencia a ese mismo array.
 ~No, porque usa llaves en la arrow function en lugar de una expresión directa#Incorrecto. El uso de llaves no determina la pureza; el problema es la mutación.
-####`push` modifica el array original in-place. Cualquier código que tenga una referencia a ese array verá el cambio. La versión pura sería `(arr, elem) => [...arr, elem]`.
+####`push` modifica el array original in-place. Cualquier código que tenga una referencia a ese array verá el cambio. La versión pura sería `(arr, elem) \=> [...arr, elem]`.
 }
 
 ::TP03-Q22-impura-incrementar::[markdown]Dado el siguiente código\:
 
-`let x \= 0; const siguiente \= ()\: number => ++x;`
+`let x \= 0; const siguiente \= ()\: number \=> ++x;`
 
 Si ejecutás `siguiente() + siguiente()`, ¿qué resultado obtenés y por qué? {
 =`3` — la primera llamada devuelve 1 (x pasa a 1) y la segunda devuelve 2 (x pasa a 2), sumando 1+2\=3. La función no es pura porque depende de y modifica `x` externo#Correcto. `++x` modifica `x` como efecto colateral, haciendo que cada llamada devuelva un valor distinto.
@@ -194,7 +194,7 @@ Si ejecutás `siguiente() + siguiente()`, ¿qué resultado obtenés y por qué? 
 ~`4` — la primera llamada devuelve 2 y la segunda devuelve 2#Incorrecto. `++x` es pre-incremento\: la primera llamada lleva x a 1 y devuelve 1.
 }
 
-::TP03-Q23-pura-sumar::[markdown]¿Por qué la función `const sumar \= (a\: number, b\: number)\: number => a + b` es clasificada como pura? {
+::TP03-Q23-pura-sumar::[markdown]¿Por qué la función `const sumar \= (a\: number, b\: number)\: number \=> a + b` es clasificada como pura? {
 =Porque su resultado depende exclusivamente de `a` y `b`, y no produce ningún efecto colateral — `sumar(3, 4)` siempre devuelve 7#Correcto. Cumple ambas condiciones de pureza.
 ~Porque está definida con `const` y por lo tanto su valor no puede cambiar#Incorrecto. `const` impide reasignar la variable, pero no determina la pureza de la función.
 ~Porque usa tipos estáticos que garantizan que no hay side effects#Incorrecto. Los tipos estáticos de TypeScript no garantizan la ausencia de side effects.
@@ -223,7 +223,7 @@ Si ejecutás `siguiente() + siguiente()`, ¿qué resultado obtenés y por qué? 
 ~Porque las funciones puras se ejecutan en modo read-only a nivel del sistema operativo#Incorrecto. No existe tal modo a nivel de OS; la seguridad viene de las propiedades del paradigma.
 }
 
-::TP03-Q27-llamadas-puras::[markdown]Si `const cuadrado \= (n\: number)\: number => n * n` es una función pura, ¿qué podemos afirmar con certeza sobre `cuadrado(7)` ejecutado 1000 veces? {
+::TP03-Q27-llamadas-puras::[markdown]Si `const cuadrado \= (n\: number)\: number \=> n * n` es una función pura, ¿qué podemos afirmar con certeza sobre `cuadrado(7)` ejecutado 1000 veces? {
 =Las 1000 invocaciones devuelven exactamente `49` — el resultado es determinista e independiente del contexto de ejecución#Correcto. Esta es la propiedad fundamental de las funciones puras.
 ~Las 1000 invocaciones probablemente devuelven `49`, pero podría haber variaciones por caching del compilador#Incorrecto. La pureza garantiza el resultado sin ambigüedad.
 ~Las primeras invocaciones devuelven `49` pero las posteriores podrían devolver un valor cacheado diferente debido a la memoización#Incorrecto. La memoización devolvería exactamente el mismo valor; no "diferente".
@@ -231,10 +231,10 @@ Si ejecutás `siguiente() + siguiente()`, ¿qué resultado obtenés y por qué? 
 }
 
 ::TP03-Q28-identificar-pura::[markdown]¿Cuál de las siguientes funciones TypeScript es **pura**? {
-=`const longitud \= (s\: string)\: number => s.length`#Correcto. Solo depende del argumento `s` y `length` no produce side effects.
-~`const log \= (msg\: string)\: void => \{ console.log(msg); \}`#Incorrecto. `console.log` es I/O — un efecto colateral.
-~`const random \= (max\: number)\: number => Math.floor(Math.random() * max)`#Incorrecto. `Math.random()` produce un valor distinto en cada llamada — no es determinista.
-~`const tiempo \= ()\: string => new Date().toISOString()`#Incorrecto. Depende del reloj del sistema — estado externo.
+=`const longitud \= (s\: string)\: number \=> s.length`#Correcto. Solo depende del argumento `s` y `length` no produce side effects.
+~`const log \= (msg\: string)\: void \=> \{ console.log(msg); \}`#Incorrecto. `console.log` es I/O — un efecto colateral.
+~`const random \= (max\: number)\: number \=> Math.floor(Math.random() * max)`#Incorrecto. `Math.random()` produce un valor distinto en cada llamada — no es determinista.
+~`const tiempo \= ()\: string \=> new Date().toISOString()`#Incorrecto. Depende del reloj del sistema — estado externo.
 }
 
 ::TP03-Q29-random-condicion::[markdown]`Math.random()` viola la condición de pureza porque\: {
@@ -244,12 +244,12 @@ Si ejecutás `siguiente() + siguiente()`, ¿qué resultado obtenés y por qué? 
 ~Porque internamente modifica el generador de semillas del runtime, lo cual es un efecto colateral, pero si ignoramos eso, la función sí es pura#Incorrecto. No se puede ignorar la no-determinismo — la no-determinismo de la salida por sí sola ya la hace impura.
 }
 
-::TP03-Q30-sort-pura::[markdown]Considerá\: `const ordenar \= (arr\: number[]) => arr.sort((a, b) => a - b)`. ¿Es esta función pura? {
+::TP03-Q30-sort-pura::[markdown]Considerá\: `const ordenar \= (arr\: number[]) \=> arr.sort((a, b) \=> a - b)`. ¿Es esta función pura? {
 =No — `Array.sort()` en JavaScript muta el array original in-place, produciendo un efecto colateral sobre el argumento recibido#Correcto. `sort()` modifica el array en su lugar; cualquier otra referencia al array verá el cambio.
 ~Sí — recibe un array como argumento y devuelve el mismo array ordenado, cumpliendo ambas condiciones#Incorrecto. Devolver el mismo array (mutado) es precisamente el problema — modifica el argumento.
 ~Sí — `.sort()` devuelve un nuevo array ordenado sin modificar el original#Incorrecto. `.sort()` en JavaScript muta el array original.
-~No — porque la función comparadora `(a, b) => a - b` podría devolver resultados inconsistentes#Incorrecto. La función comparadora es pura; el problema es que `sort()` muta el array.
-####Versión pura\: `const ordenar \= (arr\: number[]) => [...arr].sort((a, b) => a - b)`. Primero copia con spread, luego ordena la copia.
+~No — porque la función comparadora `(a, b) \=> a - b` podría devolver resultados inconsistentes#Incorrecto. La función comparadora es pura; el problema es que `sort()` muta el array.
+####Versión pura\: `const ordenar \= (arr\: number[]) \=> [...arr].sort((a, b) \=> a - b)`. Primero copia con spread, luego ordena la copia.
 }
 
 // ============================================================
@@ -331,7 +331,7 @@ $CATEGORY: TP/03-intro-funcional-ts/E-transparencia-referencial
 ~Que el compilador puede ver todas las referencias a esa expresión en tiempo de compilación#Incorrecto. Eso sería un análisis de alcance del compilador, no transparencia referencial.
 }
 
-::TP03-Q40-expresion-tr::[markdown]Dada `const doble \= (n\: number)\: number => n * 2`, ¿cuál de las siguientes sustituciones es válida por transparencia referencial? {
+::TP03-Q40-expresion-tr::[markdown]Dada `const doble \= (n\: number)\: number \=> n * 2`, ¿cuál de las siguientes sustituciones es válida por transparencia referencial? {
 =`doble(5) + doble(5)` puede reemplazarse por `10 + 10` sin cambiar el resultado#Correcto. Como `doble` es pura, `doble(5)` siempre es `10` y la sustitución es segura.
 ~`doble(5)` puede reemplazarse por `doble(10)` porque ambas son invocaciones de la misma función#Incorrecto. `doble(5) \= 10` pero `doble(10) \= 20` — no son equivalentes.
 ~`doble(5)` puede reemplazarse por `5 * 2` solo si no hay otros threads ejecutando la función al mismo tiempo#Incorrecto. La sustitución es válida siempre, independientemente de threads.
@@ -361,7 +361,7 @@ $CATEGORY: TP/03-intro-funcional-ts/E-transparencia-referencial
 
 ::TP03-Q44-tr-contraejemplo-avanzado::[markdown]Considerá\:
 
-`let c \= 0; const f \= () => \{ c++; return c; \};`
+`let c \= 0; const f \= () \=> \{ c++; return c; \};`
 
 Si sustituimos `f() + f()` por `1 + 1` (asumiendo que la primera llamada devuelve 1), ¿qué ocurre? {
 =La sustitución es **inválida**\: `f() + f()` da `1 + 2 \= 3`, pero `1 + 1 \= 2`  — la expresión `f()` **no** es referencialmente transparente porque tiene side effects#Correcto. `f()` incrementa `c` como efecto colateral, haciendo que cada llamada devuelva un valor distinto.
@@ -377,21 +377,21 @@ Si sustituimos `f() + f()` por `1 + 1` (asumiendo que la primera llamada devuelv
 
 $CATEGORY: TP/03-intro-funcional-ts/F-map-filter-reduce
 
-::TP03-Q45-filter-resultado::[markdown]¿Qué devuelve `[1, 2, 3, 4, 5, 6].filter(n => n % 2 \=\=\= 0)`? {
+::TP03-Q45-filter-resultado::[markdown]¿Qué devuelve `[1, 2, 3, 4, 5, 6].filter(n \=> n % 2 \=\=\= 0)`? {
 =`[2, 4, 6]`#Correcto. `filter` conserva solo los elementos que cumplen el predicado (pares).
 ~`[1, 3, 5]`#Incorrecto. Esos son los impares — el predicado selecciona pares.
 ~`[true, false, true, false, true, false]`#Incorrecto. `filter` devuelve los elementos, no los resultados del predicado.
 ~`3`#Incorrecto. `filter` devuelve un array, no la cantidad de elementos que cumplen.
 }
 
-::TP03-Q46-map-resultado::[markdown]¿Qué devuelve `[10, 20, 30].map(n => n / 10)`? {
+::TP03-Q46-map-resultado::[markdown]¿Qué devuelve `[10, 20, 30].map(n \=> n / 10)`? {
 =`[1, 2, 3]`#Correcto. `map` aplica la función a cada elemento.
 ~`[10, 20, 30]`#Incorrecto. `map` transforma cada elemento; no devuelve el original.
 ~`6`#Incorrecto. Eso sería el resultado de un `reduce` con suma.
 ~`[0.1, 0.2, 0.3]`#Incorrecto. La función divide por 10, no calcula el recíproco de 10 multiplicado por cada elemento.
 }
 
-::TP03-Q47-reduce-resultado::[markdown]¿Qué devuelve `[1, 2, 3, 4].reduce((acc, n) => acc * n, 1)`? {
+::TP03-Q47-reduce-resultado::[markdown]¿Qué devuelve `[1, 2, 3, 4].reduce((acc, n) \=> acc * n, 1)`? {
 =`24`#Correcto. Traza\: 1*1\=1, 1*2\=2, 2*3\=6, 6*4\=24.
 ~`10`#Incorrecto. 10 sería la suma, no el producto.
 ~`0`#Incorrecto. Con valor inicial 0, la multiplicación siempre daría 0, pero el inicial es 1.
@@ -401,7 +401,7 @@ $CATEGORY: TP/03-intro-funcional-ts/F-map-filter-reduce
 
 ::TP03-Q48-chain-resultado::[markdown]¿Qué devuelve el siguiente pipeline?
 
-`[1, 2, 3, 4, 5, 6].filter(n => n % 2 \=\=\= 0).map(n => n * n).reduce((a, n) => a + n, 0)` {
+`[1, 2, 3, 4, 5, 6].filter(n \=> n % 2 \=\=\= 0).map(n \=> n * n).reduce((a, n) \=> a + n, 0)` {
 =`56`#Correcto. filter→[2,4,6], map→[4,16,36], reduce→4+16+36\=56.
 ~`91`#Incorrecto. Eso sería aplicar map antes del filter (1+4+9+16+25+36\=91).
 ~`21`#Incorrecto. Eso sería reduce(+) sobre los elementos originales.
@@ -425,9 +425,9 @@ $CATEGORY: TP/03-intro-funcional-ts/F-map-filter-reduce
 
 ::TP03-Q51-pipe-evaluar::[markdown]Dadas\:
 
-`const doble \= (n\: number) => n * 2`
+`const doble \= (n\: number) \=> n * 2`
 
-`const sumaUno \= (n\: number) => n + 1`
+`const sumaUno \= (n\: number) \=> n + 1`
 
 Si `pipe(doble, sumaUno)(3)` aplica las funciones de izquierda a derecha, ¿qué devuelve? {
 =`7` — primero `doble(3) \= 6`, luego `sumaUno(6) \= 7`#Correcto. Pipe aplica las funciones en secuencia de izquierda a derecha.
@@ -444,7 +444,7 @@ Si `pipe(doble, sumaUno)(3)` aplica las funciones de izquierda a derecha, ¿qué
 ~100 si `fn` es pura, pero podría ser diferente si `fn` tiene side effects#Incorrecto. El tamaño del resultado de `map` siempre es igual al original, independientemente de la pureza de `fn`.
 }
 
-::TP03-Q53-reduce-trace::[markdown]Dado\: `[5, 9, 6, 5].reduce((acc, n) => acc + n * n, 0)`, ¿cuál es la traza correcta de evaluación? {
+::TP03-Q53-reduce-trace::[markdown]Dado\: `[5, 9, 6, 5].reduce((acc, n) \=> acc + n * n, 0)`, ¿cuál es la traza correcta de evaluación? {
 =paso 1\: (0,5)→25 | paso 2\: (25,9)→106 | paso 3\: (106,6)→142 | paso 4\: (142,5)→167 → resultado `167`#Correcto. Cada paso acumula\: acc + n*n.
 ~paso 1\: (0,5)→5 | paso 2\: (5,9)→14 | paso 3\: (14,6)→20 | paso 4\: (20,5)→25 → resultado `25`#Incorrecto. Esa traza calcula la suma sin elevar al cuadrado.
 ~paso 1\: (0,5)→25 | paso 2\: (25,9)→81 | paso 3\: (81,6)→36 | paso 4\: (36,5)→25 → resultado `25`#Incorrecto. En el paso 2, el acumulador (25) no se reemplaza por n*n sino que se le suma.
