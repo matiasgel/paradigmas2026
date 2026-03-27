@@ -1,7 +1,6 @@
 # Guía de Estudio — Tema 03
 ## Introducción a Programación Funcional con TypeScript
 
-> 📖 **Elaborada por:** Dra. Sofía (study-guide-writer)
 > **Materia:** Paradigmas y Lenguajes de Programación 2026 — UNTDF / IDEI — IF020
 > **Año:** 4° Licenciatura en Sistemas
 > **Semana:** 2 — Clase 1
@@ -686,9 +685,8 @@ const resultado = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3]
 
 4. **Louden, K. C. & Lambert, K. A.** (2011). *Programming Languages: Principles and Practice* (3ª ed.). Course Technology. — Capítulos sobre paradigma funcional.
 
-> **Nota sobre las citas:** Las citas directas en esta guía están extraídas de Gabbrielli & Martini, cap. 11 (versión en inglés). Los fragmentos fueron verificados en la base de conocimiento ChromaDB de la cátedra.
+> **Nota sobre las citas:** Las citas directas en esta guía están extraídas de Gabbrielli & Martini, cap. 11 (versión en inglés).
 
 ---
 
-*Documento generado por Dra. Sofía (study-guide-writer) — EDU Academic Course Production Suite v1.0.0*
-*Tema 03 — Paradigmas y Lenguajes de Programación 2026 — UNTDF/IDEI — IF020*
+*Paradigmas y Lenguajes de Programación 2026 — UNTDF/IDEI — IF020*
