@@ -74,7 +74,7 @@ En 1936 llegaron dos respuestas simultáneas e independientes, ambas negativas:
 
 ---
 
-### 1.2 Linea de tiempo de lenguajes funcionales
+### 1.2 Línea de tiempo de lenguajes funcionales
 
 | Año | Lenguaje | Nicho hoy |
 |---|---|---|

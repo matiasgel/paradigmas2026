@@ -1,0 +1,4033 @@
+# Fuente
+- archivo: 351-423.pdf
+- ruta: /home/matiasgel/Documentos/paradigmas2026/ingesta/351-423.pdf
+- extraido: 2026-03-26T16:16:03
+
+# Contenido
+
+Functional Programming Paradigm
+
+11
+
+In this chapter, we discuss the functional programming paradigm, where computation
+proceeds by term rewriting and not through modiﬁcation of the state. Languages of
+this paradigm, at least in their “pure” form, do not use the concept of memory (and
+therefore there is no side effect). Once an environment is ﬁxed, an expression always
+denotes the same value.
+
+We will discuss the pure paradigm in the ﬁrst sections, explaining its fundamental
+aspects. Real functional programming languages, however, merge these “pure” ingre-
+dients with many other mechanisms; we will review some of them in Sect. 11.3. Also
+most modern imperative languages incorporate constructs for a functional program-
+ming style. We will conclude this ﬁrst part of the chapter discussing the reasons why
+the functional programming paradigm has gained much interest in the last decades.
+We will touch on the SECD machine, an abstract machine for higher-order func-
+
+tional languages which is the prototype of many real implementations.
+
+The chapter concludes with a more theoretical section that provides a succinct
+introduction to the λ-calculus, a formal system for computability that inspires all
+functional languages and which has, since the time of Algol and Lisp, been a
+constant model for the design of programming languages.
+
+11.1 Computing Without State
+
+Conventional languages base their computational model on the transformation of the
+state. The heart of this model is the concept of modiﬁable variable, that is, a container
+with a name to which, during the computation, can be assigned different values, while
+the same association is always maintained in the environment. Correspondingly,
+the principal construct of conventional languages is assignment, which modiﬁes
+the value of a variable, without changing the association between the name of the
+
+© The Author(s), under exclusive license to Springer Nature Switzerland AG 2023
+M. Gabbrielli and S. Martini, Programming Languages: Principles and Paradigms,
+Undergraduate Topics in Computer Science,
+https://doi.org/10.1007/978-3-031-34144-1_11
+
+335
+
+336
+
+11 Functional Programming Paradigm
+
+variable and the location to which it corresponds. In the terminology of Sect. 6.2.2, it
+modiﬁes the r-value but not the l-value, which is ﬁxed when the variable is declared.
+This conventional, “imperative” computational model is an abstract view of the
+underlying physical machine, where computation proceeds by modifying values
+stored in locations, according to the so-called von Neumann Machine model, named
+after the Hungarian-American mathematician who, in the 1940s, was one of the
+prominent designers of one of the ﬁrst electronic stored-program computers.
+
+In pure functional languages, there is neither a state nor a modiﬁable variable. The
+computation proceeds—at least in principle—by rewriting expressions, by changes
+that take place only in the environment and do not involve the concept of memory. If
+there are no modiﬁable variables, there is no longer a need for assignment. The entire
+computation is expressed in terms of modiﬁcations to the environment in which the
+manipulation of (higher-order, see Sect. 7.2) functions plays a fundamental role.
+
+Without assignment, iteration becomes less important. A loop repeatedly modiﬁes
+the state until the values of certain variables satisfy a guard. The reader already knows
+(see Chap. 6) that iterative and recursive constructs are two equivalent mechanisms
+permitting inﬁnitely long (and possibly divergent) computations. In the stateless
+computation model, (unbounded) iteration disappears, recursion remains, becoming
+the fundamental construct for sequence control. Bounded iteration is expressed via
+higher-order functions, see Sect. 11.3.4.
+
+Higher-order functions and recursion are the basic ingredients of this stateless
+computational model, which is called the functional programming paradigm, as
+opposed to the ordinary, state based imperative paradigm.
+
+This is a paradigm as old as the imperative one. Since the 1930s, beside the
+Turing Machine (see box on Sect. 3.4), there has existed the λ-calculus, an ab-
+stract model for computable functions based on those same concepts we have been
+brieﬂy explaining. Lisp was the ﬁrst programming language explicitly inspired by the
+λ-calculus and many others have followed in the intervening years (Scheme, ML,
+in all its different dialects, Miranda, Haskell, Erlang to name just a few of them).
+Among these, only Miranda and Haskell are “purely functional”; the others also have
+imperative components, although these languages assign a subordinate role to them.
+We introduce ﬁrst the pure functional paradigm. To make the treatment more
+concrete, we refer to a speciﬁc language rather than using a neutral pseudocode. ML
+has been chosen for this because, through its coherence and elegance of design, it is
+the most suited of them all to didactic presentation. It is not our aim to introduce the
+language (for which, the reader should refer to the bibliography), but only to use the
+syntax in an instrumental fashion to discuss some general questions that apply also
+to other functional languages.
+
+11.1.1 Expressions and Functions
+
+In the usual mathematical practice, there is some ambiguity about when we are
+deﬁning a function and when we are applying it to a value. It is not uncommon to
+encounter expressions of the kind:
+
+11.1 Computing Without State
+
+337
+
+Let f (x) = x 2 be the function that associates with x its square. If now we have x = 2, it
+follows that f (x) = 4.
+
+The syntactic expression f (x) is used to denote two things that are quite different:
+the ﬁrst time, it serves to introduce the name, f , of a speciﬁc function; the second
+time, it serves to denote the result of applying the function f to a speciﬁed value. In
+mathematical practice, this ambiguity is completely innocuous because the context
+helps us to distinguish which of the two uses is intended. The same does not hold for
+an artiﬁcial language (such as a programming language) which describes functions.
+Here, it is appropriate to distinguish the two cases.
+
+When a mathematician asserts that they are deﬁning the function, f (x), in reality,
+they are deﬁning the function f with one formal parameter, x, which serves to
+indicate the transformation that f applies to its argument. To distinguish linguistically
+between the name and the “body” of the function, following ML syntax, we can write:
+
+val f = fn x = > x * x ;
+
+The reserved word val introduces a declaration. The declaration is used to extend
+the environment with a new association between a name and a value. In our case, the
+name f is bound to the transformation of x into x ∗ x. In all functional languages,
+functions are expressible values; that is, they can be the result of the evaluation of a
+complex expression. In our case, the expression on the right of the = and introduced
+by fn is an expression that denotes a function.
+
+For the application of a function to an argument, we retain the traditional notation,
+writing f(2) or (f 2), or f 2, for the expression that results from the application
+of a function f to the argument 2. We can also use val to introduce new names, as
+in:
+
+val four = f 2;
+
+The introduction of speciﬁc syntax for an expression which denotes a function
+has an important consequence. It is possible to write (and possibly apply) a function
+without having necessarily to assign it a name. For example, the expression
+
+( fn y = > y +1) (6);
+
+has the value 7 which results from the application of the (anonymous) function fn
+y => y+1 to the argument 6. To make the notation less imposing, we assume (as
+does ML) that application can be denoted by simple juxtaposition (that is without
+parentheses) and that is associates to the left (preﬁx notation). If g is the name of a
+function,
+
+g a1 a2 ... ak
+
+will mean:
+
+( . . . ( ( g a1 ) a2 ) . . . ak ).
+
+Nothing prevents one functional expression from appearing inside another, as in
+
+val add = fn x = > ( fn y = > y + x );
+
+338
+
+11 Functional Programming Paradigm
+
+The value add is a function which, given an argument, x, returns an anonymous
+function which, given an argument y, returns x+y. We can use add in many different
+ways:
+
+val t h r e e = add 1 2;
+val a d d t w o = add 2;
+val f i v e = a d d t w o 3;
+
+Note that, in particular, addtwo is a function which is obtained as the result of the
+evaluation of another expression.
+
+The notation which uses val and fn is important but is a little verbose. ML also
+allows the use of a more compact notation which resembles the usual way of deﬁning
+functions in a programming language. The ﬁrst function, f, which we deﬁned (the
+one which computes the square of its argument) could also be deﬁned as follows:
+
+fun f x = x * x ;
+
+In general, a deﬁnition of the form:
+
+fun F x1 x2 ... xn = body;
+
+is only syntactic sugar (that is, in programming language jargon, only a nicer abbre-
+viation) for:
+
+val F = fn x1 = > ( fn x2 = > ... ( fn xn = > body ) . . . ) ;
+
+As a last example of functions which manipulate functions, this time in the form
+
+of a formal parameter, consider the deﬁnition:
+
+fun comp f g x = f ( g ( x ));
+
+This returns the function composed of its ﬁrst two arguments (which are, in their
+turn, functions).
+
+Finally, every functional program permits the deﬁnition of recursive functions.
+Assuming that we have available a conditional expression (which in ML is written
+with the familiar if then else syntax), we can deﬁne the usual factorial as:
+
+fun fatt n = if n =0 then 1 else n * fatt (n -1);
+
+11.1.2 Computation as Reduction
+
+If we exclude arithmetic functions (which we can assume predeﬁned with the usual
+semantics) and the conditional expression, at the conceptual level, we can describe
+the procedure used to transform a complex expression into its value (evaluation) as
+the process of rewriting. We call this process reduction. In a complex expression, a
+subexpression of the form “function applied to an argument” is textually replaced by
+the body of the function in which the formal parameter is replaced, in its turn, by the
+
+11.1 Computing Without State
+
+339
+
+Fig. 11.1 Some deﬁnitions and a computation using rewriting
+
+actual parameter.1 We can compute a simple expression using this computational
+model (we use → to indicate a reduction step).
+fact 3 → ( fn n = > if n =0 then 1 else n * fact (n -1)) 3
+
+→ if 3=0 then 1 else 3* fact (3 -1)
+→ 3* fact (3 -1)
+→ 3* fact (2)
+→ 3*(( fn n = > if n =0 then 1 else n * fact (n -1)) 2)
+→ 3*( if 2=0 then 1 else 2* fact (2 -1))
+→ 3*(2* fact (2 -1))
+→ 3*(2* fact (1))
+→ 3 * ( 2 * ( ( fn n = > if n =0 then 1 else n * fact ( n -1)) 1))
+→ 3 * ( 2 * ( if 1=0 then 1 else 1* fact (1 -1))
+→ 3 * ( 2 * ( 1 * fact (0))
+→ 3 * ( 2 * ( 1 * ( ( fn n = > if n =0 then 1 else n * fact (n -1)) 0)))
+→ 3 * ( 2 * ( 1 * ( if 0=0 then 1 else n * fact (n -1))))
+→ 3 * ( 2 * ( 1 * 1 ) )
+→ 6
+
+Note how, with the exception of arithmetic calculations and the use of the condi-
+tional expression, all of the rest of the computation proceeds by symbolic manipula-
+tion of strings: no variables, no update of values on the execution stack. Figure 11.1
+contains another example of pure symbolic manipulation. (It is a complicated way
+to write the identity function!) (While studying the ﬁgure, recall that fun is just an
+abbreviation for val ... fn.)
+
+Finally, the reader will have no difﬁculty in convincing themselves that, given the
+
+deﬁnition
+
+fun r x = r ( r ( x ));
+
+each computation that involves an evaluation of r resolves into an inﬁnite rewriting.
+We say, in such a case, that the computation diverges and that the result is undeﬁned.
+
+1 The reader will certainly have recognised in this description the “copy rule” we already discussed
+in the context of the by-name parameter passing. For the time being, we will be vague about the
+exact semantics to assign to this process—all of Sect. 11.2 will be devoted to it.
+
+340
+
+11 Functional Programming Paradigm
+
+11.1.3 The Fundamental Ingredients
+
+In these ﬁrst subsections, we have introduced the fundamental ingredients of the pure
+functional paradigm. We can make this precise and summarise the main concepts in
+the following way.
+
+From the syntactic viewpoint, a pure functional language has no commands (there
+being no state to modify using side effects) but only expressions. Apart from possible
+values and primitive operators for data (such as integer, boolean, characters, etc.) and
+the conditional expression, the two principal constructs for deﬁning expressions are:
+
+• Abstraction which, given any expression, exp and an identiﬁer, x, allows the con-
+struction of an expression fn x => exp denoting the function that transforms
+the formal parameter x into exp (the expression exp is “abstracted” from the
+speciﬁc value bound to x).
+
+• The application of an expression, f_exp, to another expression, a_exp, which
+we write f_exp a_exp, which denotes the application of the function (denoted
+by) f_exp to the argument (denoted by) a_exp.
+
+There are no constraints on the possibilities of passing functions as arguments
+to other functions, or to returning functions as the results of other (higher-order)
+functions. As a consequence, there is perfect homogeneity between programs and
+data.
+
+From the semantic viewpoint, a program consists of a series of value deﬁnitions,
+each of which inserts a new association into the environment and can require the
+evaluation of arbitrarily complex expressions. The presence of higher-order functions
+and the possibility of deﬁning recursive functions makes this deﬁnition mechanism
+ﬂexible and powerful.
+
+To a ﬁrst approximation, the semantics of computation (evaluation) refers to no
+linguistic aspects other than the ones introduced so far. It can be deﬁned using simple
+symbolic rewriting of strings (reduction), which repeatedly uses two main operations
+to simplify expressions until they reach a simple form which immediately denotes
+a value. The ﬁrst of these operations is the simple search through the environment.
+When an identiﬁer is determined as being bound in an environment, replace the
+identiﬁer by its deﬁnition. For example, in Fig. 11.1, we used this operation for the
+ﬁrst and the ﬁfth reduction. In what follows this step will not be explicitly considered
+again. We will consider a name as a simple abbreviation for the value associated with
+it.
+
+The second operation, which is more interesting, deals with a functional expres-
+sion applied to an argument and uses a version of the copy rule (which in this context
+is called the β-rule).
+
+Deﬁnition 11.1
+
+Redex A redex (which stands for a reducible expression) is an application of the
+
+form ((fn x => body) arg).
+
+11.2 Evaluation
+
+341
+
+Reductum The reductum of a redex ((fn x => body) arg) is the expres-
+sion which is obtained by replacing in body each (free) occurrence of the formal
+parameter, x, by a copy of arg (avoiding variable capture,2 see Sect. 7.1.2).
+β-rule An expression, exp, in which a redex appears as a subexpression is re-
+duced (or rewrites, simpliﬁes) to exp1 (notation: exp → exp1), where exp1
+is obtained from exp by replacing the redex by its reductum.
+
+From an implementation viewpoint, ﬁnally, every abstract machine for functional
+languages adopts extensive garbage-collection mechanisms because, in the case in
+which functions are returned as values by other functions, we know that the local
+environment must be preserved for an unlimited period of time (see Sect. 7.2.2).
+
+If these are the cardinal notions of a functional language, on a more attentive
+reading, these few lines raise more problems than they solve. We undertake a deeper
+analysis of these concepts in the next section.
+
+11.2 Evaluation
+
+Last section leaves open at least two issues:
+
+• What is the termination condition for reduction (that is what does “a simple form
+
+which immediately denotes a value” mean?)
+
+• What precise semantics must be given to the β-rule, not just concerning possible
+variable capture (which we already described in the context of parameter passing)
+but more importantly, the order to follow during rewriting, should more than one
+redex be present in the same expression?
+
+11.2.1 Values
+
+A value is an expression which cannot be further rewritten. In a functional language,
+there are values of two kinds: values of primitive type and functions. There is little
+to say about values of simple types. If the language provides some primitive types
+(integers, booleans, characters, etc.) is clear that each of these types come with a
+set of values that do not admit evaluation (for example, constants of type integer,
+boolean, characters, etc.). In the example of the previous subsection, we terminated
+the evaluation of fact when we reached primitive values of integer type: 3, 2, 1.
+
+2 In the context of functional programming, identiﬁers bound to values are often referred to as
+“variables”. The reader is by now experienced enough to allow us to continue with this traditional
+use without being confused by the absence of modiﬁable variables in pure functional programming
+languages.
+
+342
+
+11 Functional Programming Paradigm
+
+Functional values are more interesting. Let us consider the following deﬁnition:
+
+val G = fn x = > (( fn y = > y +1) 2);
+
+We have said that a deﬁnition entails the evaluation of the expression on the right of
+the equality and, then, the binding of the value thus derived to the name on the left
+of the =. But, in this case, it is not immediately clear what the value to be associated
+with G is. Do we have:
+
+fn x = > 3
+
+in which we have rewritten the body of G by evaluating the redex it contains, or do
+we have
+
+fn x = > (( fn y = > y +1) 2)
+
+in which there has been no evaluation in the body of G? The ﬁrst case appears to
+be the one that more respects the informal semantics that we gave at the end of the
+last subsection. The second, on the other hand, is closer to the usual meaning of a
+function deﬁnition in imperative languages, in which the body of a function is only
+evaluated when it is called.
+
+Functional languages in common use all adopt the latter of these choices—there
+
+is no evaluation “under” an abstraction. Every expression of the form
+
+fn x = > exp
+
+is a value, so redexes possibly contained in exp are never rewritten until the function
+is applied to some argument.
+
+11.2.2 Capture-Free Substitution
+
+To implement capture-free substitution, we saw in Chap. 7 that closures can be
+used. This is, in effect, the mechanism also used by abstract machines for functional
+languages (see Sect. 11.5). For the elementary description we are giving at present,
+though, a syntactic convention sufﬁces. In every expression, there are never two
+formal parameters with the same name and the names of the possible variables that
+are not formal parameters are all distinct from those of the formal parameters.
+
+Using this convention, there will never be variable capture in the simple examples
+
+that we consider.3
+
+11.2.3 Evaluation Strategies
+
+In Chap. 6, while discussing expressions, we saw how every language must ﬁx a
+speciﬁc strategy (that is a ﬁxed order) for the evaluation of expressions. The presence
+
+3 In the more general case, if we do not want to bring into play the concept of closure, for the correct
+description of computation using rewriting, it is necessary to carefully deﬁne the concepts of bound
+and free variable, and substitution, all concepts which we treat formally in Sect. 11.6.
+
+11.2 Evaluation
+
+Fig. 11.2 An expression
+with more than one redex
+
+343
+
+of higher-order functions in functional languages makes this question even more
+fundamental. To clarify the problem, consider the deﬁnitions in Fig. 11.2. Which
+value is associated with v and how is it determined?
+
+The β-rule on its own is not of much use because, in the right-hand part of the
+deﬁnition of v, there are 4 redexes (after the expansion of the names with the values
+associated with them by the deﬁnitions):
+
+K ( D ( succ 0))
+D ( succ 0)
+succ 0
+r 2
+
+Which of them is reduced ﬁrst? Every commonly used language uses a leftmost
+strategy which reduces the redexes starting with the one at the leftmost end. But
+even having stipulated this, it is not clear which is the leftmost redex among
+
+K ( D ( succ 0))
+D ( succ 0)
+succ 0
+
+because these three redexes are superimposed on each other. Having ﬁxed a leftmost
+evaluation order, there are three main different strategies.
+
+Evaluation by Value
+
+In evaluation by value (which is also called applicative-order, or eager, or innermost
+evaluation), a redex is evaluated only if the expression which constitutes its argument
+part is already a value. More precisely, leftmost evaluation in applicative order works
+as follows.
+
+1. Scan the expression to be evaluated from the left, choosing the ﬁrst application
+
+encountered. Let it be (f_exp a_exp).
+
+2. First evaluate (recursively applying this method) f_exp until it has been reduced
+
+to a value (of functional type) of the form (fn x => ...).
+
+3. Then evaluate the argument part, a_exp, of the application, so that it is reduced
+
+to a value, val.
+
+4. Reduce the redex ((fn x => ...)val) using the β-rule and repeat from (1).
+
+Considering Fig. 11.2, case (1) ﬁrst chooses the application K (D (succ 0)).
+Now some elementary applications of (1), (2) and (3) will serve to show that K, D and
+succ are already values (recall that we are implying that a name is an abbreviation for
+the expression associated with it). The ﬁrst redex to be reduced is then succ 0 (that
+
+344
+
+11 Functional Programming Paradigm
+
+is, ((fn v => v + 1) 0)) which will be completely evaluated and yields 1.
+Then the redex (D 1) (that is ((fn u => if u=0 then 1 else u) 1))
+is reduced to give the value 1. Then (K 1) is evaluated to produce the value (fun
+y ==> 1). At this point in the evaluation, the expression has become
+
+( fun y = > 1) ( r 2)
+
+Since the functional part of this application is already a value, the strategy pre-
+scribes that the argument (r 2) is evaluated. An application of the β-rule leads to
+r (r 2); we then proceed to r (r (r 2)) and so on in a divergent computation.
+
+No value is therefore associated with v because the computation diverges.
+
+Evaluation by Name
+
+In the evaluation by name strategy (which is also called normal order or outer-
+most evaluation), a redex is reduced without ﬁrst reducing its argument part. More
+precisely, leftmost evaluation in normal order proceeds as follows.
+
+1. Scan the expression to be evaluated from the left, choosing the ﬁrst application
+
+encountered. Let it be (f_exp a_exp).
+
+2. First evaluate f_exp (recursively applying this method) until it has been reduced
+
+to a value (of functional type) of the form (fn x => ...).
+
+3. Reduce the redex ((fn x => ..)a_exp) using the β-rule and repeat from
+
+(1).
+
+Considering Fig. 11.2, the ﬁrst redex to be reduced is therefore:
+
+K ( D ( succ 0))
+
+It is rewritten to:
+
+fn y = > D ( succ 0)
+
+which is a functional value. The full expression now is of the form:
+
+( fn y = > D ( succ 0)) ( r 2)
+
+for which the strategy prescribes reducing the outermost redex, so we obtain:
+
+D ( succ 0)
+
+Now reducing this expression, we obtain:
+
+if ( succ 0)=0 then 1 else ( succ 0)
+
+and then:
+
+if 1=0 then 1 else ( succ 0)
+
+and ﬁnally
+
+succ 0
+
+from which we obtain the ﬁnal value, 1, which is then associated with v.
+
+11.2 Evaluation
+
+Lazy Evaluation
+
+345
+
+In evaluation by name, a single redex might have to be evaluated more than once
+because of some duplication that has occurred during rewriting. In the example that
+we are discussing, the redex (succ 0) is duplicated because of the function D and
+is reduced twice4 in the conditional expression that forms the body of D. This is
+the price that must be paid for postponing the evaluation of an argument until after
+the application of a function (and it is really this that allows evaluation by name
+to obtain a value where evaluation by value would diverge). But it is expensive in
+terms of efﬁciency (since the duplicated redex may require a signiﬁcant amount of
+computation).
+
+To obviate this problem and maintain the advantages of evaluation by name, the
+lazy strategy proceeds like that by name but the ﬁrst time that a “copy” of a redex is
+encountered, its value is saved and will be used should any other copies of the same
+redex be encountered. Since there is no state, the evaluation of multiple copies of
+the same expression will always terminate with the same value, hence guaranteeing
+that the lazy strategy computes the same value of the strategy by name.
+
+The by-name and lazy strategies are examples of call by need strategies in which
+
+a redex is reduced only if it is required by the computation.
+
+11.2.4 Comparison of the Strategies
+
+In the last subsection, the by-name strategy produces a value when the by-value
+strategy diverges. It is sensible to ask the question as to whether it can be the case
+that the two strategies produce distinct values for the same expression.
+
+An answer to this question is given by the following theorem which expresses
+one of the most important properties of the pure functional paradigm. We say that
+an expression in the language is closed if all of its variables are bound by some fn.
+Let us recall, then, from Sect. 11.2.1, that by primitive value, we mean a value of
+a primitive type (integer, boolean, character, etc.), excluding, therefore, functional
+values.
+
+Theorem 11.1 Let exp be a closed expression. If exp reduces to a primitive value,
+val, using any of the three strategies of Sect. 11.2.3, then exp reduces to val
+using the by-name strategy. If exp diverges using the by-name strategy, then it also
+diverges under the other two strategies.
+
+Let us note that the theorem excludes that a (closed) expression can yield a prim-
+itive value, val, in one strategy and yield another primitive value, val2, using
+
+4 The purist does not speak of copies of redexes but will rather say that the redex (succ 0) has
+given way to two residuals, each of which has been reduced independently of the other.
+
+346
+
+11 Functional Programming Paradigm
+
+another strategy.5 Two strategies can therefore differ only by the fact that one de-
+termines a value while the other diverges, as we saw in our example. We cannot go
+into the details of how the theorem can be proved but it is important to stress that the
+following basic property is fundamental to its validity:
+
+Once any strategy has been ﬁxed in a given environment, the evaluation of all occurrences
+of a single expression always yields the same value.
+
+This property, which is immediately falsiﬁed when there are side effects, is taken
+by many authors as the criterion for a pure functional language: a language is purely
+functional if it satisﬁes this condition. This is a very important property which makes
+it possible to reason about a functional program and to which we will return in
+Sect. 11.4. Let us again note, before going on, that it is just by virtue of this property
+that lazy evaluation is correct. The value obtained by the evaluation of an expression
+does not change when another copy of the same expression is encountered (clearly,
+in the meanwhile, the environment has not been changed).
+
+In the light of the preceding theorem, it can be asked what interest there is in the
+by-value strategy, given that by-name is the most general of all possible strategies.
+Moreover, reasons of efﬁciency would seem to suggest that we only adopt call-by-
+need strategies, given that it is not clear why useless redexes should be reduced,
+with the consequent waste of computing time. The point is that the efﬁciency case is
+not so clear-cut. The implementation of a call-by-need strategy is, in general, more
+expensive than a simple call-by-value strategy. The by-value strategy has efﬁcient
+implementations on conventional architectures, even if, sometimes, it performs un-
+necessary work (every time that an argument that is not required in the body of
+the function is evaluated, as happens with the second argument of the function K
+in Fig. 11.2). This last case, however, can be treated in an efﬁcient manner with
+abstract evaluation techniques that attempt to identify useless arguments. Moreover,
+in functional languages including also imperative constructs, a by-value reduction
+strategy blends better with those imperative features.
+
+Among the functional languages that we have cited at the beginning of this chap-
+ter, Lisp, Scheme, ML, Erlang use a by-value strategy (also because they include
+major imperative aspects), while Miranda and Haskell (which are pure functional
+languages) use lazy evaluation.
+
+5 The theorem is no longer valid if the hypothesis that the value is primitive is removed. Having
+assumed that evaluation is not performed under abstraction, in fact, the two strategies can yield
+(functional) values that are distinct. By way of an example, deﬁne I = fn x => x and P =
+fn x => (fn y => y x). The term P (I I) reduces to fn y => y (I I) under the
+by-name strategy, while, using the by-value strategy, it reduces to fn y => y I. This difference
+is not too important in programming languages (where we mainly want to compute values of
+primitive type). In Sect. 11.6, we will deﬁne an abstract calculus in which reduction also occurs
+in the presence of abstractions. This calculus satisﬁes the conﬂuence property (stronger and more
+general than Theorem 11.1), which we will discuss on Sect. 11.6.
+
+11.3 Programming in a Functional Language
+
+347
+
+11.3 Programming in a Functional Language
+
+The mechanisms we described in the last section are sufﬁcient to express programs
+for every computable function (they constitute, indeed, a Turing-complete language).
+This is the core of every functional language, which, however, is too austere to be
+used as a real programming language. Every functional language, therefore, embeds
+this core in a wider context which provides mechanisms of different kinds, each
+aiming to make programming simpler and more expressive.
+
+11.3.1 Local Environment
+
+The mechanism of global deﬁnitions in the environment that we have used this far
+has too little structure for a modern language. As in conventional languages, it is
+appropriate to provide explicit mechanisms to introduce deﬁnitions with limited
+scope, as for example:
+
+let x = exp in exp1 end
+
+This introduces the binding of x to the value of exp in a scope which includes
+
+only exp1.
+
+To tell the truth, the presence of functional expressions already introduces nested
+scopes and associated environments which are composed of the formal parameters
+of the function bound to the actual parameters. From the point of view of evaluation,
+we can indeed consider the construct
+
+let x = exp in exp1 end
+
+as syntactic sugar for
+
+( fn x = > exp1) exp.
+
+The use of local scopes is too important, however, and justiﬁes the introduction
+
+of the special syntax for them.
+
+11.3.2 Interactiveness
+
+Every functional language has an interactive environment. The language is used by
+entering expressions which the abstract machine evaluate, returning their values.
+Deﬁnitions are particular expressions which modify the global environment (and
+may return a value).
+
+This model immediately suggests interpreter-based implementations, even if there
+are efﬁcient implementations that generate compiled code the ﬁrst time a deﬁnition
+is stored in the environment.
+
+348
+
+11 Functional Programming Paradigm
+
+11.3.3 Pattern Matching
+
+One of the most annoying aspects of recursive functional programming is handling
+terminal cases by means of explicit “if” expressions. Let us take, for example, the
+(very inefﬁcient) function which returns the nth term of the Fibonacci series:
+
+fun Fibo n = if n =0 then 1
+
+else if n =1 then 1
+
+else Fibo (n -1)+ Fibo (n -2);
+
+The mechanism of pattern matching present in some languages such as ML and
+Haskell, allows us to give a deﬁnition (which is equivalent to the above) as follows:
+
+fun Fibo 0 = 1
+Fibo 1 = 1
+Fibo n = Fibo (n -1)+ Fibo (n -2);
+
+|
+|
+
+The “|” character is read “or”. Each branch of the deﬁnition corresponds to a dif-
+ferent case of the function. The most interesting part of this deﬁnition is the formal
+parameters. They are no longer constrained to be identiﬁers but can be patterns, that
+is, expressions formed from variables (the last is an example), constants (in the other
+cases) and other constructs that depend on the language’s type system (we will see an
+example using lists below). A pattern is a kind of schema, a model against which to
+match the actual parameter. When the function is applied to an actual parameter, it is
+compared with the patterns (using the order in which they appear in the program) and
+the body corresponding to the ﬁrst pattern which matches with the actual parameter
+is chosen.
+
+The pattern-matching mechanism is particularly ﬂexible when structured types
+are used, for example lists.6 In ML syntax, a list is denoted by square brackets with
+the elements separated by commas. For example
+
+[ " one " , " two " , " t h r e e " ]
+
+is a list of three strings. The operator, :: denotes “cons” (that is the operator that
+adds an element to the head of a list):
+
+" zero " ::[ " one " , " two " , " three " ]
+
+is an expression whose value is the list:
+
+[ " zero " , " one " , " two " , " three " ].
+
+Finally, nil is the empty list. Thus
+
+" four " :: nil
+
+has value [“four”]. Using pattern matching, we can deﬁne a function which
+computes the length of a generic list such as:
+
+6 Recall that in the functional realm, a list is an immutable data, thus what, e.g., in Python would
+be called instead a tuple.
+
+11.3 Programming in a Functional Language
+
+349
+
+fun l e n g t h nil = 0
+
+|
+
+l e n g t h e :: r e s t = 1 + l e n g t h ( r e s t );
+
+Note that the names used in the pattern are used as formal parameters to indicate
+parts of the actual parameter. It should be clear the advantage in terms of conciseness
+and clarity with respect to the usual deﬁnition:
+
+fun l e n g t h l i s t = if list = nil then 0
+
+else 1 + l e n g t h ( tl l i s t );
+
+This deﬁnition, moreover, requires the introduction of a selection function (which
+we have written tl) to obtain the list that is obtained by removing the head element.
+The selection operation is, on the other hand, implicit in pattern matching.
+
+An important constraint is that a variable cannot appear twice in the same pattern.
+For example, consider the following “deﬁnition” of a function which, applied to a
+list, returns true if and only if the ﬁrst two elements of the list are equal:
+
+fun Eq nil = f a l s e
+Eq [ e ] = f a l s e
+Eq x :: x :: rest = true
+Eq x :: y :: rest = f a l s e ;
+
+|
+|
+|
+
+This deﬁnition is syntactically illegal because the third pattern contains the variable
+x twice, where it is used to test the equality of the ﬁrst two elements. The pattern-
+matching mechanism is one way to check that the form of an actual parameter agrees
+with a pattern, not that the values it contains bear certain relationships. Otherwise
+stated, pattern matching is not uniﬁcation, a much more general mechanism (and
+more complex to implement) and which we will discuss in the context of the logic
+programming paradigm (Chap. 12).7
+
+11.3.4 Programming in a Functional Style
+
+Programming in a functional style revolves around immutable data, manipulated by a
+(large) set of (small) functions. Using higher-order functions one may deﬁne general
+programming schemata as functions, which can then be instantiated to obtain speciﬁc
+program behaviors. A typical example is the so-called “map, ﬁlter, fold pattern”
+which is the functional equivalent of the “linear scan of a sequence” in imperative
+style.
+
+The function map(f,list_of_data) is a (usually predeﬁned) function that
+returns the list which is obtained by applying f to any element of list_of_data.
+Instead of the imperative Python code
+
+7 The implementation of pattern matching is nothing other than the “obvious” translation into a
+sequence of ifs. In the case of Eq, the third pattern would require checking the equality of two
+elements of arbitrary type. If we have values for which the language does not deﬁne equality (as
+happens, for example, for functional values), it would not be possible to implement an equality test.
+
+350
+
+11 Functional Programming Paradigm
+
+res =[]
+for e in l i s t _ o f _ d a t a :
+
+res . a p p e n d ( f ( e ))
+
+we would simply write res=map(f,list_of_data).
+
+takes a binary function f and applies it
+
+The function fold(f,init,list_of_data) is a (usually predeﬁned) func-
+tion that
+the elements of
+list_of_data, returning the accumulated result; init is the initial value used
+to start the fold. For example, fold(fn x,y=>x+y, 0, list_of_int) re-
+turns the sum of all the elements of list_of_int.8
+
+to all
+
+The function filter(p,list_of_data) is a (usually predeﬁned) function
+that returns the list which is obtained by taking those elements of list_of_data
+which satisfy the predicate (the condition) p.
+
+Other sets of higher-order functions allow for the concise (and efﬁcient) expression
+of many other program schemata. The essential point we want to make is that the
+extensive use of program schemata increases the modularity of code. And the more
+modular a program is, the more easily we may factor the testing (or the veriﬁcation,
+or the proof of correctness) of that program.
+
+It is clear that one may use a functional programming style also using programming
+languages that allow for other programming paradigms. Once a language provides
+higher-order functions, it becomes easy to write large programs which avoid state-
+based computations. This is the case, for instance, of Scala, which has a large “func-
+tional subset” and has all the needed, predeﬁned higher-order functions.9 Moreover,
+in Scala names can be introduced by two distinct constructs: var declares a name that
+can be re-assigned, while val binds a name to a value, without allowing any further
+modiﬁcation of this binding. By using val and only unmodiﬁable values we avoid
+any side-effect, and hence we obtain a truly functional programming style. What
+is peculiar to pure programming languages is that the absence of any side-effect10
+allows much easier control of the correctness of a program, see Sect. 11.4.
+
+11.3.5 Types
+
+As in conventional languages, the type system is an aspect of primary importance in
+functional languages, as well. Every functional language we have cited provides the
+usual primitive types (integers, booleans, characters) with operations on their values.
+With the exception of Scheme, which is a language with dynamic type checking, all
+the others have elaborate static type systems. These type systems allow the deﬁnition
+of new types such as pairs, lists, “records” (that is, tuples of labelled values). For
+
+8 See the use of the anonymous function (the lambda) as argument to fold.
+9 Also Python’s functions are ﬁrst-class citizens. Differently from Scala, however, Python has no
+linguistic construct to limit the re-assignability of names. The isolation of a pure functional subset
+is therefore more problematic.
+10 Or even the limited, conﬁned side-effects of those languages, like Erlang and Scala, which are
+not pure but insist on encapsulating any side-effect into speciﬁc functions.
+
+11.3 Programming in a Functional Language
+
+351
+
+example, in ML, we can deﬁne a function add_p which takes as arguments a pair
+of integers and returns their sum:
+
+fun a d d _ p ( n1 , n2 ) = n1 + n2 ;
+
+Note the fundamental difference between add_p and add which we deﬁned on
+Sect. 11.1.1: add_p requires a pair of integers and it would make no sense to
+provide just one value for n1 and none for n2. Instead, add is a function which
+inputs one number and returns a function that takes another number and returns the
+sum of both.11
+
+An important part of the type system in functional languages is the one dedicated to
+the types of functions, given that functions are denotable and expressible values (and
+often also storable, if the language includes imperative aspects). In typed functional
+languages, this also means that some functional expressions are illegal because they
+cannot be typed. For example, the following higher-order function is illegal in most
+typed languages:
+
+fun F f n = if n =0 then f (1) else f ( " p i p p o " );
+
+The reason for this is that the formal parameter, f, must simultaneously have types
+int -> ’a and string -> ’a (where ’a denotes a type variable, that is, a
+generic type that is not yet instantiated).
+
+Another illegal expression (because it violates typing) is self-application:
+
+fun D e l t a x = x x ;
+
+The expression, (x x), is illegal because there is no way to assign a unique and
+consistent type to x. Given that it occurs on the left as an application, it must have
+a type of the form ’a -> ’b. Since, then, it also appears as the argument to a
+function (on the right of the application), it must have the type that the function
+requires: therefore, x must be of the type ’a. Putting the two constraints together,
+we have it that x must, at the same time, be of type ’a and of type ’a -> ’b and
+there is no way to “unify” these two expressions.
+
+In languages without a strong typing system, such as Scheme, the function Delta
+is, instead, legal. In Scheme, we can also apply Delta to itself. The expression
+(obviously written in Scheme syntax)
+
+( D e l t a D e l t a )
+
+constitutes a simple example of a divergent program. The lack of a static type check
+makes it possible in Scheme to write expressions such as:
+
+(4 3)
+
+Here, the aim is to apply the integer 4 to the integer 3. Since the left-hand part of this
+application is not a function, the abstract machine will generate an error at execution
+time.
+
+11 The passage from a function requiring, as argument, a pair (or, more generally, a tuple) to a unary
+higher-order function, is called the curryﬁcation of a function. The operation is named after Haskell
+Curry, one of the founding fathers of the theory of the λ-calculus.
+
+352
+
+11 Functional Programming Paradigm
+
+In the case of ML, the most interesting aspect of its type system is its support for
+
+polymorphism (see Sect. 8.8 and, in particular, the box on Sect. 8.7.4).
+
+11.3.6 Inﬁnite Objects
+
+In the presence of by-name or lazy strategies, it is possible to deﬁne and manipulate
+streams, that is, data structures that are (potentially) inﬁnite. In this section, we will
+give a small example of how this can be done. We cannot give the example in ML
+because it uses a by-value strategy. The example is possible, though, in Haskell.
+So, to avoid loading the reader with a different syntax, we will write the terms with
+the same concrete syntax as ML but with the stipulation that evaluation must be
+understood as lazy.
+
+First, we have to clarify the concept of value for data structures such as lists.
+In a language that uses eager evaluation, a value of type T list is a list whose
+elements are values of type T. In a lazy language, this is not a good notion of value
+because it might require the evaluation of useless redexes, contrary to the call-by-
+need philosophy. To see the reason, deﬁne the functions:
+
+fun hd x :: rest = x ;
+fun tl x :: rest = rest ;
+
+The functions return, respectively, the ﬁrst element (that is, the head) and the rest
+(that is, the tail) of a non-empty list (in the case of the empty list, the abstract machine
+will generate an error when doing pattern matching).
+
+Let us now consider the expression
+
+hd [2 , (( fn n = > n +1) 2)].
+
+To calculate its value (that is, 2), it is not necessary to reduce the redex that comprises
+the second element of the list because it will never be used in the body of the hd
+function. For these reasons, in a by-need context, a value of type list is any expression
+of the form:
+
+exp1 :: exp2
+
+where exp1 and exp2 can also contain redexes.
+
+It is then possible to deﬁne a list by recursion, as for example:
+
+val i n f i n i t y 2 = 2 :: i n f i n i t y 2 ;
+
+The expression infinity2 corresponds to a potentially inﬁnite list whose ele-
+ments are all 2 (using eager evaluation, such an expression would cause a divergent
+computation). We may manipulate infinity2 under lazy evaluation. For example,
+
+hd i n f i n i t y 2
+
+is an expression whose evaluation terminates with the value 2. Another expression
+with value 2 is
+
+hd ( tl ( tl ( tl i n f i n i t y 2 ))).
+
+11.3 Programming in a Functional Language
+
+353
+
+Side Effects in Lisp
+
+Lisp, the ﬁrst functional language, is based on a data structure called a dotted pair (or cons cell, see
+the box on Sect. 6.1.1). Dotted pairs are composed of two parts: the car (for contents of the address
+register) and cdr (for contents of the decrement register). An expression of the form:
+
+( cons a b )
+
+allocates a dotted pair and initialises it so that its car points to the value of a and its cdr points to
+the value of b. The two components of a dotted pair can be selected using the functions car and
+cdr. So,
+
+( cdr ( cons a b ))
+
+has the value b. These are characteristics that belong to the pure part of Lisp.
+
+Lisp has, in addition, imperative mechanisms. For example, there are functions such as
+(rplaca x a) and (rplacd x a) which, respectively, assign to the car and assign to the
+cdr of the dotted pair x the value of a:
+
+( cdr ( r p l a c d ( cons ’ a ’ b ) ’ c ))
+
+This has the value ’c. Other side-effecting functions are set and setq.
+
+As a last example of a stream, the following function constructs an inﬁnite list of
+
+natural numbers starting with its argument, n:
+
+fun n u m b e r s F r o m n = n :: n u m b e r s F r o m ( n +1);
+
+We can deﬁne a higher-order function that applies its functional argument to all
+
+the elements of a list, as in:
+
+fun map f nil = nil
+
+|
+
+map f e :: rest = f ( e ):: rest ;
+
+We can now produce the inﬁnite list of all the squares starting from n*n:
+
+fun s q u a r e s F r o m n = map ( fn y = > y * y ) ( n u m b e r s F r o m n );
+
+11.3.7 Imperative Aspects
+
+Many functional languages also include imperative mechanisms which introduce a
+notion of state that can be modiﬁed by side effects.
+
+In ML, there are real modiﬁable variables (called “reference cells”) with their own
+types. For every type T in the language (including functional types, therefore), the
+type T ref is deﬁned and its values are modiﬁable variables that can contain values
+of type T. A modiﬁable variable of type T, initialised to the value v (of type T) is
+created by:
+
+ref v
+
+The usual constructs that associate names and values can also be used on values
+
+of type T ref. For example:
+
+354
+
+11 Functional Programming Paradigm
+
+val I = ref 4;
+
+This creates a reference cell of type int ref, which is initialised to 4 and has
+the name I. This is what, in imperative languages, we call “the modiﬁable variable
+(with name) I.” Obviously, I is the name of the reference cell and not of the value
+it contains (it is an l-value). To obtain its r-value, it is necessary to dereference it
+explicitly using the ! operator:
+
+val n = ! I + 1;
+
+The expression !I is of type int. In general, if V is an expression of type T
+ref, !V is of type T. The line above associates the name n with the value 5. At risk
+of being pedantic, let us observe that n is not a modiﬁable variable, it is an ordinary
+name bound to a value in the environment.
+
+Reference cells can be modiﬁed using assignments:
+
+I := ! I + 1;
+
+Note the difference with the deﬁnition of the value n given above. Here, we are
+modifying (using a side effect) the r-value of a reference cell that already exists. The
+type of an imperative construct of this kind is unit (recall Sect. 8.3.7).
+
+The presence of modiﬁable variables clearly introduces the possibility of aliasing.
+
+Let us indeed consider the following deﬁnitions:
+
+val I = ref 4;
+val J = I ;
+
+The second line associates the value of the name I (that is, the reference cell—the
+l-value) with the name J. We here have a classic situation of aliasing: I and J are
+different names for the same l-value. After execution of the fragment
+
+I := 5;
+val z = ! J ;
+
+the name z is associated with the value 5.
+
+The language deﬁnition does not specify how to implement an assignment between
+modiﬁable variables. From the examples given so far using integers, one could imag-
+ine a traditional implementation with the r-value being copied from the source to the
+destination of the assignment. However, values with quite different memory sizes
+can be stored in reference cells. Let us consider, for example, modiﬁable variables
+that contain lists and strings:
+
+val S = ref " pear " ;
+val L = ref [ " one " , " two " , " t h r e e " ];
+
+The name S is of type string ref, while L is of type (string list) ref.
+The two modiﬁable variables associated with the names S and L can contain, respec-
+tively, any string and any list. For example, we can perform two assignments:
+
+S := " t h i s   is   a   s t r i n g   m u c h   l o n g e r   than   p r e v i o u s l y " ;
+L := " zero " :: " four " :: " five " :: ! L ;
+
+11.4 An Assessment
+
+355
+
+The new values of L and S require more memory than their previous values did.
+It is not possible to implement these assignments using a simple (and traditional)
+value copy. The abstract machine will, in this case, copy references (or pointers)
+to these values. All of this is, though, completely invisible to the language user.
+The implementation handles the two space requirements by allocating the necessary
+memory for each case and then modiﬁes the references.
+
+As well as modiﬁable variables, ML also provides imperative control constructs,
+
+such as sequential composition (;) and loops.
+
+It is appropriate to note that, in the presence of these imperative features, both
+Theorem 11.1 and the property that we cited immediately after it do not apply. This
+is particularly relevant in the case of a lazy evaluation strategy which would become
+incorrect in the presence of side effects. It is for this reason that languages such as
+Miranda and Haskell, which use lazy evaluation, do not admit side effects of any
+kind (they are purely functional languages).
+
+11.4 An Assessment
+
+The computing beginner often holds that design and writing efﬁcient programs are
+the most important tasks on which their occupation is based. Software Engineering,
+however, has largely shown, both in theory, as in ample experimental studies, that the
+most critical factors in a software project are its correctness, readability, maintain-
+ability and its dependability. In economic terms, these factors account for more than
+ﬁfty percent of the total cost; in social terms, software maintenance (which depends
+in a critical way on its readability) can involve hundreds of different people over a
+period of tens of years. In ethical terms, the life, or health, of thousands of people
+can depend on the reliability and correctness of a software system.
+
+The goal of the research in program correctness (which uses tools and techniques
+from many different areas of computer science) is to produce software with correct-
+ness guarantees comparable to those with which structural engineers release their
+own products (bridges, columns, structures). They have at their disposal a whole
+corpus of applied mathematics with which to “calculate” the structures. If a bridge
+must take a certain load, be subjected to certain winds, can be exposed to seismic
+events of a given magnitude, etc., it must have given dimensions, must be built using
+materials with certain characteristics, etc. These characteristics are not determined
+by the designer’s taste but are calculated using appropriate techniques.
+
+Reasoning about programs with side effects is particularly difﬁcult and expensive.
+On the contrary, there are standard techniques that allow reasoning about side-effect-
+free programs. If reliability, readability, and correctness are more important than
+efﬁciency, there is no doubt that functional programming generates more readable
+software, whose correctness is easier to establish and, therefore, is more reliable.
+Indeed, a function may seen as a behaviour, and several simple behaviours can be
+combined to obtain more complex ones.
+
+This is true also for non-pure functional programming languages—and for con-
+ventional imperative languages with a signiﬁcant functional programming subset—
+where we may isolate signiﬁcant software components which are indeed stateless,
+
+356
+
+11 Functional Programming Paradigm
+
+and thus one may reason on those components in isolation, with the guarantee that
+they will always behave in the same manner, since no side-effect is around.12 It is for
+these reasons that higher-order functions as ﬁrst-class citizens are one of the major
+components of any modern programming language, of any paradigm. Mechanisms
+for concurrent programming (for instance, futures or callbacks) are most of the times
+based on functions. Designing and implementing a concurrent system in terms of
+value transformations (“term rewriting”) instead of state transformations, makes it
+easier to deal with the inherent non-determinism of these systems.
+
+Let us stress, ﬁnally, that functional languages had a tremendous impact on the
+design of programming languages of any paradigm. Many concepts and experimental
+features in functional programming have later migrated to other paradigms. Among
+these concepts, type systems, generics, polymorphism, type safety, all originated in
+functional languages (because is it simpler to study and to implement them in an
+environment without side effects).
+
+11.5 Implementation: The SECD Machine
+
+The technology for implementing functional programming languages is today so-
+phisticated and cannot be adequately described in this book. The techniques for
+passing functions as parameters we described in Chap. 7 constitute the heart of
+these implementations. In order to give more details on how to handle higher-order
+functions, we will limit ourselves to summarising the SECD machine, a prototype
+proposed in 1964 by Peter Landin for evaluation by value. Many other abstract ma-
+chines have developed out of the SECD machine.
+
+We will describe the SECD machine in an abstract manner, using a very simple,
+purely functional language that uses only abstraction and application. The primitive
+elements of the language are the names of constants and variables and some primitive
+functions (for example, we could have constants 0, 1, true, etc. and primitive
+functions succ and pred). The important part of the machine is not concerned
+with these aspects of the language but with the presence of higher-order functions.
+Let us assume, for simplicity, that we are only dealing with unary functions. Let us
+assume that Var is a non-terminal from which can be derived a denumerable number
+of names (of variables) and that Const and Fun are, respectively, the non-terminals
+from which are derived the appropriate constants and primitive functions. We can
+state the grammar of our example language as:
+
+12 One major example is the Erlang programming language, designed at Ericsson for building scal-
+able, concurrent systems with high availability guarantees; or, in more concrete terms, “to provide
+a better way of programming telephony applications” [1]. An Erlang application is a collection
+of many, small processes that communicate through messages. Any such lightweight process is
+purely functional (although the system resulting from their composition is not). In 1998 Ericsson
+announced the AXD301 switch, with more than one million of lines of Erlang code, probably the
+largest ever program in a functional language, at that time. The AXD301 was extremely reliable,
+and this was related to the quality of the functional design.
+
+11.5 Implementation: The SECD Machine
+
+357
+
+exp:: = Const | Var | Fun | (exp exp) | (fn Var => exp).
+
+The SECD machine has four main components:
+
+• A Stack to store the partial results which will be used during the computation.
+• An Environment, that is, a list of associations between names and values. Among
+values, there are abstractions (since “there is no evaluation under an abstraction”).
+To deal with abstractions with free variables we need to couple the abstraction
+to the environment in which the free variables in its body are to be evaluated (a
+concept we called a closure in Chap. 7). Let us assume that a closure is a triple
+composed of an environment, an expression (which will always be the body of
+an abstraction) and a variable (representing the variable that was bound in the
+abstraction). We will therefore write a closure as cl(E, exp, x), which represents
+the abstraction (fn x => exp) in the environment E.
+
+• A Control, represented by a stack of expressions to be evaluated. Among the
+expressions, we have the special operator @, which is read “app” and which
+indicates that an application should be executed (because the two expressions that
+comprise an application have already been evaluated and are stored in the next two
+positions on the stack).
+
+• A storage area called the Dump, that is a stack in which previous states of the
+machine have been saved when the computation was suspended to evaluate internal
+redexes.
+
+We write [a1, . . . , an] to denote the stack composed of the elements a1, . . . , an
+with a1 at its top. [] is the empty stack. If P is a stack, top(P) denotes the topmost
+element, while tl(P) denotes P with the top element removed.
+
+A state of the machine is composed of a quadruple, (S, E, C, D). A dump is
+
+always composed of a structure of the form:
+
+(S1, E1, C1, (S2, E2, C2, (S3, E3, C3, []))).
+
+This state of the dump has been obtained by ﬁrst saving the state
+
+then the state
+
+(S3, E3, C3, [])
+
+(S2, E2, C2, (S3, E3, C3, []))
+
+which includes the previous dump, and so on.
+
+To evaluate an expression, exp, the machine starts its operation in the state
+([], [], [exp], []) and terminates when both the control, C, and the dump, D, are
+empty.
+
+The operation of the SECD is described by a transition function which allows it
+to pass from one state to a succeeding one using the following rules. The machine
+selects the rule according to the expression on the control list (imagine that control
+is described using abstract syntax). Let us assume, therefore, that the machine ﬁnds
+itself in the generic state, (S, E, C, D), then:
+
+358
+
+11 Functional Programming Paradigm
+
+1. A constant, c (e.g., 1, 0, true), is on top of the control list, that is, there is an
+expression that does not need to be further evaluated. In this case, the new state
+of the machine is (c :: S, E, tl(C), D) in which the (immediate) value of the ex-
+pression is pushed onto the stack and the expression just evaluated is removed
+from the control list.
+
+2. There is a variable, x, on the top of the control list. In this case, the value is the one
+which the environment associates with x. Therefore, the new state of the machine
+is (E(x) :: S, E, tl(C), D).
+
+3. On the top of the control list, there is an application of the form (exp f expa
+
+).
+In this case, since the SECD implements eager evaluation, it is necessary to
+follow the evaluation procedure we described in Sect. 11.2.3. The new state is
+:: @ :: tl(C), D) which expresses the fact that the next
+therefore (S, E, exp f
+expression to be evaluated is the functional part of the application (which at some
+point will have as its value a closure, as we will see), followed by the argument
+part of the application, followed, ﬁnally, be the special expression, @, which will
+force the actual application of the function to its argument.
+
+:: expa
+
+4. On the top of the control list, there is an abstraction, (fn x => exp). We
+know that we are already in the presence of a value which must however be
+“closed” with the current environment. The new state of the machine is therefore
+(cl(E, exp, x) :: S, E, tl(C), D).
+
+5. The special value @ is on the top of the control list. We then know, by construction,
+that on the stack there are two values that represent, respectively, an argument
+(on the top of the stack) and a function to apply (the second element). There are
+two subcases which depend on the function to be applied:
+
+• The function is a primitive function,
+
+f , such as succ. The function must
+be directly applied to its argument and the new state of the machine is
+( f (top(S)) :: tl(tl(S)), E, tl(C), D).
+
+• The function on the top is a closure of the form cl(E1, exp, x). This is one of the
+central points of the SECD machine; it brings the dump into play. It is necessary
+to use the copy rule. The computation passes to exp in the environment of the
+closure, E1, (and not in the current environment, E) modiﬁed by the binding
+of the formal parameter. But the computation performed up to now must not be
+forgotten. It is frozen on the dump. The new state of the machine is therefore
+([], E1[x ← top(S)], [exp], (tl(tl(S)), E, tl(C), D)).
+
+6. The control list is empty. This can happen when the computation has terminated
+(in which case, the dump is also empty). It can also happen when a computation
+started by the previous rule (the one for applying a closure to a value) is ﬁnished.
+In this second case (that is, non-empty dump of the form (S1, E1, C1, D1)), it is
+necessary to resume the computation saved on the dump, restoring, at the same
+time, the value just computed (which is on the top of the stack). The new state of
+the machine is (top(S) :: S1, E1, C1, D1).
+
+11.6 Fundamentals: The λ-Calculus
+
+359
+
+Fig. 11.3 A computation using the SECD machine
+
+Figure 11.3 shows how the SECD machine computes the value of the expression
+
+(F 3), where:
+
+F = fn x => (sqrt ((fn y => (succ x)) x)).
+
+The computation is shown as a table in which every row represents a transition
+of the machine. The rule being used for the transition is indicated in the rightmost
+column.
+
+11.6 Fundamentals: The λ-Calculus
+
+At the start of the chapter, we saw that the functional paradigm is inspired by a
+foundation for computability theory, different from that based on Turing machines
+(but equivalent to that as far as expressive power is concerned). We present in this
+section some of the ingredients of this formal system for computability—λ-calculus.
+The syntax of the λ-calculus is extremely austere and can be given in one line
+using the following grammar, where X is a non-terminal which represents a generic
+variable, M is the initial symbol, the dot and the two parentheses are terminal sym-
+bols:
+
+M ::= X | (M M) | (λX.M).
+
+360
+
+11 Functional Programming Paradigm
+
+In addition, let us assume that we also have a denumerable set of terminal symbols
+for variables which, for ease of notation, we will in general write using the last
+lower-case letters of the alphabet: x, y, z, etc.
+
+The reader will recognise in these clauses both application and abstraction (written
+using λ instead of fn) which we introduced informally in Sect. 11.1.3. We call λ-
+terms (or, simply, terms) the strings of terminals that are derived from this grammar.
+
+Syntactic Conventions, Free and Bound Variables
+The “ofﬁcial” books on the λ-calculus introduce many additional conventions to
+simplify the notation. For example, application associates to the left, or:
+
+M1 M2 · · · Mn
+
+stand for (· · · (M1 M2) · · · Mn).
+
+The scope of a λ extends as far as possible to the right (that is, λx.x y stands for
+(λx.(x y)) and not for ((λx.x).y). We will seek to use these conventions as little as
+possible by using parentheses where necessary. We will also speak of subterms, with
+the obvious meaning (for example, (x y) is a subterm of (λx.(x y)) but λx is not).
+
+The abstraction operator binds the variable upon which it acts,13 in the double
+sense that, semantically, consistent renaming of the bound variable does not modify
+the semantics of an expression and, syntactically, possible substitutions have no
+effect on bound variables. We formalise these aspects in the following deﬁnitions.
+First, we deﬁne, for an arbitrary expression, M, the set of its free variables, which
+we denote by Fv(M), and of its bound variables Bv(M):
+
+Fv(x) = {x}
+Fv(M N ) = Fv(M) ∪ Fv(N )
+Fv(λx.M) = Fv(M) − {x}
+
+Bv(x) = ∅,
+Bv(M N ) = Bv(M) ∪ Bv(N ),
+Bv(λx.M) = Bv(M) ∪ {x}.
+
+Substitution
+
+We can formally deﬁne the concept of substitution without variable capture which
+constitutes the core of the copy rule. We deﬁne, therefore, the notation, M[N /x]
+which we read as the substitution of N for the free occurrences of x in M:
+
+x[N /x] = N ,
+y[N /x] = y
+(M1 M2)[N /x] = (M1[N /x]M2[N /x]),
+(λy.M)[N /x] = (λy.M[N /x])
+(λy.M)[N /x] = (λy.M)
+
+when x (cid:7)= y,
+
+when x (cid:7)= y e y /∈ Fv(N ),
+when x = y.
+
+The deﬁnition is simple. Practically, to substitute N in place of x in M, we “push”
+the substitution down towards the leaves of the syntax tree, that is to the variables,
+and check if the leaf is labelled with x or with some other variable. But the deﬁnition
+is subtle, since it avoids capture of the variables in N by some λ. This is the reason
+
+13 Remember what was said in Sect. 7.1 about formal parameters to procedures.
+
+11.6 Fundamentals: The λ-Calculus
+
+361
+
+why the last clause requires that y /∈ Fv(N ). What happens if, on the other hand, y
+is present in N ? We can rename the variable bound by λ. As we said above, indeed,
+it is not the name of the variable that counts when a λ is applied, but only the way in
+which it is used. In other words, we will consider as equivalent two terms that differ
+only by the names of their bound variables. For example, λx.x and λy.y, or λx.λy.x
+and λv.λw.v.
+
+Alpha Equivalence
+
+The intuitive idea that two expressions are equivalent when they differ only in the
+names of their free variables is formalised in the concept of α-equivalence:
+
+λx.M ≡α λy.M[y/x] y fresh
+
+where by “y fresh”, we mean that y is a new variable not present in M.
+
+Two terms that differ by just the replacement of some subterm of one term by an
+
+α-equivalent subterm will be considered identical.
+
+Computation: β Reduction
+Computation proceeds by rewriting according to the prescriptions of β-reduction:
+(λx.M)N →β M[N /x].
+More generally, we will say that M β-reduces to N (and we write M → N ) when
+N is the result of the application of one step of β-reduction to some subterm of M.
+A subterm of the form (λx.M)N is a redex whose reductum is M[N /x]. Note that
+the concept of β-reduction is not deterministic. Whenever there exists more than
+one redex in the same term, it is not prescribed which one will be chosen. Observe
+that the notion of reduction that we just deﬁned does not restrict the position of the
+reduced redex. It may well be the case that the redex is contained in the body of an
+abstraction. Contrary to the reduction we deﬁned in Sect. 11.2.1, here we do allow
+reduction under abstraction.
+
+β-reduction is a relation that is not symmetric. In general, if M → N , it is not
+the case that N → M. It is useful to introduce a symmetric relation which we call
+β-equivalence, deﬁned as the reﬂexive and transitive closure of β-reduction and
+denoted by =β . Intuitively, M =β N means that M and N are connected through a
+sequence of β-reductions (not necessarily all in the same direction).
+
+Normal Forms
+When a λ-term that does not contain a redex, β-reduction terminates; such terms
+are called normal forms. For example, λx.λy.x is a normal form, while the term
+λx.(λy.y)x) is not a normal form because it contains the redex (λy.y)x. We have,
+then:
+
+λx.(λy.y)x → λx.x
+
+and λx.x is now a normal form.
+
+362
+
+11 Functional Programming Paradigm
+
+Fig. 11.4 The conﬂuence
+property for λ-terms
+
+Some terms have reductions that terminate (in a normal form). There are however
+also terms which reduce an inﬁnite number of times without ever producing a normal
+form, as for example:
+
+(λx.x x)(λx.x x) → (x x)[(λx.x x)/x]
+= (λx.x x)(λx.x x)
+→ (λx.x x)(λx.x x)
+→ . . . .
+
+Conﬂuence
+A fundamental property of the λ-calculus is that its inherent non-determinism has
+no dangerous effects. In any way we might choose the redex to reduce inside a term,
+the ﬁnal result (the normal form) of a sequence of reductions is always the same.
+Stated in a more formal manner, we have the following property, called conﬂuence
+and graphically represented in Fig. 11.4.
+
+If M reduces to N1 in a number of reduction steps, and M also reduces to N2 in a number of
+reduction steps, then there exists a term, P, such that both N1 and N2 both reduce to P in a
+number of steps.
+
+An important consequence of this property is that if a term can be reduced to a
+normal form, this normal form is unique and independent of the path followed to
+reach it. As we already observed on Sect. 11.2.4, crucial for this property to hold in
+full generality (and not only in the restricted sense of Theorem 11.1) is the possibility
+of reducing under an abstraction.
+
+Fixed Point Operators
+We have seen how the λ-calculus formalises many concepts that we have seen in this
+chapter.14 We have not however introduced any mechanisms for the deﬁnition of
+
+14 We should rather say: formalises many of the concepts that we have seen in this book. The
+λ-calculus was a fundamental inspiration to the design of programming languages starting with
+
+11.6 Fundamentals: The λ-Calculus
+
+363
+
+recursive functions. The λ-calculus has no notion of an external or global environment
+in which to assign names to terms, as it happens when deﬁning a recursive function,
+for which naming seems to be a fundamental concept.
+
+The point (surprising at ﬁrst sight) is that the concepts of abstraction and local
+environment (which is derived from the possibility of nested λ’s) are on their own
+sufﬁcient for the deﬁnition of recursion or, more precisely, ﬁxed points.
+
+Let us consider the following very simple recursive deﬁnition, which, for simplic-
+ity, we write in a λ-calculus extended with integers and conditional expressions15 :
+
+Z = λn. if n = 0 then 0 else 1 + Z (n − 1).
+
+(11.1)
+
+Our experience with programming languages suggests, perhaps, that we should
+
+read this relation as a deﬁnition:
+
+Z
+
+def= λn. if n = 0 then 0 else 1 + Z (n − 1).
+But this is not the only reading possible (in particular, it is not possible in the λ-
+calculus, which has no concept of global environment to allow us to use the name of
+a term inside an expression). A mathematician would probably read it as an equation
+with unknown Z (recall the discussion on inductive deﬁnitions in Sect. 6.5). For this
+very simple equation, it is clear that one solution (rather, in this case, the unique
+solution) is the identity function:
+
+I (n) = n.
+
+(11.2)
+
+What we are looking for is a general method which allows us to pass from an
+equation such as (11.1) to an algorithm, that is to a λ-term, which is a solution to
+this equation when the equality symbol is interpreted as β-equivalence:
+
+Z =β λn. if n = 0 then 0 else 1 + Z (n − 1).
+
+(11.3)
+
+Note that this is to ask more than simply provide an arbitrary function such as (11.2).
+It requires a term which in the calculus satisﬁes (11.3).16
+
+Let us consider, ﬁrst, the function that is obtained from (11.3) by λ-abstracting
+
+on the unknown function:
+
+def= λ f.λn. if n = 0 then 0 else 1 + f (n − 1).
+
+F
+
+Hence our problem is to ﬁnd a suitable term g such that:
+
+g =β F(g).
+
+Algol and Lisp. Concepts such as scope, local environment, call by name, to mention only the
+most important, have been “imported” into programming languages on the basis of analogous
+concepts in the λ-calculus.
+15 We use this extension only to simplify the presentation. In the λ-calculus, it is possible to codify
+numbers and conditions using only variables, abstractions and applications.
+16 The term λn.n is an algorithm for the only function which satisﬁes (11.1), but it is not a solution
+of (11.3), which expresses a determinate behaviour through reduction.
+
+364
+
+11 Functional Programming Paradigm
+
+A term, g, which satisﬁes an equation of this type is called a ﬁxed point of F.
+Therefore our problem of ﬁnding a solution to (11.3) can be reformulated as a problem
+of ﬁnding the ﬁxed point of some function.
+
+We want now to show that the λ-calculus provides a general method to “automat-
+ically” solve these equations. Let us, indeed, consider the following term, which for
+convenience (and following tradition), we name Y :
+
+Y
+
+def= λ f.(λx. f (x x))(λx. f (x x)).
+This is a term which can be reduced an inﬁnite number of times without reaching
+normal form. But it can be put to good use. Let us indeed try to apply it to an arbitrary
+term, M:
+
+Y M =β (λx.M(x x))(λx.M(x x))
+
+=β M((λx.M(x x))(λx.M(x x)))
+=β M(Y M).
+
+In the last step, we have used the fact that was established in the ﬁrst line, that
+
+Y M =β (λx.M(x x))(λx.M(x x))
+
+and we have then substituted equals for equals. Y M is therefore a ﬁxed point of M:
+Y is a term in the calculus which can compute the ﬁxed point of an arbitrary term.17
+We say that Y is a ﬁxed point operator. It is then quite clear that Y provides solutions
+to any recursive equation. In particular, it gives us a solution to (11.3):
+
+Id
+
+def= Y F.
+The term Id thus deﬁned has a reduction behaviour which satisﬁes the relation with
+which we started. It is instructive to try to apply this function to a speciﬁc argument
+to see how the mechanism of ﬁxed points is really capable of computing a recursive
+function. For example:
+
+Id 2
+
+def= (Y F) 2
+→F(Y F) 2
+→if 2 = 0 then 0 else 1 + ((Y F)(2 − 1))
+→1 + ((Y F) 1)
+→1 + (F (Y F) 1)
+→1 + ((if 1 = 0 then 0 else 1 + ((Y F)(1 − 1))))
+→1 + (1 + ((Y F) 0))
+→1 + (1 + (if 0 = 0 then 0 else 1 + ((Y F) (0 − 1))))
+→1 + (1 + 0)
+→2.
+
+17 This shows also that, in the λ-calculus, every term has always at least one ﬁxed point, that
+computed by Y .
+
+11.7 Summary
+
+365
+
+At each “recursive call”, Y F provides a new copy of the body of the function which
+is used on the next call.
+
+What we have just seen is also true for the deﬁnition of recursive values which
+
+are not functions. The stream that we deﬁned in Sect. 11.3.6 as:
+
+val infinity2 = 2 :: infinity2;
+
+is nothing more than a ﬁxed point:
+
+infinity2
+
+def= Y (λl. 2 :: l).
+
+Observe that Y is a ﬁxed point operator with respect to β-equality.18 If, instead
+of β-reduction, we use a different strategy, for example, the analogue of reduction
+by value which we deﬁned for functional languages, Y is no longer able to compute
+ﬁxed points. For reduction by value, another operator must be used, for example:
+
+H
+
+def= λg.((λ f. f f )(λ f.(g(λx. f f x)))).
+For reasons of efﬁciency, implementations of functional programming languages do
+not use ﬁxed point operators to implement recursion. However, ﬁxed point operators
+play a role that is very important to the theory of these languages.
+
+Expressiveness of the λ-Calculus
+
+This very simple formal system, constructed only from the concepts of application
+and abstraction, is not as rudimentary as it seems, if it can express arbitrary recursions.
+Indeed, it is possible to show that the λ-calculus is a Turing-complete formalism. In
+the ﬁrst place, it is possible to encode the natural numbers as λ-terms (a λ-term, n is
+associated with the number n) and, then, show that to every computable function, f ,
+there corresponds a λ-term M f which computes f : if f (n) = m, then M f n → m.
+
+11.7 Summary
+
+In this chapter, we have presented the functional programming paradigm. In its pure
+form, this is a computational model which does not contain the concept of modiﬁable
+variable. Computation proceeds by the rewriting of terms that denote functions. The
+main concepts that we have discussed are:
+
+• Abstraction. A mechanism for passing from one expression denoting a value to
+
+one denoting a function.
+
+• Application A mechanism dual to abstraction, by which a function is applied to
+
+an argument.
+
+18 Clearly it is not unique. For another operator slightly more complex than Y but which satisﬁes a
+stronger relation, see Exercise 7.
+
+366
+
+11 Functional Programming Paradigm
+
+• Computation by rewriting or reduction, in which an expression is repeatedly sim-
+
+pliﬁed until a form that can not be further reduced is encountered.
+
+• Redex. The syntactic structure which is simpliﬁed during reduction and is formed
+
+from the application of an abstraction to an expression.
+• The centrality of higher order in this mode of computation.
+• The concept of value which corresponds to those syntactic forms not otherwise
+
+reducible and where reduction therefore terminates.
+
+• The different evaluation strategies: by value (or eager), by name, lazy.
+• Some mechanisms that the most common functional languages add to the funda-
+mental nucleus. Among these, recall: an interactive environment, a rich system of
+types, pattern matching, imperative aspects such as variables and assignments.
+• A comparison of the functional and imperative paradigms, centred on the notion
+
+of program correctness.
+
+• The SECD machine, a prototype abstract machine for higher-order functional lan-
+
+guages using the by-value strategy.
+
+• The λ-calculus, a simple and powerful formal system that constitutes the formal
+
+nucleus of all functional languages.
+
+11.8 Bibliographical Note
+
+Reading the original article by John McCarthy on Lisp is still a valuable experi-
+ence [2]. An elementary introduction to programming using ML is to be found in [3],
+while [4] is a more advanced text (which uses the Caml dialect); [5] is the ofﬁcial
+deﬁnition of the language and it is useful to read it together with the commentary [6].
+The implementation of functional languages, with particular regard to lazy evalu-
+ation is dealt with in [7]. The SECD machine was introduced in the pioneering work
+of Peter Landin [8].
+
+John Backus’ lecture for the Turing Award [9] should be essential reading (at least
+
+for its ﬁrst part) for every student of programming languages.
+
+The lambda calculus was introduced in the 1930s by Alonzo Church. An original
+reference is [10]. The modern reference text is [11], even if [12] is a more accessible
+introduction.
+
+11.9 Exercises
+
+1. Consider the following deﬁnitions in ML:
+
+fun K x y = x ;
+fun I x = x ;
+fun O m e g a x = O m e g a x ;
+
+State what the result of evaluating the following expression will be.
+
+References
+
+367
+
+K ( I 3) ( O m e g a 1).
+
+What would be the result if ML adopted a lazy strategy?
+
+2. Write a function map which applies its ﬁrst parameter (which will be a function)
+
+to all the elements of a list passed as its second argument.
+
+3. Describe formally the operation of the SECD machine, by giving a deﬁnition
+
+using the structural operational semantics that we introduced in Sect. 2.5.
+
+4. In λ-calculus, we deﬁne the code of a natural number, n, as:
+
+def= λ f.λx. f n x
+
+def= λ f.λx. f ( f · · · ( f x) · · · ),
+
+n
+
+where, in the body, there are n occurrences of f . Give the deﬁnition of a term,
+prod such that:
+
+prod n m → n ∗ m.
+
+5. Apply the technique of calculating ﬁxed points to solve the following equation
+
+for the unknown fact:
+
+fact =β λn. if n = 0 then 1 else n ∗ fact(n − 1)
+
+and describe the reduction which computes the value of its solution applied to
+argument 2.
+
+6. Apply the technique of calculating ﬁxed points to solve the following equation
+
+for the unknown h:
+
+h =β λx. if x > 100 then x − 10 else h(h(x + 11)).
+
+Call the solution Ninetyone, then calculate Ninetyone(99).
+
+7. Consider the λ-terms:
+
+A = λx.λy.y(x x y),
+(cid:5) = A A.
+
+Show that (cid:5) is a ﬁxed-point operator for which the relation:
+
+(cid:5)M → · · · → M ((cid:5)M).
+is true. This relation is stronger than that satisﬁed by Y , for which only Y M =β
+M(Y M) is true. The term, (cid:5), is called the Turing ﬁxed point operator.
+
+References
+
+1. J. Armstrong, A history of Erlang, in Proceedings of the Third ACM SIGPLAN Conference on
+History of Programming Languages, HOPL III (Association for Computing Machinery, New
+York, 2007), pp. 6.1–6.26
+
+2. J. McCarthy, Recursive functions of symbolic expressions and their computation by machine,
+
+part I. Commun. ACM 3(4), 184–195 (1960)
+
+3. J.D. Ullman, Elements of ML Programming (Prentice-Hall Inc, Upper Saddle River, 1994)
+4. G. Cousineau, M. Mauny, The Functional Approach to Programming (Cambridge University
+
+Press, 1998)
+
+368
+
+11 Functional Programming Paradigm
+
+5. R. Milner, M. Tofte, R. Harper, D. MacQueen, The Deﬁnition of Standard ML - Revised (MIT
+
+Press, 1997)
+
+6. R. Milner, M. Tofte, Commentary on Standard ML (MIT Press, 1991)
+7. S. Peyton-Jones, The Implementation of Functional Programming Languages (Prentice Hall,
+
+1987)
+
+8. P.J. Landin, The mechanical evaluation of expressions. Comput. J. 6(4), 308–320 (1964)
+9. J. Backus, Can programming be liberated from the von Neumann style? A functional style and
+
+its algebra of programs. Commun. ACM 21(8), 613–641 (1978). Turing Award Lecture
+
+10. A. Church, The Calculi of Lambda Conversion (Princeton University Press, 1941)
+11. H. Barendregt, The Lambda Calculus: Its Syntax and Semantics (Elsevier, 1984)
+12. R. Hindley, P. Seldin, Introduction to Combinators and Lambda-Calculus (Cambridge Univer-
+
+sity Press, 1986)
+
+Logic Programming Paradigm
+
+12
+
+12.1 Deduction as Computation
+
+A famous slogan by R. Kowalski, accurately captures the concepts underpinning the
+activity of programming: Algorithm = Logic + Control. According to this “equa-
+tion”, the speciﬁcation of an algorithm, and therefore its formulation in programming
+languages, can be separated into two parts. On the one side, the logic of the solution
+is speciﬁed—that is, the “what” must be done is deﬁned. On the other, those aspects
+related to control are speciﬁed, and therefore the “how” of ﬁnding the desired solution
+is clariﬁed. The programmer who uses a traditional imperative language must take
+account of both these components. Logic programming, on the other hand, was orig-
+inally deﬁned with the idea of separating these two aspects. The programmer is only
+required, at least in principle, to provide a logical speciﬁcation. Everything related
+to control is delegated to the abstract machine. Using a computational mechanism
+based on a particular deduction rule (resolution), the interpreter searches through the
+space of possible solutions for the one speciﬁed by the “logic”, deﬁning in this way
+the sequence of operations necessary to reach the ﬁnal result.
+
+The basis for this view of computation as logical deduction can be traced back to
+the work of K. Gödel and J. Herbrand in the 1930s. In particular, Herbrand antici-
+pated, albeit incompletely, some ideas about the process of uniﬁcation, which, as we
+shall see, is the basic computational mechanism of logic programming languages.
+
+It was not until the 1960s that a formal deﬁnition (due to A. Robinson) of this
+process appeared. Then, ten years later (in the early 1970s) it was realised that formal
+automatic deduction of a particular kind could be interpreted as a computational
+mechanism. The ﬁrst programming languages of this paradigm were created, among
+which Prolog (the name is an acronym for PROgramming in LOGic; for more
+information on history, see Sect. 16.4).
+
+Today there are many implemented versions of Prolog, and there are several
+other languages in this paradigm (as far as applications are concerned, those including
+constraints are of particular interest). All these languages (including Prolog) also
+
+© The Author(s), under exclusive license to Springer Nature Switzerland AG 2023
+M. Gabbrielli and S. Martini, Programming Languages: Principles and Paradigms,
+Undergraduate Topics in Computer Science,
+https://doi.org/10.1007/978-3-031-34144-1_12
+
+369
+
+370
+
+12 Logic Programming Paradigm
+
+provide constructs for the explicit speciﬁcation of control, for the sake of efﬁciency.
+Since these constructs do not have a direct logical interpretation, they make the
+semantics of the language more complicated and cause the loss of part of the purely
+declarative nature of the logic paradigm. This notwithstanding, we still call them
+logic programming languages—they require the programmer to do little more than
+formulate (or declare) the speciﬁcation of the problem to be solved. In some cases,
+the resulting programs are really surprising in their brevity, simplicity and clarity, as
+we will see in the next section.
+
+Terminological Note
+
+We should distinguish between Logic programming, which is the theoretical founda-
+tional formalism, from Prolog, a language that has different implementations. The
+concepts we introduce below, if not otherwise stated, are valid for both. The impor-
+tant differences will be explicitly pointed out. The programming examples which
+we include (usually in this font) are all Prolog code that could be run on some
+implementation of the language. The theoretical concepts, on the other hand, even
+when they are valid also for Prolog, use mathematical concepts and are rendered
+in italic. Moreover, we will follow the Prolog convention that we always write
+variables beginning with an upper-case letter. As mentioned before, in the logic pro-
+gramming paradigm there exist several other languages, different from Prolog. We
+call all of them logic programming languages, or logic languages, for short.
+
+12.1.1 An Example
+
+We start with a fairly informal example since we did not yet introduce either the
+syntax or the semantics of logic languages.
+
+Let us consider the following problem. We want to arrange three 1s, three 2s, . . . ,
+three 9s in a list (which therefore will consist of 27 numbers) such that, for each
+i ∈ [1, 9], there are exactly i numbers between two successive occurrences of the
+number i. Therefore, 1, 2, 1, 8, 2, 4, 6, 2 could be a part of the ﬁnal solution, while
+1, 2, 1, 8, 2, 4, 2, 6 is not (because there is only a single number between the last
+two occurrences of 2). The reader is invited to try to write a program that solves this
+problem using her preferred imperative programming language. It is not a difﬁcult
+exercise but does require some care, because even if the “what” must be done is
+clear, the “how” of the desired solution is not trivial. For example, in a naive (and
+inefﬁcient) way, we may generate all possible permutations of a list of 27 numbers
+containing three 1s, three 2s, three 3s, . . . , three 9s, to see if one of them satisﬁes
+the required propriety. Even this solution (probably the conceptually simplest one),
+however, requires the speciﬁcation in detail of the aspects of control to generate the
+permutations of a list.
+
+Reasoning in a declarative fashion, on the other hand, we can proceed as follows.
+First, we need a list which we will call Ls. This list will have to contain 27 elements,
+
+12.1 Deduction as Computation
+
+371
+
+something that we can specify using a unary predicate (that is, a relation symbol)1
+list_of_27. If we write list_of_27(Ls), we mean, therefore, that Ls must
+be a list of 27 elements. In other words, list_of_27 deﬁnes a unary relation (a
+subset of all possible ﬁnite strings) formed by all the lists of 27 elements. For this,
+we can deﬁne list_of_27 as follows:
+
+l i s t _ o f _ 2 7 ( Ls ): -
+
+Ls = [_ , _ , _ , _ ,_ ,_ ,_ , _ , _ ,_ ,_ ,_ ,_ , _ , _ ,_ ,_ ,_ , _ , _ , _ ,_ ,_ ,_ , _ , _ , _ ].
+
+where the part to the left of the :- symbol denotes what is being deﬁned, while the
+part to the right of :- indicates the deﬁnition. The = denotes an equality concept
+whose deﬁnition, for the time being, is left to intuition (it has nothing to do with
+an assignment, however). Anticipating the Prolog notation for lists, here we write
+[X1, X2, ...,Xn] to denote the list that contains the n variables X1, X2, . . . ,
+Xn (see Sect. 12.4.5 for more details about lists). We use _ for the anonymous
+variable, that is a variable whose name is of no interest and which is distinct from
+all other variables present, including all other anonymous variables.
+
+In order to satisfy our speciﬁcation, the list, Ls, in addition to being composed
+of 27 elements, must contain a sublist2 in which the number 1 appears followed by
+any other number, by another occurrence of the number 1, then another number and
+ﬁnally a last occurrence of the number 1. Such a sublist can be speciﬁed as
+
+[1 , X ,1 , Y ,1]
+
+where X and Y are variables. Exploiting again the anonymous variable, we may
+write:
+
+[1 , _ ,1 , _ ,1]
+
+Assuming that we have available a binary predicate sublist(X,Y) whose mean-
+ing is that the ﬁrst argument (X) is a sublist of the second (Y),3 our requirement
+therefore can be expressed by writing:
+
+s u b l i s t ([1 , _ ,1 , _ ,1] , Ls )
+
+Moving on to number 2 and reasoning in a similar way, we obtain that the list Ls
+
+must also contain the sublist:
+
+[2 , _ , _ ,2 , _ , _2 ]
+
+and therefore the following must also be true:
+
+s u b l i s t ([2 , _ ,_ ,2 , _ ,_ ,2] , Ls )
+
+Repeating this reasoning for all the other numbers up to 9, the sol program that
+
+we want to produce can be described as follows:
+
+1 Recall that unary means that it has a single argument while n-ary means that there are n arguments.
+2 Recall that Li is a sublist of Ls if Ls is obtained by concatenating a (possibly empty) list with
+Li and with another list (itself also possibly empty).
+3 The deﬁnition of the relation sublist is given in Sect. 12.4.5.
+
+12 Logic Programming Paradigm
+
+372
+
+sol ( Ls ) : -
+
+l i s t _ o f _ 2 7 ( Ls ) ,
+s u b l i s t ([9 , _ ,_ ,_ ,_ , _ , _ , _ ,_ ,_ ,9 , _ , _ , _ ,_ ,_ ,_ , _ , _ ,_ ,9] , Ls ) ,
+s u b l i s t ([8 , _ ,_ ,_ ,_ , _ , _ , _ ,_ ,8 , _ , _ , _ , _ ,_ ,_ ,_ , _ ,8] , Ls ) ,
+s u b l i s t ([7 , _ ,_ ,_ ,_ , _ , _ , _ ,7 , _ ,_ , _ , _ , _ ,_ ,_ ,7] , Ls ) ,
+s u b l i s t ([6 , _ ,_ ,_ ,_ , _ , _ ,6 , _ ,_ ,_ , _ , _ , _ ,6] , Ls ) ,
+s u b l i s t ([5 , _ ,_ ,_ ,_ , _ ,5 , _ ,_ ,_ ,_ , _ ,5] , Ls ) ,
+s u b l i s t ([4 , _ ,_ ,_ ,_ ,4 , _ , _ ,_ ,_ ,4] , Ls ) ,
+s u b l i s t ([3 , _ ,_ ,_ ,3 , _ , _ , _ ,3] , Ls ) ,
+s u b l i s t ([2 , _ ,_ ,2 , _ , _ ,2] , Ls ) ,
+s u b l i s t ([1 , _ ,1 , _ ,1] , Ls ).
+
+l i s t _ o f _ 2 7 ( Ls ): -
+
+Ls = [_ , _ , _ , _ ,_ ,_ ,_ , _ , _ ,_ ,_ ,_ ,_ , _ , _ ,_ ,_ ,_ , _ , _ , _ ,_ ,_ ,_ , _ , _ , _ ].
+
+1
+
+3
+
+5
+
+7
+
+9
+
+11
+
+13
+
+where, as before, the part to the right of the :- symbol is the deﬁnition of the left-
+hand side. This program says that to ﬁnd a solution to our problem (sol(Ls) in
+line 1), all the properties described in lines 2–11 must be satisﬁed. The comma that
+separate the various predicates is to be interpreted as “and”, that is as conjunction in
+the logical sense. We have given a speciﬁcation that formally repeats the formulation
+of the problem and which, as we will see below, can be interpreted in purely logical
+terms.
+
+This declarative reading, for all of its elegance and compactness, would not be of
+much use if it did not come together with a procedural interpretation, and thus had to
+be translated into a conventional programming language. The fact of the matter is that
+these (logical) speciﬁcations are to all intents and purposes executable programs. The
+code described above in lines 1–14 (plus the deﬁnition of sublist in Sect. 12.4.5)
+is indeed a genuine Prolog program that can be evaluated by an interpreter to obtain
+the desired solution.
+
+In other words, our speciﬁcation can also be read in a procedural fashion, as
+follows. Line 1 contains the declaration of a procedure called sol; it has a single
+formal parameter, Ls. The body of this procedure is deﬁned by lines 2 to 11, where we
+ﬁnd ten procedure calls. On line 2, procedure list_of_27 is called with actual
+parameter Ls. According to its deﬁnition, list_of_27 instantiates4 its actual
+parameter into a list of 27 anonymous variables. Then, on line 3, we have the call:
+
+s u b l i s t ([9 , _ , _ , _ , _ , _ , _ ,_ ,_ ,_ ,9 , _ ,_ ,_ ,_ ,_ ,_ ,_ ,_ , _ ,9] , Ls )
+
+We assume that this call arranges matters so that the list which appears as the ﬁrst
+parameter is a sublist of the list bound to the second parameter (Ls), possibly by
+instantiating the variable Ls. Similarly for the other calls until line 11. Parameter
+passing occurs in a way similar to call by name and, in Prolog, the order in which
+the different procedure calls appear in the text speciﬁes the order of evaluation (in
+the case of pure logic programs, on the other hand, no order is speciﬁed).
+
+Given the preceding deﬁnition of procedure sol, the call sol(Ls) returns Ls
+
+instantiated with a solution to the problem, such as for example the following:
+
+4 Even if the terminology is intuitively clear: by instantiation of a variable we mean substituting for
+it a syntactic object. We will give a precise deﬁnition in Sect. 12.3.
+
+12.2 Syntax
+
+373
+
+1 ,9 ,1 ,2 ,1 ,8 ,2 ,4 ,6 ,2 ,7 ,9 ,4 ,5 ,8 ,6 ,3 ,4 ,7 ,5 ,3 ,9 ,6 ,8 ,3 ,5 ,7.
+
+Successive calls to the same procedure allow obtaining the other solutions to the
+problem.
+
+With this procedural interpretation, one has a true programming language that
+allows us to express, in a compact and relatively simple way, programs that solve
+even complex problems. For this power, the language pays the penalty of efﬁciency.
+In the preceding program, despite its apparent simplicity, the computation performed
+by the language’s abstract machine is complex, given that the interpreter must try
+the various combinations of possible sublists until it ﬁnds the one that satisﬁes all
+the given conditions. In these search processes, a backtracking mechanism is used.
+When the computation reaches at a point at which it cannot proceed, the computation
+that has been performed so far is undone so that a decision point can be reached, if it
+exists, at which an alternative is chosen that is different from the previous one (if this
+alternative does not exist, the computation terminates in failure). It is not difﬁcult to
+see that, in general, this search process can have exponential complexity.
+
+12.2 Syntax
+
+Logic programs are sets of logic formulæ of a particular form. We begin therefore
+with some basic notions for deﬁning the syntax.
+
+The logic of interest here is ﬁrst-order logic, also called predicate calculus. Sym-
+bols are used to express properties of (or, in a more old-fashioned terminology, to
+“predicate on”) elements of a ﬁxed domain of discourse, D. Higher-order logics
+(second, third, etc., order) also permit predicates whose arguments are more compli-
+cated objects such as sets and functions over D (second order), sets of these functions
+(third order), etc., in addition to elements of D.
+
+12.2.1 The Language of First-Order Logic
+
+The language of ﬁrst-order logic consists of three components:
+
+1. An alphabet.
+2. Terms deﬁned over this alphabet.
+3. Well-formed formulæ deﬁned over this alphabet.
+
+Alphabet
+The alphabet is a set5 of symbols, partitioned into two disjoint subsets: the set of
+logical symbols (common to all ﬁrst-order languages) and the set of non-logical (or
+extra-logical) symbols (which are speciﬁc to a domain of interest). For example, all
+
+5 All the sets we consider here are ﬁnite or denumerable.
+
+374
+
+12 Logic Programming Paradigm
+
+ﬁrst-order languages will use a (logical) symbol to denote conjunction. If we are
+considering orderings on a set, we will probably also have the < symbol as one of
+the non-logical symbols.
+
+The set of logical symbols contains the following elements:
+
+• The logical connectives ∧ (conjunction), ∨ (disjunction), ¬ (negation), → (impli-
+
+cation) and ↔ (double implication).
+
+• The propositional constants true and false.
+• The quantiﬁers ∃ (exists) and ∀ (forall).
+• Some punctuation symbols such as brackets “(” and “)” and comma “,”.
+• An (denumerably) inﬁnite set V of variables, written X , Y , Z , . . .
+
+The non-logical (or extra-logical) symbols are deﬁned by a signature with pred-
+icates ((cid:2), (cid:3)). This is a pair in which the ﬁrst element, (cid:2) is the function signature,
+that is a set of function symbols, each considered with its own arity.6 The second
+element of the pair, (cid:3), is the predicate signature, a set of predicate symbols together
+with their arities. Functions of arity 0 are said to be constants and are denoted by
+the letters a, b, c, . . . . Function symbols of positive arity are, as usual, denoted by
+f , g, h, . . . , while predicate symbols are denoted by p, q, r , . . . . Let us assume that
+the sets (cid:2) and (cid:3) have an empty intersection and are also disjoint from the logical
+symbols. The difference between function and predicate symbols is that the former
+must be interpreted as functions, while the latter must be interpreted as relations.
+This distinction will become clearer when we discuss formulæ.
+
+Terms
+
+The concept of term, which is fundamental to mathematical logic and Computer
+Science, is used implicitly in many contexts. For example, an arithmetic expression
+is a term obtained by applying (arithmetic) operators to operands. Other types of
+construct, too, such as strings, binary trees, lists, and so on, can be conveniently seen
+as terms which are obtained using appropriate constructors. Semantically, a term
+denotes an element of the domain of discourse, D.
+
+Syntactically, in the simplest case a term is obtained by applying a function symbol
+to as many variables and constants as required by its arity. For example, if a and b
+are constants, X and Y are both variables and f and g have arity 2, then f (a, b) and
+g(a, X ) are terms. Nothing prevents the use of terms as the arguments to a function,
+provided that the arity is respected. We can, for example, write g( f (a, b), Y ) or
+g( f (a, f (X, Y )), X ) and so on.
+
+In the most general case, we can deﬁne terms as follows.
+
+Deﬁnition 12.1 (Term) The terms over a signature (cid:2) (and over the set, V , of vari-
+ables) are deﬁned inductively7 as follows:
+
+6 Recall that, as stated above, the arity denotes the number of arguments of a function or relation.
+7 See the box on Sect. 6.4 for inductive deﬁnitions.
+
+12.2 Syntax
+
+375
+
+• A variable (in V ) is a term.
+• If f (in (cid:2)) is a function symbol of arity n and t1, . . . , tn are terms, then f (t1, . . . , tn)
+
+is a term.
+
+As a particular case of the second point, a constant is a term. According to the
+letter of the deﬁnition, a term which corresponds to a constant must be written with
+parentheses: a(), b(), . . . . Let us establish, for ease of reading, that in the case of
+function symbols of arity 0, parentheses are omitted. Terms without variables are
+said to be ground terms. Terms are usually denoted by the letters s, t, u, . . . . Note
+that predicates do not appear in terms; they appear in formulæ (to express properties
+of terms).
+
+Formulæ
+
+The well-formed formulæ (or formulæ for short) of the language allow us to express
+the properties of terms. Semantically, therefore, a formula states that some elements
+of our domain, D, enjoy a property. For example, if we have the predicate > (inter-
+preted as usual as a partial order relation on D), writing > (3, 2) we express that the
+term “3” corresponds to a value (an element of D) which is greater than the value
+associated with the term “2”. More complex formulæ can be constructed using log-
+ical symbols. For example, the formula > (X, Y )∧ > (Y, Z ) →> (X, Z ) expresses
+the transitivity of >—if > (X, Y ) is true and > (Y, Z ) is also true then, it is the case
+that > (X, Z ).
+
+Wanting to deﬁne formulæ precisely, we have ﬁrst atomic formulæ (or atoms),
+constructed by the application of a predicate to the number of terms required by its
+arity. For example, if p has arity 2, using the two terms introduced above, we can write
+p( f (a, b), f (a, X )). Using logical connectives and quantiﬁcation, we can construct
+complex formulæ from atomic ones. As usual, we have an inductive deﬁnition (or,
+equivalently, a free grammar—see Exercise 1).
+
+Deﬁnition 12.2 (Formula) The (well-formed) formulæ over the signature with terms
+((cid:2), (cid:3)) are deﬁned inductively as follows:
+
+1. If t1, . . . , tn are terms over the signature (cid:2) and p ∈ (cid:3) is a predicate symbol of
+
+arity n, then p(t1, . . . , pn) is a formula.
+
+2. true and false are formulæ.
+3. If F and G are formulæ, then ¬F, (F ∧ G), (F ∨ G), (F → G) and (F ↔ G)
+
+are formulæ.
+
+4. If F is a formula and X is a variable, then ∀X.F and ∃X.F are formulæ.
+
+12.2.2 Logic Programs
+
+A formula constructed according to the last deﬁnition can have a highly complex
+structure. This complexity often determines also the effort required to ﬁnd a proof. In
+
+376
+
+12 Logic Programming Paradigm
+
+automatic theorem proving, and in logic programming, particular classes of formulæ
+have been identiﬁed, which lend to more efﬁcient manipulation. One of this classes is
+the one of the clauses, which can be manipulated with a special inference rule called
+resolution. We are interested in a restriction of the notion of clause, called deﬁnite
+clause, as well as in a restricted forms of resolution—SLD resolution, see Sect. 12.4.3.
+Using these two notions, the procedure for seeking a proof is not only particularly
+simple but also allows the explicit calculation of the values of the variables necessary
+for the proof. These values can be considered as the result of the computation, giving
+way to an interesting model of computation based on logical deduction. We will see
+this model in more detail below, for now we will concentrate on syntactic aspects.
+
+Deﬁnition 12.3 (Logic Program) Let H , A1, . . . , An be atomic formulæ. A deﬁnite
+clause (for us simply a “clause”) is a formula of the form:
+
+H : −A1, . . . , An.
+If n = 0, the clause is said to be a unit, or a fact, and the symbol : − is omitted (but
+not the ﬁnal full stop). A logic program is a set of clauses, while a pure Prolog
+program is an ordered sequence of clauses. A query (or goal) is a sequence of atoms
+A1, . . . , An.
+
+Let us clarify some points about this deﬁnition. First, the symbol : − which we
+
+did not include in our alphabet, is just (reversed) implication (←).8
+
+The commas in a clause or in a query should be interpreted as logical conjunction.
+The notation “H : −A1, . . . , An.” is therefore an abbreviation for “H ← A1 ∧ · · · ∧
+An.” Note that the full stop is part of the notation and is important because it tells a
+potential interpreter or compiler that the clause has terminated.
+
+The part on the left of : − is the head of the clause; that on the right is the body.
+A fact is therefore a clause with an empty body. A program is a set of clauses in
+the case of the theoretical formalism. In the case of Prolog, on the other hand, a
+program is considered as a sequence because, as we will see, the order of clauses is
+relevant. Here, we used the simpliﬁed terminology found in many recent texts (for
+example, [1]). For more precise terminology, see the next box. The set of clauses
+containing the predicate symbol p in their head is said to be the deﬁnition of p.
+Variables occurring in the body of a clause and not in the head are said to be local
+variables.
+
+8 : − instead of ← is used for practical reasons. When logic languages were being introduced, it
+was much easier to type : − rather than a left arrow, on most keyboards.
+
+12.3 Theory of Uniﬁcation
+
+377
+
+Clause
+
+The reader familiar with ﬁrst-order logic will have recognised the notion of clause given in Deﬁni-
+tion 12.3 as being a particular case of the one used in logic. A clause, in the general sense, is indeed
+a formula of the form:
+
+∀X1, . . . , Xm (L 1 ∨ L 2 ∨ · · · ∨ L n)
+where L 1 . . . L n are literals (atoms or negated atoms) and X1, . . . , Xn are all the variables that occur
+in L 1 . . . L n. For clarity, we may separate the negated atoms from the others, therefore writing a
+clause as:
+
+∀X1, . . . , Xm (A1 ∨ A2 ∨ · · · ∨ Am , ¬B1 ∨ ¬B2 ∨ · · · ∨ ¬Bk ).
+Using well-known logical equivalences, we can express this formula in the following equivalent
+form;
+
+A1, . . . Am ← B1, . . . , Bk .
+A program clause, also called a deﬁnite clause, is a clause that has only one un-negated atom. In the
+form shown in (12.1), a deﬁnite clause always has m = 1, which is the notion introduced directly in
+Deﬁnition 12.3. A fact is therefore a deﬁnite clause containing no negated atoms. Finally, a negative
+clause, also called a query or goal, is a clause of the form (12.1) in which m = 0.
+
+(12.1)
+
+12.3 Theory of Uniﬁcation
+
+The fundamental computational mechanism in logic programming is the solution of
+equations between terms using the uniﬁcation procedure. In this procedure, substi-
+tutions are computed so that variables and terms can be bound (or instantiated). The
+composition of the different substitutions obtained in the course of a computation
+provides the result of the calculation. Before seeing the computational model for
+logic programming in detail, we must analyse uniﬁcation in a little detail, a task we
+undertake in this section.
+
+12.3.1 The Logic Variable
+
+Let us clarify, ﬁrst, that the concept of variable we are considering is different from
+that seen in Sect. 6.2.1. Here, we consider the so-called logic variable, an unknown
+which can assume values from a predetermined set. In our case, this set is that of
+deﬁnite terms over the given alphabet. This fact, together with the use that logic
+programming makes of logic variables, gives rise to three important differences
+between logic variables and modiﬁable variables of imperative languages.
+
+1. The logic variable can be bound only once, in the sense that if a variable is bound
+to a term, this binding cannot be destroyed (but the term might be modiﬁed, as
+will be explained below). For example, if we bind the variable X to the constant
+a in a logic program, the binding cannot later be replaced by another which
+binds X to the constant b. Clearly, this is possible in imperative languages using
+assignment. The fact that the binding of a variable cannot be eliminated does
+
+378
+
+12 Logic Programming Paradigm
+
+not mean, however, that it is impossible to modify the value of the variable. This
+apparent contradiction is dealt with in the next point.
+
+2. The value of a logic variable can be partially deﬁned (or can be undeﬁned), to
+be speciﬁed later. This is because a term that is bound to a variable can contain,
+in its turn, other logic variables. For example, if the variable X is bound to the
+term f (Y, Z ), successive bindings of the variables Y and Z will also modify
+the value of the variable X : if Y is bound to a and Z is bound to g(W ), the
+value of X will become the term f (a, g(W )). The process could continue by
+modifying the value of W . This mechanism for specifying the value of a variable
+by successive approximations, so to speak, is typical of logic languages and
+is somewhat different from the corresponding one encountered in imperative
+languages, where a value assigned to a value cannot be partially deﬁned.
+
+3. A third important difference concerns the bidirectional nature of bindings for
+logic variables. If X is bound to the term f (Y ) and later we are able to bind X
+to the term f (a), the effect so produced is that of binding the variable Y to the
+constant a. This does not contradict the ﬁrst point, given that the binding of X
+to the term f (Y ) is not destroyed, but the value of f (Y ) is speciﬁed through
+the binding of Y . Therefore, we can not only modify the value of a variable by
+modifying the term to which it is bound, but we can also modify this term by
+providing another binding for that variable. Clearly, this second binding must
+be consistent with the ﬁrst, that is if X is bound to the term f (Y ), we cannot try
+to bind X to a term of the form g(Z ).
+
+The last point is fundamental, since it allows us to use a single logic program
+in quite different ways, as will be seen below. Essentially, we are talking about a
+property that derives from the uniﬁcation mechanism, which we will discuss shortly.
+First, however, we must introduce the concept of substitution.
+
+12.3.2 Substitution
+
+The connection between variables and terms is made in terms of the concept of
+substitution, which, as its name tells us, allows the “substitution” of a variable by a
+term. A substitution, usually denoted by the greek letters ϑ, σ , ρ, . . . , can be deﬁned
+as follows.
+
+Deﬁnition 12.4 (Substitution) A substitution is a function from variables to terms
+such that the number of variables which are not mapped to themselves is ﬁnite. We
+denote a substitution ϑ by the notation:
+
+ϑ = {X1/t1, . . . , Xn/tn}
+where X1, . . . , Xn are different variables, t1, . . . , tn are terms and where we assume
+that ti is different from Xi , for i = 1, . . . , n.
+
+12.3 Theory of Uniﬁcation
+
+379
+
+In the preceding deﬁnition, a pair Xi /ti is said to be a binding.9 In the case in
+which all the t1, . . . , tn are ground terms, then ϑ is said to be a ground substitution.
+We write (cid:7) for the empty substitution. For ϑ represented as in Deﬁnition 12.4, we
+deﬁne the domain, codomain and variables of a substitution as follows:
+
+Domain(ϑ) = {X1, . . . , Xn},
+Codomain(ϑ) = {Y | Y a variable in ti , for some ti , 1 ≤ i ≤ n}.
+
+A substitution can be applied to a term, or, more generally, to any syntactic expres-
+sion, to modify the value of the variables present in the domain of the substitution.
+More precisely, if we consider an expression, E (which could be a term, a literal, a
+conjunction of atoms, etc.), the result of the application of ϑ = {X1/t1, . . . , Xn/tn}
+to E, denoted by Eϑ, is obtained by simultaneously replacing every occurrence
+of Xi in E by the corresponding ti , for all 1 ≤ i ≤ n. For example, if we apply
+the substitution ϑ = {X/a, Y / f (W )} to the term g(X, W, Y ), we obtain the term
+g(X, W, Y )ϑ, that is g(a, W, f (W )). Note that the application is simultaneous. For
+example, if we apply the substitution σ = {Y / f (X ), X/a} to the term g(X, Y ), we
+obtain g(a, f (X )) (and not g(a, f (a))).
+
+The composition, ϑσ , of two substitutions ϑ = {X1/t1, . . . , Xn/tn} and σ =
+{Y1/s1, . . . , Ym/sm} is deﬁned as the substitution obtained by removing from the set
+{X1/t1σ, . . . , Xn/tnσ, Y1/s1, . . . , Ym/sm}
+the pairs Xi /ti σ such that Xi is equal to ti σ and the pairs Yi /si such that Yi ∈
+{X1, . . . , Xn}. Composition is associative and it is not difﬁcult to see that, for any
+expression, E, it is the case that E(ϑσ ) = (Eϑ)σ . The effect of the application
+of a composition is the same as it is obtained by successively applying the two
+substitutions that we want to compose.
+
+For example, composing
+
+ϑ1 = {X/ f (Y ), W/a, Z / X } and ϑ2 = {Y /b, W/b, X/Z }
+
+we obtain the substitution
+
+ϑ = ϑ1ϑ2 = {X/ f (b), W/a, Y /b}.
+If we apply the latter to the term g(X, Y, W ), we obtain the term g( f (b), b, a).
+The same term is obtained ﬁrst by applying ϑ1 to g(X, Y, W ), then applying ϑ2 to
+the result. Note that, in the result ϑ of the composition, the Y in ϑ1 is instantiated
+to b because of the binding occurring in ϑ2. The X occurring in Z / X is instantiated
+to Z using the binding X/Z in ϑ2, after which the binding Z /Z is eliminated from
+the resulting substitution (because it is the identity). The bindings W/b and X/Z
+
+9 We are using here an “opposite” notation of the one we used in the context of the λ-calculus,
+Sect. 11.6. There, according to the prevalent tradition in functional languages, we wrote N / X for
+the substitution of the term N in place of the variable X . Here such a binding is written X/N (i.e.,
+backwards). In this chapter we will use the latter notation, which is the one most commonly used
+in logic programming.
+
+380
+
+12 Logic Programming Paradigm
+
+present in ϑ2 ﬁnally disappear from ϑ because both W and Z appear in the domain
+(or, on the left of a binding) in ϑ1.
+
+A particular type of substitution is formed from those which simply rename
+their variables. For example, the substitution {X/W, W/ X } does nothing more than
+change the names of the variables X and W . Substitutions like this are called renam-
+ings and can be deﬁned as follows.
+
+Deﬁnition 12.5 (Renaming) A substitution ρ is a renaming if its inverse substitution
+ρ−1 exists and is such that ρρ−1 = ρ−1ρ = (cid:7).
+
+Note that the substitution {X/Y, W/Y } is not a renaming. Indeed, it not only
+changes the names of the two variables, but also makes the two variables equal,
+while they were previously distinct.
+
+Finally, it will be useful to deﬁne a preorder, ≤, over substitutions, where ϑ ≤ σ
+is read as: ϑ is more general than σ . Let us therefore deﬁne ϑ ≤ σ if (and only if)
+there exists a substitution γ such that ϑγ = σ . Analogously, given two expressions,
+t and t (cid:11), we deﬁne t ≤ t (cid:11) (t is more general t (cid:11)) if and only if there exists a ϑ such that
+tϑ = t (cid:11). The relation ≤ is a preorder and the equivalence induced by it10 is called the
+variance; t and t (cid:11) are therefore variants if t is an instance of t (cid:11) and, conversely, t (cid:11) is
+an instance of t. It is not difﬁcult to see that this deﬁnition is equivalent to saying that
+t and t (cid:11) are variants if there exists a renaming ρ such that t is syntactically identical
+to t (cid:11)ρ. These deﬁnitions can be extended to any expression in an obvious fashion.
+Finally, if ϑ is a substitution that has as domain the set of variables V , and W is a
+subset of V , the restriction of ϑ to the variables in W is the substitution obtained by
+considering only the bindings for variables in W , that is the substitution deﬁned as
+follows:
+
+{Y /t | Y ∈ W and Y /t ∈ ϑ}.
+
+A comparison with the imperative paradigm can help in better understanding the
+concepts under consideration. As we saw in Sect. 2.5, in the imperative paradigm,
+the semantics can be expressed by referring to a concept of state that associates every
+variable with a value.11 An expression containing variables is evaluated with respect
+to a state to obtain a value that is completely deﬁned.
+
+In the logic paradigm, the association of values with variables is implemented
+through substitutions. The application of a substitution to a term (or to a more complex
+expression) can be seen as the evaluation of the terms, an evaluation that returns
+another term, and therefore, in general, a partially deﬁned value.
+
+10 Given a preorder, ≤, the equivalence relation induced by ≤ is deﬁned as t = t (cid:11) if and only if
+t ≤ t (cid:11) and t (cid:11) ≤ t.
+11 Wishing to be precise, as we have seen in the box on Sect. 6.3, in real languages, this association
+is implemented using two functions, environment and memory. This however does not alter the
+import of what we are saying.
+
+12.3 Theory of Uniﬁcation
+
+381
+
+12.3.3 Most General Uniﬁer
+
+The basic computation mechanism for the logic paradigm is the evaluation of equa-
+tions of the form s = t,12 where s and t are terms and “=” is a predicate symbol
+interpreted as syntactic equality over the set of all ground terms; this set is called the
+Herbrand Universe.13 We will attempt better to clarify this equality.
+
+If we write X = a in a logic program, we mean that the variable X must be bound
+to the constant a. The substitution {X/a} therefore is a solution to this equation since,
+by applying the substitution to the equation, we obtain a = a which is a syntactical
+identity. You should not be deceived by the syntactic analogy with assignment in
+imperative languages, for it deals with a completely different concept. Indeed, unlike
+in an imperative language, here we can also write a = X instead of X = a and the
+meaning does not change (the equality that we are considering is symmetric, as are
+all equality relations). Also the analogy with the equality of arithmetic expressions
+can be, in some ways, misleading, as illustrated by the following example.
+
+Let us assume that we have a binary function symbol + which, intuitively,
+expresses the sum of two natural numbers, and consider the equation 3 = 2 + 1,
+where, for simplicity, we use inﬁx notation for + and we represent in the usual fash-
+ion the natural numbers. Given that the equation 3 = 2+1 does not contain variables,
+it can be either true (or, solved) or false (that is, insoluble). Contrary to what arith-
+metic intuition would suggest to us, in a (pure) logic program this equation cannot
+be solved. This is because, as we have said, the symbol = is interpreted as syntactic
+equality over the set of ground terms (the Herbrand universe). It is clear that, from
+the syntactic viewpoint, the constant 3 is different from the term 2 + 1 and since they
+are treated as ground terms (that is completely instantiated terms) there is no way that
+they can be made syntactically equal. Analogously, the equation f (X ) = g(Y ) has
+no solutions (it is not solvable) because however the variables X and Y are instanti-
+ated, we cannot make the two different function symbols, f and g, equal. Note that
+the equation, f (X ) = f (g(X )), also has no solutions, because the variable X in the
+left-hand term must be instantiated with g(X ) and therefore the possible solution
+must contain the substitution {X/g(X )}. The application of this substitution to the
+term on the right would instantiate X , producing the term f (g(g(X ))), so the X in
+the right-hand term would have to be instantiated to g(g(X )) rather than to g(X ) and
+so on, without ever reaching a solution.14 In general, therefore, the equation X = t
+cannot be solved if t contains the variable X (and t is different from X ).
+
+12 We draw attention to the notation that, as usual, overloads the “=” symbol. By writing ϑ =
+{X1/t1, . . . , Xn/tn}, we mean that ϑ is the substitution {X1/t1, . . . , Xn/tn}, while writing s = t,
+we mean an equation.
+13 The symbol “=” is usually written in inﬁx notation for increased readability. Different logic
+languages can have different syntactic readings for it and use different equality symbols, each with
+a different meaning. Here, we refer to “pure” logic programming.
+14 By admitting inﬁnite terms, we can ﬁnd a solution, however.
+
+382
+
+12 Logic Programming Paradigm
+
+On the other hand, the equation f (X ) = f (g(Y )) is solvable. One solution is
+the substitution ϑ = {X/g(Y )} because if this is applied to the two terms in the
+equation, it makes them syntactically equal. Indeed, f (X )ϑ is identical to f (g(Y ))
+which is identical to f (g(Y ))ϑ. In more formal terms, we can say that the substitu-
+tion ϑ uniﬁes the two terms of the equation—ϑ is a uniﬁer. We have said “a solution”
+because there are many substitutions (an inﬁnite number of them) that are uniﬁers
+of X and g(Y ). It is sufﬁcient to instantiate Y in the deﬁnition of ϑ. So, for exam-
+ple, the substitution {X/g(a), Y /a} is also an uniﬁer, as are {X/g( f (Z )), Y / f (Z )},
+{X/g( f (a)), Y / f (a)}, and so on. All these substitutions are, however, less general
+than ϑ according to the preorder that we deﬁned above. Each of them, that is, can be
+obtained by composing ϑ with some other, appropriate, substitution. For example,
+{X/g(a), Y /a} is equal to ϑ{Y /a} (remember that we denote the composition of
+substitutions with juxtaposition). In this sense, we say that ϑ is the most general
+uniﬁer (or m.g.u.) of X and g(Y ).
+
+Before moving to general deﬁnitions, note one last important detail: the process
+of solving an equation (the uniﬁcation process), can create bidirectional bindings,
+that is the direction in which the associations must be realised is not speciﬁed. For
+example, a solution of the equation f (X, a) = f (b, Y ) is given by the substitution
+{X/b, Y /a}, where a variable on the left and one on the right of the = symbol are
+bound. Instead, in the equation, f (X, a) = f (Y, a), to ﬁnd a solution, we can choose
+whether to bind the variable on the left (using {X/Y }) or the one on the right (using
+{Y / X }) or even both (using {X/Z , Y /Z }).
+
+This aspect, to which we will return, is important because it allows the imple-
+mentation of bidirectional parameter-passing mechanisms. It allows also a unique
+characteristic of the logic paradigm—to use the same program in different ways,
+turning input arguments into outputs and vice versa, without modifying the program.
+
+We may now give the formal deﬁnition.
+
+Deﬁnition 12.6 (M.g.u.) Given a set of equations E = {s1 = t1, . . . , sn = tn},
+where s1, . . . , sn and t1, . . . , tn are terms, the substitution, ϑ, is a uniﬁer for E if
+the sequence (s1, . . . , sn)ϑ and (t1, . . . , tn)ϑ are syntactically identical. A uniﬁer
+of E is said to be the most general uniﬁer (m.g.u.) if it is more general than any
+other uniﬁer of E; that is, for every other uniﬁer, σ , of E, σ is equal to ϑτ for some
+substitution, τ .
+
+The preceding concept of uniﬁer can be extended to other syntactic objects in an
+obvious fashion. In particular, we say that ϑ is a uniﬁer of two atoms p(s1, . . . , sn)
+and p(t1, . . . , tn) if ϑ is a uniﬁer of {s1 = t1, . . . , sn = tn}.
+
+12.3 Theory of Uniﬁcation
+
+383
+
+12.3.4 A Uniﬁcation Algorithm
+
+An important result, due to Robinson in 1965, shows that the problem of determin-
+ing whether a set of equations of terms can be uniﬁed is decidable. The proof is
+constructive, in the sense that it provides a uniﬁcation algorithm which, for every set
+of equations, produces their m.g.u. if the set is uniﬁable and returns a failure in the
+opposite case.15
+
+It can also be proved that a m.g.u.
+
+is unique up to renaming. The uniﬁcation
+algorithm which we will now see is not Robinson’s original but is Martelli and
+Montanari’s from 1982 and it makes use of ideas present in Herbrand’s thesis of
+1930.
+
+Martelli and Montanari’s Uniﬁcation Algorithm
+
+Given a set of equations
+
+E = {s1 = t1, . . . , sn = tn},
+
+the algorithm produces either failure or a set of equations in the following, so called,
+solved form:
+
+{X1 = r1, . . . , Xm = rm},
+where X1, . . . , Xm are distinct variables not appearing in the terms r1, . . . , rm. The
+set of equations is equivalent to the starting set, E, and from it we can obtain a
+m.g.u. for E simply interpreting every equality as a binding. Therefore, the m.g.u. that
+we seek is the substitution:
+
+{X1/r1, . . . , Xm/rm}.
+
+The algorithm is non-deterministic in the sense that when there are more possible
+actions, one is chosen in an arbitrary fashion, with no priority between the various
+actions.16 The algorithm is given by the following steps.
+
+1. Nondeterministically select one equation from the set E.
+2. According to the type of equation chosen, execute, if possible, one of the speciﬁc
+operations as follows (where on the left of the “:” we indicate the type of equation
+and, on the right, the associated action):
+
+a.
+
+b.
+
+f (l1, . . . , lk) = f (m1, . . . , mk): eliminate this equation from the set E and
+add to E the equations l1 = m1, . . . , lk = mk.
+f (l1, . . . , lk) = g(m1, . . . , mk): if f
+failure.
+
+is different from g, terminate with
+
+15 Robinson’s original algorithm considers the uniﬁcation of just two terms but this, obviously, is
+not reductive given that the uniﬁcation of {s1 = t1, . . . , sn = tn} can be seen as the uniﬁcation of
+f (s1, . . . , sn) and f (t1, . . . , tn).
+16 We will return to the non-determinism brieﬂy when we discuss the operational semantics of logic
+programs.
+
+384
+
+12 Logic Programming Paradigm
+
+c. X = X : eliminate this equation from the set E.
+d. X = t: if t does not contain the variable X and this variable appears in another
+equation in the set E, apply the substitution {X/t} to all the other equations
+in the set E.
+
+e. X = t: if t contains the variable X , terminate with failure.
+f. t = X : if t is not a variable, eliminate this equation from the set E and add
+
+to E the equation X = t.
+
+3. If none of the preceding operations is possible, terminate with success (E con-
+tains the solved form). If, on the other hand, an operation different from termi-
+nation with failure has been executed, go to (1).
+
+This is a simple algorithm, but it is worth discussing in in detail its steps.
+In the ﬁrst case the two terms agree on the function symbol. To unify the two
+terms, it is necessary to unify the arguments, so we replace the original equation
+with the equations obtained by equating the arguments in each position. Note that
+this case also includes equivalence between constants of the form a = a (where a is
+a function symbol of arity 0) which are eliminated without adding anything.
+
+The second case produces a failure given that, when f and g are different, the two
+
+terms cannot be uniﬁed.
+
+The equation X = X is eliminated using the identity substitution which therefore
+
+produces no change in the other equations.
+
+The fourth case is the most interesting. An equation X = t is already in solved
+form (because, by assumption, t does not contain X ). In other words, the substitution
+{X/t} is the m.g.u. of this very equation. We need to combine the effect of such an
+m.g.u. with those produced by other equations, so we apply the substitution {X/t}
+to all the other equations in E.
+
+On the other hand, in the case in which t contains the variable X , as we have
+already seen, the equation has no solution and therefore the algorithm terminates
+with failure. It is important to note that this check, called the occurs check, is removed
+from many implementations of Prolog for reasons of efﬁciency. Therefore, many
+Prolog implementations use an incorrect uniﬁcation algorithm!
+
+The last case, ﬁnally, serves only to obtain a result form in which the variables
+
+appear on the left and the terms on the right of the = symbol.
+
+It is easy to convince oneself that the algorithm terminates, given that the depth of
+the input terms is ﬁnite. It is, moreover, possible to prove that the algorithm produces
+an m.g.u. which is obtained by the interpretation as substitutions of the ﬁnal result
+form of the equations.
+
+By a careful consideration of the algorithm, it can be seen that the computation
+of the most general uniﬁer occurs in an incremental fashion by solving ever simpler
+equations until a result form is encountered. It is also possible to express this process
+in terms of substitution compositions as happens in the operational model of logic
+languages. We will exemplify this point with an example. To simplify, we will always
+choose the leftmost equation (the ﬁnal result, anyway, does not depend upon such an
+assumption; any other selection rule would lead to the same result up to renaming).
+
+12.3 Theory of Uniﬁcation
+
+385
+
+Let us consider the set of equations:
+
+E = { f (X, b) = f (g(Y ), W ), h(X, Y ) = h(Z , W )}.
+Choosing the ﬁrst equation on the left, using the operation described in (a), the set
+E is transformed into:
+
+E1 = {X = g(Y ), b = W, h(X, Y ) = h(Z , W )}.
+
+Using operation (d), we therefore obtain:
+
+E2 = {X = g(Y ), b = W, h(g(Y ), Y ) = h(Z , W )}.
+
+Using (f) and then (d) again on the second equation, we ﬁnally obtain:
+
+E3 = {X = g(Y ), W = b, h(g(Y ), Y ) = h(Z , b)}.
+This already contains the result of the ﬁrst equation in the set E. In fact, the substi-
+tution:
+
+ϑ1 = {X/g(Y ), W/b}
+
+is an m.g.u. for f (X, b) = f (g(Y ), W ).
+
+Continuing with the second equation from the original set, suitably instantiated
+
+by the substitutions already computed, using operation (a), we obtain:
+
+E4 = {X = g(Y ), W = b, g(Y ) = Z , Y = b};
+
+then, by (f), we obtain:
+
+E5 = {X = g(Y ), W = b, Z = g(Y ), Y = b}.
+
+Finally, using (d) applied to the last equation, we have:
+
+E4 = {X = g(b), W = b, Z = g(b), Y = b},
+which is the result form for the set E and therefore also provides the m.g.u. of the
+initial set in the form of the substitution
+
+ϑ = {X/g(b), W/b, Z /g(b), Y /b}.
+Two important observations can be made. First, note how the value of some
+variables can be partially speciﬁed ﬁrst, and then later reﬁned. For example, ϑ1
+(m.g.u. of the ﬁrst equation in E) tells us that X has g(Y ) as its value and only by
+solving the second equation do we see that Y has b as its value. Therefore it can be
+seen that g(b) is the value of X (as, indeed, it results in the ﬁnal m.g.u.).
+
+Moreover, we can see that if we consider {h(g(X ), Y ) = h(Z , W )}ϑ1 (the second
+
+equation in E instantiated using the m.g.u. of the ﬁrst), we obtain the equation
+
+h(g(Y ), Y ) = h(Z , b)
+
+for which the substitution
+
+ϑ2 = {Z = g(b), Y = b}
+is a m.g.u. Using the deﬁnition of composition of substitutions, it is easy to check
+that ϑ = ϑ1ϑ2. The m.g.u. of the set E can therefore be obtained by composing the
+ﬁrst equation’s m.g.u. with that of the second (to which the ﬁrst m.g.u. has already
+been applied). This, as we have already said, is what, indeed, normally happens in
+implementations of logic languages, where, instead of accumulating all the equations
+and then solve them, an m.g.u. is computed on each step of the computation and is
+composed with the ones that were previously obtained.
+
+386
+
+12 Logic Programming Paradigm
+
+12.4 The Computational Model
+
+The logic paradigm, implementing the idea of “computation as deduction”, uses a
+computational model that is substantially different from all the others that we have
+seen so far. Wishing to synthesise, we can identify the following main differences
+from the other paradigms:
+
+1. The only possible values, at least in the pure model, are terms over a given
+
+signature.
+
+2. Programs can have a declarative reading which is entirely logical, or a procedural
+
+reading of an operational kind.
+
+3. Computation works by instantiating the variables appearing in terms (and there-
+
+fore in goals) to other terms using the uniﬁcation mechanism.
+
+4. Control, which is entirely handled by the abstract machine (except for some pos-
+sible annotations in Prolog) is based on the process of automatic backtracking.
+
+Below, we analyse these four points. We will explicitly discuss the differences
+
+between logic programming and Prolog.
+
+12.4.1 The Herbrand Universe
+
+In logic programming, terms are a fundamental element. The set of all possible terms
+over a given signature is called the Herbrand Universe and is the domain over which
+computation in logic programs is performed. It has some characteristics that must
+be understood.
+
+• The alphabet over which programs are deﬁned is not ﬁxed but can vary as far as
+
+non-logical symbols are concerned.
+
+• As a (partial) consequence of the previous point, unlike what happens in imperative
+languages, no predeﬁned meaning is assigned to the (non-logical) symbols of the
+alphabet. For example, a program can use the + symbol to denote addition, while
+another program can use the same symbol to denote string concatenation. The
+exceptions are the (binary) equality predicate and some other predeﬁned (“built-
+in”) symbols in Prolog.17
+
+• As a ﬁnal consequence, no type system is present in logic languages (at least in
+the classic formalism). The only type that is present is that of terms with which
+we can represent arithmetic, list, expressions, etc.
+
+17 As well as predeﬁned predicates in constraint languages, as we will see in the next chapter.
+
+12.4 The Computational Model
+
+387
+
+From the theoretical stance, the fact that there are no types and that computation
+occurs in the Herbrand Universe is not limiting, rather it permits the highly elegant
+and, all considered, simple expression of the formal semantics of logic programs. For
+example, with only two function symbols, 0 (constant zero) and s (successor, of arity
+1), we can express the natural numbers using the terms 0, s(0), s(s(0)), s(s(s(0))),
+etc. With a little effort, we can express the normal arithmetic operations in terms of
+this two-symbol representation.
+
+From the practical view point, on the other hand, the lack of types is a serious
+problem. In fact, in Prolog, as in other, more recent, logic languages, some prim-
+itive types have been introduced (for example, integers and associated arithmetic
+operations). The languages of this paradigm are therefore always somewhat lacking
+as far as types are concerned.
+
+12.4.2 Declarative and Procedural Interpretation
+
+As we have just hinted, a clause, and therefore a logic program, can have two different
+interpretations: one declarative and one procedural.
+
+From the declarative viewpoint, a clause H : −A1, . . . , An is a formula which
+expresses that if A1 and A2 and . . . and An are true, then H is also true. A query (or
+goal) is also a formula for which we want to prove, provided that it is appropriately
+instantiated, that it is a logical consequence of the program, and is, therefore, true in all
+interpretations in which the program is true.18 This interpretation can be developed
+using the methods of logic (in particular, some elementary concepts of model theory)
+in such a way as to give a meaning to a program in purely declarative terms without
+referring at all to a computational process. For this interpretation, while interesting,
+we refer the reader to the specialist literature cited at the end of the chapter.
+
+The procedural interpretation, on the other hand, allows us to read a clause such
+
+as:
+
+H : −A1, . . . , An
+as follows. To prove H , it is necessary ﬁrst to prove A1, . . . , An, or rather to compute
+H , it is necessary ﬁrst to compute A1, . . . , An. From this, we can view a predicate
+as the name of a procedure, whose deﬁning clauses constitute its body. In this inter-
+pretation, we can read an atom in the body of a clause, or in a goal, as a procedure
+call. A logic program is therefore a set of declarations and a goal is no more than the
+equivalent of “main” in an imperative program, given that it contains all the calls to
+the procedures that we want to evaluate. The comma in the body of clauses and in
+goals, in Prolog (but not in other pure logic programming languages), can be read
+as the analogue of “;” in imperative languages.
+
+18 Here we will content ourselves with an intuitive idea of this concept. The interested reader can
+consult any text on logic for more information.
+
+388
+
+12 Logic Programming Paradigm
+
+Precise correspondence theorems allow us to reconcile the declarative and proce-
+
+dural views, proving that the two approaches are equivalent.
+
+From a formal viewpoint, the procedural interpretation is supported by so-called
+SLD resolution, a logical inference rule which we will discuss in the box on
+Sect. 12.4.3. It is also possible to describe the procedural interpretation in a more
+informal manner, using only the analogy with procedure calls and parameter passing
+which we have just outlined. This is the approach we will use below.
+
+12.4.3 Procedure Calls
+
+Let us consider for now a simpliﬁed deﬁnition of clause in which we assume that, in
+the head, all the arguments of the predicate are distinct variables. An arbitrary clause
+of this type therefore has the form:
+
+p(X1, . . . , Xn) : −A1, . . . , Am
+and, as we have anticipated, it can be seen as the declaration of the procedure p
+with n formal parameters, X1, . . . , Xn. An atom q(t1, . . . , tn) can be seen as a call
+to the procedure q with n actual parameters, t1, . . . , tn. In the deﬁnition of p, there-
+fore, the body is formed from the calls to m procedures which constitute the atoms
+A1, . . . , Am.
+
+In accordance with this view, and analogously to what happens in imperative
+languages, the evaluation of the call p(t1, . . . , tn) causes the evaluation of the body
+of the procedure after parameter passing has been performed. Parameter passing
+uses a technique similar to call by name, replacing the formal parameter Xi with
+the corresponding actual parameter ti . Moreover, given that the variables appearing
+in the body of the procedure are to be considered as logical variables, they can be
+considered to be distinct from all other variables. In block-structured languages, this
+happens implicitly given that the body of the procedure is considered as a block with
+its own local environment. Here, on the other hand, the concept of block is absent,
+so, in order to avoid conﬂicts between variable names, we assume that, before using
+a clause, all the variables appearing in it are systematically renamed (so that they do
+not conﬂict with any others).
+
+Using more precise terms, we can say that the evaluation of the call p(t1, . . . , tn),
+
+with the deﬁnition of p seen above, causes the evaluation of the m calls:
+
+(A1, . . . , Am)ϑ
+
+present in the body of p, appropriately instantiated by the substitution
+
+ϑ = {X1/t1, . . . , Xn/tn}
+
+which performs parameter passing. In the case in which the body of the clause is
+empty (or that m = 0), the procedure call terminates immediately. Otherwise, the
+
+12.4 The Computational Model
+
+389
+
+computation proceeds with the evaluation of the new calls. Using logic program-
+ming terminology, this can be expressed by saying that the evaluation of the goal
+p(t1, . . . , tn) produces the new goal:
+
+(A1, . . . , Am){X1/t1, . . . , Xn/tn}
+
+which, in its turn, will have to be evaluated. When all the calls generated by this
+process have been evaluated (provided there has been no failure), the computation
+terminates with success and the ﬁnal result is composed of the substitution that
+associates the values computed in the course of the computation with the variables
+present in the initial call (X1, . . . , Xn, in our case). This substitution is said to be
+the computed answer for the initial goal in the given program. We will see a more
+precise deﬁnition of this concept below. For now, we will see a simple example. Let
+us consider the procedure list_of_2 deﬁned below and identical to the procedure
+list_of_27 of Sect. 12.1.1, except for the lesser number of anonymous variables:
+
+l i s t _ o f _ 2 ( Ls ): - Ls = [ _ , _ ].
+
+1
+
+The evaluation of the call list_of_2(LXs) causes the evaluation of the body
+
+of the clause, instantiated by the substitution {Ls/L X s}, that is:
+
+LXs = [ _ , _ ]
+
+This is a particular call because = is a predeﬁned predicate which, as we saw in the
+previous section, is interpreted as syntactic equality over the Herbrand Universe and,
+operationally, corresponds to the uniﬁcation operation. The previous call therefore
+reduces to the attempt (performed by the language interpreter) to solve the equation
+using uniﬁcation. In our case, clearly, this attempt succeeds and produces the m.g.u.
+{L X s/[_, _]} which is the result of the computation. The previous substitution is
+therefore the computed answer for the goal list_of_2 in the logic program deﬁned
+by the single line (1) above.
+
+Evaluation of a Non-atomic Goal
+
+The view presented in the previous subsection must be generalised and made more
+precise to clarify the logic-programming computational model. Below, in order to
+conform with current terminology, we will talk of atomic goals and goals rather than
+procedure calls and sequences of calls. The analogy with the conventional paradigm
+remains valid, though.
+
+In the case in which a non-atomic goal must be evaluated, the computational
+mechanism is analogous to the one seen above, except that now we must choose
+one of the possible calls using some selection rule. While in the case of pure logic
+programming no such rule is speciﬁed, Prolog adopts the rule that the leftmost
+atom is always chosen. It is however possible to prove that whatever rule is adopted,
+the results that are computed are always the same (see also Exercises 13 and 14 at
+the end of the chapter).
+
+390
+
+12 Logic Programming Paradigm
+
+Assuming, for simplicity, that we adopt the Prolog rule, we can describe the
+
+progress of the evaluation process. Let
+
+B1, . . . , Bk
+with k ≥ 1, be the goal to be evaluated. We distinguish the following cases according
+to the form of the selected atom, B1:
+
+1. If B1 is an equation of the form s = t, try to compute a m.g.u.
+
+(using the
+
+uniﬁcation algorithm). There are two possibilities:
+a. If the m.g.u. exists and is the substitution σ , then the result of the evaluation
+
+is the goal:
+
+(B2, . . . , Bk)σ
+
+obtained from the previous one by eliminating the chosen atom and applying
+the m.g.u. thus computed. If k = 1 (and therefore (B2, . . . , Bk)σ is empty),
+the computation terminates in success.
+
+b. If the m.g.u. does not exist (or the equation has no solutions), then we have
+
+failure.
+
+2. If, on the other hand, B1 has the form p(t1, . . . , tn), we have the following two
+
+cases:
+
+a. If, in the program, there exists a clause of the form:
+
+p(X1, , . . . , Xn) : −A1, . . . , Am
+
+(which we consider renamed to avoid variable capture), then the result of
+evaluation is a new goal:
+
+(A1, . . . , Am)ϑ, B2, . . . , Bk
+where ϑ = {X1/t1, . . . , Xn/tn}. If k = 1 (then we have an atomic goal) and
+m = 0 (the body of the clause is empty), then the computation terminates
+with success.
+
+b. If, in the program, there exists no clause deﬁning the predicate p, we have
+
+failure.
+
+To be able exactly to deﬁne the results of the computation (the computed answers),
+we need to clarify some aspects of control, which we will do in Sect. 12.4.4.
+
+12.4 The Computational Model
+
+391
+
+SLD Resolution
+
+Deﬁnite clauses allow a natural procedural reading based on resolution, an inference rule which
+is complete for sets of clauses and which was introduced by Robinson and used in automated
+deduction. In logic programming, we have SLD resolution, that is linear resolution guided by a
+clause selection rule (SLD is an acronym for Selection rule-driven Linear resolution for Deﬁnite
+clauses).
+
+This rule can be described as follows. Let G be the goal B1, . . . , Bk and let C be the (deﬁnite)
+clause H : −A1, . . . , An. We say that G(cid:11) is derived from G and C using ϑ or, equivalently, G(cid:11) is a
+resolvent of G and C if (and only if) the following conditions are met:
+
+1. Bm , with 1 ≤ m ≤ k, is a selected atom from those in G.
+2. ϑ is the m.g.u. of Bm and H .
+3. G(cid:11) is the goal (B1, . . . , Bm−1, A1, . . . , An, Bm+1, . . . Bk )ϑ.
+
+Note that, unlike Sect. 12.4.3, here it is necessary also to apply ϑ to the other atoms occurring in
+the goal G because the heads of the clauses contain arbitrary terms and therefore ϑ could instantiate
+variables that are also in the goal.
+
+Given a goal, G, and a logic program, P, an SLD derivation of P ∪ G consists of a (possibly
+inﬁnite) sequence of goals G0, G1, G2, . . . , of a sequence C1, C2, . . . of clauses in P which have
+been renamed in such a way as to avoid variable capture and a sequence ϑ1, ϑ2, . . . , of m.g.u. s such
+that G0 is G and, for i ≥ 1, every Gi , is derived from Gi−1 and Ci using ϑi . An SLD refutation of
+P ∪ G is a ﬁnite SLD derivation of P ∪ G which has the empty clause as the last resolvent of the
+derivation. If ϑ1, ϑ2, . . . are the m.g.u. s used in the refutation of P ∪ G, we say that the substitution
+ϑ1ϑ2 · · · ϑn restricted to the variables occurring in G is the computed answer substitution for P ∪ G
+(or for the goal G in the program P).
+
+Classic results, due to K. L. Clark, show that this rule is sound and complete with respect to the
+
+traditional ﬁrst-order logical interpretation.
+
+Indeed, it can be proved that if ϑ is the computed answer substitution for the goal G in program
+P, then Gϑ is a logical consequence of P (soundness). Moreover, if Gϑ is a logical consequence
+of P, then no matter which selection rule is used, there exists a SLD refutation of P ∪ G with
+computed answer σ such that Gσ is more general than Gϑ (strong completeness).
+
+Heads with Arbitrary Terms
+
+So far, we have assumed that the heads of clauses contain just distinct variables.
+We have made this choice to preserve the similarity with procedures in traditional
+languages. However, real logic programs also use arbitrary terms as arguments to
+predicates in heads, as we have seen in the example in Sect. 12.1.1. The box on
+Sect. 12.4.3 provides the evaluation rule for such a general case. Note, however, that
+our assumption is in no way limiting (apart, perhaps, from textual convenience).
+Indeed, as it is clear from what was said in the box and from the preceding treatment,
+a clause of the form:
+
+p(t1, . . . , tn) : −A1, . . . , Am
+
+can be seen as an abbreviation of the clause:
+
+p(X1, . . . , Xn) : −X1 = t1, . . . , Xn = tn, A1, . . . , Am.
+
+392
+
+12 Logic Programming Paradigm
+
+In the following examples, we will often use the notation with arbitrary terms in
+
+heads.
+
+12.4.4 Control: Non-determinism
+
+In the evaluation of a goal, we have two degrees of freedom: the selection of the
+atom to evaluate and the choice of the clause to apply.
+
+For the ﬁrst, we have said that we can ﬁx a selection rule, without inﬂuencing the
+ﬁnal results of the computation that terminate in success. For this reason, the non
+determinism arising from the selection of the atom is called “don’t care”.
+
+For the selection of clauses, on the other hand, the matter is more delicate. Given
+that a predicate can be deﬁned by more than one clause, and that we have to use only
+one of them at a time, we could think about ﬁxing some rule for choosing clauses,
+analogous to the one used to choose atoms. The following program reveals however
+a problem. Let Pa be the program:
+
+p ( X ): - p ( X ).
+p ( X ): - X = a .
+
+1
+
+2
+
+and let us assume that we choose clauses from top to bottom, following the textual
+order of the program. It is easy to see that by adopting this rule, the evaluation of
+p(Y) never terminates and therefore we do not have a computed answer by the
+program. Indeed, using clause (1) and the substitution {X/Y }, the initial goal, after
+one computation step, becomes the goal p(Y), which is again the starting goal.
+According to the clause-selection rule, we must choose clause (1) and apply it to this
+(new) goal, and so on. It is however clear that using clause (2) we would immediately
+obtain a terminating computation, producing the substitution {Y /a} as result. Note
+that to ﬁx another order, for example, from bottom to top, would not in general solve
+this problem.
+
+In the light of this example, let us carefully reconsider the evaluation rule for a
+goal seen in the previous subsection and, in particular, let us ﬁx on point 2(a), where
+we wrote “if there exists a clause” without specifying how this can be chosen. By
+doing this, we have therefore introduced into the computation model a form of non-
+determinism: in the case in which there is more than one clause for the same predicate,
+we can choose one in a non-deterministic fashion, without adopting any particular
+rule. This form of non-determinism is called “don’t know” non-determinism, because
+we do not know which the “right” clause will be that allows the termination of the
+computation with success. The theoretical model of logic programming keeps this
+non-determinism when it considers all possible choices of clause and therefore all
+possible results of the various computations that are produced as a consequence of
+this choice. The result of the evaluation of a goal G in the program P is therefore a
+set of computed answers, where each of these answers is the substitution obtained by
+the composition of all the m.g.u. s which are encountered in a speciﬁc computation
+(with speciﬁc choices of clauses), restricted to the variables present in G. For a more
+precise deﬁnition of this idea, as well as of the whole process of evaluating a goal,
+see the box on Sect. 6.4.
+
+12.4 The Computational Model
+
+393
+
+Turning to our previous example, the only computed answer for the goal p(Y)
+in program Pa is the substitution {Y /a} while, for the same program, the goal p(b)
+has no computed answer given that all its computations either terminate with failure
+(when the second clause is used) or do not terminate (when the ﬁrst clause is used).
+
+Backtracking in PROLOG
+
+When moving from the theoretical model to an implemented language, such as
+Prolog, non-determinism must, at some level, be transformed into determinism,
+given that the physical computing machine is deterministic. This can obviously be
+done in various ways, and in principle does not cause loss of solutions. For example,
+we could think of starting k parallel computations when there are k possible clauses
+for a predicate19 and therefore consider the results of all the possible computations.
+In Prolog, however, for reasons of simplicity and implementation efﬁciency, the
+strategy we ﬁrst saw is employed: clauses are used according to the textual order in
+which they occur in the program (top-to-bottom). We saw in the previous example that
+this strategy is incomplete, given that it does allow us to ﬁnd all possible computed
+answers. This limit, however, is adjustable by the programmer who, knowing this
+property of Prolog, can order the clauses in the program in the most convenient way
+(typically putting ﬁrst those relating to terminal cases and then the inductive steps).
+Note, though, that this trick, at least in principle, eliminates some of the declarative
+nature of the language, because the programmer has speciﬁed an aspect of control.
+In addition to inﬁnite computations, there is a second, more important aspect to
+be considered by adopting the deterministic model of Prolog and deals with the
+handing of failures. Let us ﬁrst see an example. Let us consider the program Pb:
+
+2
+
+1
+
+p ( X ): - X = f ( a ).
+p ( X ): - X = g ( a ).
+Let us consider the evaluation of the goal p(g(Y)). By the Prolog strategy,
+clause (1) is chosen, which, using the substitution {X/g(Y )}, produces the new goal
+g(Y) = f(a). This fails, given that the two terms in the equation cannot be uni-
+ﬁed. However, given that there is still one clause to use, it would not be acceptable
+to terminate the computation by returning a failure. “Backtracking” then occurs,
+returning to the choice of the clause for p(g(Y)) and therefore continues the com-
+putation by trying clause (2). In this way, the computation achieves success with the
+computed answer {Y /a}.
+
+In general, therefore, when arriving at a failure, the Prolog abstract machine
+“backtracks” to a previous choice point at which there are other choices; that is, where
+there are other clauses to test. In this backtracking process, the bindings that might
+have been computed in the previous computation must be undone. Once a choice
+point has been reached, a new clause is tried and the computation continues in the way
+we have seen. If the previous choice point contains no possibilities for computations,
+
+19 Clearly, on a machine with one processor, the k parallel computations must be appropriately
+“scheduled” so they can be executed in a sequential manner, analogous to what happens with
+processes in a multitasking operating system.
+
+394
+
+12 Logic Programming Paradigm
+
+an older choice point is sought and, if there are no more, the computation terminates
+in failure. Note that all of this is handled directly by the Prolog abstract machine
+and is completely invisible to the programmer (except the use of particular constructs
+such as the cut which we will introduce in Sect. 12.5.1).
+
+It is also easy to see how this procedure, which uses a search corresponding to
+a depth-ﬁrst search through a tree representing the possible computations, can be
+computationally demanding. The solution to the problem seen in Sect. 12.1.1, for
+example, requires extensive backtracking and is fairly wasteful in computation time.
+
+Let us now see another example. Consider the program Pc:
+
+p ( X ): - X = f ( Y ) , q ( X ).
+p ( X ): - X = g ( Y ) , q ( X ).
+q ( X ): - X = g ( a ).
+q ( X ): - X = g ( b ).
+
+1
+
+2
+
+3
+
+4
+
+Let us analyse the goal p(Z). Using clause (1), we obtain the goal Z=f(Y),q(Z).
+The evaluation of the equation produces the m.g.u. {Z / f (Y )} and we obtain the
+goal q(f(Y)). Using clause (3), we obtain the goal f(Y) = g(a), which fails.
+At this point we must turn to the last choice point, that is to the point where the
+choice of clause for the predicate q occurred. In this case, there are no bindings
+to undo, and therefore we try clause (4), obtaining therefore the goal f(Y)=g(b)
+which also fails. We return again to the choice point for q and we see that there are
+no other possible clauses and therefore we return to the previous choice point (the
+one for predicate p). Doing this, we have to undo the binding {Z / f (Y )} calculated
+by clause (1) and therefore we return to the initial situation, where variable Z is
+not instantiated. Using clause (2), we obtain the goal Z=g(Y),q(Z) and therefore
+by the evaluation of the equation, we obtain the m.g.u. {Y /a} and the new goal
+q(g(Y)). At this point, using clause (3), we obtain the goal g(Y)=g(a) which
+succeeds and produces the m.g.u. {Y /a}. Given that there remain no more goals to
+evaluate, the computation terminates with success. The result of the computation
+is produced by composing the computed m.g.u. s {Z /g(Y )}{Y /a} and restricting
+the substitution {Z /g(a), Y (a)} obtained by this composition to the single variable
+present in the initial goal. Therefore, the computed answer obtained is {Z /g(a)}.
+Note that there is another computed answer, {Z /g(b)}, which we can obtain using
+clause (4) rather than (3). In Prolog implementations, answers subsequent to the
+ﬁrst can be obtained using the “;” command. Finally, the reader can easily check that
+the goal p(g(c)) in program Pc terminates with failure, a result that is obtained
+after having proved all four of the possible clause combinations.
+
+12.4.5 Some Examples
+
+In this subsection, we will focus on the Prolog language, and we will make
+use of its syntax. The notation [h|t] is used to denote the list which has h
+as its head and t as its tail. Let us remember that the head is the ﬁrst element
+in the list, while the tail is what remains of the list when the head has been
+removed. The empty list is written [], while [a,b,c] is an abbreviation for
+
+12.4 The Computational Model
+
+395
+
+[a | [b | [c |[] ]]] (the list composed of elements a, b and c). Note that
+in Prolog, as in pure logic programming language, there exists no list type, for
+which the binary function symbol [|] can be used for terms that are not lists. For
+example, we can also write [a | f(a)] which is not a list (because f(a) is not
+a list).
+
+As the ﬁrst example, let us consider the following program member which checks
+
+whether an element belongs to a given list:
+
+m e m b e r ( X , [ X | Xs ]).
+m e m b e r ( X , [ Y | Xs ]) : - m e m b e r ( X , Xs ).
+
+The declarative reading of the program is immediate: Clause (1) consists of the
+terminal case in which the element that we are looking for (the ﬁrst argument of
+the member predicate) is the head of the list (the second argument to the member
+predicate). Clause (2) instead provides the inductive case and tells us that X is an
+element of the list [Y|Xs] if it is an element of the list Xs.
+
+Formulated in this way, the member program is similar to the one that we could
+write in any language that supports recursion. However, let us note that, unlike in
+the imperative and functional paradigms, this program can be used in two different
+ways.
+
+The more conventional mode is the one in which it is used as a test. In a Prolog
+
+system, once the previous program has been input, we have:
+
+? - m e m b e r ( hewey , [ dewey , hewey , l o u i e ]).
+Yes
+
+where ?- is the abstract machine’s prompt, to which we have added the goal whose
+evaluation we require. The next line contains the interpreter’s answer. In this case,
+we have a simple “boolean” answer which expresses the existence of a successful
+computation of our goal. Moreover, as we know, we can also use the program to
+compute. For example, we can ask for the evaluation of:
+
+? - m e m b e r ( X , [ dewey , hewey , l o u i e ]).
+X = d e w e y
+
+The abstract machine returns {X/dewey} as the computed answer. We can also
+obtain more answers using the “;” command. When there are no more answer, the
+system replies “no”.
+
+Finally, even if it is used in a rather unnatural fashion, we can use the ﬁrst argument
+
+to instantiate the list that appears as the second argument. For example:
+
+? - m e m b e r ( dewey , [ X , hewey , l o u i e ]).
+X = d e w e y
+
+This possibility of using the same arguments as inputs or as outputs according to the
+way in which they are instantiated is unique to the logic paradigm and is due to the
+presence of uniﬁcation in the computational model.
+
+We can clarify this point further by considering the following append program
+
+which allows us to concatenate lists:
+
+a p p e n d ([] , Ys , Ys ).
+a p p e n d ([ X | Xs ] , Ys , [ X | Zs ]) : - a p p e n d ( Xs , Ys , Zs ).
+
+1
+
+2
+
+396
+
+12 Logic Programming Paradigm
+
+In this case, too, the declarative reading is immediate. If the ﬁrst list is empty, the
+results is the second list (clause(1)). Otherwise, (inductively), if Zs is the result of
+the concatenation of Xs and Ys, the result of the concatenation of [X|Xs] and Ys
+is obtained by adding X to the head of the list Zs, as indicated by [X|Zs].
+The normal use of the this program is illustrated by the following goal:
+
+? - a p p e n d ([ dewey , h e w e y ] , [ louie , d o n a l d ] , Zs ).
+Zs = [ dewey , hewey , louie , d o n a l d ]
+
+Moreover, we can use append also to know how to subdivide a list into sublists,
+
+something that is not possible in a functional or imperative program:
+
+? - a p p e n d ( Xs , Ys , [ dewey , h e w e y ]).
+Xs = []
+Ys = [ dewey , h e w e y ];
+Xs = [ d e w e y ]
+Ys = [ h e w e y ];
+Xs = [ dewey , h e w e y ]
+Ys = [];
+no
+
+Here, as before, the “;” command causes the computation of new solutions.
+
+As a third example, we give the deﬁnition of the sublist predicate (we used
+this in Sect. 12.1.1). If Xs is a sublist of Ys, then there exist another two (possibly
+empty) lists As and Bs such that Ys is the concatenation of As, Xs and Bs. We note
+that this means that Xs is the sufﬁx of a preﬁx of Ys. Hence using append, we can
+deﬁne sublist as follows:
+
+s u b l i s t ( Xs , Ys ) : - a p p e n d ( As , XsBs , Ys ) , append ( Xs , Bs , XsBs ).
+
+This program, combined with the append program and the sequence program
+of Sect. 12.1.1 allow us to solve the problem stated in Sect. 12.1.1. Note the concise-
+ness and simplicity of the resulting program. Clearly other deﬁnitions of sublist
+are possible (see Exercise 8).
+
+As a last example, let us consider a program that solves the classical problem
+of the Towers of Hanoi. We have a tower (in Computer Science terms, we would
+say a stack) composed of n perforated discs (of different diameters), arranged on a
+pole in order of decreasing diameter and we have 2 free poles. The problem consists
+of moving the tower to another pole, recreating the initial order of the discs. The
+following rules apply. The disks can be moved only from one pole to another. Only
+one disc at a time can be moved from one pole to another and the top disc must be
+taken from a pole. A disc cannot be put onto a smaller disc.
+
+According to legend, this problem was assigned by the Divinity to the monks of a
+monastery near to Hanoi. There were three poles and 64 discs of gold. The solution
+to the problem would have signalled the end of the world. Given that the optimal
+solution requires time exponential in the number of discs, even if the legend comes
+true, we can still remain calm for a while: 264 is a large enough number.
+
+The following program solves the problem for an arbitrary number of disc, N, and
+three poles called A, B and C. It uses the coding of the natural numbers in terms of
+0 and successor that we saw above.
+
+12.5 Extensions
+
+397
+
+hanoi ( s (0) , A , B , C [ move (A , B )]).
+
+h a n o i ( s ( N ) , A , B , C , M o v e s ): -
+h a n o i ( N , A , C , B , M o v e s 1 ) ,
+h a n o i ( N , C , B , A , M o v e s 2 ) ,
+a p p e n d ( Moves1 , [ move ( A , B )| M o v e s 2 ] , M o v e s ).
+
+The call hanoi(n, A, B, C, Move), where n is a (term which represents a)
+natural number, solves the problem of moving the tower of n discs from A to B using
+C as an auxiliary pole. The solution is contained in the Move variable which, when the
+computation terminates, is instantiated with the list containing move which contribute
+to the solution. Every move is represented by a term of the form move(X,Y) to
+indicate the move of the top disc of pole X to pole Y.
+
+This amazingly simple program demonstrates the power of logic programming
+and recursive reasoning. Let us give its declarative interpretation. The ﬁrst clause is
+clear: if we have just one disc, all we have to do is to move it from A from B. The
+reading of the second clause also is quite intuitive. If Moves1 is the list of moves
+that solves the problem of moving a tower of N discs from A to C using B as an
+auxiliary pole and Moves2 is the list of moves needed to move the tower of N disc
+from C to B using A as an auxiliary pole, to solve our problem in the case of N+1 (or
+s(N)) discs, we have to do the following: ﬁrst, execute all the moves in Moves1,
+then move from A to B (with the move move(A,B)) the N+1st disc in A which,
+being the largest, must be the last (at the bottom) in B as well. Finally, execute all the
+moves in Moves2. This is what is done by the append predicate which therefore
+will use the variable Moves to provide the solutions to this problem.
+
+12.5 Extensions
+
+Until now, we have seen pure logic programming and some, highly partial, aspects of
+Prolog. In this last section, we will brieﬂy outline some of the numerous extensions
+to the pure formalism which are used in real implemented logic languages. We
+defer to the next chapter an important extension of logic programming which is
+nowadays used in most Prolog languages, namely constraint logic programming.
+In the bibliographical notes we have included some references for those wishing to
+learn more.
+
+12.5.1 Prolog
+
+Prolog is a language that is much richer than it might appear from what has been
+said so far. Let us recall that this language differs from logic programming in its
+adoption of precise rules for selecting the next atom to be rewritten (left to right) and
+for selecting the next clause to use (top to bottom, according to the program text).
+
+398
+
+12 Logic Programming Paradigm
+
+In addition to these, there are other important differences with the theoretical
+
+formalism. We will list some of these without pretending to be exhaustive.
+
+Arithmetic
+
+A real language cannot allow itself the luxury of using a completely symbolic arith-
+metic with no predeﬁned operators. In Prolog, there exist therefore integers and
+reals (as ﬂoating point) as predeﬁned data structures and various operators for manip-
+ulating them. These include:
+
+• The usual arithmetic operators +, −, ∗ and // (integer division).
+• Arithmetic comparison operators such as <, <= >=, =:= (equal), = \ =
+
+(different).
+
+• An evaluation operator called is.
+
+Unlike other (function and predicate) symbols used in Prolog, these symbols
+use inﬁx notation for ease of use. There are however numerous delicate aspects that
+should be known to avoid simple mistakes.
+
+First, comparison operators always require that their operands are ground arith-
+
+metic expressions (they cannot contain variables). Thus, while we have20:
+
+? - 3*2 =:= 1+5
+Yes
+? 4 > 5+2
+no
+
+if we use terms that are not arithmetic expressions or which contain variables, error
+will be signalled, as in:
+
+? - 3 > a
+e r r o r in a r i t h m e t i c e x p r e s s i o n : a is not a n u m b e r
+? - X =:= 3+5
+i n s t a n t i a t i o n f a u l t .
+
+The last example is particularly disturbing. The evaluation of the arithmetic
+expression 3+5 produces the value 8 which we might expect to be bound to the
+variable X. This cannot be done using =:=, nor can it be done using syntactical
+equality between terms as considered in the previous paragraph. If we write X =
+3+5, indeed, the effect is that of binding X to the term 3+5 (rather than the value
+8). To avoid this problem, the expression evaluation operator is is introduced. This
+operator allows us to obtain the effect we desire; s is t indeed uniﬁes s with
+the value of the ground arithmetic expression t (if t is not a ground arithmetic
+expression, we have an error). The following are some examples of the use of is:
+
+20 At the prompt ?- we ﬁnd the query that we want to evaluate; the following line is the Prolog
+interpreter’s reply.
+
+12.5 Extensions
+
+399
+
+? - X is 3+5;
+X = 8
+? - 8 is 3 + 5
+Yes
+? - 6 is 3 * 3
+no
+? - X is Y *2
+e r r o r in a r i t h m e t i c e x p r e s s i o n : Y *2 is not a n u m b e r
+
+The use of is, necessary to be able to evaluate an expression, makes the use of
+arithmetic in Prolog rather complicated. For example, given the following program:
+
+e v a l u a t e (0 ,0).
+e v a l u a t e ( s ( X ) , Val +1) : - e v a l u a t e (X , Val )
+
+The goal evaluate(s(s(s(0))), X) does not compute the value 3 for X, as
+perhaps would have been expected, but the term 0+1+1+1 (see Exercise 9 at the
+end of this chapter, too).
+
+Cut
+
+Prolog provides various constructs for interaction with the abstract machine’s inter-
+preter so that the normal ﬂow of control can be modiﬁed. Among these, one of the
+more important (and most discussed) is cut. This is an argument-free predicate,
+written as an exclamation mark, which allows the programmer to eliminate some
+of the possible alternatives produced during evaluation, with the aim of increasing
+execution efﬁciency. It is used when we are sure that, when a condition is satisﬁed,
+the other clauses in the program are no longer useful. For example, the following
+program computes the minimum of two value. If a comparison condition is true, the
+other is necessarily false, so we can use ! to express the fact that once the ﬁrst clause
+has been used, there is no need to consider the second.
+
+m i n i m u m ( X , Y , X ) : - X < Y , !.
+m i n i m u m ( X , Y , Y ) : - X > Y .
+
+Alternatively, if we are interested only in testing whether a value appears at least
+
+once in a list, we can use the following modiﬁcation to the member program:
+
+m e m b e r ( X , [ X | Xs ]) : - !.
+m e m b e r ( X , [ Y | Xs ]) : - m e m b e r ( X , Xs ).
+
+In general, the meaning of cut is the following. Suppose that we have n clauses
+deﬁnining the predicate p
+
+p ( S1 ) : - A1 .
+...
+p ( Sk ) : - B , ! , C .
+...
+p ( Sn ) : - An .
+
+If, during the evaluation of the goal p(t), we ﬁnd the kth clause in the list being
+used, we have the following cases:
+
+400
+
+12 Logic Programming Paradigm
+
+1. If an evaluation of B fails,21 then we proceed by trying the k + 1st clause.
+2. If, instead, the evaluation of B succeeds, then ! is evaluated. It succeeds (it
+always does) and the evaluation proceeds with C. In the case of backtracking,
+however, all the alternative ways of computing B are eliminated, as well as are
+eliminated all the alternatives provided by the clauses from the kth to the nth to
+compute p(t).
+
+There is no need to say that cut, in addition to not being easy to use, eliminates a
+
+good part of the declarativeness of a program.
+
+Disjunction
+
+If we want to express the disjunction of two goals, G1 and G2, that is the fact that it
+is sufﬁcient that at least one of the two succeeds, we can use two clauses of the form:
+
+p ( X ) : - G1 .
+p ( X ) : - G2 .
+
+with the goal p(X). The same effect can be obtained writing G1;G2, where we have
+used the predeﬁned predicate “;”, which represents disjunction.
+
+If-then-else
+
+The traditional construct from imperative languages:
+
+If B then C1 else C2
+is provided in Prolog as a built-in with syntax B -> C1;C2. This construct is
+implemented using cut as follows:
+
+i f _ t h e n _ e l s e (B , C1 , C2 ) : - B , ! , C1 .
+i f _ t h e n _ e l s e (B , C1 , C2 ) : - C2 .
+
+Negation
+
+Thus far, we have seen that in the body of a clause, only “positive” atomic formulæ
+can be used; in other words, they cannot be negated.22 Often, however, it can also
+be useful to use negated atomic formulæ. For example, let us consider the following
+program, flights:
+
+d i r e c t _ f l i g h t ( bologna , paris ).
+d i r e c t _ f l i g h t ( bologna , a m s t e r d a m ).
+d i r e c t _ f l i g h t ( paris , b o m b a y ).
+
+2
+
+21 Here, B, just like Ai and C, is considered as an arbitrary goal and not necessarily an atomic one.
+22 Here, we refer to the H : −A1, . . . , An notation. If, instead, we consider a clause as a disjunction
+of literals, the atoms in the body are negated, given that the preceding representation is equivalent
+to ¬A1 ∨ · · · ∨ ¬An ∨ H .
+
+12.5 Extensions
+
+d i r e c t _ f l i g h t ( a m s t e r d a m , m o s c o w ).
+f l i g h t ( X , Y ): - d i r e c t _ f l i g h t ( X , Y ).
+f l i g h t ( X , Y ): - d i r e c t _ f l i g h t ( X , Z ) , f l i g h t (Z , Y ).
+
+401
+
+4
+
+6
+
+Here, we have a series of facts deﬁning the direct_flight predicate, which
+denotes the existence of a connection without stopover between two destinations.
+Then, we have the flight predicate which deﬁnes a ﬂight, possibly with interme-
+diate stops, between two locations. This will be a direct ﬂight (clause 5) or rather a
+direct ﬂight for a stopover different from the one that is the destination, followed by
+a ﬂight from this stopover to the destination (clause 6). With this program, we can
+check the existence of a ﬂight, or we can ask which destinations can be reached from
+a given airport:
+
+? - f l i g h t ( bologna , b o m b a y )
+Yes
+? - d i r e c t _ f l i g h t ( bologna , m o s c o w )
+no
+? - f l i g h t ( bologna , X )
+X = p a r i s
+
+However, we fail to express the fact that there exists only non-direct ﬂights. Indeed,
+there is no way we can express that there does not exist a direct ﬂight. To do this, we
+need negation. If we write:
+
+i n d i r e c t _ f l i g h t (X , Y ) : - f l i g h t (X , Y ) , not d i r e c t _ f l i g h t ( X , Y ).
+
+we mean to say that there exists an indirect ﬂight between X and Y if there exists
+a ﬂight (between X and Y) and there exist no direct ﬂight. With this deﬁnition, we
+have:
+
+? - i n d i r e c t _ f l i g h t ( bologna , b o m b a y )
+Yes
+? - i n d i r e c t _ f l i g h t ( bologna , paris )
+no
+
+These results can be explained as follows. The Prolog interpreter evaluates a
+goal such as not G by trying to evaluate the un-negated goal G. If the evaluation
+of this goal terminates (possibly after backtracking) with failure, then the goal not
+G succeeds. If, on the other hand, the goal G has a computation that terminates with
+success, then that of not G fails. Finally, if the evaluation of G does not terminate,
+then not G fails to terminate. This type of negation is called “negation as failure”,23
+in that it interprets the negation of a goal in terms of failure of the un-negated goal.
+Note that, because of inﬁnite computations,24 this type of negation differs from the
+negation in classical logic, given that the lack of success of G is not equivalent to the
+success of the negated version not G. For example, neither the goal p nor the goal
+not p succeed in the program p :- p.
+
+23 To be more precise, negation as failure, as deﬁned in the theoretical model of logic programming,
+has a behaviour that is slightly different from that described because of the incompleteness of the
+Prolog interpreter.
+24 And also non-ground goals, which we will not consider here.
+
+402
+
+12 Logic Programming Paradigm
+
+12.5.2 Logic Programming and Databases
+
+The flight program above indirectly indicates a possible application of logic
+programming in the context of databases.
+
+A set of unit clauses, such as those deﬁning the direct_flight predicate, is
+indeed, to all effects, the explicit (or extensional) deﬁnition of the relation denoted
+by this predicate. In this sense, this set of unit clauses can be seen as the ana-
+logue of a relation in the relational database model. To express a query, while in
+the relational model we would use relational algebra with the usual operations of
+selection, projection, join, etc., or more conveniently, a data manipulation language
+such as SQL, in the logic paradigm we can use its usual computational mechanisms.
+For example, to ﬁnd out if there is a direct ﬂight to Paris, we can use the query
+direct_flight(X,paris). The predicates deﬁned by the non-unit clauses
+such as flight, deﬁne relations in an implicit (or intensional) manner. They, indeed,
+allow us to compute new relations which are not explicitly stored, through the mech-
+anism of inference. Using database terminology, we will say that these predicates
+deﬁne “views” (or virtual relations).
+
+Note, moreover, that in the flights program, function symbols are not used.
+Indeed, if we want only to manipulate relations, as is the case in relational algebra,
+function symbols are not needed.
+
+These considerations were crystallised in the deﬁnition of Datalog, a logic lan-
+guage for databases. In its simplest form, it is a simpliﬁed version of logic program-
+ming in which:
+
+1. There are no function symbols.
+2. Extensional and intensional predicates are distinguished, as are comparison pred-
+
+icates.
+
+3. Extensional predicates cannot occur in the head of clauses with a non-empty body.
+4. If a variable occurs in the head, it must occur in the body of a clause.
+5. A comparison predicate can occur only in the body of a clause. The variables
+occurring in such a predicate must occur also in another atom in the body of the
+same clause.
+
+The last two conditions deal with the speciﬁc evaluation rule which Datalog uses25
+and will here will be ignored. The distinction between extensional and intensional
+predicates corresponds to the intuitive idea that has already been discussed. Exten-
+sional predicates, as condition (3) implies, can be deﬁned only by facts.
+
+The flights program can therefore be considered as a Datalog program.
+The reader who knows SQL or relational algebra will have no difﬁculty in under-
+standing how the presence of recursion increases the expressive power of Datalog
+beyond that of these other formalisms. Our program, flights, provides us with
+
+25 Datalog adopts a kind of bottom-up evaluation mechanism for goals. This differs from the top-
+down one we saw for logic programming. The results obtained are, however, the same.
+
+12.6 Advantages and Disadvantages of the Logic Paradigm
+
+403
+
+an example in this sense: the query flight(bologna, X) allows us to ﬁnd all
+the destinations that can be reached from Bologna with an arbitrary number of inter-
+mediate stops. This query is not expressible in relational algebra or in SQL (at least,
+in its initial version) since the number of joins that we must create depends on the
+number of intermediate stops and, in general, not knowing how many of them there
+are (we are making no assumptions about how relations are structured), we cannot
+deﬁne such a number a priori.
+
+12.6 Advantages and Disadvantages of the Logic Paradigm
+
+The few examples given in this chapter should be sufﬁcient to show that logic
+languages require a programming style that is signiﬁcantly different from that of
+traditional languages. They also have a different expressive power. Clearly, since
+both Prolog and the conventional programming languages are Turing-complete for-
+malisms, we are not saying that logic languages allow “to computate more things”
+than common imperative languages. The expressive power to which we refer is of a
+pragmatic kind, as we will make clearer in this section.
+
+First, it is worth repeating that logic languages, in a way analogous to functional
+languages, allow us express solutions even to very complex problems in a “purely
+declarative” way, and therefore in a simple and compact way. In our speciﬁc case,
+these aspects are further reinforced by three unique properties of the logic paradigm:
+(i) the ability to use a program in more than one way by transforming input arguments
+into outputs and viceversa; (ii) the possibility of obtaining a complex relationship
+between variables as a result, which implicitly expresses an inﬁnite number of solu-
+tions (given by all the values of the variables that satisfy the relation); (iii) the
+possibility of reading a program directly as a logical formula.
+
+The ﬁrst characteristic derives from the fact that the basic computational mech-
+anism, uniﬁcation, is intrinsically bi-directional. This does not happen either with
+assignment in imperative languages, or with pattern matching in functional languages
+because both of these mechanisms presuppose a direction in variable bindings. This
+ﬂexibility clearly allows us to use every program to its best, avoiding the duplication
+of code for modiﬁcations that are often only of a syntactic nature.
+
+The second property is particularly important to all application areas in which a
+single solution, understood as a set of speciﬁc values of interesting variables, either
+cannot be obtained (because the data do not contain enough information), or is not
+interesting, or is particularly difﬁcult to obtain computationally. This property will
+be more evident in the next chapter, when will discuss constraint logic programs .
+
+The third aspect, ﬁnally, at least in principle, makes it easier to verify the cor-
+rectness of logic programs than imperative ones, where a logical reading of pro-
+grams is possible but requires much more expressive (and complicated) tools. As
+already emphasised in Sect. 11.4, this aspect is essential to be able to obtain formal
+correctness-verifying tools that are easily usable on programs of signiﬁcant size.
+
+404
+
+12 Logic Programming Paradigm
+
+These three aspects, which we can summarise in the principle of “computation
+as deduction”, allow us to express in a natural fashion forms of reasoning that we
+encounter in artiﬁcial intelligence and knowledge representation (for example, in
+the context of the Semantic Web). The fact that control is handled entirely by the
+abstract machine through backtracking, allows to easily express search problems in
+a space of solutions.
+
+Logic languages can also proﬁtably be used as tools for the rapid prototyping of
+systems. Using Prolog, it is possible to describe in a very short period and in a
+compact way, even very complex systems, with the advantage, as far as speciﬁcation
+languages are concerned, that it can be executed.
+
+Thus far, advantages. Beside them, however, we can record various negative
+
+aspects of logic languages, at least in their classical versions.
+
+First, as already noted in this chapter, the control mechanism based on backtrack-
+ing is of limited efﬁciency. Various expedients can be used to improve this aspect,
+be it at the level of constructs used in programs, or at the implementation level. For
+example, abstract machines speciﬁc to logic languages such as the WAM (Warren
+Abstract Machine) have been deﬁned and have been variously optimised. However,
+the efﬁciency of a Prolog program remains fairly limited.
+
+The absence of types or modules is a second bad point, even if in this sense
+some more recent languages have proposed partial solutions (for example, the logic
+language, Mercury). From what was said in Chap. 8, it should be clear that the lack
+of an adequate type system makes program correctness checking relatively difﬁcult,
+despite the possibility of declarative reading.
+
+Also, the arithmetic constructs and, in general, built-ins in Prolog certainly do
+not facilitate the correctness of programs. This is because their use is not easy due
+to various semantic subtleties. This is particularly evident in the control constructs,
+which frequently force us to choose between a clear program that is not efﬁcient and
+an efﬁcient one that is, however, hard to understand.
+
+Finally, and for many reasons (not just a limited commercial interest), logic lan-
+guages almost always have a programming environment that is rather deﬁcient, where
+there are few of the characteristics available in the sophisticated environments for
+object-oriented programming.
+
+12.7 Summary
+
+In this chapter, we have presented the primary characteristics of the logic program-
+ming paradigm, a relatively recent paradigm (which has developed since the mid-
+1970s), which implements the old aspiration of seeing computation as a process that
+is entirely governed by logical laws. With only one chapter available to us, we have
+had to limit ourselves to introductory aspects, however what has been presented has
+enough formal precision to illustrate the computational model for logic programming
+languages. In particular, we have seen:
+
+12.8 Bibliographical Notes
+
+405
+
+• Some syntactic concepts in ﬁrst-order logic which are necessary for the deﬁnition
+
+of clauses and therefore logic programs.
+
+• The process of uniﬁcation which comprises the basic computational mechanism.
+This required a few concepts relating to terms and substitutions. We have also seen
+a speciﬁc algorithm for uniﬁcation.
+
+• How computation in a logic language works using a rule of deduction called
+SLD Resolution. In the text, we have chosen an approach that was inspired by a
+procedural reading of the clauses that demonstrate the similarity with “normal”
+procedures in imperative languages. Two boxes more formally introduced the
+concepts.
+
+After some examples, we saw some important extensions to the pure formalism,
+
+in particular:
+
+• Some speciﬁc characteristics of the Prolog language. We did not cover meta-
+programming, higher-order programming or constructs that manipulate the pro-
+gram at runtime, all of which are very important.
+
+• The idea of the use of logic languages in connection with databases.
+
+For more information on those aspects of Prolog that we have omitted or for
+a better introduction to Datalog, the reader is recommended to the literature listed
+below. On the other hand Constraint logic programs, an important extension, will be
+considered in the next chapter.
+
+12.8 Bibliographical Notes
+
+Herbrand’s ideas on uniﬁcation are in his doctoral dissertation from 1930 [2]. The
+deﬁnition of the resolution rule and the ﬁrst formalisation of the uniﬁcation algorithm
+are in A. Robinson’s work [3]. The uniﬁcation algorithm that we have presented was
+introduced in [4]. Major details of theory of uniﬁcation can be obtained from various
+articles and texts, among which is [5].
+
+The “historic” paper by R. Kowalski which introduced SLD Resolution and there-
+fore the theory of logic programming is [6]. K. L. Clark’s results on correctness and
+completion are in [7].
+
+There are many texts both on the theory of logic programming and on program-
+ming in Prolog. Among the former, there is the text by Lloyd [8] and the more recent
+and detailed treatment by Apt [1]. For programming in Prolog and for numerous
+(non-trivial) examples of programming, we advise the reader to consult the classic
+text by Sterling and Shapiro [9], from which we have taken the program that solves
+the problem of the Towers of Hanoi; there is also the book by Coelho and Cotta [10],
+from which we have taken the program in the example presented in Sect. 12.1.1.
+
+Finally, as for Datalog and, more generally, the use of logic programs with
+
+databases, [11] can be consulted.
+
+406
+
+12.9 Exercises
+
+12 Logic Programming Paradigm
+
+1. State a context-free grammar which deﬁnes propositional formulæ (that is those
+obtained by considering only predicates of arity 0 and without quantiﬁers).
+2. Assume that we have to represent the natural numbers using 0 for zero and s(n)
+for the successor of n. State what is the computed answer obtained by evaluating
+the goal p(s,t,X), in the following logic program, where s and t are terms
+that represent natural numbers:
+
+p (0 , X , X ).
+p ( s ( Y ) , X , s ( Z )): - p ( Y , X , Z ).
+
+3. State what are the computed answers obtained by evaluating the goal p(X) in
+
+the following logic program:
+
+p (0).
+p ( s ( X )): - q ( X ).
+q ( s ( X ): - p ( X ).
+
+4. Given the following logic program:
+
+m e m b e r ( X , [ X | Xs ]).
+m e m b e r ( X , [ Y | Xs ]): - m e m b e r ( X , Xs ).
+
+State what is the result of evaluating the goal:
+
+m e m b e r ( f ( X ) , [1 , f (2) , 3] ).
+
+5. Given the following Prolog program (recall that X and Y are variables, while
+
+a and b are constants):
+
+p ( b ): - p ( b ).
+p ( X ): - r ( b ).
+p ( a ): - p ( a ).
+r ( Y ).
+
+State whether the goal p(a) terminates or not; justify your answer.
+
+6. Consider the following logic program:
+
+p ( X ): - q ( a ) , r ( Y ).
+q ( b ).
+q ( X ): - p ( X ).
+r ( b ).
+
+State whether the goal p(b) terminates or not; justify your answer.
+
+7. Assuming that the natural numbers are represented using 0 for zero and s(n)
+for the successor of n and using a primitive write(x) that writes the term t,
+write a logic program that prints all the natural numbers.
+
+8. Deﬁne the sublist predicate in a direct fashion without using append.
+9. Write in Prolog a program that computes the length (understood as the number
+of elements) of a list and returns this value in numeric form. (Hint: consider an
+inductive deﬁnition of length and use the is operator to increment the value in
+the inductive case.)
+
+References
+
+407
+
+10. List the principle differences between a logic program and a Prolog program.
+11. If in a logic program, the order of the atoms in the body of a clause is changed,
+
+is the semantics of the program altered? Justify your answer.
+
+12. If in Prolog, the clause-selection rule were changed (for example, always
+selecting the lowest instead of the highest) would it change the semantics of
+the language? Justify your answer.
+
+13. Give an example of a logic program, P, and of a goal, G, such that the evaluation
+of G in P produces a different effect when two different selection rules are used.
+(Suggestion: since for computed answers there is no difference in the use of
+different selection rules, consider what happens to computations that do not
+terminate and that fail.)
+
+14. Informally describe a selection rule that allows us to obtain the least possible
+number of computations that do not terminate. (Suggestion: computations that
+do not terminate, by changing the selection rule, would become ﬁnite failures.
+Consider a rule that guarantees that all atoms in the goal are evaluated.)
+
+References
+
+1. K.R. Apt, From Logic Programming to Prolog (Prentice Hall, 1997)
+2. J. Herbrand, Logical Writings (Reidel, Dordrecht, 1971)
+3. J.A. Robinson, A machine-oriented logic based on the resolution principle. J. ACM 12(1),
+
+23–41 (1965)
+
+4. A. Martelli, U. Montanari, An efﬁcient uniﬁcation algorithm. ACM Trans. Program. Lang.
+
+Syst. 4, 258–282 (1982)
+
+5. E. Eder, Properties of substitutions and uniﬁcations. J. Symb. Comput. 1, 31–46 (1985)
+6. R.A. Kowalski, Predicate logic as a programming language. Inf. Process. 74, 569–574 (1974)
+7. K.L. Clark, Predicate logic as a computational formalism. Technical Report Res. Rep. DOC
+
+79/59, Imperial College (Department of Computing, London, 1979)
+
+8. J.W. Lloyd, Foundations of Logic Programming, 2nd edn. (Springer, 1987)
+9. L. Sterling, E. Shapiro, The Art of Prolog (MIT Press, 1986)
+10. H. Coelho, J.C. Cotta, Prolog by Example (Springer, 1988)
+11. S. Ceri, G. Gottlob, L. Tanca, Logic Programming and Databases (Springer, 1989)

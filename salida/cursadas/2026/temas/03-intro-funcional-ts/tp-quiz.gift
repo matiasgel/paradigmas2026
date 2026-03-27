@@ -1,0 +1,509 @@
+// TP 03: Introducción a Programación Funcional con TypeScript
+// Paradigmas y Lenguajes de Programación 2026 — UNTDF / IDEI
+// Importar en Moodle 5: Banco de preguntas > Importar > Formato GIFT
+// Encoding obligatorio: UTF-8 sin BOM
+// Preguntas: 60 | Tipo: MC simple + MC múltiple
+
+// ============================================================
+// CATEGORÍA A — Historia y Fundamentos Teóricos (Q01–Q10)
+// Trazabilidad: F-02 a F-09 — OA-7
+// ============================================================
+
+$CATEGORY: TP/03-intro-funcional-ts/A-historia-fundamentos
+
+::TP03-Q01-church-lambda::[markdown]El Entscheidungsproblem fue resuelto independientemente en 1936 por Church y Turing. ¿Cuál fue la herramienta formal específica que utilizó **Alonzo Church** para demostrar que no existe un procedimiento mecánico para decidir la verdad de todo enunciado matemático? {
+=El λ-cálculo, un sistema formal basado en funciones y sustitución de expresiones#Correcto. Church usó el λ-cálculo, que modela la computación como aplicación y reducción de funciones.
+~La Máquina de Turing, un dispositivo abstracto con cinta infinita y tabla de estados#Incorrecto. La Máquina de Turing fue la herramienta de Alan Turing, no de Church.
+~El álgebra de Boole, un sistema formal de operaciones lógicas binarias#Incorrecto. El álgebra de Boole fue creada por George Boole en el siglo XIX y no se usó para resolver el Entscheidungsproblem.
+~La teoría de tipos de Russell, un sistema para evitar paradojas en la lógica formal#Incorrecto. La teoría de tipos de Russell aborda las paradojas lógicas pero no fue la herramienta de Church para este problema.
+####Church publicó "An Unsolvable Problem of Elementary Number Theory" en 1936 en Annals of Mathematics. Su λ-cálculo es la base teórica del paradigma funcional.
+}
+
+::TP03-Q02-halting-problem::[markdown]El Halting Problem demostrado por Turing establece que\: {
+=Ningún algoritmo puede determinar, para todo programa y todo input arbitrario, si dicho programa terminará o entrará en loop infinito#Correcto. Ésta es la formulación precisa del Halting Problem.
+~Toda máquina de Turing eventualmente se detiene si recibe un input finito#Incorrecto. Esto es falso — existen programas que no terminan.
+~Existe al menos un programa que puede determinar si cualquier otro programa termina, pero su complejidad es exponencial#Incorrecto. El punto es que tal programa NO puede existir, independientemente de su complejidad.
+~Los programas funcionales siempre terminan pero los imperativos pueden no hacerlo#Incorrecto. Ambos paradigmas son computacionalmente equivalentes y ambos pueden tener programas que no terminan.
+####El Halting Problem implica que el Entscheidungsproblem no tiene solución general. Es un resultado fundamental de la computabilidad.
+}
+
+::TP03-Q03-tesis-church-turing::[markdown]La Tesis Church-Turing establece que\: {
+=Todo lo computable por una Máquina de Turing también es computable por el λ-cálculo, y viceversa — ambos modelos son equivalentes en poder computacional#Correcto. La tesis establece equivalencia en poder de cómputo entre los dos modelos.
+~El paradigma funcional es más expresivo que el imperativo para problemas de concurrencia#Incorrecto. La tesis no habla de expresividad ni de concurrencia sino de equivalencia computacional.
+~El λ-cálculo es más eficiente que la Máquina de Turing para ciertos tipos de cómputos#Incorrecto. La tesis no hace afirmaciones sobre eficiencia, sino sobre qué es computable.
+~Toda función computable puede resolverse en tiempo polinomial si se usa el modelo adecuado#Incorrecto. La tesis no dice nada sobre complejidad temporal — solo sobre computabilidad.
+####La equivalencia significa que cualquier problema que uno puede resolver, el otro también. Pero los modelos tienen filosofías opuestas: uno modifica estado y el otro sustituye expresiones.
+}
+
+::TP03-Q04-turing-legado::[markdown]La cadena de legado histórico **Máquina de Turing → arquitectura von Neumann → paradigma imperativo** implica que\: {
+=El paradigma imperativo hereda su modelo de computar como modificación secuencial de estado, análogo a la cabeza de la Máquina de Turing que lee, escribe y mueve sobre una cinta#Correcto. El imperativo computa modificando el estado de la memoria, como la Máquina de Turing modifica la cinta.
+~La CPU moderna ejecuta λ-cálculo internamente y lo traduce a instrucciones de máquina#Incorrecto. La CPU ejecuta el modelo de Turing (instrucciones que modifican registros y memoria).
+~Von Neumann diseñó su arquitectura basándose en el λ-cálculo de Church#Incorrecto. Von Neumann se basó en el modelo de Turing, no en el de Church.
+~El paradigma imperativo fue creado directamente por Turing en el paper de 1936#Incorrecto. Turing formalizó el modelo de computación, pero el paradigma imperativo como tal surgió con los primeros lenguajes como Fortran (1957).
+}
+
+::TP03-Q05-primer-funcional::[markdown]¿Cuál fue el primer lenguaje de programación explícitamente basado en el λ-cálculo, y en qué año fue creado? {
+=Lisp, 1958 — creado por John McCarthy en MIT#Correcto. Lisp fue el primer lenguaje funcional, basado directamente en el λ-cálculo.
+~Fortran, 1957 — creado por John Backus en IBM#Incorrecto. Fortran fue el primer lenguaje imperativo de alto nivel, no funcional.
+~Haskell, 1990 — creado por un comité académico#Incorrecto. Haskell fue el primer lenguaje puramente funcional amplio, pero Lisp lo precedió por 32 años.
+~Scheme, 1975 — creado por Steele y Sussman en MIT#Incorrecto. Scheme es un dialecto de Lisp posterior. El primer lenguaje funcional fue Lisp.
+}
+
+::TP03-Q06-fin-clock-scaling::[markdown]¿Cuál fue el cambio tecnológico específico de mediados de los 2000s que motivó la adopción masiva de características funcionales en lenguajes imperativos como Java, JavaScript y Python? {
+=Los CPUs dejaron de crecer en frecuencia de clock y pasaron a múltiples núcleos, haciendo que el estado mutable compartido entre threads generara condiciones de carrera#Correcto. La transición a multicore hizo que la concurrencia con estado mutable fuera inmanejable.
+~La invención de la nube y los microservicios requería un nuevo paradigma de programación#Incorrecto. Los microservicios son posteriores y no son el motivo directo de la adopción funcional.
+~Los lenguajes funcionales puros demostraron ser más rápidos que los imperativos en benchmarks estándar#Incorrecto. Los lenguajes funcionales no son inherentemente más rápidos; la motivación fue la seguridad en concurrencia.
+~La creciente popularidad de Haskell en la industria obligó a los lenguajes mainstream a competir#Incorrecto. Haskell sigue siendo un lenguaje de nicho; la causa fue el problema hardware del multicore.
+####Cuando los CPUs pasaron a multicore, el estado mutable compartido entre threads se volvió el enemigo: condiciones de carrera, deadlocks y bugs imposibles de reproducir. La inmutabilidad funcional los elimina por diseño.
+}
+
+::TP03-Q07-java8-funcional::[markdown]¿Qué incorporó Java en la versión 8 (2014) proveniente del paradigma funcional? {
+=Lambdas, Stream API y `Optional`#Correcto. Java 8 fue la versión que incorporó las principales características funcionales.
+~Clases abstractas, interfaces y herencia múltiple#Incorrecto. Estos son conceptos de orientación a objetos que Java ya tenía.
+~Recolección de basura, tipos genéricos y anotaciones#Incorrecto. La recolección de basura existe desde Java 1.0 y los genéricos desde Java 5.
+~Inmutabilidad por defecto, pattern matching y tipos algebraicos#Incorrecto. Java 8 no implementó inmutabilidad por defecto ni tipos algebraicos (esas features llegaron parcialmente en versiones posteriores).
+}
+
+::TP03-Q08-clojure-diseno::[markdown]Clojure fue creado por Rich Hickey en 2007 con un objetivo de diseño principal. ¿Cuál es? {
+=Ser un lenguaje funcional puro y práctico para sistemas concurrentes, con inmutabilidad estructural nativa sobre la JVM#Correcto. Hickey diseñó Clojure para eliminar los problemas de concurrencia con estado mutable en Java.
+~Ser una versión moderna de Haskell con sintaxis más accesible para programadores Java#Incorrecto. Clojure es un dialecto de Lisp, no de Haskell.
+~Reemplazar a Scala como el lenguaje funcional principal de la JVM para big data#Incorrecto. Clojure no fue diseñado para reemplazar a Scala; tiene distintos nichos.
+~Ser un lenguaje funcional para frontend web que compile a JavaScript#Incorrecto. Aunque existe ClojureScript, el objetivo primario de Clojure fue la concurrencia segura en la JVM.
+}
+
+::TP03-Q09-arrow-lambda::[markdown]¿Cuál es la relación directa entre la notación `n => n * 2` de TypeScript y el λ-cálculo de Church de 1936? {
+=`n => n * 2` es una función anónima (lambda) — la misma idea de `(λn. n * 2)` del λ-cálculo, con sintaxis moderna#Correcto. Las arrow functions son lambdas, y la palabra "lambda" proviene directamente del cálculo de Church.
+~No hay relación directa; la arrow function es una innovación de ES6 sin precedente teórico#Incorrecto. Las arrow functions son lambdas, concepto que viene directamente del λ-cálculo.
+~La relación es solo nominal — se llaman "lambda" por convención pero operan de forma completamente distinta#Incorrecto. La operación fundamental es la misma: definir una función anónima que toma un parámetro y produce un resultado.
+~`n => n * 2` corresponde a la Máquina de Turing porque modifica el valor de `n`#Incorrecto. No modifica `n` — produce un nuevo valor. Esto es sustitución funcional, no mutación de estado.
+}
+
+::TP03-Q10-lenguajes-comun::[markdown]¿Qué característica comparten Erlang (1986), Scala (2003) y Elixir (2012) como lenguajes funcionales, según la historia del paradigma? {
+=Cada uno nació para resolver un problema concreto de su época (telecomunicaciones, big data, web en tiempo real) — no como ejercicio académico#Correcto. Cada lenguaje funcional moderno surgió para resolver necesidades industriales específicas.
+~Los tres son lenguajes puramente funcionales que no permiten ningún tipo de mutación#Incorrecto. Scala es multiparadigma y permite mutación; Erlang y Elixir permiten estado en procesos.
+~Fueron creados por el mismo equipo de investigación en distintas universidades europeas#Incorrecto. Fueron creados por personas y organizaciones diferentes (Armstrong/Ericsson, Odersky/EPFL, Valim).
+~Los tres compilan a código nativo para maximizar el rendimiento#Incorrecto. Scala compila a bytecode JVM y Elixir a bytecode BEAM; ninguno compila a nativo directamente.
+}
+
+// ============================================================
+// CATEGORÍA B — Modelo Funcional vs Imperativo (Q11–Q18)
+// Trazabilidad: F-10, F-11, F-12 — OA-1
+// ============================================================
+
+$CATEGORY: TP/03-intro-funcional-ts/B-modelo-funcional
+
+::TP03-Q11-computar-funcional::[markdown]En el paradigma funcional, "computar" significa\: {
+=Reducir (reescribir) una expresión hasta llegar a su forma normal, sin modificar ningún estado#Correcto. El cómputo funcional procede por sustitución de expresiones — β-reducción.
+~Ejecutar instrucciones secuenciales que modifican variables en memoria#Incorrecto. Esto describe el paradigma imperativo, no el funcional.
+~Compilar el código fuente a instrucciones de máquina optimizadas#Incorrecto. La compilación no es "computar" en el sentido del paradigma.
+~Iterar sobre estructuras de datos usando loops y acumuladores#Incorrecto. Esto describe el estilo imperativo. El funcional usa recursión y composición.
+}
+
+::TP03-Q12-diferencia-fundamental::[markdown]¿Cuál es la diferencia **fundamental** entre los paradigmas imperativo y funcional, según el modelo teórico de cada uno? {
+=El imperativo computa modificando el estado de la memoria paso a paso; el funcional computa sustituyendo expresiones por sus valores equivalentes#Correcto. Esta es la diferencia de raíz, heredada de Turing (estado) vs Church (sustitución).
+~El imperativo usa variables y el funcional no usa ningún tipo de dato#Incorrecto. El funcional sí usa datos — lo que no usa son variables mutables.
+~El imperativo es más rápido porque opera a bajo nivel; el funcional sacrifica rendimiento por elegancia#Incorrecto. La diferencia es filosófica (qué es computar), no de rendimiento.
+~El imperativo es para programas pequeños y el funcional para sistemas distribuidos grandes#Incorrecto. Ambos paradigmas son aplicables a cualquier escala de programa.
+}
+
+::TP03-Q13-beta-reduccion::[markdown]¿Qué es la β-reducción en el contexto del λ-cálculo? {
+=El paso de evaluación donde se sustituye el argumento por el parámetro en el cuerpo de una función aplicada\: `(λx. expr) arg → expr[x/arg]`#Correcto. La β-reducción es la operación fundamental del λ-cálculo.
+~El proceso de optimización donde el compilador elimina código muerto#Incorrecto. La eliminación de código muerto es una optimización de compilador, no β-reducción.
+~La transformación de una función recursiva en un loop iterativo equivalente#Incorrecto. Eso se llama tail-call optimization, no β-reducción.
+~El mecanismo por el cual la Máquina de Turing cambia de estado al leer un símbolo#Incorrecto. Eso describe la función de transición de la Máquina de Turing, no la β-reducción del λ-cálculo.
+}
+
+::TP03-Q14-evaluar-beta::[markdown]Dada la expresión del λ-cálculo `(λx. x * x) 5`, ¿cuál es el resultado de aplicar **un paso** de β-reducción? {
+=`5 * 5` — se sustituye `x` por `5` en el cuerpo `x * x`#Correcto. La β-reducción sustituye el argumento (5) por el parámetro (x) en el cuerpo.
+~`25` — el resultado final de la evaluación completa#Incorrecto. 25 es el resultado final, pero un solo paso de β-reducción produce la expresión `5 * 5`.
+~`(λx. 25)` — se evalúa el cuerpo y se envuelve en otra lambda#Incorrecto. La β-reducción no envuelve el resultado en otra lambda.
+~`(λ5. 5 * 5)` — se sustituye el nombre del parámetro por el argumento#Incorrecto. Se sustituye el parámetro `x` por `5` dentro del cuerpo, no el nombre del parámetro.
+####Un solo paso de β-reducción produce `5 * 5`. Un segundo paso de evaluación aritmética produce `25`.
+}
+
+::TP03-Q15-elemento-central::[markdown]¿Cuál es el "elemento central" del paradigma funcional, en contraste con la "variable mutable + asignación" del imperativo? {
+=Función + sustitución#Correcto. El paradigma funcional se centra en funciones como unidad de abstracción y la sustitución como mecanismo de cómputo.
+~Clase + herencia#Incorrecto. Esto corresponde al paradigma orientado a objetos.
+~Proceso + mensaje#Incorrecto. Esto corresponde al modelo de actores (Erlang), no al paradigma funcional en general.
+~Array + iteración#Incorrecto. Esto describe un patrón del paradigma imperativo.
+}
+
+::TP03-Q16-estado-resultado::[markdown]¿Por qué el resultado de una expresión funcional pura **no depende del estado de la máquina** en el momento de su evaluación? {
+=Porque la expresión solo usa sus argumentos y no lee ni modifica variables externas — cada evaluación es una sustitución autocontenida#Correcto. La independencia del estado es consecuencia directa de la pureza funcional.
+~Porque el compilador funcional cachea todos los resultados en una tabla de memoización global#Incorrecto. La memoización es una optimización posible, no la razón de la independencia del estado.
+~Porque los lenguajes funcionales no tienen acceso a la memoria RAM del sistema#Incorrecto. Los lenguajes funcionales acceden a la memoria; lo que no hacen es depender de su estado.
+~Porque las funciones funcionales se ejecutan en un sandbox aislado del sistema operativo#Incorrecto. No existe tal sandbox; la independencia viene de las propiedades del paradigma, no del runtime.
+}
+
+::TP03-Q17-control-flujo::[markdown]El paradigma funcional utiliza como mecanismos de control de flujo\: {
+=Recursión y composición de funciones#Correcto. En lugar de loops e instrucciones secuenciales, el funcional usa recursión y composición.
+~Instrucciones secuenciales y loops `for`/`while`#Incorrecto. Los loops son control de flujo imperativo.
+~Excepciones y bloques `try`/`catch`#Incorrecto. Las excepciones con side effects no son parte del modelo funcional puro.
+~Hilos de ejecución y sincronización con locks#Incorrecto. Esto describe concurrencia imperativa, no control de flujo funcional.
+}
+
+::TP03-Q18-paralelizable::[markdown]Un pipeline funcional como `.filter(pred).map(fn).reduce(acc, init)` es más fácilmente paralelizable que un loop imperativo equivalente porque\: {
+=Ninguna de las operaciones modifica estado compartido — cada transformación produce datos nuevos sin interferir con las demás#Correcto. Sin estado mutable compartido, no hay condiciones de carrera y cada operación puede ejecutarse independientemente.
+~El motor de JavaScript detecta automáticamente los pipelines funcionales y los distribuye en múltiples cores#Incorrecto. V8 no paraleliza automáticamente pipelines; la propiedad es teórica del paradigma.
+~Las funciones `map` y `filter` están implementadas en código nativo optimizado para múltiples hilos#Incorrecto. La implementación estándar es single-threaded; lo paralelizable es la propiedad del paradigma.
+~Los arrays en TypeScript son thread-safe por defecto, a diferencia de los arrays en C++#Incorrecto. Los arrays de JS no son thread-safe; lo que facilita la paralelización es la ausencia de mutación en el paradigma funcional.
+}
+
+// ============================================================
+// CATEGORÍA C — Funciones Puras (Q19–Q30)
+// Trazabilidad: F-13, F-14, F-15 — OA-2, OA-3, OA-5
+// ============================================================
+
+$CATEGORY: TP/03-intro-funcional-ts/C-funciones-puras
+
+::TP03-Q19-definicion-pura::[markdown]Una función es **pura** si y solo si cumple simultáneamente\: {
+=Su salida depende exclusivamente de sus argumentos Y no produce ningún efecto colateral observable#Correcto. Ambas condiciones deben cumplirse para que la función sea pura.
+~Su salida depende exclusivamente de sus argumentos, sin importar si produce efectos colaterales#Incorrecto. Las dos condiciones son necesarias simultáneamente. Producir side effects la hace impura.
+~No produce efectos colaterales, aunque su salida pueda depender de variables globales#Incorrecto. Si depende de variables globales, viola la primera condición.
+~Está definida con `const` y arrow function en TypeScript#Incorrecto. La sintaxis no determina la pureza. Una arrow function puede ser impura si lee estado externo o produce side effects.
+}
+
+::TP03-Q20-impura-date::[markdown]¿Por qué la función `const ahora = () => Date.now()` **no** es una función pura? {
+=Porque su resultado depende del estado externo (el reloj del sistema) — llamarla dos veces consecutivas puede dar resultados distintos#Correcto. La salida varía sin cambio en los argumentos, violando la primera condición de pureza.
+~Porque `Date.now()` es un método estático y los métodos estáticos no son funcionales#Incorrecto. El hecho de ser estático no determina la pureza.
+~Porque devuelve un número y las funciones puras deben devolver objetos inmutables#Incorrecto. Los números son inmutables; el problema es la dependencia del estado externo.
+~Porque no recibe argumentos y las funciones puras deben recibir al menos uno#Incorrecto. Una función sin argumentos puede ser pura si siempre devuelve el mismo valor (ej\: `() => 42`).
+####La misma llamada `ahora()` devuelve un valor distinto en cada ejecución porque lee el reloj del sistema — no es determinista respecto a sus argumentos (vacíos).
+}
+
+::TP03-Q21-impura-push::[markdown]Considerá la siguiente función TypeScript\:
+
+`const agregar = (arr\: number[], elem\: number) => \{ arr.push(elem); return arr; \}`
+
+¿Es pura? {
+=No, porque `arr.push(elem)` modifica el array original recibido como argumento — produce un efecto colateral#Correcto. `push` muta el array en su lugar, lo cual es un side effect observable.
+~Sí, porque recibe todos los datos como argumentos y devuelve un resultado#Incorrecto. Recibir datos como argumentos no es suficiente — también modifica la referencia original.
+~Sí, porque devuelve el mismo array con el elemento agregado, lo cual es predecible#Incorrecto. Modifica el array original, afectando cualquier otra referencia a ese mismo array.
+~No, porque usa llaves en la arrow function en lugar de una expresión directa#Incorrecto. El uso de llaves no determina la pureza; el problema es la mutación.
+####`push` modifica el array original in-place. Cualquier código que tenga una referencia a ese array verá el cambio. La versión pura sería `(arr, elem) => [...arr, elem]`.
+}
+
+::TP03-Q22-impura-incrementar::[markdown]Dado el siguiente código\:
+
+`let x \= 0; const siguiente \= ()\: number => ++x;`
+
+Si ejecutás `siguiente() + siguiente()`, ¿qué resultado obtenés y por qué? {
+=`3` — la primera llamada devuelve 1 (x pasa a 1) y la segunda devuelve 2 (x pasa a 2), sumando 1+2\=3. La función no es pura porque depende de y modifica `x` externo#Correcto. `++x` modifica `x` como efecto colateral, haciendo que cada llamada devuelva un valor distinto.
+~`2` — ambas llamadas devuelven 1 porque `x` se reinicia entre llamadas#Incorrecto. `x` no se reinicia; `++x` lo incrementa permanentemente.
+~`0` — `siguiente()` no modifica `x` porque `const` impide la reasignación#Incorrecto. `const` protege la referencia de `siguiente`, no la variable `x` que es `let`.
+~`4` — la primera llamada devuelve 2 y la segunda devuelve 2#Incorrecto. `++x` es pre-incremento\: la primera llamada lleva x a 1 y devuelve 1.
+}
+
+::TP03-Q23-pura-sumar::[markdown]¿Por qué la función `const sumar \= (a\: number, b\: number)\: number => a + b` es clasificada como pura? {
+=Porque su resultado depende exclusivamente de `a` y `b`, y no produce ningún efecto colateral — `sumar(3, 4)` siempre devuelve 7#Correcto. Cumple ambas condiciones de pureza.
+~Porque está definida con `const` y por lo tanto su valor no puede cambiar#Incorrecto. `const` impide reasignar la variable, pero no determina la pureza de la función.
+~Porque usa tipos estáticos que garantizan que no hay side effects#Incorrecto. Los tipos estáticos de TypeScript no garantizan la ausencia de side effects.
+~Porque es una arrow function y todas las arrow functions son puras en TypeScript#Incorrecto. Las arrow functions pueden ser impuras si leen estado externo o producen side effects.
+}
+
+::TP03-Q24-efectos-colaterales::[markdown]¿Cuál de las siguientes acciones **NO** constituye un efecto colateral de una función? {
+=Calcular y devolver un valor nuevo a partir de los argumentos recibidos, sin leer ni escribir nada externo#Correcto. Calcular un resultado a partir de los argumentos es la operación esperada de una función pura.
+~Modificar una variable definida fuera del scope de la función#Incorrecto. Eso sí es un efecto colateral.
+~Escribir en la consola con `console.log()`#Incorrecto. `console.log()` es I/O y constituye un efecto colateral.
+~Leer una propiedad de un objeto global como `window.innerWidth`#Incorrecto. Leer estado global externo hace que la función dependa de algo que no es su argumento.
+}
+
+::TP03-Q25-testing-puras::[markdown]¿Por qué las funciones puras son más fáciles de testear unitariamente que las funciones con efectos colaterales? {
+=Porque no requieren setup ni teardown de estado externo — se testean solo con argumentos de entrada y valor de retorno esperado#Correcto. Un test de función pura es `expect(f(input)).toBe(output)`, sin configuración adicional.
+~Porque TypeScript genera automáticamente tests unitarios para funciones declaradas con `const`#Incorrecto. TypeScript no genera tests automáticamente.
+~Porque las funciones puras siempre devuelven `true` o `false`, lo cual simplifica las assertions#Incorrecto. Las funciones puras pueden devolver cualquier tipo, no solo booleanos.
+~Porque los frameworks de testing (Jest, Vitest) optimizan internamente la ejecución de funciones puras#Incorrecto. Los frameworks no distinguen entre funciones puras e impuras.
+####Para testear `sumar(3, 4)` solo necesitás\: `expect(sumar(3, 4)).toBe(7)`. No hay base de datos que inicializar, archivo que crear, ni estado global que resetear.
+}
+
+::TP03-Q26-concurrencia-puras::[markdown]¿Por qué dos threads que llaman simultáneamente a la misma función pura con los mismos argumentos **no** pueden interferirse? {
+=Porque cada invocación trabaja exclusivamente con sus propios argumentos y variables locales, sin acceder a estado mutable compartido#Correcto. Sin estado compartido, no hay posibilidad de condición de carrera.
+~Porque el runtime de JavaScript es single-threaded y nunca ejecuta dos funciones al mismo tiempo#Incorrecto. Esto es verdad para el event loop de JS, pero la pregunta es sobre el paradigma — y la propiedad aplica en lenguajes multi-threaded.
+~Porque el compilador inserta automáticamente locks (mutex) alrededor de cada función pura#Incorrecto. No se necesitan locks porque no hay estado compartido que proteger.
+~Porque las funciones puras se ejecutan en modo read-only a nivel del sistema operativo#Incorrecto. No existe tal modo a nivel de OS; la seguridad viene de las propiedades del paradigma.
+}
+
+::TP03-Q27-llamadas-puras::[markdown]Si `const cuadrado \= (n\: number)\: number => n * n` es una función pura, ¿qué podemos afirmar con certeza sobre `cuadrado(7)` ejecutado 1000 veces? {
+=Las 1000 invocaciones devuelven exactamente `49` — el resultado es determinista e independiente del contexto de ejecución#Correcto. Esta es la propiedad fundamental de las funciones puras.
+~Las 1000 invocaciones probablemente devuelven `49`, pero podría haber variaciones por caching del compilador#Incorrecto. La pureza garantiza el resultado sin ambigüedad.
+~Las primeras invocaciones devuelven `49` pero las posteriores podrían devolver un valor cacheado diferente debido a la memoización#Incorrecto. La memoización devolvería exactamente el mismo valor; no "diferente".
+~Solo las invocaciones que ocurren en el mismo tick del event loop devuelven `49` — las de otros ticks podrían diferir#Incorrecto. El resultado es siempre el mismo, independientemente del momento de ejecución.
+}
+
+::TP03-Q28-identificar-pura::[markdown]¿Cuál de las siguientes funciones TypeScript es **pura**? {
+=`const longitud \= (s\: string)\: number => s.length`#Correcto. Solo depende del argumento `s` y `length` no produce side effects.
+~`const log \= (msg\: string)\: void => \{ console.log(msg); \}`#Incorrecto. `console.log` es I/O — un efecto colateral.
+~`const random \= (max\: number)\: number => Math.floor(Math.random() * max)`#Incorrecto. `Math.random()` produce un valor distinto en cada llamada — no es determinista.
+~`const tiempo \= ()\: string => new Date().toISOString()`#Incorrecto. Depende del reloj del sistema — estado externo.
+}
+
+::TP03-Q29-random-condicion::[markdown]`Math.random()` viola la condición de pureza porque\: {
+=Devuelve un valor distinto en cada llamada sin que cambien sus argumentos (no recibe ninguno) — viola la condición de determinismo#Correcto. La primera condición de pureza exige que mismos argumentos produzcan siempre el mismo resultado.
+~Porque es un método estático de la clase `Math` y los métodos estáticos no pueden ser puros#Incorrecto. Hay métodos estáticos puros, como `Math.max(3, 5)` que siempre devuelve 5.
+~Porque devuelve un `number` con decimales y los decimales causan imprecisión de punto flotante#Incorrecto. La imprecisión de punto flotante es un problema diferente; el issue es la no-determinismo.
+~Porque internamente modifica el generador de semillas del runtime, lo cual es un efecto colateral, pero si ignoramos eso, la función sí es pura#Incorrecto. No se puede ignorar la no-determinismo — la no-determinismo de la salida por sí sola ya la hace impura.
+}
+
+::TP03-Q30-sort-pura::[markdown]Considerá\: `const ordenar \= (arr\: number[]) => arr.sort((a, b) => a - b)`. ¿Es esta función pura? {
+=No — `Array.sort()` en JavaScript muta el array original in-place, produciendo un efecto colateral sobre el argumento recibido#Correcto. `sort()` modifica el array en su lugar; cualquier otra referencia al array verá el cambio.
+~Sí — recibe un array como argumento y devuelve el mismo array ordenado, cumpliendo ambas condiciones#Incorrecto. Devolver el mismo array (mutado) es precisamente el problema — modifica el argumento.
+~Sí — `.sort()` devuelve un nuevo array ordenado sin modificar el original#Incorrecto. `.sort()` en JavaScript muta el array original.
+~No — porque la función comparadora `(a, b) => a - b` podría devolver resultados inconsistentes#Incorrecto. La función comparadora es pura; el problema es que `sort()` muta el array.
+####Versión pura\: `const ordenar \= (arr\: number[]) => [...arr].sort((a, b) => a - b)`. Primero copia con spread, luego ordena la copia.
+}
+
+// ============================================================
+// CATEGORÍA D — Inmutabilidad (Q31–Q38)
+// Trazabilidad: F-16, F-17 — OA-2, OA-5
+// ============================================================
+
+$CATEGORY: TP/03-intro-funcional-ts/D-inmutabilidad
+
+::TP03-Q31-definicion-inmutabilidad::[markdown]¿Qué significa inmutabilidad en el contexto del paradigma funcional? {
+=Una vez que un valor es asignado a un nombre, no puede ser modificado — si se necesita un valor diferente, se crea uno nuevo#Correcto. La inmutabilidad prohíbe la modificación de valores existentes.
+~Las variables no pueden ser declaradas con `let`, sino obligatoriamente con `const`#Incorrecto. `const` es una herramienta de TypeScript, pero la inmutabilidad es un concepto del paradigma más amplio que una keyword.
+~Los programas funcionales no pueden crear variables después de la inicialización#Incorrecto. Se pueden crear nuevas ligaduras (bindings) en cualquier momento; lo que no se puede es modificar las existentes.
+~Los datos de entrada de una función no pueden ser leídos más de una vez durante la ejecución#Incorrecto. Los datos pueden leerse cuantas veces se necesite; lo que no se puede es modificarlos.
+}
+
+::TP03-Q32-const-push::[markdown]Dado\: `const numeros \= [1, 2, 3]; numeros.push(4);` — ¿qué ocurre en TypeScript? {
+=Compila sin error y `numeros` pasa a ser `[1, 2, 3, 4]` — `const` impide reasignar la referencia pero no impide mutar el contenido del array#Correcto. Esta es la "trampa" de `const` — protege la referencia, no el contenido.
+~Error de compilación porque `const` impide cualquier modificación del array#Incorrecto. `const` solo impide `numeros \= otroArray`, no `numeros.push()`.
+~Compila sin error pero `push` devuelve un nuevo array sin modificar el original#Incorrecto. `push` muta el array original in-place y devuelve la nueva longitud.
+~Error de runtime porque los arrays `const` están congelados en memoria#Incorrecto. `const` no congela objetos; para eso se necesitaría `Object.freeze()`.
+####Para inmutabilidad real en TypeScript\: usar `as const` (readonly) o crear copias con spread `[...numeros, 4]`.
+}
+
+::TP03-Q33-crear-inmutable::[markdown]¿Cuál es la forma correcta de "agregar" un elemento a un array en estilo funcional inmutable en TypeScript? {
+=`const masNumeros \= [...numeros, 4]` — crear un nuevo array con spread operator#Correcto. El spread crea una copia nueva sin modificar el original.
+~`numeros.push(4)` — usar el método nativo del array#Incorrecto. `push` muta el array original, rompiendo la inmutabilidad.
+~`numeros[numeros.length] \= 4` — agregar por índice#Incorrecto. Esto muta el array original.
+~`numeros.concat(4)` — concat siempre devuelve void#Incorrecto. `concat` sí devuelve un nuevo array (no void), y es una alternativa válida, pero la opción que dice "void" es incorrecta.
+}
+
+::TP03-Q34-as-const::[markdown]¿Para qué sirve `as const` al declarar un array en TypeScript como `const nums \= [1, 2, 3] as const`? {
+=Convierte el array en `readonly` — el compilador rechaza cualquier intento de mutar su contenido (push, splice, asignación por índice)#Correcto. `as const` hace que TypeScript trate el array como una tupla readonly inmutable.
+~Hace que el array se almacene en memoria de solo lectura del sistema operativo#Incorrecto. `as const` es una directiva del compilador TypeScript, no del runtime ni del OS.
+~Congela recursivamente todos los objetos anidados como `Object.freeze()` pero en tiempo de compilación#Incorrecto. `as const` hace readonly recursivo a nivel de tipos, pero no aplica `Object.freeze()`.
+~Convierte el array en un tipo literal numérico para optimización del compilador#Incorrecto. Sí infiere tipos literales, pero su propósito principal es la inmutabilidad de tipos.
+}
+
+::TP03-Q35-ts-vs-clojure-inmut::[markdown]¿Cuál es la diferencia fundamental entre la inmutabilidad en TypeScript y en Clojure? {
+=En TypeScript la inmutabilidad es opt-in (el programador la elige con `const`/`as const`/`readonly`); en Clojure es nativa y es imposible violarla por diseño del lenguaje#Correcto. TypeScript es disciplina; Clojure es garantía.
+~En TypeScript `const` garantiza inmutabilidad total; en Clojure se puede mutar con funciones especiales#Incorrecto. `const` en TypeScript no garantiza inmutabilidad total (ej\: `push` en un array const).
+~No hay diferencia significativa — ambos manejan la inmutabilidad de la misma forma pero con distinta sintaxis#Incorrecto. La diferencia es fundamental\: disciplina del programador vs garantía del lenguaje.
+~Clojure no tiene inmutabilidad real porque corre sobre la JVM, que permite mutación de objetos Java#Incorrecto. Clojure usa structural sharing con estructuras persistentes inmutables; la JVM es solo la plataforma de ejecución.
+}
+
+::TP03-Q36-structural-sharing::[markdown]¿Qué es el structural sharing que usan las estructuras persistentes de Clojure? {
+=Las nuevas versiones de una estructura de datos comparten la memoria interna de la versión anterior, sin copiar todos los elementos — solo se agrega el nodo nuevo#Correcto. Esto hace que crear nuevas versiones sea eficiente en memoria y tiempo.
+~Un mecanismo donde todas las variables apuntan al mismo espacio de memoria global compartido#Incorrecto. Eso sería estado mutable compartido, exactamente lo opuesto.
+~Un patrón de diseño donde los objetos comparten código fuente entre clases mediante herencia#Incorrecto. Eso es herencia de OOP, no structural sharing.
+~Un protocolo de red donde múltiples servidores comparten las mismas estructuras de datos distribuidas#Incorrecto. El structural sharing de Clojure es un mecanismo de memoria local, no de red.
+####Ejemplo\: `(conj [1 2 3] 4)` crea `[1 2 3 4]` reutilizando los nodos de `[1 2 3]`. Es eficiente y thread-safe porque nadie puede ver un estado intermedio.
+}
+
+::TP03-Q37-spread-efecto::[markdown]Dado\: `const nums \= [1, 2, 3]; const mas \= [...nums, 4];` — ¿qué contiene `nums` después de estas dos líneas? {
+=`[1, 2, 3]` — `nums` no fue modificado; spread crea un array nuevo#Correcto. El spread operator crea una copia nueva sin afectar el original.
+~`[1, 2, 3, 4]` — spread agrega el 4 al final del array original#Incorrecto. Spread no modifica el original; crea un nuevo array.
+~`[]` — spread vacía el array original al copiar sus elementos#Incorrecto. Spread no vacía la fuente.
+~`undefined` — `nums` dejó de existir después de ser expandido por spread#Incorrecto. `nums` sigue existiendo con su valor original.
+}
+
+::TP03-Q38-inmut-concurrencia::[markdown]¿Por qué la inmutabilidad elimina las condiciones de carrera (race conditions) en programación concurrente? {
+=Si ningún thread puede modificar los datos compartidos, es imposible que dos threads interfieran al leer o escribir simultáneamente sobre los mismos datos#Correcto. Sin mutación, no hay escrituras concurrentes que puedan colisionar.
+~Porque los lenguajes con inmutabilidad usan un lock global que serializa todas las operaciones#Incorrecto. La inmutabilidad elimina la NECESIDAD de locks porque no hay escrituras.
+~Porque cada thread recibe una copia completa de todos los datos en su propia memoria, incrementando el uso de RAM#Incorrecto. Con structural sharing, las copias comparten memoria interna.
+~Porque la inmutabilidad equivale a que todos los threads sean read-only, lo cual impide que el programa haga cualquier tipo de I/O#Incorrecto. La inmutabilidad se refiere a las estructuras de datos, no impide I/O en los bordes del sistema.
+}
+
+// ============================================================
+// CATEGORÍA E — Transparencia Referencial (Q39–Q44)
+// Trazabilidad: F-18 — OA-2, OA-5
+// ============================================================
+
+$CATEGORY: TP/03-intro-funcional-ts/E-transparencia-referencial
+
+::TP03-Q39-definicion-tr::[markdown]¿Qué significa que una expresión tenga **transparencia referencial**? {
+=Que puede ser reemplazada por su valor en cualquier contexto del programa sin cambiar el comportamiento observable#Correcto. Esta es la definición formal de transparencia referencial.
+~Que el código fuente es legible y autoexplicativo sin necesidad de comentarios#Incorrecto. La legibilidad del código es deseable pero no es la transparencia referencial.
+~Que la variable que la contiene es visible desde cualquier scope del programa#Incorrecto. Eso describe la visibilidad/scope de una variable, no la transparencia referencial.
+~Que el compilador puede ver todas las referencias a esa expresión en tiempo de compilación#Incorrecto. Eso sería un análisis de alcance del compilador, no transparencia referencial.
+}
+
+::TP03-Q40-expresion-tr::[markdown]Dada `const doble \= (n\: number)\: number => n * 2`, ¿cuál de las siguientes sustituciones es válida por transparencia referencial? {
+=`doble(5) + doble(5)` puede reemplazarse por `10 + 10` sin cambiar el resultado#Correcto. Como `doble` es pura, `doble(5)` siempre es `10` y la sustitución es segura.
+~`doble(5)` puede reemplazarse por `doble(10)` porque ambas son invocaciones de la misma función#Incorrecto. `doble(5) \= 10` pero `doble(10) \= 20` — no son equivalentes.
+~`doble(5)` puede reemplazarse por `5 * 2` solo si no hay otros threads ejecutando la función al mismo tiempo#Incorrecto. La sustitución es válida siempre, independientemente de threads.
+~Solo el compilador puede realizar la sustitución; el programador no puede asumirla#Incorrecto. La transparencia referencial permite que tanto el compilador como el programador razonen haciendo la sustitución.
+}
+
+::TP03-Q41-tr-rota::[markdown]¿Por qué la expresión `Date.now()` **no** tiene transparencia referencial? {
+=Porque no se puede reemplazar `Date.now()` por el valor que devolvió la primera vez — la segunda llamada daría un timestamp diferente, alterando el comportamiento#Correcto. El valor cambia con cada llamada, haciendo que la sustitución no sea equivalente.
+~Porque `Date` es un objeto global y los objetos globales nunca tienen transparencia referencial#Incorrecto. Un valor constante global como `Math.PI` sí es referencialmente transparente.
+~Porque `Date.now()` devuelve un tipo `number` y los números no pueden ser transparentes#Incorrecto. Los números sí pueden ser referencialmente transparentes; el problema es que el valor cambia.
+~Porque `now()` es un método de instancia y solo las funciones puras libres pueden ser transparentes#Incorrecto. `now()` es un método estático, y el problema no es la sintaxis sino la dependencia del estado externo.
+}
+
+::TP03-Q42-tr-optimizacion::[markdown]¿Qué optimización del compilador es posible **gracias** a la transparencia referencial? {
+=Memoización — si `f(x)` ya se calculó, el resultado puede cachearse y reutilizarse sin recalcular#Correcto. La TR garantiza que el mismo input siempre produce el mismo output, permitiendo cache.
+~Minificación del código fuente — renombrar variables a nombres cortos#Incorrecto. La minificación no depende de la transparencia referencial.
+~Compilación JIT — traducir bytecode a código nativo en tiempo de ejecución#Incorrecto. La compilación JIT es una optimización del runtime independiente de la TR.
+~Tree shaking — eliminar código no utilizado del bundle final#Incorrecto. Tree shaking se basa en análisis de imports/exports, no en transparencia referencial.
+}
+
+::TP03-Q43-tres-pilares-relacion::[markdown]¿Cuál es la relación entre los tres pilares del paradigma funcional? {
+=Si las funciones son puras (pilar 1) y los datos son inmutables (pilar 2), entonces las expresiones son automáticamente referencialmente transparentes (pilar 3)#Correcto. La TR es consecuencia de los otros dos pilares.
+~Son tres conceptos independientes que pueden implementarse por separado sin relación entre sí#Incorrecto. Los pilares están profundamente interrelacionados; la TR depende de los otros dos.
+~La inmutabilidad depende de la transparencia referencial, que a su vez depende de las funciones puras#Incorrecto. La relación es al revés\: la TR es consecuencia de pureza + inmutabilidad.
+~Solo las funciones puras son necesarias; la inmutabilidad y la TR son consecuencias opcionales#Incorrecto. La inmutabilidad es un pilar independiente; sin ella, las funciones que operan sobre datos mutables no son puras.
+}
+
+::TP03-Q44-tr-contraejemplo-avanzado::[markdown]Considerá\:
+
+`let c \= 0; const f \= () => \{ c++; return c; \};`
+
+Si sustituimos `f() + f()` por `1 + 1` (asumiendo que la primera llamada devuelve 1), ¿qué ocurre? {
+=La sustitución es **inválida**\: `f() + f()` da `1 + 2 \= 3`, pero `1 + 1 \= 2`  — la expresión `f()` **no** es referencialmente transparente porque tiene side effects#Correcto. `f()` incrementa `c` como efecto colateral, haciendo que cada llamada devuelva un valor distinto.
+~La sustitución es válida porque ambas formas son numéricamente consistentes#Incorrecto. `f() + f()` da 3, no 2.
+~La sustitución es válida solo si se ejecuta en un contexto síncrono sin otros listeners#Incorrecto. El efecto colateral de `c++` ocurre siempre, independientemente del contexto.
+~La sustitución falla solo porque `c` es `let` — si fuera `const`, la función sería referencialmente transparente#Incorrecto. El problema es que la función modifica estado externo; `const` no cambiaría eso (no podríamos hacer `c++` si fuera `const`).
+}
+
+// ============================================================
+// CATEGORÍA F — map, filter, reduce + composición (Q45–Q56)
+// Trazabilidad: F-19 a F-26 — OA-3, OA-4, OA-5
+// ============================================================
+
+$CATEGORY: TP/03-intro-funcional-ts/F-map-filter-reduce
+
+::TP03-Q45-filter-resultado::[markdown]¿Qué devuelve `[1, 2, 3, 4, 5, 6].filter(n => n % 2 \=\=\= 0)`? {
+=`[2, 4, 6]`#Correcto. `filter` conserva solo los elementos que cumplen el predicado (pares).
+~`[1, 3, 5]`#Incorrecto. Esos son los impares — el predicado selecciona pares.
+~`[true, false, true, false, true, false]`#Incorrecto. `filter` devuelve los elementos, no los resultados del predicado.
+~`3`#Incorrecto. `filter` devuelve un array, no la cantidad de elementos que cumplen.
+}
+
+::TP03-Q46-map-resultado::[markdown]¿Qué devuelve `[10, 20, 30].map(n => n / 10)`? {
+=`[1, 2, 3]`#Correcto. `map` aplica la función a cada elemento.
+~`[10, 20, 30]`#Incorrecto. `map` transforma cada elemento; no devuelve el original.
+~`6`#Incorrecto. Eso sería el resultado de un `reduce` con suma.
+~`[0.1, 0.2, 0.3]`#Incorrecto. La función divide por 10, no calcula el recíproco de 10 multiplicado por cada elemento.
+}
+
+::TP03-Q47-reduce-resultado::[markdown]¿Qué devuelve `[1, 2, 3, 4].reduce((acc, n) => acc * n, 1)`? {
+=`24`#Correcto. Traza\: 1*1\=1, 1*2\=2, 2*3\=6, 6*4\=24.
+~`10`#Incorrecto. 10 sería la suma, no el producto.
+~`0`#Incorrecto. Con valor inicial 0, la multiplicación siempre daría 0, pero el inicial es 1.
+~`4`#Incorrecto. 4 es el último elemento, no el resultado del reduce.
+####Traza paso a paso\: (1,1)→1 | (1,2)→2 | (2,3)→6 | (6,4)→24
+}
+
+::TP03-Q48-chain-resultado::[markdown]¿Qué devuelve el siguiente pipeline?
+
+`[1, 2, 3, 4, 5, 6].filter(n => n % 2 \=\=\= 0).map(n => n * n).reduce((a, n) => a + n, 0)` {
+=`56`#Correcto. filter→[2,4,6], map→[4,16,36], reduce→4+16+36\=56.
+~`91`#Incorrecto. Eso sería aplicar map antes del filter (1+4+9+16+25+36\=91).
+~`21`#Incorrecto. Eso sería reduce(+) sobre los elementos originales.
+~`12`#Incorrecto. Eso sería la suma de los pares sin elevar al cuadrado (2+4+6\=12).
+####Pipeline\: filter pares → [2,4,6] → map cuadrado → [4,16,36] → reduce suma → 56
+}
+
+::TP03-Q49-map-vs-reduce::[markdown]¿Cuál es la diferencia fundamental entre `map` y `reduce` en cuanto al **tipo** de su resultado? {
+=`map` siempre devuelve un array del mismo largo que el original; `reduce` puede devolver cualquier tipo (número, string, objeto, array de diferente tamaño)#Correcto. `reduce` es la operación más general.
+~`map` devuelve un array y `reduce` siempre devuelve un número#Incorrecto. `reduce` puede devolver cualquier tipo, no solo números.
+~`map` transforma tipos y `reduce` conserva tipos — ambos devuelven arrays del mismo largo#Incorrecto. `reduce` no devuelve necesariamente un array.
+~`map` y `reduce` son intercambiables — solo difieren en la sintaxis de la función callback#Incorrecto. Tienen semánticas diferentes\: transformación vs acumulación.
+}
+
+::TP03-Q50-reduce-general::[markdown]¿Por qué se dice que `reduce` (también llamado `fold`) es la operación más general de las tres? {
+=Porque `map` y `filter` pueden implementarse usando `reduce` como caso particular — `reduce` puede acumular en cualquier tipo de estructura#Correcto. `map` es un `reduce` donde el acumulador es un array y se agrega cada elemento transformado.
+~Porque `reduce` puede manejar arrays de cualquier tamaño mientras que `map` y `filter` tienen un límite#Incorrecto. Las tres operan sobre arrays de cualquier tamaño.
+~Porque `reduce` se ejecuta en O(1) mientras que `map` y `filter` son O(n)#Incorrecto. Las tres son O(n).
+~Porque `reduce` fue inventado primero históricamente y las otras son derivaciones posteriores#Incorrecto. La generalidad de `reduce` es una propiedad matemática, no histórica.
+}
+
+::TP03-Q51-pipe-evaluar::[markdown]Dadas\:
+
+`const doble \= (n\: number) => n * 2`
+
+`const sumaUno \= (n\: number) => n + 1`
+
+Si `pipe(doble, sumaUno)(3)` aplica las funciones de izquierda a derecha, ¿qué devuelve? {
+=`7` — primero `doble(3) \= 6`, luego `sumaUno(6) \= 7`#Correcto. Pipe aplica las funciones en secuencia de izquierda a derecha.
+~`8` — primero `sumaUno(3) \= 4`, luego `doble(4) \= 8`#Incorrecto. Pipe aplica de izquierda a derecha, no de derecha a izquierda.
+~`9` — primero `doble(3) \= 6`, luego `doble(6) \= 12`, luego... error#Incorrecto. Solo se aplican las dos funciones dadas en orden.
+~`6` — solo se aplica la primera función del pipe#Incorrecto. Pipe aplica todas las funciones en secuencia.
+####`pipe(f, g)(x) \= g(f(x))`. Primero aplica `f`, luego `g` al resultado.
+}
+
+::TP03-Q52-map-tamano::[markdown]Si un array tiene 100 elementos y se aplica `.map(fn)`, ¿cuántos elementos tiene el resultado? {
+=Exactamente 100 — `map` transforma cada elemento sin agregar ni quitar#Correcto. `map` siempre devuelve un array del mismo tamaño.
+~Depende de la función `fn` — si devuelve `undefined` para algunos, esos se omiten#Incorrecto. `map` incluye incluso los `undefined` en el resultado.
+~Menos de 100, porque `map` filtra los elementos que no cumplen la condición#Incorrecto. `map` transforma, no filtra. Para filtrar se usa `filter`.
+~100 si `fn` es pura, pero podría ser diferente si `fn` tiene side effects#Incorrecto. El tamaño del resultado de `map` siempre es igual al original, independientemente de la pureza de `fn`.
+}
+
+::TP03-Q53-reduce-trace::[markdown]Dado\: `[5, 9, 6, 5].reduce((acc, n) => acc + n * n, 0)`, ¿cuál es la traza correcta de evaluación? {
+=paso 1\: (0,5)→25 | paso 2\: (25,9)→106 | paso 3\: (106,6)→142 | paso 4\: (142,5)→167 → resultado `167`#Correcto. Cada paso acumula\: acc + n*n.
+~paso 1\: (0,5)→5 | paso 2\: (5,9)→14 | paso 3\: (14,6)→20 | paso 4\: (20,5)→25 → resultado `25`#Incorrecto. Esa traza calcula la suma sin elevar al cuadrado.
+~paso 1\: (0,5)→25 | paso 2\: (25,9)→81 | paso 3\: (81,6)→36 | paso 4\: (36,5)→25 → resultado `25`#Incorrecto. En el paso 2, el acumulador (25) no se reemplaza por n*n sino que se le suma.
+~paso 1\: (1,5)→26 | paso 2\: (26,9)→107 → resultado `107` (reduce se detiene al encontrar un resultado > 100)#Incorrecto. El valor inicial es 0, no 1, y reduce procesa TODOS los elementos.
+}
+
+::TP03-Q54-map-no-muta::[markdown]¿Por qué `map` no modifica el array original? ¿A qué pilar del paradigma funcional responde esto? {
+=Al pilar de **inmutabilidad** — cada operación devuelve un nuevo array sin tocar el original, evitando efectos impredecibles sobre otras referencias#Correcto. map respeta la inmutabilidad al crear un nuevo array.
+~Al pilar de **encapsulamiento** — map oculta el array original dentro de un scope privado#Incorrecto. El encapsulamiento es un concepto de OOP, y map no "oculta" nada.
+~Al pilar de **herencia** — map hereda el array original y lo extiende con nuevos valores#Incorrecto. La herencia es un concepto de OOP; map crea un array nuevo.
+~Al principio DRY — no mutar el original permite reutilizar la referencia en otro lugar#Incorrecto. DRY (Don't Repeat Yourself) es un principio de diseño, no uno de los tres pilares funcionales.
+}
+
+::TP03-Q55-restriccion-let::[markdown]En el "modo funcional" de TypeScript, ¿por qué se prohíbe el uso de `let` y `var`? {
+=Porque permiten reasignar variables, creando estado mutable que rompe la inmutabilidad y la transparencia referencial#Correcto. `let` permite mutación del binding, violando los pilares funcionales.
+~Porque `let` y `var` tienen problemas de hoisting que causan bugs en JavaScript#Incorrecto. Aunque `var` tiene hoisting problemático, la prohibición en modo funcional es por inmutabilidad.
+~Porque `let` es más lento que `const` en los engines de JavaScript modernos#Incorrecto. La diferencia de performance es negligible; la razón es disciplina de paradigma.
+~Porque TypeScript requiere `const` para inferir tipos correctamente#Incorrecto. TypeScript infiere tipos con `let` también; la razón es el paradigma funcional.
+}
+
+::TP03-Q56-for-prohibido::[markdown]En el modo funcional de TypeScript, ¿por qué se evitan los loops `for` y `while` y se prefiere `map`, `filter` y `reduce`? {
+=Porque el loop mezcla *cómo iterar* (índice, condición, incremento) con *qué hacer* (la transformación), mientras que las funciones de orden superior abstraen la iteración y expresan solo la intención#Correcto. Las funciones de orden superior separan la iteración de la lógica.
+~Porque `for` y `while` son más lentos que `map`/`filter`/`reduce` en tiempo de ejecución#Incorrecto. Los loops nativos suelen ser más rápidos o iguales en performance.
+~Porque `for` y `while` no existen en TypeScript, solo en JavaScript#Incorrecto. `for` y `while` existen en TypeScript.
+~Porque `map`/`filter`/`reduce` pueden ejecutarse en paralelo automáticamente en V8#Incorrecto. V8 no los ejecuta en paralelo; la ventaja es de diseño y claridad, no de ejecución.
+}
+
+// ============================================================
+// CATEGORÍA G — Clojure y Comparativa (Q57–Q60)
+// Trazabilidad: F-27 a F-32 — OA-6
+// ============================================================
+
+$CATEGORY: TP/03-intro-funcional-ts/G-clojure-comparativa
+
+::TP03-Q57-clojure-prefija::[markdown]En Clojure, la expresión `(+ (* 3 4) (- 10 3))` evalúa a\: {
+=`19` — primero `(* 3 4) \= 12` y `(- 10 3) \= 7`, luego `(+ 12 7) \= 19`#Correcto. Clojure usa notación prefija\: `(operador arg1 arg2)`.
+~`5` — Clojure evalúa de izquierda a derecha\: 3+4\=7, 10-3\=7, luego resta#Incorrecto. Cada subexpresión se evalúa según el operador que tiene.
+~`Error` — Clojure no permite anidar expresiones de esta forma#Incorrecto. Clojure permite anidar expresiones sin límite.
+~`120` — Clojure multiplica todos los argumentos\: 3*4*10*3 \= 360 / 3#Incorrecto. Cada paréntesis es una aplicación de función independiente.
+}
+
+::TP03-Q58-clojure-map::[markdown]¿Qué devuelve la expresión Clojure `(map \#(* % %) '(1 2 3 4))`? {
+=`(1 4 9 16)` — aplica la función "elevar al cuadrado" a cada elemento#Correcto. `\#(* % %)` es la función anónima que multiplica el argumento por sí mismo.
+~`(2 4 6 8)` — multiplica cada elemento por 2#Incorrecto. `\#(* % %)` multiplica `%` por `%` (cuadrado), no por 2.
+~`(1 2 3 4 1 2 3 4)` — duplica la lista#Incorrecto. `map` transforma cada elemento, no duplica la lista.
+~`10` — suma todos los elementos#Incorrecto. `map` transforma cada elemento individualmente; para sumar se usa `reduce`.
+}
+
+::TP03-Q59-clojure-thread::[markdown]En Clojure, la macro `->>` (thread-last) se usa para\: {
+=Encadenar transformaciones pasando el resultado de cada expresión como último argumento de la siguiente — equivalente al encadenamiento con `.` en TypeScript#Correcto. `->>` facilita la lectura de pipelines de transformación de datos.
+~Crear un nuevo thread de ejecución para procesamiento paralelo de colecciones#Incorrecto. `->>` no tiene relación con threading/concurrencia.
+~Definir funciones con evaluación lazy que solo se ejecutan cuando se consume el resultado#Incorrecto. La evaluación lazy viene de las secuencias de Clojure, no de `->>`.
+~Convertir una lista mutable en inmutable aplicando congelamiento profundo#Incorrecto. En Clojure todo es inmutable por defecto; no se necesita "congelar".
+}
+
+::TP03-Q60-ts-vs-clojure-garantia::[markdown]"En TypeScript, confiás en la disciplina del equipo. En Clojure, confiás en el diseño del lenguaje." Esta afirmación se refiere a que\: {
+=TypeScript permite mutación — es decisión del programador no usarla. Clojure hace la mutación imposible por diseño de sus estructuras de datos y runtime#Correcto. La diferencia clave es disciplina (TS) vs garantía (Clojure).
+~TypeScript no tiene un compilador lo suficientemente avanzado como para detectar mutación#Incorrecto. TypeScript puede detectar algunas mutaciones con `readonly`, pero la cuestión es que el lenguaje permite ambos estilos.
+~Clojure no permite definir variables, por lo que no puede haber mutación#Incorrecto. Clojure permite `def` (bindings) y tiene atoms/refs para estado controlado.
+~TypeScript es un lenguaje no tipado donde la disciplina del equipo es la única defensa contra errores#Incorrecto. TypeScript tiene tipos estáticos robustos; la "disciplina" se refiere específicamente a la inmutabilidad.
+####`const arr \= [1,2,3]; arr.push(4)` compila en TypeScript sin error. En Clojure, `(def v [1 2 3])` no tiene ninguna operación que mute `v` — solo se pueden crear nuevas colecciones.
+}

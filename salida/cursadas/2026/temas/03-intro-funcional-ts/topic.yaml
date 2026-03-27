@@ -5,7 +5,8 @@ topic_folder: "salida/cursadas/2026/temas/03-intro-funcional-ts"
 class_duration: "120"
 git_branch: "tema-03-intro-funcional-ts"
 created_at: "2026-03-26"
-status: "class"
+status: "tp"
+tp_type: "quiz-moodle"
 artifacts:
   diseno: "diseno.md"
   minuta: "minuta.md"
@@ -14,3 +15,9 @@ artifacts:
   score: "score-pedagogico.md"
   faq: "faq-anticipado.md"
   slides_url: "slides/slides-url.txt"
+  writing_report: "writing-report.md"
+  pdf: "guia-estudio.pdf"
+pdf_exported: true
+pdf_path: "salida/cursadas/2026/temas/03-intro-funcional-ts/guia-estudio.pdf"
+quality_loops_run: true
+quality_loops_date: "2026-03-27"

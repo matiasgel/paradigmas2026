@@ -1,0 +1,431 @@
+# Fuente
+- archivo: 283-294.pdf
+- ruta: /home/matiasgel/Documentos/paradigmas2026/ingesta/(Undergraduate Topics in Computer Science) Maurizio Gabbrielli_ Simone Martini - Programming Languages_ Principles and Paradigms (2nd Edition)-Springer (2023)/283-294.pdf
+- extraido: 2026-03-26T16:14:21
+
+# Contenido
+
+Data Abstraction
+
+9
+
+The physical machine manipulates data of only one type: bit strings. The types of a
+high-level language impose an organisation on this undivided universe, giving each
+value a sort of “wrapping”. Each value is wrapped in an encapsulation (its type) which
+provides the operations that manipulate it. The type system for a language establishes
+how transparent this encapsulation is. In type-safe languages, the encapsulation is
+completely opaque, in the sense that it does not allow access to the representation
+(or better: every access can only take place using or by means of the encapsulation
+itself).
+
+The last chapter presented in detail many of the predeﬁned types and the prin-
+cipal mechanisms for deﬁning new ones. The latter, however, are fairly limited:
+ﬁnite homogeneous aggregations (arrays) and heterogeneous ones (records and
+sequences), recursive types and pointers. The operations possible on these com-
+posite types are predeﬁned by the language and the programmer is restricted to use
+them. It is clear that the programmer, using just the mechanisms we discussed in
+Chap. 8, cannot really deﬁne a new type, when it is understood, using our deﬁnition,
+as a collection of (homogeneous and effectively presented) values equipped with a
+set of operations. The user of a language can only make use of the existing cap-
+sules and only has limited ways to deﬁne new types: there are few data abstraction
+mechanisms.
+
+In this chapter, we will present some of the main ways in which a language can
+provide more sophisticated mechanisms for deﬁning abstractions over data. Among
+these, we will discuss the so-called abstract data type, which in different forms is
+provided by several languages. We then look at modules, a largely similar concept,
+but which mainly applies to programming in the large. These abstraction mecha-
+nisms also constitute an introduction to some themes that we will encounter again
+with object-oriented programming. The key concepts that we will investigate in this
+chapter are the separation between interface and implementation and the concept of
+information hiding.
+
+© The Author(s), under exclusive license to Springer Nature Switzerland AG 2023
+M. Gabbrielli and S. Martini, Programming Languages: Principles and Paradigms,
+Undergraduate Topics in Computer Science,
+https://doi.org/10.1007/978-3-031-34144-1_9
+
+267
+
+268
+
+9 Data Abstraction
+
+9.1 Abstract Data Types
+
+The introduction of a new type using the mechanisms discussed in the last chapter
+does not permit the user of a language to deﬁne types at the same level of abstraction
+as that enjoyed by the predeﬁned types in these languages.
+
+By way of an example, Fig. 9.1 shows one possible deﬁnition in our pseudo-
+language of a data type for stacks of integers. We assume a reference model for
+variables. When deﬁning a type of this kind, it is probably intended that a stack
+of integers will be a data structure that can be manipulated by the operations of
+creation, insertion, access to the top element, removal of the top element. However,
+the language does not guarantee that these are the only ways in which a stack can be
+manipulated. Even if we adopt a strict type equivalence by name discipline (so that
+a stack is introduced by a declaration of the type Int_Stack) nothing prevents us
+from directly accessing its representation as an array:
+
+int s e c o n d _ f r o m _ t o p ()( I n t _ S t a c k c ){
+
+r e t u r n c . P [ s . top - 1];
+}
+
+From a general viewpoint, therefore, while languages provide predeﬁned data
+abstractions (types) which hide implementations, the programmer cannot do this for
+themselves. To avoid this problem, some programming languages allow the deﬁnition
+
+Fig. 9.1 Stack of integers
+
+9.1 Abstract Data Types
+
+269
+
+of data abstractions which behave like predeﬁned types as far as the (in)accessibility
+of representations is concerned. This mechanism is called an abstract data type
+(ADT). It is characterised by the following primary characteristics:
+
+1. A name for the type.
+2. An implementation (or representation) for the type.
+3. A set of names denoting operations for manipulating the values of the type,
+
+together with their types.
+
+4. For every operation, an implementation that uses the representation provided in
+
+point 2.
+
+5. A security capsule which separates the name of the type and those of the operations
+
+from their implementations.
+
+One possible notation for the stack of integers ADT in our pseudo-language could
+be that depicted in Fig. 9.2.
+
+A deﬁnition of this kind must be interpreted as follows. The ﬁrst line introduces
+the name of the abstract data type. Line 2 provides the representation (or concrete
+type) for the abstract type Int_Stack. Lines 7 to 12 (introduced by signature)
+deﬁne the names and types of the operations that can manipulate an Int_Stack.
+The remaining lines (introduced by operations) provide the implementation of
+the operations. The important point of this deﬁnition is that inside the declaration of
+type, Int_Stack is a synonym for its concrete representation (and therefore the
+operations manipulate a stack as a record containing an array and two integer ﬁelds),
+while outside (and therefore in the rest of the program), there is no relation between
+an Int_Stack and its concrete type. The only possible ways to manipulate an
+Int_Stack are provided by its operations. The function second_from_top(),
+which we deﬁned above, is now impossible because type checking does not permit
+the application of a ﬁeld selector to an Int_Stack (which is not a record outside
+of its deﬁnition.)
+
+An ADT is an opaque capsule. On the outside surface, visible to anyone, we ﬁnd
+the name of the new type and the names and types of the operations. Inside, invisible to
+the outside world, there are the implementations of the type and its operations. Access
+to the inside is always controlled by the capsule which guarantees the consistency of
+the information it encloses. This external surface of the capsule is called the signature
+or interface of the ADT. On its inside is its implementation.
+
+Abstract data types (in languages that support them, for example ML, and CLU1 )
+behave just like predeﬁned types. It is possible to declare variables of an abstract
+type and to use one abstract type in the deﬁnition of another, as has been done, by
+way of example, in Fig. 9.3. The code in Fig. 9.3 implements (very inefﬁciently) a
+variable of type integer using a stack. Inside the implementation of Int_Var, the
+implementation of Int_Stack is invisible because it was completely encapsulated
+when it was deﬁned.
+
+1 In some object-oriented languages, we will see that it is possible to obtain similar abstraction goals
+using different, more ﬂexible techniques.
+
+270
+
+9 Data Abstraction
+
+Fig. 9.2 ADT for stacks of integers
+
+9.2 Information Hiding
+
+The division between interface and implementation is of great importance for soft-
+ware development methods because it allows the separation a component’s use from
+its deﬁnition. We also saw this distinction when we looked at control abstraction. A
+function abstracts (that is, hides) the code constituting its body (the implementation),
+while it reveals its interface, which is composed of its name and of the number and
+types of its parameters (that is, its signature). Data abstraction generalises this some-
+what primitive form of abstraction. Not only is how an operation is implemented
+
+9.2 Information Hiding
+
+271
+
+Constructors, Transformers and Observers
+
+In the deﬁnition of an abstract data type, T, the operations are conceptually divided into three
+separate categories:
+
+(cid:129) Constructors. These are operations which construct a new value of type T, possibly using values
+
+of other known types.
+
+(cid:129) Transformers or operators. These are operations that compute values of type T, possibly using
+other values (of the same ADT or of other types). A fundamental property of a transformer t of
+type S1 ×· · ·×Sk -> Y is that, for every argument value, it must be the case that t(s1,. . .,sk )
+is a value constructable using only constructors.
+
+(cid:129) Observers. These are operations that compute a value of a known type that is different from T,
+
+using one or more values of type T.
+
+An ADT without constructors is completely useless. There is no way to construct a value. In general,
+an ADT must have at least one operation in each of the above categories. It is not always easy to
+show that an operation is really a transformer (that is, that each of its values is in reality a value that
+can be obtained from a sequence of constructors).
+
+In the integer stack example, create_stack and push are constructors, pop is a trans-
+
+former and top and empty are observers.
+
+Fig. 9.3 An ADT for an
+integer variable,
+implemented with a stack
+
+hidden but so is the way in which the data is represented, so that the language (with
+its type system) can guarantee that the abstraction cannot be violated. This phe-
+nomenon is called information hiding. One of the more interesting consequences of
+information hiding is that, under certain conditions, it is possible to substitute the
+implementation of one ADT with another implementation of the same ADT, while
+keeping the interface the same. In the stack example, we could opt to represent the
+concrete type as a linked list (ignoring deallocation) allocated in the heap. This is
+deﬁned as in Fig. 9.4. Under certain assumptions, by substituting the ﬁrst deﬁnition
+of Int_Stack by that in Fig. 9.4, there should be no observable effect on pro-
+
+272
+
+9 Data Abstraction
+
+grams that use the abstract data type. These assumptions centre on what the clients
+of the interface expect from the operations. Let us say that the description of the
+semantics of the operations of an ADT is a speciﬁcation, expressed not in terms of
+concrete types but general abstract relations. One possible speciﬁcation for our ADT
+Int_Stack could be:
+
+Fig. 9.4 Another deﬁnition of the Int_Stack ADT
+
+9.2 Information Hiding
+
+273
+
+(cid:129) create_stack creates an empty stack.
+(cid:129) push inserts an element into the stack.
+(cid:129) top returns the element at the top of the stack without modifying the stack itself.
+
+The stack must not be empty.
+
+(cid:129) pop removes the top elements from the stack. The stack must not be empty.
+(cid:129) empty is true if and only if the stack is empty.
+
+Every client that uses Int_Stack making use of this speciﬁcation only, will see
+no difference at all in the two deﬁnitions. This property has come to be called the
+principle of representation independence.
+
+The speciﬁcation of an abstract data type can be given in many different ways,
+ranging from natural language (which we have done) to semi-formal schemata,
+to completely formalised languages that can be manipulated by theorem provers.
+A speciﬁcation is a kind of contract between the ADT and its client. The ADT guar-
+antees that the implementation of the operations (which are unknown to the client)
+matches the speciﬁcation; that is, all the properties stated in the speciﬁcation are
+satisﬁed by the implementation. When this happens, it is also said that the imple-
+mentation is correct with respect to the speciﬁcation.
+
+9.2.1 Representation Independence
+
+We can state the representation independence property as follows:
+
+Two correct implementations of a single speciﬁcation of an ADT are observationally indis-
+tinguishable by the clients of these types.
+
+If a type enjoys representation independence, it is possible to replace its implemen-
+tation by an equivalent (e.g., more efﬁcient) one without causing any (new) errors in
+clients.
+
+It should be clear that a considerable (and not at all obvious) part of representation
+independence consists of the guarantee that both implementations are correct with
+respect to the same speciﬁcation. This can be hard to show, particularly when the
+speciﬁcation is informal. There is, however, a weak version of the representation
+independence property that concerns only correctness with respect to the signature.
+In a type-safe language with abstract data types, the replacement of one ADT by
+another with the same signature (but different implementation) does not cause type
+errors. Under the assumptions we have made (of type safety and ADT), this property
+is a theorem which can be proved by type inference. Languages like ML and CLU
+enjoy this form of representation independence.
+
+274
+
+9.3 Modules
+
+9 Data Abstraction
+
+Abstract data types are mechanisms for programming in the small. They were
+designed to encapsulate one type and its associated operations. It is much more
+common, however, for an abstraction to be composed of a number of inter-related
+types (or data structures) of which it is desired to give clients a limited (that is,
+abstract) view (not all the operations are revealed and there is concealment of the
+implementation). The linguistic mechanisms which implement this type of encap-
+sulation are called modules or packages. They belong to that part of a programming
+language dealing with programming in the large, that is with the implementation
+of complex systems using composition and assembly of simpler components. The
+module mechanism allows the static partitioning of a program into separate parts,
+each of which is equipped with data (types, variables, etc.) as well as with operations
+(functions, code, etc.). A module groups together a number of declarations (of data
+and/or functions) as well as deﬁning visibility rules for these declarations by means
+of which a form of encapsulation and information hiding is implemented.
+
+Considering semantic principles, there is not much of a difference between mod-
+ules and ADTs, mostly the ability to deﬁne more than one type at a time (according
+to the deﬁnitions we have given, an ADT is a particular case of a module). Pragmati-
+cally, on the other hand, the module mechanism affords greater ﬂexibility, both in the
+ability to state how permeable its encapsulation is (indeed, it is possible to indicate on
+an individual basis which operations are visible or to choose the level of visibility),
+or in the possibility of deﬁning generic (polymorphic) modules (recall Sect. 8.8).
+Finally, module constructs are often related to separate compilation mechanisms for
+modules themselves.2
+
+Even given the enormous variety among existing languages, we can state the
+important linguistic characteristics of a module by discussing the example shown
+in Fig. 9.5. It is expressed, as usual, in an suitable pseudo-language. First of all, a
+module is divided, as is an ADT, into a public part (which is visible to all the module’s
+clients) and a private part (which is invisible to the outside world). The private part
+of a module can contain declarations that do not appear at all in the public part (for
+example, the bookkeep function inside Queue). A module can mention some of
+its own data structures in the public part, so that anyone can use or modify them
+(the variable c in Buffer, for example). A client module can use the public part
+of another module by importing it (the imports clause). In our example, Buffer
+has an additional import clause in its private part.
+
+We will not continue with this discussion, both because we would have to go into
+the details of the mechanisms in a speciﬁc language, and because we will return
+to many points when considering object-oriented programming. To conclude, let
+us merely observe that the module mechanism is often associated with some form
+
+2 Keep in mind that modules and separate compilation are independent aspects of a language. In Java,
+for example, it is not the module (package, in Java terminology) which is the unit of compilation,
+rather the class is.
+
+9.3 Modules
+
+275
+
+Fig. 9.5 Modules
+
+276
+
+9 Data Abstraction
+
+of parametric polymorphism which requires link-time resolution. In our example,
+we could have deﬁned a buffer of type T, rather than a buffer of integer, making
+the deﬁnition generic and then suitably instantiating it when it is used. Figure 9.6
+shows the generic version of the buffer example. It can be seen how the buffer and
+the code are both generic. When the private part of Buffer imports Queue, it
+speciﬁes that it must be instantiated to the same type (which is not speciﬁed) as
+Buffer.
+
+9.4 Summary
+
+This short chapter has presented a ﬁrst introduction to data abstraction, which turns
+on the key concepts of interface, implementation, encapsulation, data hiding.
+
+From a linguistic viewpoint, we have presented the following:
+
+(cid:129) Abstract data type mechanisms.
+(cid:129) Mechanisms to hide information and their consequences; that is, the Principle of
+
+representation independence.
+
+(cid:129) Modules which apply the concepts of encapsulation to programming in the large.
+
+All of these concepts are treated in more depth in texts on software engineering. As
+far as this book is concerned, they are devices to help understanding object-oriented
+programming which is the subject of the next chapter.
+
+9.5 Bibliographical Notes
+
+The concept of module probably appears for the ﬁrst time in the Simula language
+[1,2], the ﬁrst object-oriented language (see Chap. 16). The development of modules
+in programming languages is due to the work of Wirth [3], which includes the Modula
+and Oberon [4] projects.
+
+The concept of information hiding made its ﬁrst appearance in the literature in
+a classic paper by Parnas [5]. Abstract data types originate in the same context, as
+a mechanism guaranteeing abstraction that is different from modules. Among the
+languages that include ADTs, the most inﬂuential was certainly Clu [6–8] which is
+also the basis for the book [9].
+
+9.5 Bibliographical Notes
+
+277
+
+Fig. 9.6 Generic modules
+
+278
+
+9.6 Exercises
+
+9 Data Abstraction
+
+1. Consider the following deﬁnition of an ADT in our pseudo-language:
+
+a b s t y p e L i t t l e U s e {
+
+type L i t t l e U s e = int ;
+s i g n a t u r e
+
+L i t t l e U s e prox ( L i t t l e U s e x );
+int get ( L i t t l e U s e x );
+
+o p e r a t i o n s
+
+L i t t l e U s e prox ( L i t t l e U s e x ){
+
+r e t u r n x +1;
+}
+
+int get ( L i t t l e U s e x ){
+
+r e t u r n x ;
+}
+
+}
+
+Why this type is useless?
+
+References
+
+1. G. Birtwistle, O. Dahl, B. Myhrtag, K. Nygaard, Simula Begin (Auerbach Press, Philadelphia,
+
+1973)
+
+2. K. Nygaard, O. Dahl, The development of the SIMULA languages, in HOPL-1: The ﬁrst ACM
+SIGPLAN Conference on History of Programming Languages (ACM Press, New York, 1978),
+pp. 245–272
+
+3. N. Wirth, The module: A system structuring facility in high-level programming languages, in
+Language Design and Programming Methodology. LNCS, vol. 79 (Springer, 1979), pp. 1–24
+
+4. N. Wirth, From Modula to Oberon. Softw. Pract. Exper. 18(7), 661–670 (1988)
+5. D.L. Parnas, On the criteria to be used in decomposing systems into modules. Commun. ACM
+
+15(12), 1053–1058 (1972)
+
+6. B. Liskov, A history of CLU, in The Second ACM SIGPLAN Conference on History of Pro-
+gramming Languages, HOPL-II (Association for Computing Machinery, New York, 1993), pp.
+133–147
+
+7. B. Liskov, R. Atkinson, T. Bloom, E. Moss, C. Schaffert, B. Scheiﬂer, A. Snyderw, CLU reference
+
+manual. Technical Report MIT-LCS-TR-225, MIT-LCS (1979)
+
+8. B. Liskov, A. Snyder, R. Atkinson, C. Schaffert, Abstraction mechanisms in CLU. Commun.
+
+ACM 20(8), 564–576 (1977)
+
+9. B. Liskov, J. Guttag, Abstraction and Speciﬁcation in Program Development. MIT Electrical
+
+Engineering and Computer Science Series (MIT Press, 1986)
