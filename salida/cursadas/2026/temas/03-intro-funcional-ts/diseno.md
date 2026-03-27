@@ -404,8 +404,8 @@ En el funcional, las funciones son *valores de primera clase*: pueden pasarse co
 
 - [x] `minuta.md` — plan de clase detallado per-bloque (35 secciones, 88 momentos ▶)
 - [x] `filminas.md` — 35 filminas autocontenidas, schema-compliant
-- [x] `guia-estudio.md` — documento de estudio autónomo (6 partes, autoevaluación, glosario)
-- [x] `guiaprofesor.md` — guía del docente autocontenida (plan por filmina, FAQ, fragmentos de libros)
+- [ ] `guia-estudio.md` — documento de estudio autónomo
+- [ ] `guiaprofesor.md` — guía del docente autocontenida
 - [ ] `tp.md` — trabajo práctico trazable a la minuta
 - [ ] `score-pedagogico.md` — resultado de simulación pedagógica
 
