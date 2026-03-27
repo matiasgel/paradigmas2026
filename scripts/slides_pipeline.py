@@ -133,24 +133,21 @@ def _get_slide_image(slide: dict) -> dict:
     if img and isinstance(img, dict) and "layer" in img:
         return img
     return {"layer": "none", "prompt": "", "local_asset": "", "drive_id": None}
-    "tabla":              {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none",       "table": "table-main"},
-    "tabla-comparativa":  {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none",       "table": "table-main"},
-    "diagrama":           {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none",       "table": "none"},
-    "socratica":          {"title": "center-top",     "body": "center-middle", "image": "background", "code": "none",       "table": "none"},
-    "demo":               {"title": "full-title",     "body": "left-middle",   "image": "none",       "code": "right-half", "table": "none"},
-    "cierre":             {"title": "center-middle",  "body": "center-bottom", "image": "background", "code": "none",       "table": "none"},
-    "timeline":           {"title": "full-title",     "body": "full-center",   "image": "none",       "code": "none",       "table": "none"},
-}
 
 # Geometría de zonas en EMU: (x, y, width, height)
 def _zones(w: int = SLIDE_W, h: int = SLIDE_H, m: int = MARGIN, th: int = TITLE_H) -> dict[str, tuple]:
     half_w = w // 2
     body_y = LOGO_CLEAR + th + 80_000
     body_h = h - body_y - max(m, BOTTOM_CLEAR)
-    table_intro_h = 560_000
-    table_gap = 140_000
+    table_intro_h = 620_000
+    table_gap = 220_000
     table_main_y = body_y + table_intro_h + table_gap
     table_main_h = h - table_main_y - max(m, TABLE_BOTTOM_CLEAR)
+    split_intro_h = 600_000
+    split_gap = 180_000
+    split_left_w = half_w - int(m * 1.35)
+    split_bottom_y = body_y + split_intro_h + split_gap
+    split_bottom_h = max(600_000, body_h - split_intro_h - split_gap)
     return {
         "full-title":    (TITLE_SAFE_X, LOGO_CLEAR,   w - TITLE_SAFE_X - m, th),   # reserva lateral para logo
         "left-top":      (m,            LOGO_CLEAR,   half_w - m,      th),        # media anchura
@@ -159,6 +156,8 @@ def _zones(w: int = SLIDE_W, h: int = SLIDE_H, m: int = MARGIN, th: int = TITLE_
         "center-bottom": (m,            h * 2 // 3,   w - 2 * m,       h // 3 - m),
         "left-middle":   (m,            body_y,       half_w - m,      body_h),
         "left-half":     (m,            body_y,       half_w - m,      body_h),
+        "left-top-split": (m,           body_y,       split_left_w,    split_intro_h),
+        "left-bottom-split": (m,        split_bottom_y, split_left_w,  split_bottom_h),
         "right-half":    (half_w + m,   body_y,       half_w - 2 * m,  body_h),
         "full-bottom":   (m,            body_y,       w - 2 * m,       body_h),
         "full-center":   (m,            m,            w - 2 * m,       h - 2 * m),
@@ -972,8 +971,8 @@ def _image_prompt(slide: dict, config: dict) -> str:
     return _append_image_guardrails(prompt, config)
 
 
-def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
-    """Fase 1: filminas.md → plan-filminas-{tema}.yaml."""
+def generate_plan(filminas_path: Path, config: dict, template_id: str, registry: dict | None = None) -> dict:
+    """Fase 1: filminas.md → plan-filminas-{tema}.json (formato v3 unificado)."""
     print("📋 Fase 1 — Generando plan desde filminas.md …")
 
     project_root = find_project_root(filminas_path.parent)
@@ -988,6 +987,21 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
         if first_title.lower() == "portada" and first_subtitle:
             topic_title = first_subtitle
 
+    # Mapeo image_layer desde registry (fuente de verdad) o fallback hardcoded
+    image_layer_map: dict[str, str] = {}
+    if registry:
+        image_layer_map = _image_layer_from_registry(registry)
+    if not image_layer_map:
+        # Fallback: derivar desde LAYOUT_MAP.image
+        for stype, layout_def in LAYOUT_MAP.items():
+            img_zone = layout_def.get("image", "none")
+            if img_zone == "background":
+                image_layer_map[stype] = "background"
+            elif img_zone != "none":
+                image_layer_map[stype] = "content"
+            else:
+                image_layer_map[stype] = "none"
+
     # Budget de imágenes: máximo 12 por presentación
     max_images  = _max_images_per_presentation(config)
     if max_images < 12:
@@ -1000,9 +1014,10 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
         for s in slides:
             if s["id"] in assigned:
                 continue
-            if s["type"] == stype and IMAGE_STRATEGY.get(stype, "none") != "none":
-                assigned[s["id"]] = IMAGE_STRATEGY[stype] if img_count < max_images else "none"
-                if IMAGE_STRATEGY.get(stype, "none") != "none" and img_count < max_images:
+            layer = image_layer_map.get(s["type"], "none")
+            if s["type"] == stype and layer != "none":
+                assigned[s["id"]] = layer if img_count < max_images else "none"
+                if layer != "none" and img_count < max_images:
                     img_count += 1
     for s in slides:
         assigned.setdefault(s["id"], "none")
@@ -1011,18 +1026,10 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
     for slide in slides:
         directives = slide.get("directives") or {}
         layout_key = directives.get("layout") or slide["type"]
-        layout   = LAYOUT_MAP.get(layout_key, LAYOUT_MAP[slide["type"]])
-        strategy = directives.get("image") or assigned[slide["id"]]
+        layout   = LAYOUT_MAP.get(layout_key, LAYOUT_MAP.get(slide["type"], {}))
+        layer    = directives.get("image") or assigned[slide["id"]]
 
-        bg_strategy = strategy if strategy == "background" else "none"
-        ct_strategy = strategy if strategy == "content"    else "none"
-
-        bg_prompt = _image_prompt(slide, config) if bg_strategy == "gemini" or bg_strategy == "background" else ""
-        ct_prompt = _image_prompt(slide, config) if ct_strategy == "gemini" or ct_strategy == "content"    else ""
-
-        # Si la estrategia es "background" o "content", el medio de generación es "gemini"
-        bg_gen = "gemini" if bg_strategy == "background" else "none"
-        ct_gen = "gemini" if ct_strategy == "content"    else "none"
+        img_prompt = _image_prompt(slide, config) if layer != "none" else ""
 
         table_assets = [
             {
@@ -1047,17 +1054,11 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
             "asset_hints": slide.get("asset_hints") or [],
             # Directrices de layout
             "layout": layout,
-            # Imágenes
-            "background_image": {
-                "strategy":    bg_gen,
-                "prompt":      bg_prompt,
-                "local_asset": f"slides/assets/{slide['id']}-bg.png" if bg_gen == "gemini" else "",
-                "drive_id":    None,
-            },
-            "content_image": {
-                "strategy":    ct_gen,
-                "prompt":      ct_prompt,
-                "local_asset": f"slides/assets/{slide['id']}-content.png" if ct_gen == "gemini" else "",
+            # Imagen (v3 unificado)
+            "image": {
+                "layer":       layer,
+                "prompt":      img_prompt,
+                "local_asset": f"slides/assets/{slide['id']}-img.png" if layer != "none" else "",
                 "drive_id":    None,
             },
             "table_assets": table_assets,
@@ -1068,7 +1069,7 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
             "topic_id":      topic_id,
             "title":         topic_title,
             "source":        "filminas.md",
-            "schema_version": schema.get("version", "filminas/v1"),
+            "schema_version": "3.0.0",
             "schema_path": schema.get("_path", str(DEFAULT_FILMINAS_SCHEMA)),
             "generated_at":  datetime.now().isoformat(timespec="seconds"),
             "template_id":   template_id,
@@ -1082,50 +1083,35 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str) -> dict:
     return plan
 
 
-def validate_publish_artifacts(
-    topic_folder: Path,
-    plan_path: Path,
-    assets_manifest_path: Path,
-    publish_context_path: Path,
-) -> dict[str, Any]:
-    missing = []
-    for path, label in [
-        (plan_path, "slides/plan-filminas-{tema}.yaml"),
-        (assets_manifest_path, "slides/assets-manifest.yaml"),
-        (publish_context_path, "slides/publish-context.yaml"),
-    ]:
-        if not path.exists():
-            missing.append(f"- {label} ({path})")
+def validate_publish_artifacts(plan_path: Path) -> Result[dict]:
+    """Valida el plan JSON v3. Retorna Result con el plan si es válido."""
+    if not plan_path.exists():
+        return Result.fail(f"Falta el plan de publicación: {plan_path}")
 
-    if missing:
-        raise FileNotFoundError(
-            "Faltan artefactos de publicación generados por el agente:\n" + "\n".join(missing)
-        )
+    plan = load_json(plan_path)
+    errors: list[str] = []
 
-    plan = load_yaml(plan_path)
     if not plan.get("meta") or not plan.get("slides"):
-        raise ValueError(f"Plan inválido: {plan_path} debe incluir 'meta' y 'slides'.")
+        errors.append(f"Plan inválido: {plan_path} debe incluir 'meta' y 'slides'.")
+        return Result.fail(*errors)
 
     meta = plan.get("meta", {}) or {}
     required_meta = {"topic_id", "title", "source", "template_id"}
     missing_meta = required_meta - set(meta.keys())
     if missing_meta:
-        raise ValueError(
+        errors.append(
             f"Plan inválido: faltan campos en meta: {', '.join(sorted(missing_meta))}"
         )
 
     for slide in plan.get("slides", []):
         slide_id = slide.get("id", "?")
-        bg = slide.get("background_image") or {}
-        ci = slide.get("content_image") or {}
-        if bg.get("strategy") == "gemini" and not str(bg.get("prompt", "")).strip():
-            raise ValueError(f"Plan inválido: {slide_id} requiere background_image.prompt no vacío.")
-        if ci.get("strategy") == "gemini" and not str(ci.get("prompt", "")).strip():
-            raise ValueError(f"Plan inválido: {slide_id} requiere content_image.prompt no vacío.")
+        img = _get_slide_image(slide)
+        if img.get("layer") in ("background", "content") and not str(img.get("prompt", "")).strip():
+            errors.append(
+                f"Plan inválido: {slide_id} requiere image.prompt no vacío para layer='{img['layer']}'."
+            )
 
-    load_yaml(assets_manifest_path)
-    load_yaml(publish_context_path)
-    return plan
+    return Result.fail(*errors) if errors else Result.ok(plan)
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -1283,27 +1269,17 @@ def generate_assets(
     for slide in plan["slides"]:
         s = dict(slide)
 
-        # ── Imagen de fondo ─────────────────────────────────────────────
-        bg = dict(slide.get("background_image") or {})
-        if bg.get("strategy") == "gemini" and bg.get("prompt") and bg.get("local_asset"):
-            lp = topic_folder / bg["local_asset"]
+        # ── Imagen (v3 unificado) ──────────────────────────────────────
+        img = _get_slide_image(slide)
+        layer = img.get("layer", "none")
+        if layer != "none" and img.get("prompt") and img.get("local_asset"):
+            lp = topic_folder / img["local_asset"]
             if not lp.exists():
-                print(f"  🖼️  Generando fondo para {slide['id']} …")
-                _gemini_image(bg["prompt"], lp, gemini_api_key)
-            if lp.exists() and not bg.get("drive_id"):
-                bg["drive_id"] = _upload_drive(drive_svc, lp, folder_id)
-            s["background_image"] = bg
-
-        # ── Imagen de contenido ─────────────────────────────────────────
-        ci = dict(slide.get("content_image") or {})
-        if ci.get("strategy") == "gemini" and ci.get("prompt") and ci.get("local_asset"):
-            lp = topic_folder / ci["local_asset"]
-            if not lp.exists():
-                print(f"  🖼️  Generando imagen de contenido para {slide['id']} …")
-                _gemini_image(ci["prompt"], lp, gemini_api_key)
-            if lp.exists() and not ci.get("drive_id"):
-                ci["drive_id"] = _upload_drive(drive_svc, lp, folder_id)
-            s["content_image"] = ci
+                print(f"  🖼️  Generando imagen ({layer}) para {slide['id']} …")
+                _gemini_image(img["prompt"], lp, gemini_api_key)
+            if lp.exists() and not img.get("drive_id"):
+                img["drive_id"] = _upload_drive(drive_svc, lp, folder_id)
+            s["image"] = img
 
         # ── Tablas como PNG ─────────────────────────────────────────────
         updated_ta = []
@@ -1774,18 +1750,20 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
                         }
                     })
 
-    # ── 3. Imagen de fondo ──────────────────────────────────────────────
-    bg = slide.get("background_image") or {}
-    if bg.get("drive_id"):
-        add_image(_drive_url(bg["drive_id"]), "background")
+    # ── 3. Imagen (v3 unificado) ───────────────────────────────────────
+    img = _get_slide_image(slide)
+    img_layer = img.get("layer", "none")
+    img_drive_id = img.get("drive_id")
+
+    if img_layer == "background" and img_drive_id:
+        add_image(_drive_url(img_drive_id), "background")
         add_bg_overlay("background", opacity=0.6)
 
     # ── 4. Imagen de contenido ──────────────────────────────────────────
-    ci = slide.get("content_image") or {}
-    if ci.get("drive_id"):
+    if img_layer == "content" and img_drive_id:
         img_zone = layout.get("image", "right-half")
         if img_zone != "none":
-            add_image(_drive_url(ci["drive_id"]), img_zone)
+            add_image(_drive_url(img_drive_id), img_zone)
 
     # ── 5. Tablas (preferir nativas cuando entren bien) ─────────────────
     table_zone = layout.get("table", "full-bottom")
@@ -1837,6 +1815,8 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         body_txt = _compose_body_text(body_subtitle, body_blocks)
         b_size   = typo.get("body", {}).get("size", 18)
         if body_zone == "table-intro":
+            b_size = min(b_size, 13)
+        if body_zone == "left-top-split":
             b_size = min(b_size, 15)
         body_geo = ZONES.get(body_zone)
         if body_geo and body_txt:
@@ -1977,7 +1957,7 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
-        description="EDU Slides Pipeline — YAML de publicación → Google Slides",
+        description="EDU Slides Pipeline — Plan JSON v3 → Assets → Google Slides",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
@@ -1985,8 +1965,8 @@ def main(argv: list[str] | None = None) -> None:
         "topic_folder",
         help="Ruta a la carpeta del tema (ej: salida/cursadas/2026/temas/01-conceptos-introductorios)",
     )
-    parser.add_argument("--plan-only",    action="store_true", help="Solo valida los YAML de publicación")
-    parser.add_argument("--regen-plan",   action="store_true", help="Regenera plan-filminas YAML desde filminas.md")
+    parser.add_argument("--plan-only",    action="store_true", help="Solo valida el plan JSON")
+    parser.add_argument("--regen-plan",   action="store_true", help="Regenera plan JSON desde filminas.md")
     parser.add_argument("--assets-only",  action="store_true", help="Solo genera assets (requiere plan previo)")
     parser.add_argument("--publish-only", action="store_true", help="Solo publica (requiere plan + assets)")
     args = parser.parse_args(argv)
@@ -1998,13 +1978,25 @@ def main(argv: list[str] | None = None) -> None:
 
     project_root = find_project_root(topic_folder)
 
+    # ── Cargar schema registry y sobreescribir mapeos ────────────────────
+    registry = load_registry(project_root)
+    if registry:
+        _override_maps_from_registry(registry)
+        print("  ✓ Schema registry cargado — mapeos actualizados desde _edu/schemas/schema-registry.json")
+    else:
+        print("  ⚠️  Schema registry no encontrado — usando mapeos por defecto")
+
     secrets_path  = project_root / "_edu" / "secrets.local.yaml"
     config_path   = project_root / "_edu" / "slides-config.yaml"
     token_path    = project_root / "_edu" / "token_slides.json"
-    plan_name     = f"plan-filminas-{topic_folder.name}.yaml"
-    plan_path     = topic_folder / "slides" / plan_name
-    assets_manifest_path = topic_folder / "slides" / "assets-manifest.yaml"
-    publish_context_path = topic_folder / "slides" / "publish-context.yaml"
+
+    # ── Buscar plan JSON v3 ──────────────────────────────────────────────
+    from pipeline_common import find_plan
+    plan_result = find_plan(topic_folder)
+    if not plan_result.is_ok:
+        plan_path = topic_folder / "slides" / f"plan-filminas-{topic_folder.name}.json"
+    else:
+        plan_path = plan_result.unwrap()
 
     required_paths = [(config_path, "_edu/slides-config.yaml")]
     if not args.plan_only and not args.regen_plan:
@@ -2021,9 +2013,6 @@ def main(argv: list[str] | None = None) -> None:
             sys.exit(1)
 
     config  = load_yaml(config_path)
-    secrets = load_yaml(secrets_path) if secrets_path.exists() else {}
-    gemini_key   = secrets.get("gemini_api_key", "")
-    template_id  = config.get("template_id", "")
 
     # ── --regen-plan: regenerar plan desde filminas.md ────────────────────
     if args.regen_plan:
@@ -2031,37 +2020,41 @@ def main(argv: list[str] | None = None) -> None:
         if not filminas_path.exists():
             print(f"❌ No se encontró filminas.md en {topic_folder}")
             sys.exit(1)
+        template_id = config.get("template_id", "")
         if not template_id:
             print("❌ template_id no configurado en slides-config.yaml")
             sys.exit(1)
-        new_plan = generate_plan(filminas_path, config, template_id)
-        plan_path.parent.mkdir(parents=True, exist_ok=True)
-        save_yaml(plan_path, new_plan)
+        plan_path = topic_folder / "slides" / f"plan-filminas-{topic_folder.name}.json"
+        new_plan = generate_plan(filminas_path, config, template_id, registry=registry)
+        save_json(plan_path, new_plan)
         print(f"  📄 Plan regenerado: {plan_path.relative_to(project_root)}")
         print(f"     {new_plan['meta']['total_slides']} filminas, {new_plan['meta']['images_planned']} imágenes planificadas.")
         print("\n✅ Plan listo. Ejecutar con --assets-only para generar imágenes.")
         return
 
-    # ── Fase 1: Validar artefactos generados por el agente ────────────────
-    try:
-        plan = validate_publish_artifacts(topic_folder, plan_path, assets_manifest_path, publish_context_path)
-    except (FileNotFoundError, ValueError) as exc:
-        print(f"❌ {exc}")
-        print("   Ejecutar primero el prompt/agente que genera los YAML de publicación.")
+    # ── Fase 1: Validar plan JSON v3 ──────────────────────────────────────
+    result = validate_publish_artifacts(plan_path)
+    if not result.is_ok:
+        for err in result.errors:
+            print(f"❌ {err}")
+        print("   Ejecutar primero el prompt/agente que genera el plan de publicación.")
         sys.exit(1)
 
+    plan = result.unwrap()
     print(f"  📄 Plan cargado desde: {plan_path.relative_to(project_root)}")
     if args.plan_only:
-        print("\n✅ Artefactos validados. Podés ejecutar sin --plan-only para generar assets y publicar.")
+        print("\n✅ Plan validado. Podés ejecutar sin --plan-only para generar assets y publicar.")
         return
 
     # ── Autenticar con Google ─────────────────────────────────────────────
+    secrets = load_yaml(secrets_path) if secrets_path.exists() else {}
+    gemini_key   = secrets.get("gemini_api_key", "")
     creds = _get_creds(secrets_path, token_path)
 
     # ── Fase 2: Generar assets ─────────────────────────────────────────────
     if not args.publish_only:
         plan = generate_assets(plan, config, creds, gemini_key, topic_folder)
-        save_yaml(plan_path, plan)
+        save_json(plan_path, plan)
         print(f"  📄 Plan actualizado con drive_ids: {plan_path.relative_to(project_root)}")
         if args.assets_only:
             print("\n✅ Assets generados. Ejecutar con --publish-only para publicar.")
@@ -2070,10 +2063,13 @@ def main(argv: list[str] | None = None) -> None:
     # ── Fase 3: Publicar ─────────────────────────────────────────────────
     url = publish_slides(plan, config, creds, topic_folder)
 
+    total = plan.get("meta", {}).get("total_slides", len(plan.get("slides", [])))
+    title = plan.get("meta", {}).get("title", topic_folder.name)
+
     print(f"""
 🎉 Pipeline completado!
-   Tema:    {plan['meta']['title']}
-   Slides:  {plan['meta']['total_slides']}
+   Tema:    {title}
+   Slides:  {total}
    Plan:    {plan_path.relative_to(project_root)}
    URL:     {url}
 """)

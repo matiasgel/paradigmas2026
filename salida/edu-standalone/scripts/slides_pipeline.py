@@ -1,32 +1,33 @@
 #!/usr/bin/env python3
 """
-EDU Slides Pipeline — Módulo EDU (v3 — Schema-Driven)
+EDU Slides Pipeline — Módulo EDU (v4 — Schema-Driven)
 ======================================================
-Consume plan JSON schema-driven → assets (imágenes/tablas) → Google Slides.
+Pipeline canónico: filminas.md → plan JSON v3 → assets → Google Slides.
 
 Fases:
-    1. validate — Valida plan-filminas-{tema}.json contra JSON Schemas.
-                  (soporta legacy YAML v2 con validación ad hoc)
-    2. assets   — Genera imágenes con Gemini, renderiza tablas como PNG,
+    1. plan     — Parsea filminas.md y genera plan-filminas-{tema}.json
+    2. validate — Valida plan JSON contra contratos v3
+    3. assets   — Genera imágenes con Gemini, renderiza tablas como PNG (matplotlib),
                   sube todo a Google Drive.
-    3. publish  — Lee el plan + assets y crea la presentación en Google Slides.
+    4. publish  — Crea la presentación en Google Slides desde el plan.
 
 Uso:
   python slides_pipeline.py <ruta-tema>
   python slides_pipeline.py <ruta-tema> --plan-only
+  python slides_pipeline.py <ruta-tema> --regen-plan
   python slides_pipeline.py <ruta-tema> --assets-only
   python slides_pipeline.py <ruta-tema> --publish-only
 
 Requiere:
   pip install -r requirements.txt
 
-Archivos de configuración requeridos (en la raíz del proyecto):
-  _edu/secrets.local.yaml       — google_credentials_path + gemini_api_key
-  _edu/slides-config.yaml       — sistema de diseño generado por /edu-slides-designer
-  _edu/schemas/schema-registry.json — mapeos y enums (fuente única de verdad)
+Archivos de configuración (en la raíz del proyecto):
+  _edu/secrets.local.yaml              — google_credentials_path + gemini_api_key
+  _edu/slides-config.yaml              — sistema de diseño
+  _edu/schemas/schema-registry.json    — mapeos y enums (fuente única de verdad)
 
-Artefacto requerido en la carpeta del tema (generado por el agente):
-    slides/plan-filminas-{tema}.json  (un solo archivo JSON v3)
+Artefacto requerido en la carpeta del tema:
+    slides/plan-filminas-{tema}.json   (un solo archivo JSON v3)
 """
 
 from __future__ import annotations
@@ -37,6 +38,7 @@ import json
 import re
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -85,18 +87,18 @@ EMU_PER_PT = 12_700
 # Directrices de layout por tipo — fuente canónica: schema-registry.json
 # En runtime se sobreescriben desde el registry via _override_maps_from_registry().
 LAYOUT_MAP: dict[str, dict] = {
-    "portada":            {"title": "full-title",     "body": "center-bottom", "image": "background", "code": "none",       "table": "none"},
-    "concepto-abstracto": {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none",       "table": "none"},
-    "concepto-mixto":     {"title": "full-title",     "body": "left-middle",   "image": "none",       "code": "right-half", "table": "none"},
-    "tabla-mixta":        {"title": "full-title",     "body": "left-top-split", "image": "none",      "code": "left-bottom-split", "table": "right-half"},
-    "codigo":             {"title": "full-title",     "body": "subtitle-only", "image": "none",       "code": "full-bottom", "table": "none"},
-    "tabla":              {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none",       "table": "table-main"},
-    "tabla-comparativa":  {"title": "full-title",     "body": "table-intro",   "image": "none",       "code": "none",       "table": "table-main"},
-    "diagrama":           {"title": "full-title",     "body": "left-middle",   "image": "right-half", "code": "none",       "table": "none"},
-    "socratica":          {"title": "center-top",     "body": "center-middle", "image": "background", "code": "none",       "table": "none"},
-    "demo":               {"title": "full-title",     "body": "left-middle",   "image": "none",       "code": "right-half", "table": "none"},
-    "cierre":             {"title": "center-middle",  "body": "center-bottom", "image": "background", "code": "none",       "table": "none"},
-    "timeline":           {"title": "full-title",     "body": "full-center",   "image": "none",       "code": "none",       "table": "none"},
+    "portada":            {"title": "full-title",     "body": "center-bottom",   "image": "background", "code": "none",             "table": "none"},
+    "concepto-abstracto": {"title": "full-title",     "body": "left-middle",     "image": "right-half", "code": "none",             "table": "none"},
+    "concepto-mixto":     {"title": "full-title",     "body": "left-middle",     "image": "none",       "code": "right-half",       "table": "none"},
+    "tabla-mixta":        {"title": "full-title",     "body": "left-top-split",  "image": "none",       "code": "left-bottom-split", "table": "right-half"},
+    "codigo":             {"title": "full-title",     "body": "subtitle-only",   "image": "none",       "code": "full-bottom",      "table": "none"},
+    "tabla":              {"title": "full-title",     "body": "table-intro",     "image": "none",       "code": "none",             "table": "table-main"},
+    "tabla-comparativa":  {"title": "full-title",     "body": "table-intro",     "image": "none",       "code": "none",             "table": "table-main"},
+    "diagrama":           {"title": "full-title",     "body": "left-middle",     "image": "right-half", "code": "none",             "table": "none"},
+    "socratica":          {"title": "center-top",     "body": "center-middle",   "image": "background", "code": "none",             "table": "none"},
+    "demo":               {"title": "full-title",     "body": "left-middle",     "image": "none",       "code": "right-half",       "table": "none"},
+    "cierre":             {"title": "center-middle",  "body": "center-bottom",   "image": "background", "code": "none",             "table": "none"},
+    "timeline":           {"title": "full-title",     "body": "left-top-split",  "image": "none",       "code": "none",             "table": "right-half"},
 }
 
 
@@ -115,14 +117,14 @@ def _override_maps_from_registry(registry: dict) -> None:
         LAYOUT_MAP = new_layout
 
 
-def _load_plan_file(plan_path: Path) -> dict:
-    """Carga un plan desde JSON."""
-    return load_json(plan_path)
-
-
-def _save_plan_file(plan_path: Path, data: dict) -> None:
-    """Guarda un plan como JSON."""
-    save_json(plan_path, data)
+def _image_layer_from_registry(registry: dict) -> dict[str, str]:
+    """Extrae mapeo tipo → image_layer desde el registry."""
+    type_layout_map = registry.get("type_layout_map", {})
+    return {
+        stype: mapping.get("image_layer", "none")
+        for stype, mapping in type_layout_map.items()
+        if isinstance(mapping, dict)
+    }
 
 
 def _get_slide_image(slide: dict) -> dict:
@@ -172,7 +174,7 @@ ZONES = _zones()
 # HELPERS
 # ═══════════════════════════════════════════════════════════════════════
 
-# find_project_root, load_yaml — importados de pipeline_common
+# find_project_root, load_yaml, load_json, save_json — importados de pipeline_common
 
 
 def _deep_merge_dict(base: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
@@ -210,8 +212,8 @@ def _default_filminas_schema() -> dict[str, Any]:
             "asset": "@asset:",
         },
         "allowed": {
-            "slide_types": sorted(LAYOUT_MAP.keys()) if LAYOUT_MAP else [],
-            "layout_presets": sorted(LAYOUT_MAP.keys()) if LAYOUT_MAP else [],
+            "slide_types": sorted(LAYOUT_MAP.keys()),
+            "layout_presets": sorted(LAYOUT_MAP.keys()),
             "image_strategies": ["background", "content", "none"],
         },
     }
@@ -759,8 +761,7 @@ def _finalize_slide(raw: dict, schema: dict[str, Any]) -> dict:
 
     return {
         "id":          raw["id"],
-        # El tipo viene del @tipo: explícito en filminas.md; sin @tipo: → "pending".
-        "type":        directives.get("type") or "pending",
+        "type":        _detect_type(raw["id"], title, code_blocks, tables, directives, body_blocks),
         "title":       title,
         "subtitle":    subtitle,
         "body_blocks": body_blocks,
@@ -820,20 +821,274 @@ def validate_filminas_contract(slides: list[dict], schema: dict[str, Any], filmi
         )
 
 
+def _detect_type(slide_id: str, title: str, code_blocks, tables, directives: dict[str, Any] | None = None, body_blocks: list | None = None) -> str:
+    forced_type = str((directives or {}).get("type", "")).strip()
+    if forced_type in LAYOUT_MAP:
+        return forced_type
+    num = int(slide_id.split("-")[1])
+    if num == 0:
+        return "portada"
+    if code_blocks:
+        # Si hay cuerpo sustancial (listas o varios bloques de texto), usar diseño mixto
+        if body_blocks:
+            substantial = sum(
+                len(b.get("items", []))
+                if b.get("type") == "list"
+                else (1 if b.get("type") in ("text", "heading") else 0)
+                for b in body_blocks
+            )
+            if substantial >= 2:
+                return "concepto-mixto"
+        return "codigo"
+    if tables:
+        return "tabla"
+    tl = title.lower()
+    if any(k in tl for k in ["demo ", "en vivo", "práctica", "ejercicio"]):
+        return "demo"
+    if any(k in tl for k in ["cierre", "adelanto", "mapa de la materia", "fin de"]):
+        return "cierre"
+    if any(k in tl for k in ["timeline", "línea del tiempo", "historia"]):
+        return "timeline"
+    if any(k in tl for k in ["¿", "pregunta", "reflexión", "socrát"]):
+        return "socratica"
+    if any(k in tl for k in ["diagrama", "pipeline", "flujo", "arquitectura", "cuello de botella"]):
+        return "diagrama"
+    return "concepto-abstracto"
+
+
 # ═══════════════════════════════════════════════════════════════════════
-# VALIDACIÓN DE ARTEFACTOS
+# FASE 1 — GENERADOR DE PLAN
 # ═══════════════════════════════════════════════════════════════════════
+
+def _preferred_image_prompt(slide: dict) -> str:
+    directives = slide.get("directives") or {}
+    explicit = str(directives.get("image_prompt", "")).strip()
+    if explicit:
+        return explicit
+
+    for asset in slide.get("asset_hints") or []:
+        if not isinstance(asset, dict):
+            continue
+        prompt = str(asset.get("prompt", "")).strip()
+        if prompt:
+            return prompt
+
+    return ""
+
+
+def _slide_visual_context(slide: dict) -> str:
+    parts: list[str] = []
+    title = _strip_markdown(str(slide.get("title", "")).strip())
+    subtitle = _strip_markdown(str(slide.get("subtitle", "")).strip())
+
+    if title:
+        parts.append(title)
+    if subtitle:
+        parts.append(subtitle)
+
+    return ". ".join(part for part in parts if part)
+
+
+def _palette_prompt_fragment(config: dict) -> str:
+    palette = config.get("palette", {}) or {}
+    color_names = {
+        "#8B0000": "bordo institucional",
+        "#FFFFFF": "blanco",
+        "#1A1A1A": "gris carbon",
+        "#000000": "negro",
+    }
+    mapped = [
+        color_names.get(str(color).strip().upper())
+        for color in [palette.get("primary"), palette.get("secondary"), palette.get("text")]
+        if color
+    ]
+    mapped = [color for color in mapped if color]
+    if not mapped:
+        return "paleta sobria universitaria"
+    return "paleta " + ", ".join(dict.fromkeys(mapped))
+
+
+def _image_safety_rules() -> str:
+    return (
+        "Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. "
+        "Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. "
+        "Estilo vectorial limpio, fondo claro, académico."
+    )
+
+
+def _append_image_guardrails(prompt: str, config: dict) -> str:
+    base = re.sub(r"\s+", " ", prompt).strip().rstrip(".")
+    style = f"Alta resolución, {_palette_prompt_fragment(config)}. {_image_safety_rules()}"
+    return f"{base}. {style}"
+
+
+def _max_images_per_presentation(config: dict) -> int:
+    strategy = config.get("gemini_image_strategy", {}) or {}
+    raw = strategy.get("max_per_presentation", strategy.get("max_images_per_presentation", 8))
+    if raw is None or raw == "":
+        return 8
+    return int(raw)
+
+def _image_prompt(slide: dict, config: dict) -> str:
+    """Genera un prompt Gemini para imagen de fondo o contenido."""
+    preferred = _preferred_image_prompt(slide)
+    if preferred:
+        return _append_image_guardrails(preferred, config)
+
+    stype = slide.get("type", "concepto-abstracto")
+    title = _strip_markdown(str(slide.get("title", "")).strip()) or "lenguajes de programación"
+
+    if stype == "portada":
+        prompt = (
+            f"Portada académica universitaria: bloques geométricos y flechas representando etapas de un compilador, "
+            f"aula y materiales de estudio. Tema: {title}"
+        )
+    elif stype == "cierre":
+        prompt = (
+            f"Composición visual de síntesis: árbol sintáctico, bloques de pipeline y símbolo de completitud. "
+            f"Tema: {title}"
+        )
+    elif stype == "socratica":
+        prompt = (
+            f"Escena de debate académico: dos caminos visuales opuestos con íconos contrastantes. "
+            f"Tema: {title}"
+        )
+    elif stype == "diagrama":
+        prompt = (
+            f"Infografía técnica con cajas y flechas representando un pipeline o flujo de procesamiento. "
+            f"Tema: {title}"
+        )
+    elif stype == "timeline":
+        prompt = (
+            f"Línea de tiempo con hitos visuales concretos, íconos mudos, sin texto. "
+            f"Tema: {title}"
+        )
+    else:
+        prompt = (
+            f"Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, "
+            f"sin elementos decorativos. Tema: {title}"
+        )
+    return _append_image_guardrails(prompt, config)
+
+
+def generate_plan(filminas_path: Path, config: dict, template_id: str, registry: dict | None = None) -> dict:
+    """Fase 1: filminas.md → plan-filminas-{tema}.json (formato v3 unificado)."""
+    print("📋 Fase 1 — Generando plan desde filminas.md …")
+
+    project_root = find_project_root(filminas_path.parent)
+    schema = load_filminas_schema(project_root)
+    slides      = parse_filminas(filminas_path, schema)
+    topic_id    = filminas_path.parent.name
+    topic_title = topic_id.replace("-", " ").title()
+    if slides:
+        first_title = (slides[0].get("title") or "").strip()
+        first_subtitle = (slides[0].get("subtitle") or "").strip()
+        topic_title = first_subtitle or first_title or topic_title
+        if first_title.lower() == "portada" and first_subtitle:
+            topic_title = first_subtitle
+
+    # Mapeo image_layer desde registry (fuente de verdad) o fallback hardcoded
+    image_layer_map: dict[str, str] = {}
+    if registry:
+        image_layer_map = _image_layer_from_registry(registry)
+    if not image_layer_map:
+        # Fallback: derivar desde LAYOUT_MAP.image
+        for stype, layout_def in LAYOUT_MAP.items():
+            img_zone = layout_def.get("image", "none")
+            if img_zone == "background":
+                image_layer_map[stype] = "background"
+            elif img_zone != "none":
+                image_layer_map[stype] = "content"
+            else:
+                image_layer_map[stype] = "none"
+
+    # Budget de imágenes: máximo 12 por presentación
+    max_images  = _max_images_per_presentation(config)
+    if max_images < 12:
+        max_images = 12
+    img_count   = 0
+    priority    = ["portada", "cierre", "concepto-abstracto", "diagrama", "socratica", "timeline"]
+
+    assigned: dict[str, str] = {}
+    for stype in priority:
+        for s in slides:
+            if s["id"] in assigned:
+                continue
+            layer = image_layer_map.get(s["type"], "none")
+            if s["type"] == stype and layer != "none":
+                assigned[s["id"]] = layer if img_count < max_images else "none"
+                if layer != "none" and img_count < max_images:
+                    img_count += 1
+    for s in slides:
+        assigned.setdefault(s["id"], "none")
+
+    plan_slides = []
+    for slide in slides:
+        directives = slide.get("directives") or {}
+        layout_key = directives.get("layout") or slide["type"]
+        layout   = LAYOUT_MAP.get(layout_key, LAYOUT_MAP.get(slide["type"], {}))
+        layer    = directives.get("image") or assigned[slide["id"]]
+
+        img_prompt = _image_prompt(slide, config) if layer != "none" else ""
+
+        table_assets = [
+            {
+                "index":          idx,
+                "table_markdown": tmd,
+                "local_asset":    f"slides/assets/{slide['id']}-table-{idx + 1}.png",
+                "drive_id":       None,
+            }
+            for idx, tmd in enumerate(slide["tables"])
+        ]
+
+        plan_slides.append({
+            "id":       slide["id"],
+            "type":     slide["type"],
+            # Contenido completo de filminas.md
+            "title":       slide["title"],
+            "subtitle":    slide["subtitle"],
+            "body_blocks": slide["body_blocks"],
+            "code_blocks": slide["code_blocks"],
+            "tables":      slide["tables"],
+            "directives":  directives,
+            "asset_hints": slide.get("asset_hints") or [],
+            # Directrices de layout
+            "layout": layout,
+            # Imagen (v3 unificado)
+            "image": {
+                "layer":       layer,
+                "prompt":      img_prompt,
+                "local_asset": f"slides/assets/{slide['id']}-img.png" if layer != "none" else "",
+                "drive_id":    None,
+            },
+            "table_assets": table_assets,
+        })
+
+    plan = {
+        "meta": {
+            "topic_id":      topic_id,
+            "title":         topic_title,
+            "source":        "filminas.md",
+            "schema_version": "3.0.0",
+            "schema_path": schema.get("_path", str(DEFAULT_FILMINAS_SCHEMA)),
+            "generated_at":  datetime.now().isoformat(timespec="seconds"),
+            "template_id":   template_id,
+            "total_slides":  len(slides),
+            "images_planned": img_count,
+        },
+        "slides": plan_slides,
+    }
+
+    print(f"  ✅ {len(slides)} filminas procesadas, {img_count} imágenes planificadas.")
+    return plan
 
 
 def validate_publish_artifacts(plan_path: Path) -> Result[dict]:
-    """Valida artefactos de publicación (plan JSON v3).
-
-    Retorna Result[dict] con el plan cargado si es válido, o errores.
-    """
+    """Valida el plan JSON v3. Retorna Result con el plan si es válido."""
     if not plan_path.exists():
         return Result.fail(f"Falta el plan de publicación: {plan_path}")
 
-    plan = _load_plan_file(plan_path)
+    plan = load_json(plan_path)
     errors: list[str] = []
 
     if not plan.get("meta") or not plan.get("slides"):
@@ -1024,7 +1279,6 @@ def generate_assets(
                 _gemini_image(img["prompt"], lp, gemini_api_key)
             if lp.exists() and not img.get("drive_id"):
                 img["drive_id"] = _upload_drive(drive_svc, lp, folder_id)
-            # Actualizar en el slide
             s["image"] = img
 
         # ── Tablas como PNG ─────────────────────────────────────────────
@@ -1496,7 +1750,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
                         }
                     })
 
-    # ── 3. Imagen de fondo ──────────────────────────────────────────────
+    # ── 3. Imagen (v3 unificado) ───────────────────────────────────────
     img = _get_slide_image(slide)
     img_layer = img.get("layer", "none")
     img_drive_id = img.get("drive_id")
@@ -1703,7 +1957,7 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
-        description="EDU Slides Pipeline — Plan JSON → Assets → Google Slides",
+        description="EDU Slides Pipeline — Plan JSON v3 → Assets → Google Slides",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
@@ -1711,7 +1965,8 @@ def main(argv: list[str] | None = None) -> None:
         "topic_folder",
         help="Ruta a la carpeta del tema (ej: salida/cursadas/2026/temas/01-conceptos-introductorios)",
     )
-    parser.add_argument("--plan-only",    action="store_true", help="Solo valida los artefactos de publicación")
+    parser.add_argument("--plan-only",    action="store_true", help="Solo valida el plan JSON")
+    parser.add_argument("--regen-plan",   action="store_true", help="Regenera plan JSON desde filminas.md")
     parser.add_argument("--assets-only",  action="store_true", help="Solo genera assets (requiere plan previo)")
     parser.add_argument("--publish-only", action="store_true", help="Solo publica (requiere plan + assets)")
     args = parser.parse_args(argv)
@@ -1739,13 +1994,12 @@ def main(argv: list[str] | None = None) -> None:
     from pipeline_common import find_plan
     plan_result = find_plan(topic_folder)
     if not plan_result.is_ok:
-        # Default path para mensajes de error
         plan_path = topic_folder / "slides" / f"plan-filminas-{topic_folder.name}.json"
     else:
         plan_path = plan_result.unwrap()
 
     required_paths = [(config_path, "_edu/slides-config.yaml")]
-    if not args.plan_only:
+    if not args.plan_only and not args.regen_plan:
         required_paths.insert(0, (secrets_path, "_edu/secrets.local.yaml"))
 
     # Verificar prerequisitos
@@ -1760,7 +2014,25 @@ def main(argv: list[str] | None = None) -> None:
 
     config  = load_yaml(config_path)
 
-    # ── Fase 1: Validar artefactos generados por el agente ────────────────
+    # ── --regen-plan: regenerar plan desde filminas.md ────────────────────
+    if args.regen_plan:
+        filminas_path = topic_folder / "filminas.md"
+        if not filminas_path.exists():
+            print(f"❌ No se encontró filminas.md en {topic_folder}")
+            sys.exit(1)
+        template_id = config.get("template_id", "")
+        if not template_id:
+            print("❌ template_id no configurado en slides-config.yaml")
+            sys.exit(1)
+        plan_path = topic_folder / "slides" / f"plan-filminas-{topic_folder.name}.json"
+        new_plan = generate_plan(filminas_path, config, template_id, registry=registry)
+        save_json(plan_path, new_plan)
+        print(f"  📄 Plan regenerado: {plan_path.relative_to(project_root)}")
+        print(f"     {new_plan['meta']['total_slides']} filminas, {new_plan['meta']['images_planned']} imágenes planificadas.")
+        print("\n✅ Plan listo. Ejecutar con --assets-only para generar imágenes.")
+        return
+
+    # ── Fase 1: Validar plan JSON v3 ──────────────────────────────────────
     result = validate_publish_artifacts(plan_path)
     if not result.is_ok:
         for err in result.errors:
@@ -1771,7 +2043,7 @@ def main(argv: list[str] | None = None) -> None:
     plan = result.unwrap()
     print(f"  📄 Plan cargado desde: {plan_path.relative_to(project_root)}")
     if args.plan_only:
-        print("\n✅ Artefactos validados. Podés ejecutar sin --plan-only para generar assets y publicar.")
+        print("\n✅ Plan validado. Podés ejecutar sin --plan-only para generar assets y publicar.")
         return
 
     # ── Autenticar con Google ─────────────────────────────────────────────
@@ -1782,18 +2054,17 @@ def main(argv: list[str] | None = None) -> None:
     # ── Fase 2: Generar assets ─────────────────────────────────────────────
     if not args.publish_only:
         plan = generate_assets(plan, config, creds, gemini_key, topic_folder)
-        _save_plan_file(plan_path, plan)
+        save_json(plan_path, plan)
         print(f"  📄 Plan actualizado con drive_ids: {plan_path.relative_to(project_root)}")
         if args.assets_only:
             print("\n✅ Assets generados. Ejecutar con --publish-only para publicar.")
             return
 
     # ── Fase 3: Publicar ─────────────────────────────────────────────────
-    topic_id = topic_folder.name
     url = publish_slides(plan, config, creds, topic_folder)
 
-    total = plan.get("summary", plan.get("meta", {})).get("total_slides", len(plan.get("slides", [])))
-    title = plan.get("meta", {}).get("title", topic_id)
+    total = plan.get("meta", {}).get("total_slides", len(plan.get("slides", [])))
+    title = plan.get("meta", {}).get("title", topic_folder.name)
 
     print(f"""
 🎉 Pipeline completado!
