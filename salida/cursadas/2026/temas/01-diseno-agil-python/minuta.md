@@ -440,7 +440,7 @@ def saludar(nombre: str) -> str:
 | 4–8 | Cronología PEP 484 → Python 3.10+ — sintaxis moderna vs. obsoleta | F-72 |
 | 8–12 | Tipos básicos + anotaciones de variable | F-73 |
 | 12–16 | Colecciones tipadas: list[int], dict[str, float], tuple[float, float] | F-74 |
-| 16–20 | X | None (Optional moderno) + Union | F-75, F-76 |
+| 16–20 | `X \| None` (Optional moderno) + Union | F-75, F-76 |
 | 20–24 | Any y Callable — cuándo usar cada uno | F-77, F-78 |
 | 24–28 | Ruff + Pylance verificando type hints en TP2 | F-79 |
 | 28–30 | Cierre: cheat sheet resumen | F-80 |

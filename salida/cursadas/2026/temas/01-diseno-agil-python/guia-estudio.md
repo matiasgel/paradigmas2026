@@ -2,7 +2,7 @@
 ## Tema 01 · Laboratorio de Programación y Lenguajes 2026
 ## Universidad Nacional de Tierra del Fuego — Instituto IDEI
 
-> **Escrita por:** Dra. Sofía 📖 (study-guide-writer)  
+> **Docente:** Prof. Matias Gel  
 > **Dirigida a:** Alumnos del IF009 — Semanas 2–3  
 > **TP asociado:** TP2 Python + Prompting con Autograding  
 > **Deadline TP2:** Semana 4, lunes 23:59 | `classroom.github.com/a/X4xiTEDQ`
@@ -79,7 +79,7 @@ Para este curso usamos GitHub Codespaces como entorno estándar. Esto significa:
 
 ### 2.1 Por qué Python 3.13
 
-Python 3.13 (octubre 2024) trae mejoras importante para aprender:
+Python 3.13 (octubre 2024) trae mejoras importantes para aprender:
 
 - **REPL mejorado:** historial persistente, colores, mejor soporte para código multilínea
 - **Errores contextuales:** `Did you mean: 'upper'?` cuando escribís `upper_case()`
@@ -554,9 +554,14 @@ alumnos = [
     {"nombre": "Bob",    "nota": 85},
 ]
 
-# Ordenar por nota
-por_nota = sorted(alumnos, key=lambda a: a["nota"])
-# Ana (91), Bob (85), Carlos (72) en orden descendente con reverse=True
+# Ordenar por nota ascendente (menor a mayor)
+por_nota_asc = sorted(alumnos, key=lambda a: a["nota"])
+# → [Carlos(72), Bob(85), Ana(91)]
+
+# Ordenar en forma descendente (mayor a menor)
+por_nota_desc = sorted(alumnos, key=lambda a: a["nota"], reverse=True)
+# → [Ana(91), Bob(85), Carlos(72)]
+
 mejor = max(alumnos, key=lambda a: a["nota"])
 ```
 
