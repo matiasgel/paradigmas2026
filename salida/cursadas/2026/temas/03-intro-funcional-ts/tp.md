@@ -1,8 +1,8 @@
-# TP 03 — Introducción a Programación Funcional con TypeScript
+# TP 03 — Programación Funcional: TypeScript + Clojure
 **Materia:** Paradigmas y Lenguajes de Programación 2026 — UNTDF / IDEI
-**Tema:** 03 | **Tipo:** Quiz Moodle (GIFT)
-**Cantidad de preguntas:** 60
-**Modalidad:** Cuestionario individual — deferred feedback — 1 intento — 90 minutos
+**Tema:** 03 | **Tipo:** Repo GitHub Classroom (Autograding)
+**Cantidad de ejercicios:** 50 (25 TypeScript + 25 Clojure)
+**Modalidad:** Individual — entrega por push a GitHub Classroom — Plazo: 1 semana
 **Archivo de importación:** `tp-quiz.gift` (UTF-8 sin BOM)
 **Guía de configuración Moodle 5:** `tp-quiz-moodle-config.md`
 
