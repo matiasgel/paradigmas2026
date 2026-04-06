@@ -1,0 +1,14 @@
+student_id,name,email,topic_id,tp_type,score,max_score,submitted_at
+p2-estrategico,Perfil Estrategico,estrategico@example.edu,03,quiz,85,100,2026-04-05T10:00:00
+p2-estrategico,Perfil Estrategico,estrategico@example.edu,03,tp1,88,100,2026-04-05T10:05:00
+p2-estrategico,Perfil Estrategico,estrategico@example.edu,03,tp2,82,100,2026-04-05T10:10:00
+p2-ansioso,Perfil Ansioso,ansioso@example.edu,03,quiz,35,100,2026-04-05T10:15:00
+p2-ansioso,Perfil Ansioso,ansioso@example.edu,03,tp1,40,100,2026-04-05T10:20:00
+p2-ansioso,Perfil Ansioso,ansioso@example.edu,03,tp2,38,100,2026-04-05T10:25:00
+p2-disperso,Perfil Disperso,disperso@example.edu,03,quiz,0,100,2026-04-05T10:30:00
+p2-disperso,Perfil Disperso,disperso@example.edu,03,tp1,0,100,2026-04-05T10:35:00
+p2-disperso,Perfil Disperso,disperso@example.edu,03,tp2,0,100,2026-04-05T10:40:00
+p2-disperso,Perfil Disperso,disperso@example.edu,03,tp3,25,100,2026-04-05T10:45:00
+p2-recursero,Perfil Recursero,recursero@example.edu,03,quiz,55,100,2026-04-05T10:50:00
+p2-recursero,Perfil Recursero,recursero@example.edu,03,tp1,62,100,2026-04-05T10:55:00
+p2-recursero,Perfil Recursero,recursero@example.edu,03,tp2,58,100,2026-04-05T11:00:00
