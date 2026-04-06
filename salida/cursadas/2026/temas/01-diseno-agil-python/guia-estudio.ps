@@ -1,0 +1,324 @@
+%!PS-Adobe-3.0
+%%Pages: (atend)
+%%PageOrder: Ascend
+%%BoundingBox: 0 0 595 842
+%%EndComments
+%%Page: 1 1
+/Courier findfont 10 scalefont setfont
+40 820 moveto (GUIA DE ESTUDIO  MODULO I: DISENO AGIL + PYTHON) show
+40 796 moveto (Tema 01  Laboratorio de Programacion y Lenguajes 2026) show
+40 772 moveto (Universidad Nacional de Tierra del Fuego  Instituto IDEI) show
+40 736 moveto (NOTE: Docente: Prof. Matias Gel) show
+40 712 moveto (NOTE: Dirigida a: Alumnos del IF009  Semanas 23) show
+40 688 moveto (NOTE: TP asociado: TP2 Python + Autograding) show
+40 652 moveto (---) show
+40 628 moveto (Objetivos de esta guia) show
+40 592 moveto (Al finalizar este modulo, el estudiante debera poder:) show
+40 568 moveto (# | Objetivo | Como se evalua) show
+40 556 moveto (--- | ---------- | ----------------) show
+40 544 moveto (OA1 | Describir el modelo agil y sus herramientas de desarrollo | Flujo de trabajo del) show
+40 532 moveto (TP2: commits explicitos y CI en verde) show
+40 520 moveto (OA2 | Implementar funciones en Python 3.13 con tipos, condicionales y bucles | Scripts) show
+40 508 moveto (`src/` del TP2 con pruebas automatizadas en verde) show
+40 496 moveto (OA3 | Aplicar colecciones para resolver problemas concretos y mantener claridad) show
+40 484 moveto (estructural | Soluciones del TP2 con colecciones apropiadas y legibles) show
+40 472 moveto (OA4 | Organizar codigo en modulos con docstrings y type hints | Estructura `src/tests/`) show
+40 460 moveto (del TP2 y documentacion de funciones) show
+40 448 moveto (OA5 | Justificar el diseno del codigo y explicar su comportamiento | Comentarios tecnicos) show
+40 436 moveto (y documentacion de la solucion) show
+40 412 moveto (---) show
+40 388 moveto (Conceptos previos necesarios) show
+40 352 moveto ( [x] Cuenta GitHub activa con SSH configurado \(Tema 00\)) show
+40 340 moveto ( [x] GitHub Codespaces funcional \(Tema 00\)) show
+40 328 moveto ( [x] Git basico: add, commit, push \(Tema 00\)) show
+40 316 moveto ( [x] Bootstrap 5 + HTML basico \(Tema 00  solo de contexto\)) show
+40 292 moveto (---) show
+40 268 moveto (PARTE 1: El Modelo Agil) show
+40 232 moveto (1.1 Que es el desarrollo agil?) show
+40 196 moveto (El desarrollo agil es un enfoque de ingenieria de software que prioriza iteraciones) show
+40 184 moveto (breves, retroalimentacion continua y colaboracion constante. Se fundamenta en la entrega) show
+40 172 moveto (temprana de valor y en la adaptacion progresiva del producto.) show
+40 148 moveto (El Manifiesto Agil de 2001 resume esta filosofia en cuatro valores basicos:) show
+40 124 moveto (Valoramos mas | Que) show
+40 112 moveto (--------------- | -----) show
+40 100 moveto (Individuos e interacciones | Procesos y herramientas) show
+40 88 moveto (Software funcionando | Documentacion exhaustiva) show
+40 76 moveto (Colaboracion con el cliente | Negociacion de contratos) show
+40 64 moveto (Respuesta al cambio | Seguir un plan rigido) show
+showpage
+%%Page: 2 2
+/Courier findfont 10 scalefont setfont
+40 808 moveto (NOTE: Nota: Agil no implica ausencia de planificacion; implica planificacion iterativa y) show
+40 796 moveto (ajuste continuo.) show
+40 760 moveto (1.2 Cascada vs. Agil) show
+40 724 moveto (El modelo cascada propone fases secuenciales: requisitos, diseno, implementacion, prueba y) show
+40 712 moveto (despliegue. Su principal limitacion es que el cliente no observa el resultado hasta etapas) show
+40 700 moveto (avanzadas del proceso.) show
+40 676 moveto (En contraste, el enfoque agil busca validar incrementos de software de forma temprana) show
+40 664 moveto (mediante iteraciones cortas. En el TP2 esto se expresa mediante ciclos de trabajo que) show
+40 652 moveto (combinan desarrollo, prueba y ajuste continuo.) show
+40 628 moveto (1.3 El entorno de desarrollo agil) show
+40 592 moveto (Para este curso se utiliza GitHub Codespaces como entorno estandar. Esto garantiza que) show
+40 580 moveto (todos los estudiantes trabajen con la misma configuracion y minimiza diferencias de) show
+40 568 moveto (entorno.) show
+40 544 moveto ( El entorno se define en .devcontainer/devcontainer.json) show
+40 532 moveto ( El proyecto se ejecuta en un contenedor reproducible) show
+40 508 moveto (Extensiones VS Code relevantes) show
+40 484 moveto (Extension | Proposito) show
+40 472 moveto (----------- | -----------) show
+40 460 moveto (**Pylance** | Comprobacion estatica de tipos en tiempo real) show
+40 448 moveto (**Ruff** | Linter automatico y correccion de estilo) show
+40 436 moveto (**GitLens** | Visualizacion del historial Git en el editor) show
+40 412 moveto (---) show
+40 388 moveto (PARTE 2: Python 3.13  Fundamentos) show
+40 352 moveto (2.1 Por que Python 3.13) show
+40 316 moveto (Python 3.13 introduce mejoras que facilitan el aprendizaje y reducen el esfuerzo de) show
+40 304 moveto (depuracion. Entre las novedades relevantes se encuentran errores mas claros y mayor) show
+40 292 moveto (consistencia en el comportamiento del lenguaje.) show
+40 268 moveto (Para iniciar el interprete en Codespaces:) show
+40 232 moveto (    python3) show
+40 196 moveto (2.2 Tipos de datos primitivos) show
+40 160 moveto (Python es un lenguaje de tipado dinamico, pero en este curso se exige el uso de) show
+40 148 moveto (anotaciones de tipo para mejorar la claridad y la mantenibilidad.) show
+40 124 moveto (Tipo | Ejemplos | Caracteristicas) show
+40 112 moveto (------ | ---------- | -----------------) show
+40 100 moveto (`int` | `42`, `-7`, `1000000` | Precision arbitraria) show
+40 88 moveto (`float` | `3.14`, `-0.5`, `1e10` | Representacion IEEE 754) show
+40 76 moveto (`str` | `"hola"`, `'mundo'` | Inmutable) show
+40 64 moveto (`bool` | `True`, `False` | Subclase de `int`) show
+showpage
+%%Page: 3 3
+/Courier findfont 10 scalefont setfont
+40 820 moveto (`None` | `None` | Indica ausencia de valor) show
+40 784 moveto (    nombre: str = "Ada Lovelace") show
+40 772 moveto (    edad: int = 25) show
+40 760 moveto (    promedio: float = 7.85) show
+40 748 moveto (    activo: bool = True) show
+40 736 moveto (    email: str | None = None) show
+40 700 moveto (2.3 Operadores aritmeticos) show
+40 652 moveto (    10 + 3    # 13) show
+40 640 moveto (    10 - 3    # 7) show
+40 628 moveto (    10 * 3    # 30) show
+40 616 moveto (    10 / 3    # 3.3333...  # division real) show
+40 604 moveto (    10 // 3   # 3  # division entera) show
+40 592 moveto (    10 % 3    # 1  # resto) show
+40 580 moveto (    2 ** 8    # 256  # potencia) show
+40 544 moveto (NOTE: Precaucion: 10 / 2 produce 5.0, no 5. Use // si se requiere un entero.) show
+40 508 moveto (2.4 Strings  inmutabilidad e interpolacion) show
+40 472 moveto (Los strings en Python son inmutables. Para obtener una variante distinta se debe crear un) show
+40 460 moveto (nuevo objeto.) show
+40 424 moveto (    saludo = "hola") show
+40 412 moveto (    saludo_formal = saludo.capitalize\(\)) show
+40 400 moveto (    print\(saludo\)  # "hola") show
+40 364 moveto (f-strings) show
+40 328 moveto (    nombre = "Ada") show
+40 316 moveto (    edad = 25) show
+40 304 moveto (    texto = f"Hola, {nombre}. Tiene {edad} anos.") show
+40 268 moveto (2.5 Variables y referencias) show
+40 232 moveto (En Python, las variables son etiquetas que apuntan a objetos en memoria.) show
+40 196 moveto (    a = [1, 2, 3]) show
+40 184 moveto (    b = a) show
+40 172 moveto (    b.append\(99\)) show
+40 160 moveto (    print\(a\)  # [1, 2, 3, 99]) show
+40 124 moveto (Para evitar modificaciones compartidas, copie explicitamente el objeto:) show
+40 88 moveto (    c = a.copy\(\)) show
+40 76 moveto (    c.append\(100\)) show
+40 64 moveto (    print\(a\)  # [1, 2, 3, 99]) show
+showpage
+%%Page: 4 4
+/Courier findfont 10 scalefont setfont
+40 796 moveto (2.6 None y bool) show
+40 748 moveto (    resultado = None) show
+40 736 moveto (    if resultado is None:) show
+40 724 moveto (        print\("Sin resultado aun"\)) show
+40 712 moveto (    ) show
+40 700 moveto (    if not []:) show
+40 688 moveto (        print\("Lista vacia"\)) show
+40 652 moveto (---) show
+40 628 moveto (PARTE 3: Control de flujo) show
+40 592 moveto (3.1 Condicionales  if / elif / else) show
+40 544 moveto (    def clasificar_nota\(nota: int\) -> str:) show
+40 532 moveto (        if nota >= 90:) show
+40 520 moveto (            return "Sobresaliente") show
+40 508 moveto (        elif nota >= 70:) show
+40 496 moveto (            return "Aprobado") show
+40 484 moveto (        elif nota >= 50:) show
+40 472 moveto (            return "Regular") show
+40 460 moveto (        else:) show
+40 448 moveto (            return "Desaprobado") show
+40 412 moveto (3.2 Bucles  for) show
+40 364 moveto (    frutas = ["manzana", "banana", "pera"]) show
+40 352 moveto (    for fruta in frutas:) show
+40 340 moveto (        print\(fruta.upper\(\)\)) show
+40 304 moveto (Si se requiere el indice, utilice enumerate:) show
+40 268 moveto (    for i, fruta in enumerate\(frutas, start=1\):) show
+40 256 moveto (        print\(f"{i}: {fruta}"\)) show
+40 220 moveto (3.3 Bucles  while) show
+40 172 moveto (    intentos = 0) show
+40 160 moveto (    MAX = 3) show
+40 148 moveto (    ) show
+40 136 moveto (    while intentos < MAX:) show
+40 124 moveto (        clave = input\("Clave: "\)) show
+40 112 moveto (        if clave == "1234":) show
+40 100 moveto (            print\("Correcto"\)) show
+40 88 moveto (            break) show
+40 76 moveto (        intentos += 1) show
+40 64 moveto (    else:) show
+showpage
+%%Page: 5 5
+/Courier findfont 10 scalefont setfont
+40 820 moveto (        print\("Bloqueado por demasiados intentos"\)) show
+40 784 moveto (3.4 match  Pattern Matching) show
+40 736 moveto (    def describir_http\(codigo: int\) -> str:) show
+40 724 moveto (        match codigo:) show
+40 712 moveto (            case 200:) show
+40 700 moveto (                return "OK  exito") show
+40 688 moveto (            case 400:) show
+40 676 moveto (                return "Bad Request  error del cliente") show
+40 664 moveto (            case 404:) show
+40 652 moveto (                return "Not Found  recurso inexistente") show
+40 640 moveto (            case 500:) show
+40 628 moveto (                return "Internal Server Error") show
+40 616 moveto (            case _:) show
+40 604 moveto (                return f"Codigo HTTP: {codigo}") show
+40 568 moveto (---) show
+40 544 moveto (PARTE 4: Funciones) show
+40 508 moveto (4.1 Anatomia completa de una funcion) show
+40 460 moveto (    def calcular_imc\(peso_kg: float, altura_m: float\) -> float:) show
+40 448 moveto (        """) show
+40 436 moveto (        Calcula el Indice de Masa Corporal.) show
+40 424 moveto (    ) show
+40 412 moveto (        Args:) show
+40 400 moveto (            peso_kg: Peso en kilogramos \(debe ser mayor que 0\).) show
+40 388 moveto (            altura_m: Altura en metros \(debe ser mayor que 0\).) show
+40 376 moveto (    ) show
+40 364 moveto (        Returns:) show
+40 352 moveto (            IMC como numero flotante.) show
+40 340 moveto (    ) show
+40 328 moveto (        Raises:) show
+40 316 moveto (            ValueError: Si algun parametro es menor o igual a 0.) show
+40 304 moveto (        """) show
+40 292 moveto (        if peso_kg <= 0 or altura_m <= 0:) show
+40 280 moveto (            raise ValueError\("Peso y altura deben ser positivos"\)) show
+40 268 moveto (        return peso_kg / \(altura_m ** 2\)) show
+40 232 moveto (4.2 Parametros) show
+40 184 moveto (    def crear_perfil\() show
+40 172 moveto (        nombre: str,) show
+40 160 moveto (        edad: int,) show
+40 148 moveto (        rol: str = "alumno") show
+40 136 moveto (    \) -> dict[str, str | int]:) show
+40 124 moveto (        return {"nombre": nombre, "edad": edad, "rol": rol}) show
+40 88 moveto (4.3 Valores de retorno) show
+showpage
+%%Page: 6 6
+/Courier findfont 10 scalefont setfont
+40 808 moveto (    def cuadrado\(n: int\) -> int:) show
+40 796 moveto (        return n ** 2) show
+40 784 moveto (    ) show
+40 772 moveto (    def dividir\(a: int, b: int\) -> tuple[int, int]:) show
+40 760 moveto (        return a // b, a % b) show
+40 712 moveto (    def buscar\(lista: list[int], valor: int\) -> int | None:) show
+40 700 moveto (        for i, x in enumerate\(lista\):) show
+40 688 moveto (            if x == valor:) show
+40 676 moveto (                return i) show
+40 664 moveto (        return None) show
+40 628 moveto (---) show
+40 604 moveto (PARTE 5: Colecciones) show
+40 568 moveto (5.1 list  secuencia mutable) show
+40 520 moveto (    notas = [85, 72, 91, 68, 77]) show
+40 508 moveto (    notas.append\(95\)) show
+40 496 moveto (    notas.insert\(0, 100\)) show
+40 484 moveto (    ultimo = notas.pop\(\)) show
+40 448 moveto (5.2 tuple  secuencia inmutable) show
+40 400 moveto (    coordenada = \(3.5, -1.2\)) show
+40 388 moveto (    x, y = coordenada) show
+40 352 moveto (5.3 dict  mapa clave-valor) show
+40 304 moveto (    alumno = {) show
+40 292 moveto (        "nombre": "Ana",) show
+40 280 moveto (        "legajo": 12345,) show
+40 268 moveto (        "notas": [85, 90]) show
+40 256 moveto (    }) show
+40 220 moveto (5.4 set  conjunto sin duplicados) show
+40 172 moveto (    lenguajes = {"Python", "JavaScript", "Python"}) show
+40 136 moveto (5.5 Comprensiones) show
+40 88 moveto (    cuadrados = [x ** 2 for x in range\(10\)]) show
+40 76 moveto (    pares = [x for x in range\(20\) if x % 2 == 0]) show
+showpage
+%%Page: 7 7
+/Courier findfont 10 scalefont setfont
+40 808 moveto (5.6 Funciones de iteracion) show
+40 760 moveto (    for i, fruta in enumerate\(["manzana", "banana", "cereza"], start=1\):) show
+40 748 moveto (        print\(f"{i}: {fruta}"\)) show
+40 736 moveto (    ) show
+40 724 moveto (    for nombre, nota in zip\(["Ana", "Bob", "Carlos"], [85, 72, 91]\):) show
+40 712 moveto (        print\(f"{nombre}: {nota}"\)) show
+40 676 moveto (---) show
+40 652 moveto (PARTE 6: Modulos, Funciones de Orden Superior y Decoradores) show
+40 616 moveto (6.1 Modulos y paquetes) show
+40 568 moveto (    import calculadora) show
+40 556 moveto (    resultado = calculadora.sumar\(5, 3\)) show
+40 520 moveto (6.2 Funciones de orden superior) show
+40 472 moveto (    def aplicar\(func, lista: list[int]\) -> list[int]:) show
+40 460 moveto (        return [func\(x\) for x in lista]) show
+40 424 moveto (6.3 Lambdas) show
+40 376 moveto (    cuadrado = lambda x: x ** 2) show
+40 340 moveto (6.4 Decoradores basicos) show
+40 292 moveto (    import functools) show
+40 280 moveto (    ) show
+40 268 moveto (    def registrar\(func\):) show
+40 256 moveto (        @functools.wraps\(func\)) show
+40 244 moveto (        def wrapper\(*args, **kwargs\):) show
+40 232 moveto (            resultado = func\(*args, **kwargs\)) show
+40 220 moveto (            return resultado) show
+40 208 moveto (        return wrapper) show
+40 172 moveto (---) show
+40 148 moveto (PARTE 7: Type Hints \(Python 3.10+\)) show
+40 112 moveto (7.1 Que son y por que importan) show
+40 76 moveto (Las anotaciones de tipo documentan las expectativas de entrada y salida de funciones. No) show
+40 64 moveto (se validan en tiempo de ejecucion, pero contribuyen a la calidad del codigo y a la) show
+showpage
+%%Page: 8 8
+/Courier findfont 10 scalefont setfont
+40 820 moveto (deteccion temprana de errores.) show
+40 796 moveto (7.2 Sintaxis moderna) show
+40 748 moveto (    notas: list[int]) show
+40 736 moveto (    mapa: dict[str, float]) show
+40 724 moveto (    email: str | None = None) show
+40 688 moveto (7.3 Anotaciones en funciones) show
+40 640 moveto (    def procesar_alumnos\() show
+40 628 moveto (        nombres: list[str],) show
+40 616 moveto (        notas: dict[str, int],) show
+40 604 moveto (        umbral: int = 70) show
+40 592 moveto (    \) -> tuple[list[str], list[str]]:) show
+40 580 moveto (        aprobados = [n for n in nombres if notas.get\(n, 0\) >= umbral]) show
+40 568 moveto (        desaprobados = [n for n in nombres if notas.get\(n, 0\) < umbral]) show
+40 556 moveto (        return aprobados, desaprobados) show
+40 520 moveto (7.4 Callable) show
+40 472 moveto (    from collections.abc import Callable) show
+40 460 moveto (    ) show
+40 448 moveto (    def aplicar_a_todos\() show
+40 436 moveto (        lista: list[int],) show
+40 424 moveto (        func: Callable[[int], int]) show
+40 412 moveto (    \) -> list[int]:) show
+40 400 moveto (        return [func\(x\) for x in lista]) show
+40 364 moveto (---) show
+40 340 moveto (PARTE 8: PEP 8 + Ruff  Estilo de Codigo) show
+40 304 moveto (8.1 Las reglas mas importantes) show
+40 268 moveto (Regla | Mal | Bien) show
+40 256 moveto (------- | ----- | ------) show
+40 244 moveto (Identacion | 2 espacios o tabs | 4 espacios) show
+40 232 moveto (Nombres de funciones | `MiFunc` | `mi_func`) show
+40 220 moveto (Nombres de clases | `mi_clase` | `MiClase`) show
+40 208 moveto (Constantes | `maxIntentos` | `MAX_INTENTOS`) show
+40 196 moveto (Largo de linea | >88 caracteres | maximo 88 caracteres) show
+40 172 moveto (8.2 Ruff  el linter del curso) show
+40 124 moveto (    ruff check .) show
+40 112 moveto (    ruff check --fix .) show
+40 100 moveto (    ruff check src/calculadora.py) show
+40 64 moveto (Se recomienda ejecutar Ruff antes de cada entrega para identificar violaciones de estilo y) show
+showpage
+%%Page: 9 9
+/Courier findfont 10 scalefont setfont
+40 820 moveto (errores sintacticos simples.) show
+showpage
+%%EOF

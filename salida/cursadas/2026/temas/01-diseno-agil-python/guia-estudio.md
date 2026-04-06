@@ -4,8 +4,7 @@
 
 > **Docente:** Prof. Matias Gel  
 > **Dirigida a:** Alumnos del IF009 — Semanas 2–3  
-> **TP asociado:** TP2 Python + Prompting con Autograding  
-> **Deadline TP2:** Semana 4, lunes 23:59 | `classroom.github.com/a/X4xiTEDQ`
+
 
 ---
 
@@ -15,10 +14,10 @@ Al finalizar este módulo, podés:
 
 | # | Objetivo | Cómo se evalúa |
 |---|----------|----------------|
-| OA1 | Describir el modelo ágil y sus herramientas (VS Code, Git, CI) | Flujo de trabajo del TP2: commits + CI verde |
-| OA2 | Escribir funciones Python 3.13 con tipos, condicionales y loops | Scripts `src/` del TP2 con tests en verde |
-| OA3 | Usar colecciones Python para resolver problemas concretos | Scripts complejos del TP2 |
-| OA4 | Organizar código en módulos con docstrings, Ruff-compliant y type hints | Estructura `src/tests/` del TP2 |
+| OA1 | Describir el modelo ágil y sus herramientas (VS Code, Git, CI) | Flujo de trabajo con commits y CI en verde |
+| OA2 | Escribir funciones Python 3.13 con tipos, condicionales y loops | Scripts `src/` con pruebas automatizadas en verde |
+| OA3 | Usar colecciones Python para resolver problemas concretos | Soluciones con colecciones claras y eficientes |
+| OA4 | Organizar código en módulos con docstrings, Ruff-compliant y type hints | Estructura `src/tests/` y documentación de funciones |
 | OA5 | Usar Copilot con prompts estructurados y documentarlos en PROMPTS.md | `PROMPTS.md` con ≥3 prompts completos |
 | OA6 | Explicar qué hace el código generado por IA antes de entregarlo | Calidad del PROMPTS.md |
 
@@ -54,7 +53,7 @@ Surge en 2001 cuando 17 desarrolladores publicaron el **Manifiesto Ágil** (agil
 
 El modelo **cascada** (waterfall) fue el dominante durante los 1970s–1990s. Propone fases secuenciales: Requisitos → Diseño → Implementación → Prueba → Despliegue. El problema: el cliente ve el software por primera vez cuando ya está "terminado" y difícil de cambiar.
 
-**En la práctica del TP2:** Tenés tests preescritos (los "requisitos") y tu tarea es hacer que todos pasen haciendo iteraciones pequeñas (commits). Eso es el ciclo ágil más mínimo posible: **Red → Green → Refactor**.
+**En este curso:** Tenés tests preescritos (los "requisitos") y tu tarea es hacer que todos pasen haciendo iteraciones pequeñas (commits). Eso es el ciclo ágil más mínimo posible: **Red → Green → Refactor**.
 
 ### 1.3 El entorno de desarrollo ágil
 
@@ -189,7 +188,7 @@ c.append(100)
 print(a)         # [1, 2, 3, 99] ← a no cambió
 ```
 
-> **Para el TP2:** Si tenés una función que recibe una lista, ten cuidado de no modificarla si el test espera que el original quede intacto.
+> **En este curso:** Si tenés una función que recibe una lista, ten cuidado de no modificarla si el test espera que el original quede intacto.
 
 ### 2.6 None y Boolean
 
@@ -350,7 +349,7 @@ def calcular_imc(peso_kg: float, altura_m: float) -> float:
     return peso_kg / (altura_m ** 2)
 ```
 
-**Elementos obligatorios para el TP2:**
+**Elementos obligatorios en este curso:**
 - `def nombre_funcion(param: tipo) -> tipo_retorno:`
 - Docstring con descripción, Args y Returns
 - Type hints en todos los parámetros y en el retorno
@@ -598,9 +597,9 @@ resultado = sumar(5, 3)
 from calculadora import sumar as add
 ```
 
-**Estructura del TP2 (referencia):**
+**Estructura del proyecto (referencia):**
 ```
-tp2/
+proyecto/
 ├── src/
 │   ├── __init__.py    ← hace que src/ sea un paquete
 │   └── calculadora.py
@@ -713,7 +712,7 @@ sumar(3, 4)
 
 Los **type hints** son anotaciones que documentan qué tipos espera y devuelve una función. Python **no las valida en runtime** — pero Pylance sí las verifica en tiempo de edición, y Ruff puede detectar inconsistencias.
 
-Para el TP2: **son obligatorios** en todos los parámetros y retornos de funciones públicas.
+En este curso: **son obligatorios** en todos los parámetros y retornos de funciones públicas.
 
 ### 7.2 Sintaxis moderna (Python 3.10+)
 
@@ -825,7 +824,7 @@ Las principales reglas que marca:
 
 ### 9.1 El patrón obligatorio para PROMPTS.md
 
-Para el TP2, cada vez que uses Copilot o ChatGPT, documentá el prompt completo en `PROMPTS.md` siguiendo el patrón **Role + Contexto + Tarea + Restricciones + Ejemplo (RCTAE)**.
+Cada vez que uses Copilot o ChatGPT, documentá el prompt completo en `PROMPTS.md` siguiendo el patrón **Role + Contexto + Tarea + Restricciones + Ejemplo (RCTAE)**.
 
 ### 9.2 Ejemplo de prompt bien formado
 
@@ -834,7 +833,7 @@ Para el TP2, cada vez que uses Copilot o ChatGPT, documentá el prompt completo 
 
 **Role:** Eres un tutor de Python 3.13 especialista en algoritmos matemáticos.
 
-**Contexto:** Estoy implementando `src/clasificador.py` para el TP2 de la materia IF009.
+**Contexto:** Estoy implementando `src/clasificador.py` para un ejercicio de la materia IF009.
 Necesito una función que determine si un número es primo.
 
 **Tarea:** Implementá la función `es_primo(n: int) -> bool` con:
@@ -873,7 +872,7 @@ Cuando tenés un error, el traceback es el mejor punto de partida para pedirle a
 
 ```markdown
 **Role:** Eres un tutor de Python experto en debugging.
-**Contexto:** Tengo este error en mi TP2:
+**Contexto:** Tengo este error en mi desarrollo:
 ---
 Traceback (most recent call last):
   File "src/calculadora.py", line 12
@@ -886,32 +885,6 @@ La función es: def dividir(a, b): return a / b
 ```
 
 ---
-
-## PARTE 10: Autoevaluación
-
-Respondé estas preguntas antes de cerrar la guía. Si no podés responder alguna, volvé a la sección correspondiente.
-
-### Nivel básico (debe poder responderse antes del TP2)
-
-1. ¿Cuál es la diferencia entre `/` y `//` en Python?
-2. ¿Por qué `a = [1,2,3]; b = a; b.append(4)` modifica también a `a`?
-3. ¿Qué valor imprime `print(True + True + False)`?
-4. Escribí una función `calcular_promedio(notas: list[int]) -> float` correcta.
-5. ¿Cuándo usás `str | None` en un type hint?
-
-### Nivel intermedio (para el TP2)
-
-6. Escribí una comprensión que filtre solo los pares de `range(20)`.
-7. ¿Qué diferencia hay entre `sorted(lista)` y `lista.sort()`?
-8. ¿Para qué sirve `__init__.py` en una carpeta?
-9. Escribí un prompt RCTAE para pedir una función que convierta temperatura.
-10. ¿Qué hace `@functools.wraps` y por qué es importante?
-
-### Nivel avanzado (bonus — no evaluado en TP2)
-
-11. Implementá un decorador `medir_tiempo(func)` que imprima cuánto tardó la función.
-12. Reescribí `[x**2 for x in range(10) if x % 2 == 0]` usando `map` y `filter`.
-13. ¿Cuándo usarías `tuple` en lugar de `list` para guardar coordenadas?
 
 ---
 
@@ -959,9 +932,5 @@ Respondé estas preguntas antes de cerrar la guía. Si no podés responder algun
 - Alves & Cipriano (2024). *Give Me The Code: GPT in First Year CS*. arXiv:2411.17855 — sobre PROMPTS.md como herramienta de comprensión
 - Prather (2024). *Beyond the Hype: GenAI in CS Education*. arXiv:2412.14732 — sobre IA literacy en programación
 
-### Enlace TP2
 
-```
-classroom.github.com/a/X4xiTEDQ
-Deadline: Semana 4, lunes 23:59
 ```

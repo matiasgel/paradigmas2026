@@ -10,6 +10,7 @@ import sys
 import os
 import re
 import argparse
+import textwrap
 from pathlib import Path
 
 # Add project root to path
@@ -320,6 +321,8 @@ class GuiaPDF(FPDF):
         avail = 170
         col_w = avail / col_count
         line_h = 5
+        padding = 2
+        wrap_width = int((col_w - padding * 2) / 2.8)
 
         for i, row in enumerate(rows):
             if i == 1 and has_header:
@@ -331,34 +334,50 @@ class GuiaPDF(FPDF):
                 self.add_page()
                 y = self.get_y()
 
-            self.set_x(20)
-            for j, cell_text in enumerate(row):
+            cells = []
+            max_lines = 1
+            for cell_text in row:
                 cell_text = cell_text.strip()
+                cell_text = clean_inline(cell_text) if not is_header else cell_text
+                wrapped = textwrap.wrap(cell_text, width=wrap_width) or [""]
+                cells.append(wrapped)
+                max_lines = max(max_lines, len(wrapped))
+
+            row_height = max_lines * line_h + padding * 2
+            if y + row_height > (297 - 22):
+                self.add_page()
+                y = self.get_y()
+
+            self.set_draw_color(200, 200, 200)
+            self.set_line_width(0.1)
+
+            for j, wrapped_lines in enumerate(cells):
                 if is_header:
                     self.set_fill_color(*COLOR_BORDO)
                     self.set_text_color(*COLOR_WHITE)
                     self.set_font("Helvetica", "B", 8)
-                    fill = True
                 elif i % 2 == 0:
                     self.set_fill_color(*COLOR_LIGHT)
                     self.set_text_color(*COLOR_DARK)
                     self.set_font("Helvetica", "", 8)
-                    fill = True
                 else:
                     self.set_fill_color(*COLOR_WHITE)
                     self.set_text_color(*COLOR_DARK)
                     self.set_font("Helvetica", "", 8)
-                    fill = True
 
-                self.set_draw_color(200, 200, 200)
-                self.set_line_width(0.1)
-                # Truncar texto largo
-                if len(cell_text) > int(col_w * 1.5):
-                    cell_text = cell_text[:int(col_w * 1.5) - 3] + "..."
                 x_pos = 20 + j * col_w
                 self.set_xy(x_pos, y)
-                self.cell(col_w, line_h, s(cell_text), border=1, fill=fill)
-            self.ln(line_h)
+                self.rect(x_pos, y, col_w, row_height, "DF")
+
+                text_x = x_pos + padding
+                text_y = y + padding
+                for line in wrapped_lines:
+                    self.set_xy(text_x, text_y)
+                    self.cell(col_w - padding * 2, line_h, s(line), ln=0)
+                    text_y += line_h
+
+            self.set_xy(20, y + row_height)
+            self.ln(1)
 
         self.set_text_color(*COLOR_DARK)
         self.ln(2)
