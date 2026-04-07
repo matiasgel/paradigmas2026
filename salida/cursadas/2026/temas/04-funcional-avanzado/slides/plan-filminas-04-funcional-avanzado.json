@@ -1,0 +1,1620 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "04-funcional-avanzado",
+    "title": "Aspectos Avanzados de Programación Funcional",
+    "source": "filminas.md",
+    "generated_at": "2026-04-07T14:14:54",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
+    "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\04-funcional-avanzado",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/slides-pipeline.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 42,
+    "images_planned": 21,
+    "tables_planned": 6,
+    "code_slides": 14,
+    "status": "READY_FOR_VALIDATION",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "portada": 1,
+      "concepto-abstracto": 15,
+      "tabla-comparativa": 4,
+      "codigo": 14,
+      "tabla": 2,
+      "diagrama": 2,
+      "demo": 1,
+      "socratica": 1,
+      "cierre": 2
+    }
+  },
+  "slides": [
+    {
+      "id": "F-01",
+      "type": "portada",
+      "title": "Portada",
+      "subtitle": "Aspectos Avanzados de Programación Funcional",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Paradigmas y Lenguajes de Programación 2026 — UNTDF / IDEI\nTema 04 · Módulo II"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "fondo oscuro con circuitos y símbolos de lambda (λ) y componentes de código abstractos en tonos azul profundo, estilo académico-tecnológico",
+        "local_asset": "slides/assets/F-01-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-02",
+      "type": "concepto-abstracto",
+      "title": "¿Por qué hablar de funcional?",
+      "subtitle": "¿Por qué hablar de programación funcional?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Contexto actual"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Concurrencia y multicore obligan a pensar en datos inmutables",
+              "level": 0
+            },
+            {
+              "content": "El funcional es una forma de controlar la complejidad",
+              "level": 0
+            },
+            {
+              "content": "No es solo teoría: es una forma práctica de diseño",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "infografía con una ruta que va de un nodo \"estado mutable\" a otro nodo \"expresiones puras\", con flechas y colores azul y gris, estilo académico moderno",
+        "local_asset": "slides/assets/F-02-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-03",
+      "type": "tabla-comparativa",
+      "title": "Imperativo vs funcional",
+      "subtitle": "Imperativo vs funcional",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Paradigma | Qué representa | Punto fuerte |\n|---|---|---|\n| Imperativo | Estado mutable + pasos | Control detallado |\n| Funcional | Expresiones + composición | Menos efectos colaterales |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Paradigma | Qué representa | Punto fuerte |\n|---|---|---|\n| Imperativo | Estado mutable + pasos | Control detallado |\n| Funcional | Expresiones + composición | Menos efectos colaterales |",
+          "local_asset": "slides/assets/F-03-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "type": "concepto-abstracto",
+      "title": "Funciones puras",
+      "subtitle": "Funciones puras",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Misma entrada → mismo resultado",
+              "level": 0
+            },
+            {
+              "content": "No producen efectos secundarios",
+              "level": 0
+            },
+            {
+              "content": "Son fáciles de razonar y de testear",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "diagrama de cajas y flechas mostrando entrada, función y salida sin cambios en el origen, con colores azul y blanco, estilo plano",
+        "local_asset": "slides/assets/F-04-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "concepto-abstracto",
+      "title": "Inmutabilidad",
+      "subtitle": "Inmutabilidad",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué importa"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El valor original no cambia",
+              "level": 0
+            },
+            {
+              "content": "Se evita el estado compartido corrupto",
+              "level": 0
+            },
+            {
+              "content": "Es la base de modelos funcionales seguros",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "ilustración de dos objetos de datos, uno original y otro nuevo, con flechas que muestran copia por valor y sin mutación, estilo minimalista en gris y azul",
+        "local_asset": "slides/assets/F-05-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-06",
+      "type": "codigo",
+      "title": "Pipeline en TypeScript",
+      "subtitle": "Pipeline funcional en TypeScript",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const numeros = [1, 2, 3, 4, 5, 6];\nconst resultado = numeros\n  .filter(n => n % 2 === 0)\n  .map(n => n * n)\n  .reduce((acc, n) => acc + n, 0);"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-07",
+      "type": "tabla",
+      "title": "`filter` + `map`",
+      "subtitle": "`filter` y `map`",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué hacen?"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Operación | Resultado |\n|---|---|\n| `filter` | Selecciona elementos que cumplen la condición |\n| `map` | Transforma cada elemento |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Operación | Resultado |\n|---|---|\n| `filter` | Selecciona elementos que cumplen la condición |\n| `map` | Transforma cada elemento |",
+          "local_asset": "slides/assets/F-07-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-08",
+      "type": "codigo",
+      "title": "`reduce`",
+      "subtitle": "`reduce` en TypeScript",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Acumula un valor sin mutar la colección",
+              "level": 0
+            },
+            {
+              "content": "Útil para agregaciones y cálculos finales",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const suma = numeros.reduce((acc, n) => acc + n, 0);"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-09",
+      "type": "codigo",
+      "title": "Composición en TypeScript",
+      "subtitle": "Composición funcional en TypeScript",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Transform<T> = (items: T[]) => T[];\n\nconst filterPares: Transform<number> = items =>\n  items.filter(n => n % 2 === 0);\n\nconst mapCuadrado: Transform<number> = items =>\n  items.map(n => n * n);\n\nconst compose = <T>(...fns: Transform<T>[]) =>\n  (input: T[]) => fns.reduce((acc, fn) => fn(acc), input);\n\nconst pipeline = compose(filterPares, mapCuadrado);"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-10",
+      "type": "concepto-abstracto",
+      "title": "Colecciones inmutables en TS",
+      "subtitle": "Colecciones inmutables en TypeScript",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Herramientas"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`const` + `readonly`",
+              "level": 0
+            },
+            {
+              "content": "`ReadonlyArray<T>`",
+              "level": 0
+            },
+            {
+              "content": "Spread `...` para crear nuevos valores",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "infografía con un objeto original y un objeto nuevo creado por copia, con un candado y flechas, estilo profesional sin texto",
+        "local_asset": "slides/assets/F-10-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "concepto-abstracto",
+      "title": "Secuencias perezosas en Clojure",
+      "subtitle": "Secuencias perezosas en Clojure",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Las operaciones no se ejecutan hasta que se necesita el resultado",
+              "level": 0
+            },
+            {
+              "content": "Permite trabajar con colecciones grandes sin pasos intermedios innecesarios",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "diagrama simple de datos que fluyen lentamente por una tubería con gotas, estilo minimalista azul-gris",
+        "local_asset": "slides/assets/F-11-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-12",
+      "type": "codigo",
+      "title": "Pipeline en Clojure",
+      "subtitle": "Pipeline en Clojure",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": "(def numeros [1 2 3 4 5 6])\n(def resultado\n  (->> numeros\n       (filter even?)\n       (map #(* % %))\n       (reduce +)))"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "diagrama",
+      "title": "Colecciones persistentes en Clojure",
+      "subtitle": "Colecciones persistentes",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ventaja clave"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Nuevas versiones se construyen sin copiar todo",
+              "level": 0
+            },
+            {
+              "content": "Acceso rápido y seguro a datos antiguos",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "ilustración de una estructura de datos que comparte nodos entre dos versiones, con un efecto de capas y estilo plano",
+        "local_asset": "slides/assets/F-13-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-14",
+      "type": "codigo",
+      "title": "Algebraic data types en TS",
+      "subtitle": "Algebraic Data Types en TypeScript",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Resultado<T, E> =\n  | { status: \"ok\"; value: T }\n  | { status: \"error\"; error: E };"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-15",
+      "type": "tabla-comparativa",
+      "title": "`Result` vs excepción",
+      "subtitle": "`Result` vs excepciones",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Enfoque | ¿Qué muestra? | Beneficio |\n|---|---|---|\n| Excepción | Salida normal o error inesperado | Control fuera del tipo |\n| `Result` | Flujo explícito de éxito/fallo | Más fácil de razonar |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Enfoque | ¿Qué muestra? | Beneficio |\n|---|---|---|\n| Excepción | Salida normal o error inesperado | Control fuera del tipo |\n| `Result` | Flujo explícito de éxito/fallo | Más fácil de razonar |",
+          "local_asset": "slides/assets/F-15-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-16",
+      "type": "codigo",
+      "title": "Ejemplo `Result` en TS",
+      "subtitle": "Ejemplo de `Result` en TypeScript",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const dividir = (a: number, b: number): Resultado<number, string> =>\n  b === 0\n    ? { status: \"error\", error: \"División por cero\" }\n    : { status: \"ok\", value: a / b };"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-17",
+      "type": "concepto-abstracto",
+      "title": "`Option` / `Maybe`",
+      "subtitle": "`Option` / `Maybe`",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Representa un valor que puede o no existir",
+              "level": 0
+            },
+            {
+              "content": "Evita `null` y `undefined`",
+              "level": 0
+            },
+            {
+              "content": "Es útil para datos opcionales en pipeline funcional",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "iconos de un objeto presente y otro ausente, con un signo de interrogación y flechas, estilo gráfico educativo",
+        "local_asset": "slides/assets/F-17-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-18",
+      "type": "codigo",
+      "title": "Manejo de errores en Clojure",
+      "subtitle": "Manejo funcional de errores en Clojure",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": "(defn dividir [a b]\n  (if (zero? b)\n    {:status :error :error \"División por cero\"}\n    {:status :ok :value (/ a b)}))"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "concepto-abstracto",
+      "title": "¿Qué es un transducer?",
+      "subtitle": "Transducers en Clojure",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Componen transformaciones sin crear colecciones intermedias",
+              "level": 0
+            },
+            {
+              "content": "Separan qué transformar de cómo procesar",
+              "level": 0
+            },
+            {
+              "content": "Son reutilizables en distintos contextos",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "diagrama de dos transformaciones compuestas en una sola etapa, con líneas y cajas transparentes, estilo plano",
+        "local_asset": "slides/assets/F-19-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-20",
+      "type": "codigo",
+      "title": "Ejemplo de `transduce`",
+      "subtitle": "Ejemplo `transduce`",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": "(def xf\n  (comp\n    (filter even?)\n    (map #(* % %))))\n\n(transduce xf + [1 2 3 4 5 6])"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-21",
+      "type": "tabla-comparativa",
+      "title": "Transducers vs pipeline convencional",
+      "subtitle": "Transducers vs pipeline convencional",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Característica | Pipeline | Transducer |\n|---|---|---|\n| Colecciones intermedias | Sí | No |\n| Reutilización | Media | Alta |\n| Ideal para | listas pequeñas | flujos grandes |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Característica | Pipeline | Transducer |\n|---|---|---|\n| Colecciones intermedias | Sí | No |\n| Reutilización | Media | Alta |\n| Ideal para | listas pequeñas | flujos grandes |",
+          "local_asset": "slides/assets/F-21-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-22",
+      "type": "codigo",
+      "title": "API funcional genérica en TS",
+      "subtitle": "API funcional genérica en TS",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Transform<T> = (items: T[]) => T[];\n\nconst compose = <T>(...fns: Transform<T>[]) =>\n  (input: T[]) => fns.reduce((acc, fn) => fn(acc), input);"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "concepto-abstracto",
+      "title": "Funciones de orden superior",
+      "subtitle": "Higher-order functions",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Reciben o devuelven funciones",
+              "level": 0
+            },
+            {
+              "content": "Permiten crear abstracciones muy expresivas",
+              "level": 0
+            },
+            {
+              "content": "Son la base de la composición funcional",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "diagrama con una función que recibe otra función como argumento y retorna una nueva función, estilo abstracto y educativo",
+        "local_asset": "slides/assets/F-23-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "concepto-abstracto",
+      "title": "Metaprogramación en Clojure",
+      "subtitle": "Metaprogramación en Clojure",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Las macros operan sobre código como datos",
+              "level": 0
+            },
+            {
+              "content": "Son útiles para DSLs y abstracciones de dominio",
+              "level": 0
+            },
+            {
+              "content": "Se usan con moderación para no complicar el diseño",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "ilustración de un árbol sintáctico que se transforma en código, con estilo marcado y abstracto",
+        "local_asset": "slides/assets/F-24-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "concepto-abstracto",
+      "title": "Concurrencia funcional: por qué",
+      "subtitle": "Concurrencia funcional",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Evita condiciones de carrera",
+              "level": 0
+            },
+            {
+              "content": "Se apoya en datos inmutables",
+              "level": 0
+            },
+            {
+              "content": "Da predictibilidad a programas paralelos",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "imagen abstracta con múltiples flujos paralelos y un candado simbolizando seguridad, estilo flat sin texto",
+        "local_asset": "slides/assets/F-25-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-26",
+      "type": "codigo",
+      "title": "`core.async`: canales en Clojure",
+      "subtitle": "`core.async` en Clojure",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`chan` crea una cola segura",
+              "level": 0
+            },
+            {
+              "content": "Permite separar productor de consumidor",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": "(require '[clojure.core.async :refer [chan go >! <! close!]])\n\n(let [in (chan)\n      out (chan)]\n  ...)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-27",
+      "type": "codigo",
+      "title": "`go` blocks y comunicación",
+      "subtitle": "`go` blocks en Clojure",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Crea una coroutine ligera",
+              "level": 0
+            },
+            {
+              "content": "No bloquea el hilo principal",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": "(go (loop []\n      (when-some [x (<! in)]\n        (>! out (* x x))\n        (recur))))"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-28",
+      "type": "concepto-abstracto",
+      "title": "STM y transacciones",
+      "subtitle": "STM en Clojure",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`ref` guarda estado coordinado",
+              "level": 0
+            },
+            {
+              "content": "`dosync` agrupa actualizaciones",
+              "level": 0
+            },
+            {
+              "content": "Permite rollback si falla",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "diagrama de dos transacciones sobre un recurso compartido con líneas que representan bloqueo lógico, estilo plano educativo",
+        "local_asset": "slides/assets/F-28-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-29",
+      "type": "concepto-abstracto",
+      "title": "Agentes y estado asíncrono",
+      "subtitle": "Agentes en Clojure",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`agent` actualiza estado de forma asíncrona",
+              "level": 0
+            },
+            {
+              "content": "Ideal para tareas que no requieren transacción inmediata",
+              "level": 0
+            },
+            {
+              "content": "Separación clara entre envío y procesamiento",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "ilustración de un agente enviando mensajes a un estado centralizado con estilo iconográfico limpio",
+        "local_asset": "slides/assets/F-29-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-30",
+      "type": "concepto-abstracto",
+      "title": "Concurrencia en TypeScript",
+      "subtitle": "Concurrencia en TypeScript",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`Promise` representa un valor futuro",
+              "level": 0
+            },
+            {
+              "content": "`async-await` hace el código más legible",
+              "level": 0
+            },
+            {
+              "content": "No elimina la necesidad de pensar en efectos",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "diagrama de un navegador y una promesa representada como un reloj, estilo moderno sin texto",
+        "local_asset": "slides/assets/F-30-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-31",
+      "type": "codigo",
+      "title": "Promesas y `async-await`",
+      "subtitle": "`async-await` en TS",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "async function fetchData(url: string): Promise<string> {\n  const response = await fetch(url);\n  return response.text();\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-32",
+      "type": "concepto-abstracto",
+      "title": "Efectos puros vs I/O",
+      "subtitle": "Efectos puros vs I/O",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Una función pura no observa el mundo exterior",
+              "level": 0
+            },
+            {
+              "content": "I/O rompe la pureza",
+              "level": 0
+            },
+            {
+              "content": "Es útil separar lógica pura de efectos",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "iconos abstractos de un cubo puro y un enchufe de energía, estilo plano y minimalista",
+        "local_asset": "slides/assets/F-32-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-33",
+      "type": "tabla-comparativa",
+      "title": "Canal vs promesa",
+      "subtitle": "Canal vs promesa",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Modelo | Uso ideal | Característica |\n|---|---|---|\n| `core.async` | Flujos continuos | Canales backpressure |\n| `Promise` | Operación puntual | Valor único futuro |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Modelo | Uso ideal | Característica |\n|---|---|---|\n| `core.async` | Flujos continuos | Canales backpressure |\n| `Promise` | Operación puntual | Valor único futuro |",
+          "local_asset": "slides/assets/F-33-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-34",
+      "type": "diagrama",
+      "title": "Diseño de flujo continuo",
+      "subtitle": "Flujo funcional continuo",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Datos entran, se transforman, salen",
+              "level": 0
+            },
+            {
+              "content": "Ideal para pipelines de eventos y streaming",
+              "level": 0
+            },
+            {
+              "content": "El modelo funcional simplifica la razón sobre el flujo",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "flujo de datos constante entrando por la izquierda, transformándose y saliendo por la derecha, estilo técnico sin texto",
+        "local_asset": "slides/assets/F-34-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-35",
+      "type": "demo",
+      "title": "Taller comparativo",
+      "subtitle": "Taller comparativo",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Desafío"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Filtrar órdenes con `amount` y `status`",
+              "level": 0
+            },
+            {
+              "content": "Calcular total funcionalmente",
+              "level": 0
+            },
+            {
+              "content": "Manejar errores con `Result` / `Either`",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-36",
+      "type": "codigo",
+      "title": "Guion TS del taller",
+      "subtitle": "Ejercicio en TypeScript",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Definir pipeline de validación y suma",
+              "level": 0
+            },
+            {
+              "content": "Mantener la lógica pura independiente de efectos",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Order = { amount: number; status: \"valid\" | \"invalid\" };\n\ntype Resultado<T, E> =\n  | { status: \"ok\"; value: T }\n  | { status: \"error\"; error: E };"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-37",
+      "type": "codigo",
+      "title": "Guion Clojure del taller",
+      "subtitle": "Ejercicio en Clojure",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": "(def orders [{:amount 100 :status :valid}\n             {:amount 50 :status :invalid}])\n\n(defn validar-orden [order]\n  (if (= :valid (:status order))\n    {:status :ok :value (:amount order)}\n    {:status :error :error \"Orden inválida\"}))"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-38",
+      "type": "socratica",
+      "title": "Comparar soluciones",
+      "subtitle": "Comparar soluciones",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿Qué se entiende mejor en TypeScript?",
+              "level": 0
+            },
+            {
+              "content": "¿Qué es más natural en Clojure?",
+              "level": 0
+            },
+            {
+              "content": "¿Dónde se repite la misma idea?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "dos bloques de código frente a frente con símbolos de comparación, estilo conceptual sin texto",
+        "local_asset": "slides/assets/F-38-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-39",
+      "type": "concepto-abstracto",
+      "title": "Buenas preguntas para el cierre",
+      "subtitle": "Buenas preguntas para el cierre",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿Qué abstraemos con un `Result`?",
+              "level": 0
+            },
+            {
+              "content": "¿En qué caso elegimos `core.async`?",
+              "level": 0
+            },
+            {
+              "content": "¿Cuál es la diferencia clave entre pipeline y transducer?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "iconos de preguntas y reflexión, estilo educativo sin texto",
+        "local_asset": "slides/assets/F-39-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-40",
+      "type": "tabla",
+      "title": "Evaluación pedagógica rápida",
+      "subtitle": "Evaluación rápida",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Comprensión | Indicador |\n|---|---|\n| Patrones funcionales | Puede explicar composición y pureza |\n| Manejo de errores | Usa `Result`/`Either` para flujo explícito |\n| Concurrencia | Identifica cuándo usar canales vs promesas |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Comprensión | Indicador |\n|---|---|\n| Patrones funcionales | Puede explicar composición y pureza |\n| Manejo de errores | Usa `Result`/`Either` para flujo explícito |\n| Concurrencia | Identifica cuándo usar canales vs promesas |",
+          "local_asset": "slides/assets/F-40-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-41",
+      "type": "cierre",
+      "title": "Resumen final",
+      "subtitle": "Cierre",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Menos estado mutable, más composición",
+              "level": 0
+            },
+            {
+              "content": "`Result` hace el flujo explícito",
+              "level": 0
+            },
+            {
+              "content": "Clojure y TypeScript comparten los mismos principios",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "fondo claro con un camino de hitos y un punto final resaltado, estilo infográfico limpio sin texto",
+        "local_asset": "slides/assets/F-41-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-42",
+      "type": "cierre",
+      "title": "Próxima clase y TP",
+      "subtitle": "Próxima clase y TP",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Tema siguiente: Mónadas en TypeScript",
+              "level": 0
+            },
+            {
+              "content": "TP: implementar una API funcional y justificar la elección de efectos",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "FIN DEL BLOQUE"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "ilustración de un calendario y un archivo de código en colores azules, estilo plano sin texto",
+        "local_asset": "slides/assets/F-42-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    }
+  ]
+}
