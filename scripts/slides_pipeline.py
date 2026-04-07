@@ -329,6 +329,23 @@ def _compose_body_text(subtitle: str, blocks: list[dict]) -> str:
     return "\n\n".join(part for part in parts if part)
 
 
+def _estimate_subtitle_only_reserve_emu(subtitle: str, blocks: list[dict]) -> int:
+    """Estima alto (EMU) para subtítulo+bullets y evita clipping en slides de código."""
+    text = _compose_body_text(subtitle, blocks).strip()
+    if not text:
+        return 0
+    visual_lines = 0
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line:
+            visual_lines += 1
+            continue
+        # Estimación conservadora para wrap con fuente de cuerpo.
+        visual_lines += max(1, (len(line) + 47) // 48)
+    reserve = 180_000 + visual_lines * 210_000
+    return min(1_420_000, max(760_000, reserve))
+
+
 def _list_item_parts(item: Any) -> tuple[str, int]:
     if isinstance(item, dict):
         return _strip_markdown(str(item.get("content", ""))), int(item.get("level", 0) or 0)
@@ -1810,8 +1827,8 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     # ── 8. Cuerpo (texto + listas) ──────────────────────────────────────
     body_zone = layout.get("body", "left-middle")
     body_subtitle = slide.get("subtitle", "") if stype != "portada" else ""
+    body_blocks = slide.get("body_blocks") or []
     if body_zone not in ("none", "subtitle-only"):
-        body_blocks = slide.get("body_blocks") or []
         body_txt = _compose_body_text(body_subtitle, body_blocks)
         b_size   = typo.get("body", {}).get("size", 18)
         if body_zone == "table-intro":
@@ -1823,15 +1840,31 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
             b_size = _fit_text_font_size(body_txt, body_geo, b_size, min_size=10)
         if body_geo:
             add_rich_textbox_geo(body_subtitle, body_blocks, body_geo, b_size, color=text_col)
-    elif body_zone == "subtitle-only" and subtitle:
+    elif body_zone == "subtitle-only" and (subtitle or body_blocks):
         b_size = typo.get("body", {}).get("size", 18)
-        add_textbox(subtitle, "subtitle-only", b_size, color=text_col)
+        subtitle_reserve_h = _estimate_subtitle_only_reserve_emu(body_subtitle, body_blocks)
+        body_geo = ZONES.get("subtitle-only")
+        if body_geo:
+            body_geo = (body_geo[0], body_geo[1], body_geo[2], max(body_geo[3], subtitle_reserve_h))
+        body_txt = _compose_body_text(body_subtitle, body_blocks)
+        if body_geo and body_txt:
+            b_size = _fit_text_font_size(body_txt, body_geo, b_size, min_size=10)
+        if body_geo:
+            add_rich_textbox_geo(body_subtitle, body_blocks, body_geo, b_size, color=text_col)
 
     # ── 9. Código ───────────────────────────────────────────────────────
     code_zone  = layout.get("code", "none")
     code_blocks = slide.get("code_blocks") or []
     if code_zone != "none" and code_blocks:
         code_geo = ZONES.get(code_zone)
+        if code_geo and body_zone == "subtitle-only" and (body_subtitle or body_blocks):
+            reserve_h = _estimate_subtitle_only_reserve_emu(body_subtitle, body_blocks) + 170_000
+            code_geo = (
+                code_geo[0],
+                code_geo[1] + reserve_h,
+                code_geo[2],
+                max(400_000, code_geo[3] - reserve_h),
+            )
         code_text = "\n\n".join(cb['content'] for cb in code_blocks)
         c_size = typo.get("code", {}).get("size", 14)
         if code_geo and _looks_like_ascii_diagram(code_text):
