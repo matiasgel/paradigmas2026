@@ -57,7 +57,7 @@
         "layer": "background",
         "prompt": "fondo oscuro con circuitos y símbolos de lambda (λ) y componentes de código abstractos en tonos azul profundo, estilo académico-tecnológico",
         "local_asset": "slides/assets/F-01-bg.png",
-        "drive_id": null
+        "drive_id": "1DpXAuCnOGlyKXnfgs83G5F_V5PoLqnDe"
       },
       "table_assets": []
     },
@@ -104,7 +104,7 @@
         "layer": "content",
         "prompt": "infografía con una ruta que va de un nodo \"estado mutable\" a otro nodo \"expresiones puras\", con flechas y colores azul y gris, estilo académico moderno",
         "local_asset": "slides/assets/F-02-content.png",
-        "drive_id": null
+        "drive_id": "1kI9-CO1LC2mUXQTjRONJfBXPH5NQc0tI"
       },
       "table_assets": []
     },
@@ -136,7 +136,7 @@
           "index": 0,
           "table_markdown": "| Paradigma | Qué representa | Punto fuerte |\n|---|---|---|\n| Imperativo | Estado mutable + pasos | Control detallado |\n| Funcional | Expresiones + composición | Menos efectos colaterales |",
           "local_asset": "slides/assets/F-03-table-1.png",
-          "drive_id": null
+          "drive_id": "1zfOw2uN-Nxph9YHY4lYjPZDRvyFhMycU"
         }
       ]
     },
@@ -183,7 +183,7 @@
         "layer": "content",
         "prompt": "diagrama de cajas y flechas mostrando entrada, función y salida sin cambios en el origen, con colores azul y blanco, estilo plano",
         "local_asset": "slides/assets/F-04-content.png",
-        "drive_id": null
+        "drive_id": "1X4RFaiNJtSN4k48DAc7OB7vXT89jcqJ5"
       },
       "table_assets": []
     },
@@ -230,7 +230,7 @@
         "layer": "content",
         "prompt": "ilustración de dos objetos de datos, uno original y otro nuevo, con flechas que muestran copia por valor y sin mutación, estilo minimalista en gris y azul",
         "local_asset": "slides/assets/F-05-content.png",
-        "drive_id": null
+        "drive_id": "13UyTsS-fTwCIIbpcp-q6ZAtjnUnXlxG5"
       },
       "table_assets": []
     },
@@ -296,7 +296,7 @@
           "index": 0,
           "table_markdown": "| Operación | Resultado |\n|---|---|\n| `filter` | Selecciona elementos que cumplen la condición |\n| `map` | Transforma cada elemento |",
           "local_asset": "slides/assets/F-07-table-1.png",
-          "drive_id": null
+          "drive_id": "13CU-xSGzegXPftF8t5-0vnCm05WSZkoM"
         }
       ]
     },
@@ -414,7 +414,7 @@
         "layer": "content",
         "prompt": "infografía con un objeto original y un objeto nuevo creado por copia, con un candado y flechas, estilo profesional sin texto",
         "local_asset": "slides/assets/F-10-content.png",
-        "drive_id": null
+        "drive_id": "1XV5IrDrqxNIBZ_6O4HJ4O_d0kXdkiq74"
       },
       "table_assets": []
     },
@@ -452,7 +452,7 @@
         "layer": "content",
         "prompt": "diagrama simple de datos que fluyen lentamente por una tubería con gotas, estilo minimalista azul-gris",
         "local_asset": "slides/assets/F-11-content.png",
-        "drive_id": null
+        "drive_id": "1iTe1Uz4L84kzMybB7mw5SXwvGn1F27t1"
       },
       "table_assets": []
     },
@@ -523,7 +523,7 @@
         "layer": "content",
         "prompt": "ilustración de una estructura de datos que comparte nodos entre dos versiones, con un efecto de capas y estilo plano",
         "local_asset": "slides/assets/F-13-content.png",
-        "drive_id": null
+        "drive_id": "1rOtx21HwLGvsiS9-HhzaEUSM2lTmjflu"
       },
       "table_assets": []
     },
@@ -583,7 +583,7 @@
           "index": 0,
           "table_markdown": "| Enfoque | ¿Qué muestra? | Beneficio |\n|---|---|---|\n| Excepción | Salida normal o error inesperado | Control fuera del tipo |\n| `Result` | Flujo explícito de éxito/fallo | Más fácil de razonar |",
           "local_asset": "slides/assets/F-15-table-1.png",
-          "drive_id": null
+          "drive_id": "1I9teGyLF6B0mXrFdF7R4rOeeCQCP79tR"
         }
       ]
     },
@@ -653,7 +653,7 @@
         "layer": "content",
         "prompt": "iconos de un objeto presente y otro ausente, con un signo de interrogación y flechas, estilo gráfico educativo",
         "local_asset": "slides/assets/F-17-content.png",
-        "drive_id": null
+        "drive_id": "17n2hJgMmRJq-fF03-0zvvxukWcn6ORiS"
       },
       "table_assets": []
     },
@@ -723,7 +723,7 @@
         "layer": "content",
         "prompt": "diagrama de dos transformaciones compuestas en una sola etapa, con líneas y cajas transparentes, estilo plano",
         "local_asset": "slides/assets/F-19-content.png",
-        "drive_id": null
+        "drive_id": "1gtLj4PDnGLEt8DbPVPC7T13K8RiQa00T"
       },
       "table_assets": []
     },
@@ -783,7 +783,7 @@
           "index": 0,
           "table_markdown": "| Característica | Pipeline | Transducer |\n|---|---|---|\n| Colecciones intermedias | Sí | No |\n| Reutilización | Media | Alta |\n| Ideal para | listas pequeñas | flujos grandes |",
           "local_asset": "slides/assets/F-21-table-1.png",
-          "drive_id": null
+          "drive_id": "1DRIIPzwVB2_X6d-E_qpZ2eq6fZ7axZO1"
         }
       ]
     },
@@ -853,7 +853,7 @@
         "layer": "content",
         "prompt": "diagrama con una función que recibe otra función como argumento y retorna una nueva función, estilo abstracto y educativo",
         "local_asset": "slides/assets/F-23-content.png",
-        "drive_id": null
+        "drive_id": "1Q4EdGVfX8RCKyKIWJVZjD8_gu4t0Nus2"
       },
       "table_assets": []
     },
@@ -895,7 +895,7 @@
         "layer": "content",
         "prompt": "ilustración de un árbol sintáctico que se transforma en código, con estilo marcado y abstracto",
         "local_asset": "slides/assets/F-24-content.png",
-        "drive_id": null
+        "drive_id": "1FFJbnhRpfXmCa0PkZx3lfhn9v_27yzWo"
       },
       "table_assets": []
     },
@@ -937,7 +937,7 @@
         "layer": "content",
         "prompt": "imagen abstracta con múltiples flujos paralelos y un candado simbolizando seguridad, estilo flat sin texto",
         "local_asset": "slides/assets/F-25-content.png",
-        "drive_id": null
+        "drive_id": "1ZfCFUk4aIxLhUIMJ4tQrRLQ-cv4csOpe"
       },
       "table_assets": []
     },
@@ -1065,7 +1065,7 @@
         "layer": "content",
         "prompt": "diagrama de dos transacciones sobre un recurso compartido con líneas que representan bloqueo lógico, estilo plano educativo",
         "local_asset": "slides/assets/F-28-content.png",
-        "drive_id": null
+        "drive_id": "1Sbc4fTCLxLEROVM1YfsyrHWA7XpqTRS6"
       },
       "table_assets": []
     },
@@ -1107,7 +1107,7 @@
         "layer": "content",
         "prompt": "ilustración de un agente enviando mensajes a un estado centralizado con estilo iconográfico limpio",
         "local_asset": "slides/assets/F-29-content.png",
-        "drive_id": null
+        "drive_id": "18E8oXiho_6c0wW3ra6-LDaEqhctj0quE"
       },
       "table_assets": []
     },
@@ -1149,7 +1149,7 @@
         "layer": "content",
         "prompt": "diagrama de un navegador y una promesa representada como un reloj, estilo moderno sin texto",
         "local_asset": "slides/assets/F-30-content.png",
-        "drive_id": null
+        "drive_id": "1PeBnNitOGMwg_jbYeWTKv5fpOmEIdF7X"
       },
       "table_assets": []
     },
@@ -1219,7 +1219,7 @@
         "layer": "content",
         "prompt": "iconos abstractos de un cubo puro y un enchufe de energía, estilo plano y minimalista",
         "local_asset": "slides/assets/F-32-content.png",
-        "drive_id": null
+        "drive_id": "18W8LROsvqNjA020ZCXo-P-sCfPfmXMg2"
       },
       "table_assets": []
     },
@@ -1251,7 +1251,7 @@
           "index": 0,
           "table_markdown": "| Modelo | Uso ideal | Característica |\n|---|---|---|\n| `core.async` | Flujos continuos | Canales backpressure |\n| `Promise` | Operación puntual | Valor único futuro |",
           "local_asset": "slides/assets/F-33-table-1.png",
-          "drive_id": null
+          "drive_id": "1g7NG1i5YTOMByUF5ZXsoPMOvRV_dI9m7"
         }
       ]
     },
@@ -1293,7 +1293,7 @@
         "layer": "content",
         "prompt": "flujo de datos constante entrando por la izquierda, transformándose y saliendo por la derecha, estilo técnico sin texto",
         "local_asset": "slides/assets/F-34-content.png",
-        "drive_id": null
+        "drive_id": "1TZMBtNVF1GmeEb392XzaHSpdHO3p3COV"
       },
       "table_assets": []
     },
@@ -1453,7 +1453,7 @@
         "layer": "background",
         "prompt": "dos bloques de código frente a frente con símbolos de comparación, estilo conceptual sin texto",
         "local_asset": "slides/assets/F-38-bg.png",
-        "drive_id": null
+        "drive_id": "13tjb7rlpoFtacbGRtVW2tC_L77dmM4uj"
       },
       "table_assets": []
     },
@@ -1495,7 +1495,7 @@
         "layer": "content",
         "prompt": "iconos de preguntas y reflexión, estilo educativo sin texto",
         "local_asset": "slides/assets/F-39-content.png",
-        "drive_id": null
+        "drive_id": "1J5VkrQNPovg_C_UOqH6yK7_DNG7iLXPJ"
       },
       "table_assets": []
     },
@@ -1527,7 +1527,7 @@
           "index": 0,
           "table_markdown": "| Comprensión | Indicador |\n|---|---|\n| Patrones funcionales | Puede explicar composición y pureza |\n| Manejo de errores | Usa `Result`/`Either` para flujo explícito |\n| Concurrencia | Identifica cuándo usar canales vs promesas |",
           "local_asset": "slides/assets/F-40-table-1.png",
-          "drive_id": null
+          "drive_id": "1bULts5iXX9NBTUqEKz2uPCcg4zDmOOhx"
         }
       ]
     },
@@ -1569,7 +1569,7 @@
         "layer": "background",
         "prompt": "fondo claro con un camino de hitos y un punto final resaltado, estilo infográfico limpio sin texto",
         "local_asset": "slides/assets/F-41-bg.png",
-        "drive_id": null
+        "drive_id": "1Sh_I46gt1XlXUQ3ayHtvDFrwC1dQF6sG"
       },
       "table_assets": []
     },
@@ -1612,7 +1612,7 @@
         "layer": "background",
         "prompt": "ilustración de un calendario y un archivo de código en colores azules, estilo plano sin texto",
         "local_asset": "slides/assets/F-42-bg.png",
-        "drive_id": null
+        "drive_id": "1LPA7oulqD-sGuC4GqqTiF2yTqocXW3w7"
       },
       "table_assets": []
     }
