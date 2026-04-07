@@ -1,3 +1,23 @@
+---
+title: "Minuta de Clase — Aspectos Avanzados de Programación Funcional"
+subtitle: "Guion docente — Tema 04"
+author: "Matías Gel"
+institute: "Universidad Nacional de Tierra del Fuego - Instituto IDEI"
+date: "Ciclo lectivo 2026"
+subject: "Paradigmas y Lenguajes de Programación 2026"
+lang: "es"
+toc: true
+toc-depth: 2
+toc-title: "Índice"
+numbersections: false
+colorlinks: true
+linkcolor: "blue"
+urlcolor: "blue"
+geometry: "margin=2.5cm"
+fontsize: "11pt"
+linestretch: 1.25
+---
+
 # Clase: Aspectos Avanzados de Programación Funcional
 **Materia:** Paradigmas y Lenguajes de Programación 2026 — UNTDF / IDEI
 **Tema:** 04 | **Módulo:** II

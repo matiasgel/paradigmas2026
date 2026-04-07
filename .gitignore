@@ -50,3 +50,4 @@ salida/cursadas/*/students/
 # IDE
 .vscode/
 .idea/
+salida/cursadas/2026/temas/04-funcional-avanzado/slides/**

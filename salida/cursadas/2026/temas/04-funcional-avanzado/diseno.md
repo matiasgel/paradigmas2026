@@ -1,7 +1,11 @@
 # Diseño del Tema 04 — Aspectos Avanzados de Programación Funcional
 
-> Duración de clase: 120 minutos
-> Enfoque: comparación aplicada entre TypeScript y Clojure, con atención a patrones avanzados, abstracciones funcionales y manejo de efectos.
+> ESTADO: APROBADO
+> Aprobado por docente: Matías Gel
+> Fecha de aprobación: 2026-04-07
+
+Duración de clase: 120 minutos
+Enfoque: comparación aplicada entre TypeScript y Clojure, con atención a patrones avanzados, abstracciones funcionales y manejo de efectos.
 
 ## 1. Objetivos de aprendizaje
 

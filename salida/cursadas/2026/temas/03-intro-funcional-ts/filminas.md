@@ -970,7 +970,7 @@ const numeros = [1, 2, 3];
 numeros.push(4);  // ← el compilador lo permite aunque lo hayamos "prohibido"
                    // la inmutabilidad es una convención del equipo, no del lenguaje
 ```
-
+ 
 ## En Clojure
 
 ```clojure
@@ -1064,3 +1064,4 @@ En Clojure, cuando el código compila y corre:
 ## TP
 
 → Ver próxima clase para tipo y fecha de entrega
+  
