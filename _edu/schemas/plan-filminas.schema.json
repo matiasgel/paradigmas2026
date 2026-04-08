@@ -101,8 +101,8 @@
         "images_planned": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 50,
-          "description": "Número de slides con image.layer != 'none'. Máximo configurable vía slides-config.yaml (max_per_presentation)."
+          "maximum": 12,
+          "description": "Número de slides con image.layer != 'none'. Máximo 12 por presentación."
         },
         "tables_planned": {
           "type": "integer",

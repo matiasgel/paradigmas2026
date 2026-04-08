@@ -165,8 +165,8 @@ slide_types:
 # --- Estrategia de imágenes (Gemini) ---
 gemini_image_strategy:
   default: "content"
-  max_per_presentation: 25
-  max_images_per_presentation: 25  # alias de compatibilidad
+  max_per_presentation: 12
+  max_images_per_presentation: 12  # alias de compatibilidad
   fallback: "none"
   safety_rules: "Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico."
   prompt_guide: |
