@@ -18,9 +18,17 @@ __pycache__/
 venv/
 env/
 
+# Contenido generado del cursado (no va en el template)
+salida/cursadas/*/
+!salida/cursadas/.gitkeep
+
 # Assets generados localmente (imágenes/tablas = artefactos, no código)
 salida/cursadas/*/temas/*/slides/assets/
 salida/cursadas/*/temas/*/slides/slides-url.txt
+
+# Ingesta: materiales del docente (PDFs, PPTX, DOCX — locales)
+ingesta/*
+!ingesta/.gitkeep
 
 # Test runs (generados por test_pipeline.py)
 reporte/
