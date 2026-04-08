@@ -1,35 +1,52 @@
-# Editor / OS
-.DS_Store
-.vscode/settings.json
-*.swp
-*~
+# EDU Standalone — Ignorar en git
+# =================================
+
+# Credenciales y secretos OAuth (NUNCA commitear)
+_edu/credentials.json
+_edu/token_slides.json
+_edu/token*.json
+_edu/secrets.local.yaml
+
+# Variables de entorno con rutas locales
+.env
 
 # Python
 __pycache__/
-*.pyc
-.env
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
 
-# Node
-node_modules/
+# Assets generados localmente (imágenes/tablas = artefactos, no código)
+salida/cursadas/*/temas/*/slides/assets/
+salida/cursadas/*/temas/*/slides/slides-url.txt
 
-# Temporales
-*.tmp
-*.bak
-
-# Test runs (reporte/ generado por test_pipeline.py)
+# Test runs (generados por test_pipeline.py)
 reporte/
 
-# Calibración de slides (slides de prueba locales, no committear)
-calibracion/
-_edu/calibracion-config.json
+# Temas de prueba / fixtures temporales
+salida/cursadas/*/temas/*prueba*/
+salida/cursadas/*/temas/*pruebas*/
 
-# EDU collective memory — WAL/SHM son temporales de SQLite, no se versionan
-_edu-memory/memory.db-wal
-_edu-memory/memory.db-shm
+# Sprint 5 — Analytics (datos de alumnos)
+analytics/*.csv
 
-# Material del curso (PDFs y TXT — no versionar)
-material/
+# Sprint 7 — Audio generado
+salida/cursadas/*/temas/*/audio/
 
-# Ingesta (PDFs fuente — no versionar)
-ingesta/
-salida/cursadas/**/slides/
+# Sprint 7 — Interactivos generados
+salida/cursadas/*/temas/*/interactivos/
+
+# Sprint 10 — Modelos ML descargados
+_edu-knowledge/models/
+
+# Sprint 11 — Knowledge Graph artifacts
+_edu-knowledge/universal-kg.json
+
+# Sprint 13 — Student state
+salida/cursadas/*/students/
+
+# IDE
+.vscode/
+.idea/
