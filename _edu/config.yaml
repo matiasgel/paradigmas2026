@@ -4,14 +4,14 @@ U — Academic Course Production Suite
 # Date: 2026-03-07
 
 # --- Project ---
-project_name: ""           # Nombre de la materia/curso
-institution: ""            # Institución educativa
+project_name: "Inteligencia Artificial aplicada al Poder Judicial"  # Nombre de la materia/curso
+institution: "Tribunales Federales de Tierra del Fuego — Poder Judicial de la Nación"  # Institución educativa
 communication_language: "spanish"
 document_output_language: "spanish"
-user_name: ""              # Nombre del docente
+user_name: ""              # ⚠️ Completar con el nombre del docente
 
 # --- Multi-Class ---
-course_prefix: ""                                          # Prefijo corto de la materia (ej: leng, para, algo). Usar /edu-switch-course para cambiar.
+course_prefix: "iapjn"                                     # Prefijo corto de la materia (ej: leng, para, algo). Usar /edu-switch-course para cambiar.
 course_year: "2026"                                        # Año académico activo — actualizar en /edu-start-new-year
 course_id: "{course_prefix}-{course_year}"                 # Clave compuesta materia+año (ej: leng-2026). Se deriva automáticamente.
 
@@ -30,10 +30,12 @@ subheader: "Desde la ingesta del programa oficial hasta el cierre de cursada con
 
 # --- Behavioral ---
 default_professor_profile: "profesor-practico"
-default_class_duration: "90"
+default_class_duration: "180"             # 3 horas totales: 2h teoría + 1h práctica (jornada única)
 lms_provider: "none"
 academic_guardrail_enabled: "true"
 command_aliases: "true"
+course_format: "jornada-unica"             # Un solo día, no cursada semanal
+author_audience: "mixta"                  # Empleados judiciales con distintos niveles tecnológicos + profesionales de abogacía
 
 # --- Professor Profiles ---
 # Available: profesor-teorico, profesor-practico, profesor-socratico, profesor-flipped, profesor-investigador
@@ -44,6 +46,7 @@ accessibility_check_enabled: false
 delivery_mode: "presencial"                 # presencial | remoto | hybrid
 classroom_distance_meters: 6
 screen_resolution: "1080p"
+class_structure: "2h-teoria+1h-practica"   # Bloque teórico seguido de bloque práctico
 
 # --- Cognitive Science (Sprint 4) ---
 cognitive_validation_enabled: false

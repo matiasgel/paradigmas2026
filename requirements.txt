@@ -1,12 +1,12 @@
-# EDU Standalone — Dependencias Python
+# EDU Standalone  Dependencias Python
 # ======================================
-# Instalación rápida desde la raíz del módulo:
+# Instalacion rapida desde la raiz del modulo:
 #   pip install -r requirements.txt
 #
 # Con entorno virtual (recomendado):
-#   bash scripts/setup.sh          ← crea y configura .venv automáticamente
-#   source .venv/bin/activate      ← Linux/macOS
-#   .venv\Scripts\activate         ← Windows
+#   bash scripts/setup.sh          <- crea y configura .venv automaticamente
+#   source .venv/bin/activate      <- Linux/macOS
+#   .venv\Scripts\activate         <- Windows
 #   pip install -r requirements.txt
 
 # Google APIs (Slides + Drive + OAuth)
@@ -14,37 +14,38 @@ google-api-python-client>=2.100.0
 google-auth-oauthlib>=1.1.0
 google-auth-httplib2>=0.1.1
 
-# Config y serialización
+# Config y serializacion
 pyyaml>=6.0.1
 
 # HTTP para Gemini REST
 requests>=2.31.0
 
-# Renderizado de tablas como imágenes
+# Renderizado de tablas como imagenes
 matplotlib>=3.7.0
 Pillow>=10.0.0
 
-# --- Dependencias opcionales por sprint (instalar según necesidad) ---
+# --- Dependencias opcionales por sprint (instalar segun necesidad) ---
 
-# Sprint 7 — TTS (narración de filminas)
+# Sprint 7  TTS (narracion de filminas)
 # edge-tts>=6.1.0
 
-# Sprint 9 — NLP Semántico (drift, topic analysis, fact verification)
-# sentence-transformers>=2.2.0
-# chromadb>=0.4.0
+# Sprint 9  NLP Semantico (drift, topic analysis, fact verification)
+sentence-transformers>=2.2.0
+chromadb>=0.4.0
 
-# Sprint 10 — Psicometría + Visual Quality
+# Sprint 10  Psicometria + Visual Quality
 # transformers>=4.30.0      # Bloom classifier (DeBERTa)
 # open-clip-torch>=2.20.0   # CLIP visual quality
-# py-irt>=0.1.0             # IRT 2PL calibración
+# py-irt>=0.1.0             # IRT 2PL calibracion
 
-# Sprint 11 — Knowledge Engineering
+# Sprint 11  Knowledge Engineering
 # rdflib>=6.3.0             # OWL/RDF/SPARQL
 # networkx>=3.0             # Grafo de prerequisitos
 # scikit-learn>=1.3.0       # CPL classifier
 
-# Sprint 12 — Orchestration
+# Sprint 12  Orchestration
 # smolagents>=0.1.0         # HuggingFace agent framework
+mcp>=1.0.0                  # MCP Server (edu-mcp-server/)
 
-# Sprint 13 — Adaptive Learning
+# Sprint 13  Adaptive Learning
 # streamlit>=1.30.0         # UI opcional
