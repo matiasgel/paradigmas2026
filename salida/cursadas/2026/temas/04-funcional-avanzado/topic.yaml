@@ -5,7 +5,9 @@ topic_folder: "salida/cursadas/2026/temas/04-funcional-avanzado"
 class_duration: "120"
 git_branch: "tema-04-funcional-avanzado"
 created_at: "2026-04-07"
-status: "quality-loop"
+closed_at: "2026-04-09"
+status: "closed"
+tp_type: "repo"
 pdf_exported: true
 pdf_path: "salida/cursadas/2026/temas/04-funcional-avanzado/guia-estudio.pdf"
 artifacts:
