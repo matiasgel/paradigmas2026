@@ -85,7 +85,7 @@ Enfoque: construcción progresiva del concepto de mónada — desde la motivaci�
 
 - **Maybe en Clojure (10 min)**:
   - Clojure idiomático: `nil` como ausencia, `some->` / `some->>` como threading que corta en nil.
-  - Con `cats`: `(require '[cats.monad.maybe :as m])`, `(m/just 42)`, `(m/nothing)`, `(m/bind v f)`.
+  - Con `cats`: `(require '[cats.monad.maybe :as m])`, `(m/just 42)`, `(m/nothing)`, `(mc/bind v f)`.
   - Mismo ejemplo: buscar usuario → dirección → código postal con `mlet`.
   - Mostrar: en Clojure `nil` ya es parte del lenguaje — ¿para qué wrappear en Maybe? Discutir: `some->` es Maybe *implícito*; `cats/maybe` es Maybe *explícito*.
 
@@ -95,7 +95,7 @@ Enfoque: construcción progresiva del concepto de mónada — desde la motivaci�
     |---------|-----------|----------|
     | Representación | Tagged union `Just/Nothing` | `nil` nativo o `cats/maybe` |
     | Type safety | Compilador fuerza pattern match | En runtime; no fuerza |
-    | Encadenamiento | `.flatMap(fn)` / `pipe` | `some->` o `(m/bind v f)` |
+    | Encadenamiento | `.flatMap(fn)` / `pipe` | `some->` o `(mc/bind v f)` |
     | Ergonomía | Verboso pero seguro | Conciso pero sin red |
     | Idiomático | Sí (con fp-ts/Effect) | `some->` sí; `cats/maybe` menos común |
 
@@ -139,8 +139,8 @@ Enfoque: construcción progresiva del concepto de mónada — desde la motivaci�
   - Comparativa: TS necesita IO para ser "puro"; Clojure elige ser pragmático y controlar efectos por convención.
 
 - **Las tres leyes monádicas — verificadas en ambos lenguajes (6 min)**:
-  1. Identidad izquierda: `of(a).flatMap(f) === f(a)` / `(m/bind (m/return a) f) == (f a)`.
-  2. Identidad derecha: `m.flatMap(of) === m` / `(m/bind m m/return) == m`.
+  1. Identidad izquierda: `of(a).flatMap(f) === f(a)` / `(mc/bind (m/return a) f) == (f a)`.
+  2. Identidad derecha: `m.flatMap(of) === m` / `(mc/bind m m/return) == m`.
   3. Asociatividad: `m.flatMap(f).flatMap(g) === m.flatMap(x => f(x).flatMap(g))`.
   - Verificar en TS con tests unitarios y en Clojure en el REPL.
 
