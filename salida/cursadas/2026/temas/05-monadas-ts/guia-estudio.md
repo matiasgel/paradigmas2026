@@ -11,7 +11,7 @@
 
 ## Cómo usar esta guía
 
-Esta guía está pensada para estudio autónomo y seguimiento de clase. Se basa en el alcance aprobado en [diseno.md](diseno.md), la secuencia didáctica de [minuta.md](minuta.md) y el mapa visual de [filminas.md](filminas.md).
+Esta guía está pensada para estudio autónomo y seguimiento de clase. Se basa en el programa de la materia y la secuencia de contenidos de la clase.
 
 Secuencia recomendada:
 
@@ -581,7 +581,7 @@ program.run();  // Ahora sí: prompt + console.log
 La línea `const program = ioFlatMap(readLine, greet)` no tiene efectos. Es composición pura. Solo `program.run()` dispara la cadena.
 
 **¿Por qué importa?**
-- Separar "qué hacer" de "cuándo hacerlo" mejora testabilidad: podemos inspeccionar y componer programas sin ejecutarlos.
+- Separar "qué hacer" de "cuándo hacerlo" mejora la capacidad de prueba: podemos inspeccionar y componer programas sin ejecutarlos.
 - Es el principio de diseño de Haskell: todo I/O está en la mónada IO, y el `main` es la única función que ejecuta.
 
 #### 4.2 IO en Clojure — ¿necesaria?
@@ -977,7 +977,7 @@ Respondé sin mirar el código. Si no podés, revisá la sección correspondient
 
 7. **¿Por qué Clojure no necesita IO como wrapper?**
 
-8. **Clasifiquen estas APIs según la mónada que modelan:**
+8. **Clasificá estas APIs según la mónada que modelan:**
    - `Promise.then`
    - `Array.flatMap`
    - `user?.address?.city`
