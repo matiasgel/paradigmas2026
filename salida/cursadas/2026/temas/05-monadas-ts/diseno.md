@@ -64,7 +64,7 @@ Enfoque: construcción progresiva del concepto de mónada — desde la motivaci�
 
 > **Criterio de filminas:** cada mónada tiene filminas TS y filminas Clojure dedicadas, más filminas comparativas. No hay límite de cantidad — la claridad manda.
 
-### Bloque 1 — Motivación: ¿por qué mónadas? (20 min)
+### Bloque 1 — Motivación: ¿por qué mónadas? (26 min)
 
 - **Apertura (5 min)**: Retomar el `Result<T, E>` del Tema 04. Preguntar: "¿Qué pasa cuando queremos encadenar 3 operaciones que pueden fallar?". Mostrar el código con `if/else` anidados — feo, propenso a errores.
 - **El problema del encadenamiento — en los dos lenguajes (10 min)**:
