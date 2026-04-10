@@ -35,6 +35,9 @@ salida/cursadas/*/temas/*/*.jpeg
 salida/cursadas/*/temas/*/*.gif
 salida/cursadas/*/temas/*/*.webp
 
+# Ignorar todos los .jpg generados automáticamente en cualquier carpeta
+**/*.jpg
+
 # Test runs (generados por test_pipeline.py)
 reporte/
 
