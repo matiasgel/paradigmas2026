@@ -892,9 +892,17 @@ def _slide_visual_context(slide: dict) -> str:
 def _palette_prompt_fragment(config: dict) -> str:
     palette = config.get("palette", {}) or {}
     color_names = {
+        "#1B3A5C": "navy institucional",
+        "#1b3a5c": "navy institucional",
+        "#C8932A": "dorado institucional",
+        "#c8932a": "dorado institucional",
+        "#F0F4F8": "gris azulado claro",
+        "#f0f4f8": "gris azulado claro",
         "#8B0000": "bordo institucional",
+        "#8b0000": "bordo institucional",
         "#FFFFFF": "blanco",
         "#1A1A1A": "gris carbon",
+        "#1a1a1a": "gris carbon",
         "#000000": "negro",
     }
     mapped = [

@@ -64,20 +64,28 @@ def _validate_v3_schema(plan: dict, project_root: Path) -> Result[dict]:
     plan_schema = load_json(plan_schema_path)
     slide_schema = load_json(slide_schema_path) if slide_schema_path.exists() else None
 
-    # Construir resolver para $ref
+    # Construir resolver para $ref usando file:// URIs para evitar doble normalización.
+    # Los $id relativos en los schemas (edo-schemas/...) son ignorados quitándolos en
+    # runtime para que la resolución quede anclada al file:// real de cada archivo.
+    plan_schema_uri = plan_schema_path.as_uri()
+    plan_schema_for_validation = {k: v for k, v in plan_schema.items() if k != "$id"}
     schema_store: dict[str, dict] = {}
     if slide_schema:
-        schema_store[slide_schema.get("$id", "filmina-slide.schema.json")] = slide_schema
-        schema_store["filmina-slide.schema.json"] = slide_schema
+        slide_schema_uri = slide_schema_path.as_uri()
+        slide_schema_no_id = {k: v for k, v in slide_schema.items() if k != "$id"}
+        schema_store[slide_schema_uri] = slide_schema_no_id
+        schema_store[slide_schema.get("$id", "filmina-slide.schema.json")] = slide_schema_no_id
+        schema_store["filmina-slide.schema.json"] = slide_schema_no_id
 
-    registry = jsonschema.RefResolver.from_schema(plan_schema, store=schema_store)
+    registry = jsonschema.RefResolver(plan_schema_uri, plan_schema_for_validation, schema_store)
+    
 
     try:
         validator_cls = jsonschema.Draft202012Validator
     except AttributeError:
         validator_cls = jsonschema.Draft7Validator  # fallback
 
-    validator = validator_cls(plan_schema, resolver=registry)
+    validator = validator_cls(plan_schema_for_validation, resolver=registry)
 
     errors = tuple(
         f"SCHEMA [{'.'.join(str(p) for p in e.absolute_path) or '(root)'}]: {e.message}"
