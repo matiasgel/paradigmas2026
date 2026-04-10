@@ -42,7 +42,7 @@ Esta clase construye progresivamente el concepto de mónada desde la motivación
 
 | Archivo | Descripción | Uso en clase |
 |---|---|---|
-| diseno.md | Alcance pedagógico y restricciones | Control de scope (evitar desvíos) |
+| diseno.md | Alcance pedagógico y restricciones | Control de alcance (evitar desvíos) |
 | minuta.md | Guion por filmina con tiempos y transiciones | Documento operativo principal durante dictado |
 | filminas.md | Plan de presentación con código y directivas | Soporte visual de clase |
 | guia-estudio.md | Desarrollo expandido con implementaciones | Preclase, repaso y recuperación |
@@ -191,7 +191,7 @@ Wadler muestra que las mónadas resuelven tres problemas en lenguajes puros: exc
 
 ### Anderlind & Åsberg (2023) — *Monadic Programming in Imperative Languages*
 
-Tesis de Chalmers que implementa Maybe, Either y IO en JavaScript/TypeScript y evalúa si el patrón mejora la calidad del código en lenguajes imperativos. Conclusión: las mónadas mejoran composición y manejo de errores, pero requieren overhead conceptual que no todos los equipos aceptan.
+Tesis de Chalmers que implementa Maybe, Either y IO en JavaScript/TypeScript y evalúa si el patrón mejora la calidad del código en lenguajes imperativos. Conclusión: las mónadas mejoran composición y manejo de errores, pero requieren sobrecarga conceptual que no todos los equipos aceptan.
 
 **Uso en clase:** Cuando algún alumno pregunte "¿esto se usa en la industria?", citar esta tesis: "se evaluó en JS/TS y se encontró que mejora composición pero requiere formación del equipo".
 
@@ -224,7 +224,7 @@ Tesis de Chalmers que implementa Maybe, Either y IO en JavaScript/TypeScript y e
 → Existe `clojure.spec` y `malli` para validación de formas de datos. No es tipado estático como TypeScript, pero permite contratos verificables en runtime.
 
 **"¿Qué son monad transformers?"**
-→ Permiten combinar mónadas (ej: `MaybeT(IO(a))` para un IO que puede no tener valor). Están fuera de scope de este tema — mencionarlos como lectura complementaria.
+→ Permiten combinar mónadas (ej: `MaybeT(IO(a))` para un IO que puede no tener valor). Están fuera del alcance de este tema — mencionarlos como lectura complementaria.
 
 ---
 
