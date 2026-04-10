@@ -25,7 +25,7 @@ Enfoque: construcción progresiva del concepto de mónada — desde la motivaci�
 - Tema 03: Funciones puras, inmutabilidad, `map`, `filter`, `reduce`, funciones de orden superior.
 - Tema 04: Algebraic data types en TypeScript, patrón `Result<T, E>` / `Either`, composición de funciones, pipes.
 - Comprensión de tipos genéricos en TypeScript (`T`, `<T, E>`).
-- Familiaridad básica con Clojure (sintaxis, colecciones inmutables, REPL — vista en T04).
+- Familiaridad básica con Clojure (sintaxis, colecciones inmutables, REPL — vistas en T04).
 
 ## 3. Alcance del tema
 
@@ -50,7 +50,7 @@ Enfoque: construcción progresiva del concepto de mónada — desde la motivaci�
 - Monad transformers (se mencionan como problema motivacional, no se implementan).
 - Free monads, algebraic effects, effect handlers (se dejan para lectura complementaria).
 - Implementación completa de una librería FP (fp-ts/Effect se muestra como referencia, no se replica).
-- Haskell como lenguaje de implementación (se usa solo como contraste notacional en una o dos slides comparativas).
+- Haskell como lenguaje de implementación (se usa solo como contraste notacional en una o dos filminas comparativas).
 
 ## 4. Tópicos del Plan Mínimo cubiertos
 
@@ -236,7 +236,7 @@ Enfoque: construcción progresiva del concepto de mónada — desde la motivaci�
 |--------|-----------|
 | Estudiantes se bloquean con la abstracción "mónada" como concepto matemático | Arrancar desde el problema práctico (encadenamiento con nulos), nunca desde la definición formal. La palabra "mónada" aparece recién en el minuto 10, después de que ya estén usando `flatMap`. |
 | Confusión entre `map` y `flatMap` | Diagrama visual: `map` envuelve dos veces (`Maybe<Maybe<T>>`), `flatMap` aplana. Repetir 3 veces con ejemplos distintos. |
-| Se pierde tiempo en la sintaxis de Clojure | Todos los ejemplos Clojure vienen pre-armados en el REPL. El docente ejecuta y explica, no escribe desde cero. Los alumnos ya vieron Clojure en T04. |
+| Se pierde tiempo en la sintaxis de Clojure | Todos los ejemplos en Clojure vienen pre-cargados en el REPL. El docente ejecuta y explica, no escribe desde cero. Los alumnos ya vieron Clojure en T04. |
 | Estudiantes piensan que "todo debería ser monádico" | Cerrar con criterio pragmático: "Usá mónadas cuando el error o el efecto es parte explícita de tu dominio. No para sumar dos números." |
 | El bloque IA queda desconectado | Conectar explícitamente: "El pipeline de prompting ES el mismo patrón que el validador de formulario — falla tipada propagada con flatMap." |
 
