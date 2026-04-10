@@ -823,7 +823,7 @@ El `flatMap` del validador de formulario es **el mismo** que compone un pipeline
 
 ---
 
-### Jerarquía: Functor → Applicative → Monad (F-32)
+### Jerarquía: Functor → Monad (F-32)
 
 Las tres abstracciones forman una jerarquía de capacidades:
 
