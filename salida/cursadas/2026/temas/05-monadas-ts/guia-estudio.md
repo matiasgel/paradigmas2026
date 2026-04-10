@@ -18,7 +18,7 @@ Secuencia recomendada:
 1. Leer objetivos y conceptos previos.
 2. Estudiar cada bloque teórico con sus implementaciones en TypeScript y Clojure.
 3. Verificar las leyes monádicas con el código provisto.
-4. Resolver los ejercicios trabajados y luego la autoevaluación.
+4. Resolver los ejercicios trabajados.
 5. Repasar glosario y errores frecuentes antes de pasar al TP.
 
 ---
@@ -948,43 +948,6 @@ program.run();  // Ahora sí: prompt + prompt + console.log
 
 ---
 
-## Autoevaluación
-
-Respondé sin mirar el código. Si no podés, revisá la sección correspondiente.
-
-1. **¿Qué problema resuelve `flatMap` que `map` no resuelve?**
-   Pista: pensá en qué tipo produce `map` cuando la función de transformación ya devuelve un Maybe.
-
-2. **Implementá `Maybe.flatMap` en TypeScript** (2 líneas de código). No mires arriba.
-
-3. **¿Cuál es la diferencia entre `some->` y `cats/maybe` en Clojure?**
-   ¿Cuándo usarías cada uno?
-
-4. **Escribí la ley de asociatividad**. ¿Qué garantiza en la práctica?
-
-5. **¿`Promise` cumple las tres leyes monádicas?** ¿Qué le falta para ser una mónada pura?
-
-6. **Dado este pipeline:**
-   ```typescript
-   flatMap(validateName(name), vn =>
-     flatMap(validateEmail(email), ve =>
-       validateAge(age)
-     )
-   )
-   ```
-   ¿Qué devuelve si `validateName` retorna `Left`?
-   ¿Se ejecuta `validateEmail`? ¿Y `validateAge`?
-
-7. **¿Por qué Clojure no necesita IO como wrapper?**
-
-8. **Clasificá estas APIs según la mónada que modelan:**
-   - `Promise.then`
-   - `Array.flatMap`
-   - `user?.address?.city`
-   - `some->`
-
----
-
 ## Glosario
 
 | Término | Definición |
@@ -1029,7 +992,7 @@ Respondé sin mirar el código. Si no podés, revisá la sección correspondient
 ## Lecturas Complementarias
 
 - **Wadler, P. (1995)**. *Monads for Functional Programming*. Paper fundacional que explica mónadas con ejemplos en un lenguaje funcional accesible. [Disponible en `_edu-knowledge/references/monads-pdfs/`]
-- **Anderlind & Åsberg (2023)**. *Monadic Programming in Imperative Languages*. Tesis de Chalmers sobre implementación de mónadas en JavaScript/TypeScript. [Disponible en `_edu-knowledge/references/monads-pdfs/`]
+- **Anderlind & Åsberg (2023)**. *Monadic Programming in Imperative Languages*. Tesis de Chalmers sobre implementación de mónadas en lenguajes imperativos (Rust y C#). Evalúa si el patrón mejora la calidad del código. [Disponible en `_edu-knowledge/references/monads-pdfs/`]
 - **funcool/cats**: Documentación oficial — https://funcool.github.io/cats/latest/
 - **fp-ts**: Documentación — https://gcanti.github.io/fp-ts/
 - **Effect**: Documentación — https://effect.website/

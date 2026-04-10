@@ -191,9 +191,9 @@ Wadler muestra que las mónadas resuelven tres problemas en lenguajes puros: exc
 
 ### Anderlind & Åsberg (2023) — *Monadic Programming in Imperative Languages*
 
-Tesis de Chalmers que implementa Maybe, Either y IO en JavaScript/TypeScript y evalúa si el patrón mejora la calidad del código en lenguajes imperativos. Conclusión: las mónadas mejoran composición y manejo de errores, pero requieren sobrecarga conceptual que no todos los equipos aceptan.
+Tesis de Chalmers que implementa Maybe, Either y IO en Rust y C#, y evalúa si el patrón mejora la calidad del código en lenguajes imperativos. Conclusión: las mónadas mejoran composición y manejo de errores, pero requieren sobrecarga conceptual que no todos los equipos aceptan.
 
-**Uso en clase:** Cuando algún alumno pregunte "¿esto se usa en la industria?", citar esta tesis: "se evaluó en JS/TS y se encontró que mejora composición pero requiere formación del equipo".
+**Uso en clase:** Cuando algún alumno pregunte "¿esto se usa en la industria?", citar esta tesis: "se evaluó en lenguajes imperativos y se encontró que mejora composición pero requiere formación del equipo".
 
 ---
 
