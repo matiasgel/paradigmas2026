@@ -110,7 +110,52 @@ Mismo patrón, mismo crecimiento lineal del anidamiento. Y peor: con `when-let`,
 
 La solución es una abstracción que codifique este patrón *una sola vez*: **la mónada**.
 
-#### 1.2 De `map` a `flatMap`
+#### 1.2 ¿Qué es una mónada? — la explicación intuitiva
+
+Antes de entrar en código, entendamos la idea con una analogía.
+
+**Analogía: el sobre certificado 📨**
+
+Imaginá que mandás una carta por correo certificado:
+
+1. **Meter en el sobre** (`of`): ponés tu carta dentro del sobre certificado.
+2. **Abrir, procesar, reenviar** (`flatMap`): el cartero abre el sobre, procesa el contenido con alguna operación, y lo mete en un nuevo sobre certificado.
+3. **Si el sobre viene vacío**, el cartero no hace nada — pasa el sobre vacío al siguiente. No pregunta por qué está vacío, no intenta inventar contenido. Simplemente lo propaga.
+
+Eso es una mónada: **una caja que envuelve un valor y agrega un contexto**. El contexto puede ser:
+
+- **"Puede no haber valor"** → Maybe (la caja puede estar vacía)
+- **"Puede haber un error con información"** → Either (la caja puede contener un mensaje de error en vez del valor)
+- **"Es un efecto pendiente"** → IO (la caja contiene una receta para ejecutar después)
+
+La regla clave: el valor de adentro no se toca directamente — se usa `flatMap` para operar sobre él. Esto parece una restricción, pero es la fuente del poder: la mónada maneja el caso de fallo **automáticamente**, sin que escribas un solo `if`.
+
+**En una frase:**
+
+> Una mónada es un patrón que envuelve valores en un contexto y permite encadenar operaciones sobre ese contexto, manejando automáticamente los casos de fallo.
+
+**Antes vs después — el mismo código:**
+
+```typescript
+// ❌ Sin mónadas: 3 operaciones → 3 guardas manuales
+const user = findUser(1);
+if (user === null) return null;
+const address = getAddress(user);
+if (address === null) return null;
+const postal = getPostalCode(address);
+if (postal === null) return null;
+return postal;
+
+// ✅ Con mónadas: 3 operaciones → 0 guardas
+const postal = flatMap(
+  flatMap(findUser(1), getAddress),
+  getPostalCode
+);
+```
+
+¿Qué cambió? La lógica de "si falló, propagá el fallo" está codificada *una sola vez* dentro de `flatMap`. No la repetimos en cada paso.
+
+#### 1.3 De `map` a `flatMap`
 
 En el Tema 04, `map` transforma un valor dentro de un contexto:
 

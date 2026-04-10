@@ -67,21 +67,24 @@ Si el dominio de `Result<T, E>` no es sólido, dedicar 5 min extra al inicio con
 
 ### BLOQUE 1 — Motivación: ¿por qué mónadas? (20 min)
 
-**Filminas:** F-01 a F-07
+**Filminas:** F-01 a F-07 (incluyendo F-06b, F-06c)
 
 **Objetivo del bloque:** Crear la necesidad de `flatMap` antes de nombrar "mónada". La palabra "mónada" debe aparecer recién ~minuto 15.
 
-**Estrategia pedagógica:** Partir del código feo (if/null anidados) que los alumnos ya escriben. Mostrar el patrón repetido en TS y Clojure. Luego construir la abstracción inductivamente.
+**Estrategia pedagógica:** Partir del código feo (if/null anidados) que los alumnos ya escriben. Mostrar el patrón repetido en TS y Clojure. Dar la analogía intuitiva (el sobre certificado) ANTES de cualquier definición técnica. Luego construir la abstracción inductivamente.
 
 - **F-02 a F-04**: Código roto en ambos lenguajes. No dar la solución todavía — dejar que sientan la incomodidad.
 - **F-05**: Tabla que cristaliza el patrón común. Preguntar: "¿Qué tienen en común estas dos versiones?"
-- **F-06**: La transición clave: de `map` a `flatMap`. Usar la pizarra o un diagrama en vivo para mostrar el doble envoltorio.
-- **F-07**: Analogía del contenedor. Cerrar con la definición de trabajo: `of` + `flatMap`.
+- **F-06** ⭐ NUEVA — CLAVE: Explicación intuitiva con analogía del sobre certificado. Esta filmina baja el concepto a tierra ANTES de la formalización. Dedicarle tiempo: 5 min mínimo.
+- **F-06b**: Código lado a lado: sin mónadas vs con mónadas. Impacto visual.
+- **F-06c**: Parte técnica: por qué `map` no alcanza y `flatMap` sí. Diagrama del doble envoltorio.
+- **F-07**: Analogía del contenedor + tabla de las tres cajas (Maybe, Either, IO) como adelanto.
 
 **Puntos de cuidado:**
 - NO arrancar con "una mónada es un endofunctor en la categoría..." — eso mata la motivación.
 - NO decir "es simple" — para muchos no lo es. Decir "es un patrón que se repite".
-- SÍ hacer pausas para preguntas después de F-06 — es el concepto más denso del bloque.
+- SÍ dedicar tiempo generoso a F-06 (analogía) — es la filmina que desbloquea la comprensión.
+- SÍ hacer pausas para preguntas después de F-06c — es el concepto más denso del bloque.
 
 ---
 

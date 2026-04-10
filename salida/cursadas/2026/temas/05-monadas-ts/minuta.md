@@ -124,35 +124,72 @@ function getPostalCode(userId: number): string | null {
 
 ---
 
-### [F-06] De `map` a `flatMap` — la intuición
+### [F-06] ¿Qué es una mónada? — la explicación simple
 
-**Tiempo:** 4 min
+**Tiempo:** 5 min
 
-**▶ Al mostrar el diagrama**
-> "En el Tema 04 usamos `map` para transformar valores dentro de un contexto. Pero hay un problema."
+**▶ Al mostrar la filmina**
+> "Antes de meternos en código, quiero que entiendan la idea con una analogía."
+
+**▶ Explicar la analogía del sobre certificado:**
+> "Imaginen un sobre certificado. Meter la carta es `of`. El cartero que abre el sobre, procesa el contenido y lo mete en un nuevo sobre certificado es `flatMap`. Ahora, la parte más importante: si el sobre llega vacío, el cartero no hace nada — pasa el sobre vacío al siguiente. Eso es el cortocircuito automático."
 
 **Conceptos clave para desarrollar:**
-- Si tenemos `Maybe<User>` y aplicamos `map` con una función `User → Maybe<Address>`, el resultado es `Maybe<Maybe<Address>>`. Doble envoltorio.
-- ¿Por qué? Porque `map` mete el resultado de `f` dentro del contexto existente. Si `f` ya devuelve un contexto, quedan dos niveles.
-- `flatMap` resuelve esto: aplica la función *y* aplana un nivel. `Maybe<User>` + `flatMap(User → Maybe<Address>)` = `Maybe<Address>`.
-- Definición de trabajo: una mónada es un tipo con `of` (envolver) y `flatMap` (encadenar-aplanando).
+- Una mónada es un **patrón**, no una cosa misteriosa. Es un tipo que envuelve un valor y agrega un contexto: "puede no haber valor", "puede haber un error", "es un efecto pendiente".
+- El valor de adentro no se toca directamente — se usa `flatMap` para operar sobre él. Esto parece una restricción, pero es la fuente del poder: la mónada maneja el caso de fallo automáticamente.
+- NO empezar desde la definición matemática. La analogía primero. El álgebra viene después, cuando ya entienden el patrón.
 
-**▶ En la pizarra (o REPL):**
+> "En una frase: una mónada envuelve valores en un contexto y permite encadenar operaciones, manejando automáticamente los casos de fallo."
+
+**▶ Transición:** "Veamos cómo se ve esto en código real."
+
+---
+
+### [F-06b] Antes vs después — sin mónadas vs con mónadas
+
+**Tiempo:** 3 min
+
+**▶ Al mostrar el código lado a lado**
+> "A la izquierda, el código que ya escribieron: tres guardas `if/null` repetitivas. A la derecha, el mismo pipeline con `flatMap`: tres líneas, sin un solo `if`."
+
+**Conceptos clave para desarrollar:**
+- Señalar que la lógica de "si falló, propagá el fallo" está repetida 3 veces en el código de la izquierda. En el de la derecha, está codificada *una sola vez* dentro de `flatMap`.
+- No importa que no conozcan aún la implementación de `flatMap` — el punto es que **existe** una abstracción que elimina la repetición.
+- Preguntar: "¿Cuántas guardas necesitarían si el pipeline tuviera 10 pasos?"
+
+**▶ Transición:** "Ahora entendamos *por qué* necesitamos flatMap y no alcanza con map."
+
+---
+
+### [F-06c] De `map` a `flatMap` — la diferencia técnica
+
+**Tiempo:** 3 min
+
+**▶ Al mostrar el diagrama**
+> "Esta es la diferencia técnica clave."
+
+**Conceptos clave para desarrollar:**
+- `map` transforma el valor de adentro y envuelve el resultado en una caja. Si la función *ya* devuelve una caja, quedan dos cajas anidadas: `Maybe<Maybe<T>>`. Eso no sirve.
+- `flatMap` aplica la función y no re-envuelve porque la función ya devuelve una caja. Resultado: una sola caja.
+- La diferencia en código es una línea: `just(f(m.value))` vs `f(m.value)`. `map` agrega `just(...)`, `flatMap` no.
+- Cerrar con la definición de trabajo: `of` + `flatMap` = mónada.
+
+**▶ En la pizarra:**
 ```
 map:     Maybe<User> → (User → Maybe<Address>) → Maybe<Maybe<Address>>  ❌
 flatMap: Maybe<User> → (User → Maybe<Address>) → Maybe<Address>         ✅
 ```
 
 **▶ Pregunta:**
-> "¿Por qué `map` genera doble envoltorio y `flatMap` no? ¿Qué operación extra hace `flatMap`?"
+> "¿Por qué `map` genera doble envoltorio y `flatMap` no?"
 
-**▶ Transición:** "Ahora, una analogía para fijar la idea."
+**▶ Transición:** "Una analogía visual más para fijar, y después construimos la primera mónada."
 
 ---
 
 ### [F-07] Analogía del contenedor
 
-**Tiempo:** 4 min
+**Tiempo:** 3 min
 
 **▶ Al mostrar el diagrama**
 > "Piensen en una mónada como una caja con reglas."
@@ -161,6 +198,7 @@ flatMap: Maybe<User> → (User → Maybe<Address>) → Maybe<Address>         �
 - `of(valor)`: mete el valor en la caja. La caja puede ser Maybe (caja que puede estar vacía), Either (caja que puede tener un error), IO (caja que difiere la ejecución).
 - `flatMap(f)`: abre la caja, aplica `f` al valor de adentro. `f` devuelve una nueva caja. La mónada se encarga de que no queden cajas anidadas.
 - Si la caja está vacía (Nothing) o tiene error (Left), `flatMap` *no abre la caja* — propaga el estado tal cual. Esa es la magia: el cortocircuito es automático.
+- Usar la tabla de las tres cajas para anticipar lo que viene: Maybe, Either, IO — tres contextos distintos, mismo patrón de operación.
 
 > "Es como una cadena de montaje: cada estación recibe la caja, hace su trabajo, y la pasa. Si alguna estación señaliza «defectuoso», el producto pasa directo al final sin que las estaciones siguientes lo toquen."
 

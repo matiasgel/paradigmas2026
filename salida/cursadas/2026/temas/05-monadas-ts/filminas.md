@@ -13,14 +13,6 @@
 Paradigmas y Lenguajes de Programación 2026 — UNTDF / IDEI
 Tema 05 · Módulo II
 
-Una **mónada** es un tipo con dos operaciones:
-- `of` / `return`: meter un valor en el contexto
-- `flatMap` / `bind` / `>>=`: encadenar una función que produce otro contexto
-
----
-
-### [F-07] Analogía del contenedor
-
 ---
 
 ## BLOQUE 1 — Motivación: ¿por qué mónadas?
@@ -104,24 +96,94 @@ function getPostalCode(userId: number): string | null {
 
 ---
 
-### [F-06] De `map` a `flatMap` — la intuición
+### [F-06] ¿Qué es una mónada? — la explicación simple
+
+@tipo: concepto-abstracto
+@imagen: content
+@prompt-imagen: ilustración de una caja de regalo etiquetada "contexto" con un objeto adentro, flechas que muestran: 1) meter algo en la caja, 2) abrir la caja y transformar el contenido sin sacarlo. Estilo educativo simple con colores pastel
+
+# Una mónada es una caja con reglas
+
+## Analogía: el sobre certificado 📨
+
+Imaginá que mandás una carta por correo certificado:
+
+1. **Meter en el sobre** (`of`): ponés tu carta dentro del sobre certificado
+2. **Abrir, procesar, reenviar** (`flatMap`): el cartero abre el sobre, procesa el contenido con alguna operación, y lo mete en un nuevo sobre certificado
+3. **Si el sobre viene vacío**, el cartero no hace nada — pasa el sobre vacío al siguiente
+
+## ¿Por qué "caja con reglas"?
+
+- La caja agrega un **contexto**: "puede no haber valor" (Maybe), "puede haber un error" (Either), "es un efecto pendiente" (IO)
+- El valor de adentro no se puede tocar directamente — hay que usar las operaciones de la caja
+- La magia: `flatMap` se encarga del cortocircuito. Si la caja está vacía o tiene error, **no ejecuta nada** — propaga el estado tal cual
+
+## En una frase
+
+> Una mónada es un patrón que envuelve valores en un contexto y permite encadenar operaciones sobre ese contexto, manejando automáticamente los casos de fallo.
+
+---
+
+### [F-06b] Antes vs después — el mismo código con y sin mónadas
+
+@tipo: codigo
+@imagen: none
+
+# Sin mónadas vs con mónadas
+
+## ❌ Sin mónadas: código defensivo manual
+
+```typescript
+const user = findUser(1);
+if (user === null) return null;      // guardia 1
+const address = getAddress(user);
+if (address === null) return null;   // guardia 2
+const postal = getPostalCode(address);
+if (postal === null) return null;    // guardia 3
+return postal;
+```
+
+## ✅ Con mónadas: encadenamiento automático
+
+```typescript
+const postal = flatMap(
+  flatMap(findUser(1), getAddress),
+  getPostalCode
+);
+// Si cualquier paso falla → Nothing se propaga solo
+// Sin if, sin null, sin guardias repetidas
+```
+
+**¿Qué cambió?** La lógica de "si falló, propagá el fallo" está codificada *una sola vez* dentro de `flatMap`. No la repetimos en cada paso.
+
+---
+
+### [F-06c] De `map` a `flatMap` — la diferencia técnica
 
 @tipo: concepto-abstracto
 @imagen: content
 @prompt-imagen: diagrama: una caja Maybe contiene otra caja Maybe (map produce anidamiento), flecha hacia abajo muestra flatMap que aplana a una sola caja, estilo educativo con colores azul y verde
 
-# ¿Por qué `map` no alcanza?
+# ¿Por qué `flatMap` y no solo `map`?
 
 ## El problema del doble envoltorio
 
-- `map` sobre `Maybe<User>` con función `User → Maybe<Address>` produce `Maybe<Maybe<Address>>`
-- Necesitamos una operación que **aplique y aplane**: eso es `flatMap` / `bind`
+- `map` transforma el valor de adentro, pero envuelve el resultado en otra caja
+- Si la función ya devuelve una caja → quedan dos cajas anidadas: `Maybe<Maybe<Address>>`
+- `flatMap` aplica la función **y aplana**: `Maybe<Address>` — una sola caja
+
+## Diferencia en una línea de código
+
+```typescript
+// map:     just(f(m.value))   → envuelve el resultado → puede anidar
+// flatMap: f(m.value)         → la función ya envuelve → no anida
+```
 
 ## Definición de trabajo
 
 Una **mónada** es un tipo con dos operaciones:
-- `of` / `return`: meter un valor en el contexto
-- `flatMap` / `bind` / `>>=`: encadenar una función que produce otro contexto
+- `of` / `return`: meter un valor en el contexto (la caja)
+- `flatMap` / `bind` / `>>=`: encadenar una función que ya devuelve un contexto, aplanando
 
 ---
 
@@ -138,6 +200,14 @@ Una **mónada** es un tipo con dos operaciones:
 1. `of(valor)` → mete el valor en la caja
 2. `flatMap(f)` → abre la caja, aplica `f`, devuelve una nueva caja
 3. La caja decide qué hacer si está vacía o tiene error
+
+## Las tres cajas que vamos a construir hoy
+
+| Caja | Contexto que agrega | Ejemplo cotidiano |
+|---|---|---|
+| `Maybe<T>` | "puede no haber valor" | Buscar un contacto en la agenda: puede no existir |
+| `Either<E, T>` | "puede haber un error con info" | Validar un formulario: puede fallar con mensaje |
+| `IO<T>` | "es un efecto pendiente" | Leer un archivo: el efecto ocurre cuando ejecutás |
 
 ---
 
