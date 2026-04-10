@@ -1,0 +1,172 @@
+# Calibración de Perfiles — Tema 04: Aspectos Avanzados de Programación Funcional
+# Generado: 2026-04-09 | Agente: student-simulator (modo Batch — 4 perfiles)
+# Fuentes base: calibración Tema 03 + contenido específico Tema 04
+# NOTA: Este archivo NUNCA se resetea — acumula calibración año a año
+
+tema:
+  numero: "04"
+  nombre: "Aspectos Avanzados de Programación Funcional"
+  duracion_clase: 120
+  bloques: 4
+  artefactos_evaluados:
+    - diseno.md
+    - minuta.md
+    - filminas.md
+    - guia-estudio.md
+    - tp.md
+
+literatura:
+  - id: "mahatanankoon-wolf-2021"
+    titulo: "Cognitive Learning Strategies in an Introductory Computer Programming Course"
+    autores: ["Mahatanankoon, P.", "Wolf, J."]
+    año: 2021
+    fuente: "ISEJ"
+    eric_id: "EJ1301236"
+    relevancia: >
+      Estrategias deep vs shallow. Estratégico comprende ADT conceptualmente;
+      recursero memoriza pattern matching sin internalizar por qué.
+
+  - id: "olipas-2022"
+    titulo: "Feelings, Challenges and Difficulties Experienced by IT Students in Learning Computer Programming"
+    autores: ["Olipas, C. N."]
+    año: 2022
+    fuente: "ERIC"
+    eric_id: "ED622663"
+    relevancia: >
+      Ansiedad ante notación nueva. En Tema 04: sintaxis Clojure (paréntesis,
+      macros, go blocks) y tipos algebraicos generan activación del ansioso.
+
+  - id: "sweller-chen-2023"
+    titulo: "Cognitive Load Theory — Revised"
+    autores: ["Sweller, J.", "Chen, O."]
+    año: 2023
+    relevancia: >
+      Bloque 3 (concurrencia: canales + STM + agentes + async/await en 30 min)
+      excede la carga cognitiva recomendable para disperso y ansioso.
+      Segmentación (Mayer) es crítica.
+
+  - id: "hoq-et-al-2025"
+    titulo: "Automated Identification of Logical Errors — Student Misconceptions"
+    autores: ["Hoq, M.", "et al."]
+    año: 2025
+    fuente: "IEDMS"
+    eric_id: "ED675600"
+    relevancia: >
+      Misconception "const = inmutable" persiste en ~35% de alumnos incluso
+      después del Tema 03. Requiere intervención directa en F-05.
+
+perfiles:
+  estrategico:
+    scores_tema04:
+      en_clase: 80
+      guia_autonoma: 87
+      tp_estimado: "82-90/100"
+      score_global: 83
+    bloque_mas_bajo: "B3_concurrencia (72)"
+    misconceptions_probables:
+      - "core.async = Observable de RxJS"
+      - "STM = database transaction"
+    alertas:
+      - "Puede subestimar transducers como 'map+filter optimizado'"
+      - "Retomar en Tema 05 diferencia concurrencia cooperativa vs preemptiva"
+
+  ansioso:
+    scores_tema04:
+      en_clase: 57
+      guia_autonoma: 71
+      tp_estimado: "55-65/100"
+      score_global: 64
+    bloque_mas_bajo: "B3_concurrencia (40)"
+    zona_recuperacion: "guia-estudio.md sube +14 pts respecto a clase"
+    misconceptions_probables:
+      - "Result y Maybe son lo mismo"
+      - "async/await ya es funcional"
+      - "Notación (go (>! ch v)) es impenetrable"
+    alertas:
+      - "Scaffold visual de Result (3 estados) es crítico"
+      - "Comunicar valor de guía de estudio explícitamente en clase"
+      - "ej08/ej09 del TP necesitan ejemplo resuelto previo"
+
+  disperso:
+    scores_tema04:
+      en_clase: 44
+      guia_autonoma: 52
+      tp_estimado: "40-55/100"
+      score_global: 48
+    bloque_mas_bajo: "B3_concurrencia (28)"
+    prerequisito_gap:
+      - "Inmutabilidad no consolidada (const ≠ inmutable)"
+      - "Efecto secundario no consolidado desde Tema 01"
+    misconceptions_probables:
+      - "const arr = [...] hace inmutable al array"
+      - "transducer = pipeline con menos código"
+      - "go block = goroutine de Go"
+    alertas:
+      - "Pregunta detectora B1 min~12: const + push"
+      - "B3: limitar a core.async básico, no STM"
+      - "ej15 y ej16 los más abandonados por este perfil"
+
+  recursero:
+    scores_tema04:
+      en_clase: 58
+      guia_autonoma: 65
+      tp_estimado: "60-70/100"
+      score_global: 62
+    bloque_mas_bajo: "B3_concurrencia (48)"
+    zona_comodidad: "pipeline filter/map/reduce (B1) desde Tema 03"
+    misconceptions_probables:
+      - "Transducer ahorra memoria porque usa menos funciones"
+      - "STM es como un lock más lindo"
+    alertas:
+      - "Puede aprobar ej01-ej06 sin comprensión real"
+      - "ej19/ej20 (integradores) son el filtro de memorización vs comprensión"
+      - "Pregunta: '¿Por qué transduce no crea colecciones intermedias?'"
+
+predicciones_clase:
+  riesgo_alto:
+    tema: "Bloque 3 — Concurrencia y metaprogramación"
+    perfiles_en_riesgo: [disperso, ansioso]
+    score_cohort_promedio: 57
+    intervencion_sugerida: >
+      Reducir expectativa explícitamente. Anclar en idea central:
+      inmutabilidad → no locks. F-33 como filmina de síntesis obligatoria.
+
+  zona_activa:
+    tema: "Bloque 1 — Fundamentos avanzados"
+    perfiles_que_se_estabilizan: [todos]
+    oportunidad: "Pipeline conecta con Tema 03 — base sólida para toda la clase"
+
+  zona_recuperacion_guia:
+    perfil: ansioso
+    tema: "Result/Maybe y concurrencia"
+    detalle: >
+      Score ansioso sube de 57 (clase) a 71 (guía autónoma).
+      La guía cumple función compensatoria clave — comunicar explícitamente.
+
+  faq_anticipado_criticos:
+    - perfil: disperso
+      bloque: "B1"
+      pregunta: "¿const hace inmutable al array?"
+      intervencion: "Demo en vivo con push"
+    - perfil: ansioso
+      bloque: "B2"
+      pregunta: "¿Result y Maybe son lo mismo?"
+      intervencion: "Tabla comparativa lado a lado"
+    - perfil: disperso
+      bloque: "B2"
+      pregunta: "¿Qué es un transducer?"
+      intervencion: "Dibujo: 3 arrays vs 1 pasada"
+    - perfil: ansioso
+      bloque: "B3"
+      pregunta: "¿Canal vs promesa?"
+      intervencion: "Analogía sobre/tubo"
+
+historial:
+  - fecha: "2026-04-09"
+    tipo: "inicial_simulacion_batch"
+    fuente: "literatura_academica + calibracion_tema03"
+    agente: "student-simulator (modo TA — Test All)"
+    nota: >
+      Calibración derivada de perfiles Tema 03 adaptados al contenido de Tema 04.
+      Sin datos reales de encuesta. Actualizar post-clase-2026.
+    proxima_calibracion: "post-clase-tema04-2026"
