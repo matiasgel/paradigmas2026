@@ -138,7 +138,7 @@ Enfoque: construcción progresiva del concepto de mónada — desde la motivaci�
   - `core.async` como alternativa: canales como composición de efectos asincrónicos.
   - Comparativa: TS necesita IO para ser "puro"; Clojure elige ser pragmático y controlar efectos por convención.
 
-- **Las tres leyes monádicas — verificadas en ambos lenguajes (6 min)**:
+- **Las tres leyes monádicas — verificadas en ambos lenguajes (9 min)**:
   1. Identidad izquierda: `of(a).flatMap(f) === f(a)` / `(mc/bind (m/return a) f) == (f a)`.
   2. Identidad derecha: `m.flatMap(of) === m` / `(mc/bind m m/return) == m`.
   3. Asociatividad: `m.flatMap(f).flatMap(g) === m.flatMap(x => f(x).flatMap(g))`.
