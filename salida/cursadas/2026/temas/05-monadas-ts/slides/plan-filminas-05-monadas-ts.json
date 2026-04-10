@@ -1,0 +1,1734 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "05-monadas-ts",
+    "title": "Mónadas en TypeScript",
+    "source": "salida/cursadas/2026/temas/05-monadas-ts/filminas.md",
+    "generated_at": "2026-04-10T00:00:00Z",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "salida/cursadas/2026/temas",
+    "topic_folder": "salida/cursadas/2026/temas/05-monadas-ts",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/schemas/pipeline-runtime.schema.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 44,
+    "images_planned": 12,
+    "tables_planned": 9,
+    "code_slides": 24,
+    "status": "READY_FOR_VALIDATION",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "portada": 1,
+      "concepto-abstracto": 9,
+      "codigo": 20,
+      "tabla-comparativa": 6,
+      "diagrama": 3,
+      "socratica": 2,
+      "tabla": 2,
+      "cierre": 1
+    }
+  },
+  "slides": [
+    {
+      "id": "F-01",
+      "type": "portada",
+      "title": "Mónadas en TypeScript",
+      "subtitle": "Paradigmas y Lenguajes de Programación 2026 — UNTDF / IDEI\nTema 05 · Módulo II",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Fondo oscuro degradado de azul profundo a violeta. Tres rectángulos grises translúcidos superpuestos parcialmente, conectados por flechas luminosas en blanco que forman una cadena diagonal de izquierda a derecha. Cada rectángulo tiene bordes sutiles y ligera transparencia. Flat design, bordo y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-02",
+      "type": "concepto-abstracto",
+      "title": "¿Qué pasa cuando encadenamos operaciones que pueden fallar?",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El problema real"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Obtener un usuario → su dirección → su código postal"
+            },
+            {
+              "content": "Cada paso puede devolver `null` o fallar"
+            },
+            {
+              "content": "El código defensivo se vuelve un `if/else` anidado inmanejable"
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Tres rectángulos gris oscuro apilados en columna izquierda, conectados verticalmente por flechas delgadas. Desde cada rectángulo parten dos ramas: una continúa hacia abajo en línea recta, otra se bifurca en diagonal hacia la derecha formando un árbol que se expande. El árbol tiene múltiples ramificaciones secundarias caóticas. Fondo blanco. Flat design, bordo y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-03",
+      "type": "codigo",
+      "title": "El infierno de los `null` en TypeScript",
+      "subtitle": "3 operaciones → 3 guardas → complejidad crece linealmente",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function getPostalCode(userId: number): string | null {\n  const user = findUser(userId);\n  if (user === null) return null;\n\n  const address = getAddress(user);\n  if (address === null) return null;\n\n  const postalCode = getPostalCode(address);\n  if (postalCode === null) return null;\n\n  return postalCode;\n}\n// 3 operaciones → 3 guardas → complejidad crece linealmente"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-04",
+      "type": "codigo",
+      "title": "El infierno de `when-let` en Clojure",
+      "subtitle": "Anidamiento crece con cada operación; no se puede saber por qué falló",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": "(defn get-postal-code [user-id]\n  (when-let [user (find-user user-id)]\n    (when-let [address (get-address user)]\n      (when-let [postal (get-postal-code address)]\n        postal))))\n;; Anidamiento crece con cada operación\n;; Y si queremos saber *por qué* falló... no podemos"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "tabla-comparativa",
+      "title": "El patrón es el mismo",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Aspecto | TypeScript | Clojure |\n|---|---|---|\n| Valor ausente | `null` / `undefined` | `nil` |\n| Guardia | `if (x === null) return null` | `(when-let [x ...] ...)` |\n| Anidamiento | Crece linealmente | Crece linealmente |\n| Razón del fallo | Perdida (solo `null`) | Perdida (solo `nil`) |\n| Solución necesaria | Una abstracción que encadene | Una abstracción que encadene |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | TypeScript | Clojure |\n|---|---|---|\n| Valor ausente | `null` / `undefined` | `nil` |\n| Guardia | `if (x === null) return null` | `(when-let [x ...] ...)` |\n| Anidamiento | Crece linealmente | Crece linealmente |\n| Razón del fallo | Perdida (solo `null`) | Perdida (solo `nil`) |\n| Solución necesaria | Una abstracción que encadene | Una abstracción que encadene |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "type": "concepto-abstracto",
+      "title": "Una mónada es una caja con reglas",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Analogía: el sobre certificado 📨"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Meter en el sobre** (`of`): ponés tu carta dentro del sobre certificado"
+            },
+            {
+              "content": "**Abrir, procesar, reenviar** (`flatMap`): el cartero abre el sobre, procesa el contenido con alguna operación, y lo mete en un nuevo sobre certificado"
+            },
+            {
+              "content": "**Si el sobre viene vacío**, el cartero no hace nada — pasa el sobre vacío al siguiente"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Por qué \"caja con reglas\"?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "La caja agrega un **contexto**: \"puede no haber valor\" (Maybe), \"puede haber un error\" (Either), \"es un efecto pendiente\" (IO)"
+            },
+            {
+              "content": "El valor de adentro no se puede tocar directamente — hay que usar las operaciones de la caja"
+            },
+            {
+              "content": "La magia: `flatMap` se encarga del cortocircuito. Si la caja está vacía o tiene error, **no ejecuta nada** — propaga el estado tal cual"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En una frase"
+        },
+        {
+          "type": "text",
+          "content": "Una mónada es un patrón que envuelve valores en un contexto y permite encadenar operaciones sobre ese contexto, manejando automáticamente los casos de fallo."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Secuencia horizontal de tres iconos en fila. Primero: círculo bordo pequeño a la izquierda (objeto suelto). Flecha delgada apuntando a la derecha. Segundo: rectángulo con borde fino que contiene el círculo bordo adentro (caja cerrada), con tapa superior. Flecha delgada apuntando a la derecha. Tercero: rectángulo similar pero con la tapa levantada en diagonal y flecha interna que transforma el círculo en una estrella. Fondo blanco. Flat design, bordo y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-07",
+      "type": "codigo",
+      "title": "Sin mónadas vs con mónadas",
+      "subtitle": "La lógica de cortocircuito codificada una sola vez en flatMap",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// ❌ Sin mónadas: código defensivo manual\nconst user = findUser(1);\nif (user === null) return null;      // guardia 1\nconst address = getAddress(user);\nif (address === null) return null;   // guardia 2\nconst postal = getPostalCode(address);\nif (postal === null) return null;    // guardia 3\nreturn postal;"
+        },
+        {
+          "lang": "typescript",
+          "content": "// ✅ Con mónadas: encadenamiento automático\nconst postal = flatMap(\n  flatMap(findUser(1), getAddress),\n  getPostalCode\n);\n// Si cualquier paso falla → Nothing se propaga solo\n// Sin if, sin null, sin guardias repetidas"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-08",
+      "type": "concepto-abstracto",
+      "title": "¿Por qué `flatMap` y no solo `map`?",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El problema del doble envoltorio"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`map` transforma el valor de adentro, pero envuelve el resultado en otra caja"
+            },
+            {
+              "content": "Si la función ya devuelve una caja → quedan dos cajas anidadas: `Maybe<Maybe<Address>>`"
+            },
+            {
+              "content": "`flatMap` aplica la función **y aplana**: `Maybe<Address>` — una sola caja"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición de trabajo"
+        },
+        {
+          "type": "text",
+          "content": "Una **mónada** es un tipo con dos operaciones:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`of` / `return`: meter un valor en el contexto (la caja)"
+            },
+            {
+              "content": "`flatMap` / `bind` / `>>=`: encadenar una función que ya devuelve un contexto, aplanando el resultado"
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// map:     just(f(m.value))   → envuelve el resultado → puede anidar\n// flatMap: f(m.value)         → la función ya envuelve → no anida"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Arriba: un rectángulo grande con borde azul que contiene otro rectángulo más pequeño con borde verde en su interior (rectángulos anidados, dos capas). Flecha gruesa hacia abajo en el centro. Abajo: un solo rectángulo de altura media con borde verde sin anidamiento interior. Fondo blanco. Flat design, azul y verde. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-09",
+      "type": "diagrama",
+      "title": "`of` envuelve — `flatMap` abre, transforma, reenvuelve",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Flujo monádico"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "`of(valor)` → mete el valor en la caja"
+            },
+            {
+              "content": "`flatMap(f)` → abre la caja, aplica `f`, devuelve una nueva caja"
+            },
+            {
+              "content": "La caja decide qué hacer si está vacía o tiene error"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Las tres cajas que vamos a construir hoy"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Caja | Contexto que agrega | Ejemplo cotidiano |\n|---|---|---|\n| `Maybe<T>` | \"puede no haber valor\" | Buscar un contacto en la agenda: puede no existir |\n| `Either<E, T>` | \"puede haber un error con info\" | Validar un formulario: puede fallar con mensaje |\n| `IO<T>` | \"es un efecto pendiente\" | Leer un archivo: el efecto ocurre cuando ejecutás |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Tres rectángulos translúcidos idénticos en columna vertical, cada uno con un círculo pequeño bordo en su interior. Sobre cada rectángulo, flecha larga hacia abajo desde un punto circular fuera del rectángulo (entrada). Bajo cada rectángulo, flecha hacia abajo hacia otro punto circular (salida transformada). Fondo blanco. Flat design, bordo y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Caja | Contexto que agrega | Ejemplo cotidiano |\n|---|---|---|\n| `Maybe<T>` | \"puede no haber valor\" | Buscar un contacto en la agenda: puede no existir |\n| `Either<E, T>` | \"puede haber un error con info\" | Validar un formulario: puede fallar con mensaje |\n| `IO<T>` | \"es un efecto pendiente\" | Leer un archivo: el efecto ocurre cuando ejecutás |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-10",
+      "type": "codigo",
+      "title": "`Maybe<T>` en TypeScript",
+      "subtitle": "Tagged union discriminada por `tag`; el compilador fuerza manejar ambos casos",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Maybe<T> =\n  | { tag: 'Just'; value: T }\n  | { tag: 'Nothing' };\n\nconst just = <T>(value: T): Maybe<T> =>\n  ({ tag: 'Just', value });\n\nconst nothing = <T>(): Maybe<T> =>\n  ({ tag: 'Nothing' });"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "codigo",
+      "title": "Operaciones monádicas de `Maybe<T>`",
+      "subtitle": "`map` transforma el valor; `flatMap` aplica función que ya devuelve `Maybe<U>` → aplana",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const of = <T>(value: T): Maybe<T> => just(value);\n\nconst map = <T, U>(m: Maybe<T>, f: (x: T) => U): Maybe<U> =>\n  m.tag === 'Just' ? just(f(m.value)) : nothing();\n\nconst flatMap = <T, U>(m: Maybe<T>, f: (x: T) => Maybe<U>): Maybe<U> =>\n  m.tag === 'Just' ? f(m.value) : nothing();"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-12",
+      "type": "codigo",
+      "title": "Pipeline con `Maybe` — sin un solo `if/null`",
+      "subtitle": "Si cualquier paso devuelve Nothing → todo el pipeline devuelve Nothing",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type User    = { name: string; addressId: number };\ntype Address = { street: string; postalCode: string };\n\nconst findUser    = (id: number): Maybe<User>    => /* ... */;\nconst getAddress  = (u: User): Maybe<Address>    => /* ... */;\nconst getPostal   = (a: Address): Maybe<string>  => just(a.postalCode);\n\n// Pipeline monádico\nconst postalCode: Maybe<string> =\n  flatMap(\n    flatMap(findUser(1), getAddress),\n    getPostal\n  );\n// Si cualquier paso devuelve Nothing → todo el pipeline devuelve Nothing\n// Sin if, sin null checks, sin anidamiento"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "codigo",
+      "title": "Maybe implícito: `some->` en Clojure",
+      "subtitle": "`some->` es un Maybe implícito: threading que corta en `nil`",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": ";; nil como ausencia — idiomático en Clojure\n(defn find-user [id]\n  (get users-db id))       ; nil si no existe\n\n(defn get-address [user]\n  (get addresses-db (:address-id user)))\n\n(defn get-postal [address]\n  (:postal-code address))\n\n;; Pipeline: some-> corta en el primer nil\n(some-> 1\n        find-user\n        get-address\n        get-postal)\n;; => \"9410\" o nil — sin when-let anidados"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-14",
+      "type": "codigo",
+      "title": "Maybe explícito: `cats/maybe` en Clojure",
+      "subtitle": "Equivalente a flatMap encadenado — `mlet` es do-notation para mónadas",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": "(require '[cats.monad.maybe :as m])\n(require '[cats.core :as mc])\n\n;; Constructores\n(m/just 42)     ;=> #<Just 42>\n(m/nothing)     ;=> #<Nothing>\n\n;; Pipeline con mlet (do-notation para mónadas)\n(mc/mlet [user    (find-user-m 1)       ; Maybe<User>\n          address (get-address-m user)   ; Maybe<Address>\n          postal  (get-postal-m address)]; Maybe<String>\n  (mc/return postal))\n\n;; Equivalente a flatMap encadenado:\n(mc/bind (find-user-m 1)\n  (fn [user]\n    (mc/bind (get-address-m user)\n      (fn [address]\n        (get-postal-m address)))))"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-15",
+      "type": "concepto-abstracto",
+      "title": "¿Para qué wrappear si `nil` ya existe?",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "`some->` = Maybe implícito"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Clojure ya tiene `nil` como valor universal de ausencia"
+            },
+            {
+              "content": "`some->` corta automáticamente — cero ceremonia"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "`cats/maybe` = Maybe explícito"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Envuelve en `Just`/`Nothing` como en TypeScript"
+            },
+            {
+              "content": "Habilita `mlet`, composición formal, leyes verificables"
+            },
+            {
+              "content": "Precio: boilerplate en un lenguaje que no lo necesita"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "**Criterio**: `some->` para código de producción; `cats/maybe` para enseñar el patrón"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-16",
+      "type": "tabla-comparativa",
+      "title": "Maybe: TypeScript vs Clojure",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Aspecto | TypeScript | Clojure |\n|---|---|---|\n| Representación | Tagged union `Just/Nothing` | `nil` nativo o `cats/maybe` |\n| Type safety | Compilador fuerza pattern match | En runtime; no fuerza |\n| Encadenamiento | `.flatMap(fn)` / pipe | `some->` o `(mc/bind v f)` |\n| Ergonomía | Verboso pero seguro | Conciso pero sin red de tipos |\n| Idiomático | Sí (fp-ts `Option`, Effect) | `some->` sí; `cats` nicho |\n| Cuándo usar | Siempre que haya opcionalidad | `some->` por defecto |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | TypeScript | Clojure |\n|---|---|---|\n| Representación | Tagged union `Just/Nothing` | `nil` nativo o `cats/maybe` |\n| Type safety | Compilador fuerza pattern match | En runtime; no fuerza |\n| Encadenamiento | `.flatMap(fn)` / pipe | `some->` o `(mc/bind v f)` |\n| Ergonomía | Verboso pero seguro | Conciso pero sin red de tipos |\n| Idiomático | Sí (fp-ts `Option`, Effect) | `some->` sí; `cats` nicho |\n| Cuándo usar | Siempre que haya opcionalidad | `some->` por defecto |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-17",
+      "type": "codigo",
+      "title": "`Either<E, T>` en TypeScript",
+      "subtitle": "`Right` = camino feliz (valor) · `Left` = camino de error (tipado) · \"right is right\"",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Either<E, T> =\n  | { tag: 'Left';  error: E }\n  | { tag: 'Right'; value: T };\n\nconst left = <E, T>(error: E): Either<E, T> =>\n  ({ tag: 'Left', error });\n\nconst right = <E, T>(value: T): Either<E, T> =>\n  ({ tag: 'Right', value });"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-18",
+      "type": "codigo",
+      "title": "Operaciones monádicas de `Either<E, T>`",
+      "subtitle": "`flatMap` sobre `Left` propaga el error sin ejecutar `f`; el tipo `E` se preserva",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const of = <E, T>(value: T): Either<E, T> => right(value);\n\nconst map = <E, T, U>(\n  m: Either<E, T>, f: (x: T) => U\n): Either<E, U> =>\n  m.tag === 'Right' ? right(f(m.value)) : m;\n\nconst flatMap = <E, T, U>(\n  m: Either<E, T>, f: (x: T) => Either<E, U>\n): Either<E, U> =>\n  m.tag === 'Right' ? f(m.value) : m;"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "codigo",
+      "title": "Pipeline de validación con `Either`",
+      "subtitle": "Falla en la PRIMERA validación inválida — error tipado con `field` y `message`",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type ValidationError = { field: string; message: string };\n\nconst validateName = (name: string): Either<ValidationError, string> =>\n  name.length >= 2\n    ? right(name)\n    : left({ field: 'name', message: 'Mínimo 2 caracteres' });\n\nconst validateEmail = (email: string): Either<ValidationError, string> =>\n  email.includes('@')\n    ? right(email)\n    : left({ field: 'email', message: 'Email inválido' });\n\nconst validateAge = (age: number): Either<ValidationError, number> =>\n  age >= 18\n    ? right(age)\n    : left({ field: 'age', message: 'Debe ser mayor de edad' });\n\n// Pipeline: falla en la PRIMERA validación inválida\nconst validateForm = (name: string, email: string, age: number) =>\n  flatMap(validateName(name), validName =>\n    flatMap(validateEmail(email), validEmail =>\n      map(validateAge(age), validAge =>\n        ({ name: validName, email: validEmail, age: validAge })\n      )\n    )\n  );"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-20",
+      "type": "tabla-comparativa",
+      "title": "Either vs try/catch — dos filosofías",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Aspecto | `try/catch` | `Either<E, T>` |\n|---|---|---|\n| Flujo de error | Implícito (salta stack frames) | Explícito (dato en el tipo) |\n| Tipado del error | `unknown` / `any` | `E` es genérico verificable |\n| Composición | No compone (rompe el pipeline) | `flatMap` compone naturalmente |\n| Exhaustividad | El compilador no verifica | `switch` sobre `tag` es exhaustivo |\n| Cuándo preferir | Errores verdaderamente excepcionales | Errores esperados del dominio |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | `try/catch` | `Either<E, T>` |\n|---|---|---|\n| Flujo de error | Implícito (salta stack frames) | Explícito (dato en el tipo) |\n| Tipado del error | `unknown` / `any` | `E` es genérico verificable |\n| Composición | No compone (rompe el pipeline) | `flatMap` compone naturalmente |\n| Exhaustividad | El compilador no verifica | `switch` sobre `tag` es exhaustivo |\n| Cuándo preferir | Errores verdaderamente excepcionales | Errores esperados del dominio |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-21",
+      "type": "codigo",
+      "title": "Either en Clojure con `cats`",
+      "subtitle": "Pipeline con `mlet` — constructores `right`/`left` y do-notation",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": "(require '[cats.monad.either :as e])\n(require '[cats.core :as mc])\n\n;; Constructores\n(e/right \"dato válido\")   ;=> #<Right \"dato válido\">\n(e/left \"error: vacío\")   ;=> #<Left \"error: vacío\">\n\n;; Validaciones\n(defn validate-name [name]\n  (if (>= (count name) 2)\n    (e/right name)\n    (e/left {:field :name :msg \"Mínimo 2 caracteres\"})))\n\n(defn validate-email [email]\n  (if (clojure.string/includes? email \"@\")\n    (e/right email)\n    (e/left {:field :email :msg \"Email inválido\"})))\n\n;; Pipeline con mlet\n(mc/mlet [name  (validate-name \"Ana\")\n          email (validate-email \"ana@mail.com\")]\n  (mc/return {:name name :email email}))\n;; => #<Right {:name \"Ana\", :email \"ana@mail.com\"}>"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-22",
+      "type": "codigo",
+      "title": "Either \"manual\" en Clojure — mapas de datos",
+      "subtitle": "Funciona, pero sin flatMap genérico el anidamiento vuelve a crecer",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": ";; Convención de equipo: mapas con :ok / :error\n(defn validate-name [name]\n  (if (>= (count name) 2)\n    {:ok name}\n    {:error {:field :name :msg \"Mínimo 2 chars\"}}))\n\n(defn validate-email [email]\n  (if (clojure.string/includes? email \"@\")\n    {:ok email}\n    {:error {:field :email :msg \"Email inválido\"}}))\n\n;; Encadenamiento manual — sin librería\n(defn validate-form [name email]\n  (let [r1 (validate-name name)]\n    (if (:error r1)\n      r1\n      (let [r2 (validate-email email)]\n        (if (:error r2)\n          r2\n          {:ok {:name (:ok r1) :email (:ok r2)}})))))\n\n;; Funciona, pero:\n;; - No hay flatMap genérico\n;; - El anidamiento vuelve a crecer\n;; - Es un Either reimplementado con menos ergonomía"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "concepto-abstracto",
+      "title": "Clojure y los errores: datos vs tipos",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Filosofía Clojure"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "\"Los datos son la interfaz universal\""
+            },
+            {
+              "content": "Un mapa `{:ok v}` / `{:error e}` es un Either de facto"
+            },
+            {
+              "content": "No se necesita librería para modelar éxito/fallo"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El precio de la informalidad"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Sin `flatMap` genérico, el encadenamiento es manual"
+            },
+            {
+              "content": "Sin tipos, el compilador no verifica exhaustividad"
+            },
+            {
+              "content": "Errores de convención (`:ok` vs `:result`) causan bugs silenciosos"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Criterio"
+        },
+        {
+          "type": "text",
+          "content": "TS: mónadas formales — el sistema de tipos las recompensa\nClojure: datos simples — la filosofía del lenguaje las desincentiva"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Balanza tipo justicia centrada en el plano. Platillo izquierdo: apilamiento desordenado de tres rectángulos pequeños de diferentes tamaños, irregularmente superpuestos. Platillo derecho: caja rectangular sólida con una división interna vertical clara que separa dos mitades simétricas. Fondo blanco. Flat design, bordo y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "tabla-comparativa",
+      "title": "Either: TypeScript vs Clojure",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Aspecto | TypeScript | Clojure |\n|---|---|---|\n| Representación | Tagged union `Left/Right` | `cats/either` o mapa `{:ok/:error}` |\n| Error tipado | `E` es un tipo genérico verificado | String, keyword o mapa — runtime |\n| Encadenamiento | `flatMap` con tipo inferido | `mlet` (cats) o `let`+`if` manual |\n| vs try/catch | Reemplaza completamente | Complementa (`ex-info` sigue siendo común) |\n| Idiomático | Sí (fp-ts `Either`, Effect) | `cats` nicho; mapas convencionales más común |\n| Exhaustividad | Compilador verifica | Programador verifica |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | TypeScript | Clojure |\n|---|---|---|\n| Representación | Tagged union `Left/Right` | `cats/either` o mapa `{:ok/:error}` |\n| Error tipado | `E` es un tipo genérico verificado | String, keyword o mapa — runtime |\n| Encadenamiento | `flatMap` con tipo inferido | `mlet` (cats) o `let`+`if` manual |\n| vs try/catch | Reemplaza completamente | Complementa (`ex-info` sigue siendo común) |\n| Idiomático | Sí (fp-ts `Either`, Effect) | `cats` nicho; mapas convencionales más común |\n| Exhaustividad | Compilador verifica | Programador verifica |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-25",
+      "type": "codigo",
+      "title": "`IO<T>` — la computación como valor",
+      "subtitle": "Separa **qué hacer** de **cuándo hacerlo** — nada se ejecuta hasta `.run()`",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type IO<T> = { run: () => T };\n\nconst ioOf = <T>(value: T): IO<T> =>\n  ({ run: () => value });\n\nconst ioMap = <T, U>(io: IO<T>, f: (x: T) => U): IO<U> =>\n  ({ run: () => f(io.run()) });\n\nconst ioFlatMap = <T, U>(io: IO<T>, f: (x: T) => IO<U>): IO<U> =>\n  ({ run: () => f(io.run()).run() });"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-26",
+      "type": "codigo",
+      "title": "Pipeline IO: leer → transformar → escribir",
+      "subtitle": "Los efectos se ejecutan solo al final con `program.run()`",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const readLine: IO<string> =\n  ({ run: () => prompt(\"Ingrese su nombre:\") ?? \"\" });\n\nconst greet = (name: string): IO<string> =>\n  ({ run: () => {\n    const msg = `Hola, ${name.toUpperCase()}!`;\n    console.log(msg);\n    return msg;\n  }});\n\n// Composición: nada se ejecuta al definir el pipeline\nconst program: IO<string> = ioFlatMap(readLine, greet);\n\n// Ejecución: un solo punto de entrada con efectos\nprogram.run();"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-27",
+      "type": "codigo",
+      "title": "IO en Clojure: ¿necesaria?",
+      "subtitle": "`delay` y closures cumplen el rol de diferir efectos; `core.async` compone efectos asincrónicos",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": ";; Clojure es impuro por defecto — los efectos son directos\n(println \"Hola\")  ; efecto inmediato, sin wrapper\n\n;; Pero podemos diferir con closures (thunks)\n(def read-input\n  (fn [] (read-line)))  ; no se ejecuta hasta invocar\n\n;; O con delay (evaluación lazy de un solo uso)\n(def greeting\n  (delay (str \"Hola, \" (read-line))))\n\n@greeting  ; force: ejecuta y cachea resultado\n\n;; core.async: composición de efectos asincrónicos\n(require '[clojure.core.async :refer [go <! >! chan]])\n(def c (chan))\n(go (>! c (str \"Hola, \" (<! (go (read-line))))))"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-28",
+      "type": "tabla-comparativa",
+      "title": "IO: TypeScript vs Clojure",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Aspecto | TypeScript | Clojure |\n|---|---|---|\n| Necesidad | Alta — separa puro de impuro | Baja — el lenguaje es pragmáticamente impuro |\n| Representación | `{ run: () => T }` | Thunks, `delay`, closures |\n| Ejecución diferida | `.run()` explícito | `@delay` o `(force d)` |\n| Composición de efectos | `ioFlatMap` | `core.async` / `go` blocks |\n| Filosofía | Pureza por tipo | Control por convención |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | TypeScript | Clojure |\n|---|---|---|\n| Necesidad | Alta — separa puro de impuro | Baja — el lenguaje es pragmáticamente impuro |\n| Representación | `{ run: () => T }` | Thunks, `delay`, closures |\n| Ejecución diferida | `.run()` explícito | `@delay` o `(force d)` |\n| Composición de efectos | `ioFlatMap` | `core.async` / `go` blocks |\n| Filosofía | Pureza por tipo | Control por convención |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-29",
+      "type": "concepto-abstracto",
+      "title": "Las tres leyes que toda mónada debe cumplir",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "1. Identidad izquierda"
+        },
+        {
+          "type": "text",
+          "content": "`of(a).flatMap(f) === f(a)`\n\nEnvolver y aplicar = aplicar directamente"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "2. Identidad derecha"
+        },
+        {
+          "type": "text",
+          "content": "`m.flatMap(of) === m`\n\nEnvolver lo que ya está envuelto no cambia nada"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "3. Asociatividad"
+        },
+        {
+          "type": "text",
+          "content": "`m.flatMap(f).flatMap(g) === m.flatMap(x => f(x).flatMap(g))`\n\nEl orden de agrupación no importa"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Fondo oscuro. Tres rectángulos blancos enmarcados con borde gris claro, apilados verticalmente con espaciado uniforme en el centro. A la derecha de cada rectángulo, un checkmark (tilde) verde. Los tres rectángulos tienen el mismo tamaño y alineación. Estilo pizarra académica. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-30",
+      "type": "codigo",
+      "title": "Verificación con tests — TypeScript",
+      "subtitle": "Las tres leyes de identidad y asociatividad verificadas en tiempo de ejecución",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// 1. Identidad izquierda: of(a).flatMap(f) === f(a)\nconst f = (x: number): Maybe<number> => just(x * 2);\nconst a = 5;\nconsole.assert(\n  JSON.stringify(flatMap(of(a), f)) === JSON.stringify(f(a)),\n  \"Ley 1 — identidad izquierda\"\n);\n\n// 2. Identidad derecha: m.flatMap(of) === m\nconst m = just(10);\nconsole.assert(\n  JSON.stringify(flatMap(m, of)) === JSON.stringify(m),\n  \"Ley 2 — identidad derecha\"\n);\n\n// 3. Asociatividad:\n//    m.flatMap(f).flatMap(g) === m.flatMap(x => f(x).flatMap(g))\nconst g = (x: number): Maybe<string> => just(`val: ${x}`);\nconst lhs = flatMap(flatMap(m, f), g);\nconst rhs = flatMap(m, x => flatMap(f(x), g));\nconsole.assert(\n  JSON.stringify(lhs) === JSON.stringify(rhs),\n  \"Ley 3 — asociatividad\"\n);"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-31",
+      "type": "codigo",
+      "title": "Verificación en el REPL — Clojure",
+      "subtitle": "Las tres leyes verificadas con `assert` usando `cats` — pasan ✓",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": "(require '[cats.monad.maybe :as m])\n(require '[cats.core :as mc])\n\n;; 1. Identidad izquierda: (bind (return a) f) == (f a)\n(let [f (fn [x] (m/just (* x 2)))\n      a 5]\n  (assert (= (mc/bind (mc/return m/context a) f)\n             (f a))))\n\n;; 2. Identidad derecha: (bind m return) == m\n(let [mv (m/just 10)]\n  (assert (= (mc/bind mv mc/return)\n             mv)))\n\n;; 3. Asociatividad:\n;;    (bind (bind m f) g) == (bind m (fn [x] (bind (f x) g)))\n(let [mv (m/just 10)\n      f  (fn [x] (m/just (* x 2)))\n      g  (fn [x] (m/just (str \"val: \" x)))]\n  (assert (= (mc/bind (mc/bind mv f) g)\n             (mc/bind mv (fn [x] (mc/bind (f x) g))))))\n;; Las tres pasan ✓"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-32",
+      "type": "concepto-abstracto",
+      "title": "`Promise` es (casi) una mónada",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`Promise.resolve` = `of` · `.then` = `flatMap` (cuando devuelve otra Promise)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Diferencia clave"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Promise es **eager** (se ejecuta al crearla)"
+            },
+            {
+              "content": "Una mónada IO es **lazy** (se ejecuta con `.run()`)"
+            },
+            {
+              "content": "Promise aplana automáticamente — no existe `Promise<Promise<T>>`"
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Promise.resolve = of\nconst p = Promise.resolve(42);\n\n// .then = flatMap (cuando devolvemos otra Promise)\np.then(x => Promise.resolve(x * 2))\n .then(x => console.log(x));  // 84\n\n// Diferencia: Promise es eager (se ejecuta al crearla)\n// Una mónada IO es lazy (se ejecuta con .run())\n// Promise aplana automáticamente — no existe Promise<Promise<T>>"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Paquete envuelto en papel con lazo en la parte superior. Flecha gruesa hacia la derecha. A la derecha: la misma caja con la tapa levantada en diagonal y un círculo brillante bordo en su interior que emite líneas cortas radiales hacia afuera. Fondo blanco. Flat design, bordo y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-33",
+      "type": "tabla",
+      "title": "Patrones monádicos en APIs existentes",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| API | `of` equivalente | `flatMap` equivalente | Efecto |\n|---|---|---|---|\n| `Promise<T>` | `Promise.resolve(v)` | `.then(f)` | Asincronía |\n| `Array<T>` | `[v]` | `.flatMap(f)` | No-determinismo |\n| `?.` (optional chaining) | valor presente | `x?.prop` | Opcionalidad |\n| `some->` (Clojure) | valor no-nil | threading que corta en nil | Maybe implícito |\n| `for` (Clojure) | `[v]` | comprehension con `:let` | List monad |\n| `go` blocks | canal con valor | `<!` dentro de `go` | Async/IO |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| API | `of` equivalente | `flatMap` equivalente | Efecto |\n|---|---|---|---|\n| `Promise<T>` | `Promise.resolve(v)` | `.then(f)` | Asincronía |\n| `Array<T>` | `[v]` | `.flatMap(f)` | No-determinismo |\n| `?.` (optional chaining) | valor presente | `x?.prop` | Opcionalidad |\n| `some->` (Clojure) | valor no-nil | threading que corta en nil | Maybe implícito |\n| `for` (Clojure) | `[v]` | comprehension con `:let` | List monad |\n| `go` blocks | canal con valor | `<!` dentro de `go` | Async/IO |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-34",
+      "type": "diagrama",
+      "title": "De Functor a Monad",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Jerarquía de abstracciones"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Functor**: tiene `map` — transforma el valor dentro del contexto"
+            },
+            {
+              "content": "**Applicative**: tiene `ap` — aplica función envuelta a valor envuelto"
+            },
+            {
+              "content": "**Monad**: tiene `flatMap`/`bind` — encadena operaciones que producen contexto"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En Haskell (contraste notacional)"
+        },
+        {
+          "type": "text",
+          "content": "No necesitamos aprender Haskell — pero toda la terminología viene de ahí"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "haskell",
+          "content": "class Functor f where\n  fmap :: (a -> b) -> f a -> f b\n\nclass Functor f => Applicative f where\n  pure :: a -> f a\n  (<*>) :: f (a -> b) -> f a -> f b\n\nclass Applicative m => Monad m where\n  return :: a -> m a\n  (>>=) :: m a -> (a -> m b) -> m b"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Tres círculos concéntricos. El más externo: anillo azul claro de grosor uniforme. El medio: anillo verde de igual grosor. El más interno: disco sólido violeta. Los tres centrados en el mismo punto. Fondo blanco. Flat design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-35",
+      "type": "codigo",
+      "title": "Ecosistema industrial TypeScript",
+      "subtitle": "fp-ts (2019+, maduro) vs Effect (2023+, nueva generación con do-notation y tipado de errores)",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// fp-ts — Option (= Maybe)\nimport { pipe } from 'fp-ts/function';\nimport * as O from 'fp-ts/Option';\n\nconst result = pipe(\n  O.fromNullable(findUser(1)),\n  O.flatMap(u => O.fromNullable(getAddress(u))),\n  O.map(a => a.postalCode),\n  O.getOrElse(() => \"N/A\")\n);\n\n// Effect — nueva generación\nimport { Effect, pipe } from 'effect';\n\nconst program = pipe(\n  Effect.tryPromise(() => fetch('/api/user/1')),\n  Effect.flatMap(res => Effect.tryPromise(() => res.json())),\n  Effect.map(user => user.name)\n);"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-36",
+      "type": "codigo",
+      "title": "Ecosistema monádico en Clojure",
+      "subtitle": "`cats` = estándar de mónadas · `manifold` = promesas composicionales · `missionary` = reactive streams",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": ";; cats (funcool) — la librería estándar de mónadas\n(require '[cats.core :as mc])\n(require '[cats.monad.maybe :as m])\n(require '[cats.monad.either :as e])\n\n;; manifold — async con deferred (mónada de promesas)\n(require '[manifold.deferred :as d])\n(def resultado (d/chain (d/future (fetch-data))\n                        parse-json\n                        extract-name))\n\n;; missionary — reactive streams con composición monádica\n;; (mencionamos, no profundizamos)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-37",
+      "type": "concepto-abstracto",
+      "title": "Mónadas para pipelines seguros",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El pipeline"
+        },
+        {
+          "type": "text",
+          "content": "Cada paso puede fallar: prompt malformado, LLM timeout, JSON inválido, validación rechazada."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En TypeScript: `Either<Error, T>`"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En Clojure: `go` + mapas `{:ok/:error}`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const pipeline =\n  flatMap(buildPrompt(input), prompt =>\n    flatMap(callLLM(prompt), raw =>\n      flatMap(parseJSON(raw), parsed =>\n        validateResponse(parsed)\n      )\n    )\n  );"
+        },
+        {
+          "lang": "clojure",
+          "content": "(go\n  (let [prompt (<! (build-prompt input))\n        raw    (when (:ok prompt) (<! (call-llm (:ok prompt))))\n        parsed (when raw (parse-json raw))]\n    (if parsed\n      (validate-response parsed)\n      {:error \"Pipeline falló\"})))"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Cinco rectángulos bordo en fila horizontal conectados por flechas delgadas. Cada rectángulo está envuelto en un contorno externo secundario más grande (doble borde exterior). Las flechas entre los contornos externos son más gruesas que las internas. Fondo blanco. Flat design, bordo y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-38",
+      "type": "socratica",
+      "title": "Discusión: ¿todo debería ser monádico?",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Preguntas para la clase"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Si el compilador no te obliga a usar mónadas, ¿por qué hacerlo?"
+            },
+            {
+              "content": "¿`some->` y mapas `{:ok/:error}` son \"suficiente mónada\" para Clojure?"
+            },
+            {
+              "content": "¿En qué lenguaje es más natural usar mónadas explícitas? ¿Por qué?"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tesis contrapuestas"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**TS**: el sistema de tipos *recompensa* las mónadas — inferencia, autocompletado, errores en compilación"
+            },
+            {
+              "content": "**Clojure**: la filosofía de \"datos simples\" hace que las mónadas formales sean menos idiomáticas"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Conclusión provisoria"
+        },
+        {
+          "type": "text",
+          "content": "El concepto es universal; la forma de expresarlo depende del lenguaje. Usá mónadas cuando el error o efecto es parte explícita del dominio. No para sumar dos números."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-39",
+      "type": "tabla-comparativa",
+      "title": "Mapa comparativo final",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Patrón común"
+        },
+        {
+          "type": "text",
+          "content": "Todas comparten: `of` (envolver) + `flatMap` (encadenar) + leyes"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Diferencia esencial"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "TS: mónadas como **tipos** que el compilador verifica"
+            },
+            {
+              "content": "Clojure: patrones monádicos como **convenciones** que el programador respeta"
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Mónada | Efecto | TypeScript | Clojure |\n|---|---|---|---|\n| `Maybe` | Opcionalidad | Tagged union `Just/Nothing` | `nil` + `some->` / `cats/maybe` |\n| `Either` | Error tipado | Tagged union `Left/Right` | `cats/either` / mapa `{:ok/:error}` |\n| `IO` | Efectos laterales | `{ run: () => T }` | Thunks / `delay` / `core.async` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Mónada | Efecto | TypeScript | Clojure |\n|---|---|---|---|\n| `Maybe` | Opcionalidad | Tagged union `Just/Nothing` | `nil` + `some->` / `cats/maybe` |\n| `Either` | Error tipado | Tagged union `Left/Right` | `cats/either` / mapa `{:ok/:error}` |\n| `IO` | Efectos laterales | `{ run: () => T }` | Thunks / `delay` / `core.async` |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-40",
+      "type": "tabla",
+      "title": "Guía de decisión",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Situación | Mónada | ¿Por qué? |\n|---|---|---|\n| Valor puede no existir (búsqueda, campo opcional) | `Maybe` | Elimina null checks |\n| Operación puede fallar con mensaje tipado | `Either` | Error explícito en el tipo |\n| Operación tiene efectos (I/O, red, consola) | `IO` | Separa descripción de ejecución |\n| Operación asíncrona | `Promise` (TS) / `core.async` (Clj) | Efecto temporal |\n| Múltiples resultados posibles | `Array.flatMap` / `for` (Clj) | No-determinismo |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Situación | Mónada | ¿Por qué? |\n|---|---|---|\n| Valor puede no existir (búsqueda, campo opcional) | `Maybe` | Elimina null checks |\n| Operación puede fallar con mensaje tipado | `Either` | Error explícito en el tipo |\n| Operación tiene efectos (I/O, red, consola) | `IO` | Separa descripción de ejecución |\n| Operación asíncrona | `Promise` (TS) / `core.async` (Clj) | Efecto temporal |\n| Múltiples resultados posibles | `Array.flatMap` / `for` (Clj) | No-determinismo |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-41",
+      "type": "diagrama",
+      "title": "Lo que vimos hoy",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Problema**: encadenar operaciones que pueden fallar, ser nulas, o tener efectos"
+            },
+            {
+              "content": "**Solución**: un patrón con `of` + `flatMap` → mónada"
+            },
+            {
+              "content": "**Maybe**: opcionalidad (TS: `Just/Nothing` | Clj: `nil`/`some->`)"
+            },
+            {
+              "content": "**Either**: error tipado (TS: `Left/Right` | Clj: `cats/either` o mapas)"
+            },
+            {
+              "content": "**IO**: efectos diferidos (TS: `{ run }` | Clj: thunks/delay)"
+            },
+            {
+              "content": "**Leyes**: identidad izquierda, identidad derecha, asociatividad"
+            },
+            {
+              "content": "**El concepto es universal** — la forma de expresarlo depende del lenguaje"
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Árbol jerárquico descendente. Un rectángulo bordo en la cima. Tres líneas diagonales hacia abajo conectan a tres rectángulos grises en el nivel medio. Desde cada rectángulo medio, dos líneas hacia abajo conectan a dos rectángulos pequeños gris claro. Seis rectángulos en la base. Fondo blanco. Flat design, bordo y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-42",
+      "type": "socratica",
+      "title": "Preguntas para verificar comprensión",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "¿Cuándo usar Maybe vs Either?"
+            },
+            {
+              "content": "¿Por qué `flatMap` y no solo `map`?"
+            },
+            {
+              "content": "¿Clojure necesita mónadas formales o le alcanza con `some->` y mapas?"
+            },
+            {
+              "content": "¿`Promise.then` cumple las tres leyes monádicas?"
+            },
+            {
+              "content": "¿Cuál de las tres leyes garantiza que podemos refactorizar el orden de los `flatMap`?"
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-43",
+      "type": "concepto-abstracto",
+      "title": "Próximamente: FP en Python y ecosistema IA",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Funcional en Python: `map`, `filter`, `reduce`, `functools`, decoradores"
+            },
+            {
+              "content": "Dataclasses inmutables y pattern matching (3.10+)"
+            },
+            {
+              "content": "Pipeline funcional para IA: `langchain`, `pydantic`, monads en Python"
+            },
+            {
+              "content": "Contraste: TS (tipos fuertes) vs Clojure (datos simples) vs Python (pragmático)"
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-44",
+      "type": "cierre",
+      "title": "Mónadas: el patrón más poderoso que ya estaban usando",
+      "subtitle": "`Promise.then`, `Array.flatMap`, `some->`, `?.` — ya las conocían.\nAhora saben por qué funcionan.\n\nParadigmas y Lenguajes de Programación 2026 — UNTDF / IDEI",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Fondo oscuro profundo azul casi negro. Tres rectángulos luminosos con bordes brillantes en fila horizontal. Cada rectángulo emite un suave resplandor exterior. Flechas gruesas bordo conectan los rectángulos entre sí. La flecha del centro es ligeramente más ancha que las exteriores. Flat design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    }
+  ]
+}
