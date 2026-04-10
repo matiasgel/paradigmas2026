@@ -66,3 +66,8 @@ salida/cursadas/*/students/
 # IDE
 .vscode/
 .idea/
+salida/cursadas/2026/temas/04-funcional-avanzado/slides/**
+ingesta/*
+
+# Cursada iapjn-2026 — NO pertenece a este repo
+salida/cursadas/iapjn-2026/
