@@ -755,7 +755,7 @@ Ejecutar los tres `console.assert` en vivo. Mostrar que ninguno falla.
 - `Promise.resolve(42)` = `of(42)`. Envuelve un valor en el contexto de asincronía.
 - `.then(f)` = `flatMap(f)` cuando `f` devuelve una Promise. JavaScript aplana automáticamente `Promise<Promise<T>>` a `Promise<T>`.
 - **¿Por qué "casi" mónada?** Promise es *eager*: se empieza a ejecutar al crearla. IO es *lazy*: no se ejecuta hasta `.run()`. Promise viola la pureza pero cumple (casi) las leyes.
-- Promise no cumple *estrictamente* la ley de identidad izquierda por el aplanamiento automático en edge cases con `then`, pero en la práctica funciona como mónada.
+- Promise no cumple *estrictamente* la ley de identidad izquierda por el aplanamiento automático en casos límite con `then`, pero en la práctica funciona como mónada.
 
 **▶ Pregunta:**
 > "Si `Promise.then` es `flatMap`, ¿qué efecto modela Promise?"
@@ -772,7 +772,7 @@ Ejecutar los tres `console.assert` en vivo. Mostrar que ninguno falla.
 > "Cada fila de esta tabla es un patrón monádico que ya estaban usando."
 
 **▶ Recorrer la tabla fila por fila:**
-- `Array.flatMap`: "si tenemos `[1,2,3]` y una función que devuelve arrays, `flatMap` aplana el resultado. Es la List monad — no determinismo."
+- `Array.flatMap`: "si tenemos `[1,2,3]` y una función que devuelve arrays, `flatMap` aplana el resultado. Es la List monad — no-determinismo."
 - `?.` optional chaining: "es Maybe sin el tipo. `user?.address?.postalCode` corta en undefined."
 - `some->` en Clojure: "ya lo vimos — Maybe implícito."
 - `for` en Clojure: "comprehension con bindings — es la List monad con syntactic sugar."
