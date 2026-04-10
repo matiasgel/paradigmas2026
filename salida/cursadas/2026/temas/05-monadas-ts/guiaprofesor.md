@@ -201,7 +201,7 @@ Tesis de Chalmers que implementa Maybe, Either y IO en JavaScript/TypeScript y e
 
 | Señal | Acción |
 |---|---|
-| Alumnos confundidos en F-06 (map vs flatMap) | Parar. Hacer ejemplo en la pizarra con cajas: `map` anida, `flatMap` aplana. Repetir con otro ejemplo. |
+| Alumnos confundidos en F-06c (map vs flatMap) | Parar. Hacer ejemplo en la pizarra con cajas: `map` anida, `flatMap` aplana. Repetir con otro ejemplo. |
 | "¿Y esto para qué sirve?" | Volver a F-02: el código con if/null anidados. "¿Prefieren esto o el pipeline con flatMap?" |
 | Discusión TS vs Clojure se alarga | Cortar con: "no hay lenguaje mejor — hay compromisos distintos. Avanzamos y vuelven al tema en la autoevaluación." |
 | Alumnos piensan que todo debe ser monádico | F-38: "Usá mónadas cuando el error o efecto es parte del dominio. No para sumar dos números." |
