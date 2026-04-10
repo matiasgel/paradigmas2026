@@ -183,7 +183,7 @@ const postal = flatMap(
 
 Una **mónada** es un tipo con dos operaciones:
 - `of` / `return`: meter un valor en el contexto (la caja)
-- `flatMap` / `bind` / `>>=`: encadenar una función que ya devuelve un contexto, aplanando
+- `flatMap` / `bind` / `>>=`: encadenar una función que ya devuelve un contexto, aplanando el resultado
 
 ---
 
