@@ -55,7 +55,7 @@ Si alguno de estos puntos no está sólido, repasá primero el Tema 04.
 
 ## Desarrollo Teórico
 
-### Bloque 1 — El problema del encadenamiento (F-02 a F-07)
+### Bloque 1 — El problema del encadenamiento (F-02, F-03, F-04, F-05, F-06, F-06b, F-06c, F-07)
 
 #### 1.1 Motivación: ¿por qué necesitamos mónadas?
 
