@@ -123,7 +123,7 @@ Enfoque: construcción progresiva del concepto de mónada — desde la motivaci�
     | vs try/catch | Reemplaza por completo | Complementa (Clojure usa ex-info) |
     | Idiomático | Sí (fp-ts `Either`, Effect) | `cats/either` nicho; mapas convencionales más común |
 
-### Bloque 4 — IO, leyes monádicas y mónadas en el mundo real (25 min)
+### Bloque 4 — IO, leyes monádicas y mónadas en el mundo real (28 min)
 
 - **IO en TypeScript (7 min)**:
   - Definir `type IO<T> = { run: () => T }` — la computación como valor.
