@@ -22,6 +22,19 @@ env/
 salida/cursadas/*/temas/*/slides/assets/
 salida/cursadas/*/temas/*/slides/slides-url.txt
 
+# Imágenes generadas (todas las extensiones comunes)
+salida/cursadas/*/temas/*/slides/assets/*.png
+salida/cursadas/*/temas/*/slides/assets/*.jpg
+salida/cursadas/*/temas/*/slides/assets/*.jpeg
+salida/cursadas/*/temas/*/slides/assets/*.gif
+salida/cursadas/*/temas/*/slides/assets/*.webp
+# Imágenes sueltas en la raíz del tema
+salida/cursadas/*/temas/*/*.png
+salida/cursadas/*/temas/*/*.jpg
+salida/cursadas/*/temas/*/*.jpeg
+salida/cursadas/*/temas/*/*.gif
+salida/cursadas/*/temas/*/*.webp
+
 # Test runs (generados por test_pipeline.py)
 reporte/
 
