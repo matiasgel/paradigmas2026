@@ -477,7 +477,7 @@ Ejecutar con datos válidos e inválidos. Mostrar cómo el error se propaga con 
 **Tiempo:** 3 min
 
 **▶ Al mostrar la tabla**
-> "Dos filosofías para el manejo de errores. Neither is always better — depende del contexto."
+> "Dos filosofías para el manejo de errores. Ninguna es siempre mejor — depende del contexto."
 
 **Conceptos clave para desarrollar:**
 - **Flujo implícito** (`try/catch`): el error salta stack frames hasta encontrar un `catch`. Si nadie lo atrapa, crash. El programador no ve el error en la firma de la función.
