@@ -1,125 +1,125 @@
 # Diseño del Tema 04 — Aspectos Avanzados de Programación Funcional
 
-> ESTADO: APROBADO
-> Aprobado por docente: Matías Gel
-> Fecha de aprobación: 2026-04-07
+> ESTADO: REABIERTO
+> Reabierto para rediseño de alcance y filminas.
 
 Duración de clase: 120 minutos
-Enfoque: comparación aplicada entre TypeScript y Clojure, con atención a patrones avanzados, abstracciones funcionales y manejo de efectos.
+Enfoque: profundizar en programación funcional con ejemplos en Clojure y TypeScript, centrándose en funciones de orden superior, aplicación parcial, currying, recursión de cola y otros patrones avanzados. Se evita la concurrencia para no sobrecargar el tema en 120 minutos.
 
 ## 1. Objetivos de aprendizaje
 
-1. Comprender cómo se expresan los patrones funcionales avanzados en TypeScript y Clojure.
-2. Analizar diferencias clave entre un lenguaje con tipado estructural estático y uno dinámico homoicónico.
-3. Aplicar transformaciones de datos usando composabilidad, funciones puras, transducers y colecciones inmutables.
-4. Diseñar una solución funcional que combine `higher-order functions`, `algebraic data types` y manejo de errores con `Result` / `Either`.
-5. Identificar cuándo usar abstracciones de concurrencia y efectos en Clojure (`core.async`, `agents`, `STM`) versus promesas/async en TypeScript.
+1. Entender cómo `higher-order functions` y `first-class functions` permiten construir abstracciones reutilizables.
+2. Aprender a usar aplicación parcial y currying para crear APIs funcionales más expresivas.
+3. Dominar la recursión de cola en Clojure como alternativa a bucles imperativos.
+4. Aplicar funciones avanzadas de programación funcional en Clojure con claridad y composabilidad.
+5. Comparar conceptos de Clojure con implementaciones idiomáticas en TypeScript, sin caer en temas de concurrencia.
+6. Reconocer usos prácticos de los patrones funcionales en TypeScript en el desarrollo web: validación de formularios, composición de middleware/handlers y pipelines de transformación de datos.
 
 ## 2. Prerrequisitos
 
 - Conocimiento de programación funcional básica en TypeScript (Tema 03).
 - Comprensión de inmutabilidad, funciones puras, `map`, `filter`, `reduce`.
-- Familiaridad con sintaxis básica de TypeScript y conceptos de Clojure elementales.
-- Entender tipos de unión y alias en TypeScript.
+- Familiaridad básica con sintaxis de Clojure y estructura de listas.
+- Conocimiento de tipos de función y alias en TypeScript.
 
 ## 3. Alcance del tema
 
 ### Incluye
 
-- Composición y pipes de funciones.
-- Patrones avanzados de manipulación de colecciones: transducers en Clojure y equivalente en TypeScript.
-- Algebraic data types en TypeScript y estructuras de datos funcionales en Clojure.
-- Manejo de errores funcional: `Result` / `Either`, `Option` / `Maybe`.
-- Inmutabilidad y estados definidos por datos.
-- Abstracciones de concurrencia y efectos: `core.async`, `agents`, `STM`, y comparativa con `Promise` / `async-await` en TypeScript.
-- Diseño de APIs funcionales en TypeScript con tipos genéricos y funciones de orden superior.
-- Uso de macros de Clojure como herramienta de metaprogramación de dominio específico.
+- Funciones de orden superior en Clojure y TypeScript.
+- Aplicación parcial (`partial application`) y currying como patrones de diseño.
+- Recursión de cola y optimización de llamadas recursivas en Clojure.
+- Patrones avanzados: `compose`, `pipe`, `memoization`, `pattern matching` simples.
+- Modelado de datos con listas y s-expressions en Clojure.
+- Ejemplos prácticos de `fold`/`reduce`, `unfold`, `map`, `filter` y `flatmap`.
+- Uso práctico en TypeScript: validación de formularios, saneamiento de entradas, construcción de middleware/handlers y pipelines de transformación para APIs o UI.
+- Diseño de pequeñas DSLs en Clojure usando funciones de orden superior.
+- Traducción de conceptos a TypeScript para comparar estilos sin profundizar en concurrencia.
 
 ### No incluye
 
-- Implementar un compilador funcional completo.
-- Profundizar en teoría categórica formal ni demostraciones matemáticas de monadas.
-- Cubrir todas las bibliotecas FP de JavaScript/TypeScript (sólo ejemplos representativos).
-- Introducir Haskell como lenguaje principal; se usa sólo como contraste conceptual si es necesario.
+- Abordar concurrency, `core.async`, `STM` ni modelos de efectos asíncronos.
+- Entrar en teoría categórica o construcción de compiladores.
+- Cubrir todas las bibliotecas FP de JavaScript/TypeScript.
+- Investigar frameworks de concurrencia o canales en Clojure.
 
 ## 4. Estructura de la clase (120 minutos)
 
-### Bloque 1 — Fundamentos avanzados (35 min)
+### Bloque 1 — Funciones de orden superior y composición (35 min)
 
-- Revisión rápida de funciones puras y valores inmutables.
-- Composición de funciones y pipelines en TypeScript.
-- Introducción al modelo de colecciones inmutables en Clojure.
-- Ejemplo guiado: transformación de un flujo de datos con `map`/`filter`/`reduce` en TS y Clojure.
+- Repaso rápido de `first-class functions`.
+- Introducción a `map`, `filter`, `reduce` y `fold` en Clojure.
+- Ejemplo guiado: pipeline con listas y transformación de datos en Clojure.
+- Traducción a TypeScript: `compose`, `pipe`, y funciones puras.
 
-### Bloque 2 — Abstracciones y efectos (35 min)
+### Bloque 2 — Aplicación parcial y currying (35 min)
 
-- Algebraic data types en TypeScript: `type`, `union`, `interface` y `readonly`.
-- Patrón `Result` / `Either` para manejo de errores sin excepciones.
-- En Clojure: secuencias perezosas, transducers y `defrecord`.
-- Ejercicio corto: modelar una operación de validación de formulario con resultados funcionales.
+- Concepto de función parcial y función curried.
+- Ejemplos en Clojure con `lambda` y funciones de orden superior.
+- Ejemplos en TypeScript con funciones generadoras de `handler`, validación de formularios y configuración de middleware.
+- Actividad corta: construir un conjunto de funciones configurables con `partial` y `curry`, y aplicar esos patrones a una validación de formulario o pipeline de transformación de datos en una app web.
 
-### Bloque 3 — Concurrencia y metaprogramación (30 min)
+### Bloque 3 — Recursión de cola y patrones avanzados (30 min)
 
-- Clojure `core.async` y canales: pipeline de datos y separación de responsabilidades.
-- Actores leves vs STM: cuándo elegir cada modelo.
-- TypeScript: `Promise`, `async/await`, `Observable` conceptual (no obligatorio), y efectos asíncronos puros.
-- Ejemplo comparativo: consumir datos y aplicar transformaciones continuas en ambos lenguajes.
+- Definición y ventaja de la recursión de cola.
+- Ejemplo de función recursiva de cola en Clojure para recorridos y agregaciones.
+- Transformar bucles imperativos en funciones recursivas de cola.
+- Patrón `memoization` y `lazy sequences` simples en Clojure/TypeScript.
 
-### Bloque 4 — Práctica guiada y reflexión (20 min)
+### Bloque 4 — Taller de aplicación y reflexión (20 min)
 
-- Taller en parejas: implementar en TypeScript y en Clojure el mismo problema funcional.
-- Verificación cruzada: comparar soluciones, detectar similitudes y diferencias conceptuales.
-- Cierre con preguntas clave y síntesis de diferencias entre los dos enfoques.
+- Taller práctico: resolver un problema con Clojure usando `higher-order functions` y recursión de cola.
+- Comparar la solución con una implementación en TypeScript.
+- Cierre con preguntas clave y recomendaciones para aplicar estos patrones en el proyecto.
 
 ## 5. Actividades y artefactos
 
-### Actividad 1 — Transformación de datos reales
+### Actividad 1 — Currying y aplicación parcial
 
-- Input: lista de registros con valores de clientes, estados y resultados.
-- Objetivo: aplicar filtro, mapeo y agregación funcional.
-- Salida: función composable que produce una vista resumida.
-- Tipo: discusión guiada + codificación en TypeScript.
+- Construir funciones de validación y transformación de datos con `curry`.
+- Crear funciones especializadas a partir de una definición genérica.
+- Ejemplo: `make-validator`, `map-with`, `filter-by`.
+- Aplicar el mismo patrón a un pipeline de procesamiento de solicitudes, validación de formularios o composición de middleware en TypeScript.
 
-### Actividad 2 — Manejo funcional de errores
+### Actividad 2 — Recursión de cola en Clojure
 
-- Construir una estructura `Result<T, E>` en TypeScript.
-- En Clojure, usar `either`, `try` controlado y secuencias perezosas para procesar entradas.
-- Validar entradas y encadenar operaciones sin romper la composición.
+- Implementar `sum-tail`, `flatten-tail`, y `walk-list-tail`.
+- Comparar con la versión imperativa y analizar claridad.
+- Discutir cuándo la recursión de cola mejora el diseño funcional.
 
-### Actividad 3 — Comparar modelos de concurrencia
+### Actividad 3 — Proyecto de clase
 
-- Pequeño caso de uso: lectura, transformación y publicación de eventos.
-- En Clojure, bosquejar un pipeline con canales `core.async`.
-- En TypeScript, diseñar la misma lógica con `Promise` y `async/await`.
-- Discusión: cuándo la concurrencia funcional amplifica la claridad y cuándo agrega complejidad.
+- Resolver un mini-problema de análisis de secuencias con funciones compuestas.
+- En Clojure: usar funciones de orden superior para transformar listas de datos.
+- En TypeScript: aplicar el mismo patrón a un caso web real, como transformar datos de formulario/API, encadenar validaciones y construir un pipeline de respuesta.
 
 ## 6. Recursos clave
 
-- Código de ejemplo en TypeScript con tipos genéricos y funciones puras.
-- Notebooks/Clojure REPL para experimentar con `transduce`, `lazy-seq`, y `core.async`.
-- Fragmentos comparativos de Clojure y TypeScript para los patrones centrales.
-- Referencias internas: Tema 03 (fundamentos FP) y Tema 05 (mónadas en TS).
+- Ejemplos de Clojure centrados en listas, `lambda`, `let`, `defn`, `cond`.
+- Fragmentos comparativos en TypeScript para `curry`, `compose`, `partial`.
+- Notas sobre recursión de cola y cómo traducir ideas a JavaScript/TypeScript.
+- Referencias internas: Tema 03 (fundamentos FP) y Tema 05 (mónadas en TS) para continuidad.
 
 ## 7. Indicadores de éxito
 
-- El estudiante puede explicar en voz alta una tubería de datos funcional y su equivalencia en Clojure y TypeScript.
-- Puede identificar cuándo un error debe manejarse con un tipo funcional en vez de excepciones.
-- Puede distinguir un modelo de concurrencia basado en canales de uno basado en promesas.
-- Entiende por qué la inmutabilidad y las abstracciones puras son útiles en ambos lenguajes.
+- El estudiante puede crear una función de orden superior que devuelva otra función.
+- Puede explicar la diferencia entre aplicación parcial y currying.
+- Puede implementar una función recursiva de cola en Clojure y justificar su uso.
+- Puede comparar soluciones en Clojure y TypeScript sin mencionar concurrency.
 
 ## 8. Riesgos y mitigaciones
 
-- Riesgo: los estudiantes se enredan en la sintaxis de Clojure. Mitigación: usar ejemplos cortos y centrados en datos, no en macros complejas.
-- Riesgo: intentar cubrir demasiadas bibliotecas FP. Mitigación: priorizar patrones nativos y conceptos antes que librerías externas.
-- Riesgo: confundir abstracción con complejidad. Mitigación: mantener los ejemplos alineados con un mismo dominio simple.
+- Riesgo: los alumnos se distraen con sintaxis de Clojure. Mitigación: usar ejemplos cortos y directos, centrados en listas y funciones.
+- Riesgo: confundir currying con composición. Mitigación: presentar ambos patrones con ejemplos paralelos claros.
+- Riesgo: intentar abarcar demasiados temas avanzados. Mitigación: priorizar tres núcleos: HOF, partial/curry y tail recursion.
 
 ## 9. Notas para la producción posterior
 
-- `minuta.md` debe traducir los bloques en actividades de clase concretas y tiempos de ejecución.
-- `filminas.md` debe incluir diagramas de tuberías de datos, comparativas lado a lado y código compacto.
-- `tp.md` debe solicitar una implementación funcional y una reflexión sobre la elección de modelo de efectos.
-- `score-pedagogico.md` debe evaluar comprensión de abstracciones, no sólo sintaxis.
+- `minuta.md` debe reflejar los bloques como retos concretos y actividades de codificación.
+- `filminas.md` debe mostrar código Clojure claro y compararlo con TypeScript en conceptos.
+- `tp.md` debe pedir una implementación funcional y una breve justificación de la elección de patrones.
+- `score-pedagogico.md` debe evaluar comprensión de currying, aplicación parcial y recursión de cola.
 
 ---
 
-> Nota: este diseño se orienta a que el tema no pierda foco en los patrones avanzados, y evita extenderse hacia teoría categórica o implementación de compiladores. Eso está fuera de scope del Tema 04.
+> Nota: El diseño ahora prioriza Clojure y patrones de programación funcional avanzados, y elimina la concurrencia para mantener el tema manejable en 120 minutos.
