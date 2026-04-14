@@ -1,32 +1,24 @@
 (ns tp04.ej12-test
-  (:require [clojure.test :refer [deftest is testing]]
-            [tp04.ej12 :refer [procesar-pipeline procesar-transducer
-                               totales-pipeline totales-transducer]]))
+  (:require [clojure.test :refer :all]
+            [tp04.ej12 :refer :all]))
 
-(def datos
-  [{:total 300 :activa? true}
-   {:total 80  :activa? false}
-   {:total 150 :activa? true}
-   {:total 50  :activa? true}])
+(deftest test-sum-list
+  (is (= 15 (sum-list [1 2 3 4 5] 0)))
+  (is (= 0 (sum-list [] 0)))
+  (is (= 42 (sum-list [42] 0))))
 
-(deftest test-procesar-pipeline
-  (testing "suma activas con total > 100"
-    (is (= 450 (procesar-pipeline datos))))
-  (testing "lista vacía"
-    (is (= 0 (procesar-pipeline [])))))
+(deftest test-factorial
+  (is (= 120 (factorial 5 1)))
+  (is (= 1 (factorial 0 1)))
+  (is (= 1 (factorial 1 1)))
+  (is (= 3628800 (factorial 10 1))))
 
-(deftest test-procesar-transducer
-  (testing "mismo resultado que pipeline"
-    (is (= 450 (procesar-transducer datos))))
-  (testing "equivalencia con pipeline"
-    (is (= (procesar-pipeline datos) (procesar-transducer datos)))))
+(deftest test-my-reverse
+  (is (= [3 2 1] (my-reverse [1 2 3] [])))
+  (is (= [] (my-reverse [] [])))
+  (is (= [1] (my-reverse [1] []))))
 
-(deftest test-totales-pipeline
-  (testing "vector de totales filtrados"
-    (is (= [300 150] (totales-pipeline datos)))))
-
-(deftest test-totales-transducer
-  (testing "mismo resultado que pipeline"
-    (is (= [300 150] (totales-transducer datos))))
-  (testing "equivalencia"
-    (is (= (totales-pipeline datos) (totales-transducer datos)))))
+(deftest test-my-count
+  (is (= 3 (my-count [10 20 30] 0)))
+  (is (= 0 (my-count [] 0)))
+  (is (= 1 (my-count [:a] 0))))

@@ -1,61 +1,34 @@
+// Tests — Ejercicio 8: Currying
 import { describe, it, expect } from "vitest";
-import { ok, err, mapResult, flatMapResult, dividir } from "../src/ej08.js";
+import { curry2, curry3 } from "../src/ej08";
 
-describe("Ej08 — Result<T, E>", () => {
-  describe("mapResult", () => {
-    it("aplica fn cuando es ok", () => {
-      expect(mapResult(ok(10), (x) => x * 2)).toEqual({ ok: true, value: 20 });
-    });
-
-    it("propaga error sin modificar", () => {
-      expect(mapResult(err("fallo"), (x: number) => x * 2)).toEqual({ ok: false, error: "fallo" });
-    });
-
-    it("cambia el tipo del value", () => {
-      expect(mapResult(ok(42), String)).toEqual({ ok: true, value: "42" });
-    });
+describe("curry2", () => {
+  it("curry de suma", () => {
+    const cAdd = curry2((a: number, b: number) => a + b);
+    expect(cAdd(3)(4)).toBe(7);
   });
-
-  describe("flatMapResult", () => {
-    it("aplica fn que retorna ok", () => {
-      expect(flatMapResult(ok(10), (x) => ok(x + 5))).toEqual({ ok: true, value: 15 });
-    });
-
-    it("aplica fn que retorna error", () => {
-      expect(flatMapResult(ok(10), (_) => err("boom"))).toEqual({ ok: false, error: "boom" });
-    });
-
-    it("propaga error sin ejecutar fn", () => {
-      const fn = (x: number) => ok(x * 2);
-      expect(flatMapResult(err("original"), fn)).toEqual({ ok: false, error: "original" });
-    });
+  it("curry de hasMinLength", () => {
+    const cMin = curry2((min: number, str: string) => str.length >= min);
+    expect(cMin(8)("password123")).toBe(true);
+    expect(cMin(8)("short")).toBe(false);
   });
-
-  describe("dividir", () => {
-    it("divide correctamente", () => {
-      expect(dividir(10, 2)).toEqual({ ok: true, value: 5 });
-    });
-
-    it("retorna error al dividir por cero", () => {
-      expect(dividir(10, 0)).toEqual({ ok: false, error: "División por cero" });
-    });
-
-    it("funciona con decimales", () => {
-      const r = dividir(7, 2);
-      expect(r.ok).toBe(true);
-      if (r.ok) expect(r.value).toBe(3.5);
-    });
+  it("reutilizar funciones parciales", () => {
+    const cMul = curry2((a: number, b: number) => a * b);
+    const doble = cMul(2);
+    const triple = cMul(3);
+    expect(doble(5)).toBe(10);
+    expect(triple(5)).toBe(15);
   });
+});
 
-  describe("composición", () => {
-    it("encadena dividir con mapResult", () => {
-      const r = dividir(10, 2);
-      expect(mapResult(r, (x) => x * 3)).toEqual({ ok: true, value: 15 });
-    });
-
-    it("encadena dos dividir con flatMapResult", () => {
-      const r = flatMapResult(dividir(100, 4), (x) => dividir(x, 5));
-      expect(r).toEqual({ ok: true, value: 5 });
-    });
+describe("curry3", () => {
+  it("curry de 3 argumentos", () => {
+    const cSum3 = curry3((a: number, b: number, c: number) => a + b + c);
+    expect(cSum3(1)(2)(3)).toBe(6);
+  });
+  it("aplicación parcial escalonada", () => {
+    const cConcat = curry3((a: string, b: string, c: string) => a + b + c);
+    const ab = cConcat("a")("b");
+    expect(ab("c")).toBe("abc");
   });
 });

@@ -1,29 +1,22 @@
-(ns tp04.ej12)
+(ns tp04.ej12
+  "Ejercicio 12 — Recursión de cola (6 pts). Trazabilidad: F-24, F-25, F-26")
 
-;; Ejercicio 12 — Transducer vs pipeline
-;; Trazabilidad: F-21
-
-(defn procesar-pipeline
-  "Pipeline clásico con ->>:
-   filtrar activas con :total > 100, extraer :total, sumar."
-  [ordenes]
-  ;; TODO: Implementar con ->>
+;; Suma todos los elementos con acumulador. DEBE usar recur.
+(defn sum-list [nums acc]
+  ;; TODO: implementar
   )
 
-(defn procesar-transducer
-  "Mismo resultado que procesar-pipeline, pero usando transduce."
-  [ordenes]
-  ;; TODO: Implementar con transduce
+;; Factorial con acumulador. DEBE usar recur.
+(defn factorial [n acc]
+  ;; TODO: implementar
   )
 
-(defn totales-pipeline
-  "Pipeline clásico: vector de totales de activas con :total > 100."
-  [ordenes]
-  ;; TODO: Implementar con ->> e into []
+;; Revierte lista con acumulador. DEBE usar recur.
+(defn my-reverse [xs acc]
+  ;; TODO: implementar
   )
 
-(defn totales-transducer
-  "Mismo resultado que totales-pipeline, pero usando into con transducer."
-  [ordenes]
-  ;; TODO: Implementar con into y comp de transducers
+;; Cuenta elementos con acumulador. DEBE usar recur.
+(defn my-count [xs acc]
+  ;; TODO: implementar
   )

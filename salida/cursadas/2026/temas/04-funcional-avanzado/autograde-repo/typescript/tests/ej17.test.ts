@@ -1,43 +1,55 @@
+// Tests — Ejercicio 17: Integrador TypeScript
 import { describe, it, expect } from "vitest";
-import { procesarLote, filtrarAsync } from "../src/ej17.js";
+import { clasificarOrden, aplicarDescuento, procesarOrdenes, Orden } from "../src/ej17";
 
-describe("Ej17 — async/await", () => {
-  describe("procesarLote", () => {
-    it("transforma todos los items", async () => {
-      const result = await procesarLote([1, 2, 3], async (x) => x * 10);
-      expect(result).toEqual([10, 20, 30]);
-    });
+const ordenes: Orden[] = [
+  { id: 1, cliente: "Ana", total: 250, categoria: "elect", activa: true },
+  { id: 2, cliente: "Boris", total: 80, categoria: "ropa", activa: false },
+  { id: 3, cliente: "Carla", total: 420, categoria: "elect", activa: true },
+  { id: 4, cliente: "Diana", total: 50, categoria: "ropa", activa: true },
+];
 
-    it("array vacío", async () => {
-      const result = await procesarLote([], async (x: number) => x);
-      expect(result).toEqual([]);
-    });
-
-    it("transforma con operación async", async () => {
-      const result = await procesarLote(["a", "b"], async (s) => s.toUpperCase());
-      expect(result).toEqual(["A", "B"]);
-    });
+describe("clasificarOrden", () => {
+  it("ok si activa y total > 100", () => {
+    const r = clasificarOrden(ordenes[0]);
+    expect(r.status).toBe("ok");
   });
+  it("error si inactiva", () => {
+    expect(clasificarOrden(ordenes[1])).toEqual({ status: "error", error: "orden inactiva" });
+  });
+  it("error si monto insuficiente", () => {
+    expect(clasificarOrden(ordenes[3])).toEqual({ status: "error", error: "monto insuficiente" });
+  });
+});
 
-  describe("filtrarAsync", () => {
-    it("filtra con predicado async", async () => {
-      const result = await filtrarAsync([1, 2, 3, 4, 5], async (x) => x % 2 === 0);
-      expect(result).toEqual([2, 4]);
-    });
+describe("aplicarDescuento", () => {
+  it("10% de descuento", () => {
+    const desc = aplicarDescuento(10)(ordenes[0]);
+    expect(desc.total).toBe(225);
+    expect(desc.id).toBe(1);
+  });
+  it("0% no cambia", () => {
+    expect(aplicarDescuento(0)(ordenes[0]).total).toBe(250);
+  });
+  it("no muta original", () => {
+    aplicarDescuento(10)(ordenes[0]);
+    expect(ordenes[0].total).toBe(250);
+  });
+});
 
-    it("ninguno pasa el filtro", async () => {
-      const result = await filtrarAsync([1, 3, 5], async (x) => x % 2 === 0);
-      expect(result).toEqual([]);
-    });
-
-    it("todos pasan el filtro", async () => {
-      const result = await filtrarAsync([2, 4, 6], async (x) => x % 2 === 0);
-      expect(result).toEqual([2, 4, 6]);
-    });
-
-    it("preserva el orden", async () => {
-      const result = await filtrarAsync([5, 1, 4, 2, 3], async (x) => x > 2);
-      expect(result).toEqual([5, 4, 3]);
-    });
+describe("procesarOrdenes", () => {
+  it("pipeline completo", () => {
+    const result = procesarOrdenes(ordenes);
+    expect(result.aprobadas).toHaveLength(2);
+    expect(result.rechazadas).toHaveLength(2);
+    expect(result.aprobadas[0].total).toBe(225);
+    expect(result.aprobadas[1].total).toBe(378);
+    expect(result.totalFinal).toBe(603);
+  });
+  it("vacío si no hay órdenes", () => {
+    const result = procesarOrdenes([]);
+    expect(result.aprobadas).toEqual([]);
+    expect(result.rechazadas).toEqual([]);
+    expect(result.totalFinal).toBe(0);
   });
 });

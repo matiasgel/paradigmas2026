@@ -1,36 +1,20 @@
-// Ejercicio 14 — Funciones de orden superior
-// Trazabilidad: F-23
+// Ejercicio 14 — Memoization (5 pts)
+// Trazabilidad: F-28, F-29
 
-/**
- * Retorna una función que aplica f sobre su argumento n veces.
- * aplicarNVeces(f, 0)(x) === x
- * aplicarNVeces(f, 3)(x) === f(f(f(x)))
- */
-export function aplicarNVeces<T>(
-  f: (x: T) => T,
-  n: number
-): (x: T) => T {
-  // TODO: Implementar
-  throw new Error("TODO: Implementar aplicarNVeces");
+// Memoize genérico para funciones de 1 argumento. Usa Map como cache.
+export function memoize<T, R>(fn: (arg: T) => R): (arg: T) => R {
+  throw new Error("TODO: implementar");
 }
 
-/**
- * Retorna una función que multiplica su argumento por factor.
- */
-export function crearMultiplicador(
-  factor: number
-): (x: number) => number {
-  // TODO: Implementar
-  throw new Error("TODO: Implementar crearMultiplicador");
+// Fibonacci recursivo clásico (sin memo).
+export function fibonacci(n: number): number {
+  throw new Error("TODO: implementar");
 }
 
-/**
- * Convierte una función de 2 argumentos en una función curried.
- * curry2(f)(a)(b) === f(a, b)
- */
-export function curry2<A, B, R>(
-  f: (a: A, b: B) => R
-): (a: A) => (b: B) => R {
-  // TODO: Implementar
-  throw new Error("TODO: Implementar curry2");
+// Wrapper que cuenta llamadas. Retorna { call, count }.
+export function callCounter<A extends unknown[], R>(fn: (...args: A) => R): {
+  call: (...args: A) => R;
+  count: () => number;
+} {
+  throw new Error("TODO: implementar");
 }

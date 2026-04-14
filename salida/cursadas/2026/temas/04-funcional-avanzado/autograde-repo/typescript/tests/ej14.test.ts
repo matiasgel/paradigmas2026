@@ -1,55 +1,48 @@
+// Tests — Ejercicio 14: Memoization
 import { describe, it, expect } from "vitest";
-import { aplicarNVeces, crearMultiplicador, curry2 } from "../src/ej14.js";
+import { memoize, fibonacci, callCounter } from "../src/ej14";
 
-describe("Ej14 — Funciones de orden superior", () => {
-  describe("aplicarNVeces", () => {
-    it("aplica 3 veces", () => {
-      expect(aplicarNVeces((x: number) => x * 2, 3)(1)).toBe(8);
-    });
+describe("fibonacci", () => {
+  it("fib(0) = 0", () => expect(fibonacci(0)).toBe(0));
+  it("fib(1) = 1", () => expect(fibonacci(1)).toBe(1));
+  it("fib(10) = 55", () => expect(fibonacci(10)).toBe(55));
+});
 
-    it("0 veces es identidad", () => {
-      expect(aplicarNVeces((x: number) => x + 100, 0)(5)).toBe(5);
-    });
-
-    it("1 vez aplica una sola vez", () => {
-      expect(aplicarNVeces((x: number) => x + 1, 1)(10)).toBe(11);
-    });
-
-    it("funciona con strings", () => {
-      expect(aplicarNVeces((s: string) => s + "!", 3)("hola")).toBe("hola!!!");
-    });
+describe("memoize", () => {
+  it("retorna mismo resultado", () => {
+    const mFib = memoize(fibonacci);
+    expect(mFib(10)).toBe(55);
+    expect(mFib(10)).toBe(55);
   });
-
-  describe("crearMultiplicador", () => {
-    it("crea multiplicador por 5", () => {
-      expect(crearMultiplicador(5)(7)).toBe(35);
-    });
-
-    it("multiplicar por 0", () => {
-      expect(crearMultiplicador(0)(100)).toBe(0);
-    });
-
-    it("multiplicar por 1 es identidad", () => {
-      expect(crearMultiplicador(1)(42)).toBe(42);
-    });
+  it("cache funciona con counter", () => {
+    let calls = 0;
+    const expensive = (n: number) => { calls++; return n * 2; };
+    const mExpensive = memoize(expensive);
+    mExpensive(5);
+    mExpensive(5);
+    mExpensive(5);
+    expect(calls).toBe(1);
   });
+  it("diferentes args se calculan", () => {
+    let calls = 0;
+    const fn = (n: number) => { calls++; return n; };
+    const mFn = memoize(fn);
+    mFn(1);
+    mFn(2);
+    mFn(1);
+    expect(calls).toBe(2);
+  });
+});
 
-  describe("curry2", () => {
-    it("curry suma", () => {
-      const sumar = curry2((a: number, b: number) => a + b);
-      expect(sumar(3)(4)).toBe(7);
-    });
-
-    it("curry concatenación", () => {
-      const concat = curry2((a: string, b: string) => a + b);
-      expect(concat("hola ")("mundo")).toBe("hola mundo");
-    });
-
-    it("aplicación parcial reutilizable", () => {
-      const potencia = curry2((base: number, exp: number) => base ** exp);
-      const cuadrado = potencia(2);
-      expect(cuadrado(3)).toBe(8);
-      expect(cuadrado(10)).toBe(1024);
-    });
+describe("callCounter", () => {
+  it("cuenta llamadas", () => {
+    const counter = callCounter((x: number) => x * 2);
+    expect(counter.call(5)).toBe(10);
+    expect(counter.call(3)).toBe(6);
+    expect(counter.count()).toBe(2);
+  });
+  it("empieza en 0", () => {
+    const counter = callCounter(() => 42);
+    expect(counter.count()).toBe(0);
   });
 });

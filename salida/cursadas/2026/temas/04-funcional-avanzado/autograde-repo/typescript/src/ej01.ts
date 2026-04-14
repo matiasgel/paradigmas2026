@@ -1,5 +1,5 @@
-// Ejercicio 1 — Pipeline filter/map/reduce
-// Trazabilidad: F-06, F-07, F-08
+// Ejercicio 1 — Pipeline filter/map/reduce (5 pts)
+// Trazabilidad: F-04, F-05, F-10
 
 export type Orden = {
   id: number;
@@ -9,19 +9,17 @@ export type Orden = {
   activa: boolean;
 };
 
-/**
- * Filtra las órdenes activas, extrae sus totales y los suma.
- * Restricción: usar solo filter, map, reduce. Sin variables mutables.
- */
+// Filtra órdenes activas, extrae totales y los suma.
 export function filtrarActivasYSumar(ordenes: Orden[]): number {
-  // TODO: Implementar
-  throw new Error("TODO: Implementar filtrarActivasYSumar");
+  throw new Error("TODO: implementar");
 }
 
-/**
- * Filtra las órdenes activas y devuelve un array con sus totales.
- */
+// Filtra las activas y devuelve un array con sus totales.
 export function obtenerTotalesActivas(ordenes: Orden[]): number[] {
-  // TODO: Implementar
-  throw new Error("TODO: Implementar obtenerTotalesActivas");
+  throw new Error("TODO: implementar");
+}
+
+// Cuenta cuántas órdenes hay por cada categoría (usar reduce).
+export function contarPorCategoria(ordenes: Orden[]): Record<string, number> {
+  throw new Error("TODO: implementar");
 }

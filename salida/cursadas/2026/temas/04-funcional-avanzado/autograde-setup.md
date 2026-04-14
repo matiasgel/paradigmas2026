@@ -1,76 +1,89 @@
-# Guía de Publicación — GitHub Classroom Autograding
-## Tema 04: Aspectos Avanzados de Programación Funcional
+# Autograde Setup — TP04 Funcional Avanzado
 
-> **Este archivo es solo para el docente.** NO sube al repo template ni es visible para los alumnos.
+## Datos del repositorio template
 
----
+| Campo | Valor |
+|---|---|
+| **Nombre** | `tp04-funcional-avanzado-template` |
+| **Ejercicios** | 18 (11 TypeScript + 7 Clojure) |
+| **Puntos totales** | 100 |
+| **Framework TS** | vitest |
+| **Framework Clj** | lein test (clojure.test) |
+| **Runner** | `ubuntu-latest` con Node.js 20 + Java 21 Temurin + Leiningen |
 
-## Paso 1: Crear el Template Repo en GitHub
+## Pasos para publicar en GitHub Classroom
 
-1. Ir a github.com → New repository
-2. Nombre: `tp04-funcional-avanzado-template`
-3. Visibilidad: **Private** (recomendado)
-4. Subir el contenido de `autograde-repo/`:
-   ```bash
-   cd salida/cursadas/2026/temas/04-funcional-avanzado/autograde-repo
-   git init
-   git add .
-   git commit -m "Initial template — TP04 Funcional Avanzado"
-   git remote add origin https://github.com/<tu-org>/tp04-funcional-avanzado-template.git
-   git push -u origin main
-   ```
-5. En Settings del repo → marcar ✅ **"Template repository"**
+### 1. Crear repositorio template
 
-## Paso 2: Crear el Assignment en GitHub Classroom
+```bash
+# Desde la carpeta autograde-repo/
+cd autograde-repo
+git init
+git add -A
+git commit -m "initial: tp04 funcional avanzado template"
+git remote add origin https://github.com/UNTDF-IDEI/tp04-funcional-avanzado-template.git
+git push -u origin main
+```
 
-1. Ir a classroom.github.com → tu aula → **New Assignment**
-2. Tipo: **Individual**
-3. Título: "TP 04 — Aspectos Avanzados de Programación Funcional"
-4. Template repository: buscar `tp04-funcional-avanzado-template`
-5. Fecha límite: configurar según el cursado
-6. Autograding: el `classroom.yml` en el template se activa automáticamente con cada push del alumno
-   - Opcionalmente, ir a "Grading and feedback" para revisar o ajustar tests vía la UI
-   - Para usar presets UI: seleccionar "Add autograding test" → los tests del `autograding.json` sirven como guía
-7. Copiar el **Assignment Link** y compartirlo con los alumnos
+En **Settings → General**, marcar **Template repository**.
 
-## Paso 3: Monitoreo
+### 2. Crear assignment en GitHub Classroom
 
-- Panel de classroom.github.com → ver progreso por alumno en tiempo real
-- Los tests corren automáticamente en cada push (y manualmente si se configura `workflow_dispatch`)
-- Ver logs individuales: Assignments → alumno → ícono de checklist → GitHub Actions logs
-- Descargar CSV con puntajes: botón "Download" en la página del assignment
+1. Ir a [classroom.github.com](https://classroom.github.com) → Tu clase
+2. **New assignment** → Individual
+3. **Title**: `TP04 — Programación Funcional Avanzada`
+4. **Template repository**: `UNTDF-IDEI/tp04-funcional-avanzado-template`
+5. **Visibility**: Private
+6. **Grant admin access to students**: No
+7. **Enable feedback pull request**: Sí
 
-## Requisitos del runner (ubuntu-latest)
+### 3. Configurar autograding desde la UI
+
+El archivo `.github/classroom/autograding.json` ya tiene la configuración. Al importar el template, Classroom debería reconocer los 18 tests automáticamente. Si no:
+
+- Ir al assignment → **Test settings**
+- Agregar manualmente cada test con los datos del JSON
+
+### 4. Verificar el workflow
+
+El archivo `.github/workflows/classroom.yml` ejecuta los 18 ejercicios como steps independientes usando `classroom-resources/autograding-command-grader@v1`. Cada step tiene:
+
+- `test-name`: nombre descriptivo
+- `command`: comando de ejecución específico
+- `timeout`: 10 minutos
+- `max-score`: puntos de ese ejercicio
+
+El último step `autograding-grading-reporter@v1` genera el badge de nota.
+
+## Distribución de puntos
+
+| Ej | Tema | Lang | Pts |
+|----|------|------|-----|
+| 01 | Pipeline filter/map/reduce | TS | 5 |
+| 02 | Composición pipe/compose | TS | 6 |
+| 03 | Inmutabilidad con spread | TS | 4 |
+| 04 | Pipeline con ->> | Clj | 5 |
+| 05 | flatMap y reduce | TS | 5 |
+| 06 | Partial application | TS | 6 |
+| 07 | Partial en Clojure | Clj | 5 |
+| 08 | Currying | TS | 6 |
+| 09 | Validadores currying | Clj | 5 |
+| 10 | Result y validación | TS | 7 |
+| 11 | Middleware como HOF | TS | 6 |
+| 12 | Recursión de cola | Clj | 6 |
+| 13 | Recursión de cola | TS | 5 |
+| 14 | Memoization | TS | 5 |
+| 15 | Lazy sequences | Clj | 5 |
+| 16 | DSL data-driven | Clj | 5 |
+| 17 | Integrador | TS | 7 |
+| 18 | Integrador | Clj | 7 |
+| | | **Total** | **100** |
+
+## Requisitos del runner
 
 El workflow instala automáticamente:
-- **Node.js 20** + npm (para TypeScript/Vitest)
-- **Java 21 Temurin** + Leiningen (para Clojure)
-- Dependencias: `npm install` y `lein deps`
+- **Node.js 20** (para TypeScript/vitest)
+- **Java 21 Temurin** (para Clojure)
+- **Leiningen** (se descarga desde GitHub en el step)
 
-No se requiere configuración adicional.
-
-## Trazabilidad de tests → consignas
-
-| Test | Consigna tp.md | Filminas | Lenguaje | Puntos |
-|------|----------------|----------|----------|--------|
-| ej01 | Ejercicio 1 — Pipeline filter/map/reduce | F-06,07,08 | TypeScript | 3 |
-| ej02 | Ejercicio 2 — Composición pipe/compose | F-09 | TypeScript | 5 |
-| ej03 | Ejercicio 3 — Inmutabilidad | F-05,10 | TypeScript | 3 |
-| ej04 | Ejercicio 4 — Pipeline ->> | F-12 | Clojure | 3 |
-| ej05 | Ejercicio 5 — Secuencias perezosas | F-11 | Clojure | 5 |
-| ej06 | Ejercicio 6 — Colecciones persistentes | F-13 | Clojure | 3 |
-| ej07 | Ejercicio 7 — ADT tipo suma | F-14 | TypeScript | 5 |
-| ej08 | Ejercicio 8 — Result\<T,E\> | F-15,16 | TypeScript | 6 |
-| ej09 | Ejercicio 9 — Maybe/Option | F-17 | TypeScript | 5 |
-| ej10 | Ejercicio 10 — Errores como datos | F-18 | Clojure | 5 |
-| ej11 | Ejercicio 11 — Transducer básico | F-19,20 | Clojure | 5 |
-| ej12 | Ejercicio 12 — Transducer vs pipeline | F-21 | Clojure | 5 |
-| ej13 | Ejercicio 13 — API genérica funcional | F-22 | TypeScript | 7 |
-| ej14 | Ejercicio 14 — HOF | F-23 | TypeScript | 5 |
-| ej15 | Ejercicio 15 — core.async canales | F-26,27 | Clojure | 6 |
-| ej16 | Ejercicio 16 — STM transacciones | F-28 | Clojure | 6 |
-| ej17 | Ejercicio 17 — async/await | F-30,31 | TypeScript | 5 |
-| ej18 | Ejercicio 18 — Separar efectos puros | F-32 | TypeScript | 5 |
-| ej19 | Ejercicio 19 — Integrador TypeScript | F-35,36 | TypeScript | 6 |
-| ej20 | Ejercicio 20 — Integrador Clojure | F-37 | Clojure | 7 |
-| | | | **Total** | **100** |
+No se necesitan secrets adicionales ni configuración extra.

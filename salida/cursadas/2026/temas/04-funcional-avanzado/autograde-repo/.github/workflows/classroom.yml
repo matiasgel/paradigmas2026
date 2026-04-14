@@ -15,16 +15,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # ── Setup TypeScript ──────────────────────────────────────────────
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Install TypeScript dependencies
-        run: cd typescript && npm install
-
-      # ── Setup Clojure ─────────────────────────────────────────────────
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -33,206 +28,188 @@ jobs:
 
       - name: Install Leiningen
         run: |
-          mkdir -p ~/bin
-          curl -sL https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -o ~/bin/lein
-          chmod +x ~/bin/lein
-          echo "$HOME/bin" >> $GITHUB_PATH
-          ~/bin/lein version
+          curl -fsSL https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -o /usr/local/bin/lein
+          chmod +x /usr/local/bin/lein
+          lein version
+
+      - name: Install TypeScript dependencies
+        run: cd typescript && npm install
 
       - name: Install Clojure dependencies
         run: cd clojure && lein deps
 
-      # ── BLOQUE 1 — Fundamentos avanzados ──────────────────────────────
+      # ── TypeScript exercises ────────────────────────────────────────────
 
-      - name: "Ejercicio 1 — Pipeline filter/map/reduce (TS)"
+      - name: "Ej01 — Pipeline filter/map/reduce (TS)"
         id: ej01
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: "Ejercicio 1 — Pipeline filter/map/reduce"
-          command: "cd typescript && npx vitest run tests/ej01.test.ts --reporter=verbose 2>&1"
+          test-name: "Ej01 — Pipeline filter/map/reduce"
+          command: "cd typescript && npx vitest run tests/ej01.test.ts"
           timeout: "10"
-          max-score: 3
+          max-score: "5"
 
-      - name: "Ejercicio 2 — Composición pipe/compose (TS)"
+      - name: "Ej02 — Composición pipe/compose (TS)"
         id: ej02
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: "Ejercicio 2 — Composición pipe/compose"
-          command: "cd typescript && npx vitest run tests/ej02.test.ts --reporter=verbose 2>&1"
+          test-name: "Ej02 — Composición pipe/compose"
+          command: "cd typescript && npx vitest run tests/ej02.test.ts"
           timeout: "10"
-          max-score: 5
+          max-score: "6"
 
-      - name: "Ejercicio 3 — Inmutabilidad (TS)"
+      - name: "Ej03 — Inmutabilidad con spread (TS)"
         id: ej03
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: "Ejercicio 3 — Inmutabilidad"
-          command: "cd typescript && npx vitest run tests/ej03.test.ts --reporter=verbose 2>&1"
+          test-name: "Ej03 — Inmutabilidad con spread"
+          command: "cd typescript && npx vitest run tests/ej03.test.ts"
           timeout: "10"
-          max-score: 3
+          max-score: "4"
 
-      - name: "Ejercicio 4 — Pipeline con ->> (Clojure)"
-        id: ej04
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: "Ejercicio 4 — Pipeline con ->>"
-          command: "cd clojure && lein test tp04.ej04-test 2>&1"
-          timeout: "10"
-          max-score: 3
-
-      - name: "Ejercicio 5 — Secuencias perezosas (Clojure)"
+      - name: "Ej05 — flatMap y reduce (TS)"
         id: ej05
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: "Ejercicio 5 — Secuencias perezosas"
-          command: "cd clojure && lein test tp04.ej05-test 2>&1"
+          test-name: "Ej05 — flatMap y reduce"
+          command: "cd typescript && npx vitest run tests/ej05.test.ts"
           timeout: "10"
-          max-score: 5
+          max-score: "5"
 
-      - name: "Ejercicio 6 — Colecciones persistentes (Clojure)"
+      - name: "Ej06 — Partial application (TS)"
         id: ej06
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: "Ejercicio 6 — Colecciones persistentes"
-          command: "cd clojure && lein test tp04.ej06-test 2>&1"
+          test-name: "Ej06 — Partial application"
+          command: "cd typescript && npx vitest run tests/ej06.test.ts"
           timeout: "10"
-          max-score: 3
+          max-score: "6"
 
-      # ── BLOQUE 2 — Abstracciones y efectos ─────────────────────────────
-
-      - name: "Ejercicio 7 — ADT tipo suma (TS)"
-        id: ej07
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: "Ejercicio 7 — ADT tipo suma"
-          command: "cd typescript && npx vitest run tests/ej07.test.ts --reporter=verbose 2>&1"
-          timeout: "10"
-          max-score: 5
-
-      - name: "Ejercicio 8 — Result<T,E> (TS)"
+      - name: "Ej08 — Currying (TS)"
         id: ej08
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: "Ejercicio 8 — Result"
-          command: "cd typescript && npx vitest run tests/ej08.test.ts --reporter=verbose 2>&1"
+          test-name: "Ej08 — Currying"
+          command: "cd typescript && npx vitest run tests/ej08.test.ts"
           timeout: "10"
-          max-score: 6
+          max-score: "6"
 
-      - name: "Ejercicio 9 — Maybe/Option (TS)"
-        id: ej09
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: "Ejercicio 9 — Maybe/Option"
-          command: "cd typescript && npx vitest run tests/ej09.test.ts --reporter=verbose 2>&1"
-          timeout: "10"
-          max-score: 5
-
-      - name: "Ejercicio 10 — Errores como datos (Clojure)"
+      - name: "Ej10 — Result y validación (TS)"
         id: ej10
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: "Ejercicio 10 — Errores como datos"
-          command: "cd clojure && lein test tp04.ej10-test 2>&1"
+          test-name: "Ej10 — Result y validación"
+          command: "cd typescript && npx vitest run tests/ej10.test.ts"
           timeout: "10"
-          max-score: 5
+          max-score: "7"
 
-      - name: "Ejercicio 11 — Transducer básico (Clojure)"
+      - name: "Ej11 — Middleware como HOF (TS)"
         id: ej11
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: "Ejercicio 11 — Transducer básico"
-          command: "cd clojure && lein test tp04.ej11-test 2>&1"
+          test-name: "Ej11 — Middleware como HOF"
+          command: "cd typescript && npx vitest run tests/ej11.test.ts"
           timeout: "10"
-          max-score: 5
+          max-score: "6"
 
-      - name: "Ejercicio 12 — Transducer vs pipeline (Clojure)"
-        id: ej12
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: "Ejercicio 12 — Transducer vs pipeline"
-          command: "cd clojure && lein test tp04.ej12-test 2>&1"
-          timeout: "10"
-          max-score: 5
-
-      - name: "Ejercicio 13 — API genérica funcional (TS)"
+      - name: "Ej13 — Recursión de cola (TS)"
         id: ej13
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: "Ejercicio 13 — API genérica funcional"
-          command: "cd typescript && npx vitest run tests/ej13.test.ts --reporter=verbose 2>&1"
+          test-name: "Ej13 — Recursión de cola TS"
+          command: "cd typescript && npx vitest run tests/ej13.test.ts"
           timeout: "10"
-          max-score: 7
+          max-score: "5"
 
-      - name: "Ejercicio 14 — Funciones de orden superior (TS)"
+      - name: "Ej14 — Memoization (TS)"
         id: ej14
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: "Ejercicio 14 — HOF"
-          command: "cd typescript && npx vitest run tests/ej14.test.ts --reporter=verbose 2>&1"
+          test-name: "Ej14 — Memoization"
+          command: "cd typescript && npx vitest run tests/ej14.test.ts"
           timeout: "10"
-          max-score: 5
+          max-score: "5"
 
-      # ── BLOQUE 3 — Concurrencia y efectos ──────────────────────────────
-
-      - name: "Ejercicio 15 — core.async canales (Clojure)"
-        id: ej15
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: "Ejercicio 15 — core.async canales"
-          command: "cd clojure && lein test tp04.ej15-test 2>&1"
-          timeout: "10"
-          max-score: 6
-
-      - name: "Ejercicio 16 — STM transacciones (Clojure)"
-        id: ej16
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: "Ejercicio 16 — STM transacciones"
-          command: "cd clojure && lein test tp04.ej16-test 2>&1"
-          timeout: "10"
-          max-score: 6
-
-      - name: "Ejercicio 17 — async/await (TS)"
+      - name: "Ej17 — Integrador TypeScript"
         id: ej17
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: "Ejercicio 17 — async/await"
-          command: "cd typescript && npx vitest run tests/ej17.test.ts --reporter=verbose 2>&1"
+          test-name: "Ej17 — Integrador TypeScript"
+          command: "cd typescript && npx vitest run tests/ej17.test.ts"
           timeout: "10"
-          max-score: 5
+          max-score: "7"
 
-      - name: "Ejercicio 18 — Separar efectos puros (TS)"
+      # ── Clojure exercises ───────────────────────────────────────────────
+
+      - name: "Ej04 — Pipeline con ->> (Clj)"
+        id: ej04
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Ej04 — Pipeline con ->>"
+          command: "cd clojure && lein test tp04.ej04-test"
+          timeout: "10"
+          max-score: "5"
+
+      - name: "Ej07 — Partial en Clojure (Clj)"
+        id: ej07
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Ej07 — Partial en Clojure"
+          command: "cd clojure && lein test tp04.ej07-test"
+          timeout: "10"
+          max-score: "5"
+
+      - name: "Ej09 — Validadores currying (Clj)"
+        id: ej09
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Ej09 — Validadores currying"
+          command: "cd clojure && lein test tp04.ej09-test"
+          timeout: "10"
+          max-score: "5"
+
+      - name: "Ej12 — Recursión de cola (Clj)"
+        id: ej12
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Ej12 — Recursión de cola Clojure"
+          command: "cd clojure && lein test tp04.ej12-test"
+          timeout: "10"
+          max-score: "6"
+
+      - name: "Ej15 — Lazy sequences (Clj)"
+        id: ej15
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Ej15 — Lazy sequences"
+          command: "cd clojure && lein test tp04.ej15-test"
+          timeout: "10"
+          max-score: "5"
+
+      - name: "Ej16 — DSL data-driven (Clj)"
+        id: ej16
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Ej16 — DSL data-driven"
+          command: "cd clojure && lein test tp04.ej16-test"
+          timeout: "10"
+          max-score: "5"
+
+      - name: "Ej18 — Integrador Clojure"
         id: ej18
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: "Ejercicio 18 — Separar efectos puros"
-          command: "cd typescript && npx vitest run tests/ej18.test.ts --reporter=verbose 2>&1"
+          test-name: "Ej18 — Integrador Clojure"
+          command: "cd clojure && lein test tp04.ej18-test"
           timeout: "10"
-          max-score: 5
+          max-score: "7"
 
-      # ── BLOQUE 4 — Integrador ──────────────────────────────────────────
+      # ── Reporter ────────────────────────────────────────────────────────
 
-      - name: "Ejercicio 19 — Integrador TypeScript"
-        id: ej19
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: "Ejercicio 19 — Integrador TypeScript"
-          command: "cd typescript && npx vitest run tests/ej19.test.ts --reporter=verbose 2>&1"
-          timeout: "10"
-          max-score: 6
-
-      - name: "Ejercicio 20 — Integrador Clojure"
-        id: ej20
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: "Ejercicio 20 — Integrador Clojure"
-          command: "cd clojure && lein test tp04.ej20-test 2>&1"
-          timeout: "10"
-          max-score: 7
-
-      # ── Reporter ───────────────────────────────────────────────────────
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
+        with:
+          runners: ej01,ej02,ej03,ej04,ej05,ej06,ej07,ej08,ej09,ej10,ej11,ej12,ej13,ej14,ej15,ej16,ej17,ej18
         env:
           EJ01_RESULTS: "${{steps.ej01.outputs.result}}"
           EJ02_RESULTS: "${{steps.ej02.outputs.result}}"
@@ -252,7 +229,4 @@ jobs:
           EJ16_RESULTS: "${{steps.ej16.outputs.result}}"
           EJ17_RESULTS: "${{steps.ej17.outputs.result}}"
           EJ18_RESULTS: "${{steps.ej18.outputs.result}}"
-          EJ19_RESULTS: "${{steps.ej19.outputs.result}}"
-          EJ20_RESULTS: "${{steps.ej20.outputs.result}}"
-        with:
-          runners: ej01,ej02,ej03,ej04,ej05,ej06,ej07,ej08,ej09,ej10,ej11,ej12,ej13,ej14,ej15,ej16,ej17,ej18,ej19,ej20
+        if: always()

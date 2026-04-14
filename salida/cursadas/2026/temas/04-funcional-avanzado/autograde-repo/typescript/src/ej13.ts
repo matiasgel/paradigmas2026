@@ -1,44 +1,19 @@
-// Ejercicio 13 — API genérica funcional
-// Trazabilidad: F-22
+// Ejercicio 13 — Recursión de cola TS (5 pts)
+// Trazabilidad: F-27
 
-import type { Result } from "./ej08.js";
-import { ok, err } from "./ej08.js";
+export type TreeNode = { value: number; children: TreeNode[] };
 
-// Re-exportar para conveniencia en tests
-export { ok, err };
-export type { Result };
-
-/**
- * Encadena una serie de funciones que retornan Result.
- * Empieza con `initial` y aplica cada fn en secuencia.
- * Si alguna retorna error, propaga inmediatamente.
- */
-export function chainResults<T>(
-  initial: T,
-  fns: Array<(value: T) => Result<T, string>>
-): Result<T, string> {
-  // TODO: Implementar
-  throw new Error("TODO: Implementar chainResults");
+// Suma con acumulador (default 0). Recursiva, sin loops.
+export function sumList(nums: number[], acc: number = 0): number {
+  throw new Error("TODO: implementar");
 }
 
-/**
- * Si TODOS los Results son ok, retorna ok con array de valores.
- * Si alguno es error, retorna el primer error encontrado.
- */
-export function traverseResults<T>(
-  results: Array<Result<T, string>>
-): Result<T[], string> {
-  // TODO: Implementar
-  throw new Error("TODO: Implementar traverseResults");
+// Factorial con acumulador (default 1). Recursiva, sin loops.
+export function factorial(n: number, acc: number = 1): number {
+  throw new Error("TODO: implementar");
 }
 
-/**
- * Extrae solo los valores de los Results que son ok.
- * Descarta los errores.
- */
-export function filterOk<T>(
-  results: Array<Result<T, string>>
-): T[] {
-  // TODO: Implementar
-  throw new Error("TODO: Implementar filterOk");
+// Busca value en árbol N-ario pre-order. Retorna valor o null.
+export function findInTree(nodes: TreeNode[], target: number): number | null {
+  throw new Error("TODO: implementar");
 }

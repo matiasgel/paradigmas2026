@@ -1,36 +1,40 @@
+// Tests — Ejercicio 1: Pipeline filter/map/reduce
 import { describe, it, expect } from "vitest";
-import { filtrarActivasYSumar, obtenerTotalesActivas, type Orden } from "../src/ej01.js";
+import { filtrarActivasYSumar, obtenerTotalesActivas, contarPorCategoria, Orden } from "../src/ej01";
 
 const ordenes: Orden[] = [
   { id: 1, cliente: "Ana", total: 120, categoria: "elect", activa: true },
   { id: 2, cliente: "Boris", total: 50, categoria: "ropa", activa: false },
   { id: 3, cliente: "Carla", total: 200, categoria: "elect", activa: true },
-  { id: 4, cliente: "Diana", total: 75, categoria: "ropa", activa: true },
+  { id: 4, cliente: "Diana", total: 30, categoria: "alim", activa: true },
 ];
 
-describe("Ej01 — Pipeline filter/map/reduce", () => {
-  describe("filtrarActivasYSumar", () => {
-    it("suma los totales de las órdenes activas", () => {
-      expect(filtrarActivasYSumar(ordenes)).toBe(395);
-    });
-
-    it("retorna 0 para array vacío", () => {
-      expect(filtrarActivasYSumar([])).toBe(0);
-    });
-
-    it("retorna 0 si ninguna es activa", () => {
-      const inactivas = ordenes.map((o) => ({ ...o, activa: false }));
-      expect(filtrarActivasYSumar(inactivas)).toBe(0);
-    });
+describe("filtrarActivasYSumar", () => {
+  it("suma totales de activas", () => {
+    expect(filtrarActivasYSumar(ordenes)).toBe(350);
   });
+  it("retorna 0 para array vacío", () => {
+    expect(filtrarActivasYSumar([])).toBe(0);
+  });
+  it("retorna 0 si ninguna es activa", () => {
+    expect(filtrarActivasYSumar([ordenes[1]])).toBe(0);
+  });
+});
 
-  describe("obtenerTotalesActivas", () => {
-    it("retorna array de totales de las activas", () => {
-      expect(obtenerTotalesActivas(ordenes)).toEqual([120, 200, 75]);
-    });
+describe("obtenerTotalesActivas", () => {
+  it("retorna array de totales de activas", () => {
+    expect(obtenerTotalesActivas(ordenes)).toEqual([120, 200, 30]);
+  });
+  it("retorna [] para array vacío", () => {
+    expect(obtenerTotalesActivas([])).toEqual([]);
+  });
+});
 
-    it("retorna array vacío para array vacío", () => {
-      expect(obtenerTotalesActivas([])).toEqual([]);
-    });
+describe("contarPorCategoria", () => {
+  it("cuenta por categoría", () => {
+    expect(contarPorCategoria(ordenes)).toEqual({ elect: 2, ropa: 1, alim: 1 });
+  });
+  it("retorna {} para array vacío", () => {
+    expect(contarPorCategoria([])).toEqual({});
   });
 });

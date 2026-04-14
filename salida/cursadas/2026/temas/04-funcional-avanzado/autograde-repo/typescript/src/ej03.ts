@@ -1,5 +1,5 @@
-// Ejercicio 3 — Inmutabilidad
-// Trazabilidad: F-05, F-10
+// Ejercicio 3 — Inmutabilidad con spread (4 pts)
+// Trazabilidad: F-09
 
 export type Persona = {
   readonly nombre: string;
@@ -7,26 +7,27 @@ export type Persona = {
   readonly hobbies: readonly string[];
 };
 
-/**
- * Devuelve una nueva Persona con edad + 1, sin modificar la original.
- */
+export type User = {
+  readonly name: string;
+  readonly email: string;
+};
+
+// Devuelve nueva persona con edad + 1.
 export function cumpleanios(p: Persona): Persona {
-  // TODO: Implementar
-  throw new Error("TODO: Implementar cumpleanios");
+  throw new Error("TODO: implementar");
 }
 
-/**
- * Devuelve una nueva Persona con el hobby agregado al final.
- */
+// Devuelve nueva persona con hobby agregado al final.
 export function agregarHobby(p: Persona, hobby: string): Persona {
-  // TODO: Implementar
-  throw new Error("TODO: Implementar agregarHobby");
+  throw new Error("TODO: implementar");
 }
 
-/**
- * Devuelve una nueva Persona con el nombre actualizado.
- */
+// Devuelve nueva persona con nombre actualizado.
 export function actualizarNombre(p: Persona, nombre: string): Persona {
-  // TODO: Implementar
-  throw new Error("TODO: Implementar actualizarNombre");
+  throw new Error("TODO: implementar");
+}
+
+// Trim name, toLowerCase + trim email. Retorna nuevo objeto.
+export function normalizeUser(u: User): User {
+  throw new Error("TODO: implementar");
 }

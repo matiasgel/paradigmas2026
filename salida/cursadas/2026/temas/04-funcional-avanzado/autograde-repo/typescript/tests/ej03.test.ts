@@ -1,45 +1,49 @@
+// Tests — Ejercicio 3: Inmutabilidad con spread
 import { describe, it, expect } from "vitest";
-import { cumpleanios, agregarHobby, actualizarNombre, type Persona } from "../src/ej03.js";
+import { cumpleanios, agregarHobby, actualizarNombre, normalizeUser, Persona } from "../src/ej03";
 
 const ana: Persona = { nombre: "Ana", edad: 28, hobbies: ["leer", "correr"] };
 
-describe("Ej03 — Inmutabilidad", () => {
-  describe("cumpleanios", () => {
-    it("incrementa la edad en 1", () => {
-      expect(cumpleanios(ana).edad).toBe(29);
-    });
+describe("cumpleanios", () => {
+  it("incrementa edad", () => {
+    expect(cumpleanios(ana).edad).toBe(29);
+  });
+  it("no modifica original", () => {
+    cumpleanios(ana);
+    expect(ana.edad).toBe(28);
+  });
+});
 
-    it("no modifica el original", () => {
-      cumpleanios(ana);
-      expect(ana.edad).toBe(28);
-    });
+describe("agregarHobby", () => {
+  it("agrega hobby al final", () => {
+    expect(agregarHobby(ana, "nadar").hobbies).toEqual(["leer", "correr", "nadar"]);
+  });
+  it("no modifica original", () => {
+    agregarHobby(ana, "nadar");
+    expect(ana.hobbies).toEqual(["leer", "correr"]);
+  });
+});
 
-    it("preserva los otros campos", () => {
-      const result = cumpleanios(ana);
-      expect(result.nombre).toBe("Ana");
-      expect(result.hobbies).toEqual(["leer", "correr"]);
+describe("actualizarNombre", () => {
+  it("cambia nombre", () => {
+    expect(actualizarNombre(ana, "Anita").nombre).toBe("Anita");
+  });
+  it("no modifica original", () => {
+    actualizarNombre(ana, "Anita");
+    expect(ana.nombre).toBe("Ana");
+  });
+});
+
+describe("normalizeUser", () => {
+  it("trim y lowercase", () => {
+    expect(normalizeUser({ name: "  Ana  ", email: "  ANA@test.com  " })).toEqual({
+      name: "Ana",
+      email: "ana@test.com",
     });
   });
-
-  describe("agregarHobby", () => {
-    it("agrega un hobby al final", () => {
-      expect(agregarHobby(ana, "nadar").hobbies).toEqual(["leer", "correr", "nadar"]);
-    });
-
-    it("no modifica el original", () => {
-      agregarHobby(ana, "nadar");
-      expect(ana.hobbies).toEqual(["leer", "correr"]);
-    });
-  });
-
-  describe("actualizarNombre", () => {
-    it("cambia el nombre", () => {
-      expect(actualizarNombre(ana, "Ana María").nombre).toBe("Ana María");
-    });
-
-    it("no modifica el original", () => {
-      actualizarNombre(ana, "Ana María");
-      expect(ana.nombre).toBe("Ana");
-    });
+  it("no modifica original", () => {
+    const u = { name: "  X  ", email: "  Y  " };
+    normalizeUser(u);
+    expect(u.name).toBe("  X  ");
   });
 });

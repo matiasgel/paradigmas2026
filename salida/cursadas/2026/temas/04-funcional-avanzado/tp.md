@@ -65,15 +65,16 @@ type Orden = {
 
 ## Consignas
 
-### BLOQUE 1 — Fundamentos avanzados
+### BLOQUE 1 — HOF y composición
 
-#### Ejercicio 1 — Pipeline filter/map/reduce (TypeScript) — 3 pts
-**Trazabilidad:** F-06, F-07, F-08 | **Archivo:** `typescript/src/ej01.ts`
+#### Ejercicio 1 — Pipeline filter/map/reduce (TypeScript) — 5 pts
+**Trazabilidad:** F-04, F-05, F-10 | **Archivo:** `typescript/src/ej01.ts`
 
-Implementá dos funciones que procesan un array de órdenes usando un pipeline funcional:
+Implementá funciones que procesan un array de órdenes usando un pipeline funcional:
 
 - `filtrarActivasYSumar(ordenes: Orden[]): number` — Filtra las órdenes activas, extrae sus totales y los suma.
 - `obtenerTotalesActivas(ordenes: Orden[]): number[]` — Filtra las activas y devuelve un array con sus totales.
+- `contarPorCategoria(ordenes: Orden[]): Record<string, number>` — Cuenta cuántas órdenes hay por cada categoría (usando `reduce`).
 
 **Ejemplo:**
 ```typescript
@@ -82,21 +83,23 @@ const ordenes = [
   { id: 2, cliente: "Boris", total: 50, categoria: "ropa", activa: false },
   { id: 3, cliente: "Carla", total: 200, categoria: "elect", activa: true },
 ];
-filtrarActivasYSumar(ordenes); // → 320
-obtenerTotalesActivas(ordenes); // → [120, 200]
+filtrarActivasYSumar(ordenes);    // → 320
+obtenerTotalesActivas(ordenes);   // → [120, 200]
+contarPorCategoria(ordenes);      // → { elect: 2, ropa: 1 }
 ```
 
 **Restricción:** No usar variables mutables (`let`, bucles `for`). Solo `filter`, `map`, `reduce`.
 
 ---
 
-#### Ejercicio 2 — Composición con pipe y compose (TypeScript) — 5 pts
-**Trazabilidad:** F-09 | **Archivo:** `typescript/src/ej02.ts`
+#### Ejercicio 2 — Composición con pipe y compose (TypeScript) — 6 pts
+**Trazabilidad:** F-06, F-07 | **Archivo:** `typescript/src/ej02.ts`
 
-Implementá las funciones de composición:
+Implementá las funciones de composición y un pipeline real:
 
 - `pipe(...fns): (x) => result` — Compone funciones de izquierda a derecha.
 - `compose(...fns): (x) => result` — Compone funciones de derecha a izquierda.
+- `normalizeEmail(raw: string): string` — Pipeline que aplica `trim`, `toLowerCase`, y agrega `@empresa.com` si no tiene `@`. Construido con `pipe`.
 
 **Ejemplo:**
 ```typescript
@@ -106,24 +109,29 @@ const doble = (x: number) => x * 2;
 pipe(inc, doble)(3);      // → 8   (primero +1, luego ×2)
 compose(inc, doble)(3);   // → 7   (primero ×2, luego +1)
 pipe()(5);                // → 5   (sin funciones, identidad)
+
+normalizeEmail("  ANA  ");           // → "ana@empresa.com"
+normalizeEmail("  Bob@test.com  ");  // → "bob@test.com"
 ```
 
-**Restricción:** Usar `reduce` / `reduceRight` internamente.
+**Restricción:** Usar `reduce` / `reduceRight` internamente. No usar loops.
 
 ---
 
-#### Ejercicio 3 — Inmutabilidad (TypeScript) — 3 pts
-**Trazabilidad:** F-05, F-10 | **Archivo:** `typescript/src/ej03.ts`
+#### Ejercicio 3 — Inmutabilidad con spread (TypeScript) — 4 pts
+**Trazabilidad:** F-09 | **Archivo:** `typescript/src/ej03.ts`
 
 Implementá funciones que devuelven nuevos objetos sin modificar los originales:
 
 - `cumpleanios(p: Persona): Persona` — Devuelve una nueva persona con `edad + 1`.
 - `agregarHobby(p: Persona, hobby: string): Persona` — Devuelve una nueva persona con el hobby agregado al final.
 - `actualizarNombre(p: Persona, nombre: string): Persona` — Devuelve una nueva persona con el nombre actualizado.
+- `normalizeUser(u: User): User` — Aplica `trim` a `name` y `toLowerCase` + `trim` a `email`, retornando un nuevo objeto.
 
-**Tipo dado:**
+**Tipos dados:**
 ```typescript
 type Persona = { readonly nombre: string; readonly edad: number; readonly hobbies: readonly string[] };
+type User = { readonly name: string; readonly email: string };
 ```
 
 **Ejemplo:**
@@ -132,37 +140,338 @@ const ana = { nombre: "Ana", edad: 28, hobbies: ["leer", "correr"] };
 const ana29 = cumpleanios(ana);
 ana29.edad;   // → 29
 ana.edad;     // → 28 (intacto)
+
+normalizeUser({ name: "  Ana  ", email: "  ANA@test.com  " });
+// → { name: "Ana", email: "ana@test.com" }
 ```
+
+**Restricción:** No usar `Object.assign` ni mutación directa. Solo spread `{ ...obj }` y `[...arr]`.
 
 ---
 
-#### Ejercicio 4 — Pipeline con ->> (Clojure) — 3 pts
-**Trazabilidad:** F-12 | **Archivo:** `clojure/src/tp04/ej04.clj`
+#### Ejercicio 4 — Pipeline con ->> (Clojure) — 5 pts
+**Trazabilidad:** F-08 | **Archivo:** `clojure/src/tp04/ej04.clj`
 
 Implementá funciones que usen el macro `->>` para procesar órdenes:
 
 - `(total-activas ordenes)` — Filtra las activas, extrae `:total` y suma.
 - `(nombres-activas ordenes)` — Filtra las activas y devuelve un vector con sus `:cliente`.
+- `(cuadrados-pares nums)` — Filtra pares, eleva al cuadrado, suma. Todo con `->>`.
 
 **Ejemplo:**
 ```clojure
 (def ordenes [{:id 1 :cliente "Ana" :total 120 :activa? true}
               {:id 2 :cliente "Boris" :total 50 :activa? false}
               {:id 3 :cliente "Carla" :total 200 :activa? true}])
-(total-activas ordenes)   ; => 320
-(nombres-activas ordenes) ; => ["Ana" "Carla"]
+
+(total-activas ordenes)     ; => 320
+(nombres-activas ordenes)   ; => ["Ana" "Carla"]
+(cuadrados-pares [1 2 3 4 5]) ; => 20  (4 + 16)
+```
+
+**Restricción:** Cada función DEBE usar `->>`. No usar `loop/recur` ni variables mutables.
+
+---
+
+#### Ejercicio 5 — flatMap y reduce avanzado (TypeScript) — 5 pts
+**Trazabilidad:** F-11, F-12 | **Archivo:** `typescript/src/ej05.ts`
+
+Implementá funciones que demuestren `flatMap` y `reduce` como herramientas de transformación:
+
+- `todosLosRoles(users: UserWithRoles[]): string[]` — Extrae todos los roles de todos los usuarios usando `flatMap` (con duplicados).
+- `rolesUnicos(users: UserWithRoles[]): string[]` — Como el anterior pero sin duplicados (usar `Set`).
+- `indexarPorId(items: { id: number; nombre: string }[]): Record<number, string>` — Construye un diccionario `id → nombre` con `reduce`.
+
+**Tipo dado:**
+```typescript
+type UserWithRoles = { name: string; roles: string[] };
+```
+
+**Ejemplo:**
+```typescript
+const users = [
+  { name: "Ana", roles: ["admin", "editor"] },
+  { name: "Luis", roles: ["editor"] },
+  { name: "María", roles: ["viewer", "editor"] },
+];
+todosLosRoles(users);  // → ["admin", "editor", "editor", "viewer", "editor"]
+rolesUnicos(users);    // → ["admin", "editor", "viewer"]
+
+indexarPorId([{ id: 1, nombre: "Ana" }, { id: 2, nombre: "Luis" }]);
+// → { 1: "Ana", 2: "Luis" }
 ```
 
 ---
 
-#### Ejercicio 5 — Secuencias perezosas (Clojure) — 5 pts
-**Trazabilidad:** F-11 | **Archivo:** `clojure/src/tp04/ej05.clj`
+### BLOQUE 2 — Partial application, currying y validación
 
-Implementá funciones que generen secuencias perezosas:
+#### Ejercicio 6 — Partial application (TypeScript) — 6 pts
+**Trazabilidad:** F-13, F-14 | **Archivo:** `typescript/src/ej06.ts`
+
+Implementá partial application con closures:
+
+- `partial(fn, a)` — Recibe una función de 2 args y el primer arg, devuelve función de 1 arg.
+- `makeGreeter(saludo: string): (nombre: string) => string` — Fábrica de saludadores. `makeGreeter("Hola")("Ana")` → `"Hola, Ana"`.
+- `makeRequiredValidator(fieldName: string): (value: string) => Result<string, string>` — Fábrica de validadores. Retorna `ok(value)` si no está vacío (después de trim), o `err("${fieldName} es obligatorio")`.
+
+**Tipo dado:**
+```typescript
+type Result<T, E> = { status: "ok"; value: T } | { status: "error"; error: E };
+```
+
+**Ejemplo:**
+```typescript
+const add = (a: number, b: number) => a + b;
+const add5 = partial(add, 5);
+add5(3);  // → 8
+
+makeGreeter("Hola")("Ana");       // → "Hola, Ana"
+makeRequiredValidator("email")("ana@test.com");  // → { status: "ok", value: "ana@test.com" }
+makeRequiredValidator("email")("");              // → { status: "error", error: "email es obligatorio" }
+```
+
+---
+
+#### Ejercicio 7 — Partial en Clojure (Clojure) — 5 pts
+**Trazabilidad:** F-15 | **Archivo:** `clojure/src/tp04/ej07.clj`
+
+Implementá funciones usando `partial` nativo de Clojure:
+
+- `(def doble (partial * 2))` — Duplica un número.
+- `(def triple (partial * 3))` — Triplica un número.
+- `(def validate-name (partial required-field "nombre"))` — Validador parcializado.
+- `(def validate-email (partial required-field "email"))` — Validador parcializado.
+- `(required-field field-name value)` — Retorna `{:status :ok :value value}` si `(seq (str/trim value))`, o `{:status :error :error "FIELD es obligatorio"}`.
+
+**Ejemplo:**
+```clojure
+(doble 5)              ; => 10
+(triple 4)             ; => 12
+(map doble [1 2 3])    ; => (2 4 6)
+
+(validate-name "Ana")  ; => {:status :ok, :value "Ana"}
+(validate-name "")     ; => {:status :error, :error "nombre es obligatorio"}
+(validate-email "")    ; => {:status :error, :error "email es obligatorio"}
+```
+
+---
+
+#### Ejercicio 8 — Currying (TypeScript) — 6 pts
+**Trazabilidad:** F-16, F-17 | **Archivo:** `typescript/src/ej08.ts`
+
+Implementá currying y úsalo para construir validators:
+
+- `curry2(fn)` — Convierte una función de 2 args en cadena de funciones de 1 arg.
+- `curry3(fn)` — Convierte una función de 3 args en cadena de funciones de 1 arg.
+- `cHasMinLength` — Versión currificada de `hasMinLength(min, str)` que retorna `boolean`.
+- `cMultiply` — Versión currificada de `multiply(a, b)`.
+
+**Ejemplo:**
+```typescript
+const add = (a: number, b: number) => a + b;
+const cAdd = curry2(add);
+cAdd(3)(4);  // → 7
+
+const hasMinLength = (min: number, str: string) => str.length >= min;
+const cHasMinLength = curry2(hasMinLength);
+const atLeast8 = cHasMinLength(8);
+atLeast8("password123");  // → true
+atLeast8("short");        // → false
+
+const sum3 = (a: number, b: number, c: number) => a + b + c;
+const cSum3 = curry3(sum3);
+cSum3(1)(2)(3);  // → 6
+```
+
+---
+
+#### Ejercicio 9 — Validadores con currying (Clojure) — 5 pts
+**Trazabilidad:** F-18 | **Archivo:** `clojure/src/tp04/ej09.clj`
+
+Implementá validadores configurables al estilo HOF:
+
+- `(make-validator pred error-msg)` — Retorna una función que recibe un valor y devuelve `{:status :ok :value val}` o `{:status :error :error error-msg}`.
+- `(validate-field value & validators)` — Aplica validators en secuencia; para en el primer error.
+- `validate-not-empty` — Validator: falla si el string está vacío (después de trim).
+- `validate-email-format` — Validator: falla si no contiene `@` y `.`.
+
+**Ejemplo:**
+```clojure
+(validate-not-empty "Ana")           ; => {:status :ok, :value "Ana"}
+(validate-not-empty "")              ; => {:status :error, :error "campo vacío"}
+(validate-email-format "a@b.com")    ; => {:status :ok, :value "a@b.com"}
+(validate-email-format "invalid")    ; => {:status :error, :error "email inválido"}
+
+(validate-field "ana@test.com" validate-not-empty validate-email-format)
+; => {:status :ok, :value "ana@test.com"}
+
+(validate-field "" validate-not-empty validate-email-format)
+; => {:status :error, :error "campo vacío"}
+```
+
+---
+
+#### Ejercicio 10 — Result y validación encadenada (TypeScript) — 7 pts
+**Trazabilidad:** F-19, F-20, F-21 | **Archivo:** `typescript/src/ej10.ts`
+
+Implementá el patrón `Result` completo con encadenamiento:
+
+- `ok(value)` — Constructor de éxito.
+- `err(error)` — Constructor de error.
+- `chain(result, validator)` — Si `result` es error, propaga. Si es ok, aplica `validator` al valor.
+- `validateForm(data: FormData): Result<FormData, string>` — Encadena 3 validators: nombre requerido, email válido (contiene `@` y `.`), password ≥ 8 chars.
+- `handleResult(result: Result<FormData, string>): { status: number; body: unknown }` — Retorna `{ status: 400, body: { error } }` si error, o `{ status: 200, body: { user: value } }` si ok.
+
+**Tipo dado:**
+```typescript
+type FormData = { name: string; email: string; password: string };
+type Result<T, E> = { status: "ok"; value: T } | { status: "error"; error: E };
+```
+
+**Ejemplo:**
+```typescript
+validateForm({ name: "Ana", email: "ana@test.com", password: "12345678" });
+// → { status: "ok", value: { name: "Ana", email: "ana@test.com", password: "12345678" } }
+
+validateForm({ name: "", email: "ana@test.com", password: "12345678" });
+// → { status: "error", error: "nombre requerido" }
+
+validateForm({ name: "Ana", email: "invalid", password: "12345678" });
+// → { status: "error", error: "email inválido" }
+
+handleResult(ok({ name: "Ana", email: "a@b.com", password: "12345678" }));
+// → { status: 200, body: { user: { name: "Ana", ... } } }
+```
+
+---
+
+#### Ejercicio 11 — Middleware como HOF (TypeScript) — 6 pts
+**Trazabilidad:** F-22, F-23 | **Archivo:** `typescript/src/ej11.ts`
+
+Implementá middlewares composables:
+
+- `withAuth(secret: string): Middleware` — Si `req.headers["authorization"]` es `"Bearer ${secret}"`, continúa. Si no, retorna `{ status: 401, body: { error: "unauthorized" } }`.
+- `withLogging(prefix: string): Middleware` — Registra `"[prefix] request"` en `req.meta.logs` (array de strings) antes de llamar al handler.
+- Componer ambos con `pipe` y aplicarlos a un handler base.
+
+**Tipos dados:**
+```typescript
+type Request  = { headers: Record<string, string>; body: unknown; meta: { logs: string[] } };
+type Response = { status: number; body: unknown };
+type Handler  = (req: Request) => Response;
+type Middleware = (handler: Handler) => Handler;
+```
+
+**Ejemplo:**
+```typescript
+const baseHandler: Handler = req => ({ status: 200, body: { ok: true } });
+
+const secured = pipe(withLogging("api"), withAuth("secret123"))(baseHandler);
+
+secured({ headers: { authorization: "Bearer secret123" }, body: {}, meta: { logs: [] } });
+// → { status: 200, body: { ok: true } }
+// req.meta.logs contiene ["[api] request"]
+
+secured({ headers: { authorization: "wrong" }, body: {}, meta: { logs: [] } });
+// → { status: 401, body: { error: "unauthorized" } }
+```
+
+---
+
+### BLOQUE 3 — Recursión de cola y patrones avanzados
+
+#### Ejercicio 12 — Recursión de cola (Clojure) — 6 pts
+**Trazabilidad:** F-24, F-25, F-26 | **Archivo:** `clojure/src/tp04/ej12.clj`
+
+Implementá funciones usando `recur` para garantizar TCO:
+
+- `(sum-list nums acc)` — Suma todos los elementos con acumulador.
+- `(factorial n acc)` — Factorial con acumulador (`(factorial 5 1)` → `120`).
+- `(my-reverse xs acc)` — Revierte una lista con acumulador.
+- `(my-count xs acc)` — Cuenta elementos de una lista con acumulador.
+
+**Ejemplo:**
+```clojure
+(sum-list [1 2 3 4 5] 0)   ; => 15
+(factorial 5 1)             ; => 120
+(factorial 0 1)             ; => 1
+(my-reverse [1 2 3] [])    ; => [3 2 1]
+(my-count [10 20 30] 0)    ; => 3
+```
+
+**Restricción:** Todas DEBEN usar `recur`. No usar `reduce`, `count`, `reverse` ni funciones built-in equivalentes.
+
+---
+
+#### Ejercicio 13 — Recursión de cola (TypeScript) — 5 pts
+**Trazabilidad:** F-27 | **Archivo:** `typescript/src/ej13.ts`
+
+Implementá funciones recursivas con acumulador en TypeScript:
+
+- `sumList(nums: number[], acc?: number): number` — Suma con acumulador (default 0).
+- `factorial(n: number, acc?: number): number` — Factorial con acumulador (default 1).
+- `findInTree(nodes: TreeNode[], target: number): number | null` — Busca un valor en un árbol N-ario recorriendo en pre-order con stack explícito.
+
+**Tipo dado:**
+```typescript
+type TreeNode = { value: number; children: TreeNode[] };
+```
+
+**Ejemplo:**
+```typescript
+sumList([1, 2, 3, 4, 5]);  // → 15
+factorial(5);               // → 120
+factorial(0);               // → 1
+
+const tree: TreeNode = {
+  value: 1,
+  children: [
+    { value: 2, children: [{ value: 4, children: [] }] },
+    { value: 3, children: [] },
+  ],
+};
+findInTree([tree], 4);  // → 4
+findInTree([tree], 9);  // → null
+```
+
+**Restricción:** No usar bucles `for`/`while`. Las funciones de suma/factorial DEBEN ser recursivas con acumulador.
+
+---
+
+#### Ejercicio 14 — Memoization (TypeScript) — 5 pts
+**Trazabilidad:** F-28, F-29 | **Archivo:** `typescript/src/ej14.ts`
+
+Implementá memoization genérica y verificá su efecto:
+
+- `memoize(fn)` — Recibe una función de 1 argumento y retorna una versión con cache (usar `Map`).
+- `fibonacci(n: number): number` — Fibonacci recursivo clásico (sin memo).
+- `fibonacciMemo` — Fibonacci con `memoize` aplicado.
+- `callCounter(fn)` — Wrapper que cuenta cuántas veces se llama la función original. Retorna `{ call: (...args) => result, count: () => number }`.
+
+**Ejemplo:**
+```typescript
+const mFib = memoize(fibonacci);
+mFib(10);  // → 55
+mFib(10);  // → 55 (desde cache, sin recalcular)
+
+const counter = callCounter((x: number) => x * 2);
+counter.call(5);   // → 10
+counter.call(5);   // → 10
+counter.count();   // → 2
+
+// Con memoize + counter, la función original se llama solo 1 vez para el mismo input
+```
+
+---
+
+#### Ejercicio 15 — Lazy sequences (Clojure) — 5 pts
+**Trazabilidad:** F-30 | **Archivo:** `clojure/src/tp04/ej15.clj`
+
+Implementá funciones que generen y consuman secuencias perezosas:
 
 - `(primeros-n-pares n)` — Los primeros `n` números pares positivos (2, 4, 6...).
 - `(fibonacci)` — Secuencia infinita de Fibonacci (0, 1, 1, 2, 3, 5, 8...).
-- `(tomar-mientras-menor coll umbral)` — Toma elementos de `coll` mientras sean menores que `umbral`.
+- `(tomar-mientras-menor coll umbral)` — Toma elementos mientras sean menores que `umbral`.
 
 **Ejemplo:**
 ```clojure
@@ -175,288 +484,41 @@ Implementá funciones que generen secuencias perezosas:
 
 ---
 
-#### Ejercicio 6 — Colecciones persistentes (Clojure) — 3 pts
-**Trazabilidad:** F-13 | **Archivo:** `clojure/src/tp04/ej06.clj`
+#### Ejercicio 16 — DSL data-driven (Clojure) — 5 pts
+**Trazabilidad:** F-31 | **Archivo:** `clojure/src/tp04/ej16.clj`
 
-Implementá funciones que demuestren inmutabilidad por diseño:
+Implementá un motor de validación genérico donde las reglas son datos:
 
-- `(agregar-al-vector v elem)` — Retorna un nuevo vector con `elem` al final.
-- `(actualizar-mapa m k v)` — Retorna un nuevo mapa con la clave `k` asociada a `v`.
-- `(combinar-mapas m1 m2)` — Retorna un nuevo mapa con todas las claves de ambos (m2 prevalece en conflictos).
-
-**Ejemplo:**
-```clojure
-(agregar-al-vector [1 2 3] 4)                   ; => [1 2 3 4]
-(actualizar-mapa {:a 1} :b 2)                    ; => {:a 1 :b 2}
-(combinar-mapas {:a 1 :b 2} {:b 99 :c 3})        ; => {:a 1 :b 99 :c 3}
-```
-
----
-
-### BLOQUE 2 — Abstracciones y efectos
-
-#### Ejercicio 7 — Algebraic Data Types (TypeScript) — 5 pts
-**Trazabilidad:** F-14 | **Archivo:** `typescript/src/ej07.ts`
-
-Definí el tipo suma `Shape` e implementá funciones de procesamiento:
-
-- `type Shape = Circle | Rectangle | Triangle` (con discriminante `kind`)
-- `area(s: Shape): number`
-- `perimetro(s: Shape): number`
-- `describir(s: Shape): string` — Retorna `"<kind>: area=X.XX"`.
-
-**Ejemplo:**
-```typescript
-area({ kind: "circle", radius: 5 });         // → 78.5398...
-perimetro({ kind: "rectangle", width: 4, height: 3 }); // → 14
-describir({ kind: "triangle", base: 6, height: 4 });   // → "triangle: area=12.00"
-```
-
----
-
-#### Ejercicio 8 — Result<T, E> (TypeScript) — 6 pts
-**Trazabilidad:** F-15, F-16 | **Archivo:** `typescript/src/ej08.ts`
-
-El archivo provee el tipo `Result` y los constructores `ok`/`err`. Implementá:
-
-- `mapResult(r, fn)` — Si `r` es ok, aplica `fn` al valor. Si es error, propaga.
-- `flatMapResult(r, fn)` — Si `r` es ok, aplica `fn` (que retorna Result). Si es error, propaga.
-- `dividir(a, b)` — Retorna `ok(a/b)` o `err("División por cero")`.
-
-**Ejemplo:**
-```typescript
-mapResult(ok(10), x => x * 2);           // → { ok: true, value: 20 }
-mapResult(err("fallo"), x => x * 2);     // → { ok: false, error: "fallo" }
-flatMapResult(ok(10), x => dividir(x, 2)); // → { ok: true, value: 5 }
-flatMapResult(ok(10), x => dividir(x, 0)); // → { ok: false, error: "División por cero" }
-```
-
----
-
-#### Ejercicio 9 — Maybe / Option (TypeScript) — 5 pts
-**Trazabilidad:** F-17 | **Archivo:** `typescript/src/ej09.ts`
-
-El archivo provee el tipo `Maybe` y los constructores `just`/`nothing`. Implementá:
-
-- `mapMaybe(m, fn)` — Si hay valor, aplica `fn`. Si no, retorna nothing.
-- `flatMapMaybe(m, fn)` — Si hay valor, aplica `fn` (que retorna Maybe). Si no, retorna nothing.
-- `buscar(arr, predicado)` — Retorna `just(elemento)` del primero que cumple, o `nothing()`.
-
-**Ejemplo:**
-```typescript
-mapMaybe(just(5), x => x * 2);           // → { some: true, value: 10 }
-mapMaybe(nothing(), x => x * 2);         // → { some: false }
-buscar([1,2,3], x => x > 2);             // → { some: true, value: 3 }
-buscar([1,2,3], x => x > 10);            // → { some: false }
-```
-
----
-
-#### Ejercicio 10 — Errores como datos (Clojure) — 5 pts
-**Trazabilidad:** F-18 | **Archivo:** `clojure/src/tp04/ej10.clj`
-
-Implementá manejo de errores sin excepciones, usando mapas:
-
-- `(dividir-seguro a b)` — Retorna `{:ok true :value resultado}` o `{:ok false :error "División por cero"}`.
-- `(raiz-segura n)` — Retorna ok con `Math/sqrt` si n ≥ 0, o error `"Raíz de negativo"`.
-- `(operar-cadena a b)` — Divide `a/b`, luego calcula la raíz del resultado. Propaga el primer error.
+- `user-rules` — Vector de mapas `{:field :name :pred fn :msg "..."}` con al menos 3 reglas (nombre no vacío, email con `@`, edad ≥ 18).
+- `(validate rules data)` — Aplica todas las reglas al mapa `data`. Retorna vector de errores `{:field :error}` (vacío si todo ok).
+- `(valid? rules data)` — `true` si no hay errores.
 
 **Ejemplo:**
 ```clojure
-(dividir-seguro 10 2)   ; => {:ok true :value 5}
-(dividir-seguro 10 0)   ; => {:ok false :error "División por cero"}
-(operar-cadena 100 4)   ; => {:ok true :value 5.0}  (√(100/4) = √25 = 5)
-(operar-cadena 10 0)    ; => {:ok false :error "División por cero"}
-(operar-cadena -100 1)  ; => {:ok false :error "Raíz de negativo"}
-```
+(validate user-rules {:name "" :email "x" :age 16})
+; => [{:field :name, :error "nombre requerido"}
+;     {:field :email, :error "email inválido"}
+;     {:field :age, :error "debe ser mayor de edad"}]
 
----
+(validate user-rules {:name "Ana" :email "ana@test.com" :age 20})
+; => []
 
-#### Ejercicio 11 — Transducer básico (Clojure) — 5 pts
-**Trazabilidad:** F-19, F-20 | **Archivo:** `clojure/src/tp04/ej11.clj`
-
-Implementá un transducer que procese órdenes:
-
-- `xf-activas-totales` — Transducer (con `comp`) que filtra activas y extrae `:total`.
-- `(sumar-activas-xf ordenes)` — Aplica `xf-activas-totales` con `transduce` y suma los totales.
-- `(totales-activas-vec ordenes)` — Aplica el transducer con `into` para obtener un vector de totales.
-
-**Ejemplo:**
-```clojure
-(sumar-activas-xf [{:total 100 :activa? true} {:total 50 :activa? false} {:total 200 :activa? true}])
-; => 300
-(totales-activas-vec [{:total 100 :activa? true} {:total 50 :activa? false}])
-; => [100]
-```
-
----
-
-#### Ejercicio 12 — Transducer vs pipeline (Clojure) — 5 pts
-**Trazabilidad:** F-21 | **Archivo:** `clojure/src/tp04/ej12.clj`
-
-Implementá el mismo procesamiento de dos formas y verificá equivalencia:
-
-- `(procesar-pipeline ordenes)` — Pipeline clásico con `->>`: filtrar activas con total > 100, extraer totales, sumar.
-- `(procesar-transducer ordenes)` — Mismo resultado usando `transduce` con un transducer compuesto.
-- `(totales-pipeline ordenes)` — Pipeline clásico: vector de totales de activas con total > 100.
-- `(totales-transducer ordenes)` — Mismo resultado con `into` y transducer.
-
-**Ejemplo:**
-```clojure
-(def datos [{:total 300 :activa? true} {:total 80 :activa? false}
-            {:total 150 :activa? true} {:total 50 :activa? true}])
-(procesar-pipeline datos)      ; => 450  (300 + 150)
-(procesar-transducer datos)    ; => 450
-(totales-pipeline datos)       ; => [300 150]
-(totales-transducer datos)     ; => [300 150]
-```
-
----
-
-#### Ejercicio 13 — API genérica funcional (TypeScript) — 7 pts
-**Trazabilidad:** F-22 | **Archivo:** `typescript/src/ej13.ts`
-
-Implementá funciones genéricas que trabajen con `Result`:
-
-- `chainResults<T>(initial: T, fns: Array<(v: T) => Result<T, string>>): Result<T, string>` — Encadena funciones, propagando el primer error.
-- `traverseResults<T>(results: Result<T, string>[]): Result<T[], string>` — Si todos son ok, retorna ok con array. Si alguno es error, retorna el primer error.
-- `filterOk<T>(results: Result<T, string>[]): T[]` — Extrae solo los valores de los ok.
-
-**Ejemplo:**
-```typescript
-const inc = (x: number): Result<number, string> => ok(x + 1);
-const doble = (x: number): Result<number, string> => ok(x * 2);
-chainResults(3, [inc, doble]);  // → ok(8)  — (3+1)×2
-
-traverseResults([ok(1), ok(2), ok(3)]); // → ok([1, 2, 3])
-traverseResults([ok(1), err("x")]);     // → err("x")
-
-filterOk([ok(1), err("x"), ok(3)]);     // → [1, 3]
-```
-
----
-
-#### Ejercicio 14 — Funciones de orden superior (TypeScript) — 5 pts
-**Trazabilidad:** F-23 | **Archivo:** `typescript/src/ej14.ts`
-
-Implementá HOFs que demuestren funciones como valores:
-
-- `aplicarNVeces<T>(f: (x: T) => T, n: number): (x: T) => T` — Aplica `f` sobre el resultado `n` veces.
-- `crearMultiplicador(factor: number): (x: number) => number` — Retorna función que multiplica por `factor`.
-- `curry2<A, B, R>(f: (a: A, b: B) => R): (a: A) => (b: B) => R` — Convierte función de 2 args en curried.
-
-**Ejemplo:**
-```typescript
-aplicarNVeces((x: number) => x * 2, 3)(1);  // → 8  (1→2→4→8)
-crearMultiplicador(5)(7);                     // → 35
-const sumar = curry2((a: number, b: number) => a + b);
-sumar(3)(4); // → 7
-```
-
----
-
-### BLOQUE 3 — Concurrencia y efectos
-
-#### Ejercicio 15 — core.async canales (Clojure) — 6 pts
-**Trazabilidad:** F-26, F-27 | **Archivo:** `clojure/src/tp04/ej15.clj`
-
-Implementá un pipeline de datos usando canales de `core.async`:
-
-- `(pipeline-canal datos filtro-fn transformar-fn)` — Crea un canal de entrada y uno de salida. Un go-block productor pone los datos. Un go-block consumidor filtra con `filtro-fn` y transforma con `transformar-fn`. Retorna un **vector** con los resultados (recolección bloqueante).
-
-**Ejemplo:**
-```clojure
-(pipeline-canal [1 2 3 4 5 6] even? #(* 2 %))
-; => [4 8 12]  — filtra pares (2,4,6) y duplica
-
-(pipeline-canal [10 -3 5 -7 20] pos? inc)
-; => [11 6 21]  — filtra positivos y suma 1
-```
-
-**Pista:** Usá `>!` y `<!` dentro de go-blocks. Para recolectar, usá `<!!` (blocking take) fuera del go-block.
-
----
-
-#### Ejercicio 16 — STM y transacciones (Clojure) — 6 pts
-**Trazabilidad:** F-28 | **Archivo:** `clojure/src/tp04/ej16.clj`
-
-Implementá un sistema bancario simple con STM:
-
-- `(crear-banco cuentas-map)` — Recibe `{:ana 1000 :boris 500}`, retorna mapa `{:ana (ref 1000) :boris (ref 500)}`.
-- `(saldo banco cuenta)` — Retorna el saldo actual de una cuenta (deref del ref).
-- `(transferir banco origen destino monto)` — Transfiere `monto` de `origen` a `destino` dentro de `dosync`.
-- `(total-banco banco)` — Suma todos los saldos (el invariante: el total nunca cambia).
-
-**Ejemplo:**
-```clojure
-(def banco (crear-banco {:ana 1000 :boris 500}))
-(total-banco banco)              ; => 1500
-(transferir banco :ana :boris 200)
-(saldo banco :ana)               ; => 800
-(saldo banco :boris)             ; => 700
-(total-banco banco)              ; => 1500 (invariante preservado)
-```
-
----
-
-#### Ejercicio 17 — async/await (TypeScript) — 5 pts
-**Trazabilidad:** F-30, F-31 | **Archivo:** `typescript/src/ej17.ts`
-
-Implementá funciones asíncronas que compongan Promises:
-
-- `procesarLote<T, U>(items: T[], transformar: (item: T) => Promise<U>): Promise<U[]>` — Aplica `transformar` a cada item en paralelo con `Promise.all`.
-- `filtrarAsync<T>(items: T[], predicado: (item: T) => Promise<boolean>): Promise<T[]>` — Filtra items evaluando el predicado asincrónicamente.
-
-**Ejemplo:**
-```typescript
-await procesarLote([1,2,3], async x => x * 10);
-// → [10, 20, 30]
-
-await filtrarAsync([1,2,3,4,5], async x => x % 2 === 0);
-// → [2, 4]
-```
-
----
-
-#### Ejercicio 18 — Separar efectos puros de I/O (TypeScript) — 5 pts
-**Trazabilidad:** F-32 | **Archivo:** `typescript/src/ej18.ts`
-
-Implementá la lógica **pura** de un sistema de descuentos, separada de los efectos:
-
-- `calcularDescuento(precio: number, porcentaje: number): number` — Retorna el precio con descuento aplicado.
-- `aplicarReglas(orden: Orden, reglas: Regla[]): OrdenConDescuento` — Aplica la primera regla cuya condición se cumple. Si ninguna aplica, descuento = 0.
-- `generarResumen(ordenes: OrdenConDescuento[]): Resumen` — Agrega: total original, total con descuento, ahorro total, cantidad de órdenes.
-
-**Tipos dados:**
-```typescript
-type Regla = { nombre: string; condicion: (o: Orden) => boolean; porcentaje: number };
-type OrdenConDescuento = Orden & { descuento: number; totalFinal: number };
-type Resumen = { totalOriginal: number; totalFinal: number; ahorro: number; cantidad: number };
-```
-
-**Ejemplo:**
-```typescript
-const reglas: Regla[] = [
-  { nombre: "VIP", condicion: o => o.total > 500, porcentaje: 20 },
-  { nombre: "Regular", condicion: o => o.total > 100, porcentaje: 10 },
-];
-const orden = { id: 1, cliente: "Ana", total: 200, categoria: "elect", activa: true };
-aplicarReglas(orden, reglas);
-// → { ...orden, descuento: 10, totalFinal: 180 }
+(valid? user-rules {:name "Ana" :email "ana@test.com" :age 20})
+; => true
 ```
 
 ---
 
 ### BLOQUE 4 — Integrador
 
-#### Ejercicio 19 — Integrador TypeScript — 6 pts
-**Trazabilidad:** F-35, F-36 | **Archivo:** `typescript/src/ej19.ts`
+#### Ejercicio 17 — Integrador TypeScript — 7 pts
+**Trazabilidad:** F-33 | **Archivo:** `typescript/src/ej17.ts`
 
-Implementá el pipeline completo del taller usando `Result`:
+Implementá un pipeline funcional completo de validación y procesamiento de órdenes, combinando todos los patrones del TP:
 
-- `clasificarOrden(o: Orden): Result<number, string>` — Si activa Y categoría `"elect"` Y total > 200, retorna `ok(total)`. Si no es activa, `err("inactiva")`. Si categoría no es elect, `err("categoría incorrecta")`. Si total ≤ 200, `err("monto insuficiente")`.
-- `totalElectActivos(ordenes: Orden[]): number` — Clasifica cada orden, filtra los ok y suma los valores.
-- `resumenClasificacion(ordenes: Orden[]): { aprobadas: number; rechazadas: number; total: number }` — Cuenta aprobadas, rechazadas y suma total de las aprobadas.
+- `clasificarOrden(o: Orden): Result<Orden, string>` — Retorna `ok(orden)` si la orden es activa Y tiene total > 100. Si no es activa, `err("orden inactiva")`. Si total ≤ 100, `err("monto insuficiente")`.
+- `aplicarDescuento(porcentaje: number): (o: Orden) => Orden` — Partial application: retorna función que crea nueva orden con `total` reducido (inmutable).
+- `procesarOrdenes(ordenes: Orden[]): { aprobadas: Orden[]; rechazadas: string[]; totalFinal: number }` — Pipeline: clasificar cada orden → separar ok/error → aplicar 10% de descuento a las aprobadas → sumar totales finales.
 
 **Ejemplo:**
 ```typescript
@@ -464,23 +526,38 @@ const ordenes = [
   { id: 1, cliente: "Ana",   total: 250, categoria: "elect", activa: true },
   { id: 2, cliente: "Boris", total: 80,  categoria: "ropa",  activa: false },
   { id: 3, cliente: "Carla", total: 420, categoria: "elect", activa: true },
-  { id: 4, cliente: "Diana", total: 30,  categoria: "ropa",  activa: true },
-  { id: 5, cliente: "Edwin", total: 175, categoria: "elect", activa: true },
+  { id: 4, cliente: "Diana", total: 50,  categoria: "ropa",  activa: true },
 ];
-totalElectActivos(ordenes);       // → 670  (250 + 420)
-resumenClasificacion(ordenes);    // → { aprobadas: 2, rechazadas: 3, total: 670 }
+
+clasificarOrden(ordenes[0]);  // → { status: "ok", value: { id: 1, ... } }
+clasificarOrden(ordenes[1]);  // → { status: "error", error: "orden inactiva" }
+clasificarOrden(ordenes[3]);  // → { status: "error", error: "monto insuficiente" }
+
+aplicarDescuento(10)(ordenes[0]);  // → { ...ordenes[0], total: 225 }
+
+procesarOrdenes(ordenes);
+// → {
+//   aprobadas: [{ id: 1, ..., total: 225 }, { id: 3, ..., total: 378 }],
+//   rechazadas: ["orden inactiva", "monto insuficiente"],
+//   totalFinal: 603
+// }
 ```
+
+**Requisitos:**
+- Usar `Result` para clasificación.
+- Usar partial application para el descuento.
+- Usar `filter`, `map`, `reduce` — sin bucles ni mutación.
 
 ---
 
-#### Ejercicio 20 — Integrador Clojure — 7 pts
-**Trazabilidad:** F-37 | **Archivo:** `clojure/src/tp04/ej20.clj`
+#### Ejercicio 18 — Integrador Clojure — 7 pts
+**Trazabilidad:** F-33 | **Archivo:** `clojure/src/tp04/ej18.clj`
 
 Implementá el mismo pipeline integrador en Clojure:
 
-- `(clasificar-orden orden)` — Retorna `{:ok true :value total}` si activa, categoría "elect" y total > 200. Error con razón en caso contrario.
-- `(total-elect-activos ordenes)` — Clasifica, filtra ok, suma valores.
-- `(resumen-por-categoria ordenes)` — Retorna mapa `{"elect" suma-elect, "ropa" suma-ropa, ...}` considerando solo las activas.
+- `(clasificar-orden orden)` — Retorna `{:ok true :value orden}` si activa y total > 100. Error con razón si no.
+- `(aplicar-descuento porcentaje orden)` — Retorna nueva orden con total reducido. Usar con `partial` para crear `(def descuento-10 (partial aplicar-descuento 10))`.
+- `(procesar-ordenes ordenes)` — Pipeline completo con `->>`: clasificar → separar ok/error → aplicar descuento → sumar. Retorna `{:aprobadas [...] :rechazadas [...] :total-final N}`.
 
 **Ejemplo:**
 ```clojure
@@ -488,11 +565,21 @@ Implementá el mismo pipeline integrador en Clojure:
   [{:id 1 :cliente "Ana"   :total 250 :categoria "elect" :activa? true}
    {:id 2 :cliente "Boris" :total 80  :categoria "ropa"  :activa? false}
    {:id 3 :cliente "Carla" :total 420 :categoria "elect" :activa? true}
-   {:id 4 :cliente "Diana" :total 30  :categoria "ropa"  :activa? true}
-   {:id 5 :cliente "Edwin" :total 175 :categoria "elect" :activa? true}])
+   {:id 4 :cliente "Diana" :total 50  :categoria "ropa"  :activa? true}])
 
-(total-elect-activos ordenes)      ; => 670
-(resumen-por-categoria ordenes)    ; => {"elect" 845, "ropa" 30}
+(clasificar-orden (first ordenes))
+; => {:ok true, :value {:id 1, :cliente "Ana", ...}}
+
+(clasificar-orden (second ordenes))
+; => {:ok false, :error "orden inactiva"}
+
+(def descuento-10 (partial aplicar-descuento 10))
+(descuento-10 {:id 1 :total 250})  ; => {:id 1, :total 225}
+
+(procesar-ordenes ordenes)
+; => {:aprobadas [{:id 1 :total 225 ...} {:id 3 :total 378 ...}]
+;     :rechazadas ["orden inactiva" "monto insuficiente"]
+;     :total-final 603}
 ```
 
 ---
@@ -501,26 +588,46 @@ Implementá el mismo pipeline integrador en Clojure:
 
 | Ej | Tema | Lenguaje | Filminas | Pts |
 |----|------|----------|----------|-----|
-| 1 | Pipeline filter/map/reduce | TypeScript | F-06,07,08 | 3 |
-| 2 | Composición pipe/compose | TypeScript | F-09 | 5 |
-| 3 | Inmutabilidad | TypeScript | F-05,10 | 3 |
-| 4 | Pipeline ->> | Clojure | F-12 | 3 |
-| 5 | Secuencias perezosas | Clojure | F-11 | 5 |
-| 6 | Colecciones persistentes | Clojure | F-13 | 3 |
-| 7 | ADT tipo suma | TypeScript | F-14 | 5 |
-| 8 | Result\<T,E\> | TypeScript | F-15,16 | 6 |
-| 9 | Maybe / Option | TypeScript | F-17 | 5 |
-| 10 | Errores como datos | Clojure | F-18 | 5 |
-| 11 | Transducer básico | Clojure | F-19,20 | 5 |
-| 12 | Transducer vs pipeline | Clojure | F-21 | 5 |
-| 13 | API genérica funcional | TypeScript | F-22 | 7 |
-| 14 | Funciones de orden superior | TypeScript | F-23 | 5 |
-| 15 | core.async canales | Clojure | F-26,27 | 6 |
-| 16 | STM transacciones | Clojure | F-28 | 6 |
-| 17 | async/await | TypeScript | F-30,31 | 5 |
-| 18 | Separar efectos puros | TypeScript | F-32 | 5 |
-| 19 | Integrador TypeScript | TypeScript | F-35,36 | 6 |
-| 20 | Integrador Clojure | Clojure | F-37 | 7 |
+| 1 | Pipeline filter/map/reduce | TypeScript | F-04, F-05, F-10 | 5 |
+| 2 | Composición pipe/compose | TypeScript | F-06, F-07 | 6 |
+| 3 | Inmutabilidad con spread | TypeScript | F-09 | 4 |
+| 4 | Pipeline con ->> | Clojure | F-08 | 5 |
+| 5 | flatMap y reduce avanzado | TypeScript | F-11, F-12 | 5 |
+| 6 | Partial application | TypeScript | F-13, F-14 | 6 |
+| 7 | Partial en Clojure | Clojure | F-15 | 5 |
+| 8 | Currying | TypeScript | F-16, F-17 | 6 |
+| 9 | Validadores con currying | Clojure | F-18 | 5 |
+| 10 | Result y validación encadenada | TypeScript | F-19, F-20, F-21 | 7 |
+| 11 | Middleware como HOF | TypeScript | F-22, F-23 | 6 |
+| 12 | Recursión de cola | Clojure | F-24, F-25, F-26 | 6 |
+| 13 | Recursión de cola | TypeScript | F-27 | 5 |
+| 14 | Memoization | TypeScript | F-28, F-29 | 5 |
+| 15 | Lazy sequences | Clojure | F-30 | 5 |
+| 16 | DSL data-driven | Clojure | F-31 | 5 |
+| 17 | Integrador TypeScript | TypeScript | F-33 | 7 |
+| 18 | Integrador Clojure | Clojure | F-33 | 7 |
 | | | | **Total** | **100** |
 
-**TypeScript:** 11 ejercicios — 60 pts | **Clojure:** 9 ejercicios — 40 pts
+**TypeScript:** 11 ejercicios — 62 pts | **Clojure:** 7 ejercicios — 38 pts
+
+---
+
+## Criterios de evaluación
+
+- **Corrección funcional:** los tests automáticos validan inputs normales y bordes.
+- **Estilo funcional:** no se aceptan `let` mutables, bucles `for`/`while` ni mutación de objetos.
+- **Trazabilidad:** cada ejercicio corresponde a filminas específicas de la clase.
+
+---
+
+## Correlación con la guía de estudio
+
+Si te trabás en un ejercicio, buscá en la guía de estudio (`guia-estudio.md`) la sección correspondiente:
+
+| Ejercicios | Sección de la guía |
+|------------|-------------------|
+| 1–5 | Parte 1 — HOF y composición |
+| 6–9 | Parte 2 — Partial application y currying |
+| 10–11 | Parte 2 — Result y middleware |
+| 12–16 | Parte 3 — Recursión, memoization, lazy, DSL |
+| 17–18 | Parte 4 — Integración de patrones |

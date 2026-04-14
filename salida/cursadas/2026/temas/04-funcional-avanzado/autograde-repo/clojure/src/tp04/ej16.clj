@@ -1,33 +1,18 @@
-(ns tp04.ej16)
+(ns tp04.ej16
+  "Ejercicio 16 — DSL data-driven (5 pts). Trazabilidad: F-31"
+  (:require [clojure.string :as str]))
 
-;; Ejercicio 16 — STM y transacciones
-;; Trazabilidad: F-28
+;; Vector de reglas: {:field :name, :pred fn, :msg "..."}
+(def user-rules
+  ;; TODO: definir al menos 3 reglas (nombre no vacío, email con @, edad >= 18)
+  [])
 
-(defn crear-banco
-  "Recibe un mapa {:ana 1000 :boris 500 ...} y retorna un mapa
-   donde cada valor es un ref con el saldo.
-   Ejemplo: {:ana (ref 1000) :boris (ref 500)}"
-  [cuentas-map]
-  ;; TODO: Implementar
+;; Aplica todas las reglas a data. Retorna vector de {:field :error} (vacío si ok).
+(defn validate [rules data]
+  ;; TODO: implementar
   )
 
-(defn saldo
-  "Retorna el saldo actual de una cuenta (deref del ref)."
-  [banco cuenta]
-  ;; TODO: Implementar
-  )
-
-(defn transferir
-  "Transfiere monto de la cuenta origen a la cuenta destino.
-   Debe ejecutarse dentro de dosync para ser atómica.
-   Usa alter para modificar los refs."
-  [banco origen destino monto]
-  ;; TODO: Implementar con dosync
-  )
-
-(defn total-banco
-  "Suma todos los saldos del banco.
-   El invariante: este total nunca cambia tras transferencias."
-  [banco]
-  ;; TODO: Implementar
+;; true si no hay errores.
+(defn valid? [rules data]
+  ;; TODO: implementar
   )

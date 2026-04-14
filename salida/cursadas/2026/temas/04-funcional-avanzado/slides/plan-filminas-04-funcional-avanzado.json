@@ -3,47 +3,22 @@
   "meta": {
     "topic_id": "04-funcional-avanzado",
     "title": "Aspectos Avanzados de Programación Funcional",
-    "source": "filminas.md",
-    "generated_at": "2026-04-07T14:14:54",
+    "source": "salida/cursadas/2026/temas/04-funcional-avanzado/filminas.md",
+    "generated_at": "2026-04-14T12:00:00Z",
     "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
-    "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
-    "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\04-funcional-avanzado",
+    "topics_folder": "salida/cursadas/2026/temas",
+    "topic_folder": "salida/cursadas/2026/temas/04-funcional-avanzado",
     "design_system_path": "_edu/slides-config.yaml",
     "pipeline_runtime_path": "_edu/slides-pipeline.json",
     "schema_registry_path": "_edu/schemas/schema-registry.json"
-  },
-  "summary": {
-    "total_slides": 42,
-    "images_planned": 21,
-    "tables_planned": 6,
-    "code_slides": 14,
-    "status": "READY_FOR_VALIDATION",
-    "pending_types": 0,
-    "pending_prompts": 0,
-    "type_distribution": {
-      "portada": 1,
-      "concepto-abstracto": 15,
-      "tabla-comparativa": 4,
-      "codigo": 14,
-      "tabla": 2,
-      "diagrama": 2,
-      "demo": 1,
-      "socratica": 1,
-      "cierre": 2
-    }
   },
   "slides": [
     {
       "id": "F-01",
       "type": "portada",
-      "title": "Portada",
-      "subtitle": "Aspectos Avanzados de Programación Funcional",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "Paradigmas y Lenguajes de Programación 2026 — UNTDF / IDEI\nTema 04 · Módulo II"
-        }
-      ],
+      "title": "Aspectos Avanzados de Programación Funcional",
+      "subtitle": "Paradigmas de Programación — UNTDF / IDEI 2026 · Tema 04 · Clojure + TypeScript",
+      "body_blocks": [],
       "code_blocks": [],
       "tables": [],
       "layout": {
@@ -55,37 +30,44 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "fondo oscuro con circuitos y símbolos de lambda (λ) y componentes de código abstractos en tonos azul profundo, estilo académico-tecnológico",
-        "local_asset": "slides/assets/F-01-bg.png",
-        "drive_id": "1DpXAuCnOGlyKXnfgs83G5F_V5PoLqnDe"
+        "prompt": "Abstract composition: a large bordo circle in the center with six thin radiating lines ending in small geometric shapes — hexagon, triangle, square, diamond, oval, star. Flat design, bordo #8B0000 and dark gray #1A1A1A palette, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
       },
       "table_assets": []
     },
     {
       "id": "F-02",
       "type": "concepto-abstracto",
-      "title": "¿Por qué hablar de funcional?",
-      "subtitle": "¿Por qué hablar de programación funcional?",
+      "title": "Qué construimos hoy",
+      "subtitle": "",
       "body_blocks": [
-        {
-          "type": "heading",
-          "level": 2,
-          "content": "Contexto actual"
-        },
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Concurrencia y multicore obligan a pensar en datos inmutables",
+              "content": "**Bloque 1 (35 min):** First-class functions, HOF, compose/pipe, pipelines con datos reales.",
               "level": 0
             },
             {
-              "content": "El funcional es una forma de controlar la complejidad",
+              "content": "**Bloque 2 (35 min):** Partial application, currying, Result, validación y middleware web.",
               "level": 0
             },
             {
-              "content": "No es solo teoría: es una forma práctica de diseño",
+              "content": "**Bloque 3 (30 min):** Recursión de cola, memoization, lazy sequences, patrones avanzados.",
+              "level": 0
+            },
+            {
+              "content": "**Bloque 4 (20 min):** Taller integrador y comparación Clojure ↔ TypeScript.",
+              "level": 0
+            },
+            {
+              "content": "Dos lenguajes, una misma idea: **datos inmutables + funciones puras + composición**.",
+              "level": 0
+            },
+            {
+              "content": "Al terminar: podés diseñar un pipeline real de validación/request sin variables mutables.",
               "level": 0
             }
           ]
@@ -102,28 +84,224 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "infografía con una ruta que va de un nodo \"estado mutable\" a otro nodo \"expresiones puras\", con flechas y colores azul y gris, estilo académico moderno",
-        "local_asset": "slides/assets/F-02-content.png",
-        "drive_id": "1kI9-CO1LC2mUXQTjRONJfBXPH5NQc0tI"
+        "prompt": "Four horizontal rectangles stacked vertically with small gaps, each in a gradient from bordo to dark gray. Thin downward arrows connect them sequentially. A bold checkmark icon at the bottom. Flat design, bordo #8B0000 and gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
       },
       "table_assets": []
     },
     {
       "id": "F-03",
-      "type": "tabla-comparativa",
-      "title": "Imperativo vs funcional",
-      "subtitle": "Imperativo vs funcional",
-      "body_blocks": [],
-      "code_blocks": [],
-      "tables": [
-        "| Paradigma | Qué representa | Punto fuerte |\n|---|---|---|\n| Imperativo | Estado mutable + pasos | Control detallado |\n| Funcional | Expresiones + composición | Menos efectos colaterales |"
+      "type": "concepto-abstracto",
+      "title": "Fuera de scope",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Concurrency / core.async:** canales, go-blocks, STM — temas propios del modelo de actores.",
+              "level": 0
+            },
+            {
+              "content": "**Teoría categórica:** funtores, mónadas formales, flechas — abstracto e innecesario en esta etapa.",
+              "level": 0
+            },
+            {
+              "content": "**Librerías FP completas:** Ramda, fp-ts, crocks — excelentes, pero no las necesitamos para entender los patrones.",
+              "level": 0
+            },
+            {
+              "content": "**Frameworks async/reactive:** RxJS, Effect-TS — dependen de conceptos que aún no vimos.",
+              "level": 0
+            },
+            {
+              "content": "Razón: en 120 minutos priorizamos **comprensión profunda > cobertura superficial**.",
+              "level": 0
+            }
+          ]
+        }
       ],
+      "code_blocks": [],
+      "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "table-intro",
-        "image": "none",
+        "body": "left-middle",
+        "image": "right-half",
         "code": "none",
-        "table": "table-main"
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "A large circle with a diagonal line crossing it (prohibition sign shape) in bordo. Inside the circle, four small scattered geometric shapes: triangle, square, hexagon, diamond in light gray. Flat minimal design, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-04",
+      "type": "concepto-abstracto",
+      "title": "Funciones como valores de primera clase",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "En FP, una función es un valor igual que un número o un string.",
+              "level": 0
+            },
+            {
+              "content": "Se puede **asignar** a una variable, **pasar** como argumento, **devolver** como resultado.",
+              "level": 0
+            },
+            {
+              "content": "Esto hace posible las funciones de orden superior (HOF).",
+              "level": 0
+            },
+            {
+              "content": "Sin first-class functions no existe map, filter, ni compose.",
+              "level": 0
+            },
+            {
+              "content": "**Imperativo:** digo *cómo* iterar. **Funcional:** digo *qué* hacer con cada elemento.",
+              "level": 0
+            },
+            {
+              "content": "Ambos lenguajes lo soportan: JavaScript/TypeScript y Clojure son lenguajes funcionales de primera clase.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Three identical small bordo squares arranged in a horizontal row. Below them, three thin curved arrows: one arrow picks up the left square and places it into a larger rectangle on the right; another arrow passes the middle square downward into a circle; the third arrow returns the right square upward. Flat design, bordo #8B0000 and dark gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "concepto-abstracto",
+      "title": "Higher-Order Function (HOF)",
+      "subtitle": "Una función que recibe y/o devuelve otra función.",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "map(f, lista) → aplica f a cada elemento.",
+              "level": 0
+            },
+            {
+              "content": "filter(pred, lista) → mantiene los que satisfacen pred.",
+              "level": 0
+            },
+            {
+              "content": "reduce(f, acc, lista) → pliega la lista a un único valor.",
+              "level": 0
+            },
+            {
+              "content": "compose(f, g)(x) → ejecuta g(x) y pasa el resultado a f.",
+              "level": 0
+            },
+            {
+              "content": "pipe(f, g)(x) → igual que compose pero en orden izquierda → derecha.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "**Por qué importa:** constituyen el vocabulario con el que se construyen todos los patrones avanzados."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "A large bordo rectangle at the top with a thin arrow pointing down into a row of five small gray circles. Each circle has a thin arrow pointing down to a corresponding small bordo square below. Flat minimal design, bordo #8B0000 and dark gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-06",
+      "type": "concepto-mixto",
+      "title": "Composición de funciones",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "compose aplica funciones de derecha a izquierda (matemáticamente natural).",
+              "level": 0
+            },
+            {
+              "content": "pipe aplica de izquierda a derecha (más legible para desarrollo).",
+              "level": 0
+            },
+            {
+              "content": "Cada función recibe el output de la anterior.",
+              "level": 0
+            },
+            {
+              "content": "Los tipos deben ser compatibles entre funciones consecutivas.",
+              "level": 0
+            },
+            {
+              "content": "El resultado es una **nueva función** — no se ejecuta nada hasta que se llame.",
+              "level": 0
+            },
+            {
+              "content": "Permite nombrar pipelines: const processUser = pipe(trim, normalize, validate).",
+              "level": 0
+            },
+            {
+              "content": "En Clojure: el operador ->> hace exactamente lo mismo (thread-last macro).",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "compose(f, g, h)(x) === f(g(h(x)))\npipe(h, g, f)(x)    === f(g(h(x)))"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
       },
       "image": {
         "layer": "none",
@@ -131,119 +309,18 @@
         "local_asset": "",
         "drive_id": null
       },
-      "table_assets": [
-        {
-          "index": 0,
-          "table_markdown": "| Paradigma | Qué representa | Punto fuerte |\n|---|---|---|\n| Imperativo | Estado mutable + pasos | Control detallado |\n| Funcional | Expresiones + composición | Menos efectos colaterales |",
-          "local_asset": "slides/assets/F-03-table-1.png",
-          "drive_id": "1zfOw2uN-Nxph9YHY4lYjPZDRvyFhMycU"
-        }
-      ]
-    },
-    {
-      "id": "F-04",
-      "type": "concepto-abstracto",
-      "title": "Funciones puras",
-      "subtitle": "Funciones puras",
-      "body_blocks": [
-        {
-          "type": "heading",
-          "level": 2,
-          "content": "Definición"
-        },
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Misma entrada → mismo resultado",
-              "level": 0
-            },
-            {
-              "content": "No producen efectos secundarios",
-              "level": 0
-            },
-            {
-              "content": "Son fáciles de razonar y de testear",
-              "level": 0
-            }
-          ]
-        }
-      ],
-      "code_blocks": [],
-      "tables": [],
-      "layout": {
-        "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
-        "table": "none"
-      },
-      "image": {
-        "layer": "content",
-        "prompt": "diagrama de cajas y flechas mostrando entrada, función y salida sin cambios en el origen, con colores azul y blanco, estilo plano",
-        "local_asset": "slides/assets/F-04-content.png",
-        "drive_id": "1X4RFaiNJtSN4k48DAc7OB7vXT89jcqJ5"
-      },
       "table_assets": []
     },
     {
-      "id": "F-05",
-      "type": "concepto-abstracto",
-      "title": "Inmutabilidad",
-      "subtitle": "Inmutabilidad",
-      "body_blocks": [
-        {
-          "type": "heading",
-          "level": 2,
-          "content": "Por qué importa"
-        },
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "El valor original no cambia",
-              "level": 0
-            },
-            {
-              "content": "Se evita el estado compartido corrupto",
-              "level": 0
-            },
-            {
-              "content": "Es la base de modelos funcionales seguros",
-              "level": 0
-            }
-          ]
-        }
-      ],
-      "code_blocks": [],
-      "tables": [],
-      "layout": {
-        "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
-        "table": "none"
-      },
-      "image": {
-        "layer": "content",
-        "prompt": "ilustración de dos objetos de datos, uno original y otro nuevo, con flechas que muestran copia por valor y sin mutación, estilo minimalista en gris y azul",
-        "local_asset": "slides/assets/F-05-content.png",
-        "drive_id": "13UyTsS-fTwCIIbpcp-q6ZAtjnUnXlxG5"
-      },
-      "table_assets": []
-    },
-    {
-      "id": "F-06",
+      "id": "F-07",
       "type": "codigo",
-      "title": "Pipeline en TypeScript",
-      "subtitle": "Pipeline funcional en TypeScript",
+      "title": "Implementación real en TS",
+      "subtitle": "compose y pipe en TypeScript",
       "body_blocks": [],
       "code_blocks": [
         {
           "lang": "typescript",
-          "content": "const numeros = [1, 2, 3, 4, 5, 6];\nconst resultado = numeros\n  .filter(n => n % 2 === 0)\n  .map(n => n * n)\n  .reduce((acc, n) => acc + n, 0);"
+          "content": "// Implementación simple de pipe\nconst pipe = <T>(...fns: Array<(x: T) => T>) =>\n  (x: T): T => fns.reduce((acc, fn) => fn(acc), x);\n\n// Funciones unitarias, puras, testeables por separado\nconst trim = (s: string) => s.trim();\nconst lowercase = (s: string) => s.toLowerCase();\nconst addDomain = (s: string) =>\n  s.includes(\"@\") ? s : `${s}@empresa.com`;\n\n// Pipeline nombrado: se lee como una especificación\nconst normalizeEmail = pipe(trim, lowercase, addDomain);\n\n// Uso en handler de formulario\nconst handleLogin = (raw: string) => {\n  const email = normalizeEmail(raw);   // \"  ANA  \" → \"ana@empresa.com\"\n  return fetchUser(email);\n};"
         }
       ],
       "tables": [],
@@ -263,68 +340,15 @@
       "table_assets": []
     },
     {
-      "id": "F-07",
-      "type": "tabla",
-      "title": "`filter` + `map`",
-      "subtitle": "`filter` y `map`",
-      "body_blocks": [
-        {
-          "type": "heading",
-          "level": 2,
-          "content": "¿Qué hacen?"
-        }
-      ],
-      "code_blocks": [],
-      "tables": [
-        "| Operación | Resultado |\n|---|---|\n| `filter` | Selecciona elementos que cumplen la condición |\n| `map` | Transforma cada elemento |"
-      ],
-      "layout": {
-        "title": "full-title",
-        "body": "table-intro",
-        "image": "none",
-        "code": "none",
-        "table": "table-main"
-      },
-      "image": {
-        "layer": "none",
-        "prompt": "",
-        "local_asset": "",
-        "drive_id": null
-      },
-      "table_assets": [
-        {
-          "index": 0,
-          "table_markdown": "| Operación | Resultado |\n|---|---|\n| `filter` | Selecciona elementos que cumplen la condición |\n| `map` | Transforma cada elemento |",
-          "local_asset": "slides/assets/F-07-table-1.png",
-          "drive_id": "13CU-xSGzegXPftF8t5-0vnCm05WSZkoM"
-        }
-      ]
-    },
-    {
       "id": "F-08",
       "type": "codigo",
-      "title": "`reduce`",
-      "subtitle": "`reduce` en TypeScript",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Acumula un valor sin mutar la colección",
-              "level": 0
-            },
-            {
-              "content": "Útil para agregaciones y cálculos finales",
-              "level": 0
-            }
-          ]
-        }
-      ],
+      "title": "->> como pipe en Clojure",
+      "subtitle": "Thread macro en Clojure",
+      "body_blocks": [],
       "code_blocks": [
         {
-          "lang": "typescript",
-          "content": "const suma = numeros.reduce((acc, n) => acc + n, 0);"
+          "lang": "clojure",
+          "content": ";; Sin thread macro — difícil de leer\n(reduce + (map #(* % %) (filter even? [1 2 3 4 5])))\n\n;; Con ->> — fluye de arriba hacia abajo\n(->> [1 2 3 4 5]\n     (filter even?)          ; → (2 4)\n     (map #(* % %))          ; → (4 16)\n     (reduce +))             ; → 20\n\n;; Ejemplo real: pipeline de pedidos\n(->> orders\n     (filter #(= (:status %) :completed))\n     (map :total)\n     (reduce + 0))\n;; Devuelve la suma de pedidos completados"
         }
       ],
       "tables": [],
@@ -346,13 +370,13 @@
     {
       "id": "F-09",
       "type": "codigo",
-      "title": "Composición en TypeScript",
-      "subtitle": "Composición funcional en TypeScript",
+      "title": "Inmutabilidad en TypeScript",
+      "subtitle": "Datos inmutables: el contrato FP",
       "body_blocks": [],
       "code_blocks": [
         {
           "lang": "typescript",
-          "content": "type Transform<T> = (items: T[]) => T[];\n\nconst filterPares: Transform<number> = items =>\n  items.filter(n => n % 2 === 0);\n\nconst mapCuadrado: Transform<number> = items =>\n  items.map(n => n * n);\n\nconst compose = <T>(...fns: Transform<T>[]) =>\n  (input: T[]) => fns.reduce((acc, fn) => fn(acc), input);\n\nconst pipeline = compose(filterPares, mapCuadrado);"
+          "content": "// ❌ Imperativo: mutación directa del objeto\nfunction normalize(user: User): void {\n  user.email = user.email.trim().toLowerCase();  // mutación\n  user.name = user.name.trim();                  // mutación\n}\n\n// ✅ Funcional: cada función produce un nuevo objeto\nconst trimUser = (u: User): User =>\n  ({ ...u, email: u.email.trim(), name: u.name.trim() });\n\nconst lowercaseEmail = (u: User): User =>\n  ({ ...u, email: u.email.toLowerCase() });\n\nconst normalizeUser = pipe(trimUser, lowercaseEmail);\n\n// El objeto original nunca se modifica\nconst raw = { name: \"  Ana  \", email: \"  ANA@test.com  \" };\nconst clean = normalizeUser(raw);\n// raw sigue igual; clean es el nuevo valor"
         }
       ],
       "tables": [],
@@ -374,28 +398,31 @@
     {
       "id": "F-10",
       "type": "concepto-abstracto",
-      "title": "Colecciones inmutables en TS",
-      "subtitle": "Colecciones inmutables en TypeScript",
+      "title": "Transformación declarativa de colecciones",
+      "subtitle": "map, filter y flatMap en profundidad",
       "body_blocks": [
-        {
-          "type": "heading",
-          "level": 2,
-          "content": "Herramientas"
-        },
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "`const` + `readonly`",
+              "content": "**map:** transforma cada elemento sin cambiar la cantidad. Array<A>.map(A → B): Array<B>.",
               "level": 0
             },
             {
-              "content": "`ReadonlyArray<T>`",
+              "content": "**filter:** selecciona un subconjunto; el tipo no cambia. Array<A>.filter(A → boolean): Array<A>.",
               "level": 0
             },
             {
-              "content": "Spread `...` para crear nuevos valores",
+              "content": "**flatMap:** transforma Y aplana un nivel — útil cuando cada elemento produce una lista. Array<A>.flatMap(A → Array<B>): Array<B>.",
+              "level": 0
+            },
+            {
+              "content": "Sin flatMap necesitaríamos .map(...).flat() — flatMap es más eficiente.",
+              "level": 0
+            },
+            {
+              "content": "**En Clojure:** map, filter, mapcat (≡ flatMap). Todo trabaja sobre *seq* (secuencias perezosas).",
               "level": 0
             }
           ]
@@ -412,60 +439,50 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "infografía con un objeto original y un objeto nuevo creado por copia, con un candado y flechas, estilo profesional sin texto",
-        "local_asset": "slides/assets/F-10-content.png",
-        "drive_id": "1XV5IrDrqxNIBZ_6O4HJ4O_d0kXdkiq74"
+        "prompt": "Three horizontal rows on white background. Top row: five small gray circles in a line with a thin arrow pointing right to five small bordo squares (transformation). Middle row: five small circles but only three remain highlighted in bordo, two are faded light gray (selection). Bottom row: three circles each splitting into two small squares, all flattened into a single line of six squares. Flat design, bordo #8B0000 and gray #1A1A1A. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
       },
       "table_assets": []
     },
     {
       "id": "F-11",
-      "type": "concepto-abstracto",
-      "title": "Secuencias perezosas en Clojure",
-      "subtitle": "Secuencias perezosas en Clojure",
-      "body_blocks": [
+      "type": "codigo",
+      "title": "flatMap en contexto real",
+      "subtitle": "flatMap aplicado: usuarios y permisos",
+      "body_blocks": [],
+      "code_blocks": [
         {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Las operaciones no se ejecutan hasta que se necesita el resultado",
-              "level": 0
-            },
-            {
-              "content": "Permite trabajar con colecciones grandes sin pasos intermedios innecesarios",
-              "level": 0
-            }
-          ]
+          "lang": "typescript",
+          "content": "type User = { name: string; roles: string[] };\n\nconst users: User[] = [\n  { name: \"Ana\",   roles: [\"admin\", \"editor\"] },\n  { name: \"Luis\",  roles: [\"editor\"] },\n  { name: \"María\", roles: [\"viewer\", \"editor\"] },\n];\n\n// Lista única de todos los roles (con duplicados)\nconst allRoles = users.flatMap(u => u.roles);\n// → [\"admin\", \"editor\", \"editor\", \"viewer\", \"editor\"]\n\n// Roles únicos sin duplicados\nconst uniqueRoles = [...new Set(users.flatMap(u => u.roles))];\n// → [\"admin\", \"editor\", \"viewer\"]\n\n// En Clojure con mapcat (equivalente a flatMap)\n(mapcat :roles users)\n;; → (\"admin\" \"editor\" \"editor\" \"viewer\" \"editor\")"
         }
       ],
-      "code_blocks": [],
       "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
         "table": "none"
       },
       "image": {
-        "layer": "content",
-        "prompt": "diagrama simple de datos que fluyen lentamente por una tubería con gotas, estilo minimalista azul-gris",
-        "local_asset": "slides/assets/F-11-content.png",
-        "drive_id": "1iTe1Uz4L84kzMybB7mw5SXwvGn1F27t1"
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
       },
       "table_assets": []
     },
     {
       "id": "F-12",
       "type": "codigo",
-      "title": "Pipeline en Clojure",
-      "subtitle": "Pipeline en Clojure",
+      "title": "reduce generaliza todo",
+      "subtitle": "reduce y fold: plegar colecciones",
       "body_blocks": [],
       "code_blocks": [
         {
-          "lang": "clojure",
-          "content": "(def numeros [1 2 3 4 5 6])\n(def resultado\n  (->> numeros\n       (filter even?)\n       (map #(* % %))\n       (reduce +)))"
+          "lang": "typescript",
+          "content": "// reduce: (acc, item) → nuevo acc\n// Es el patrón más general: map y filter son casos especiales de reduce\n\n// Suma de revenues\nconst totalRevenue = orders\n  .filter(o => o.status === \"completed\")\n  .map(o => o.amount)\n  .reduce((sum, amt) => sum + amt, 0);\n\n// Construir un índice (dict) a partir de una lista\nconst userById = users.reduce(\n  (index, user) => ({ ...index, [user.id]: user }),\n  {} as Record<string, User>\n);\n\n// En Clojure usando ->>\n(->> orders\n     (filter #(= :completed (:status %)))\n     (map :amount)\n     (reduce + 0))"
         }
       ],
       "tables": [],
@@ -486,57 +503,69 @@
     },
     {
       "id": "F-13",
-      "type": "diagrama",
-      "title": "Colecciones persistentes en Clojure",
-      "subtitle": "Colecciones persistentes",
+      "type": "concepto-mixto",
+      "title": "Partial Application",
+      "subtitle": "",
       "body_blocks": [
         {
-          "type": "heading",
-          "level": 2,
-          "content": "Ventaja clave"
+          "type": "text",
+          "content": "Una función de N argumentos → función con algunos argumentos *prefijados*."
         },
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Nuevas versiones se construyen sin copiar todo",
+              "content": "Produce una función más específica a partir de una genérica.",
               "level": 0
             },
             {
-              "content": "Acceso rápido y seguro a datos antiguos",
+              "content": "No ejecuta la función todavía — espera los argumentos restantes.",
+              "level": 0
+            },
+            {
+              "content": "Es la base de las *fábricas de funciones* y los *builders*.",
               "level": 0
             }
           ]
+        },
+        {
+          "type": "text",
+          "content": "**Por qué es útil en web:** makeValidator(\"email\") → validador especializado. makeLogger(\"auth\") → logger prefijado. makeRoute(\"/api/users\") → route handler especializado."
         }
       ],
-      "code_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "add(a, b) = a + b          // función 2-aria\nadd5 = partial(add, 5)     // función 1-aria, con a=5 prefijado\nadd5(3) → 8"
+        }
+      ],
       "tables": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
+        "image": "none",
+        "code": "right-half",
         "table": "none"
       },
       "image": {
-        "layer": "content",
-        "prompt": "ilustración de una estructura de datos que comparte nodos entre dos versiones, con un efecto de capas y estilo plano",
-        "local_asset": "slides/assets/F-13-content.png",
-        "drive_id": "1rOtx21HwLGvsiS9-HhzaEUSM2lTmjflu"
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
       },
       "table_assets": []
     },
     {
       "id": "F-14",
       "type": "codigo",
-      "title": "Algebraic data types en TS",
-      "subtitle": "Algebraic Data Types en TypeScript",
+      "title": "partial en TS con closures",
+      "subtitle": "Partial application en TypeScript",
       "body_blocks": [],
       "code_blocks": [
         {
           "lang": "typescript",
-          "content": "type Resultado<T, E> =\n  | { status: \"ok\"; value: T }\n  | { status: \"error\"; error: E };"
+          "content": "// Función genérica de 2 argumentos\nconst add = (a: number, b: number) => a + b;\n\n// Partial manual con closure\nconst add5 = (b: number) => add(5, b);\nadd5(3);  // → 8\n\n// Utility general\nconst partial = <A, B, C>(fn: (a: A, b: B) => C, a: A) =>\n  (b: B): C => fn(a, b);\n\n// Caso real: validador configurable\nconst makeRequiredValidator =\n  (fieldName: string) =>\n  (value: string): Result<string, string> =>\n    value.trim()\n      ? { status: \"ok\",    value }\n      : { status: \"error\", error: `${fieldName} es obligatorio` };\n\n// Validators especializados\nconst validateName  = makeRequiredValidator(\"nombre\");\nconst validateEmail = makeRequiredValidator(\"email\");"
         }
       ],
       "tables": [],
@@ -557,46 +586,14 @@
     },
     {
       "id": "F-15",
-      "type": "tabla-comparativa",
-      "title": "`Result` vs excepción",
-      "subtitle": "`Result` vs excepciones",
-      "body_blocks": [],
-      "code_blocks": [],
-      "tables": [
-        "| Enfoque | ¿Qué muestra? | Beneficio |\n|---|---|---|\n| Excepción | Salida normal o error inesperado | Control fuera del tipo |\n| `Result` | Flujo explícito de éxito/fallo | Más fácil de razonar |"
-      ],
-      "layout": {
-        "title": "full-title",
-        "body": "table-intro",
-        "image": "none",
-        "code": "none",
-        "table": "table-main"
-      },
-      "image": {
-        "layer": "none",
-        "prompt": "",
-        "local_asset": "",
-        "drive_id": null
-      },
-      "table_assets": [
-        {
-          "index": 0,
-          "table_markdown": "| Enfoque | ¿Qué muestra? | Beneficio |\n|---|---|---|\n| Excepción | Salida normal o error inesperado | Control fuera del tipo |\n| `Result` | Flujo explícito de éxito/fallo | Más fácil de razonar |",
-          "local_asset": "slides/assets/F-15-table-1.png",
-          "drive_id": "1I9teGyLF6B0mXrFdF7R4rOeeCQCP79tR"
-        }
-      ]
-    },
-    {
-      "id": "F-16",
       "type": "codigo",
-      "title": "Ejemplo `Result` en TS",
-      "subtitle": "Ejemplo de `Result` en TypeScript",
+      "title": "partial nativo de Clojure",
+      "subtitle": "Partial application en Clojure",
       "body_blocks": [],
       "code_blocks": [
         {
-          "lang": "typescript",
-          "content": "const dividir = (a: number, b: number): Resultado<number, string> =>\n  b === 0\n    ? { status: \"error\", error: \"División por cero\" }\n    : { status: \"ok\", value: a / b };"
+          "lang": "clojure",
+          "content": ";; partial en Clojure: devuelve función con args prefijados\n(defn multiply [factor n] (* factor n))\n\n(def double  (partial multiply 2))\n(def triple  (partial multiply 3))\n\n(map double [1 2 3 4])   ;→ (2 4 6 8)\n(map triple [1 2 3 4])   ;→ (3 6 9 12)\n\n;; Validador configurable\n(defn required-field [field-name value]\n  (if (seq (clojure.string/trim value))\n    {:status :ok    :value value}\n    {:status :error :error (str field-name \" es obligatorio\")}))\n\n(def validate-name  (partial required-field \"nombre\"))\n(def validate-email (partial required-field \"email\"))\n\n(validate-name \"Ana\")   ;→ {:status :ok, :value \"Ana\"}\n(validate-name \"\")      ;→ {:status :error, :error \"nombre es obligatorio\"}"
         }
       ],
       "tables": [],
@@ -616,57 +613,80 @@
       "table_assets": []
     },
     {
-      "id": "F-17",
-      "type": "concepto-abstracto",
-      "title": "`Option` / `Maybe`",
-      "subtitle": "`Option` / `Maybe`",
+      "id": "F-16",
+      "type": "tabla-comparativa",
+      "title": "Currying",
+      "subtitle": "Transformar una función de N argumentos en N funciones anidadas de 1 argumento.",
       "body_blocks": [
         {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Representa un valor que puede o no existir",
-              "level": 0
-            },
-            {
-              "content": "Evita `null` y `undefined`",
-              "level": 0
-            },
-            {
-              "content": "Es útil para datos opcionales en pipeline funcional",
-              "level": 0
-            }
-          ]
+          "type": "text",
+          "content": "**Por qué importa:** Currying permite construir variantes de funciones sin duplicar código. Habilita la composición cuando pipe/compose necesita funciones de 1 argumento. Es idiomático en Haskell, Elm, F# — en TS/Clojure se hace explícitamente."
         }
       ],
       "code_blocks": [],
+      "tables": [
+        "| | Partial Application | Currying |\n|---|---|---|\n| Qué hace | Fija *algunos* argumentos | Convierte en cadena de 1-arg |\n| Cuándo aplica | En el momento de usar | Al definir la función |\n| Flexibilidad | Cualquier cantidad de args | Siempre 1 arg por vez |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| | Partial Application | Currying |\n|---|---|---|\n| Qué hace | Fija *algunos* argumentos | Convierte en cadena de 1-arg |\n| Cuándo aplica | En el momento de usar | Al definir la función |\n| Flexibilidad | Cualquier cantidad de args | Siempre 1 arg por vez |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-17",
+      "type": "codigo",
+      "title": "Curry genérico y uso real",
+      "subtitle": "Currying en TypeScript: implementación",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Curry genérico para funciones de 2 args\nconst curry2 = <A, B, C>(fn: (a: A, b: B) => C) =>\n  (a: A) => (b: B): C => fn(a, b);\n\n// Función 2-aria base\nconst hasMinLength = (min: number, str: string) => str.length >= min;\n\n// Versión currificada\nconst cHasMinLength = curry2(hasMinLength);\n\n// Validators especializados via currying\nconst atLeast3 = cHasMinLength(3);   // nombre\nconst atLeast8 = cHasMinLength(8);   // contraseña\n\n// Uso en pipeline de validación\nconst validatePassword = pipe(\n  trim,\n  (s: string) => atLeast8(s)\n    ? { status: \"ok\" as const, value: s }\n    : { status: \"error\" as const, error: \"mínimo 8 caracteres\" }\n);"
+        }
+      ],
       "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
         "table": "none"
       },
       "image": {
-        "layer": "content",
-        "prompt": "iconos de un objeto presente y otro ausente, con un signo de interrogación y flechas, estilo gráfico educativo",
-        "local_asset": "slides/assets/F-17-content.png",
-        "drive_id": "17n2hJgMmRJq-fF03-0zvvxukWcn6ORiS"
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
       },
       "table_assets": []
     },
     {
       "id": "F-18",
       "type": "codigo",
-      "title": "Manejo de errores en Clojure",
-      "subtitle": "Manejo funcional de errores en Clojure",
+      "title": "Currying idiomático en Clojure",
+      "subtitle": "Currying en Clojure: estilo HOF",
       "body_blocks": [],
       "code_blocks": [
         {
           "lang": "clojure",
-          "content": "(defn dividir [a b]\n  (if (zero? b)\n    {:status :error :error \"División por cero\"}\n    {:status :ok :value (/ a b)}))"
+          "content": ";; En Clojure se logra con lambdas anidadas\n(defn make-validator [pred error-msg]\n  (fn [value]\n    (if (pred value)\n      {:status :ok    :value value}\n      {:status :error :error error-msg})))\n\n;; Validators especializados\n(def validate-email\n  (make-validator\n    #(re-matches #\".+@.+\\..+\" %)\n    \"email inválido\"))\n\n(def validate-not-empty\n  (make-validator\n    #(seq (clojure.string/trim %))\n    \"campo vacío\"))\n\n;; Composición de validators sobre un campo\n(defn validate-field [value & validators]\n  (reduce\n    (fn [result v]\n      (if (= :ok (:status result))\n        (v (:value result))\n        result))\n    {:status :ok :value value}\n    validators))\n\n(validate-field \"ana@test.com\" validate-not-empty validate-email)\n;; → {:status :ok, :value \"ana@test.com\"}"
         }
       ],
       "tables": [],
@@ -687,56 +707,73 @@
     },
     {
       "id": "F-19",
-      "type": "concepto-abstracto",
-      "title": "¿Qué es un transducer?",
-      "subtitle": "Transducers en Clojure",
+      "type": "concepto-mixto",
+      "title": "Errores sin excepciones",
+      "subtitle": "El tipo Result<T, E>",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Componen transformaciones sin crear colecciones intermedias",
+              "content": "Las excepciones rompen el flujo funcional: son un goto encubierto.",
               "level": 0
             },
             {
-              "content": "Separan qué transformar de cómo procesar",
+              "content": "Result modela el éxito o el fracaso **como un valor**.",
               "level": 0
             },
             {
-              "content": "Son reutilizables en distintos contextos",
+              "content": "El tipo de retorno hace explícito que puede fallar — no hay sorpresas.",
+              "level": 0
+            },
+            {
+              "content": "El compilador obliga a manejar ambos casos.",
+              "level": 0
+            },
+            {
+              "content": "Es composable: se puede encadenar con flatMap o andThen.",
+              "level": 0
+            },
+            {
+              "content": "**Corolario:** si una función puede fallar, su tipo de retorno debe decirlo.",
               "level": 0
             }
           ]
         }
       ],
-      "code_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Result<T, E> =\n  | { status: \"ok\";    value: T }\n  | { status: \"error\"; error: E };"
+        }
+      ],
       "tables": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
+        "image": "none",
+        "code": "right-half",
         "table": "none"
       },
       "image": {
-        "layer": "content",
-        "prompt": "diagrama de dos transformaciones compuestas en una sola etapa, con líneas y cajas transparentes, estilo plano",
-        "local_asset": "slides/assets/F-19-content.png",
-        "drive_id": "1gtLj4PDnGLEt8DbPVPC7T13K8RiQa00T"
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
       },
       "table_assets": []
     },
     {
       "id": "F-20",
       "type": "codigo",
-      "title": "Ejemplo de `transduce`",
-      "subtitle": "Ejemplo `transduce`",
+      "title": "Pipeline de validación completo",
+      "subtitle": "Validación encadenada con Result",
       "body_blocks": [],
       "code_blocks": [
         {
-          "lang": "clojure",
-          "content": "(def xf\n  (comp\n    (filter even?)\n    (map #(* % %))))\n\n(transduce xf + [1 2 3 4 5 6])"
+          "lang": "typescript",
+          "content": "type FormData = { name: string; email: string; password: string };\ntype Validator<T> = (data: T) => Result<T, string>;\n\nconst requireName: Validator<FormData> =\n  data => data.name.trim()\n    ? { status: \"ok\", value: data }\n    : { status: \"error\", error: \"nombre requerido\" };\n\nconst requireValidEmail: Validator<FormData> =\n  data => /^.+@.+\\..+$/.test(data.email)\n    ? { status: \"ok\", value: data }\n    : { status: \"error\", error: \"email inválido\" };\n\nconst requireStrongPassword: Validator<FormData> =\n  data => data.password.length >= 8\n    ? { status: \"ok\", value: data }\n    : { status: \"error\", error: \"contraseña muy corta\" };\n\n// Combinar validators: para en el primer error\nconst chain = <T>(\n  result: Result<T, string>,\n  validator: Validator<T>\n): Result<T, string> =>\n  result.status === \"error\" ? result : validator(result.value);\n\nconst validateForm = (data: FormData): Result<FormData, string> =>\n  [requireName, requireValidEmail, requireStrongPassword]\n    .reduce(chain, { status: \"ok\", value: data });"
         }
       ],
       "tables": [],
@@ -757,46 +794,14 @@
     },
     {
       "id": "F-21",
-      "type": "tabla-comparativa",
-      "title": "Transducers vs pipeline convencional",
-      "subtitle": "Transducers vs pipeline convencional",
-      "body_blocks": [],
-      "code_blocks": [],
-      "tables": [
-        "| Característica | Pipeline | Transducer |\n|---|---|---|\n| Colecciones intermedias | Sí | No |\n| Reutilización | Media | Alta |\n| Ideal para | listas pequeñas | flujos grandes |"
-      ],
-      "layout": {
-        "title": "full-title",
-        "body": "table-intro",
-        "image": "none",
-        "code": "none",
-        "table": "table-main"
-      },
-      "image": {
-        "layer": "none",
-        "prompt": "",
-        "local_asset": "",
-        "drive_id": null
-      },
-      "table_assets": [
-        {
-          "index": 0,
-          "table_markdown": "| Característica | Pipeline | Transducer |\n|---|---|---|\n| Colecciones intermedias | Sí | No |\n| Reutilización | Media | Alta |\n| Ideal para | listas pequeñas | flujos grandes |",
-          "local_asset": "slides/assets/F-21-table-1.png",
-          "drive_id": "1DRIIPzwVB2_X6d-E_qpZ2eq6fZ7axZO1"
-        }
-      ]
-    },
-    {
-      "id": "F-22",
       "type": "codigo",
-      "title": "API funcional genérica en TS",
-      "subtitle": "API funcional genérica en TS",
+      "title": "Del formulario al servidor",
+      "subtitle": "Usar el Result en un handler HTTP",
       "body_blocks": [],
       "code_blocks": [
         {
           "lang": "typescript",
-          "content": "type Transform<T> = (items: T[]) => T[];\n\nconst compose = <T>(...fns: Transform<T>[]) =>\n  (input: T[]) => fns.reduce((acc, fn) => fn(acc), input);"
+          "content": "// Handler de Express / Hono / Fastify\nconst registerHandler = async (req: Request, res: Response) => {\n  const result = validateForm(req.body);\n\n  if (result.status === \"error\") {\n    return res.status(400).json({ error: result.error });\n  }\n\n  // TypeScript sabe que result.value es FormData válido\n  const user = await userService.create(result.value);\n  return res.status(201).json(user);\n};"
         }
       ],
       "tables": [],
@@ -816,147 +821,37 @@
       "table_assets": []
     },
     {
-      "id": "F-23",
-      "type": "concepto-abstracto",
-      "title": "Funciones de orden superior",
-      "subtitle": "Higher-order functions",
+      "id": "F-22",
+      "type": "concepto-mixto",
+      "title": "Middleware composable",
+      "subtitle": "Middleware como HOF",
       "body_blocks": [
+        {
+          "type": "text",
+          "content": "Un middleware es una función que **recibe** un handler y **devuelve** un handler transformado."
+        },
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Reciben o devuelven funciones",
+              "content": "Esto es una HOF: recibe y devuelve funciones.",
               "level": 0
             },
             {
-              "content": "Permiten crear abstracciones muy expresivas",
+              "content": "Se pueden componer en cadena con pipe o compose.",
               "level": 0
             },
             {
-              "content": "Son la base de la composición funcional",
-              "level": 0
-            }
-          ]
-        }
-      ],
-      "code_blocks": [],
-      "tables": [],
-      "layout": {
-        "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
-        "table": "none"
-      },
-      "image": {
-        "layer": "content",
-        "prompt": "diagrama con una función que recibe otra función como argumento y retorna una nueva función, estilo abstracto y educativo",
-        "local_asset": "slides/assets/F-23-content.png",
-        "drive_id": "1Q4EdGVfX8RCKyKIWJVZjD8_gu4t0Nus2"
-      },
-      "table_assets": []
-    },
-    {
-      "id": "F-24",
-      "type": "concepto-abstracto",
-      "title": "Metaprogramación en Clojure",
-      "subtitle": "Metaprogramación en Clojure",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Las macros operan sobre código como datos",
+              "content": "Patrón usado en: Express, Koa, Hono, Redux, RxJS operators.",
               "level": 0
             },
             {
-              "content": "Son útiles para DSLs y abstracciones de dominio",
+              "content": "Cada middleware tiene una responsabilidad clara.",
               "level": 0
             },
             {
-              "content": "Se usan con moderación para no complicar el diseño",
-              "level": 0
-            }
-          ]
-        }
-      ],
-      "code_blocks": [],
-      "tables": [],
-      "layout": {
-        "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
-        "table": "none"
-      },
-      "image": {
-        "layer": "content",
-        "prompt": "ilustración de un árbol sintáctico que se transforma en código, con estilo marcado y abstracto",
-        "local_asset": "slides/assets/F-24-content.png",
-        "drive_id": "1FFJbnhRpfXmCa0PkZx3lfhn9v_27yzWo"
-      },
-      "table_assets": []
-    },
-    {
-      "id": "F-25",
-      "type": "concepto-abstracto",
-      "title": "Concurrencia funcional: por qué",
-      "subtitle": "Concurrencia funcional",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Evita condiciones de carrera",
-              "level": 0
-            },
-            {
-              "content": "Se apoya en datos inmutables",
-              "level": 0
-            },
-            {
-              "content": "Da predictibilidad a programas paralelos",
-              "level": 0
-            }
-          ]
-        }
-      ],
-      "code_blocks": [],
-      "tables": [],
-      "layout": {
-        "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
-        "table": "none"
-      },
-      "image": {
-        "layer": "content",
-        "prompt": "imagen abstracta con múltiples flujos paralelos y un candado simbolizando seguridad, estilo flat sin texto",
-        "local_asset": "slides/assets/F-25-content.png",
-        "drive_id": "1ZfCFUk4aIxLhUIMJ4tQrRLQ-cv4csOpe"
-      },
-      "table_assets": []
-    },
-    {
-      "id": "F-26",
-      "type": "codigo",
-      "title": "`core.async`: canales en Clojure",
-      "subtitle": "`core.async` en Clojure",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "`chan` crea una cola segura",
-              "level": 0
-            },
-            {
-              "content": "Permite separar productor de consumidor",
+              "content": "Se pueden reordenar, combinar, testear por separado.",
               "level": 0
             }
           ]
@@ -964,8 +859,174 @@
       ],
       "code_blocks": [
         {
+          "lang": "typescript",
+          "content": "// Middleware = (Request → Response) → (Request → Response)\n\n// Sin FP:\nrouter.post(\"/register\", authCheck, logRequest, validateSchema, handler);\n\n// Con FP:\nconst processRegister = pipe(authCheck, logRequest, validateSchema);\nrouter.post(\"/register\", processRegister(handler));"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "codigo",
+      "title": "HOF generadora de middlewares",
+      "subtitle": "Middleware en TypeScript: implementación",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Request  = { headers: Record<string, string>; body: unknown; meta: Record<string, unknown> };\ntype Response = { status: number; body: unknown };\ntype Handler  = (req: Request) => Promise<Response>;\ntype Middleware = (handler: Handler) => Handler;\n\n// Middleware de autenticación\nconst withAuth = (secret: string): Middleware =>\n  handler => async req => {\n    const token = req.headers[\"authorization\"];\n    if (token !== `Bearer ${secret}`) {\n      return { status: 401, body: { error: \"unauthorized\" } };\n    }\n    return handler(req);\n  };\n\n// Middleware de logging\nconst withLogging = (prefix: string): Middleware =>\n  handler => async req => {\n    console.log(`[${prefix}] incoming request`);\n    const res = await handler(req);\n    console.log(`[${prefix}] response ${res.status}`);\n    return res;\n  };\n\n// Composición de middlewares\nconst secured = pipe(\n  withLogging(\"auth-route\"),\n  withAuth(\"my-secret\")\n)(baseHandler);"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "concepto-mixto",
+      "title": "Por qué la recursión simple falla",
+      "subtitle": "Recursión: el problema del stack overflow",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Cada llamada queda *pendiente* hasta que la interna termine.",
+              "level": 0
+            },
+            {
+              "content": "Se acumulan frames en el call stack.",
+              "level": 0
+            },
+            {
+              "content": "Con listas largas (10k, 100k elementos) → **stack overflow**.",
+              "level": 0
+            },
+            {
+              "content": "Los bucles for/while no tienen este problema porque no acumulan frames.",
+              "level": 0
+            },
+            {
+              "content": "**Solución:** recursión de cola — el resultado no espera al retorno de la llamada recursiva.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "factorial(5)\n  → 5 * factorial(4)\n       → 4 * factorial(3)\n            → 3 * factorial(2)\n                 → 2 * factorial(1)\n                      → 1"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "concepto-mixto",
+      "title": "Tail Call Optimization (TCO)",
+      "subtitle": "Recursión de cola: la idea",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Una llamada es \"de cola\" cuando es **la última operación** de la función — no hay trabajo pendiente después.",
+              "level": 0
+            },
+            {
+              "content": "Con un acumulador, el compilador/runtime puede **reemplazar** el frame actual.",
+              "level": 0
+            },
+            {
+              "content": "No hay acumulación de stack → puede manejar millones de iteraciones.",
+              "level": 0
+            },
+            {
+              "content": "Clojure garantiza TCO explícitamente con recur.",
+              "level": 0
+            },
+            {
+              "content": "JavaScript/TypeScript **no garantizan** TCO (depende del motor) — pero la lógica es la misma.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "// No es tail call: aún hay que multiplicar por n\nfactorial(n) = n * factorial(n-1)   ← queda pendiente la multiplicación\n\n// Sí es tail call: el acumulador lleva el resultado\nfactorial(n, acc=1) = factorial(n-1, acc*n)  ← nada pendiente"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-26",
+      "type": "codigo",
+      "title": "Recursión de cola con recur",
+      "subtitle": "recur en Clojure",
+      "body_blocks": [],
+      "code_blocks": [
+        {
           "lang": "clojure",
-          "content": "(require '[clojure.core.async :refer [chan go >! <! close!]])\n\n(let [in (chan)\n      out (chan)]\n  ...)"
+          "content": ";; suma de lista — versión con recur (garantiza TCO)\n(defn sum-list [nums acc]\n  (if (empty? nums)\n    acc\n    (recur (rest nums) (+ acc (first nums)))))\n\n(sum-list [1 2 3 4 5] 0)   ;→ 15\n\n;; flatten de lista anidada\n(defn my-flatten [xs acc]\n  (cond\n    (empty? xs)    (reverse acc)\n    (seq? (first xs))\n      (recur (concat (first xs) (rest xs)) acc)\n    :else\n      (recur (rest xs) (cons (first xs) acc))))\n\n(my-flatten [1 [2 3] [4 [5 6]]] [])   ;→ (1 2 3 4 5 6)"
         }
       ],
       "tables": [],
@@ -987,28 +1048,13 @@
     {
       "id": "F-27",
       "type": "codigo",
-      "title": "`go` blocks y comunicación",
-      "subtitle": "`go` blocks en Clojure",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Crea una coroutine ligera",
-              "level": 0
-            },
-            {
-              "content": "No bloquea el hilo principal",
-              "level": 0
-            }
-          ]
-        }
-      ],
+      "title": "Equivalente TypeScript",
+      "subtitle": "Recursión de cola en TypeScript",
+      "body_blocks": [],
       "code_blocks": [
         {
-          "lang": "clojure",
-          "content": "(go (loop []\n      (when-some [x (<! in)]\n        (>! out (* x x))\n        (recur))))"
+          "lang": "typescript",
+          "content": "// Suma con acumulador\nconst sumList = (nums: number[], acc = 0): number =>\n  nums.length === 0\n    ? acc\n    : sumList(nums.slice(1), acc + nums[0]);\n\n// Búsqueda en árbol (pre-order, con stack explícito)\ntype TreeNode = { value: number; children: TreeNode[] };\n\nconst findInTree = (\n  nodes: TreeNode[],\n  target: number\n): number | null => {\n  if (nodes.length === 0) return null;\n  const [head, ...tail] = nodes;\n  if (head.value === target) return head.value;\n  return findInTree([...head.children, ...tail], target);\n};"
         }
       ],
       "tables": [],
@@ -1030,23 +1076,31 @@
     {
       "id": "F-28",
       "type": "concepto-abstracto",
-      "title": "STM y transacciones",
-      "subtitle": "STM en Clojure",
+      "title": "Memoization",
+      "subtitle": "Cache funcional",
       "body_blocks": [
+        {
+          "type": "text",
+          "content": "Guardar el resultado de una función para evitar recalcularlo con los mismos argumentos."
+        },
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "`ref` guarda estado coordinado",
+              "content": "**Cuándo usar:** Funciones puras con resultados caros, llamadas repetidamente con los mismos valores.",
               "level": 0
             },
             {
-              "content": "`dosync` agrupa actualizaciones",
+              "content": "Fibonacci recursivo clásico: sin memo O(2ⁿ), con memo O(n).",
               "level": 0
             },
             {
-              "content": "Permite rollback si falla",
+              "content": "**Cuándo NO usar:** Funciones con efectos colaterales — la cache puede retornar datos stale.",
+              "level": 0
+            },
+            {
+              "content": "Funciones con argumentos de tipo objeto (sin serialización la key no funciona).",
               "level": 0
             }
           ]
@@ -1063,106 +1117,113 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "diagrama de dos transacciones sobre un recurso compartido con líneas que representan bloqueo lógico, estilo plano educativo",
-        "local_asset": "slides/assets/F-28-content.png",
-        "drive_id": "1Sbc4fTCLxLEROVM1YfsyrHWA7XpqTRS6"
+        "prompt": "A large bordo rectangle on the left with a thin arrow pointing right to a small gray diamond (decision shape). From the diamond, two paths: one curved arrow going up to a bordo rounded rectangle (cached result), another arrow going down-right through three small gray circles in sequence to a bordo rounded rectangle (computed result). Flat design, bordo #8B0000 and dark gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
       },
       "table_assets": []
     },
     {
       "id": "F-29",
-      "type": "concepto-abstracto",
-      "title": "Agentes y estado asíncrono",
-      "subtitle": "Agentes en Clojure",
-      "body_blocks": [
+      "type": "codigo",
+      "title": "Implementación y uso real",
+      "subtitle": "Memoization en TypeScript y Clojure",
+      "body_blocks": [],
+      "code_blocks": [
         {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "`agent` actualiza estado de forma asíncrona",
-              "level": 0
-            },
-            {
-              "content": "Ideal para tareas que no requieren transacción inmediata",
-              "level": 0
-            },
-            {
-              "content": "Separación clara entre envío y procesamiento",
-              "level": 0
-            }
-          ]
+          "lang": "typescript",
+          "content": "// Implementación simple para funciones de 1 argumento\nconst memoize = <T, R>(fn: (arg: T) => R): ((arg: T) => R) => {\n  const cache = new Map<T, R>();\n  return (arg: T): R => {\n    if (cache.has(arg)) return cache.get(arg)!;\n    const result = fn(arg);\n    cache.set(arg, result);\n    return result;\n  };\n};\n\n// Caso real: lookup de configuración (costoso de parsear)\nconst getConfig = memoize((env: string) => parseEnvConfig(env));\ngetConfig(\"production\");  // parseEnvConfig corre una vez\ngetConfig(\"production\");  // desde cache"
+        },
+        {
+          "lang": "clojure",
+          "content": ";; memoize nativo en Clojure\n(defn fetch-user [id]\n  (Thread/sleep 100)   ; simula latencia\n  {:id id :name (str \"User-\" id)})\n\n(def fetch-user-cached (memoize fetch-user))\n\n(fetch-user-cached 42)  ; llama a fetch-user\n(fetch-user-cached 42)  ; desde cache, instantáneo"
         }
       ],
-      "code_blocks": [],
       "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
         "table": "none"
       },
       "image": {
-        "layer": "content",
-        "prompt": "ilustración de un agente enviando mensajes a un estado centralizado con estilo iconográfico limpio",
-        "local_asset": "slides/assets/F-29-content.png",
-        "drive_id": "18E8oXiho_6c0wW3ra6-LDaEqhctj0quE"
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
       },
       "table_assets": []
     },
     {
       "id": "F-30",
-      "type": "concepto-abstracto",
-      "title": "Concurrencia en TypeScript",
-      "subtitle": "Concurrencia en TypeScript",
+      "type": "concepto-mixto",
+      "title": "Evaluación perezosa",
+      "subtitle": "Lazy sequences en Clojure",
       "body_blocks": [
+        {
+          "type": "text",
+          "content": "Una lazy sequence **no calcula sus elementos** hasta que se necesitan."
+        },
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "`Promise` representa un valor futuro",
+              "content": "Procesar datos en streaming sin cargar todo en memoria.",
               "level": 0
             },
             {
-              "content": "`async-await` hace el código más legible",
+              "content": "Modelar secuencias potencialmente infinitas de forma natural.",
               "level": 0
             },
             {
-              "content": "No elimina la necesidad de pensar en efectos",
+              "content": "Componer transformaciones sin evaluar cada paso por separado.",
+              "level": 0
+            },
+            {
+              "content": "Sin lazy: cargar todos los logs en memoria antes de filtrar.",
+              "level": 0
+            },
+            {
+              "content": "Con lazy: procesar 1 elemento a la vez hasta completar take.",
               "level": 0
             }
           ]
         }
       ],
-      "code_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "clojure",
+          "content": ";; range infinita — no explota memoria\n(def naturals (range))   ; 0, 1, 2, 3, ... infinito\n\n;; Tomar solo lo que necesito\n(take 5 naturals)        ;→ (0 1 2 3 4)\n(take 5 (filter even? naturals))  ;→ (0 2 4 6 8)\n\n;; Pipeline sobre stream de logs (infinito en producción)\n(->> (read-log-stream)\n     (filter #(= :error (:level %)))\n     (map :message)\n     (take 100))     ; solo los primeros 100 errores"
+        }
+      ],
       "tables": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
+        "image": "none",
+        "code": "right-half",
         "table": "none"
       },
       "image": {
-        "layer": "content",
-        "prompt": "diagrama de un navegador y una promesa representada como un reloj, estilo moderno sin texto",
-        "local_asset": "slides/assets/F-30-content.png",
-        "drive_id": "1PeBnNitOGMwg_jbYeWTKv5fpOmEIdF7X"
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
       },
       "table_assets": []
     },
     {
       "id": "F-31",
       "type": "codigo",
-      "title": "Promesas y `async-await`",
-      "subtitle": "`async-await` en TS",
+      "title": "Mini-DSL de validación declarativa",
+      "subtitle": "DSLs pequeñas con HOF en Clojure",
       "body_blocks": [],
       "code_blocks": [
         {
-          "lang": "typescript",
-          "content": "async function fetchData(url: string): Promise<string> {\n  const response = await fetch(url);\n  return response.text();\n}"
+          "lang": "clojure",
+          "content": ";; Reglas expresadas como datos\n(def user-rules\n  [{:field :name  :pred #(seq %)           :msg \"nombre requerido\"}\n   {:field :email :pred #(re-matches #\".+@.+\\..+\" %) :msg \"email inválido\"}\n   {:field :age   :pred #(>= % 18)         :msg \"debe ser mayor de edad\"}])\n\n;; Motor genérico: aplica las reglas a cualquier mapa\n(defn validate [rules data]\n  (->> rules\n       (map (fn [{:keys [field pred msg]}]\n              (when-not (pred (get data field))\n                {:field field :error msg})))\n       (remove nil?)))\n\n;; Uso\n(validate user-rules {:name \"\" :email \"x\" :age 16})\n;; → ({:field :name,  :error \"nombre requerido\"}\n;;    {:field :email, :error \"email inválido\"}\n;;    {:field :age,   :error \"debe ser mayor de edad\"})"
         }
       ],
       "tables": [],
@@ -1183,55 +1244,18 @@
     },
     {
       "id": "F-32",
-      "type": "concepto-abstracto",
-      "title": "Efectos puros vs I/O",
-      "subtitle": "Efectos puros vs I/O",
+      "type": "tabla-comparativa",
+      "title": "Los mismos patrones, distinta sintaxis",
+      "subtitle": "Comparación Clojure vs TypeScript",
       "body_blocks": [
         {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Una función pura no observa el mundo exterior",
-              "level": 0
-            },
-            {
-              "content": "I/O rompe la pureza",
-              "level": 0
-            },
-            {
-              "content": "Es útil separar lógica pura de efectos",
-              "level": 0
-            }
-          ]
+          "type": "text",
+          "content": "**Clave:** los patrones son transferibles. Si entendés uno, el otro es sintaxis. Clojure aporta claridad conceptual; TypeScript aporta tipado estático."
         }
       ],
       "code_blocks": [],
-      "tables": [],
-      "layout": {
-        "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
-        "table": "none"
-      },
-      "image": {
-        "layer": "content",
-        "prompt": "iconos abstractos de un cubo puro y un enchufe de energía, estilo plano y minimalista",
-        "local_asset": "slides/assets/F-32-content.png",
-        "drive_id": "18W8LROsvqNjA020ZCXo-P-sCfPfmXMg2"
-      },
-      "table_assets": []
-    },
-    {
-      "id": "F-33",
-      "type": "tabla-comparativa",
-      "title": "Canal vs promesa",
-      "subtitle": "Canal vs promesa",
-      "body_blocks": [],
-      "code_blocks": [],
       "tables": [
-        "| Modelo | Uso ideal | Característica |\n|---|---|---|\n| `core.async` | Flujos continuos | Canales backpressure |\n| `Promise` | Operación puntual | Valor único futuro |"
+        "| Patrón | Clojure | TypeScript |\n|---|---|---|\n| Pipeline | ->> thread macro | pipe(...fns) |\n| Mapa | (map f xs) | xs.map(f) |\n| Filtrado | (filter pred xs) | xs.filter(pred) |\n| Reducción | (reduce f acc xs) | xs.reduce(f, acc) |\n| Partial | (partial f a) | (b) => f(a, b) |\n| Lazy | (range), (lazy-seq ...) | generators function* |\n| TCO | recur garantizado | manual / trampolining |\n| Datos | mapas, vectores, listas | objetos, arrays |"
       ],
       "layout": {
         "title": "full-title",
@@ -1249,192 +1273,36 @@
       "table_assets": [
         {
           "index": 0,
-          "table_markdown": "| Modelo | Uso ideal | Característica |\n|---|---|---|\n| `core.async` | Flujos continuos | Canales backpressure |\n| `Promise` | Operación puntual | Valor único futuro |",
-          "local_asset": "slides/assets/F-33-table-1.png",
-          "drive_id": "1g7NG1i5YTOMByUF5ZXsoPMOvRV_dI9m7"
+          "table_markdown": "| Patrón | Clojure | TypeScript |\n|---|---|---|\n| Pipeline | ->> thread macro | pipe(...fns) |\n| Mapa | (map f xs) | xs.map(f) |\n| Filtrado | (filter pred xs) | xs.filter(pred) |\n| Reducción | (reduce f acc xs) | xs.reduce(f, acc) |\n| Partial | (partial f a) | (b) => f(a, b) |\n| Lazy | (range), (lazy-seq ...) | generators function* |\n| TCO | recur garantizado | manual / trampolining |\n| Datos | mapas, vectores, listas | objetos, arrays |",
+          "local_asset": "",
+          "drive_id": null
         }
       ]
     },
     {
-      "id": "F-34",
-      "type": "diagrama",
-      "title": "Diseño de flujo continuo",
-      "subtitle": "Flujo funcional continuo",
+      "id": "F-33",
+      "type": "socratica",
+      "title": "Taller: pipeline funcional completo",
+      "subtitle": "",
       "body_blocks": [
         {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Datos entran, se transforman, salen",
-              "level": 0
-            },
-            {
-              "content": "Ideal para pipelines de eventos y streaming",
-              "level": 0
-            },
-            {
-              "content": "El modelo funcional simplifica la razón sobre el flujo",
-              "level": 0
-            }
-          ]
-        }
-      ],
-      "code_blocks": [],
-      "tables": [],
-      "layout": {
-        "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
-        "table": "none"
-      },
-      "image": {
-        "layer": "content",
-        "prompt": "flujo de datos constante entrando por la izquierda, transformándose y saliendo por la derecha, estilo técnico sin texto",
-        "local_asset": "slides/assets/F-34-content.png",
-        "drive_id": "1TZMBtNVF1GmeEb392XzaHSpdHO3p3COV"
-      },
-      "table_assets": []
-    },
-    {
-      "id": "F-35",
-      "type": "demo",
-      "title": "Taller comparativo",
-      "subtitle": "Taller comparativo",
-      "body_blocks": [
-        {
-          "type": "heading",
-          "level": 2,
-          "content": "Desafío"
+          "type": "text",
+          "content": "**Contexto:** una API que recibe datos de registro de usuarios. **Objetivo:** construir un pipeline funcional sin mutaciones ni try/catch."
         },
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Filtrar órdenes con `amount` y `status`",
+              "content": "**Parte A — TypeScript:** Definir FormData, implementar 3 validators con Result, componer con pipe o reduce, manejar Result sin excepciones.",
               "level": 0
             },
             {
-              "content": "Calcular total funcionalmente",
+              "content": "**Parte B — Clojure:** Definir user-rules como vector de mapas, implementar motor validate, agregar memoize a un lookup costoso, usar ->> para componer el pipeline.",
               "level": 0
             },
             {
-              "content": "Manejar errores con `Result` / `Either`",
-              "level": 0
-            }
-          ]
-        }
-      ],
-      "code_blocks": [],
-      "tables": [],
-      "layout": {
-        "title": "full-title",
-        "body": "left-middle",
-        "image": "none",
-        "code": "right-half",
-        "table": "none"
-      },
-      "image": {
-        "layer": "none",
-        "prompt": "",
-        "local_asset": "",
-        "drive_id": null
-      },
-      "table_assets": []
-    },
-    {
-      "id": "F-36",
-      "type": "codigo",
-      "title": "Guion TS del taller",
-      "subtitle": "Ejercicio en TypeScript",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Definir pipeline de validación y suma",
-              "level": 0
-            },
-            {
-              "content": "Mantener la lógica pura independiente de efectos",
-              "level": 0
-            }
-          ]
-        }
-      ],
-      "code_blocks": [
-        {
-          "lang": "typescript",
-          "content": "type Order = { amount: number; status: \"valid\" | \"invalid\" };\n\ntype Resultado<T, E> =\n  | { status: \"ok\"; value: T }\n  | { status: \"error\"; error: E };"
-        }
-      ],
-      "tables": [],
-      "layout": {
-        "title": "full-title",
-        "body": "subtitle-only",
-        "image": "none",
-        "code": "full-bottom",
-        "table": "none"
-      },
-      "image": {
-        "layer": "none",
-        "prompt": "",
-        "local_asset": "",
-        "drive_id": null
-      },
-      "table_assets": []
-    },
-    {
-      "id": "F-37",
-      "type": "codigo",
-      "title": "Guion Clojure del taller",
-      "subtitle": "Ejercicio en Clojure",
-      "body_blocks": [],
-      "code_blocks": [
-        {
-          "lang": "clojure",
-          "content": "(def orders [{:amount 100 :status :valid}\n             {:amount 50 :status :invalid}])\n\n(defn validar-orden [order]\n  (if (= :valid (:status order))\n    {:status :ok :value (:amount order)}\n    {:status :error :error \"Orden inválida\"}))"
-        }
-      ],
-      "tables": [],
-      "layout": {
-        "title": "full-title",
-        "body": "subtitle-only",
-        "image": "none",
-        "code": "full-bottom",
-        "table": "none"
-      },
-      "image": {
-        "layer": "none",
-        "prompt": "",
-        "local_asset": "",
-        "drive_id": null
-      },
-      "table_assets": []
-    },
-    {
-      "id": "F-38",
-      "type": "socratica",
-      "title": "Comparar soluciones",
-      "subtitle": "Comparar soluciones",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "¿Qué se entiende mejor en TypeScript?",
-              "level": 0
-            },
-            {
-              "content": "¿Qué es más natural en Clojure?",
-              "level": 0
-            },
-            {
-              "content": "¿Dónde se repite la misma idea?",
+              "content": "**Comparación final:** mostrar las soluciones lado a lado y detectar diferencias reales.",
               "level": 0
             }
           ]
@@ -1451,32 +1319,56 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "dos bloques de código frente a frente con símbolos de comparación, estilo conceptual sin texto",
-        "local_asset": "slides/assets/F-38-bg.png",
-        "drive_id": "13tjb7rlpoFtacbGRtVW2tC_L77dmM4uj"
+        "prompt": "A wide flat workspace seen from above. Two large rectangular areas side by side, left in bordo tint, right in dark gray tint. Small geometric shapes (circles, squares, triangles) scattered on both sides in matching patterns. Thin dashed line dividing the two halves. Flat design, bordo #8B0000 and dark gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
       },
       "table_assets": []
     },
     {
-      "id": "F-39",
+      "id": "F-34",
       "type": "concepto-abstracto",
-      "title": "Buenas preguntas para el cierre",
-      "subtitle": "Buenas preguntas para el cierre",
+      "title": "Lo que podés hacer ahora",
+      "subtitle": "Checklist de patrones aprendidos",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "¿Qué abstraemos con un `Result`?",
+              "content": "✅ Escribir funciones puras testeables (sin efectos).",
               "level": 0
             },
             {
-              "content": "¿En qué caso elegimos `core.async`?",
+              "content": "✅ Componer transformaciones con pipe / ->>.",
               "level": 0
             },
             {
-              "content": "¿Cuál es la diferencia clave entre pipeline y transducer?",
+              "content": "✅ Factorizar con partial y curry.",
+              "level": 0
+            },
+            {
+              "content": "✅ Modelar errores con Result<T, E> sin excepciones.",
+              "level": 0
+            },
+            {
+              "content": "✅ Construir middleware composable como HOF.",
+              "level": 0
+            },
+            {
+              "content": "✅ Implementar recursión de cola con acumulador.",
+              "level": 0
+            },
+            {
+              "content": "✅ Evitar recómputo con memoize.",
+              "level": 0
+            },
+            {
+              "content": "✅ Usar lazy sequences para procesamiento eficiente.",
+              "level": 0
+            },
+            {
+              "content": "✅ Leer y escribir código Clojure con ->>, map, filter, recur.",
               "level": 0
             }
           ]
@@ -1493,110 +1385,109 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "iconos de preguntas y reflexión, estilo educativo sin texto",
-        "local_asset": "slides/assets/F-39-content.png",
-        "drive_id": "1J5VkrQNPovg_C_UOqH6yK7_DNG7iLXPJ"
-      },
-      "table_assets": []
-    },
-    {
-      "id": "F-40",
-      "type": "tabla",
-      "title": "Evaluación pedagógica rápida",
-      "subtitle": "Evaluación rápida",
-      "body_blocks": [],
-      "code_blocks": [],
-      "tables": [
-        "| Comprensión | Indicador |\n|---|---|\n| Patrones funcionales | Puede explicar composición y pureza |\n| Manejo de errores | Usa `Result`/`Either` para flujo explícito |\n| Concurrencia | Identifica cuándo usar canales vs promesas |"
-      ],
-      "layout": {
-        "title": "full-title",
-        "body": "table-intro",
-        "image": "none",
-        "code": "none",
-        "table": "table-main"
-      },
-      "image": {
-        "layer": "none",
-        "prompt": "",
+        "prompt": "A vertical column of nine small bordo checkmark icons stacked evenly. Each checkmark sits inside a small rounded gray square. A thin vertical bordo line connects all squares from top to bottom. Flat design, bordo #8B0000 and dark gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
         "local_asset": "",
         "drive_id": null
       },
-      "table_assets": [
-        {
-          "index": 0,
-          "table_markdown": "| Comprensión | Indicador |\n|---|---|\n| Patrones funcionales | Puede explicar composición y pureza |\n| Manejo de errores | Usa `Result`/`Either` para flujo explícito |\n| Concurrencia | Identifica cuándo usar canales vs promesas |",
-          "local_asset": "slides/assets/F-40-table-1.png",
-          "drive_id": "1bULts5iXX9NBTUqEKz2uPCcg4zDmOOhx"
-        }
-      ]
-    },
-    {
-      "id": "F-41",
-      "type": "cierre",
-      "title": "Resumen final",
-      "subtitle": "Cierre",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Menos estado mutable, más composición",
-              "level": 0
-            },
-            {
-              "content": "`Result` hace el flujo explícito",
-              "level": 0
-            },
-            {
-              "content": "Clojure y TypeScript comparten los mismos principios",
-              "level": 0
-            }
-          ]
-        }
-      ],
-      "code_blocks": [],
-      "tables": [],
-      "layout": {
-        "title": "center-middle",
-        "body": "center-bottom",
-        "image": "background",
-        "code": "none",
-        "table": "none"
-      },
-      "image": {
-        "layer": "background",
-        "prompt": "fondo claro con un camino de hitos y un punto final resaltado, estilo infográfico limpio sin texto",
-        "local_asset": "slides/assets/F-41-bg.png",
-        "drive_id": "1Sh_I46gt1XlXUQ3ayHtvDFrwC1dQF6sG"
-      },
       "table_assets": []
     },
     {
-      "id": "F-42",
-      "type": "cierre",
-      "title": "Próxima clase y TP",
-      "subtitle": "Próxima clase y TP",
+      "id": "F-35",
+      "type": "concepto-abstracto",
+      "title": "Guía práctica de adopción",
+      "subtitle": "¿Cuándo aplicar estos patrones?",
       "body_blocks": [
+        {
+          "type": "text",
+          "content": "**Pensá en funcional cuando:**"
+        },
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Tema siguiente: Mónadas en TypeScript",
+              "content": "Necesitás transformar datos sin mutar el original → HOF, map/filter/reduce.",
               "level": 0
             },
             {
-              "content": "TP: implementar una API funcional y justificar la elección de efectos",
+              "content": "Tenés lógica que puede fallar → Result en lugar de throw.",
+              "level": 0
+            },
+            {
+              "content": "Querés construir handlers/validators configurables → partial, curry.",
+              "level": 0
+            },
+            {
+              "content": "Necesitás encadenar operaciones sobre datos → pipe.",
+              "level": 0
+            },
+            {
+              "content": "Una función costosa se llama muchas veces con mismos args → memoize.",
+              "level": 0
+            },
+            {
+              "content": "Procesás streams grandes → lazy sequences.",
               "level": 0
             }
           ]
         },
         {
-          "type": "heading",
-          "level": 2,
-          "content": "FIN DEL BLOQUE"
+          "type": "text",
+          "content": "**No forzar FP cuando:** el estado mutable local es claro y acotado, o la lógica es UI-event-heavy y el modelo reactivo es más natural."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "A compass rose icon in bordo at the center. Four thin arrows radiating outward: up, down, left, right. At the end of each arrow, a different small geometric shape: circle, square, triangle, hexagon, all in dark gray. Flat design, bordo #8B0000 and dark gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-36",
+      "type": "cierre",
+      "title": "Resumen y continuidad",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Funciones como valores → base de toda la FP.",
+              "level": 0
+            },
+            {
+              "content": "Composición como diseño → pipe, ->>.",
+              "level": 0
+            },
+            {
+              "content": "Result como protocolo → errores tipados sin excepciones.",
+              "level": 0
+            },
+            {
+              "content": "Recursión de cola → iteración sin estado mutable ni stack overflow.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "**Próximos pasos:** Tema 05 — Mónadas en TypeScript (Result = Either). Tema 06 — Efectos y IO."
+        },
+        {
+          "type": "text",
+          "content": "\"Un programa funcional es una colección de transformaciones de datos. No ejecuta pasos — *describe* qué debe suceder.\" — Rich Hickey"
         }
       ],
       "code_blocks": [],
@@ -1610,11 +1501,29 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "ilustración de un calendario y un archivo de código en colores azules, estilo plano sin texto",
-        "local_asset": "slides/assets/F-42-bg.png",
-        "drive_id": "1LPA7oulqD-sGuC4GqqTiF2yTqocXW3w7"
+        "prompt": "Abstract composition: multiple thin bordo horizontal lines flowing from left to right across the canvas, converging into a single bold bordo arrow pointing right at the center-right. Background gradient from white to very light gray. Flat minimal design, bordo #8B0000 and dark gray #1A1A1A. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
       },
       "table_assets": []
     }
-  ]
+  ],
+  "summary": {
+    "total_slides": 36,
+    "images_planned": 11,
+    "tables_planned": 2,
+    "code_slides": 16,
+    "status": "READY_FOR_VALIDATION",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "portada": 1,
+      "concepto-abstracto": 8,
+      "concepto-mixto": 7,
+      "codigo": 16,
+      "tabla-comparativa": 2,
+      "socratica": 1,
+      "cierre": 1
+    }
+  }
 }
