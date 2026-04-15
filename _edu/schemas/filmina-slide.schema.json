@@ -462,10 +462,10 @@
           "layout": {
             "properties": {
               "title": {"const": "full-title"},
-              "body": {"const": "full-center"},
+              "body": {"const": "left-top-split"},
               "image": {"const": "none"},
               "code": {"const": "none"},
-              "table": {"const": "none"}
+              "table": {"const": "right-half"}
             }
           },
           "image": {
