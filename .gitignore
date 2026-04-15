@@ -50,3 +50,19 @@ salida/cursadas/*/students/
 # IDE
 .vscode/
 .idea/
+.clj-kondo/.cache/v1/lock
+.clj-kondo/.cache/v1/clj/tp04.ej04-test.transit.json
+.clj-kondo/.cache/v1/clj/tp04.ej04.transit.json
+.clj-kondo/.cache/v1/clj/tp04.ej07-test.transit.json
+.clj-kondo/.cache/v1/clj/tp04.ej07.transit.json
+.clj-kondo/.cache/v1/clj/tp04.ej09-test.transit.json
+.clj-kondo/.cache/v1/clj/tp04.ej09.transit.json
+.clj-kondo/.cache/v1/clj/tp04.ej12-test.transit.json
+.clj-kondo/.cache/v1/clj/tp04.ej12.transit.json
+.clj-kondo/.cache/v1/clj/tp04.ej15-test.transit.json
+.clj-kondo/.cache/v1/clj/tp04.ej15.transit.json
+.clj-kondo/.cache/v1/clj/tp04.ej16-test.transit.json
+.clj-kondo/.cache/v1/clj/tp04.ej16.transit.json
+.clj-kondo/.cache/v1/clj/tp04.ej18-test.transit.json
+.clj-kondo/.cache/v1/clj/tp04.ej18.transit.json
+.lsp/.cache/db.transit.json
