@@ -71,3 +71,5 @@ ingesta/*
 
 # Cursada iapjn-2026 — NO pertenece a este repo
 salida/cursadas/iapjn-2026/
+.clj-kondo/**
+.lsp/**
