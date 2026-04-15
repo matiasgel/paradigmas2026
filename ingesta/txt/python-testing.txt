@@ -1,0 +1,329 @@
+# Fuente
+- archivo: python-testing.pdf
+- ruta: C:\Users\matia\paradigmas2026\ingesta\python-testing.pdf
+- extraido: 2026-04-15T11:27:36
+
+# Contenido
+
+PRUEBAS DE UNIDAD EN PYTHON
+
+LABORATORIO DE PROGRAMACIÓN  Y LENGUAJES 2026
+
+Errores!!!!!!!!
+
+Vuelo  140 de Air 
+China
+Un error de 
+software 
+desactivo el piloto 
+automático 264 
+muertes
+
+Therac-25 En 
+ciertas 
+condiciones 
+emitía 100 más 
+radiación de la 
+normal. Overflow 
+de software que 
+causó 4 muertes.
+
+Arian 5
+Un caso de 
+overflow desvió la 
+trayectoria. 
+Pérdidas 
+millonarias.
+
+FAL
+Espacio para el texto
+
+TESTING 
+INADECUADO
+
+Testing de software
+
+● Es un proceso que busca verificar la exactitud, 
+
+integridad y calidad de un software.
+
+● Incluye una serie de actividades que buscan encontrar 
+errores y fallas en el software previo a que lleguen al 
+usuario.
+
+● Los errores en el software no identificados a tiempo 
+
+pueden ser sumamente costosos en términos 
+monetarios o incluso llevar a pérdidas de vidas 
+humanas.
+
+Testing de software
+
+►
+
+►
+
+Las pruebas se realizan sin 
+conocimiento del funcionamiento 
+interno del software, se preparan un 
+juegos de entradas y se observan si las 
+salidas siguen las especificaciones.
+
+Las pruebas se realizan conociendo la 
+estructura interna del software. Los 
+juegos de datos de entrada se 
+seleccionan en base a este 
+conocimiento y suelen apuntar a 
+probar características específicas de 
+su estructura.
+
+Testing de software - niveles
+
+Test de unidades – Unit Test
+
+►
+
+Son pruebas de bajo nivel (a nivel de código) que se 
+focalizan en una pequeña parte del software. En 
+programación orientada a objetos estas unidades suelen 
+ser la clases.
+
+Python testing – sentencia 
+assert
+
+Unittest framework
+
+●
+
+●
+
+●
+
+●
+
+Python contiene un framework de pruebas unitarias integrado 
+en el api estándar.
+
+Es un framework de pruebas que forma parte de la familia  
+Xunit.
+
+Xunit no es un framework sino que se refiere a toda la familia de 
+frameworks que heredan de  Sunit el cual fue originalmente 
+escrito para smalltalk por kent beck 1989.
+
+Este tipo frameworks son fundamentales en la metodología de 
+desarrollo dirigida por pruebas TDD.
+
+Unittest – clase de hoy
+
+►
+
+►
+
+►
+
+►
+
+►
+
+►
+
+►
+
+En esta clase vamos a recorrer algunas de las abstracciones de python 
+para dar soporte a pruebas unitarias :
+
+Test case (caso de prueba)
+
+Un caso de prueba es una prueba de unidad individual. Verifica la respuesta de un conjunto de 
+sentencias  a ciertos datos de entrada. El framework unittest provee una clase TestCase que 
+puede ser heredada para crear nuevos casos de prueba.
+
+test suite (conjunto de pruebas)
+
+Un test suite es una colección de casos  de pruebas y/o otros test suite. Se utiliza para ejecutar 
+pruebas en conjunto..
+
+test runner
+
+Un test runner es un componente que orquesta la ejecución de test y provee una salida al 
+usuario. Puede tener una interfaz gráfica o textual que muestre el resultado de la ejecución de 
+un conjunto de pruebas.
+
+Ejemplo
+
+Ejemplo – ejecución 
+
+Si ejecutamos el código del ejemplo 
+el intérprete nos muestra el 
+resultado de la ejecución exitosa de 
+los 3 casos de test
+
+Modificando el método de la 
+clase test_split de manera que 
+falle vemos que el framework 
+ejecuta todos los casos de 
+prueba y brinda información de 
+los casos que fueron ejecutados 
+con error.
+
+Ejecución de test de línea de 
+comandos
+
+Desde línea de comando podemos ejecutar  pruebas contenidas 
+en módulos, clases individuales, o métodos específicos de un 
+TestCase.
+
+• Se puede ejecutar un módulo completo especificando su ruta. 
+• Si  se  ejecuta  con  el  modificador  “–v”  la  ejecución  muestra  un  mayor    número 
+
+de detalles.  
+
+• Con  el modificador “–h”  nos muestra todas las opciones disponibles. 
+• Por  último  si  se  ejecuta  sin  especificar  nada    inicia  un  proceso  que  busca 
+
+automáticamente los test a partir del path que estamos parados.
+
+La clase TestCase
+
+de 
+
+En  esta 
+
+convención 
+
+TestCase  es 
+la  clase  base  que 
+debemos  usar  en  nuestras  clases  de 
+prueba. 
+se  encuentra 
+implementada la lógica de pruebas. 
+Unittest  es  un  framework  que  sigue  la 
+idea 
+sobre 
+configuración.  
+En  vez  de 
+tener  un  archivo  de 
+configuración  en  donde  definamos 
+donde  están  las  pruebas  el  framework 
+las  encuentra  en  forma  automática 
+sigamos 
+y 
+siempre 
+convenciones. 
+Para  que  un  método  sea  una  prueba 
+a  ejecutar  debe  empezar  de  la  forma 
+“test_”.  
+
+cuando 
+
+TestCase – sentencias 
+assert
+
+La clase TestCase contiene un conjuntos de métodos que extienden la 
+sentencia assert de forma conveniente. Cada método assert tiene 
+asociada una excepción que nos permite clasificar el código en 
+categorías.  
+
+Python – sentencia with
+
+• La sentencia with fue pensada para mejorar el manejo 
+
+de excepciones.  
+
+• Podemos analizar su uso en base a un ejemplo.
+
+• Muchas veces al ejecutar código que puede ser 
+factible de lanzar excepciones necesito realizar 
+tareas para preparar la ejecución.
+
+• Al terminar la ejecución del código requiero 
+
+realizar un conjunto de tareas para no dejar al 
+sistema en un estado propenso a errores. 
+• En el ejemplo realizó un query sobre una 
+supuesta conexión de base de datos.
+
+• La sentencia with me permite encapsular el 
+
+código en una clase que contiene los métodos 
+___enter__ y __exit__ .  Los objetos de este tipo se 
+llaman contextmanager.
+
+• Al iniciar la ejecución del bloque with  el 
+
+intérprete llama a al método __enter__ del 
+contextmanager. 
+
+• Al terminar el bloque se llama a __exit__ incluso si 
+
+se lanzó una excepción.
+
+Python – sentencia with – 
+ejemplo archivos
+
+• La función open de python permite abrir un archivo para 
+su lectura y retorna el manejador de archivos.  Open es 
+un objeto contextmanager en ejemplo las dos funciones 
+son equivalentes.
+
+TestCase - Sentencias 
+assert - excepciones 
+
+• Cuando codificamos utilizamos excepciones para el 
+
+manejo de errores esperados e inesperados.
+• Nuestras pruebas deben abarcar el código de 
+
+excepciones verificando que se comporten como se 
+espera.
+
+• La clase TestCase tiene un conjunto de assert orientadas 
+
+a controlar las excepciones en nuestro código.
+
+• assertRaises verifica que se lance una excepción  en un 
+
+bloque with. El test pasa si la excepción es lanzada 
+dentro del with.
+
+TestCase - Sentencias 
+assert - excepciones 
+
+Sentencias assert - 
+excepciones
+
+Sentencias assert
+
+La clase 
+TestSuite
+
+La clase TestCase - 
+fixtures
+
+❖ setUp():  Este método es llamado antes de la ejecución de 
+
+cada  método test. Aquí se preparan los datos necesarios a 
+utilizar en el test.
+
+❖ tearDown(): Este método es llamado al finalizar la ejecución 
+de cada método y es utilizado para limpiar las instancias 
+utilizadas en el método de prueba.  Se ejecuta incluso si una 
+excepción es lanzada durante la ejecución de la prueba. 
+❖ setUpClass(): este método debe ser implementado como 
+
+método de clase y se ejecuta al inicio de todas las 
+prueabas de la clase. 
+
+❖ tearDownClass(): este método se ejecuta al finalizer todas 
+
+las pruebas de una clase.
+
+Problema
+
+Realizar la clase agenda que guarde el nombre, apellido, 
+dirección y teléfono de una persona utilizando su dni como 
+referencia. Desarrolle los métodos necesarios para gestionar 
+los datos incluyendo excepciones  por datos inválidos.  Una 
+vez realizada la clase Agenda escriba la clase AgendaTest 
+que pruebe todos los métodos incluida las excepciones.

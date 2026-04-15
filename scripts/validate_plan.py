@@ -64,20 +64,21 @@ def _validate_v3_schema(plan: dict, project_root: Path) -> Result[dict]:
     plan_schema = load_json(plan_schema_path)
     slide_schema = load_json(slide_schema_path) if slide_schema_path.exists() else None
 
-    # Construir resolver para $ref
-    schema_store: dict[str, dict] = {}
+    # Inlinar el slide schema directamente para evitar problemas con $ref resolution
+    import copy
+    plan_schema_resolved = copy.deepcopy(plan_schema)
     if slide_schema:
-        schema_store[slide_schema.get("$id", "filmina-slide.schema.json")] = slide_schema
-        schema_store["filmina-slide.schema.json"] = slide_schema
-
-    registry = jsonschema.RefResolver.from_schema(plan_schema, store=schema_store)
+        plan_schema_resolved["properties"]["slides"]["items"] = {
+            k: v for k, v in slide_schema.items()
+            if k not in ("$schema", "$id", "title", "description", "version", "date")
+        }
 
     try:
         validator_cls = jsonschema.Draft202012Validator
     except AttributeError:
         validator_cls = jsonschema.Draft7Validator  # fallback
 
-    validator = validator_cls(plan_schema, resolver=registry)
+    validator = validator_cls(plan_schema_resolved)
 
     errors = tuple(
         f"SCHEMA [{'.'.join(str(p) for p in e.absolute_path) or '(root)'}]: {e.message}"
