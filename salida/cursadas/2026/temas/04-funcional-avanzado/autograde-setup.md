@@ -16,23 +16,16 @@
 ### 1. Crear repositorio template
 
 ```bash
-# Desde la carpeta autograde-repo/
-cd autograde-repo
-git init
-git add -A
-git commit -m "initial: tp04 funcional avanzado template"
-git remote add origin https://github.com/UNTDF-IDEI/tp04-funcional-avanzado-template.git
-git push -u origin main
+# ✅ REPO YA PUBLICADO — https://github.com/Laboratorio-y-paradigmas-UNTDF/tp04-funcional-avanzado-template
+# ✅ Marcado como Template repository (is_template: true)
 ```
-
-En **Settings → General**, marcar **Template repository**.
 
 ### 2. Crear assignment en GitHub Classroom
 
 1. Ir a [classroom.github.com](https://classroom.github.com) → Tu clase
 2. **New assignment** → Individual
 3. **Title**: `TP04 — Programación Funcional Avanzada`
-4. **Template repository**: `UNTDF-IDEI/tp04-funcional-avanzado-template`
+4. **Template repository**: `Laboratorio-y-paradigmas-UNTDF/tp04-funcional-avanzado-template`
 5. **Visibility**: Private
 6. **Grant admin access to students**: No
 7. **Enable feedback pull request**: Sí
