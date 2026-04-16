@@ -1,0 +1,2325 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "02-pruebas-unitarias",
+    "title": "Módulo II — Pruebas Unitarias",
+    "source": "salida/cursadas/2026/temas/02-pruebas-unitarias/filminas.md",
+    "generated_at": "2026-04-15T18:00:00Z",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "salida/cursadas/2026/temas",
+    "topic_folder": "salida/cursadas/2026/temas/02-pruebas-unitarias",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/slides-pipeline.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "slides": [
+    {
+      "id": "F-00",
+      "type": "portada",
+      "title": "Módulo II — Pruebas Unitarias",
+      "subtitle": "Laboratorio de Programación y Lenguajes · UNTDF 2026",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Semana 4 · Dr. Roberto / Lic. Marcos"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Large dark rectangle as background. In the center: a grid of small horizontal bars, half in green and half in bordo red, arranged like a checklist pattern. A bold checkmark icon in the lower-right corner glowing in green. Flat design, bordo and dark gray palette, dark background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-00-bg.png",
+        "drive_id": "1fd6MIcfvEJ3BXGtQ_R5liRQzNQIerS9F"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-01",
+      "type": "tabla",
+      "title": "¿Qué vemos hoy?",
+      "subtitle": "Bloques (180 min)",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "**Al final de hoy:** van a poder escribir su primer test unitario en Python."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Bloque | Duración | Tema |\n|--------|----------|------|\n| T0 | 30 min | Repaso POO Python |\n| T1 | 40 min | Motivación — Por qué testar |\n| — | 10 min | **Pausa** |\n| T2 | 40 min | Framework `unittest` |\n| T3 | 30 min | TDD: Red → Green → Refactor |\n| T4 | 20 min | Cierre y preview práctica |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Bloque | Duración | Tema |\n|--------|----------|------|\n| T0 | 30 min | Repaso POO Python |\n| T1 | 40 min | Motivación — Por qué testar |\n| — | 10 min | **Pausa** |\n| T2 | 40 min | Framework `unittest` |\n| T3 | 30 min | TDD: Red → Green → Refactor |\n| T4 | 20 min | Cierre y preview práctica |",
+          "local_asset": "slides/assets/F-01-table-1.png",
+          "drive_id": "1Ys3WIjNaWOnu6YEHBbu92fdNaRxuycwL"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "type": "codigo",
+      "title": "Python Orientado a Objetos — lo que necesitamos hoy",
+      "subtitle": "Definir una clase",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`__str__` → lo que vemos en `print(agenda)` · `__eq__` → lo que compara `assertEqual(agenda1, agenda2)`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class Agenda:\n    def __init__(self, capacidad: int = 100) -> None:\n        self._contactos: dict = {}\n        self.capacidad = capacidad\n\n    def __str__(self) -> str:\n        return f\"Agenda con {len(self._contactos)} contacto(s)\"\n\n    def __eq__(self, other: object) -> bool:\n        return (isinstance(other, Agenda)\n                and self._contactos == other._contactos)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-03",
+      "type": "codigo",
+      "title": "Herencia en Python",
+      "subtitle": "Patrón que veremos en unittest",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`unittest.TestCase` también es una clase que **vamos a heredar** hoy — subclase, `super()`, método especializado"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class Error(Exception):\n    \"\"\"Clase base para errores de la aplicación.\"\"\"\n    pass\n\nclass DNIInvalidoError(Error):\n    \"\"\"Se lanza cuando el DNI no tiene formato válido.\"\"\"\n    def __init__(self, dni: str) -> None:\n        super().__init__(f\"DNI inválido: '{dni}'. Debe tener 7 u 8 dígitos.\")\n        self.dni = dni"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-04",
+      "type": "concepto-mixto",
+      "title": "Excepciones propias — por qué importan para tests",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El código que queremos probar lanza excepciones"
+        },
+        {
+          "type": "text",
+          "content": "El método `agregar` valida el DNI y lanza `ValueError` si es inválido o `KeyError` si ya existe."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Cómo probamos que la excepción se lanza?"
+        },
+        {
+          "type": "text",
+          "content": "→ Eso lo vemos en el Bloque T2 con `assertRaises`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class Agenda:\n    def agregar(self, dni: str, nombre: str,\n                apellido: str, direccion: str,\n                telefono: str) -> None:\n        if not dni.isdigit() or not (7 <= len(dni) <= 8):\n            raise ValueError(f\"DNI inválido: {dni!r}\")\n        if dni in self._contactos:\n            raise KeyError(f\"DNI {dni!r} ya registrado\")\n        self._contactos[dni] = {\n            \"nombre\": nombre,\n            \"apellido\": apellido,\n            \"direccion\": direccion,\n            \"telefono\": telefono,\n        }"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "tabla",
+      "title": "Métodos especiales que ayudan a testear",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "**Regla práctica:** si una clase va a ser testeada, implementá `__eq__` y `__str__`."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Método | Cuándo lo implementar | Impacto en tests |\n|--------|----------------------|------------------|\n| `__eq__` | Cuando `==` debe comparar estado interno | Permite usar `assertEqual(obj1, obj2)` |\n| `__str__` | Siempre en clases de dominio | Mejora los mensajes de error de los tests |\n| `__repr__` | Para debugging y logs | Aparece en las trazas de pytest y unittest |\n| `__len__` | Colecciones propias | Permite `assertEqual(len(agenda), 2)` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Método | Cuándo lo implementar | Impacto en tests |\n|--------|----------------------|------------------|\n| `__eq__` | Cuando `==` debe comparar estado interno | Permite usar `assertEqual(obj1, obj2)` |\n| `__str__` | Siempre en clases de dominio | Mejora los mensajes de error de los tests |\n| `__repr__` | Para debugging y logs | Aparece en las trazas de pytest y unittest |\n| `__len__` | Colecciones propias | Permite `assertEqual(len(agenda), 2)` |",
+          "local_asset": "slides/assets/F-05-table-1.png",
+          "drive_id": "1vwZ_0Wdmdx5RuII0FR5BwSWapbV9p8fz"
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "type": "portada",
+      "title": "Errores",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Dark background with three large rectangles arranged horizontally, each with a bold exclamation triangle icon inside in bordo red. Small crack lines radiating from each rectangle. Dramatic atmosphere, bordo and dark gray on black. Flat design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-06-bg.png",
+        "drive_id": "12GSnfQoMF51_BkUCn97oNIR-9UHX8xHt"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-07",
+      "type": "concepto-abstracto",
+      "title": "Vuelo 140 de Air China — 26/04/1994",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué pasó?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Un **error de software** desactivó el piloto automático durante el descenso",
+              "level": 0
+            },
+            {
+              "content": "La tripulación no advirtió el cambio de modo a tiempo",
+              "level": 0
+            },
+            {
+              "content": "El avión impactó contra el suelo cerca de Nagoya, Japón",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Consecuencia"
+        },
+        {
+          "type": "text",
+          "content": "**264 muertos**"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Causa raíz"
+        },
+        {
+          "type": "text",
+          "content": "El software cambió de estado de forma inesperada bajo una combinación de entrada que no fue testeada."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "A large silver-gray triangle shape tilted diagonally downward against a gradient blue-to-dark background. Inside the triangle: small horizontal lines suggesting a control panel, one line glowing red. A bold red downward arrow below the triangle. Flat design, bordo accents. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-07-content.png",
+        "drive_id": "1gf_VRaKLcInjHPG484WmVHQhDdIS8xRn"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-08",
+      "type": "concepto-abstracto",
+      "title": "Therac-25 — Máquina de radioterapia",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué pasó?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Bajo **ciertas condiciones de carrera** (race condition), emitía hasta **100× más radiación** de lo normal",
+              "level": 0
+            },
+            {
+              "content": "El error provenía de reutilizar código sin re-testear en el nuevo contexto",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Consecuencia"
+        },
+        {
+          "type": "text",
+          "content": "**4 muertes confirmadas**, al menos 3 heridos graves"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Causa raíz"
+        },
+        {
+          "type": "text",
+          "content": "Overflow de software. Los tests de la versión anterior no cubrían la nueva interfaz de usuario."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "A large vertical gray cylinder shape on the left, pointing toward a flat horizontal rectangle on the right. Concentric circles radiating outward from between them in bordo and red gradients. A small exclamation triangle icon in the top corner in yellow. Dark teal background. Flat design, bordo and gray palette. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-08-content.png",
+        "drive_id": "1onmU94tAiD7NGqsFEmuHjX4RY2DMn3mS"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-09",
+      "type": "concepto-abstracto",
+      "title": "Ariane 5 — Vuelo 501 · 04/06/1996",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué pasó?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Se reutilizó software de navegación sin re-testear con los nuevos parámetros de velocidad",
+              "level": 0
+            },
+            {
+              "content": "**Overflow al convertir float de 64 bits a entero de 16 bits**",
+              "level": 0
+            },
+            {
+              "content": "El cohete se auto-destruyó a los 37 segundos de despegue",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Consecuencia"
+        },
+        {
+          "type": "text",
+          "content": "**$370 millones de dólares** destruidos en 37 segundos"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Causa raíz"
+        },
+        {
+          "type": "text",
+          "content": "Reutilización de código sin pruebas de regresión en el nuevo contexto."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "A tall narrow silver-gray triangle pointing upward in the center. From its midsection, orange and red burst shapes explode outward. Small triangular and rectangular fragments scattered in all directions. Dark blue background. Dramatic flat design with orange, bordo, and gray. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-09-content.png",
+        "drive_id": "1OUOW6K6ME35DkuJ46e6QiiOOIWaDmtuu"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-10",
+      "type": "socratica",
+      "title": "¿Qué tienen en común Air China, Therac-25 y Ariane 5?",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Pensemos..."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿Todos tenían código funcionando? **Sí**",
+              "level": 0
+            },
+            {
+              "content": "¿Todos pasaban por ingenieros profesionales? **Sí**",
+              "level": 0
+            },
+            {
+              "content": "¿Todos fallaron en producción? **Sí**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La respuesta"
+        },
+        {
+          "type": "text",
+          "content": "**No se testearon los casos de borde ni el comportamiento bajo nuevas condiciones.**"
+        },
+        {
+          "type": "text",
+          "content": "*\"Proceso que busca verificar la exactitud, integridad y calidad de un software.\"* — IEEE"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Three large circles arranged in a triangle formation on a subtle gray gradient background, each in a different shade of bordo. Thin dashed lines connecting all three circles to a central bold question mark icon in dark gray. Flat design, bordo and dark gray palette. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-10-bg.png",
+        "drive_id": "1nVZI9AOKkZOfrDHwzUWQ6wGGmTggEmtp"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "tabla-comparativa",
+      "title": "Tipos de tests — por conocimiento del sistema",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Los tests de la clase Agenda van a ser una **mezcla de ambos** enfoques."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Tipo | Qué se prueba | Conocimiento | Ejemplo |\n|------|---------------|-------------|----------|\n| **Caja Negra** | Entradas y salidas contra la especificación | Sin conocer la implementación interna | DNI `\"abc\"` → esperar `ValueError` |\n| **Caja Blanca** | Ramas, condiciones y caminos internos | Conociendo la estructura interna | DNI de 6 dígitos para cubrir `if len(dni) < 7` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Tipo | Qué se prueba | Conocimiento | Ejemplo |\n|------|---------------|-------------|----------|\n| **Caja Negra** | Entradas y salidas contra la especificación | Sin conocer la implementación interna | DNI `\"abc\"` → esperar `ValueError` |\n| **Caja Blanca** | Ramas, condiciones y caminos internos | Conociendo la estructura interna | DNI de 6 dígitos para cubrir `if len(dni) < 7` |",
+          "local_asset": "slides/assets/F-11-table-1.png",
+          "drive_id": "1H_vjqUL1OaV1pKDWf7ob_VLoLszLC_Sf"
+        }
+      ]
+    },
+    {
+      "id": "F-12",
+      "type": "diagrama",
+      "title": "Los 4 niveles de testing",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Prueba de Unidad** — una clase o función aislada (milisegundos)",
+              "level": 0
+            },
+            {
+              "content": "**Prueba de Integración** — interacción entre módulos (segundos)",
+              "level": 0
+            },
+            {
+              "content": "**Prueba de Sistema** — el sistema completo (minutos)",
+              "level": 0
+            },
+            {
+              "content": "**Prueba de Aceptación** — requisitos del usuario (horas)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "**Este módulo:** Nivel 1 — Unit Test con `unittest`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "A pyramid shape with four horizontal layers stacked vertically. Bottom layer widest in green. Second layer in yellow. Third layer in orange. Top layer smallest in bordo red. Each layer is a flat rectangle decreasing in width toward the top. White background. Clean flat educational style. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-12-content.png",
+        "drive_id": "1dVjWCwDU4kKC-2tZoF-JYHJ0Ot3awhqX"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "concepto-mixto",
+      "title": "Prueba de regresión — la red de seguridad",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué es?"
+        },
+        {
+          "type": "text",
+          "content": "Re-ejecutar todos los tests existentes **después de cada cambio** para verificar que nada se rompió."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Por qué importa?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Ariane 5 falló por falta de pruebas de regresión al reutilizar código",
+              "level": 0
+            },
+            {
+              "content": "Therac-25 falló por falta de pruebas de regresión al cambiar la interfaz",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "**Mensaje clave:** el suite de tests es tu red de seguridad para refactorizar con confianza."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "bash",
+          "content": "# Cada vez que modificás código, ejecutás:\npython -m unittest discover\n# Si todos los tests pasan → el cambio no rompió nada"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-14",
+      "type": "timeline",
+      "title": "La familia xUnit",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`unittest` es parte de la **stdlib de Python** — no necesitás instalar nada."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Año | Framework | Lenguaje | Creador |\n|-----|-----------|----------|----------|\n| 1989 | **SUnit** | Smalltalk | Kent Beck |\n| 1997 | **JUnit** | Java | Kent Beck + Erich Gamma |\n| 2001 | **unittest** | Python | Steve Purcell (port de JUnit) |\n| 2002 | **NUnit** | .NET | Charlie Poole |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-top-split",
+        "image": "none",
+        "code": "none",
+        "table": "right-half"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Año | Framework | Lenguaje | Creador |\n|-----|-----------|----------|----------|\n| 1989 | **SUnit** | Smalltalk | Kent Beck |\n| 1997 | **JUnit** | Java | Kent Beck + Erich Gamma |\n| 2001 | **unittest** | Python | Steve Purcell (port de JUnit) |\n| 2002 | **NUnit** | .NET | Charlie Poole |",
+          "local_asset": "slides/assets/F-14-table-1.png",
+          "drive_id": "1mzWn8rar5NMbNiPnH00Vyn0j4yq1G2By"
+        }
+      ]
+    },
+    {
+      "id": "F-15",
+      "type": "diagrama",
+      "title": "Los tres conceptos del framework",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "TestCase"
+        },
+        {
+          "type": "text",
+          "content": "Un **caso de prueba** individual. Hereda de `unittest.TestCase`. Cada método `test_` es un test independiente."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "TestSuite"
+        },
+        {
+          "type": "text",
+          "content": "Una **colección** de casos de prueba. El runner lo construye automáticamente por discovery."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "TestRunner"
+        },
+        {
+          "type": "text",
+          "content": "Orquesta la **ejecución** y muestra los resultados. `python -m unittest` es el runner por defecto."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Three flat rectangles arranged in a horizontal row on white background. Left rectangle in bordo with small horizontal lines inside. Middle rectangle in dark gray, slightly larger. Right rectangle in bordo with a bold checkmark inside. Bold arrows connecting left to middle and middle to right. Flat minimal design, bordo and dark gray palette. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-15-content.png",
+        "drive_id": "1X6GJpZIwY4BjaOdC_7nXWudD0EZvM95M"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-16",
+      "type": "codigo",
+      "title": "Estructura mínima de un test",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Métodos `test_*` se ejecutan automáticamente · Un método = un test = un resultado (ok / FAIL / ERROR)"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "import unittest\n\nclass PrimeraVez(unittest.TestCase):\n\n    def test_suma(self):\n        resultado = 2 + 2\n        self.assertEqual(resultado, 4)\n\n    def test_tipo(self):\n        self.assertIsInstance(\"hola\", str)\n\nif __name__ == \"__main__\":\n    unittest.main()"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-17",
+      "type": "codigo",
+      "title": "Cuando el test falla — qué leer primero",
+      "subtitle": "FAIL vs ERROR vs verbose",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Empezá a leer desde la línea del `AssertionError` — ahí está el problema."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "# FAIL — aserción que no se cumplió\nFAIL: test_nombre_correcto (test_agenda.AgendaTest)\nAssertionError: 'Juana' != 'Juan'\n\n# ERROR — excepción inesperada (bug en el código)\nERROR: test_buscar_existente (test_agenda.AgendaTest)\nKeyError: '12345678'\n\n# Con -v (verbose)\ntest_agregar_nuevo ... ok\ntest_buscar_existente ... FAIL\ntest_dni_invalido ... ok\nRan 3 tests in 0.002s  FAILED (failures=1)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-18",
+      "type": "tabla",
+      "title": "Las aserciones más usadas (1/2)",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Método | Verifica |\n|--------|----------|\n| `assertEqual(a, b)` | `a == b` |\n| `assertNotEqual(a, b)` | `a != b` |\n| `assertTrue(x)` | `bool(x) is True` |\n| `assertFalse(x)` | `bool(x) is False` |\n| `assertIsNone(x)` | `x is None` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Método | Verifica |\n|--------|----------|\n| `assertEqual(a, b)` | `a == b` |\n| `assertNotEqual(a, b)` | `a != b` |\n| `assertTrue(x)` | `bool(x) is True` |\n| `assertFalse(x)` | `bool(x) is False` |\n| `assertIsNone(x)` | `x is None` |",
+          "local_asset": "slides/assets/F-18-table-1.png",
+          "drive_id": "1FFbd1GsOXYh0s6Zka5vCObrrWEf_VRb4"
+        }
+      ]
+    },
+    {
+      "id": "F-19",
+      "type": "tabla",
+      "title": "Las aserciones más usadas (2/2)",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "**Tip:** preferí `assertEqual` sobre `assertTrue(a == b)` — los mensajes de error son mucho más claros."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Método | Verifica |\n|--------|----------|\n| `assertIsNotNone(x)` | `x is not None` |\n| `assertIn(a, b)` | `a in b` |\n| `assertIsInstance(a, T)` | `isinstance(a, T)` |\n| `assertRaises(Exc)` | se lanza la excepción `Exc` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Método | Verifica |\n|--------|----------|\n| `assertIsNotNone(x)` | `x is not None` |\n| `assertIn(a, b)` | `a in b` |\n| `assertIsInstance(a, T)` | `isinstance(a, T)` |\n| `assertRaises(Exc)` | se lanza la excepción `Exc` |",
+          "local_asset": "slides/assets/F-19-table-1.png",
+          "drive_id": "1U88CFzbWX22k2HXmhGy-jBTyxhTo4ybR"
+        }
+      ]
+    },
+    {
+      "id": "F-20",
+      "type": "tabla",
+      "title": "Cuando verificás listas, dicts y strings",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`assertCountEqual([1,2,3], [3,1,2])` pasa. `assertEqual` fallaría porque el orden importa."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Método | Verifica |\n|--------|----------|\n| `assertIn(a, b)` | `a in b` (lista, dict, string) |\n| `assertNotIn(a, b)` | `a not in b` |\n| `assertCountEqual(a, b)` | mismos elementos, **cualquier orden** |\n| `assertListEqual(a, b)` | listas iguales — diff detallado |\n| `assertDictEqual(a, b)` | dicts iguales — diff detallado |\n| `assertRegex(s, r)` | string `s` matchea regex `r` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Método | Verifica |\n|--------|----------|\n| `assertIn(a, b)` | `a in b` (lista, dict, string) |\n| `assertNotIn(a, b)` | `a not in b` |\n| `assertCountEqual(a, b)` | mismos elementos, **cualquier orden** |\n| `assertListEqual(a, b)` | listas iguales — diff detallado |\n| `assertDictEqual(a, b)` | dicts iguales — diff detallado |\n| `assertRegex(s, r)` | string `s` matchea regex `r` |",
+          "local_asset": "slides/assets/F-20-table-1.png",
+          "drive_id": "1hE-oxhIjFdpMyQvUfMJoudYgWmdwhxO0"
+        }
+      ]
+    },
+    {
+      "id": "F-21",
+      "type": "codigo",
+      "title": "¿Cómo probamos que una excepción se lanza?",
+      "subtitle": "Con context manager (recomendado)",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Si la excepción **NO** se lanza → el test **falla** con `AssertionError: ValueError not raised`."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "def test_dni_invalido_lanza_error(self):\n    with self.assertRaises(ValueError):\n        Agenda().agregar(\"abc\", \"Juan\", \"Pérez\",\n                         \"Calle 1\", \"111\")\n\ndef test_mensaje_de_error_correcto(self):\n    with self.assertRaises(ValueError) as ctx:\n        Agenda().agregar(\"abc\", \"Juan\", \"Pérez\",\n                         \"Calle 1\", \"111\")\n    self.assertIn(\"abc\", str(ctx.exception))"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-22",
+      "type": "codigo",
+      "title": "Fixtures — preparar y limpiar el entorno",
+      "subtitle": "¿Por qué fixtures?",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`setUp` corre antes de **cada** test — cada test empieza con un estado limpio."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class AgendaTest(unittest.TestCase):\n\n    def setUp(self):\n        \"\"\"Se ejecuta ANTES de cada test.\"\"\"\n        self.agenda = Agenda()\n        self.agenda.agregar(\"12345678\", \"Juan\",\n                            \"Pérez\", \"Calle 1\", \"2901-111\")\n\n    def tearDown(self):\n        \"\"\"Se ejecuta DESPUÉS de cada test.\"\"\"\n        del self.agenda\n\n    def test_buscar_existente(self):\n        resultado = self.agenda.buscar(\"12345678\")\n        self.assertEqual(resultado[\"nombre\"], \"Juan\")\n\n    def test_buscar_inexistente(self):\n        with self.assertRaises(KeyError):\n            self.agenda.buscar(\"00000000\")"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "codigo",
+      "title": "El ciclo completo de una clase de tests",
+      "subtitle": "Orden de ejecución garantizado",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "El **orden entre tests** no está garantizado — diseñalos independientes."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "setUpClass()       <- 1 vez por clase\n  setUp()          <- antes de test_A\n    test_A()\n  tearDown()       <- después de test_A (aunque falle)\n  setUp()          <- antes de test_B\n    test_B()\n  tearDown()\ntearDownClass()    <- 1 vez al final"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "codigo",
+      "title": "Ejecutar tests desde la terminal",
+      "subtitle": "Comandos básicos",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "bash",
+          "content": "# Ejecutar un archivo\npython -m unittest test_agenda.py\n\n# Con detalle (verbose)\npython -m unittest -v test_agenda.py\n\n# Descubrimiento automático\npython -m unittest discover\n\n# En una carpeta específica\npython -m unittest discover -s tests/ -p \"test_*.py\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "concepto-abstracto",
+      "title": "Test-Driven Development",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición"
+        },
+        {
+          "type": "text",
+          "content": "**TDD** es una metodología donde **el test se escribe antes que el código de producción**."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Origen"
+        },
+        {
+          "type": "text",
+          "content": "Kent Beck, *Test-Driven Development by Example* (2002) · Extreme Programming (XP)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El mantra"
+        },
+        {
+          "type": "text",
+          "content": "*\"Never write a single line of production code unless you have a failing test.\"* — Kent Beck"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Tests = **especificación ejecutable**",
+              "level": 0
+            },
+            {
+              "content": "Diseño emergente guiado por tests",
+              "level": 0
+            },
+            {
+              "content": "Red de seguridad para refactorizar",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "A large open book icon in the center of the composition. Three smaller icons floating above it: a red circle on the left, a green circle in the middle, and a blue circle on the right. Thin upward arrows from the book to each circle. White background. Flat design, bordo and dark gray palette. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-25-content.png",
+        "drive_id": "1CkDtJGjnNGbK_1uatOB_865GeznyExI6"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-26",
+      "type": "diagrama",
+      "title": "El ciclo TDD",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "RED — Escribir un test que falla"
+        },
+        {
+          "type": "text",
+          "content": "El test se escribe **antes** del código y **debe fallar**"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "GREEN — Hacer pasar el test"
+        },
+        {
+          "type": "text",
+          "content": "**Mínimo código posible** para que pase"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "REFACTOR — Limpiar el código"
+        },
+        {
+          "type": "text",
+          "content": "Mejorar sin cambiar comportamiento · Tests siguen en verde"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Three large circles arranged in a clockwise triangular cycle on white background. Top-left circle in bright red. Top-right circle in bright green. Bottom-center circle in blue. Bold curved arrows connecting them clockwise: red to green, green to blue, blue to red. Flat design, vibrant colors, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-26-content.png",
+        "drive_id": "1PV03EsBXa68nYyRc0M-lYr4j1dx0oL8o"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-27",
+      "type": "codigo",
+      "title": "Demo en vivo — FizzBuzz TDD · Paso 1: RED",
+      "subtitle": "Especificación",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "**¡Perfecto! El test falla — el RED está confirmado.**"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "import unittest\n\nclass FizzBuzzTest(unittest.TestCase):\n\n    def test_tres_retorna_fizz(self):\n        self.assertEqual(fizzbuzz(3), \"Fizz\")\n\n# Resultado:\n# ERROR: test_tres_retorna_fizz\n# NameError: name 'fizzbuzz' is not defined"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-28",
+      "type": "codigo",
+      "title": "Demo en vivo — FizzBuzz TDD · Paso 2: GREEN",
+      "subtitle": "Mínimo código para pasar el test",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Ahora implementamos la función completa para pasar todos los tests."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "def fizzbuzz(n: int) -> str:\n    return \"Fizz\"\n\n# test_tres_retorna_fizz ... ok\n# Ran 1 test in 0.000s OK\n\n# Agregar más tests (el ciclo se repite):\ndef test_cinco_retorna_buzz(self):\n    self.assertEqual(fizzbuzz(5), \"Buzz\")\n\ndef test_quince_retorna_fizzbuzz(self):\n    self.assertEqual(fizzbuzz(15), \"FizzBuzz\")\n\ndef test_uno_retorna_uno(self):\n    self.assertEqual(fizzbuzz(1), \"1\")"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-29",
+      "type": "codigo",
+      "title": "Demo en vivo — FizzBuzz TDD · Paso 3: REFACTOR",
+      "subtitle": "Implementación completa",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "**Los tests documentan la especificación. El código la implementa.**"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "def fizzbuzz(n: int) -> str:\n    \"\"\"Retorna Fizz, Buzz, FizzBuzz o el número.\"\"\"\n    if n % 15 == 0:\n        return \"FizzBuzz\"\n    if n % 3 == 0:\n        return \"Fizz\"\n    if n % 5 == 0:\n        return \"Buzz\"\n    return str(n)\n\n# test_cinco_retorna_buzz ... ok\n# test_quince_retorna_fizzbuzz ... ok\n# test_tres_retorna_fizz ... ok\n# test_uno_retorna_uno ... ok\n# Ran 4 tests in 0.000s  OK"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-30",
+      "type": "tabla",
+      "title": "Para la práctica de hoy: Clase Agenda",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "TDD: 1) Escribir tests de `__init__`, `agregar` y `buscar` · 2) Implementar `Agenda` · 3) Agregar `eliminar` y `listar` con tests"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Método | Qué hace |\n|--------|----------|\n| `agregar(dni, nombre, apellido, dir, tel)` | Registra — lanza `KeyError` si DNI ya existe |\n| `buscar(dni)` | Retorna dict — lanza `KeyError` si no existe |\n| `eliminar(dni)` | Elimina — lanza `KeyError` si no existe |\n| `listar()` | Retorna lista de DNIs |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Método | Qué hace |\n|--------|----------|\n| `agregar(dni, nombre, apellido, dir, tel)` | Registra — lanza `KeyError` si DNI ya existe |\n| `buscar(dni)` | Retorna dict — lanza `KeyError` si no existe |\n| `eliminar(dni)` | Elimina — lanza `KeyError` si no existe |\n| `listar()` | Retorna lista de DNIs |",
+          "local_asset": "slides/assets/F-30-table-1.png",
+          "drive_id": "1d-QmYQAmXm71m4diHgixqdweDpFBUQDY"
+        }
+      ]
+    },
+    {
+      "id": "F-31",
+      "type": "tabla",
+      "title": "Resumen de hoy",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "**Para la próxima clase (Semana 5):** `unittest.mock`, subtests, skipping y anticipo `django.test.TestCase`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Lo que vimos | Estado |\n|-------------|--------|\n| Repaso POO: `__eq__`, `__str__`, excepciones propias | ✅ |\n| Por qué testar: Air China, Therac-25, Ariane 5 | ✅ |\n| Tipos de tests: caja negra / blanca, pirámide | ✅ |\n| `unittest`: TestCase, aserciones, fixtures, CLI | ✅ |\n| TDD: ciclo Red → Green → Refactor (demo FizzBuzz) | ✅ |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Lo que vimos | Estado |\n|-------------|--------|\n| Repaso POO: `__eq__`, `__str__`, excepciones propias | ✅ |\n| Por qué testar: Air China, Therac-25, Ariane 5 | ✅ |\n| Tipos de tests: caja negra / blanca, pirámide | ✅ |\n| `unittest`: TestCase, aserciones, fixtures, CLI | ✅ |\n| TDD: ciclo Red → Green → Refactor (demo FizzBuzz) | ✅ |",
+          "local_asset": "slides/assets/F-31-table-1.png",
+          "drive_id": "1W9FqWtz8OWERR-WS0bcKjWcBOUsVqnCd"
+        }
+      ]
+    },
+    {
+      "id": "F-32",
+      "type": "portada",
+      "title": "Módulo II — Pruebas Unitarias",
+      "subtitle": "Semana 5: Mocking y cierre del módulo",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Semana 5 · Dr. Roberto / Lic. Marcos"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Dark background with five gray rectangles arranged in a network pattern connected by thin arrows. Two arrows in the middle are cut with scissor icon shapes, showing separation between groups. Electric blue and bordo accents on dark gray. Flat design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-32-bg.png",
+        "drive_id": "12SXIf83tiZZssBojZowP2q-R4j85huOt"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-33",
+      "type": "tabla",
+      "title": "¿Qué vemos hoy?",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "~27 filminas — ritmo rápido ~4 min/filmina"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Bloque | Duración | Tema |\n|--------|----------|------|\n| T1 | 40 min | `unittest.mock` — MagicMock, patch, return_value, side_effect |\n| T2 | 30 min | subTest, skip, addCleanup |\n| — | 10 min | **Pausa** |\n| T3 | 30 min | TDD en BlogApp — `django.test.TestCase` |\n| T4 | 30 min | Cierre Módulo II + test smells |\n| T5 | 25 min | Revisión TP 2 |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Bloque | Duración | Tema |\n|--------|----------|------|\n| T1 | 40 min | `unittest.mock` — MagicMock, patch, return_value, side_effect |\n| T2 | 30 min | subTest, skip, addCleanup |\n| — | 10 min | **Pausa** |\n| T3 | 30 min | TDD en BlogApp — `django.test.TestCase` |\n| T4 | 30 min | Cierre Módulo II + test smells |\n| T5 | 25 min | Revisión TP 2 |",
+          "local_asset": "slides/assets/F-33-table-1.png",
+          "drive_id": "1IebYYd6iEZIWxE0lwuIf5G9XlzX6QhED"
+        }
+      ]
+    },
+    {
+      "id": "F-34",
+      "type": "tabla",
+      "title": "Preguntas rápidas — 2 min",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Estado Agenda: ✅ `agregar` + tests (S4) · ✅ `buscar` + tests (S4) · ⏳ `eliminar` y `listar` — práctica de hoy"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Pregunta de repaso |\n|--------------------|\n| ¿Diferencia entre `FAIL` y `ERROR` en el output? |\n| ¿Qué hace `setUp`? ¿Cuántas veces corre? |\n| ¿Cuándo `assertRaises` pasa vs falla? |\n| Tres pasos del TDD — decílos en orden |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Pregunta de repaso |\n|--------------------|\n| ¿Diferencia entre `FAIL` y `ERROR` en el output? |\n| ¿Qué hace `setUp`? ¿Cuántas veces corre? |\n| ¿Cuándo `assertRaises` pasa vs falla? |\n| Tres pasos del TDD — decílos en orden |",
+          "local_asset": "slides/assets/F-34-table-1.png",
+          "drive_id": "11fQboS7jouCqfDqeODwnGyomoUOtoxKX"
+        }
+      ]
+    },
+    {
+      "id": "F-35",
+      "type": "concepto-mixto",
+      "title": "El problema de las dependencias externas",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué puede salir mal?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "La base de datos no está disponible en CI",
+              "level": 0
+            },
+            {
+              "content": "El test deja datos sucios para el siguiente",
+              "level": 0
+            },
+            {
+              "content": "Es lento (red, disco)",
+              "level": 0
+            },
+            {
+              "content": "El fallo de la BD oculta el error real del código",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La solución: un doble (mock)"
+        },
+        {
+          "type": "text",
+          "content": "Reemplazar la dependencia real con un **objeto falso** que simula su comportamiento."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "def test_guardar_contacto(self):\n    agenda = Agenda()\n    agenda.agregar(\"12345678\", \"Juan\", \"Pérez\",\n                   \"Calle 1\", \"111\")\n    agenda.guardar_en_db()  # <- llama a BD real\n    self.assertEqual(agenda.total(), 1)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-36",
+      "type": "tabla",
+      "title": "No todos los \"mocks\" son iguales",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`MagicMock` puede actuar como Stub, Mock o Spy según cómo lo configures."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Tipo | Qué hace | Cuándo usarlo |\n|------|----------|---------------|\n| **Stub** | Retorna valores fijos | Aislar una fuente de datos |\n| **Mock** | Registra llamadas + verificación | Verificar que un método fue llamado |\n| **Spy** | Como mock pero usa implementación real | Verificar interacciones sin reemplazar lógica |\n| **Fake** | Implementación simplificada que funciona | BD en memoria |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Tipo | Qué hace | Cuándo usarlo |\n|------|----------|---------------|\n| **Stub** | Retorna valores fijos | Aislar una fuente de datos |\n| **Mock** | Registra llamadas + verificación | Verificar que un método fue llamado |\n| **Spy** | Como mock pero usa implementación real | Verificar interacciones sin reemplazar lógica |\n| **Fake** | Implementación simplificada que funciona | BD en memoria |",
+          "local_asset": "slides/assets/F-36-table-1.png",
+          "drive_id": "1N4n-FB_0kxbhlc3fhSCmfN4PPjd7foy5"
+        }
+      ]
+    },
+    {
+      "id": "F-37",
+      "type": "codigo",
+      "title": "unittest.mock.MagicMock",
+      "subtitle": "¿Qué es?",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Un objeto que **acepta cualquier método o atributo** y registra todas las llamadas recibidas."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "from unittest.mock import MagicMock\n\n# Crear el doble\ndb_falsa = MagicMock()\n\n# Llamar cualquier método — no lanza error\ndb_falsa.guardar({\"dni\": \"12345678\", \"nombre\": \"Juan\"})\n\n# Verificar que fue llamado\ndb_falsa.guardar.assert_called_once()\n\n# Verificar el argumento exacto\ndb_falsa.guardar.assert_called_with(\n    {\"dni\": \"12345678\", \"nombre\": \"Juan\"})\n\n# Configurar valor de retorno\ndb_falsa.buscar.return_value = {\"nombre\": \"Juan\"}\nresultado = db_falsa.buscar(\"12345678\")"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-38",
+      "type": "codigo",
+      "title": "MagicMock — verificar llamadas",
+      "subtitle": "Los métodos de verificación más usados",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "m = MagicMock()\nm.guardar(\"a.json\")\nm.guardar(\"b.json\")\n\nm.guardar.assert_called()                    # alguna vez?\nm.guardar.assert_called_with(\"b.json\")      # última llamada?\nm.guardar.assert_called_once_with(\"a.json\") # falla: 2 veces\nm.guardar.assert_any_call(\"a.json\")         # alguna vez con este arg?\n\nprint(m.guardar.call_count)        # -> 2\nprint(m.guardar.call_args_list)\n# -> [call('a.json'), call('b.json')]"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-39",
+      "type": "codigo",
+      "title": "Controlar qué devuelve el mock",
+      "subtitle": "return_value y side_effect",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`side_effect` tiene prioridad sobre `return_value`."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "db = MagicMock()\n\n# return_value — siempre lo mismo\ndb.buscar.return_value = {\"nombre\": \"Juan\"}\ndb.buscar(\"cualquier-dni\")  # -> {\"nombre\": \"Juan\"}\n\n# side_effect — comportamiento dinámico\n# Lanzar excepción\ndb.buscar.side_effect = KeyError(\"no encontrado\")\n\n# Distintos valores por llamada\ndb.buscar.side_effect = [\n    {\"nombre\": \"Juan\"},\n    {\"nombre\": \"Ana\"},\n    KeyError(\"fin\")\n]\ndb.buscar(\"1\")  # -> {\"nombre\": \"Juan\"}\ndb.buscar(\"2\")  # -> {\"nombre\": \"Ana\"}\ndb.buscar(\"3\")  # -> KeyError!"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-40",
+      "type": "codigo",
+      "title": "unittest.mock.patch — como context manager",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`patch` reemplaza `open` **solo dentro del bloque `with`** — luego lo restaura automáticamente."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "from unittest.mock import patch, mock_open\n\nclass AgendaTest(unittest.TestCase):\n\n    def test_guardar_llama_open(self):\n        agenda = Agenda()\n        agenda.agregar(\"12345678\", \"Juan\", \"Pérez\",\n                       \"Calle 1\", \"111\")\n\n        with patch(\"builtins.open\", mock_open()) as m:\n            agenda.guardar(\"agenda.json\")\n\n        m.assert_called_once_with(\"agenda.json\", \"w\")"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-41",
+      "type": "concepto-mixto",
+      "title": "La regla: patchear donde se USA, no donde se DEFINE",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "**Regla mnemónica:** el path empieza por el módulo que **importa** el símbolo, no por donde está definido."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "❌ `patch(\"json.dump\")` — parchea la definición",
+              "level": 0
+            },
+            {
+              "content": "✅ `patch(\"agenda.json.dump\")` — parchea donde `agenda.py` lo usa",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# agenda.py\nimport json\n\nclass Agenda:\n    def guardar(self, path):\n        json.dump(self._contactos,\n                  open(path, \"w\"))\n\n# test — patchear donde se USA:\nwith patch(\"agenda.json.dump\") as m:\n    agenda.guardar(\"out.json\")"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-42",
+      "type": "codigo",
+      "title": "patch como decorador",
+      "subtitle": "El mismo test, otra sintaxis",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Context manager: patch activo en medio del test · Decorador: patch cubre todo el test (más común)"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "from unittest.mock import patch, mock_open\n\nclass AgendaTest(unittest.TestCase):\n\n    @patch(\"builtins.open\", new_callable=mock_open)\n    def test_guardar_llama_open(self, mock_open_obj):\n        agenda = Agenda()\n        agenda.agregar(\"12345678\", \"Juan\", \"Pérez\",\n                       \"Calle 1\", \"111\")\n        agenda.guardar(\"agenda.json\")\n\n        mock_open_obj.assert_called_once_with(\n            \"agenda.json\", \"w\")"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-43",
+      "type": "codigo",
+      "title": "patch.object y múltiples patches",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Con múltiples decoradores: el más cercano al método llega como primer argumento."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "from unittest.mock import patch\n\n# patch.object — patchear un método de una clase\nwith patch.object(AgendaService, \"validar_dni\",\n                  return_value=True):\n    agenda = Agenda()\n    agenda.agregar(\"12345678\", \"Juan\", \"Pérez\",\n                   \"Calle 1\", \"111\")\n\n# Múltiples @patch — orden INVERSO\n@patch(\"agenda.json.dump\")       # -> mock_dump\n@patch(\"builtins.open\")          # -> mock_open\ndef test_guardar(self, mock_open, mock_dump):\n    ..."
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-44",
+      "type": "codigo",
+      "title": "subTest() — probar múltiples casos en un test",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Si falla un caso, los demás **continúan ejecutándose** — el reporte muestra cuáles fallaron."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "def test_fizzbuzz_casos(self):\n    casos = [\n        (3,  \"Fizz\"),\n        (5,  \"Buzz\"),\n        (15, \"FizzBuzz\"),\n        (1,  \"1\"),\n        (30, \"FizzBuzz\"),\n    ]\n    for entrada, esperado in casos:\n        with self.subTest(n=entrada):\n            self.assertEqual(fizzbuzz(entrada),\n                             esperado)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-45",
+      "type": "codigo",
+      "title": "subTest — leer el reporte de fallo",
+      "subtitle": "El reporte muestra exactamente qué caso falló",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "El valor `n=5` aparece en el nombre → sabés exactamente qué entrada falló."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "FAIL: test_fizzbuzz_casos (n=5)\nAssertionError: 'Buzz' != 'WRONG'\n\nFAIL: test_fizzbuzz_casos (n=7)\nAssertionError: '7' != 'WRONG'\n\nRan 1 test in 0.001s  FAILED (failures=2)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-46",
+      "type": "codigo",
+      "title": "Decoradores de skip",
+      "subtitle": "Skipping — saltear tests",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`@skip` y `@skipIf` son útiles durante desarrollo · `@expectedFailure` documenta bugs conocidos"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "import sys\nimport unittest\n\nclass EjemploSkip(unittest.TestCase):\n\n    @unittest.skip(\"Función aún no implementada\")\n    def test_en_construccion(self):\n        self.assertTrue(funcion_pendiente())\n\n    @unittest.skipIf(sys.version_info < (3, 11),\n                     \"Requiere Python 3.11+\")\n    def test_solo_en_python_nuevo(self):\n        ...\n\n    @unittest.skipUnless(sys.platform == \"linux\",\n                         \"Solo en Linux\")\n    def test_solo_linux(self):\n        ...\n\n    @unittest.expectedFailure\n    def test_bug_conocido(self):\n        self.assertEqual(1, 2)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-47",
+      "type": "codigo",
+      "title": "@expectedFailure — workflow TDD con métodos pendientes",
+      "subtitle": "Usar @expectedFailure para marcar trabajo pendiente",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Si `test_eliminar` pasa accidentalmente → el runner reporta **unexpected success**."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class AgendaTest(unittest.TestCase):\n\n    def test_agregar(self):              # implementado\n        ...\n\n    @unittest.expectedFailure\n    def test_eliminar(self):             # por implementar\n        self.agenda.eliminar(\"12345678\")\n        self.assertNotIn(\"12345678\",\n                         self.agenda.listar())\n\n    @unittest.expectedFailure\n    def test_listar_ordenado(self):      # por implementar\n        ...\n\n# Output:\n# test_agregar ... ok\n# test_eliminar ... expected failure  (x)\n# test_listar_ordenado ... expected failure  (x)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-48",
+      "type": "codigo",
+      "title": "Fixtures de clase — para recursos costosos",
+      "subtitle": "setUpClass y tearDownClass",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`setUp`: antes de **cada** test (objetos simples) · `setUpClass`: **una vez** por clase (BD, conexiones)"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class AgendaIntegrationTest(unittest.TestCase):\n\n    @classmethod\n    def setUpClass(cls):\n        \"\"\"UNA VEZ antes de todos los tests.\"\"\"\n        cls.conexion = inicializar_conexion_bd()\n\n    @classmethod\n    def tearDownClass(cls):\n        \"\"\"UNA VEZ después de todos los tests.\"\"\"\n        cls.conexion.cerrar()\n\n    def test_persistir_contacto(self):\n        # usa self.conexion — ya inicializada\n        ..."
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-49",
+      "type": "codigo",
+      "title": "addCleanup — limpieza sin tearDown",
+      "subtitle": "Registrar limpieza desde setUp",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`addCleanup` permite múltiples limpiezas en orden LIFO · Se ejecutan incluso si `setUp` falla a la mitad"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class AgendaTest(unittest.TestCase):\n\n    def setUp(self):\n        self.archivo_temp = crear_archivo_temporal()\n        # Registra limpieza — no hay tearDown separado\n        self.addCleanup(os.remove, self.archivo_temp)\n\n    def test_guardar_carga(self):\n        ...  # si falla, addCleanup igual se ejecuta"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-50",
+      "type": "concepto-mixto",
+      "title": "Todo lo que aprendieron se transfiere directamente",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "django.test.TestCase hereda de unittest.TestCase"
+        },
+        {
+          "type": "text",
+          "content": "**Mismos métodos, mismas aserciones, mismos fixtures.**"
+        },
+        {
+          "type": "text",
+          "content": "Django agrega funcionalidades extras: cliente de pruebas, BD de test, rollback automático."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# unittest — lo que aprendieron hoy\nclass AgendaTest(unittest.TestCase):\n    def setUp(self): ...\n    def test_algo(self):\n        self.assertEqual(...)\n\n# Django — lo que verán en Módulo III\nfrom django.test import TestCase\n\nclass PostTest(TestCase):  # <- es un unittest.TestCase\n    def setUp(self): ...\n    def test_algo(self):\n        self.assertEqual(...)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-51",
+      "type": "codigo",
+      "title": "El cliente HTTP de Django — sin tocar la red",
+      "subtitle": "django.test.Client",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Esto es **Nivel 2 (Integración)** — vista + URL + template. Se profundiza en Módulo III."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "from django.test import TestCase, Client\n\nclass PostViewTest(TestCase):\n\n    def setUp(self):\n        self.client = Client()\n\n    def test_lista_posts_devuelve_200(self):\n        response = self.client.get(\"/blog/posts/\")\n        self.assertEqual(response.status_code, 200)\n\n    def test_crear_requiere_login(self):\n        response = self.client.post(\n            \"/blog/posts/crear/\", {\"titulo\": \"Hola\"})\n        self.assertEqual(response.status_code, 302)\n\n    def test_contenido_en_respuesta(self):\n        response = self.client.get(\"/blog/posts/\")\n        self.assertContains(response,\n                            \"Últimas entradas\")"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-52",
+      "type": "codigo",
+      "title": "Dónde van los tests en un proyecto Django",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "La lógica es idéntica — `manage.py test` llama al runner de `unittest` por debajo."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "blogapp/\n├── manage.py\n├── blog/\n│   ├── models.py\n│   ├── views.py\n│   └── tests/              <- carpeta de tests\n│       ├── __init__.py\n│       ├── test_models.py   <- Unit (Nivel 1)\n│       ├── test_views.py    <- Integration (Nivel 2)\n│       └── test_forms.py"
+        },
+        {
+          "lang": "bash",
+          "content": "python manage.py test blog"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-53",
+      "type": "codigo",
+      "title": "manage.py test — opciones útiles",
+      "subtitle": "Los flags que van a usar en el TP 3",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "bash",
+          "content": "# Correr toda la app\npython manage.py test blog\n\n# Solo un TestCase\npython manage.py test blog.tests.test_models.PostTest\n\n# Solo un método\npython manage.py test blog.tests.test_models.PostTest.test_titulo_requerido\n\n# Verbose — muestra el nombre de cada test\npython manage.py test blog --verbosity=2\n\n# Detener en el primer fallo\npython manage.py test blog --failfast\n\n# Mantener la BD entre corridas (más rápido)\npython manage.py test blog --keepdb"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-54",
+      "type": "tabla",
+      "title": "TP 3 — Blog App con tests desde el inicio",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Estructura: `tp03-blog-app/blog/models.py` (implementar) + `blog/tests/` (tests primero). Más detalles en la sesión práctica."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Aspecto | TP 2 | TP 3 |\n|---------|------|------|\n| Tests | Escritos por nosotros (autograding) | **Ustedes escriben los tests** |\n| TDD | Opcional | **Obligatorio** |\n| Foco | Funciones | Modelos y vistas Django |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | TP 2 | TP 3 |\n|---------|------|------|\n| Tests | Escritos por nosotros (autograding) | **Ustedes escriben los tests** |\n| TDD | Opcional | **Obligatorio** |\n| Foco | Funciones | Modelos y vistas Django |",
+          "local_asset": "slides/assets/F-54-table-1.png",
+          "drive_id": "1GgoE5eCDViia95RvIHDU2i0BPVuQa9Dx"
+        }
+      ]
+    },
+    {
+      "id": "F-55",
+      "type": "tabla",
+      "title": "¿Qué aprendimos en el Módulo II? (1/2)",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Concepto | Estado |\n|----------|--------|\n| Caja negra / caja blanca | ✅ |\n| Pirámide de niveles de testing | ✅ |\n| `unittest.TestCase` — estructura | ✅ |\n| Aserciones: `assertEqual`, `assertRaises`, etc. | ✅ |\n| Fixtures: `setUp`, `tearDown`, `setUpClass` | ✅ |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Concepto | Estado |\n|----------|--------|\n| Caja negra / caja blanca | ✅ |\n| Pirámide de niveles de testing | ✅ |\n| `unittest.TestCase` — estructura | ✅ |\n| Aserciones: `assertEqual`, `assertRaises`, etc. | ✅ |\n| Fixtures: `setUp`, `tearDown`, `setUpClass` | ✅ |",
+          "local_asset": "slides/assets/F-55-table-1.png",
+          "drive_id": "1oKP7wAx84XrztNSnENepbhvCSeOF8-zM"
+        }
+      ]
+    },
+    {
+      "id": "F-56",
+      "type": "tabla",
+      "title": "¿Qué aprendimos en el Módulo II? (2/2)",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Concepto | Estado |\n|----------|--------|\n| TDD: ciclo Red → Green → Refactor | ✅ |\n| `unittest.mock`: MagicMock, patch | ✅ |\n| `subTest()` y decoradores de skip | ✅ |\n| `python -m unittest discover` | ✅ |\n| `django.test.TestCase` (anticipo) | ✅ (preview) |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Concepto | Estado |\n|----------|--------|\n| TDD: ciclo Red → Green → Refactor | ✅ |\n| `unittest.mock`: MagicMock, patch | ✅ |\n| `subTest()` y decoradores de skip | ✅ |\n| `python -m unittest discover` | ✅ |\n| `django.test.TestCase` (anticipo) | ✅ (preview) |",
+          "local_asset": "slides/assets/F-56-table-1.png",
+          "drive_id": "1xi1n5_8-K6JI150r7lJnfxhmNm_9m6xK"
+        }
+      ]
+    },
+    {
+      "id": "F-57",
+      "type": "tabla",
+      "title": "Los errores más comunes al escribir tests",
+      "subtitle": "Test smells — qué evitar",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Un test que falla por razones no relacionadas con el código bajo prueba es ruido, no señal."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Smell | Síntoma | Solución |\n|-------|---------|----------|\n| **Test que nunca falla** | Siempre ok aunque rompas el código | Verificar que el test mida algo real |\n| **Test del mock** | `assertEqual(mock.val, mock.val)` | Verificar comportamiento del código real |\n| **setUp gigante** | setUp de 30+ líneas | Separar en múltiples TestCase |\n| **Test sin assert** | Corre pero no verifica nada | Agregar al menos un assert |\n| **Tests interdependientes** | El orden importa | Cada test debe ser autocontenido |\n| **Nombre genérico** | `test_1`, `test_a` | `test_agregar_dni_invalido_lanza_ValueError` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Smell | Síntoma | Solución |\n|-------|---------|----------|\n| **Test que nunca falla** | Siempre ok aunque rompas el código | Verificar que el test mida algo real |\n| **Test del mock** | `assertEqual(mock.val, mock.val)` | Verificar comportamiento del código real |\n| **setUp gigante** | setUp de 30+ líneas | Separar en múltiples TestCase |\n| **Test sin assert** | Corre pero no verifica nada | Agregar al menos un assert |\n| **Tests interdependientes** | El orden importa | Cada test debe ser autocontenido |\n| **Nombre genérico** | `test_1`, `test_a` | `test_agregar_dni_invalido_lanza_ValueError` |",
+          "local_asset": "slides/assets/F-57-table-1.png",
+          "drive_id": "13v_2O_CeUCa5XWeyUnIdfS0bEsTwevpo"
+        }
+      ]
+    },
+    {
+      "id": "F-58",
+      "type": "cierre",
+      "title": "Módulo II — Completado",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "*\"Un test que pasa no prueba que tu código es correcto. Prueba que tu código hace lo que vos especificaste. Escribí mejores especificaciones.\"*"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`django.test.TestCase` es `unittest.TestCase` con superpoderes",
+              "level": 0
+            },
+            {
+              "content": "TDD es la metodología — se aplica igual en Django",
+              "level": 0
+            },
+            {
+              "content": "Los tests del TP 3 son **suyos** — diseñenlos bien",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "**Próximo:** Módulo III — Django MVC: modelos, vistas, URLs, templates"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Dark background resembling a monitor screen shape. Inside: multiple short horizontal lines in bright green arranged neatly in rows. A large bold green checkmark icon in the center with a subtle glow effect. Dark gray and green palette. Flat design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-58-bg.png",
+        "drive_id": "1x9PgxdYm8HWBrzy6GJTrNUbaNCU3APY3"
+      },
+      "table_assets": []
+    }
+  ],
+  "summary": {
+    "total_slides": 59,
+    "images_planned": 12,
+    "tables_planned": 16,
+    "code_slides": 31,
+    "status": "READY_FOR_VALIDATION",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "portada": 3,
+      "concepto-abstracto": 4,
+      "concepto-mixto": 5,
+      "codigo": 26,
+      "tabla": 14,
+      "tabla-comparativa": 1,
+      "diagrama": 3,
+      "socratica": 1,
+      "timeline": 1,
+      "cierre": 1
+    }
+  }
+}

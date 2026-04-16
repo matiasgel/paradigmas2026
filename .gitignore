@@ -26,8 +26,7 @@ salida/cursadas/*/temas/*/slides/slides-url.txt
 reporte/
 
 # Temas de prueba / fixtures temporales
-salida/cursadas/*/temas/*prueba*/
-salida/cursadas/*/temas/*pruebas*/
+
 
 # Sprint 5 — Analytics (datos de alumnos)
 analytics/*.csv
