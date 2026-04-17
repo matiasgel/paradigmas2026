@@ -1,0 +1,2832 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "06-paradigma-logico-prolog",
+    "title": "El Cuarto Paradigma",
+    "source": "filminas.md",
+    "generated_at": "2026-04-17T14:20:34",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "salida/cursadas/2026/temas",
+    "topic_folder": "salida/cursadas/2026/temas/06-paradigma-logico-prolog",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/slides-pipeline.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 38,
+    "images_planned": 6,
+    "tables_planned": 7,
+    "code_slides": 33,
+    "status": "READY_FOR_VALIDATION",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "concepto-mixto": 23,
+      "tabla-mixta": 6,
+      "concepto-abstracto": 3,
+      "diagrama": 2,
+      "codigo": 2,
+      "tabla": 1,
+      "cierre": 1
+    }
+  },
+  "slides": [
+    {
+      "id": "F-01",
+      "type": "concepto-mixto",
+      "title": "El Cuarto Paradigma",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Hasta ahora vimos:\n- **Imperativo** → decimos *cómo* hacer las cosas paso a paso\n- **Funcional** → transformamos datos con funciones puras"
+        },
+        {
+          "type": "text",
+          "content": "El **Paradigma Lógico** dice:\n> *\"Describí lo que sabés. Yo encuentro las respuestas.\"*"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Lenguaje representativo:** Prolog (Programming in Logic)",
+              "level": 0
+            },
+            {
+              "content": "**Creadores:** Colmerauer y Roussel (Marsella, 1972) + Kowalski (Edinburgh)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Idea central:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Analogía:** un experto legal. No le decís *cómo* razonar — le describís los hechos del caso y las leyes aplicables. Él deduce si el acusado es culpable.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "Programa Imperativo  = instrucciones de control\nPrograma Funcional   = transformaciones de datos\nPrograma Lógico      = base de conocimiento + motor de inferencia"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-02",
+      "type": "concepto-mixto",
+      "title": "¿Quiénes son los abuelos de Laura?",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Base de datos familiar:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**En Python** necesitamos escribir la *lógica de búsqueda*:",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**En Prolog** describimos el *conocimiento* y consultamos:",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**La diferencia:** Prolog *infiere* la respuesta. Python la *calcula* explícitamente.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "Ana → madre → Carlos\nAna → madre → Beatriz\nCarlos → padre → Laura\nCarlos → padre → Pedro\nBeatriz → madre → Tomás"
+        },
+        {
+          "lang": "python",
+          "content": "def abuelos(persona, relaciones):\n    padres_de = [p for p, h, _ in relaciones if h == persona]\n    result = []\n    for padre in padres_de:\n        abuelos_de_padre = [p for p, h, _ in relaciones if h == padre]\n        result.extend(abuelos_de_padre)\n    return result"
+        },
+        {
+          "lang": "prolog",
+          "content": "madre(ana, carlos).\nmadre(ana, beatriz).\npadre(carlos, laura).\nabuelo(X, Z) :- progenitor(X, Y), progenitor(Y, Z).\n\n?- abuelo(ana, laura).\ntrue."
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-03",
+      "type": "tabla-mixta",
+      "title": "Decir QUÉ vs. decir CÓMO",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Ejemplo — mismo problema, distinto enfoque:**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# Imperativo: yo controlo la búsqueda\ndef es_primo(a, b):\n    comunes = set(padres(a)) & set(padres(b))\n    return len(comunes) > 0 and a != b"
+        },
+        {
+          "lang": "prolog",
+          "content": "% Lógico: yo declaro la relación\nprimo(X, Y) :- progenitor(P, X), progenitor(P, Y), X \\= Y."
+        }
+      ],
+      "tables": [
+        "| | Imperativo / Funcional | Lógico |\n|---|---|---|\n| **Foco** | Algoritmo de solución | Conocimiento del dominio |\n| **Pregunta** | ¿Cómo lo calculo? | ¿Qué es verdadero? |\n| **Control** | Explícito (loops, recursión) | Implícito (motor Prolog) |\n| **Reutilización** | Funciones / métodos | Relaciones (consultas múltiples) |\n| **Depuración** | Seguir el flujo de ejecución | Revisar la base de conocimiento |"
+      ],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-top-split",
+        "image": "none",
+        "code": "left-bottom-split",
+        "table": "right-half"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| | Imperativo / Funcional | Lógico |\n|---|---|---|\n| **Foco** | Algoritmo de solución | Conocimiento del dominio |\n| **Pregunta** | ¿Cómo lo calculo? | ¿Qué es verdadero? |\n| **Control** | Explícito (loops, recursión) | Implícito (motor Prolog) |\n| **Reutilización** | Funciones / métodos | Relaciones (consultas múltiples) |\n| **Depuración** | Seguir el flujo de ejecución | Revisar la base de conocimiento |",
+          "local_asset": "slides/assets/F-03-table-1.png",
+          "drive_id": "1Ane9y9EiL3EeMRGBMPgpYf1sZEcdJqQA"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "type": "concepto-abstracto",
+      "title": "Prolog en el mundo real",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Historia:**",
+              "level": 0
+            },
+            {
+              "content": "1972 — Marsella: primer intérprete Prolog (Colmerauer + Roussel)",
+              "level": 0
+            },
+            {
+              "content": "1977 — Edinburgh: versión estándar (Warren)",
+              "level": 0
+            },
+            {
+              "content": "1995 — ISO Prolog (estándar internacional)",
+              "level": 0
+            },
+            {
+              "content": "Hoy: SWI-Prolog, GNU Prolog, SICStus, Ciao",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Aplicaciones reales:**",
+              "level": 0
+            },
+            {
+              "content": "🧠 **Sistemas expertos médicos** (MYCIN, 1970s — diagnóstico de infecciones)",
+              "level": 0
+            },
+            {
+              "content": "💬 **Procesamiento de lenguaje natural** — parsers, gramáticas",
+              "level": 0
+            },
+            {
+              "content": "🕹️ **Resolución de puzzles** — Sudoku, 8-reinas, planificación",
+              "level": 0
+            },
+            {
+              "content": "📊 **Bases de datos deductivas** — consultas sobre ontologías (OWL, RDF)",
+              "level": 0
+            },
+            {
+              "content": "🤖 **IA simbólica** — planificación, razonamiento automático",
+              "level": 0
+            },
+            {
+              "content": "📡 **Erlang** — lenguaje de telecomunicaciones inspirado en Prolog",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Curiosidad:** IBM Watson usó componentes de razonamiento lógico para ganar en Jeopardy! (2011).",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Historical timeline visualization: five milestone icons arranged left to right on a flowing horizontal path. Each icon represents a distinct application domain: a vintage computer terminal, a medical clipboard with a cross, a speech bubble, a puzzle piece, and a neural dot network. Flat design, deep bordeaux red and charcoal dark gray on white background. If any text appears it must be in Spanish. No text, no letters, no labels, no code, no numbers. High resolution.",
+        "local_asset": "slides/assets/F-04-img.png",
+        "drive_id": "1bSIHawRweCPRhmxwkBUCSkK3LBkJZkZy"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "concepto-abstracto",
+      "title": "Relevancia en 2026",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**No por su uso masivo — sino por lo que enseña:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Pensar relacionalmente:** las bases de datos NoSQL, los grafos de conocimiento y las ontologías son \"Prolog moderno\"",
+              "level": 0
+            },
+            {
+              "content": "**Separar conocimiento de control:** arquitectura limpia, mantenible",
+              "level": 0
+            },
+            {
+              "content": "**Entender la inferencia automática:** los motores de reglas de negocio (Drools, Cortex) funcionan igual",
+              "level": 0
+            },
+            {
+              "content": "**Fundamentos de IA simbólica:** necesario para entender sistemas híbridos neuro-simbólicos (GPT + razonamiento formal)",
+              "level": 0
+            },
+            {
+              "content": "**Paradigma completo:** te obliga a pensar diferente — amplía el repertorio de soluciones",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> *\"The study of logic programming can broaden a programmer's perspective on what programming languages can do and how they can be designed.\"*  \n> — Sebesta, Cap. 16"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "A centered human silhouette with five radiating conceptual branches extending outward, each ending in a distinct symbolic icon: a balance scale, a database cylinder, a puzzle piece, a megaphone, and a brain with circuit lines. Flat design illustration, bordeaux and dark gray on white background. If any text appears it must be in Spanish. No text, no letters, no labels, no code, no numbers. High resolution.",
+        "local_asset": "slides/assets/F-05-img.png",
+        "drive_id": "1cESd1qGve482RyghpDBC9cBSiesAQAlt"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-06",
+      "type": "tabla-mixta",
+      "title": "El sustento matemático (versión rápida)",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Proposición:** enunciado que puede ser verdadero o falso.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Conectivos:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**En Prolog:**",
+              "level": 0
+            },
+            {
+              "content": "`∧` → `,` (coma)",
+              "level": 0
+            },
+            {
+              "content": "`→` → `:-`",
+              "level": 0
+            },
+            {
+              "content": "`¬` → `\\+` (negación por falla)",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "P: \"Ana es madre de Carlos\"       → verdadero\nQ: \"Carlos es madre de Ana\"       → falso"
+        }
+      ],
+      "tables": [
+        "| Símbolo | Nombre | Significado |\n|---------|--------|-------------|\n| `¬P` | Negación | \"No P\" |\n| `P ∧ Q` | Conjunción | \"P y Q\" |\n| `P ∨ Q` | Disyunción | \"P o Q\" |\n| `P → Q` | Implicación | \"Si P, entonces Q\" |\n| `P ↔ Q` | Bicondicional | \"P si y solo si Q\" |"
+      ],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-top-split",
+        "image": "none",
+        "code": "left-bottom-split",
+        "table": "right-half"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Símbolo | Nombre | Significado |\n|---------|--------|-------------|\n| `¬P` | Negación | \"No P\" |\n| `P ∧ Q` | Conjunción | \"P y Q\" |\n| `P ∨ Q` | Disyunción | \"P o Q\" |\n| `P → Q` | Implicación | \"Si P, entonces Q\" |\n| `P ↔ Q` | Bicondicional | \"P si y solo si Q\" |",
+          "local_asset": "slides/assets/F-06-table-1.png",
+          "drive_id": "1U2a6Pxojpck6bM3iMEfuDVQEJpbKphjf"
+        }
+      ]
+    },
+    {
+      "id": "F-07",
+      "type": "concepto-mixto",
+      "title": "De proposiciones a predicados",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Problema de la lógica proposicional:** no puede hablar de *individuos*.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`P: \"alguien es madre de alguien\"` — ¿quiénes?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Cálculo de predicados (lógica de primer orden):** agrega variables y cuantificadores.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Predicado:** relación entre individuos.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Cuantificadores:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**En Prolog:**",
+              "level": 0
+            },
+            {
+              "content": "Variables con mayúscula representan cuantificación universal en hechos/reglas",
+              "level": 0
+            },
+            {
+              "content": "Las consultas buscan instancias que satisfagan la fórmula (cuantificación existencial implícita)",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "madre(ana, carlos)     % \"ana\" y \"carlos\" son los argumentos\nesPar(4)               % predicado unario\nsuma(2, 3, 5)          % predicado ternario"
+        },
+        {
+          "lang": "text",
+          "content": "∀X: pez(X) → animal(X)    % \"Para todo X, si X es pez entonces X es animal\"\n∃X: madre(X, carlos)       % \"Existe algún X que es madre de Carlos\""
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-08",
+      "type": "tabla-mixta",
+      "title": "Cláusulas de Horn: el lenguaje de Prolog",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Definición:** Una cláusula de Horn es una disyunción de literales con *al más uno positivo*.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Forma general:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "Se lee: \"Si B₁ y B₂ y ... y Bₙ son verdaderos, entonces H es verdadero\""
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**En sintaxis Prolog:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Tres tipos de cláusulas:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> *\"Prolog has two basic statement forms; these correspond to the headless and headed Horn clauses of predicate calculus.\"*  \n> — Sebesta, Cap. 16"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "B₁ ∧ B₂ ∧ ... ∧ Bₙ → H"
+        },
+        {
+          "lang": "prolog",
+          "content": "H :- B₁, B₂, ..., Bₙ."
+        }
+      ],
+      "tables": [
+        "| Tipo | Forma | Ejemplo Prolog |\n|------|-------|----------------|\n| Hecho (cláusula unitaria) | `H.` | `madre(ana, carlos).` |\n| Regla (cláusula de Horn con cabeza) | `H :- B₁, ..., Bₙ.` | `abuelo(X,Z) :- progenitor(X,Y), progenitor(Y,Z).` |\n| Consulta (cláusula sin cabeza) | `:- B₁, ..., Bₙ.` | `?- abuelo(ana, Z).` |"
+      ],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-top-split",
+        "image": "none",
+        "code": "left-bottom-split",
+        "table": "right-half"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Tipo | Forma | Ejemplo Prolog |\n|------|-------|----------------|\n| Hecho (cláusula unitaria) | `H.` | `madre(ana, carlos).` |\n| Regla (cláusula de Horn con cabeza) | `H :- B₁, ..., Bₙ.` | `abuelo(X,Z) :- progenitor(X,Y), progenitor(Y,Z).` |\n| Consulta (cláusula sin cabeza) | `:- B₁, ..., Bₙ.` | `?- abuelo(ana, Z).` |",
+          "local_asset": "slides/assets/F-08-table-1.png",
+          "drive_id": "1nyiccIv5C0q-ZbckLvUTaNFXH_gPyAf1"
+        }
+      ]
+    },
+    {
+      "id": "F-09",
+      "type": "concepto-mixto",
+      "title": "¿Cómo \"piensa\" Prolog?",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Principio de Resolución (Robinson, 1965):**",
+              "level": 0
+            },
+            {
+              "content": "Si tenemos `A :- B` y `B` es verdadero, podemos concluir `A`.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Ejemplo:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Prolog = Resolución SLD** (Selective Linear Definite clause resolution)",
+              "level": 0
+            },
+            {
+              "content": "Selecciona metas de izquierda a derecha",
+              "level": 0
+            },
+            {
+              "content": "Prueba cláusulas de arriba a abajo",
+              "level": 0
+            },
+            {
+              "content": "Usa backtracking cuando falla",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "Regla:   abuelo(ana, Z) :- progenitor(ana, Y), progenitor(Y, Z).\nHecho:   progenitor(ana, carlos).\nHecho:   progenitor(carlos, laura).\n\nConsulta: ?- abuelo(ana, laura).\n\nPaso 1: Unificar consulta con cabeza de la regla → Y libre, Z = laura\nPaso 2: Nueva meta: progenitor(ana, Y), progenitor(Y, laura)\nPaso 3: progenitor(ana, Y) → calza con hecho → Y = carlos\nPaso 4: progenitor(carlos, laura) → calza con hecho → ✓\nResultado: true"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-10",
+      "type": "concepto-mixto",
+      "title": "Dos momentos completamente distintos",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**MOMENTO 1 — Crear la base de conocimiento (archivo `.pl`)**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "→ El archivo **no hace nada** solo. Es conocimiento estático."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**MOMENTO 2 — Consultar (en el intérprete)**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "→ **El motor infiere**, no \"ejecuta\". Busca una prueba de que la consulta es verdadera."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Analogía:**",
+              "level": 0
+            },
+            {
+              "content": "Base = las reglas del ajedrez escritas en un libro",
+              "level": 0
+            },
+            {
+              "content": "Consulta = hacer una jugada y preguntar si es legal",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "prolog",
+          "content": "% archivo: familia.pl\nmadre(ana, carlos).\nmadre(ana, beatriz).\npadre(carlos, laura).\npadre(carlos, pedro).\nmadre(beatriz, tomas).\n\nprogenitor(X, Y) :- madre(X, Y).\nprogenitor(X, Y) :- padre(X, Y).\nabuelo(X, Z) :- progenitor(X, Y), progenitor(Y, Z)."
+        },
+        {
+          "lang": "prolog",
+          "content": "?- consult('familia.pl').     % cargar la base\ntrue.\n\n?- madre(ana, carlos).        % ¿es verdad?\ntrue.\n\n?- abuelo(ana, Z).            % ¿quiénes son nietos de Ana?\nZ = laura ;\nZ = pedro ;\nZ = tomas."
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "tabla-mixta",
+      "title": "Todo en Prolog es un Término",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Árbol de tipos:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Reglas de sintaxis:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**En clase — identificar tipos:**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "Término\n├── Atómico\n│   ├── Átomo         → ana, carlos, 'Ana López', hello_world\n│   └── Número        → 42, 3.14, -7\n├── Variable          → X, Persona, _Aux, _\n└── Término Compuesto → funtor(arg1, arg2, ...)\n    ├── madre(ana, carlos)     ← aridad 2\n    ├── pez(trucha)            ← aridad 1\n    └── f(a, g(b), X)          ← anidados"
+        },
+        {
+          "lang": "prolog",
+          "content": "madre(ana, carlos).      % átomo, átomo, átomo\nprogenitor(X, Y).        % átomo, Variable, Variable\nf(g(a), h(X, 3)).        % compuesto anidado con variable y número"
+        }
+      ],
+      "tables": [
+        "| Tipo | Regla | Ejemplos válidos | Ejemplos inválidos |\n|------|-------|------------------|--------------------|\n| Átomo | empieza con minúscula o entre `'...'` | `ana`, `'Ana'`, `hello` | `Ana`, `Hello` |\n| Variable | empieza con MAYÚSCULA o `_` | `X`, `Persona`, `_tmp` | `ana` (si queremos variable) |\n| Anónima | `_` solo | `_` | — |\n| Número | dígitos | `42`, `3.14` | — |"
+      ],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-top-split",
+        "image": "none",
+        "code": "left-bottom-split",
+        "table": "right-half"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Tipo | Regla | Ejemplos válidos | Ejemplos inválidos |\n|------|-------|------------------|--------------------|\n| Átomo | empieza con minúscula o entre `'...'` | `ana`, `'Ana'`, `hello` | `Ana`, `Hello` |\n| Variable | empieza con MAYÚSCULA o `_` | `X`, `Persona`, `_tmp` | `ana` (si queremos variable) |\n| Anónima | `_` solo | `_` | — |\n| Número | dígitos | `42`, `3.14` | — |",
+          "local_asset": "slides/assets/F-11-table-1.png",
+          "drive_id": "1G4vg-9lDACK8qnYbbLn-2TQ-2zpqL_Wh"
+        }
+      ]
+    },
+    {
+      "id": "F-12",
+      "type": "concepto-mixto",
+      "title": "¿Cómo \"calzan\" los términos? (preview de Clase 2)",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Unificación:** proceso de hacer que dos términos sean iguales mediante sustitución de variables.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Casos básicos:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Punto clave:** en Prolog `=` **no** es asignación — es **unificación**. Si falla, el motor hace backtracking.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> *(La unificación completa, con el algoritmo de Martelli-Montanari, se desarrolla en Clase 2)*"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "prolog",
+          "content": "?- X = ana.\nX = ana.              % X se instancia a 'ana'\n\n?- f(X, 3) = f(ana, Y).\nX = ana,\nY = 3.               % X→ana, Y→3\n\n?- madre(ana, X) = madre(ana, carlos).\nX = carlos.          % X→carlos\n\n?- X = X.\ntrue.                % siempre unifica\n\n?- ana = carlos.\nfalse.               % átomos distintos nunca unifican"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "concepto-mixto",
+      "title": "Hechos: la verdad incondicional",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Definición:** Un hecho es una cláusula de Horn sin antecedente. Declara algo verdadero incondicionalmente.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Sintaxis:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Predicado: átomo (minúscula)",
+              "level": 0
+            },
+            {
+              "content": "Argumentos: cualquier término",
+              "level": 0
+            },
+            {
+              "content": "**Obligatorio:** terminar con punto `.`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Base de conocimiento familia — construcción paso a paso:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**¿Qué puede ser un argumento?**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "nombre_predicado(arg1, arg2, ..., argN)."
+        },
+        {
+          "lang": "prolog",
+          "content": "% Paso 1: hechos sobre relaciones de parentesco\nmadre(ana, carlos).      % \"Ana es madre de Carlos\"\nmadre(ana, beatriz).     % \"Ana es madre de Beatriz\"\npadre(carlos, laura).    % \"Carlos es padre de Laura\"\npadre(carlos, pedro).    % \"Carlos es padre de Pedro\"\nmadre(beatriz, tomas).   % \"Beatriz es madre de Tomás\""
+        },
+        {
+          "lang": "prolog",
+          "content": "edad(ana, 45).               % átomo + número\nvive_en(carlos, 'Ushuaia').  % átomo + átomo con espacios\ncoordenadas(p1, punto(3, 7)). % átomo + término compuesto"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-14",
+      "type": "concepto-mixto",
+      "title": "Hechos en distintos dominios",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Dominio 1: Parentesco**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Dominio 2: Geografía**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Dominio 3: Cursos universitarios**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Ejercicio en clase:**",
+              "level": 0
+            },
+            {
+              "content": "\"¿Cómo representarías 'El libro Prolog de Clocksin tiene 300 páginas'?\"",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "prolog",
+          "content": "madre(ana, carlos).\npadre(carlos, laura)."
+        },
+        {
+          "lang": "prolog",
+          "content": "capital(argentina, 'Buenos Aires').\ncapital(chile, santiago).\npais(argentina).\npais(chile).\nfrontera(argentina, chile)."
+        },
+        {
+          "lang": "prolog",
+          "content": "materia('Paradigmas', codigo_IF040).\ndocente('Matías Gel', 'Paradigmas').\nalumno(legajo(1234), 'Juan Pérez').\ninscripto(legajo(1234), codigo_IF040, 2026)."
+        },
+        {
+          "lang": "prolog",
+          "content": "libro(clocksin_mellish, 'Programming in Prolog', 300)."
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-15",
+      "type": "concepto-mixto",
+      "title": "Reglas: conocimiento derivado",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Definición:** Una regla define un predicado en términos de otros predicados. Es la \"implicación\" de Prolog.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Estructura:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Cabeza** (`H`): lo que estamos definiendo — lo que será verdadero SI...",
+              "level": 0
+            },
+            {
+              "content": "**`:-`**: se lee \"si\" o \"es verdadero si\"",
+              "level": 0
+            },
+            {
+              "content": "**Cuerpo** (`B₁, ..., Bₙ`): condiciones — todas deben ser verdaderas (conjunción)",
+              "level": 0
+            },
+            {
+              "content": "**Coma `,`**: significa AND lógico",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Ejemplo construido en clase:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "→ Dos cláusulas para `progenitor` = OR implícito (se prueban en orden)"
+        },
+        {
+          "type": "text",
+          "content": "→ La variable `Y` actúa como variable de unión (intermedia)"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "prolog",
+          "content": "cabeza :- cuerpo.\n% H     :- B₁, B₂, ..., Bₙ."
+        },
+        {
+          "lang": "prolog",
+          "content": "% \"X es progenitor de Y si X es madre de Y\"\nprogenitor(X, Y) :- madre(X, Y).\n\n% \"X es progenitor de Y si X es padre de Y\"\nprogenitor(X, Y) :- padre(X, Y)."
+        },
+        {
+          "lang": "prolog",
+          "content": "% \"X es abuelo de Z si existe Y tal que X es progenitor de Y\n%  y Y es progenitor de Z\"\nabuelo(X, Z) :- progenitor(X, Y), progenitor(Y, Z)."
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-16",
+      "type": "concepto-mixto",
+      "title": "Cómo leer una regla Prolog",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Regla:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Lectura correcta:**",
+              "level": 0
+            },
+            {
+              "content": "*\"X es abuelo de Z si existe algún Y tal que X es progenitor de Y **y** Y es progenitor de Z.\"*",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Las variables en una regla son universalmente cuantificadas:**",
+              "level": 0
+            },
+            {
+              "content": "La regla vale para CUALQUIER X, Y, Z — no solo para `ana` o `carlos`.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Verificar que funciona para todos los casos:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Regla con múltiples condiciones:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "*(Estilo: las condiciones pueden ir en líneas separadas para legibilidad)*",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "prolog",
+          "content": "abuelo(X, Z) :- progenitor(X, Y), progenitor(Y, Z)."
+        },
+        {
+          "lang": "prolog",
+          "content": "?- abuelo(ana, laura).   % ¿Ana es abuela de Laura? → true\n?- abuelo(ana, tomas).   % ¿Ana es abuela de Tomás? → true\n?- abuelo(X, tomas).     % ¿Quiénes son abuelos de Tomás? → X = ana"
+        },
+        {
+          "lang": "prolog",
+          "content": "% X es hermano de Y si:\n%   - tienen el mismo progenitor P\n%   - X no es la misma persona que Y\nhermano(X, Y) :-\n    progenitor(P, X),\n    progenitor(P, Y),\n    X \\= Y."
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-17",
+      "type": "concepto-mixto",
+      "title": "Consultas: haciendo preguntas al motor",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**En SWI-Prolog:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Tipos de consultas:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**1. Consulta booleana (sin variables):**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**2. Consulta con variables (busca instancias):**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**3. Consulta con múltiples variables:**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "?-    ← prompt del intérprete (significa \"¿es verdad que...?\")"
+        },
+        {
+          "lang": "prolog",
+          "content": "?- madre(ana, carlos).\ntrue.\n\n?- madre(carlos, ana).\nfalse."
+        },
+        {
+          "lang": "prolog",
+          "content": "?- madre(ana, X).\nX = carlos ;      % escribir ; para pedir más soluciones\nX = beatriz.      % punto para terminar\n\n?- madre(X, Y).\nX = ana, Y = carlos ;\nX = ana, Y = beatriz ;\nX = beatriz, Y = tomas."
+        },
+        {
+          "lang": "prolog",
+          "content": "?- progenitor(X, laura).\nX = carlos.          % solo un padre de Laura en la base\n\n?- abuelo(X, Z).\nX = ana, Z = laura ;\nX = ana, Z = pedro ;\nX = ana, Z = tomas."
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-18",
+      "type": "concepto-mixto",
+      "title": "Más de una respuesta: el operador `;`",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**El motor de Prolog puede tener MÚLTIPLES soluciones:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**¿Qué hace `;`?**",
+              "level": 0
+            },
+            {
+              "content": "Le pide a Prolog que busque **otra** solución",
+              "level": 0
+            },
+            {
+              "content": "Prolog hace **backtracking**: vuelve atrás y prueba otro camino",
+              "level": 0
+            },
+            {
+              "content": "Cuando no hay más soluciones devuelve `false`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**`findall/3` — todas las soluciones de una vez:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Cuidado con consultas sin solución:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "→ No significa que sea imposible — significa que **no está en la base**."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "prolog",
+          "content": "?- madre(ana, X).\nX = carlos ;     % presionar ; para pedir la siguiente\nX = beatriz ;    % presionar ; de nuevo\nfalse.           % no hay más soluciones"
+        },
+        {
+          "lang": "prolog",
+          "content": "?- findall(X, madre(ana, X), Lista).\nLista = [carlos, beatriz].\n\n?- findall(Z, abuelo(ana, Z), Nietos).\nNietos = [laura, pedro, tomas]."
+        },
+        {
+          "lang": "prolog",
+          "content": "?- madre(X, ana).\nfalse.           % nadie es madre de Ana en nuestra base"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "concepto-mixto",
+      "title": "Base completa: resumen visual",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Árbol familiar (para referencia visual):**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "prolog",
+          "content": "% ═══════════════════════════════════════\n%  BASE DE CONOCIMIENTO: familia.pl\n% ═══════════════════════════════════════\n\n% — HECHOS — (relaciones primarias)\nmadre(ana,     carlos).\nmadre(ana,     beatriz).\npadre(carlos,  laura).\npadre(carlos,  pedro).\nmadre(beatriz, tomas).\n\n% — REGLAS — (relaciones derivadas)\n\n% Progenitor: madre o padre\nprogenitor(X, Y) :- madre(X, Y).\nprogenitor(X, Y) :- padre(X, Y).\n\n% Abuelo: progenitor del progenitor\nabuelo(X, Z) :-\n    progenitor(X, Y),\n    progenitor(Y, Z).\n\n% Hermano: mismo progenitor, distintas personas\nhermano(X, Y) :-\n    progenitor(P, X),\n    progenitor(P, Y),\n    X \\= Y.\n\n% Tío: hermano de un progenitor\ntio(X, Z) :-\n    hermano(X, Y),\n    progenitor(Y, Z)."
+        },
+        {
+          "lang": "text",
+          "content": "         Ana\n        /    \\\n    Carlos  Beatriz\n    /   \\       \\\nLaura  Pedro   Tomás"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-20",
+      "type": "diagrama",
+      "title": "Cómo visualizar la base como grafo",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Los hechos como arcos dirigidos:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Las reglas como derivaciones:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Consulta como búsqueda de camino:**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "ana ──madre──→ carlos\nana ──madre──→ beatriz\ncarlos ──padre──→ laura\ncarlos ──padre──→ pedro\nbeatriz ──madre──→ tomas"
+        },
+        {
+          "lang": "text",
+          "content": "progenitor(X, Y) ← madre(X, Y)  O  padre(X, Y)\nabuelo(X, Z)     ← progenitor(X, Y) ∧ progenitor(Y, Z)"
+        },
+        {
+          "lang": "text",
+          "content": "?- abuelo(ana, laura).\n\n¿Existe camino  ana → ? → laura  en la relación progenitor?\n\nana → carlos (madre) → laura (padre)  ✓"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Family tree diagram: circular person icons connected by directed arrows organized in three hierarchical levels. One root circle at top connects with downward arrows to two mid-level circles, which connect further down to a total of five leaf circles at the bottom. Arrows are slim and precise, flat design, bordeaux and dark gray on white background. If any text appears it must be in Spanish. No text, no letters, no labels, no code, no numbers. High resolution.",
+        "local_asset": "slides/assets/F-20-img.png",
+        "drive_id": "1YzcKc69mzGhdv1c4qFpabgAvzaW3CUF3"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-21",
+      "type": "concepto-mixto",
+      "title": "Cómo Prolog resuelve una consulta (algoritmo)",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Algoritmo general (simplificado):**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Este proceso se llama:** Resolución SLD (Selective Linear Definite)",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "1. Tomar la primera meta de la lista de metas\n2. Buscar en la base (de arriba a abajo) una cláusula cuya cabeza\n   UNIFIQUE con la meta\n3. Si encontró:\n     a. Sustituir la meta por el cuerpo de la cláusula (unificada)\n     b. Continuar con la próxima meta\n4. Si no encontró (o falla en alguna meta siguiente):\n     a. BACKTRACKING: deshacer la última elección\n     b. Continuar buscando desde la siguiente cláusula\n5. Si la lista de metas queda vacía → ¡ÉXITO! (true)\n6. Si se agotaron todas las opciones → FALLO (false)"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-22",
+      "type": "concepto-mixto",
+      "title": "Ejemplo 1: `?- madre(ana, carlos).`",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Punto clave:** Prolog encontró una **prueba**: madre(ana, carlos) es un hecho.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "Consulta: madre(ana, carlos)\n\nLista de metas: [ madre(ana, carlos) ]\n\nPaso 1: Tomar primera meta → madre(ana, carlos)\nPaso 2: Buscar en la base...\n   Cláusula 1: madre(ana, carlos).\n              ↓ ¿Unifica madre(ana, carlos) con madre(ana, carlos)?\n              ↓ ana = ana ✓,  carlos = carlos ✓\n              → UNIFICA\nPaso 3: Sustituir por cuerpo → cuerpo vacío (es un hecho)\nPaso 4: Lista de metas queda vacía → ÉXITO\n\nResultado: true"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "codigo",
+      "title": "Ejemplo 2: `?- madre(ana, X).`",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "Consulta: madre(ana, X)    [X es variable libre]\n\nLista de metas: [ madre(ana, X) ]\n\nPaso 1: meta → madre(ana, X)\nPaso 2: Buscar en la base...\n   Cláusula 1: madre(ana, carlos).\n              ↓ ana = ana ✓, X unifica con carlos → X = carlos\n              → UNIFICA → X = carlos\n\nLista de metas vacía → ÉXITO\nRespuesta: X = carlos\n\n[usuario pide ; → backtracking]\n\nDeshago: X vuelve a ser libre\nCláusula 2: madre(ana, beatriz).\n              ↓ ana = ana ✓, X unifica con beatriz → X = beatriz\n              → UNIFICA\n\nRespuesta: X = beatriz\n\n[usuario pide ; → backtracking]\n\nCláusula 3: madre(beatriz, tomas).\n              ↓ ana ≠ beatriz → NO UNIFICA → saltar\n\nNo hay más cláusulas de madre/2.\n→ false (no más soluciones)"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "codigo",
+      "title": "Ejemplo 3: `?- abuelo(ana, Z).`",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "Consulta: abuelo(ana, Z)\n\nRegla usada: abuelo(X, Z) :- progenitor(X, Y), progenitor(Y, Z).\nUnificar cabeza: X = ana, Z libre\n\nNueva lista de metas: [ progenitor(ana, Y), progenitor(Y, Z) ]\n\n─── Resolver progenitor(ana, Y) ───\nRegla 1: progenitor(X,Y) :- madre(X,Y). → madre(ana, Y)\n  Hecho: madre(ana, carlos) → Y = carlos ✓\n\n─── Resolver progenitor(carlos, Z) ───\nRegla 2: progenitor(X,Y) :- padre(X,Y). → padre(carlos, Z)\n  Hecho: padre(carlos, laura) → Z = laura ✓\n  → Respuesta: Z = laura\n\n[; → backtracking en progenitor(carlos, Z)]\n  Hecho: padre(carlos, pedro) → Z = pedro ✓\n  → Respuesta: Z = pedro\n\n[; → backtracking, agotados padre(carlos,...)]\n[backtracking en progenitor(ana, Y)]\n\nRegla 1 de madre: madre(ana, beatriz) → Y = beatriz ✓\n\n─── Resolver progenitor(beatriz, Z) ───\n  madre(beatriz, tomas) → Z = tomas ✓\n  → Respuesta: Z = tomas\n\n[; → no más soluciones]\n→ false"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "diagrama",
+      "title": "Árbol de búsqueda para `?- abuelo(ana, Z).`",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Observación:** Prolog recorre el árbol en **profundidad primero** (depth-first).",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "                abuelo(ana, Z)\n                      │\n          progenitor(ana,Y), progenitor(Y,Z)\n         /                              \\\n    Y=carlos                          Y=beatriz\n        │                                  │\nprogenitor(carlos, Z)          progenitor(beatriz, Z)\n      /        \\                         │\n  Z=laura   Z=pedro                  Z=tomas\n    ✓           ✓                      ✓\n\nRespuestas: laura, pedro, tomas (en ese orden)"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Binary search tree with rounded circular nodes connected by branching lines descending through three depth levels. A highlighted bordeaux path traces from the root node down to one specific leaf, indicating a found result. Two sibling leaf nodes sit next to the highlighted path; the path ends at a glowing success circle. Clean academic visualization, dark gray circles on white background. If any text appears it must be in Spanish. No text, no letters, no labels, no code, no numbers. High resolution.",
+        "local_asset": "slides/assets/F-25-img.png",
+        "drive_id": "1ATJsIKEPqjQVXLCyvKziu9kx4cltfnGd"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-26",
+      "type": "concepto-mixto",
+      "title": "Recursión: el poder de las reglas autorreferentes",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Problema:** `abuelo` solo funciona para 2 generaciones. ¿Y para 10 generaciones?",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Solución: `ancestro/2` con recursión**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Lectura:**",
+              "level": 0
+            },
+            {
+              "content": "Caso base: \"X es ancestro de Y en un solo paso\"",
+              "level": 0
+            },
+            {
+              "content": "Caso recursivo: \"X llega a Y pasando por un intermediario Z\"",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**La recursión termina** porque:",
+              "level": 0
+            },
+            {
+              "content": "Eventualmente llegamos a una persona sin progenitores en la base",
+              "level": 0
+            },
+            {
+              "content": "El caso base se activa cuando encontramos la conexión directa",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "prolog",
+          "content": "% CASO BASE: X es ancestro de Y si X es progenitor directo de Y\nancestro(X, Y) :- progenitor(X, Y).\n\n% CASO RECURSIVO: X es ancestro de Y si\n%   existe Z tal que X es progenitor de Z  (un paso)\n%   y Z es ancestro de Y                  (resto de la cadena)\nancestro(X, Y) :- progenitor(X, Z), ancestro(Z, Y)."
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-27",
+      "type": "concepto-mixto",
+      "title": "Trazado de `ancestro(ana, pedro)`",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Cadena de 2 pasos:** ana → carlos → pedro",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**¿Qué pasaría con `ancestro(ana, tomas)`?**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "Meta: ancestro(ana, pedro)\n\n① Pruebo caso base: progenitor(ana, pedro)\n   → madre(ana, pedro)?  NO\n   → padre(ana, pedro)?  NO  → FALLA\n\n② Pruebo caso recursivo: progenitor(ana, Z), ancestro(Z, pedro)\n\n   → progenitor(ana, Z):\n       madre(ana, carlos) → Z = carlos ✓\n\n   → ancestro(carlos, pedro):\n       ① caso base: progenitor(carlos, pedro)\n              padre(carlos, pedro) → ✓  ← ¡ÉXITO!\n\nResultado: true"
+        },
+        {
+          "lang": "text",
+          "content": "ana → beatriz → tomas\n(2 pasos, el motor encuentra el camino automáticamente)"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-28",
+      "type": "tabla-mixta",
+      "title": "Recursión: Prolog vs. Python",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Python (explícito):**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Prolog (declarativo):**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Diferencias clave:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Punto:** En Prolog la recursión es *natural* para relaciones transitivas.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "def es_ancestro(x, y, hechos):\n    # caso base: ¿x es progenitor directo de y?\n    if (x, y) in hechos['progenitor']:\n        return True\n    # caso recursivo: buscar intermediario\n    for z in hechos['progenitor'].get(x, []):\n        if es_ancestro(z, y, hechos):\n            return True\n    return False"
+        },
+        {
+          "lang": "prolog",
+          "content": "ancestro(X, Y) :- progenitor(X, Y).\nancestro(X, Y) :- progenitor(X, Z), ancestro(Z, Y)."
+        }
+      ],
+      "tables": [
+        "| | Python | Prolog |\n|---|---|---|\n| Control del loop | explícito (for) | implícito (motor) |\n| Retorno | return True/False | éxito/falla |\n| Múltiples soluciones | necesito modificar | automático con `;` |\n| Legibilidad | describe el algoritmo | describe la relación |"
+      ],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-top-split",
+        "image": "none",
+        "code": "left-bottom-split",
+        "table": "right-half"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| | Python | Prolog |\n|---|---|---|\n| Control del loop | explícito (for) | implícito (motor) |\n| Retorno | return True/False | éxito/falla |\n| Múltiples soluciones | necesito modificar | automático con `;` |\n| Legibilidad | describe el algoritmo | describe la relación |",
+          "local_asset": "slides/assets/F-28-table-1.png",
+          "drive_id": "1JLlqqkk83vWsLStMvwEzuAPh0XnTGGHe"
+        }
+      ]
+    },
+    {
+      "id": "F-29",
+      "type": "tabla",
+      "title": "Imperativo vs. Funcional vs. Lógico",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Aspecto | Imperativo (Python) | Funcional (TypeScript) | Lógico (Prolog) |\n|---|---|---|---|\n| **Descripción** | Cómo ejecutar | Cómo transformar | Qué es verdadero |\n| **Unidad mínima** | Instrucción | Función | Cláusula |\n| **Estado** | Mutable | Inmutable | Ninguno |\n| **Control** | Explícito (`if`, `while`) | Por estructura (recursión, pattern matching) | Automático (motor de inferencia) |\n| **Evaluación** | Paso a paso | Reducción de expresiones | Prueba de metas |\n| **Respuesta** | Retorna valor | Retorna valor | true/false + instanciaciones |\n| **Múltiples respuestas** | Necesita estructuras | Usa listas/streams | Natural (backtracking) |\n| **Ejemplo** | `for p in padres: ...` | `padres.filter(p => ...)` | `progenitor(X, Y) :- madre(X, Y).` |"
+      ],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | Imperativo (Python) | Funcional (TypeScript) | Lógico (Prolog) |\n|---|---|---|---|\n| **Descripción** | Cómo ejecutar | Cómo transformar | Qué es verdadero |\n| **Unidad mínima** | Instrucción | Función | Cláusula |\n| **Estado** | Mutable | Inmutable | Ninguno |\n| **Control** | Explícito (`if`, `while`) | Por estructura (recursión, pattern matching) | Automático (motor de inferencia) |\n| **Evaluación** | Paso a paso | Reducción de expresiones | Prueba de metas |\n| **Respuesta** | Retorna valor | Retorna valor | true/false + instanciaciones |\n| **Múltiples respuestas** | Necesita estructuras | Usa listas/streams | Natural (backtracking) |\n| **Ejemplo** | `for p in padres: ...` | `padres.filter(p => ...)` | `progenitor(X, Y) :- madre(X, Y).` |",
+          "local_asset": "slides/assets/F-29-table-1.png",
+          "drive_id": "1Qz0giQ8yva2vWtxhMG6zrOYJlP5cAMFb"
+        }
+      ]
+    },
+    {
+      "id": "F-30",
+      "type": "concepto-mixto",
+      "title": "Prolog brilla en...",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Problemas donde Prolog es natural:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "✅ **Relaciones complejas entre entidades**"
+        },
+        {
+          "type": "text",
+          "content": "✅ **Búsqueda con restricciones**"
+        },
+        {
+          "type": "text",
+          "content": "✅ **Parsing y gramáticas (DCG)**"
+        },
+        {
+          "type": "text",
+          "content": "✅ **Sistemas expertos**"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Problemas donde NO es natural:**",
+              "level": 0
+            },
+            {
+              "content": "❌ Computación numérica intensiva",
+              "level": 0
+            },
+            {
+              "content": "❌ Interfaces de usuario / gráficos",
+              "level": 0
+            },
+            {
+              "content": "❌ Manipulación masiva de archivos",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "prolog",
+          "content": "% Árbol genealógico, red social, ontología\nprimo(X, Y) :- progenitor(P, X), progenitor(P, Y), X \\= Y."
+        },
+        {
+          "lang": "prolog",
+          "content": "% Asignación de recursos, horarios, sudoku\nasignacion(T, A) :- tarea(T), agente(A), compatible(T, A), \\+ asignado(T)."
+        },
+        {
+          "lang": "prolog",
+          "content": "oracion --> frase_nominal, frase_verbal.\nfrase_nominal --> determinante, sustantivo."
+        },
+        {
+          "lang": "prolog",
+          "content": "diagnostico(gripe) :- sintoma(fiebre), sintoma(tos), sintoma(cansancio)."
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-31",
+      "type": "concepto-abstracto",
+      "title": "El pasado y el futuro del paradigma lógico",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Historia:**",
+              "level": 0
+            },
+            {
+              "content": "1970s-80s: Prolog = IA simbólica dominante",
+              "level": 0
+            },
+            {
+              "content": "1990s-2000s: perdió terreno frente a ML",
+              "level": 0
+            },
+            {
+              "content": "2020s: **renacimiento** como componente simbólico en sistemas híbridos",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Conexiones actuales:**",
+              "level": 0
+            },
+            {
+              "content": "**Knowledge Graphs** (Google, Meta) → bases de datos relacionales en escala",
+              "level": 0
+            },
+            {
+              "content": "**Datalog** → lenguaje de consulta basado en Prolog, usado en análisis de programas",
+              "level": 0
+            },
+            {
+              "content": "**Answer Set Programming (ASP)** → Prolog moderno para planificación y razonamiento",
+              "level": 0
+            },
+            {
+              "content": "**Neuro-simbólico** → LLMs + razonamiento formal (investigación activa en 2026)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> *\"The integration of neural and symbolic approaches is one of the most active research areas in AI.\"*  \n> — Gabbrielli & Martini, Cap. Lógica"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Three-panel horizontal evolution illustration: left panel shows a vintage room with large server cabinets; center panel shows a connected network of dots and curved lines forming a brain-like shape; right panel shows interleaved neural layers and a symbolic graph of connected nodes. A horizontal timeline arrow connects all three panels left to right. Flat design, bordeaux and dark gray, white background. If any text appears it must be in Spanish. No text, no letters, no labels, no code, no numbers. High resolution.",
+        "local_asset": "slides/assets/F-31-img.png",
+        "drive_id": "1Y1RtSFr_Sjhx296WjHrazT29btO2IM4v"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-32",
+      "type": "concepto-mixto",
+      "title": "Ejercicio: definir `hermano/2`",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Enunciado:**",
+              "level": 0
+            },
+            {
+              "content": "Dos personas son hermanas si tienen el mismo progenitor y son distintas.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Paso 1:** Escribir en Prolog antes de ver la solución.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Pista:** necesitás tres condiciones:",
+              "level": 0
+            },
+            {
+              "content": "Mismo progenitor P para X",
+              "level": 0
+            },
+            {
+              "content": "Mismo progenitor P para Y",
+              "level": 0
+            },
+            {
+              "content": "X no es Y",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Solución:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Consultas para probar:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Pregunta:** ¿Por qué necesitamos `X \\= Y`? Sin esa condición, ¿qué pasaría?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "hermano(X, Y) :- ???"
+        },
+        {
+          "lang": "prolog",
+          "content": "hermano(X, Y) :-\n    progenitor(P, X),\n    progenitor(P, Y),\n    X \\= Y."
+        },
+        {
+          "lang": "prolog",
+          "content": "?- hermano(carlos, beatriz).\ntrue.\n\n?- hermano(X, carlos).\nX = beatriz.\n\n?- hermano(laura, Z).\nZ = pedro."
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-33",
+      "type": "concepto-mixto",
+      "title": "Ejercicio de trazado: `?- hermano(carlos, Z).`",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Observación:** el `\\= Y` descarta la solución \"X es hermano de sí mismo\".",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "Meta: hermano(carlos, Z)\nRegla: hermano(X, Y) :- progenitor(P, X), progenitor(P, Y), X \\= Y.\nUnificar: X = carlos, Y = Z (libre)\n\nNuevas metas: progenitor(P, carlos), progenitor(P, Z), carlos \\= Z\n\n→ progenitor(P, carlos):\n   madre(P, carlos) → madre(ana, carlos) → P = ana ✓\n\n→ progenitor(ana, Z):\n   madre(ana, carlos) → Z = carlos\n   → carlos \\= carlos? FALLA  (backtrack)\n\n   madre(ana, beatriz) → Z = beatriz\n   → carlos \\= beatriz? ✓ ÉXITO\n\nRespuesta: Z = beatriz\n\n[;] backtracking... no más soluciones\nfalse"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-34",
+      "type": "concepto-mixto",
+      "title": "Ejercicios de síntesis",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Ejercicio 3a — `tio/2`:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Ejercicio 3b — `descendiente/2` (recursivo):**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Reflexión:** ¿Por qué `descendiente` solo necesita una cláusula? Porque `ancestro` ya tiene toda la lógica recursiva.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "prolog",
+          "content": "% X es tío de Z si X es hermano de algún progenitor de Z\ntio(X, Z) :-\n    hermano(X, Y),\n    progenitor(Y, Z).\n\n?- tio(beatriz, laura).\ntrue.    % Beatriz es hermana de Carlos, Carlos es padre de Laura"
+        },
+        {
+          "lang": "prolog",
+          "content": "% X es descendiente de Y si Y es ancestro de X\n% (reutiliza ancestro/2 — ¡1 sola cláusula!)\ndescendiente(X, Y) :- ancestro(Y, X).\n\n?- descendiente(tomas, ana).\ntrue.    % ana es ancestro de tomas → tomas es descendiente de ana"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-35",
+      "type": "concepto-mixto",
+      "title": "Lo que aprendimos hoy",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Los 5 conceptos clave:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Paradigma lógico:** declarar conocimiento, no escribir algoritmos",
+              "level": 0
+            },
+            {
+              "content": "**Tres tipos de cláusulas:** hecho (`.`), regla (`:-`), consulta (`?-`)",
+              "level": 0
+            },
+            {
+              "content": "**Base vs. inferencia:** el archivo `.pl` es estático; el motor infiere al consultar",
+              "level": 0
+            },
+            {
+              "content": "**Resolución:** Prolog busca pruebas de arriba a abajo, con backtracking automático",
+              "level": 0
+            },
+            {
+              "content": "**Recursión:** forma natural de expresar relaciones transitivas (caso base + caso recursivo)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**La base de conocimiento que construimos:**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "prolog",
+          "content": "madre/2, padre/2         % hechos primarios\nprogenitor/2             % regla directa\nabuelo/2, hermano/2      % reglas derivadas\ntio/2                    % regla de segundo nivel\nancestro/2               % regla recursiva\ndescendiente/2           % reutilización"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-36",
+      "type": "tabla-mixta",
+      "title": "Confusiones comunes — ¡cuidado!",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Supuesto del Mundo Cerrado (CWA):**",
+              "level": 0
+            },
+            {
+              "content": "> Lo que no está en la base se asume **falso**.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "→ No significa que Pedro no tenga hijos — significa que **no declaramos** esa relación."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "prolog",
+          "content": "?- madre(pedro, X).\nfalse."
+        }
+      ],
+      "tables": [
+        "| Confusión | Incorrecto | Correcto |\n|---|---|---|\n| `=` como asignación | `X = 5, X = 6.` → debería funcionar | Falla: X ya está instanciada a 5 |\n| Mayúscula/minúscula | `Ana` como nombre propio | `ana` (átomo), `Ana` (variable) |\n| `,` vs `;` | `a, b` como OR | `,` es AND, `;` pide más soluciones |\n| Orden de cláusulas | da igual el orden | El orden afecta eficiencia y puede causar loops |\n| `false` = imposible | si no hay hecho, es imposible | Significa \"no está en la base\" (mundo cerrado) |"
+      ],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-top-split",
+        "image": "none",
+        "code": "left-bottom-split",
+        "table": "right-half"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Confusión | Incorrecto | Correcto |\n|---|---|---|\n| `=` como asignación | `X = 5, X = 6.` → debería funcionar | Falla: X ya está instanciada a 5 |\n| Mayúscula/minúscula | `Ana` como nombre propio | `ana` (átomo), `Ana` (variable) |\n| `,` vs `;` | `a, b` como OR | `,` es AND, `;` pide más soluciones |\n| Orden de cláusulas | da igual el orden | El orden afecta eficiencia y puede causar loops |\n| `false` = imposible | si no hay hecho, es imposible | Significa \"no está en la base\" (mundo cerrado) |",
+          "local_asset": "slides/assets/F-36-table-1.png",
+          "drive_id": "1uEXvQmPMSDkundI0uPJTruMXupXzfRgc"
+        }
+      ]
+    },
+    {
+      "id": "F-37",
+      "type": "concepto-mixto",
+      "title": "Próxima clase: profundizando el motor",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Temas de Clase 2:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "🔍 **Unificación completa:**\n- Algoritmo de Martelli-Montanari\n- Occur check\n- Estructuras compuestas anidadas"
+        },
+        {
+          "type": "text",
+          "content": "🔄 **Backtracking:**\n- El árbol de búsqueda completo\n- Corte (`!`) para podar ramas\n- Problemas de orden e infinitos"
+        },
+        {
+          "type": "text",
+          "content": "➕ **Aritmética en Prolog:**"
+        },
+        {
+          "type": "text",
+          "content": "📝 **Predicados de control:**\n- `not/1` vs. `\\+`\n- `assert/1` y `retract/1` — modificar la base en tiempo de ejecución"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Ejercicio para pensar antes de la Clase 2:**",
+              "level": 0
+            },
+            {
+              "content": "¿Qué pasa con `?- ancestro(X, X).`? ¿Termina? ¿Por qué?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "prolog",
+          "content": "?- X is 2 + 3.\nX = 5.        % ¡is/2 evalúa, = no!"
+        }
+      ],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-38",
+      "type": "cierre",
+      "title": "Para seguir practicando",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Software:**",
+              "level": 0
+            },
+            {
+              "content": "🖥️ [SWI-Prolog](https://www.swi-prolog.org/) — instalación local",
+              "level": 0
+            },
+            {
+              "content": "🌐 [SWISH](https://swish.swi-prolog.org/) — online, sin instalación",
+              "level": 0
+            },
+            {
+              "content": "📱 [Tau Prolog](http://tau-prolog.org/) — Prolog en el navegador",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Bibliografía de la clase:**",
+              "level": 0
+            },
+            {
+              "content": "**Sebesta** — Cap. 16: Logic Programming Languages (pp. 703–784)",
+              "level": 0
+            },
+            {
+              "content": "**Gabbrielli & Martini** — Cap. Programación Lógica (pp. 351–423)",
+              "level": 0
+            },
+            {
+              "content": "**Louden & Lambert** — Cap. Logic Programming",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Ejercicio para casa:**",
+              "level": 0
+            },
+            {
+              "content": "Ampliar la base de conocimiento familiar para incluir:",
+              "level": 0
+            },
+            {
+              "content": "`bisabuelo(X, Z)` — ¿cuántas cláusulas?",
+              "level": 0
+            },
+            {
+              "content": "`familia(X, Y)` — X e Y son familia si comparten algún ancestro",
+              "level": 0
+            },
+            {
+              "content": "Agregar una generación más a la familia (bisabuelos de Ana)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Código de la clase:** disponible en el repositorio del curso.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "*Total de filminas: 38 | Duración estimada: 120 minutos | Clase 1 de 3*",
+              "level": 0
+            },
+            {
+              "content": "*Generado por: Dr. Roberto (class-writer) — 2026-04-17*",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "directives": {},
+      "asset_hints": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Stack of open academic books with a graduation mortarboard cap balanced on top, a laptop computer to the right with a softly glowing screen, and a pencil and open notepad to the left. Warm academic flat illustration, bordeaux red accents, dark gray outlines, white background. If any text appears it must be in Spanish. No text, no letters, no labels, no code, no numbers. High resolution.",
+        "local_asset": "slides/assets/F-38-img.png",
+        "drive_id": "1oKG-nSzMyKDqrRcRdzuSKE_tkHPUHFsa"
+      },
+      "table_assets": []
+    }
+  ]
+}

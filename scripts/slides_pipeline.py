@@ -1309,6 +1309,8 @@ def generate_assets(
 def _get_creds(secrets_path: Path, token_path: Path) -> Credentials:
     secrets   = load_yaml(secrets_path)
     creds_file = Path(secrets["google_credentials_path"])
+    if not creds_file.is_absolute():
+        creds_file = (secrets_path.parent.parent / creds_file).resolve()
     creds: Credentials | None = None
 
     if token_path.exists():

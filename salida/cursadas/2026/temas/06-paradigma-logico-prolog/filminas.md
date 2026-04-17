@@ -11,11 +11,9 @@
 
 ---
 
-### F-01 · ¿Qué es el Paradigma Lógico?
+### [F-01] El Cuarto Paradigma
 
-**Título:** El Cuarto Paradigma
 
-**Contenido:**
 
 Hasta ahora vimos:
 - **Imperativo** → decimos *cómo* hacer las cosas paso a paso
@@ -40,9 +38,8 @@ Programa Lógico      = base de conocimiento + motor de inferencia
 
 ---
 
-### F-02 · El Problema que Motiva Prolog
+### [F-02] ¿Quiénes son los abuelos de Laura?
 
-**Título:** ¿Quiénes son los abuelos de Laura?
 
 **Base de datos familiar:**
 
@@ -82,9 +79,8 @@ true.
 
 ---
 
-### F-03 · Programación Declarativa vs. Imperativa
+### [F-03] Decir QUÉ vs. decir CÓMO
 
-**Título:** Decir QUÉ vs. decir CÓMO
 
 | | Imperativo / Funcional | Lógico |
 |---|---|---|
@@ -110,9 +106,8 @@ primo(X, Y) :- progenitor(P, X), progenitor(P, Y), X \= Y.
 
 ---
 
-### F-04 · Historia y Aplicaciones de Prolog
+### [F-04] Prolog en el mundo real
 
-**Título:** Prolog en el mundo real
 
 **Historia:**
 - 1972 — Marsella: primer intérprete Prolog (Colmerauer + Roussel)
@@ -132,9 +127,8 @@ primo(X, Y) :- progenitor(P, X), progenitor(P, Y), X \= Y.
 
 ---
 
-### F-05 · ¿Por qué estudiar Prolog hoy?
+### [F-05] Relevancia en 2026
 
-**Título:** Relevancia en 2026
 
 **No por su uso masivo — sino por lo que enseña:**
 
@@ -153,9 +147,8 @@ primo(X, Y) :- progenitor(P, X), progenitor(P, Y), X \= Y.
 
 ---
 
-### F-06 · Lógica Proposicional — Repaso Rápido
+### [F-06] El sustento matemático (versión rápida)
 
-**Título:** El sustento matemático (versión rápida)
 
 **Proposición:** enunciado que puede ser verdadero o falso.
 
@@ -180,9 +173,8 @@ Q: "Carlos es madre de Ana"       → falso
 
 ---
 
-### F-07 · Cálculo de Predicados — Conceptos Clave
+### [F-07] De proposiciones a predicados
 
-**Título:** De proposiciones a predicados
 
 **Problema de la lógica proposicional:** no puede hablar de *individuos*.
 
@@ -209,9 +201,8 @@ suma(2, 3, 5)          % predicado ternario
 
 ---
 
-### F-08 · Cláusulas de Horn — La Base de Prolog
+### [F-08] Cláusulas de Horn: el lenguaje de Prolog
 
-**Título:** Cláusulas de Horn: el lenguaje de Prolog
 
 **Definición:** Una cláusula de Horn es una disyunción de literales con *al más uno positivo*.
 
@@ -239,9 +230,8 @@ H :- B₁, B₂, ..., Bₙ.
 
 ---
 
-### F-09 · Resolución — El Motor de Prolog (Conceptual)
+### [F-09] ¿Cómo "piensa" Prolog?
 
-**Título:** ¿Cómo "piensa" Prolog?
 
 **Principio de Resolución (Robinson, 1965):**  
 Si tenemos `A :- B` y `B` es verdadero, podemos concluir `A`.
@@ -268,9 +258,8 @@ Resultado: true
 
 ---
 
-### F-10 · BASE DE CONOCIMIENTO vs. INFERENCIA ⚠️ Distinción clave
+### [F-10] Dos momentos completamente distintos
 
-**Título:** Dos momentos completamente distintos
 
 **MOMENTO 1 — Crear la base de conocimiento (archivo `.pl`)**
 
@@ -311,9 +300,8 @@ Z = tomas.
 
 ---
 
-### F-11 · Términos en Prolog — Taxonomía Completa
+### [F-11] Todo en Prolog es un Término
 
-**Título:** Todo en Prolog es un Término
 
 **Árbol de tipos:**
 ```
@@ -345,9 +333,8 @@ f(g(a), h(X, 3)).        % compuesto anidado con variable y número
 
 ---
 
-### F-12 · Unificación — Introducción (preview)
+### [F-12] ¿Cómo "calzan" los términos? (preview de Clase 2)
 
-**Título:** ¿Cómo "calzan" los términos? (preview de Clase 2)
 
 **Unificación:** proceso de hacer que dos términos sean iguales mediante sustitución de variables.
 
@@ -380,9 +367,8 @@ false.               % átomos distintos nunca unifican
 
 ---
 
-### F-13 · Hechos — Definición y Sintaxis
+### [F-13] Hechos: la verdad incondicional
 
-**Título:** Hechos: la verdad incondicional
 
 **Definición:** Un hecho es una cláusula de Horn sin antecedente. Declara algo verdadero incondicionalmente.
 
@@ -414,9 +400,8 @@ coordenadas(p1, punto(3, 7)). % átomo + término compuesto
 
 ---
 
-### F-14 · Hechos — Ejemplos con Distintos Dominios
+### [F-14] Hechos en distintos dominios
 
-**Título:** Hechos en distintos dominios
 
 **Dominio 1: Parentesco**
 ```prolog
@@ -450,9 +435,8 @@ libro(clocksin_mellish, 'Programming in Prolog', 300).
 
 ---
 
-### F-15 · Reglas — Definición y Estructura
+### [F-15] Reglas: conocimiento derivado
 
-**Título:** Reglas: conocimiento derivado
 
 **Definición:** Una regla define un predicado en términos de otros predicados. Es la "implicación" de Prolog.
 
@@ -486,9 +470,8 @@ abuelo(X, Z) :- progenitor(X, Y), progenitor(Y, Z).
 
 ---
 
-### F-16 · Reglas — Lectura en Voz Alta y Variables
+### [F-16] Cómo leer una regla Prolog
 
-**Título:** Cómo leer una regla Prolog
 
 **Regla:**
 ```prolog
@@ -522,9 +505,8 @@ hermano(X, Y) :-
 
 ---
 
-### F-17 · Consultas — El Intérprete Prolog
+### [F-17] Consultas: haciendo preguntas al motor
 
-**Título:** Consultas: haciendo preguntas al motor
 
 **En SWI-Prolog:**
 ```
@@ -567,9 +549,8 @@ X = ana, Z = tomas.
 
 ---
 
-### F-18 · Consultas — El Operador `;` y Múltiples Soluciones
+### [F-18] Más de una respuesta: el operador `;`
 
-**Título:** Más de una respuesta: el operador `;`
 
 **El motor de Prolog puede tener MÚLTIPLES soluciones:**
 
@@ -603,9 +584,8 @@ false.           % nadie es madre de Ana en nuestra base
 
 ---
 
-### F-19 · La Base de Conocimiento Completa — Familia
+### [F-19] Base completa: resumen visual
 
-**Título:** Base completa: resumen visual
 
 ```prolog
 % ═══════════════════════════════════════
@@ -653,9 +633,8 @@ Laura  Pedro   Tomás
 
 ---
 
-### F-20 · Visualización: Árbol de la Base de Conocimiento
+### [F-20] Cómo visualizar la base como grafo
 
-**Título:** Cómo visualizar la base como grafo
 
 **Los hechos como arcos dirigidos:**
 ```
@@ -687,9 +666,8 @@ ana → carlos (madre) → laura (padre)  ✓
 
 ---
 
-### F-21 · Algoritmo de Resolución de Prolog
+### [F-21] Cómo Prolog resuelve una consulta (algoritmo)
 
-**Título:** Cómo Prolog resuelve una consulta (algoritmo)
 
 **Algoritmo general (simplificado):**
 
@@ -711,9 +689,8 @@ ana → carlos (madre) → laura (padre)  ✓
 
 ---
 
-### F-22 · Trazado Ejemplo 1 — Consulta Simple
+### [F-22] Ejemplo 1: `?- madre(ana, carlos).`
 
-**Título:** Ejemplo 1: `?- madre(ana, carlos).`
 
 ```
 Consulta: madre(ana, carlos)
@@ -736,9 +713,8 @@ Resultado: true
 
 ---
 
-### F-23 · Trazado Ejemplo 2 — Variable Libre
+### [F-23] Ejemplo 2: `?- madre(ana, X).`
 
-**Título:** Ejemplo 2: `?- madre(ana, X).`
 
 ```
 Consulta: madre(ana, X)    [X es variable libre]
@@ -774,9 +750,8 @@ No hay más cláusulas de madre/2.
 
 ---
 
-### F-24 · Trazado Ejemplo 3 — Regla Derivada
+### [F-24] Ejemplo 3: `?- abuelo(ana, Z).`
 
-**Título:** Ejemplo 3: `?- abuelo(ana, Z).`
 
 ```
 Consulta: abuelo(ana, Z)
@@ -814,9 +789,8 @@ Regla 1 de madre: madre(ana, beatriz) → Y = beatriz ✓
 
 ---
 
-### F-25 · Árbol de Derivación — Visualización
+### [F-25] Árbol de búsqueda para `?- abuelo(ana, Z).`
 
-**Título:** Árbol de búsqueda para `?- abuelo(ana, Z).`
 
 ```
                 abuelo(ana, Z)
@@ -837,9 +811,8 @@ Respuestas: laura, pedro, tomas (en ese orden)
 
 ---
 
-### F-26 · Recursión en Prolog — Caso Base y Recursivo
+### [F-26] Recursión: el poder de las reglas autorreferentes
 
-**Título:** Recursión: el poder de las reglas autorreferentes
 
 **Problema:** `abuelo` solo funciona para 2 generaciones. ¿Y para 10 generaciones?
 
@@ -865,9 +838,8 @@ ancestro(X, Y) :- progenitor(X, Z), ancestro(Z, Y).
 
 ---
 
-### F-27 · Trazado Recursión — `?- ancestro(ana, pedro).`
+### [F-27] Trazado de `ancestro(ana, pedro)`
 
-**Título:** Trazado de `ancestro(ana, pedro)`
 
 ```
 Meta: ancestro(ana, pedro)
@@ -898,9 +870,8 @@ ana → beatriz → tomas
 
 ---
 
-### F-28 · Recursión — Comparación con Python
+### [F-28] Recursión: Prolog vs. Python
 
-**Título:** Recursión: Prolog vs. Python
 
 **Python (explícito):**
 ```python
@@ -937,9 +908,8 @@ ancestro(X, Y) :- progenitor(X, Z), ancestro(Z, Y).
 
 ---
 
-### F-29 · Comparación — Los Tres Paradigmas
+### [F-29] Imperativo vs. Funcional vs. Lógico
 
-**Título:** Imperativo vs. Funcional vs. Lógico
 
 | Aspecto | Imperativo (Python) | Funcional (TypeScript) | Lógico (Prolog) |
 |---|---|---|---|
@@ -954,9 +924,8 @@ ancestro(X, Y) :- progenitor(X, Z), ancestro(Z, Y).
 
 ---
 
-### F-30 · ¿Cuándo Usar Prolog?
+### [F-30] Prolog brilla en...
 
-**Título:** Prolog brilla en...
 
 **Problemas donde Prolog es natural:**
 
@@ -990,9 +959,8 @@ diagnostico(gripe) :- sintoma(fiebre), sintoma(tos), sintoma(cansancio).
 
 ---
 
-### F-31 · Prolog y la IA Moderna
+### [F-31] El pasado y el futuro del paradigma lógico
 
-**Título:** El pasado y el futuro del paradigma lógico
 
 **Historia:**
 - 1970s-80s: Prolog = IA simbólica dominante
@@ -1014,9 +982,8 @@ diagnostico(gripe) :- sintoma(fiebre), sintoma(tos), sintoma(cansancio).
 
 ---
 
-### F-32 · Ejercicio 1 — Hermanos
+### [F-32] Ejercicio: definir `hermano/2`
 
-**Título:** Ejercicio: definir `hermano/2`
 
 **Enunciado:**  
 Dos personas son hermanas si tienen el mismo progenitor y son distintas.
@@ -1056,9 +1023,8 @@ Z = pedro.
 
 ---
 
-### F-33 · Ejercicio 2 — Trazar `hermano(carlos, Z)`
+### [F-33] Ejercicio de trazado: `?- hermano(carlos, Z).`
 
-**Título:** Ejercicio de trazado: `?- hermano(carlos, Z).`
 
 ```
 Meta: hermano(carlos, Z)
@@ -1087,9 +1053,8 @@ false
 
 ---
 
-### F-34 · Ejercicio 3 — Tío y Descendiente
+### [F-34] Ejercicios de síntesis
 
-**Título:** Ejercicios de síntesis
 
 **Ejercicio 3a — `tio/2`:**
 ```prolog
@@ -1120,9 +1085,8 @@ true.    % ana es ancestro de tomas → tomas es descendiente de ana
 
 ---
 
-### F-35 · Resumen de la Clase
+### [F-35] Lo que aprendimos hoy
 
-**Título:** Lo que aprendimos hoy
 
 **Los 5 conceptos clave:**
 
@@ -1144,9 +1108,8 @@ descendiente/2           % reutilización
 
 ---
 
-### F-36 · Diferencias que hay que tener Claras
+### [F-36] Confusiones comunes — ¡cuidado!
 
-**Título:** Confusiones comunes — ¡cuidado!
 
 | Confusión | Incorrecto | Correcto |
 |---|---|---|
@@ -1167,9 +1130,8 @@ false.
 
 ---
 
-### F-37 · Anticipo — Clase 2: Unificación y Backtracking
+### [F-37] Próxima clase: profundizando el motor
 
-**Título:** Próxima clase: profundizando el motor
 
 **Temas de Clase 2:**
 
@@ -1198,9 +1160,8 @@ X = 5.        % ¡is/2 evalúa, = no!
 
 ---
 
-### F-38 · Recursos y Próximos Pasos
+### [F-38] Para seguir practicando
 
-**Título:** Para seguir practicando
 
 **Software:**
 - 🖥️ [SWI-Prolog](https://www.swi-prolog.org/) — instalación local
