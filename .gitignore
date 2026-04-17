@@ -25,9 +25,9 @@ salida/cursadas/*/temas/*/slides/slides-url.txt
 # Test runs (generados por test_pipeline.py)
 reporte/
 
-# Temas de prueba / fixtures temporales
-salida/cursadas/*/temas/*prueba*/
-salida/cursadas/*/temas/*pruebas*/
+# Temas de prueba / fixtures temporales (comentado para no bloquear temas con "pruebas" en el nombre)
+# salida/cursadas/*/temas/*prueba*/
+# salida/cursadas/*/temas/*pruebas*/
 
 # Sprint 5 — Analytics (datos de alumnos)
 analytics/*.csv
