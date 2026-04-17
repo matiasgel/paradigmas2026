@@ -41,9 +41,9 @@ salida/cursadas/*/temas/*/*.webp
 # Test runs (generados por test_pipeline.py)
 reporte/
 
-# Temas de prueba / fixtures temporales
-salida/cursadas/*/temas/*prueba*/
-salida/cursadas/*/temas/*pruebas*/
+# Temas de prueba / fixtures temporales (solo ignorar carpeta "prueba" exacta, no temas que contienen "pruebas" en el nombre)
+# salida/cursadas/*/temas/*prueba*/
+# salida/cursadas/*/temas/*pruebas*/
 
 # Sprint 5 — Analytics (datos de alumnos)
 analytics/*.csv
