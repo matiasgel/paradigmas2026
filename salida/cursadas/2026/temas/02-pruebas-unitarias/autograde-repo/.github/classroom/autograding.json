@@ -1,0 +1,204 @@
+{
+  "tests": [
+    {
+      "name": "Ejercicio 01 — es_par",
+      "setup": "pip install -r requirements.txt -q 2>/dev/null || true",
+      "run": "python -m unittest tests.test_ej01 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 02 — invertir_cadena",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej02 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 03 — maximo_de_tres",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej03 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 04 — contar_vocales",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej04 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 05 — es_palindromo",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej05 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 06 — dividir",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej06 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 07 — validar_edad",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej07 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 08 — Pila",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej08 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 09 — calcular_descuento",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej09 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 10 — validar_contrasenia",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej10 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 11 — Contador con setUp",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej11 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 12 — ListaOrdenada",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej12 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 13 — CuentaBancaria",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej13 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 14 — ConversorTemperatura",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej14 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 15 — Agenda",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej15 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 16 — Mock archivos",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej16 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 17 — Mock servicio externo",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej17 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 18 — Notificador con patch",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej18 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 19 — Calculadora con subTest",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej19 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 20 — GestorTareas integrador",
+      "setup": "",
+      "run": "python -m unittest tests.test_ej20 -v",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    }
+  ]
+}
