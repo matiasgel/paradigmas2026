@@ -380,8 +380,7 @@ def ingest(force: bool = False, include_material: bool = False):
     # Check if already populated
     existing = collection.count()
     if existing > 0 and not force:
-        print(f"ℹ️  Collection ya tiene {existing} documentos. Usar --force para re-ingestar.")
-        return
+        print(f"ℹ️  Collection ya tiene {existing} documentos. Agregando nuevos sin borrar...")
 
     print("📥 Recolectando documentos...")
     chunks = collect_documents(include_material=include_material)
@@ -411,7 +410,7 @@ def ingest(force: bool = False, include_material: bool = False):
     batch_size = 5000
     for start in range(0, len(ids), batch_size):
         end = min(start + batch_size, len(ids))
-        collection.add(
+        collection.upsert(
             ids=ids[start:end],
             documents=documents[start:end],
             metadatas=metadatas[start:end],
