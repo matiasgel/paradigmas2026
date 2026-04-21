@@ -15,7 +15,7 @@
 | Perfil docente | profesor-teorico |
 | Total de semanas | 17 |
 | Total de temas (con contenido) | 15 |
-| Cobertura plan mínimo | 1/15 temas cerrados |
+| Cobertura plan mínimo | 3/15 temas cerrados |
 
 ---
 
@@ -28,8 +28,8 @@
 | 03 | Introducción a Programación Funcional con TypeScript | II | 2 | 1 | 120 min | � en-curso | `temas/03-intro-funcional-ts/` |
 | 04 | Aspectos Avanzados de Programación Funcional | II | 3 | 1 | 120 min | 🔲 pendiente | `temas/04-funcional-avanzado/` |
 | 05 | Mónadas en TypeScript | II | 4 | 1 | 120 min | 🔲 pendiente | `temas/05-monadas-ts/` |
-| 06 | Programación Funcional en Python (ecosistema IA) | II | 5 | 1 | 120 min | 🔲 pendiente | `temas/06-funcional-python-ia/` |
-| 07 | Paradigma Lógico: Prolog | III | 6 | 1 | 120 min | 🔲 pendiente | `temas/07-paradigma-logico-prolog/` |
+| 06 | Paradigma Lógico: Prolog — Clase 1 (Introducción) | III | 5 | 1 | 120 min | ✅ cerrado | `temas/06-paradigma-logico-prolog/` |
+| 07 | Paradigma Lógico: Prolog — Clase 2+3 (Unificación, Backtracking, Listas, Recursión) | III | 6 | 1 | 240 min | ✅ cerrado | `temas/07-paradigma-logico-avanzado/` |
 | 08 | Paradigma OO con TypeScript | IV | 7 | 1 | 120 min | 🔲 pendiente | `temas/08-paradigma-oo-ts/` |
 | — | **⚠️ SEMANA 8: Parcial Práctico Nº 1** (Paradigmas I–IV) | I–IV | 8 | — | — | 🗓️ evaluación | — |
 | 09 | Variables, Binding y Ámbito | VI | 9 | 1 | 120 min | 🔲 pendiente | `temas/09-variables-binding/` |
