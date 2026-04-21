@@ -1,744 +1,998 @@
-# Ejercicios de Clase — Tema 07: Paradigma Lógico (reformulado)
+# Ejercicios de Clase — Tema 07: Listas y Corte en SWI-Prolog
 
 > **Materia:** Paradigmas y Lenguajes de Programación 2026
 > **Docente:** Matías Gel — UNTDF / IDEI
-> **Uso:** resolver en clase con SWISH (https://swish.swi-prolog.org/) o SWI-Prolog local
-> **Estructura:** bloques alineados a las filminas reformuladas (B0, B1, B2, B3, B4, B5, B8)
-> **Énfasis:** **listas** (bloque B8 extendido)
-> **Modalidad sugerida:** pares o tríos. Resolver en pizarrón/SWISH, chequear respuesta, discutir.
+> **Entorno:** **SWI-Prolog 9.x** (local) o **SWISH** (https://swish.swi-prolog.org/)
+> **Eje de la clase:** **LISTAS DE PRIMER ORDEN** + **CORTE (`!`)** — los dos pilares del tema
+> **Estilo:** ejemplos REALES (alumnos, materias, notas, productos, vuelos, partidos)
 > **Fecha:** 2026-04-21
 
 ---
 
 ## Cómo usar esta guía
 
-- Cada ejercicio indica **tiempo sugerido** (T), **dificultad** (⭐ fácil, ⭐⭐ media, ⭐⭐⭐ difícil) y **objetivo**.
-- Hay **resolución + explicación** al final de cada bloque (plegá la hoja si querés resolver sin mirar).
-- Los que dicen **"En voz alta"** no se tipean: se trazan a mano o se explican oralmente.
-- Los ejercicios marcados **🎯 clave** son los que deberían salir sí o sí.
+1. Abrí SWI-Prolog local (`swipl`) o SWISH en el navegador.
+2. Creá un archivo `clase07.pl` y copiá la base de hechos de abajo.
+3. Cargalo con `?- [clase07].`
+4. Cada ejercicio tiene: **T** (tiempo), **⭐** (dificultad), **🎯** (obligatorio), y **Resultado esperado**.
+5. Tipeá cada consulta vos mismo — no mires la solución hasta haber intentado.
 
 ---
 
-## B0 — Repaso relámpago (10 min)
-
-### E0.1 ⭐ Identificá (T: 30 s c/u) 🎯 clave
-
-Decí si cada expresión es **átomo, variable, número o estructura**:
-
-1. `ana`
-2. `Ana`
-3. `42`
-4. `padre(juan, X)`
-5. `_edad`
-6. `'Buenos Aires'`
-7. `[1, 2, 3]`
-
-### E0.2 ⭐ Lectura de cláusulas (T: 2 min)
-
-Leé en voz alta en castellano natural:
+## Base de conocimiento COMÚN (copiá en `clase07.pl`)
 
 ```prolog
-abuelo(X, Z) :- padre(X, Y), progenitor(Y, Z).
-```
+% ============================================================
+% BASE REAL: alumnos, materias y notas — Paradigmas 2026
+% ============================================================
 
-### E0.3 ⭐ ¿Qué responde Prolog? (T: 2 min)
+% alumno(Legajo, Nombre, Anio).
+alumno(1001, ana,    2023).
+alumno(1002, beto,   2023).
+alumno(1003, carla,  2024).
+alumno(1004, dario,  2022).
+alumno(1005, elena,  2024).
+alumno(1006, fran,   2023).
 
-Dada la base:
-```prolog
-madre(ana, carlos).
-madre(ana, beatriz).
-padre(carlos, laura).
-```
-¿Qué responde?
+% nota(Legajo, Materia, Nota).
+nota(1001, paradigmas, 8).
+nota(1001, algoritmos, 7).
+nota(1001, bases,      9).
+nota(1002, paradigmas, 4).
+nota(1002, algoritmos, 6).
+nota(1003, paradigmas, 10).
+nota(1003, bases,      9).
+nota(1004, paradigmas, 2).
+nota(1004, algoritmos, 5).
+nota(1004, bases,      3).
+nota(1005, paradigmas, 7).
+nota(1006, paradigmas, 6).
+nota(1006, bases,      8).
 
-1. `?- madre(ana, X).`
-2. `?- madre(X, laura).`
-3. `?- padre(carlos, laura).`
+materias([paradigmas, algoritmos, bases, redes, so]).
 
----
-
-## B1 — Unificación (25 min)
-
-### E1.1 ⭐ Los 4 casos (T: 5 min) 🎯 clave
-
-Indicá si unifica y, si unifica, qué sustitución produce:
-
-| # | Expresión | ¿Unifica? | Sustitución |
-|---|-----------|:---:|-------------|
-| a | `ana = ana` | | |
-| b | `X = pedro` | | |
-| c | `X = Y` | | |
-| d | `f(a, Y) = f(X, b)` | | |
-| e | `ana = pedro` | | |
-| f | `f(X, X) = f(a, b)` | | |
-| g | `padre(X) = madre(X)` | | |
-| h | `f(a, b) = f(a, b, c)` | | |
-
-### E1.2 ⭐⭐ Trazado a mano (T: 5 min) 🎯 clave
-
-Unificá paso a paso (escribí cada sustitución):
-
-```
-padre(juan, hijo(pedro, X)) = padre(Y, hijo(Z, ana))
-```
-
-### E1.3 ⭐⭐ = vs. == vs. =:= (T: 4 min) 🎯 clave
-
-Predecí la respuesta antes de ejecutar:
-
-```prolog
-?- X = 5, X == 5.
-?- X == 5.
-?- X = 2+3, X == 5.
-?- X = 2+3, X =:= 5.
-?- 2+3 = 5.
-?- 2+3 =:= 5.
-```
-
-### E1.4 ⭐⭐ Término con `=..` (T: 3 min)
-
-```prolog
-?- padre(juan, maria) =.. L.
-?- T =.. [saludo, hola, mundo].
-?- f(a, b, c) =.. [F | Args].
-```
-
-### E1.5 ⭐⭐⭐ El gotcha del occurs-check (T: 3 min)
-
-1. ¿Qué devuelve `?- X = f(X).` en SWI por default?
-2. ¿Y `?- unify_with_occurs_check(X, f(X)).`?
-3. Explicá en una frase por qué SWI permite la primera.
-
-### E1.6 ⭐⭐ Construí con `=..` (T: 5 min)
-
-Escribí un predicado `mismo_funtor(T1, T2)` que sea verdadero si `T1` y `T2` tienen el mismo funtor y aridad (sin importar los argumentos).
-
-```prolog
-mismo_funtor(T1, T2) :-
-    % completar usando =..
-```
-
-**Ejemplo esperado:**
-```prolog
-?- mismo_funtor(padre(a,b), padre(x,y)).     true.
-?- mismo_funtor(padre(a,b), madre(x,y)).     false.
-?- mismo_funtor(padre(a), padre(x,y)).       false.
+% Productos del supermercado
+producto(leche,    350).
+producto(pan,      280).
+producto(queso,    1200).
+producto(yerba,    2100).
+producto(azucar,   650).
 ```
 
 ---
 
-## B2 — Resolución SLD (25 min)
+# SECCIÓN 1 — Listas de primer orden (120 min)
 
-### E2.1 ⭐⭐ Árbol SLD a mano (T: 8 min) 🎯 clave
+> **"Listas de primer orden"** = listas de átomos o números simples, sin anidar. Es el 90% del uso real.
 
-Dada la base:
-```prolog
-madre(ana, carlos).
-madre(ana, beatriz).
-padre(carlos, laura).
-progenitor(X,Y) :- madre(X,Y).
-progenitor(X,Y) :- padre(X,Y).
-abuelo(X,Z) :- progenitor(X,Y), progenitor(Y,Z).
-```
+## E1.1 ⭐ Primera consulta sobre listas (T: 2 min) 🎯
 
-Dibujá el árbol SLD para `?- abuelo(ana, N).` indicando:
-- Todos los choice points.
-- Las sustituciones en cada paso.
-- Qué ramas fallan y cuáles tienen éxito.
-
-### E2.2 ⭐ Orden de cláusulas (T: 4 min)
-
-Mirá estas dos versiones de `ancestro/2`. ¿Cuál es correcta y cuál puede colgarse?
+Sin escribir predicados nuevos, probá:
 
 ```prolog
-% Versión A
-ancestro(X,Y) :- progenitor(X,Y).
-ancestro(X,Y) :- progenitor(X,Z), ancestro(Z,Y).
-
-% Versión B
-ancestro(X,Y) :- progenitor(X,Z), ancestro(Z,Y).
-ancestro(X,Y) :- progenitor(X,Y).
+?- materias(L).
+?- materias([M | _]).
+?- materias([_, Segunda | _]).
+?- materias([_, _, Tercera | _]).
 ```
 
-**Justificá** por qué una puede entrar en bucle infinito.
-
-### E2.3 ⭐⭐ Regla de selección leftmost (T: 4 min)
-
-Dada la regla:
-```prolog
-chef(X) :- trabaja(X, Y), cocina(Y), tiene_licencia(X).
+**Resultado esperado:**
+```
+L = [paradigmas, algoritmos, bases, redes, so].
+M = paradigmas.
+Segunda = algoritmos.
+Tercera = bases.
 ```
 
-¿Qué goal prueba Prolog primero? Si querés que falle rápido ante personas sin licencia, ¿cómo reescribirías la regla? Escribila y justificá.
-
-### E2.4 ⭐⭐⭐ "Prolog demuestra, no computa" (T: 4 min, grupal)
-
-Discutí en pareja:
-> *"Cada respuesta de Prolog es una demostración formal, no un cálculo."*
-
-¿Qué implicancia práctica tiene esta afirmación para **depurar** un programa?
+**Pregunta:** ¿Por qué podemos sacar los primeros 3 elementos **sin recursión** ni `nth0`?
 
 ---
 
-## B3 — Backtracking (25 min)
+## E1.2 ⭐ Reconocer patrones (T: 3 min) 🎯
 
-### E3.1 ⭐ Choice points (T: 3 min) 🎯 clave
-
-Dada:
-```prolog
-color(rojo).
-color(verde).
-color(azul).
-bebida(agua).
-bebida(vino).
-```
-
-¿Cuántos choice points crea Prolog al ejecutar `?- color(X), bebida(Y).`? ¿Cuántas soluciones genera en total?
-
-### E3.2 ⭐⭐ `fail`-driven loop (T: 4 min)
-
-Escribí una consulta que **imprima** todos los colores y bebidas combinados usando `write/1`, `nl/0` y `fail/0`.
-
-### E3.3 ⭐⭐ Restricción `\=` (T: 4 min)
+Predecí si unifica y con qué sustitución:
 
 ```prolog
-almuerzo(B, C) :- bebida(B), comida(C), B \= C.
+?- [a,b,c] = [X | T].
+?- [a,b,c] = [X, Y | T].
+?- [a,b,c] = [X, Y, Z | T].
+?- [a,b,c] = [X, Y, Z, W | T].
+?- [a]     = [X | T].
+?- []      = [X | T].
 ```
-
-Con `comida(vino). comida(pasta).` y `bebida(agua). bebida(vino).`:
-
-1. ¿Cuántas respuestas da `?- almuerzo(B, C).`?
-2. Enumeralas en el orden exacto que las da Prolog.
-
-### E3.4 ⭐⭐⭐ Grafo con ciclo (T: 6 min)
-
-Dado:
-```prolog
-amigo(ana, beto).
-amigo(beto, ana).   % ¡ciclo!
-amigo(beto, carla).
-
-conoce(X, Y) :- amigo(X, Y).
-conoce(X, Z) :- amigo(X, Y), conoce(Y, Z).
-```
-
-1. ¿`?- conoce(ana, carla).` termina? ¿En qué respuestas?
-2. ¿`?- conoce(ana, X).` termina? ¿Por qué?
-3. Reescribí `conoce/2` con **lista de visitados** para que no se cuelgue.
-
-### E3.5 ⭐⭐ Cheatsheet de backtracking (T: 4 min)
-
-Uní con flechas qué hace cada operador:
-
-```
-;              →   (a) fuerza backtrack
-once(G)        →   (b) colecta todas las soluciones
-findall(T,G,L) →   (c) corta alternativas
-fail           →   (d) siguiente solución en REPL
-!              →   (e) parar en la primera solución
-```
-
-### E3.6 ⭐⭐⭐ (Pizarrón) El trail (T: 4 min)
-
-Explicá en 3 viñetas qué es el **trail** y por qué Prolog lo necesita. Mencioná:
-- Qué guarda exactamente.
-- Qué pasa cuando Prolog hace backtrack.
-- Qué diferencia hay con el stack de control.
 
 ---
 
-## B4 — Corte `!` (20 min)
+## E1.3 ⭐⭐ `aprobo/1` con `nota/3` (T: 4 min) 🎯
 
-### E4.1 ⭐⭐ Verde vs. rojo (T: 5 min) 🎯 clave
-
-Para cada versión de `max/3`, decí si el corte es **verde, rojo** o **no hace falta**:
+Escribí `aprobo(Legajo)`: verdadero si el alumno tiene al menos una nota ≥ 6.
 
 ```prolog
-% A
-max(X, Y, X) :- X >= Y.
-max(X, Y, Y) :- X < Y.
-
-% B
-max(X, Y, X) :- X >= Y, !.
-max(_, Y, Y).
-
-% C
-max(X, Y, X) :- X >= Y, !.
-max(X, Y, Y) :- X < Y.
+aprobo(Legajo) :-
+    nota(Legajo, _, N),
+    N >= 6.
 ```
 
-### E4.2 ⭐⭐ Descubrí el bug del corte rojo (T: 5 min)
+**Probar:**
+```prolog
+?- aprobo(1001).     % true (tiene 8, 7, 9)
+?- aprobo(1004).     % false (tiene 2, 5, 3)
+?- aprobo(L).        % enumera legajos aprobados
+```
 
+---
+
+## E1.4 ⭐⭐ Lista de notas con `findall/3` (T: 5 min) 🎯
+
+```prolog
+notas_de(Legajo, Notas) :- findall(N, nota(Legajo, _, N), Notas).
+```
+
+**Probar:**
+```prolog
+?- notas_de(1001, L).     % L = [8, 7, 9].
+?- notas_de(1004, L).     % L = [2, 5, 3].
+?- notas_de(9999, L).     % L = [].   (findall NUNCA falla)
+```
+
+---
+
+## E1.5 ⭐⭐ Promedio (T: 6 min) 🎯
+
+```prolog
+promedio(L, P) :-
+    notas_de(L, Notas),
+    sum_list(Notas, S),
+    length(Notas, N),
+    N > 0,
+    P is S / N.
+```
+
+**Probar:**
+```prolog
+?- promedio(1001, P).    % P = 8.0
+?- promedio(1004, P).    % P ≈ 3.33
+?- promedio(9999, P).    % false (N = 0)
+```
+
+---
+
+## E1.6 ⭐⭐ `aprobados_en/2` (T: 5 min)
+
+Lista de **nombres** (no legajos) de alumnos con nota ≥ 6 en esa materia:
+
+```prolog
+aprobados_en(Materia, Nombres) :-
+    findall(Nom,
+            ( nota(L, Materia, N), N >= 6, alumno(L, Nom, _) ),
+            Nombres).
+```
+
+**Probar:**
+```prolog
+?- aprobados_en(paradigmas, L).
+L = [ana, carla, elena, fran].
+```
+
+---
+
+## E1.7 ⭐⭐ `suma/2` a mano (T: 5 min) 🎯
+
+Sin usar `sum_list/2`:
+
+```prolog
+suma([], 0).
+suma([H|T], S) :- suma(T, ST), S is H + ST.
+```
+
+**Probar:** `?- suma([1,2,3,4,5], S).` → `S = 15.`
+
+**Trazá a mano** la llamada con `[1, 2, 3]`:
+```
+suma([1,2,3], S)
+  suma([2,3], ST1), S is 1 + ST1
+    suma([3], ST2), ST1 is 2 + ST2
+      suma([], ST3), ST2 is 3 + ST3
+        ST3 = 0
+      ST2 = 3
+    ST1 = 5
+  S = 6
+```
+
+---
+
+## E1.8 ⭐⭐ `pertenece/2` (T: 3 min) 🎯
+
+`member/2` desde cero:
+
+```prolog
+pertenece(X, [X|_]).
+pertenece(X, [_|T]) :- pertenece(X, T).
+```
+
+**Probar los 2 modos:**
+```prolog
+?- pertenece(redes, [paradigmas, algoritmos, redes, so]).
+true.
+
+?- pertenece(X, [paradigmas, algoritmos]).
+X = paradigmas ;
+X = algoritmos.
+
+?- pertenece(X, []).
+false.
+```
+
+---
+
+## E1.9 ⭐⭐ `cantidad/2` (T: 4 min)
+
+`length/2` a mano:
+
+```prolog
+cantidad([], 0).
+cantidad([_|T], N) :- cantidad(T, N1), N is N1 + 1.
+```
+
+**Probar:** `?- cantidad([a,b,c,d], N).` → `N = 4.`
+
+---
+
+## E1.10 ⭐⭐ `maximo/2` con precios reales (T: 5 min) 🎯
+
+```prolog
+maximo([X], X).
+maximo([H|T], M) :-
+    maximo(T, MT),
+    ( H >= MT -> M = H ; M = MT ).
+```
+
+**Probar:**
+```prolog
+?- findall(P, producto(_, P), Precios), maximo(Precios, Max).
+Precios = [350, 280, 1200, 2100, 650],
+Max = 2100.
+```
+
+---
+
+## E1.11 ⭐⭐ `notas_altas/2` — filtrado sin corte (T: 6 min)
+
+Versión **ingenua** (con backtracking innecesario — la mejoramos en la sección 3):
+
+```prolog
+notas_altas([], []).
+notas_altas([H|T], [H|R]) :- H >= 7, notas_altas(T, R).
+notas_altas([H|T], R)     :- H < 7,  notas_altas(T, R).
+```
+
+**Probar:**
+```prolog
+?- notas_altas([8, 4, 7, 2, 9, 5, 6], R).
+R = [8, 7, 9].
+```
+
+**Tomá nota:** esta versión **funciona** pero deja choice points. Más tarde la arreglamos con `!`.
+
+---
+
+## E1.12 ⭐⭐ `contar/3` (T: 5 min)
+
+Contar cuántas veces aparece un elemento:
+
+```prolog
+contar(_, [], 0).
+contar(X, [X|T], N) :- contar(X, T, N1), N is N1 + 1.
+contar(X, [H|T], N) :- X \= H, contar(X, T, N).
+```
+
+**Probar:**
+```prolog
+?- contar(aprobado, [aprobado, desaprobado, aprobado, aprobado, desaprobado], N).
+N = 3.
+```
+
+**🔥 Atención:** también vamos a optimizar esta con corte.
+
+---
+
+# SECCIÓN 2 — `append/3` y sublistas (40 min)
+
+> **`append/3` es EL predicado más importante de listas.** Reversible, multi-modo, es el fundamento de sublistas, prefijos, sufijos y mucho más.
+
+## E2.1 ⭐⭐ Los 3 modos de `append/3` (T: 5 min) 🎯
+
+Predecí el resultado **antes de ejecutar**:
+
+```prolog
+% Modo 1 — concatenar
+?- append([leche, pan], [yerba, queso], R).
+
+% Modo 2 — dividir (enumera particiones)
+?- append(A, B, [leche, pan, yerba, queso]).
+
+% Modo 3 — enumerar elementos
+?- append(_, [X|_], [leche, pan, yerba, queso]).
+```
+
+**Esperado:**
+```
+R = [leche, pan, yerba, queso].
+
+A = [], B = [leche, pan, yerba, queso] ;
+A = [leche], B = [pan, yerba, queso] ;
+A = [leche, pan], B = [yerba, queso] ;
+A = [leche, pan, yerba], B = [queso] ;
+A = [leche, pan, yerba, queso], B = [].
+
+X = leche ; X = pan ; X = yerba ; X = queso.
+```
+
+---
+
+## E2.2 ⭐⭐ `append/3` desde cero (T: 4 min) 🎯
+
+Solo 2 cláusulas:
+
+```prolog
+mi_append([], L, L).
+mi_append([H|T], L, [H|R]) :- mi_append(T, L, R).
+```
+
+Comprobá que funciona en los 3 modos de E2.1.
+
+---
+
+## E2.3 ⭐⭐ `es_prefijo/2` (T: 3 min) 🎯
+
+```prolog
+es_prefijo(P, L) :- append(P, _, L).
+```
+
+**Probar:**
+```prolog
+?- es_prefijo([leche, pan], [leche, pan, yerba, queso]).    % true
+?- es_prefijo([pan], [leche, pan]).                           % false
+?- es_prefijo(P, [a, b, c]).
+P = [] ;
+P = [a] ;
+P = [a, b] ;
+P = [a, b, c].
+```
+
+---
+
+## E2.4 ⭐⭐ `es_sufijo/2` (T: 3 min) 🎯
+
+```prolog
+es_sufijo(S, L) :- append(_, S, L).
+```
+
+**Probar:**
+```prolog
+?- es_sufijo([yerba, queso], [leche, pan, yerba, queso]).   % true
+?- es_sufijo(S, [a, b, c]).
+S = [a, b, c] ;
+S = [b, c] ;
+S = [c] ;
+S = [].
+```
+
+---
+
+## E2.5 ⭐⭐⭐ `sublista_contigua/2` (T: 6 min) 🎯
+
+```prolog
+sublista_contigua(S, L) :-
+    append(_, R, L),     % L = Inicio ++ R
+    append(S, _, R).      % R = S ++ Resto  → S es prefijo de un sufijo
+```
+
+**Probar:**
+```prolog
+?- sublista_contigua([pan, yerba], [leche, pan, yerba, queso]).      % true
+?- sublista_contigua([leche, yerba], [leche, pan, yerba, queso]).    % false (no contiguos)
+?- sublista_contigua([yerba], [leche, pan, yerba, queso]).           % true
+
+?- sublista_contigua(S, [a, b, c]).
+% Enumera TODAS las sublistas contiguas (incluida la vacía):
+% [], [a], [a,b], [a,b,c], [b], [b,c], [c], []
+```
+
+**🔥 Esto es lo más lindo de Prolog: una definición declarativa de "sublista" con `append/3`.**
+
+---
+
+## E2.6 ⭐⭐ `ultimo/2` con `append` (T: 3 min) 🎯
+
+```prolog
+ultimo(L, X) :- append(_, [X], L).
+```
+
+**Probar:** `?- ultimo([leche, pan, yerba, queso], U).` → `U = queso.`
+
+---
+
+## E2.7 ⭐⭐ `penultimo/2` (T: 3 min)
+
+```prolog
+penultimo(L, X) :- append(_, [X, _], L).
+```
+
+**Probar:** `?- penultimo([leche, pan, yerba, queso], P).` → `P = yerba.`
+
+---
+
+## E2.8 ⭐⭐⭐ `borrar_primero/3` sin corte (T: 5 min)
+
+Remueve la primera ocurrencia de `X` en `L`:
+
+```prolog
+borrar_primero(X, [X|T], T).
+borrar_primero(X, [H|T], [H|R]) :-
+    X \= H,
+    borrar_primero(X, T, R).
+```
+
+**Probar:**
+```prolog
+?- borrar_primero(pan, [leche, pan, yerba, pan, queso], R).
+R = [leche, yerba, pan, queso].
+```
+
+**Dejá esta versión** — la vamos a comparar con la versión con corte en la sección 3.
+
+---
+
+## E2.9 ⭐⭐⭐ `insertar_en/4` con `append` (T: 5 min)
+
+```prolog
+insertar_en(X, Pos, L, R) :-
+    length(Antes, Pos),
+    append(Antes, Despues, L),
+    append(Antes, [X|Despues], R).
+```
+
+**Probar:**
+```prolog
+?- insertar_en(yerba, 2, [leche, pan, queso], R).
+R = [leche, pan, yerba, queso].
+
+?- insertar_en(azucar, 0, [pan, queso], R).
+R = [azucar, pan, queso].
+```
+
+**🔥 Pregunta:** ¿por qué `length(Antes, Pos)` va **antes** del primer `append`?
+
+**Respuesta:** fija la longitud de `Antes` → Prolog genera una lista de `Pos` variables, y el `append` se vuelve determinístico. Sin eso, `append/3` enumeraría todas las particiones posibles.
+
+---
+
+## E2.10 ⭐⭐ Palabras con prefijo (T: 5 min)
+
+Base:
+```prolog
+palabra([p,r,o,l,o,g]).
+palabra([p,r,o,c,e,s,o]).
+palabra([p,r,o,c,e,d,i,m,i,e,n,t,o]).
+palabra([p,a,n]).
+palabra([c,a,s,a]).
+```
+
+```prolog
+empieza_con(Pre, Pal) :- palabra(Pal), append(Pre, _, Pal).
+```
+
+**Probar:**
+```prolog
+?- empieza_con([p,r,o], Pal).
+Pal = [p,r,o,l,o,g] ;
+Pal = [p,r,o,c,e,s,o] ;
+Pal = [p,r,o,c,e,d,i,m,i,e,n,t,o].
+```
+
+---
+
+# SECCIÓN 3 — 🔥 EL CORTE (`!`) — el tema central (60 min)
+
+> **El corte es el concepto más delicado de Prolog.** Acá lo vemos en acción, siempre con comparaciones **antes/después**.
+
+## E3.1 ⭐⭐ Ver choice points con `trace` (T: 3 min) 🎯
+
+Antes de cortar, **medí** cuántos choice points quedan:
+
+```prolog
+?- trace, aprobo(1001).
+```
+
+Notá los `Redo:` que aparecen — cada uno es un choice point que Prolog guardó.
+
+Desactivá el trace con `?- notrace.`
+
+---
+
+## E3.2 ⭐⭐⭐ `max/3` — verde vs. sin corte (T: 8 min) 🎯
+
+**Versión A (sin corte):**
+```prolog
+max_a(X, Y, X) :- X >= Y.
+max_a(X, Y, Y) :- X < Y.
+```
+
+**Versión B (corte verde):**
+```prolog
+max_b(X, Y, X) :- X >= Y, !.
+max_b(_, Y, Y).
+```
+
+**Probar ambas:**
+```prolog
+?- max_a(5, 3, M).
+M = 5 ;
+false.                              % ← ¡deja choice point!
+
+?- max_b(5, 3, M).
+M = 5.                              % ← sin choice point
+
+?- max_a(3, 5, M).   % M = 5.
+?- max_b(3, 5, M).   % M = 5.
+```
+
+**Preguntas:**
+1. ¿Las dos versiones dan las mismas respuestas?   → **Sí**
+2. ¿Qué significa que la versión A "deje un choice point"?   → Prolog podría volver a explorar
+3. ¿El corte en `max_b` es **verde** o **rojo**?   → **Verde** — no cambia la semántica
+
+---
+
+## E3.3 ⭐⭐⭐ Corte ROJO: el bug clásico `clasificar/2` (T: 10 min) 🎯
+
+**Versión CON cortes (parece correcta):**
 ```prolog
 clasificar(X, positivo) :- X > 0, !.
 clasificar(X, negativo) :- X < 0, !.
 clasificar(_, cero).
 ```
 
-1. ¿Qué devuelve `?- clasificar(5, C).`?
-2. ¿Qué devuelve `?- clasificar(0, C).`?
-3. ¿Qué devuelve `?- clasificar(-3, C).`?
-4. Ahora **sin cortes**: escribí la versión declarativa pura con condiciones **mutuamente excluyentes**.
-
-### E4.3 ⭐⭐ `(-> ;)` (T: 4 min) 🎯 clave
-
-Reescribí usando `(Cond -> Then ; Else)` sin corte:
-
+**Probar:**
 ```prolog
-abs(X, X) :- X >= 0, !.
-abs(X, Y) :- Y is -X.
+?- clasificar(5, C).     % C = positivo.    ✓
+?- clasificar(-3, C).    % C = negativo.    ✓
+?- clasificar(0, C).     % C = cero.        ✓
 ```
 
-### E4.4 ⭐⭐⭐ Negación implementada con corte (T: 4 min)
-
-Dada la implementación clásica:
+**🔥 AHORA QUITÁ LOS CORTES:**
 ```prolog
-not(P) :- call(P), !, fail.
-not(_).
+clasificar_sin(X, positivo) :- X > 0.
+clasificar_sin(X, negativo) :- X < 0.
+clasificar_sin(_, cero).
 ```
 
-Explicá paso a paso qué pasa en cada una de estas consultas (base: `color(rojo).`):
+**Probar:**
+```prolog
+?- clasificar_sin(5, C).
+C = positivo ;
+C = cero.          % ← ¡BUG! 5 también es "cero" porque `_` acepta todo
+```
 
-1. `?- not(color(rojo)).`
-2. `?- not(color(amarillo)).`
-3. `?- not(X = 1).`
+**Conclusión:** los cortes eran **ROJOS** — sin ellos, la semántica era incorrecta.
+
+**Reescritura declarativa pura (sin cortes, sin bugs):**
+```prolog
+clasificar_ok(X, positivo) :- X > 0.
+clasificar_ok(X, negativo) :- X < 0.
+clasificar_ok(X, cero)     :- X =:= 0.
+```
+
+Ahora los casos son **mutuamente excluyentes** → no hace falta corte.
 
 ---
 
-## B5 — Negación por falla (15 min)
+## E3.4 ⭐⭐ Corte con `(-> ;)` (T: 5 min) 🎯
 
-### E5.1 ⭐ CWA (T: 3 min)
-
-Dada solo `madre(ana, carlos).`, ¿qué responde Prolog?
-1. `?- madre(ana, carlos).`
-2. `?- madre(ana, juan).`
-3. `?- madre(beatriz, carlos).`
-
-Relacioná con la **Closed World Assumption**.
-
-### E5.2 ⭐⭐ La trampa de `\+` con variables (T: 5 min) 🎯 clave
-
-Predecí y explicá:
+Reescribí `clasificar_ok/2` usando **if-then-else explícito**:
 
 ```prolog
-?- X = 2, \+ X = 1.
-?- \+ X = 1, X = 2.
-?- \+ member(X, [1,2,3]).
+clasificar_ite(X, C) :-
+    ( X > 0  -> C = positivo
+    ; X < 0  -> C = negativo
+    ;           C = cero
+    ).
 ```
 
-**Regla práctica:** ¿cuándo usar `\+` y cuándo **no**?
-
-### E5.3 ⭐⭐ `dif/2` vs `\+` (T: 4 min)
-
-Mostrá un caso donde `dif/2` da la respuesta correcta y `\+` da falsa negativa:
-
-```prolog
-?- dif(X, 1), X = 2.
-?- \+ X = 1, X = 2.
-```
-
-### E5.4 ⭐⭐ `soltero/1` (T: 3 min)
-
-Dada `casado(ana). casado(beto).` escribí `soltero/1` usando `\+`. ¿Qué limitación tiene tu definición?
+**Regla moderna:** preferir `(-> ;)` sobre `!` cuando sea posible. Es **más local** y **más legible**.
 
 ---
 
-## B8 — Listas (bloque EXTENDIDO, 60 min)
+## E3.5 ⭐⭐⭐ `aprobo_materia/2` — corte verde (T: 6 min) 🎯
 
-> **Énfasis del docente:** este bloque es el núcleo del TP y del parcial. Resolver TODOS los marcados 🎯.
+Queremos que sea **determinístico** (no devuelva la misma respuesta dos veces).
 
-### B8.A — Notación y estructura (10 min)
+**Sin corte:**
+```prolog
+aprobo_materia(L, M) :- nota(L, M, N), N >= 6.
 
-#### E8.1 ⭐ Traducí a `[H|T]` (T: 3 min) 🎯 clave
+?- aprobo_materia(1001, paradigmas).
+true ;             % ← deja choice point inútil
+false.
+```
 
-Reescribí cada lista usando la notación **cabeza | cola** (sin azúcar sintáctico cuando se pueda):
+**Con corte verde:**
+```prolog
+aprobo_materia_once(L, M) :- nota(L, M, N), N >= 6, !.
 
-| Lista | `[H|T]` | Estructura cruda `./2` |
-|-------|---------|------------------------|
-| `[a]` | | |
-| `[a, b]` | | |
-| `[a, b, c]` | | |
-| `[a | [b, c]]` | | |
+?- aprobo_materia_once(1001, paradigmas).
+true.              % limpio, sin backtracking
+```
 
-#### E8.2 ⭐ Decí cuál unifica (T: 3 min)
-
-| # | Término 1 | Término 2 | ¿Unifica? | Sust. |
-|---|-----------|-----------|:---:|-------|
-| a | `[X\|T]` | `[1, 2, 3]` | | |
-| b | `[X, Y]` | `[1, 2, 3]` | | |
-| c | `[X, Y \| T]` | `[1, 2, 3]` | | |
-| d | `[X \| T]` | `[]` | | |
-| e | `[X \| Y]` | `[a, b \| Z]` | | |
-
-#### E8.3 ⭐ Lista vacía y no vacía (T: 2 min) 🎯 clave
-
-Definí `esVacia/1` y `noEsVacia/1` por pattern matching (sin operadores de comparación).
+**Es verde:** la respuesta no cambia, solo evita un choice point.
 
 ---
 
-### B8.B — Primitivas clásicas (15 min)
+## E3.6 ⭐⭐⭐ `borrar_primero/3` con corte (T: 6 min) 🎯
 
-#### E8.4 ⭐⭐ `primero`, `segundo`, `tercero` (T: 4 min)
+Volvemos a E2.8.
 
-Definí tres predicados por pattern matching directo (sin recursión):
-
+**Sin corte (deja choice points):**
 ```prolog
-primero(L, X).   % X es el primero de L
-segundo(L, X).
-tercero(L, X).
+borrar_primero(X, [X|T], T).
+borrar_primero(X, [H|T], [H|R]) :- X \= H, borrar_primero(X, T, R).
 ```
 
-#### E8.5 ⭐⭐ `length/2` a mano (T: 4 min) 🎯 clave
-
-Escribí tu propia versión de `length/2` **sin usar la built-in**. Después trazá la ejecución de `?- mi_length([a,b,c], N).`.
-
+**Con corte (determinístico):**
 ```prolog
-mi_length([], 0).
-mi_length([_|T], N) :- ...
+borrar_primero_c(X, [X|T], T) :- !.
+borrar_primero_c(X, [H|T], [H|R]) :- borrar_primero_c(X, T, R).
 ```
 
-#### E8.6 ⭐⭐ `member/2` a mano (T: 4 min) 🎯 clave
-
-Escribí `mi_member/2` desde cero. Luego probá:
-
-1. `?- mi_member(2, [1,2,3]).`
-2. `?- mi_member(X, [a,b,c]).`  ← ¿cuántas respuestas?
-3. `?- mi_member(X, []).`
-
-#### E8.7 ⭐⭐ `last/2` a mano (T: 3 min)
-
-Definí `mi_last/2` que recupere el último elemento:
-
+**Comparar:**
 ```prolog
-?- mi_last([a,b,c,d], X).     X = d.
+?- borrar_primero(pan, [leche, pan, yerba, pan], R).
+R = [leche, yerba, pan] ;
+false.                             % ← choice point
+
+?- borrar_primero_c(pan, [leche, pan, yerba, pan], R).
+R = [leche, yerba, pan].           % ← limpio
 ```
+
+**Diferencia clave:** el corte evita intentar la segunda cláusula cuando la cabeza ya unificó.
 
 ---
 
-### B8.C — `append/3` — la joya (15 min)
+## E3.7 ⭐⭐⭐ Corte mal puesto (T: 5 min)
 
-#### E8.8 ⭐⭐ Los 3 modos de `append/3` (T: 5 min) 🎯 clave
-
-Predecí las respuestas:
+Mirá este código "optimizado":
 
 ```prolog
-?- append([1,2], [3,4], R).
-?- append(X, Y, [1,2,3]).
-?- append([1,2], X, [1,2,3,4]).
-?- append(X, [3], [1,2,3]).
+buscar_producto(Nombre) :-
+    producto(Nombre, _), !.
+buscar_producto(_) :-
+    write('No existe'), nl.
 ```
 
-#### E8.9 ⭐⭐ `append/3` desde cero (T: 4 min) 🎯 clave
+**Probar:**
+```prolog
+?- buscar_producto(pan).     % true.
+?- buscar_producto(auto).    % No existe (se imprime)
+```
 
-Escribí `mi_append/3` en 2 cláusulas. Verificá que funcione en los 3 modos anteriores.
+**Ahora:**
+```prolog
+?- buscar_producto(X).
+X = leche.                   % ← se queda solo en el PRIMERO, no enumera
+```
 
-#### E8.10 ⭐⭐⭐ `append` como generador (T: 6 min)
-
-Usá `append/3` (built-in) para definir:
-
-1. `segundo(L, X).` — el segundo elemento de L
-2. `ultimos_dos(L, A, B).` — los dos últimos elementos
-3. `sublista(S, L).` — S es una sublista contigua de L
-4. `sin_ultimo(L, R).` — R es L sin el último elemento
-
-**Pista:** todas se pueden hacer con **una sola línea** usando `append/3`.
+**Moraleja:** el corte **destruye la enumeración**. Pensalo dos veces antes de cortar en predicados que podrían usarse como generadores.
 
 ---
 
-### B8.D — Recursión sobre listas (15 min)
+## E3.8 ⭐⭐⭐ `notas_altas/2` con corte (T: 8 min) 🎯
 
-#### E8.11 ⭐⭐ `suma_lista/2` (T: 4 min) 🎯 clave
+Volvemos a E1.11.
 
-Definí `suma_lista(L, S)` que sume los enteros de `L`. Usá `is/2` correctamente.
-
+**Sin corte (genera ramas innecesarias):**
 ```prolog
-?- suma_lista([1,2,3,4], S).     S = 10.
-?- suma_lista([], S).            S = 0.
+notas_altas([], []).
+notas_altas([H|T], [H|R]) :- H >= 7, notas_altas(T, R).
+notas_altas([H|T], R)     :- H < 7,  notas_altas(T, R).
 ```
 
-#### E8.12 ⭐⭐ `maximo/2` (T: 4 min)
-
-Definí `maximo(L, M)` que devuelva el mayor elemento de una lista no vacía.
-
+**Con corte:**
 ```prolog
-?- maximo([3,1,5,2,4], M).     M = 5.
-?- maximo([7], M).             M = 7.
+notas_altas_c([], []).
+notas_altas_c([H|T], [H|R]) :- H >= 7, !, notas_altas_c(T, R).
+notas_altas_c([_|T], R)     :- notas_altas_c(T, R).
 ```
 
-#### E8.13 ⭐⭐⭐ `reverse/2` ingenua vs. con acumulador (T: 6 min) 🎯 clave
-
-Escribí **dos** versiones de `reverse/2`:
-
-**A) Ingenua con `append/3`:**
+**Comparar:**
 ```prolog
-reverse_v1([], []).
-reverse_v1([H|T], R) :- reverse_v1(T, RT), append(RT, [H], R).
+?- notas_altas([8,4,7,2,9,5,6], R).     % R = [8,7,9] ; false.   ← choice points
+?- notas_altas_c([8,4,7,2,9,5,6], R).   % R = [8,7,9].           ← limpio
 ```
 
-**B) Con acumulador:**
-```prolog
-reverse_v2(L, R) :- rev(L, [], R).
-rev([], Acc, Acc).
-rev([H|T], Acc, R) :- ...
-```
-
-Respondé:
-1. ¿Cuál es O(n²) y cuál O(n)? ¿Por qué?
-2. Trazá ambas para `[1,2,3]`.
-3. Investigá: ¿cuál aprovecha **Last-Call Optimization**?
-
-#### E8.14 ⭐⭐ `contar/3` (T: 4 min)
-
-Definí `contar(X, L, N)`: N es cuántas veces aparece `X` en `L`.
-
-```prolog
-?- contar(a, [a,b,a,c,a], N).     N = 3.
-?- contar(z, [a,b,c], N).         N = 0.
-```
+**🔑 Atención:** este es un corte **rojo disfrazado**. Si quitás el `!`, la tercera cláusula (con `_`) también acepta casos que la segunda cubría → respuestas duplicadas.
 
 ---
 
-### B8.E — Meta / utilidades (5 min)
+## E3.9 ⭐⭐ `contar/3` con corte (T: 5 min) 🎯
 
-#### E8.15 ⭐⭐ `msort/2` vs `sort/2` (T: 2 min)
-
-Predecí:
-```prolog
-?- msort([3,1,2,1,3], L).
-?- sort([3,1,2,1,3], L).
-?- sort(0, @>, [3,1,2,1], L).
-```
-
-#### E8.16 ⭐⭐ Lista de pares (T: 3 min)
+Optimizamos E1.12:
 
 ```prolog
-edades([ana-22, beto-30, carla-22]).
+contar_c(_, [], 0).
+contar_c(X, [X|T], N) :- !, contar_c(X, T, N1), N is N1 + 1.
+contar_c(X, [_|T], N) :- contar_c(X, T, N).
 ```
 
-Escribí una consulta que:
-1. Obtenga la edad de `beto`.
-2. Ordene la lista de pares por edad usando `keysort/2` (después de invertir los pares).
+**Comparar sin y con corte:**
+```prolog
+?- contar(a, [a,b,a,c,a], N).    % N = 3 ; false.   ← backtracking
+?- contar_c(a, [a,b,a,c,a], N).  % N = 3.           ← limpio
+```
+
+El corte indica: "si la cabeza es `X`, no tiene sentido probar la tercera cláusula".
 
 ---
 
-### B8.F — Listas anidadas y `forall/between` (5 min)
+## E3.10 ⭐⭐⭐ Negación implementada con corte (T: 5 min) 🎯
 
-#### E8.17 ⭐⭐ Matriz (T: 3 min)
+Implementá `\+` desde cero:
 
 ```prolog
-matriz([[1,2,3],
-        [4,5,6],
-        [7,8,9]]).
+mi_not(P) :- call(P), !, fail.
+mi_not(_).
 ```
 
-Escribí `fila(N, M, F)` y `elemento(I, J, M, E)` (fila `I`, columna `J`).
-
-#### E8.18 ⭐⭐ `forall` + `between` (T: 2 min)
-
-Predecí:
+**Probar:**
 ```prolog
-?- forall(between(1,5,X), X > 0).
-?- forall(between(1,5,X), X > 3).
-?- forall(member(X, [2,4,6]), 0 is X mod 2).
+?- mi_not(alumno(1001, ana, 2023)).     % false (existe)
+?- mi_not(alumno(9999, zzz, 2030)).     % true (no existe)
 ```
+
+**Trazá a mano qué pasa:**
+
+- Si `P` es demostrable: `call(P)` tiene éxito → `!` corta → `fail` fuerza a fallar todo `mi_not/1`. El `!` impide que Prolog vaya a la segunda cláusula.
+- Si `P` falla: la primera cláusula falla → va a la segunda → `mi_not(_)` tiene éxito.
+
+Sin el `!`, si `P` es demostrable, `mi_not/1` siempre tendría éxito por la segunda cláusula → la negación estaría **rota**.
 
 ---
 
-### B8.G — Ejercicios integradores 🔥 (10 min — elegí 1)
+## E3.11 ⭐⭐ Tabla resumen del corte (T: 3 min) 🎯
 
-#### E8.19 ⭐⭐⭐ `aplanar/2` 🎯 clave
+Completá en tu cuaderno:
 
-Definí `aplanar/2` que convierta listas anidadas en una lista plana:
-
-```prolog
-?- aplanar([1, [2, [3, 4]], 5], R).     R = [1,2,3,4,5].
-?- aplanar([[], [[1,2]], [3]], R).      R = [1,2,3].
-```
-
-#### E8.20 ⭐⭐⭐ `permutacion/2`
-
-Definí `permutacion(L1, L2)` que sea verdadero si `L2` es una permutación de `L1`.
-
-```prolog
-?- permutacion([1,2,3], P).
-P = [1,2,3] ; P = [1,3,2] ; P = [2,1,3] ; ... (6 soluciones)
-```
-
-**Pista:** `select/3` + recursión.
-
-#### E8.21 ⭐⭐⭐ `zip/3`
-
-Definí `zip(L1, L2, Pares)`:
-
-```prolog
-?- zip([a,b,c], [1,2,3], P).     P = [a-1, b-2, c-3].
-?- zip([a,b], [1,2,3], P).       false.
-```
+| Predicado | Si quito `!` | Tipo de corte |
+|-----------|:---:|:---:|
+| `max_b` (E3.2) | funciona igual | **verde** |
+| `clasificar` (E3.3) | se rompe | **rojo** |
+| `aprobo_materia_once` (E3.5) | funciona, deja choice point | **verde** |
+| `borrar_primero_c` (E3.6) | funciona, deja choice point | **verde** |
+| `notas_altas_c` (E3.8) | se rompe (duplicados) | **rojo** |
+| `mi_not` (E3.10) | se rompe (siempre true) | **rojo** |
 
 ---
 
-## Checkpoint de clase (10 min)
+## E3.12 ⭐⭐ Regla de oro (T: 2 min, grupal)
 
-### CP1 🎯 En 1 frase cada uno
+Discutí en pareja y escribí cuándo SÍ y cuándo NO usar corte:
 
-1. ¿Qué es la MGU?
-2. ¿Por qué el orden de las cláusulas importa?
-3. ¿Diferencia entre corte verde y corte rojo?
-4. ¿Por qué `\+` falla con variables libres?
-5. ¿Qué hace `append/3` en su tercer modo?
+**SÍ:**
+- Corte verde documentado con comentario
+- Cuando `(-> ;)` no alcanza
+- Optimización medida con `time/1`
 
-### CP2 Código ciego
-
-Sin ejecutarlo, ¿qué imprime?
-
-```prolog
-?- X = [1,2,3], append(X, [4,5], Y), length(Y, N).
-```
-
-### CP3 Escritura libre (2 min)
-
-En un post-it escribí:
-> "Lo que más me costó entender de Prolog hasta ahora fue ______."
+**NO:**
+- En predicados que podrían enumerar soluciones
+- En librerías reutilizables
+- "Por las dudas"
+- Cuando se puede reescribir con condiciones **mutuamente excluyentes**
 
 ---
 
-## Soluciones breves (respuestas finales)
+# SECCIÓN 4 — Ejemplos REALES integradores (30 min)
 
-### B0
-E0.1: 1-átomo, 2-variable, 3-número, 4-estructura, 5-variable (empieza con `_`), 6-átomo, 7-estructura (lista).
-E0.3: 1) `X=carlos;X=beatriz.` 2) `false.` (no hay `madre/2` con carlos como madre de laura) 3) `true.`
+> Acá combinamos listas + corte en escenarios reales.
 
-### B1
-E1.1: a) sí, `{}`. b) sí, `{X/pedro}`. c) sí, `{X/Y}`. d) sí, `{X/a, Y/b}`. e) no. f) no. g) no. h) no.
-E1.2: `{Y/juan, Z/pedro, X/ana}`.
-E1.3: `true; false; false; true; false; true`.
-E1.5: 1) éxito con término cíclico. 2) false. 3) occurs-check cuesta O(n); se desactiva por velocidad.
+## E4.1 ⭐⭐⭐ Carrito de supermercado (T: 8 min) 🎯
 
 ```prolog
-mismo_funtor(T1, T2) :-
-    T1 =.. [F|A1], T2 =.. [F|A2], length(A1, N), length(A2, N).
+% total_carrito(+ListaProductos, -Total)
+total_carrito([], 0).
+total_carrito([P|R], T) :-
+    producto(P, Precio), !,
+    total_carrito(R, TR),
+    T is Precio + TR.
+total_carrito([_|R], T) :-      % producto desconocido: se ignora
+    total_carrito(R, T).
 ```
 
-### B3
-E3.1: 3×2=6 choice points implícitos; 6 soluciones.
-E3.3: 4 soluciones: (agua,vino),(agua,pasta),(vino,pasta)...
- (solo excluye vino-vino).
-
-### B4
-E4.1: A) no hace falta corte B) verde (quita 1 choice point) C) verde.
-E4.2:
+**Probar:**
 ```prolog
-clasificar(X, positivo) :- X > 0.
-clasificar(X, negativo) :- X < 0.
-clasificar(X, cero)     :- X =:= 0.
-```
-E4.3:
-```prolog
-abs(X, Y) :- ( X >= 0 -> Y = X ; Y is -X ).
+?- total_carrito([leche, pan, queso, yerba], T).
+T = 3930.
+
+?- total_carrito([leche, xxx, pan], T).       % xxx no existe
+T = 630.
 ```
 
-### B5
-E5.2: el orden importa; usar `\+` solo con goals **ground**.
-
-### B8 (clave)
-
-```prolog
-% E8.3
-esVacia([]).
-noEsVacia([_|_]).
-
-% E8.5
-mi_length([], 0).
-mi_length([_|T], N) :- mi_length(T, N1), N is N1 + 1.
-
-% E8.6
-mi_member(X, [X|_]).
-mi_member(X, [_|T]) :- mi_member(X, T).
-
-% E8.7
-mi_last([X], X).
-mi_last([_|T], X) :- mi_last(T, X).
-
-% E8.9
-mi_append([], L, L).
-mi_append([H|T], L, [H|R]) :- mi_append(T, L, R).
-
-% E8.10
-segundo(L, X)         :- append([_], [X|_], L).
-ultimos_dos(L, A, B)  :- append(_, [A, B], L).
-sublista(S, L)        :- append(_, R, L), append(S, _, R).
-sin_ultimo(L, R)      :- append(R, [_], L).
-
-% E8.11
-suma_lista([], 0).
-suma_lista([H|T], S) :- suma_lista(T, ST), S is H + ST.
-
-% E8.12
-maximo([X], X).
-maximo([H|T], M) :- maximo(T, MT), ( H >= MT -> M = H ; M = MT ).
-
-% E8.13 (B)
-reverse_v2(L, R) :- rev(L, [], R).
-rev([], Acc, Acc).
-rev([H|T], Acc, R) :- rev(T, [H|Acc], R).
-
-% E8.14
-contar(_, [], 0).
-contar(X, [X|T], N) :- !, contar(X, T, N1), N is N1 + 1.
-contar(X, [_|T], N) :- contar(X, T, N).
-
-% E8.17
-fila(N, M, F)         :- nth0(N, M, F).
-elemento(I, J, M, E)  :- nth0(I, M, Fila), nth0(J, Fila, E).
-
-% E8.19
-aplanar([], []).
-aplanar([H|T], R) :- is_list(H), !, aplanar(H, HR), aplanar(T, TR), append(HR, TR, R).
-aplanar([H|T], [H|TR]) :- aplanar(T, TR).
-
-% E8.20
-permutacion([], []).
-permutacion(L, [H|P]) :- select(H, L, R), permutacion(R, P).
-
-% E8.21
-zip([], [], []).
-zip([A|T1], [B|T2], [A-B|TP]) :- zip(T1, T2, TP).
-```
+**Preguntas:**
+1. ¿Qué rol cumple el `!` en la segunda cláusula?
+   → Evita probar la tercera cuando el producto ya fue encontrado.
+2. ¿Es verde o rojo?
+   → **Rojo**: sin él, productos conocidos también matcharían la tercera cláusula → total duplicado.
+3. ¿Qué pasa si lo quitás y consultás `?- total_carrito([leche, pan], T).`?
+   → Da `T = 630` pero también `T = 350` (solo leche), `T = 280` (solo pan), `T = 0` → respuestas espurias.
 
 ---
 
-## Tabla de tiempos sugeridos (clase 240 min)
+## E4.2 ⭐⭐⭐ Primer aprobado de una lista (T: 6 min) 🎯
 
-| Bloque | Ejercicios obligatorios | Tiempo |
-|--------|-------------------------|:---:|
-| B0 | E0.1, E0.3 | 10 min |
-| B1 | E1.1, E1.2, E1.3, E1.6 | 25 min |
-| B2 | E2.1, E2.2 | 25 min |
-| B3 | E3.1, E3.3, E3.4 | 25 min |
-| B4 | E4.1, E4.2, E4.3 | 20 min |
-| B5 | E5.1, E5.2 | 15 min |
-| ☕ Descanso | — | 10 min |
-| B8.A | E8.1, E8.3 | 10 min |
-| B8.B | E8.5, E8.6 | 15 min |
-| B8.C | E8.8, E8.9, E8.10 | 15 min |
-| B8.D | E8.11, E8.13 | 15 min |
-| B8.E | E8.15 | 5 min |
-| B8.F | E8.17 | 5 min |
-| B8.G | elegir 1 de E8.19/20/21 | 10 min |
-| Checkpoint | CP1, CP2, CP3 | 10 min |
-| **Total** | | **~215 min + 10 buffer** |
+Dada una lista de legajos, devolvé el **primero** que aprobó paradigmas:
+
+```prolog
+primer_aprobado_paradigmas([L|_], L) :-
+    nota(L, paradigmas, N), N >= 6, !.
+primer_aprobado_paradigmas([_|T], L) :-
+    primer_aprobado_paradigmas(T, L).
+```
+
+**Probar:**
+```prolog
+?- primer_aprobado_paradigmas([1004, 1002, 1001, 1003], L).
+L = 1001.        % 1004 (2) y 1002 (4) no aprobaron, 1001 (8) sí → corta
+```
+
+**El corte es clave:** sin él, seguiría enumerando `1003` también.
 
 ---
 
-## Recursos
+## E4.3 ⭐⭐⭐ Partidos de fútbol (T: 8 min) 🎯
 
-- **SWISH:** https://swish.swi-prolog.org/ (sin instalar, compartible con link)
-- **Guía de estudio del tema:** [`guia-estudio.md`](guia-estudio.md)
-- **Minuta del docente:** [`minuta.md`](minuta.md)
-- **Filminas:** [`filminas.md`](filminas.md)
+```prolog
+partido(boca,    river,  2, 1).
+partido(river,   boca,   0, 0).
+partido(racing,  boca,   1, 3).
+partido(river,   racing, 2, 2).
+partido(boca,    racing, 1, 1).
+
+resultado(L, V, gano_local)     :- partido(L, V, GL, GV), GL > GV, !.
+resultado(L, V, gano_visitante) :- partido(L, V, GL, GV), GL < GV, !.
+resultado(L, V, empate)         :- partido(L, V, _, _).
+```
+
+**Probar:**
+```prolog
+?- resultado(boca, river, R).         % R = gano_local.
+?- resultado(river, racing, R).       % R = empate.
+?- resultado(racing, boca, R).        % R = gano_visitante.
+```
+
+**¿Cortes verdes o rojos?**
+→ **Rojos**: sin ellos, `resultado(boca, river, R)` daría también `R = empate` (porque la tercera cláusula acepta cualquier partido).
 
 ---
 
-*Ejercicios elaborados por Aux. Valeria (tp-designer) — 2026-04-21*
-*Alineados a las filminas reformuladas (bloques B0, B1, B2, B3, B4, B5, B8).*
-*Énfasis especial en listas (B8 extendido a 7 sub-bloques).*
+## E4.4 ⭐⭐⭐ Viaje con escalas (T: 10 min)
+
+```prolog
+vuelo(ush, bue,  2200).
+vuelo(bue, mvd,   150).
+vuelo(bue, eze,    50).
+vuelo(eze, gru,  1700).
+vuelo(mvd, gru,  2100).
+
+ruta(A, B, [A, B])    :- vuelo(A, B, _).
+ruta(A, B, [A | R])   :- vuelo(A, C, _), ruta(C, B, R).
+```
+
+**Probar:**
+```prolog
+?- ruta(ush, gru, R).
+R = [ush, bue, eze, gru] ;
+R = [ush, bue, mvd, gru].
+```
+
+**Con corte — primera ruta:**
+```prolog
+ruta_corta(A, B, R) :- ruta(A, B, R), !.
+
+?- ruta_corta(ush, gru, R).
+R = [ush, bue, eze, gru].     % solo una
+```
+
+**⚠️ Advertencia:** la primera ruta que encuentra DFS NO es necesariamente la más corta en kilómetros. Para eso habría que acumular distancias.
+
+---
+
+## E4.5 ⭐⭐⭐ El mejor alumno (T: 8 min) 🎯
+
+```prolog
+mejor_alumno(Nombre) :-
+    findall(P-L, (alumno(L,_,_), promedio(L,P)), Lista),
+    keysort(Lista, Ordenada),
+    reverse(Ordenada, [_PMax-LegMax|_]),
+    alumno(LegMax, Nombre, _), !.
+```
+
+**Probar:**
+```prolog
+?- mejor_alumno(N).
+N = carla.     % carla tiene 10 y 9 → promedio 9.5
+```
+
+**Pasos:**
+1. `findall` construye `[8.0-1001, 5.0-1002, 9.5-1003, ...]`
+2. `keysort` ordena por clave (el promedio) ascendente
+3. `reverse` lo invierte → mayor primero
+4. `[_PMax-LegMax|_]` extrae el primero
+5. El `!` final asegura determinismo
+
+---
+
+# CHECKPOINT FINAL (10 min)
+
+## CP1 🎯 Cinco preguntas relámpago
+
+1. ¿Por qué `[1,2,3]` es equivalente a `[1 | [2, 3]]`?
+2. ¿Qué devuelve `?- append(_, [X], L).` cuando L está dada?
+3. ¿Qué es un corte **verde**?
+4. ¿Por qué el corte rojo es peligroso?
+5. ¿Cuándo preferir `(-> ;)` sobre `!`?
+
+## CP2 🎯 Código a leer
+
+```prolog
+primeros([], _, []).
+primeros(_, 0, []) :- !.
+primeros([H|T], N, [H|R]) :- N > 0, N1 is N - 1, primeros(T, N1, R).
+
+?- primeros([a,b,c,d,e], 3, R).
+```
+
+**Respuesta:** `R = [a, b, c].`
+
+¿Por qué el `!` en la segunda cláusula? ¿Es verde o rojo?
+
+## CP3 Escritura libre
+
+En un post-it:
+> "El corte que más me confundió fue ______."
+
+---
+
+# Tabla de tiempos (240 min clase doble)
+
+| Sección | Tiempo | Ejercicios 🎯 |
+|---------|:---:|---------------|
+| Setup (cargar `clase07.pl`) | 5 min | — |
+| **S1 Listas de primer orden** | **75 min** | E1.1, E1.2, E1.3, E1.4, E1.5, E1.7, E1.8, E1.10 |
+| **S2 `append` y sublistas** | **40 min** | E2.1, E2.2, E2.3, E2.4, E2.5, E2.6 |
+| ☕ Descanso | 10 min | — |
+| **S3 🔥 CORTE** | **70 min** | E3.2, E3.3, E3.4, E3.5, E3.6, E3.8, E3.10, E3.11 |
+| **S4 Integradores reales** | **30 min** | E4.1, E4.2, E4.3, E4.5 |
+| Checkpoint | 10 min | CP1, CP2, CP3 |
+| **Total** | **240 min** | |
+
+---
+
+# Recursos
+
+- **SWI-Prolog:** https://www.swi-prolog.org/ (local)
+- **SWISH:** https://swish.swi-prolog.org/ (navegador)
+- **Guía de estudio:** [`guia-estudio.md`](guia-estudio.md)
+- **Minuta docente:** [`minuta.md`](minuta.md)
+- **The Power of Prolog** (Markus Triska): https://www.metalevel.at/prolog
+
+---
+
+# Sobre el corte — la frase para recordar
+
+> *"El corte no hace Prolog más rápido. Te hace decidir por Prolog lo que Prolog no podría decidir solo. Usalo con la misma responsabilidad que un `goto`."*
+> — Richard O'Keefe, *The Craft of Prolog*, 1990
+
+---
+
+*Ejercicios por Aux. Valeria (tp-designer) — 2026-04-21*
+*Énfasis: listas de primer orden + sublistas + corte, todos con ejemplos reales (alumnos/notas/productos/partidos/vuelos).*
+*Probados en SWI-Prolog 9.x.*
