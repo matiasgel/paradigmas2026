@@ -42,6 +42,16 @@ def get_credentials(project_root: Path) -> Credentials:
         secrets = yaml.safe_load(f)
     creds_path = project_root / secrets["google_credentials_path"]
 
+    # Detect service account
+    import json as _json
+    try:
+        cred_data = _json.loads(creds_path.read_text(encoding="utf-8"))
+    except Exception:
+        cred_data = {}
+    if cred_data.get("type") == "service_account":
+        from google.oauth2.service_account import Credentials as SACredentials
+        return SACredentials.from_service_account_file(str(creds_path), scopes=SCOPES)
+
     creds = None
     if token_path.exists():
         creds = Credentials.from_authorized_user_file(str(token_path), SCOPES)

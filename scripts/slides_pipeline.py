@@ -48,6 +48,7 @@ import yaml
 # Google API
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
+from google.oauth2.service_account import Credentials as SACredentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
@@ -1311,6 +1312,15 @@ def _get_creds(secrets_path: Path, token_path: Path) -> Credentials:
     creds_file = Path(secrets["google_credentials_path"])
     if not creds_file.is_absolute():
         creds_file = (secrets_path.parent.parent / creds_file).resolve()
+
+    # Detect service account vs OAuth client
+    try:
+        cred_data = json.loads(creds_file.read_text(encoding="utf-8"))
+    except Exception:
+        cred_data = {}
+    if cred_data.get("type") == "service_account":
+        return SACredentials.from_service_account_file(str(creds_file), scopes=SCOPES)
+
     creds: Credentials | None = None
 
     if token_path.exists():
