@@ -88,12 +88,13 @@ Incluye (actualizado):
 **MANDATORY RULE for all agents:** At the end of a session where files have been created or modified and the user has accepted the changes, the agent MUST automatically execute the following steps:
 
 1. Check for changes with `git status`
-2. Stage all changes: `git add -A`
-3. Create a descriptive commit with the format:
+2. **CRITICAL — Verify branch:** Run `git branch --show-current`. If the current branch is NOT `production`, run `git checkout production` before proceeding. ALL course production commits MUST go to the `production` branch. NEVER commit to `main` or any other branch.
+3. Stage all changes: `git add -A`
+4. Create a descriptive commit with the format:
    `git commit -m "agent: <brief summary of changes made>"`
    - Use the active agent name as prefix (e.g. `dev:`, `pm:`, `analyst:`, `sm:`, `architect:`, `qa:`)
    - The message must clearly summarize what artifacts were created or modified
-4. Push to the current branch: `git push`
+5. Push ONLY to production: `git push origin production`
 
 **When to commit:**
 - After successfully completing a workflow or task
@@ -103,6 +104,7 @@ Incluye (actualizado):
 **When NOT to commit:**
 - If the user explicitly indicates they don't want a commit yet
 - If there are errors or incomplete changes pending
+- If the branch is `main` — switch to `production` first
 <!-- BMAD:END -->
 
 
