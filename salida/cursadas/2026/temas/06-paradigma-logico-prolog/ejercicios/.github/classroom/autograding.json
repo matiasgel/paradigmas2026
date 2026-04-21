@@ -1,0 +1,104 @@
+{
+  "tests": [
+    {
+      "name": "Ejercicio 04: bisabuelo/2",
+      "setup": "sudo apt-get install -y swi-prolog",
+      "run": "swipl -q -t 'run_tests(ej04_bisabuelo),halt(0)' -l tests/test_ejercicios.pl",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 05: madre_de_madre/2",
+      "setup": "",
+      "run": "swipl -q -t 'run_tests(ej05_madre_de_madre),halt(0)' -l tests/test_ejercicios.pl",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 07: es_anfibio/1",
+      "setup": "",
+      "run": "swipl -q -t 'run_tests(ej07_es_anfibio),halt(0)' -l tests/test_ejercicios.pl",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 08: no_vuela/1",
+      "setup": "",
+      "run": "swipl -q -t 'run_tests(ej08_no_vuela),halt(0)' -l tests/test_ejercicios.pl",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 10: libro_largo/1",
+      "setup": "",
+      "run": "swipl -q -t 'run_tests(ej10_libro_largo),halt(0)' -l tests/test_ejercicios.pl",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 13: primo/2",
+      "setup": "",
+      "run": "swipl -q -t 'run_tests(ej13_primo),halt(0)' -l tests/test_ejercicios.pl",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 10
+    },
+    {
+      "name": "Ejercicio 14: son_hermanos_entre_si/2",
+      "setup": "",
+      "run": "swipl -q -t 'run_tests(ej14_hermanos_entre_si),halt(0)' -l tests/test_ejercicios.pl",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Ejercicio 15: contar_generaciones/3",
+      "setup": "",
+      "run": "swipl -q -t 'run_tests(ej15_contar_generaciones),halt(0)' -l tests/test_ejercicios.pl",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 10
+    },
+    {
+      "name": "Ejercicio 17: aprobado/1 y desaprobado/1",
+      "setup": "",
+      "run": "swipl -q -t 'run_tests(ej17_notas),halt(0)' -l tests/test_ejercicios.pl",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 10
+    },
+    {
+      "name": "Ejercicio 18: es_familiar_directo/2",
+      "setup": "",
+      "run": "swipl -q -t 'run_tests(ej18_familiar_directo),halt(0)' -l tests/test_ejercicios.pl",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 10
+    }
+  ]
+}

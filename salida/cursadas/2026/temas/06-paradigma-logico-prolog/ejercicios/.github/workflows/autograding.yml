@@ -1,0 +1,43 @@
+name: Autograding Tests
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install SWI-Prolog
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y swi-prolog
+
+      - name: Run PLUnit test suite
+        run: swipl -l tests/test_ejercicios.pl
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          EJERCICIO04_BISABUELO_RESULTS: "${{steps.ejercicio04.outputs.result}}"
+          EJERCICIO05_MADRE_DE_MADRE_RESULTS: "${{steps.ejercicio05.outputs.result}}"
+          EJERCICIO07_ES_ANFIBIO_RESULTS: "${{steps.ejercicio07.outputs.result}}"
+          EJERCICIO08_NO_VUELA_RESULTS: "${{steps.ejercicio08.outputs.result}}"
+          EJERCICIO10_LIBRO_LARGO_RESULTS: "${{steps.ejercicio10.outputs.result}}"
+          EJERCICIO13_PRIMO_RESULTS: "${{steps.ejercicio13.outputs.result}}"
+          EJERCICIO14_HERMANOS_RESULTS: "${{steps.ejercicio14.outputs.result}}"
+          EJERCICIO15_GENERACIONES_RESULTS: "${{steps.ejercicio15.outputs.result}}"
+          EJERCICIO17_NOTAS_RESULTS: "${{steps.ejercicio17.outputs.result}}"
+          EJERCICIO18_FAMILIAR_RESULTS: "${{steps.ejercicio18.outputs.result}}"
+        with:
+          runners: ejercicio04,ejercicio05,ejercicio07,ejercicio08,ejercicio10,ejercicio13,ejercicio14,ejercicio15,ejercicio17,ejercicio18
