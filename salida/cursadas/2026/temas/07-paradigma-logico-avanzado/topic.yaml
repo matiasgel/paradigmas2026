@@ -20,3 +20,14 @@ artifacts:
   score: "score-pedagogico.md"
   faq: "faq-anticipado.md"
   slides_url: "slides/slides-url.txt"
+  guia_estudio_pdf: "guia-estudio.pdf"
+  minuta_pdf: "minuta.pdf"
+  guia_profesor_pdf: "guiaprofesor.pdf"
+  ejercicios_repo: "https://github.com/matiasgel/paradigmas-2026-tp07-prolog"
+  ejercicios_local: "ejercicios/"
+classroom_url: "https://classroom.github.com/classrooms/260723469-paradigmas-y-lenguajes-de-programacion-2026"
+tp_autograde:
+  ejercicios: 28
+  tests: 108
+  puntos_totales: 111
+  validacion_referencia: "108/108 passed"

@@ -530,7 +530,7 @@ Variante restringida de Prolog usada en:
 
 ## 6. Mapa de Filminas (≈150 filminas — 1 cada 1–2 min)
 
-Distribución tentativa para `class-writer` (el desglose final se decide al escribir la minuta):
+Distribución tentativa para la redacción de clase (el desglose final se decide al escribir la minuta):
 
 | Bloque | Min | Filminas estimadas | Rango |
 |--------|-----|--------------------|-------|
@@ -616,5 +616,5 @@ Distribución tentativa para `class-writer` (el desglose final se decide al escr
 
 ---
 
-*Tema 07 — Diseñado por: Lic. Marcos (topic-designer) — 2026-04-21*
+*Tema 07 — Diseño pedagógico — Paradigmas y Lenguajes de Programación 2026 — UNTdF — 2026-04-21*
 *Estado: **APROBADO** (auto-aprobación solicitada por docente)*

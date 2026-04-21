@@ -5,7 +5,7 @@
 > **Materia:** Paradigmas y Lenguajes de Programación 2026
 > **Docente:** Matías Gel — UNTDF / IDEI
 > **Duración de la clase:** 240 min | **Ciclo:** 2 de 2 del módulo III
-> **Autora:** Dra. Sofía (study-guide-writer) — 2026-04-21
+> **Fecha:** 2026-04-21
 
 ---
 
@@ -890,6 +890,6 @@ Una vez cerrado este tema:
 
 ---
 
-*Guía de estudio elaborada por Dra. Sofía (study-guide-writer) — 2026-04-21*
+*Guía de estudio — Paradigmas y Lenguajes de Programación 2026 — UNTdF — 2026-04-21*
 *Trazabilidad: `diseno.md` · `minuta.md` · `filminas.md` (158 slides)*
 *Fuentes: Sebesta, Gabbrielli & Martini, Louden, Sterling & Shapiro, The Power of Prolog*

@@ -3,7 +3,7 @@
 **Materia:** Paradigmas y Lenguajes de Programación 2026
 **Docente:** Matías Gel — UNTDF / IDEI
 **Duración:** 240 minutos | **Clase doble**
-**Generado por:** Dr. Roberto (class-writer) — 2026-04-21
+**Fecha:** 2026-04-21
 
 > **Uso:** esta minuta es el guion **operativo** del docente. Tiempos reales, frases clave, momentos socráticos, checkpoints de pizarra. Se lee de corrido durante la clase.
 
@@ -320,5 +320,5 @@ factorial(0,1). factorial(N,F) :- N>0, N1 is N-1, factorial(N1,F1), F is N*F1.
 
 ---
 
-*Minuta elaborada por Dr. Roberto (class-writer) — 2026-04-21*
+*Minuta — Paradigmas y Lenguajes de Programación 2026 — UNTdF — 2026-04-21*
 *Trazabilidad: `diseno.md` v2026-04-21 · `filminas.md` 158 slides · duración 240 min*

@@ -269,5 +269,5 @@ Conexión narrativa para el próximo: "Ahora que vieron **paradigmas** (imperati
 
 ---
 
-*Guía del profesor elaborada por Dr. Roberto (class-writer) — 2026-04-21*
+*Guía del profesor — Paradigmas y Lenguajes de Programación 2026 — UNTdF — 2026-04-21*
 *Autocontenida: todo lo que necesitás para dictar el tema está acá o referenciado.*

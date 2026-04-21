@@ -3,7 +3,7 @@
 **Materia:** Paradigmas y Lenguajes de Programación 2026
 **Docente:** Matías Gel — UNTDF / IDEI
 **Duración:** 240 minutos | **Clase:** doble (fusión de clases 2 y 3 del módulo III)
-**Generado por:** Dr. Roberto (class-writer) — 2026-04-21
+**Fecha:** 2026-04-21
 **Total:** ≈158 filminas — ritmo 1 cada 1–2 minutos
 
 ---
@@ -2756,5 +2756,5 @@ Es el lenguaje que cambia cómo pensás sobre los que sí usás."*
 
 ---
 
-*Tema 07 — Filminas escritas por: Dr. Roberto (class-writer) — 2026-04-21*
+*Tema 07 — Filminas — Paradigmas y Lenguajes de Programación 2026 — UNTdF — 2026-04-21*
 *Total: 158 filminas · 240 min · Auto-aprobado por el docente*
