@@ -304,6 +304,9 @@ def _parse_directive_pairs(text: str) -> dict[str, str]:
 
 def _parse_schema_directive(line: str, schema: dict[str, Any]) -> dict[str, Any] | None:
     stripped = line.strip()
+    # Soporta directivas envueltas en backticks: `@tipo: portada` → @tipo: portada
+    if stripped.startswith("`") and stripped.endswith("`") and len(stripped) > 2:
+        stripped = stripped[1:-1].strip()
     directives = schema.get("directives", {})
     for name, prefix in directives.items():
         if stripped.lower().startswith(str(prefix).lower()):

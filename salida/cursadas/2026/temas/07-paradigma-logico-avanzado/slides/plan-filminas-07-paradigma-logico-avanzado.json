@@ -4,23 +4,36 @@
     "title": "Tema 07 — Paradigma Lógico: la segunda mitad",
     "source": "filminas.md",
     "schema_version": "3.0.0",
-    "schema_path": "_edu\\templates\\filminas-schema.yaml",
-    "generated_at": "2026-04-21T12:36:38",
+    "schema_path": "_edu/templates/filminas-schema.yaml",
+    "generated_at": "2026-04-21T14:02:48",
     "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
     "total_slides": 158,
     "images_planned": 37
   },
+  "summary": {
+    "total_slides": 158,
+    "images_planned": 37,
+    "type_distribution": {
+      "portada": 2,
+      "tabla": 8,
+      "socratica": 4,
+      "concepto-mixto": 23,
+      "timeline": 1,
+      "concepto-abstracto": 16,
+      "codigo": 80,
+      "demo": 7,
+      "tabla-comparativa": 6,
+      "diagrama": 9,
+      "cierre": 2
+    }
+  },
   "slides": [
     {
       "id": "F-001",
-      "type": "concepto-abstracto",
+      "type": "portada",
       "title": "Tema 07 — Paradigma Lógico: la segunda mitad",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: portada`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -56,7 +69,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "portada"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -78,17 +93,14 @@
       "type": "tabla",
       "title": "¿Qué traemos de Clase 1?",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: tabla`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [],
       "tables": [
         "| Concepto | Recordatorio |\n|----------|--------------|\n| Hecho | `madre(ana, carlos).` |\n| Regla | `abuelo(X,Z) :- progenitor(X,Y), progenitor(Y,Z).` |\n| Consulta | `?- abuelo(ana, Z).` |\n| Término | átomo, número, variable, estructura |\n| Recursión | `ancestro(X,Y) :- progenitor(X,Y). ancestro(X,Y) :- progenitor(X,Z), ancestro(Z,Y).` |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -119,10 +131,6 @@
       "subtitle": "",
       "body_blocks": [
         {
-          "type": "text",
-          "content": "`@tipo: socratica`"
-        },
-        {
           "type": "list",
           "ordered": true,
           "items": [
@@ -147,7 +155,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "socratica"
+      },
       "asset_hints": [],
       "layout": {
         "title": "center-top",
@@ -166,14 +176,10 @@
     },
     {
       "id": "F-004",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "Lo que NO vimos todavía",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "text",
           "content": "Clase 1 dejó la **caja negra cerrada**:"
@@ -207,7 +213,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -226,20 +234,17 @@
     },
     {
       "id": "F-005",
-      "type": "tabla",
+      "type": "timeline",
       "title": "Mapa de la clase (240 min)",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: timeline`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [],
       "tables": [
         "| Min | Bloque |\n|-----|--------|\n| 0–10 | B0 Repaso |\n| 10–35 | B1 Unificación |\n| 35–60 | B2 Resolución SLD |\n| 60–85 | B3 Backtracking |\n| 85–105 | B4 Corte |\n| 105–120 | B5 Negación por falla |\n| 120–130 | ☕ Descanso + Ejercicio B6 |\n| 130–150 | B7 Aritmética |\n| 150–175 | B8 Listas |\n| 175–200 | B9 Recursión avanzada |\n| 200–220 | B10 Meta-predicados |\n| 220–240 | B11 Aplicaciones + B12 2026 + B13 Cierre |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "timeline"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -265,14 +270,10 @@
     },
     {
       "id": "F-006",
-      "type": "socratica",
+      "type": "concepto-abstracto",
       "title": "¿Qué es \"unificar\"?",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -298,7 +299,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "center-top",
@@ -320,17 +323,14 @@
       "type": "tabla",
       "title": "Los 4 casos de unificación",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: tabla`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [],
       "tables": [
         "| Caso | Ejemplo | Resultado |\n|------|---------|-----------|\n| **Átomos iguales** | `ana = ana` | éxito, sustitución `{}` |\n| **Variable libre** | `X = ana` | éxito, `{X/ana}` |\n| **Dos variables** | `X = Y` | éxito, `{X/Y}` (se unen) |\n| **Estructura** | `padre(A,B) = padre(juan,X)` | éxito, `{A/juan, B/X}` |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -359,12 +359,7 @@
       "type": "codigo",
       "title": "Cuándo falla",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [
         {
           "lang": "prolog",
@@ -372,7 +367,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -396,10 +393,6 @@
       "subtitle": "",
       "body_blocks": [
         {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
-        {
           "type": "list",
           "ordered": false,
           "items": [
@@ -421,7 +414,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -443,12 +438,7 @@
       "type": "codigo",
       "title": "Algoritmo de unificación (Robinson 1965)",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [
         {
           "lang": "text",
@@ -456,7 +446,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -475,14 +467,10 @@
     },
     {
       "id": "F-011",
-      "type": "concepto-mixto",
+      "type": "demo",
       "title": "Trazado paso a paso",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: demo`"
-        },
         {
           "type": "text",
           "content": "Unificar `padre(juan, hijo(pedro, X))` con `padre(Y, hijo(Z, ana))`:"
@@ -495,7 +483,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "demo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -514,14 +504,10 @@
     },
     {
       "id": "F-012",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "MGU: sustitución más general",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "text",
           "content": "Al unificar `f(X)` con `f(Y)`:"
@@ -561,7 +547,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -580,14 +568,10 @@
     },
     {
       "id": "F-013",
-      "type": "concepto-mixto",
+      "type": "demo",
       "title": "Unificación en uso — hechos",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: demo`"
-        },
         {
           "type": "text",
           "content": "Paso a paso para `madre(ana, X)`:\n1. Intenta `madre(ana, X) = madre(ana, carlos)` → `{X/carlos}` ✓\n2. Usuario pide más (`;`) → backtrack\n3. Intenta `madre(ana, X) = madre(ana, beatriz)` → `{X/beatriz}` ✓"
@@ -600,7 +584,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "demo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -619,14 +605,10 @@
     },
     {
       "id": "F-014",
-      "type": "concepto-mixto",
+      "type": "demo",
       "title": "Unificación en uso — reglas",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: demo`"
-        },
         {
           "type": "list",
           "ordered": true,
@@ -657,7 +639,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "demo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -676,14 +660,10 @@
     },
     {
       "id": "F-015",
-      "type": "tabla",
+      "type": "tabla-comparativa",
       "title": "`=` vs. `==`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: tabla-comparativa`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -699,7 +679,9 @@
       "tables": [
         "| Operador | Qué hace | Ejemplo | Resultado |\n|----------|----------|---------|-----------|\n| `X = Y` | Unificación (liga) | `?- X = 5.` | `X = 5` |\n| `X == Y` | Identidad estricta | `?- X == 5.` | `false` |\n| `X == Y` | (después de ligar) | `?- X = 5, X == 5.` | `true` |\n| `X \\= Y` | No unifica | `?- 1 \\= 2.` | `true` |\n| `X \\== Y` | No idénticos | `?- X \\== 5.` | `true` |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla-comparativa"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -725,14 +707,10 @@
     },
     {
       "id": "F-016",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`=..` (univ): descomponer términos",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -759,7 +737,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -784,10 +764,6 @@
       "body_blocks": [
         {
           "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
-        {
-          "type": "text",
           "content": "¿Qué devuelve?\n- **Prolog ISO:** debería fallar (hay ciclo: X = f(f(f(…))))\n- **SWI-Prolog por default:** `X = f(X).` ← ¡éxito! (crea término cíclico)"
         },
         {
@@ -808,7 +784,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -827,14 +805,10 @@
     },
     {
       "id": "F-018",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Forzar occurs-check",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Decisión de diseño: **occurs-check cuesta tiempo**. Los implementadores lo desactivan para velocidad. El estudiante avanzado lo activa cuando desarrolla."
@@ -851,7 +825,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -870,14 +846,10 @@
     },
     {
       "id": "F-019",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Variable anónima `_`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -900,7 +872,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -919,14 +893,10 @@
     },
     {
       "id": "F-020",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Aplicación: pattern matching",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -945,7 +915,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -964,14 +936,10 @@
     },
     {
       "id": "F-021",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Profundidad infinita (trampa)",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Esto suele ser un bug. Revisar el occurs-check o usar `write_canonical/1` para ver la estructura."
@@ -984,7 +952,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1003,14 +973,10 @@
     },
     {
       "id": "F-022",
-      "type": "concepto-mixto",
+      "type": "socratica",
       "title": "Ejercicio relámpago (30 s)",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: socratica`"
-        },
         {
           "type": "text",
           "content": "¿Qué imprime cada consulta?"
@@ -1033,7 +999,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "socratica"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1052,14 +1020,10 @@
     },
     {
       "id": "F-023",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Respuestas",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -1078,7 +1042,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1097,14 +1063,10 @@
     },
     {
       "id": "F-024",
-      "type": "socratica",
+      "type": "concepto-abstracto",
       "title": "¿Qué es SLD?",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -1126,7 +1088,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "center-top",
@@ -1148,17 +1112,14 @@
       "type": "tabla",
       "title": "Vocabulario",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: tabla`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [],
       "tables": [
         "| Término | Significado |\n|---------|-------------|\n| Goal | Objetivo a demostrar |\n| Resolvente | Conjunción de goals pendientes |\n| Cláusula | Hecho o regla del programa |\n| Sustitución θ | Mapeo variable → término |\n| Refutación | Demostración por contradicción |\n| Prueba | Cadena de sustituciones que vacía la resolvente |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1187,12 +1148,7 @@
       "type": "codigo",
       "title": "El algoritmo SLD (paso a paso)",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [
         {
           "lang": "text",
@@ -1200,7 +1156,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1219,14 +1177,10 @@
     },
     {
       "id": "F-027",
-      "type": "concepto-mixto",
+      "type": "demo",
       "title": "Ejemplo integrado",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: demo`"
-        },
         {
           "type": "text",
           "content": "Base:"
@@ -1247,7 +1201,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "demo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1266,15 +1222,10 @@
     },
     {
       "id": "F-028",
-      "type": "codigo",
+      "type": "diagrama",
       "title": "Árbol SLD — nodo raíz",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: diagrama`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [
         {
           "lang": "text",
@@ -1282,7 +1233,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "diagrama"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1301,15 +1254,10 @@
     },
     {
       "id": "F-029",
-      "type": "codigo",
+      "type": "diagrama",
       "title": "Árbol SLD — expansión izquierda",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: diagrama`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [
         {
           "lang": "text",
@@ -1317,7 +1265,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "diagrama"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1336,14 +1286,10 @@
     },
     {
       "id": "F-030",
-      "type": "concepto-mixto",
+      "type": "diagrama",
       "title": "Árbol SLD — rama exitosa",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: diagrama`"
-        },
         {
           "type": "text",
           "content": "Primera solución: **`N = laura`**."
@@ -1356,7 +1302,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "diagrama"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1381,10 +1329,6 @@
       "body_blocks": [
         {
           "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
-        {
-          "type": "text",
           "content": "Prolog siempre selecciona el **goal más a la izquierda** (leftmost)."
         },
         {
@@ -1407,7 +1351,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1426,14 +1372,10 @@
     },
     {
       "id": "F-032",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Orden malo = loop infinito",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Prolog expande `ancestro(X,Z)` indefinidamente antes de tocar el caso base."
@@ -1456,7 +1398,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1481,10 +1425,6 @@
       "body_blocks": [
         {
           "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
-        {
-          "type": "text",
           "content": "Prolog explora el árbol SLD en **profundidad** (*depth-first*) con backtracking cronológico."
         },
         {
@@ -1498,7 +1438,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1517,14 +1459,10 @@
     },
     {
       "id": "F-034",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "Regla de escritura",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "text",
           "content": "La **regla de escritura** (computation rule) = qué cláusula probar."
@@ -1540,7 +1478,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1565,10 +1505,6 @@
       "body_blocks": [
         {
           "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
-        {
-          "type": "text",
           "content": "Una **respuesta** de Prolog NO es \"encontré un valor\"."
         },
         {
@@ -1586,7 +1522,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1605,14 +1543,10 @@
     },
     {
       "id": "F-036",
-      "type": "concepto-mixto",
+      "type": "demo",
       "title": "Retorno con `;`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: demo`"
-        },
         {
           "type": "text",
           "content": "Cada `;` fuerza a Prolog a **rehacer la última elección** y buscar una demostración alternativa."
@@ -1629,7 +1563,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "demo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1648,14 +1584,10 @@
     },
     {
       "id": "F-037",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "¿Y si no hay ninguna demostración?",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Prolog **no dice \"no existe\"** — dice \"no pude demostrarlo con esta base\". Esta sutileza se desarrolla en B5 (negación por falla)."
@@ -1672,7 +1604,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1691,14 +1625,10 @@
     },
     {
       "id": "F-038",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "Resumen B2",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -1736,7 +1666,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1755,14 +1687,10 @@
     },
     {
       "id": "F-039",
-      "type": "socratica",
+      "type": "concepto-abstracto",
       "title": "¿Qué es el backtracking?",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
         {
           "type": "text",
           "content": "Cuando una rama del árbol SLD **falla**, Prolog **retrocede** hasta el último **punto de elección** y prueba la siguiente alternativa."
@@ -1778,7 +1706,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "center-top",
@@ -1797,14 +1727,10 @@
     },
     {
       "id": "F-040",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "Punto de elección",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "text",
           "content": "Se crea un **punto de elección** (*choice point*) cuando:\n1. Hay **más de una cláusula** que unifica con un goal, o\n2. Un goal tiene múltiples respuestas (hechos con mismo funtor)"
@@ -1820,7 +1746,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1842,12 +1770,7 @@
       "type": "codigo",
       "title": "Ejemplo canónico",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [
         {
           "lang": "prolog",
@@ -1855,7 +1778,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1874,14 +1799,10 @@
     },
     {
       "id": "F-042",
-      "type": "concepto-mixto",
+      "type": "demo",
       "title": "`fail`-driven loop",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: demo`"
-        },
         {
           "type": "text",
           "content": "Patrón clásico Prolog para \"iterar por todas las soluciones\":"
@@ -1902,7 +1823,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "demo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1921,14 +1844,10 @@
     },
     {
       "id": "F-043",
-      "type": "concepto-mixto",
+      "type": "diagrama",
       "title": "Árbol de búsqueda con bifurcación",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: diagrama`"
-        },
         {
           "type": "text",
           "content": "Base:"
@@ -1959,7 +1878,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "diagrama"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -1978,14 +1899,10 @@
     },
     {
       "id": "F-044",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Restricción con `\\=`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Cuando `B = C`, falla y backtrackea. Cuando son distintos, sigue."
@@ -1998,7 +1915,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2017,14 +1936,10 @@
     },
     {
       "id": "F-045",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "Anatomía del stack de backtracking",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "text",
           "content": "Prolog mantiene **dos stacks**:"
@@ -2054,7 +1969,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2073,14 +1990,10 @@
     },
     {
       "id": "F-046",
-      "type": "concepto-mixto",
+      "type": "diagrama",
       "title": "Visualización: ligadura → falla → deshacer",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: diagrama`"
-        },
         {
           "type": "text",
           "content": "Nada queda \"pegado\". Siempre empieza limpio."
@@ -2093,7 +2006,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "diagrama"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2112,15 +2027,10 @@
     },
     {
       "id": "F-047",
-      "type": "codigo",
+      "type": "demo",
       "title": "Múltiples soluciones con reglas",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: demo`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [
         {
           "lang": "prolog",
@@ -2128,7 +2038,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "demo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2147,14 +2059,10 @@
     },
     {
       "id": "F-048",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "Eficiencia y backtracking",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "text",
           "content": "Backtracking exhaustivo = **explosión combinatoria**."
@@ -2192,7 +2100,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2211,14 +2121,10 @@
     },
     {
       "id": "F-049",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "¿Cuándo NO hace backtracking?",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Menos choice points = ejecución más rápida. El compilador Prolog detecta \"determinismo\" y optimiza (WAM)."
@@ -2231,7 +2137,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2250,14 +2158,10 @@
     },
     {
       "id": "F-050",
-      "type": "concepto-mixto",
+      "type": "diagrama",
       "title": "Árbol de backtracking — ejemplo no trivial",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: diagrama`"
-        },
         {
           "type": "text",
           "content": "Consulta `?- conoce(ana, Q).` produce:\n- beto, carla (amigos directos)\n- dario, elena (amigos de beto)\n- fran (amiga de carla)"
@@ -2274,7 +2178,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "diagrama"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2293,14 +2199,10 @@
     },
     {
       "id": "F-051",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Infinito en backtracking",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Prevención:\n- Llevar lista de visitados (se ve en B9)\n- Usar `tabling` (extensión SWI)"
@@ -2313,7 +2215,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2336,10 +2240,6 @@
       "title": "El costo oculto del backtracking",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -2365,7 +2265,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2384,14 +2286,10 @@
     },
     {
       "id": "F-053",
-      "type": "tabla",
+      "type": "tabla-comparativa",
       "title": "Backtracking vs. streams",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: tabla-comparativa`"
-        },
         {
           "type": "text",
           "content": "Son duales: un generador Python ≈ un predicado Prolog con múltiples respuestas."
@@ -2401,7 +2299,9 @@
       "tables": [
         "| | Backtracking Prolog | Generadores/Streams |\n|---|---|---|\n| Control | Automático | Explícito (`yield`) |\n| Memoria | Trail | Frame de iterador |\n| Reuso | Recomputación | Memoización posible |\n| Paralelismo | No trivial | `async`/`await` |\n| Ejemplo | `?- member(X, L).` | `for x in L` |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla-comparativa"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2430,17 +2330,14 @@
       "type": "tabla",
       "title": "Cheatsheet de backtracking",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: tabla`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [],
       "tables": [
         "| Truco | Sintaxis |\n|-------|----------|\n| Forzar siguiente solución | `;` en REPL |\n| Parar en la primera | `once(Goal)` |\n| Colectar todas | `findall(T, G, L)` |\n| Ignorar fracaso | `catch(G, _, true)` |\n| Backtrack forzado | `fail` |\n| Sin backtracking | `!` (siguiente bloque) |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2472,10 +2369,6 @@
       "body_blocks": [
         {
           "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
-        {
-          "type": "text",
           "content": "`!` (*cut*) = compromiso irrevocable con la rama actual."
         },
         {
@@ -2489,7 +2382,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2508,14 +2403,10 @@
     },
     {
       "id": "F-056",
-      "type": "socratica",
+      "type": "concepto-mixto",
       "title": "¿Por qué cortar?",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "text",
           "content": "Tres razones:"
@@ -2545,7 +2436,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "center-top",
@@ -2564,14 +2457,10 @@
     },
     {
       "id": "F-057",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`max/3` — caso canónico",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Sin corte (correcto pero con choice point de sobra):"
@@ -2596,7 +2485,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2615,14 +2506,10 @@
     },
     {
       "id": "F-058",
-      "type": "tabla",
+      "type": "tabla-comparativa",
       "title": "Corte verde vs. rojo",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: tabla-comparativa`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -2638,7 +2525,9 @@
       "tables": [
         "| Tipo | Efecto | Si lo quito… |\n|------|--------|--------------|\n| **Verde** | Solo eficiencia | El programa sigue funcionando igual |\n| **Rojo** | Cambia la lógica | El programa responde distinto o mal |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla-comparativa"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2664,14 +2553,10 @@
     },
     {
       "id": "F-059",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Ejemplo de corte rojo",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -2698,7 +2583,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2717,14 +2604,10 @@
     },
     {
       "id": "F-060",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`if-then-else` explícito",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "SWI-Prolog soporta sintaxis explícita:"
@@ -2751,7 +2634,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2770,14 +2655,10 @@
     },
     {
       "id": "F-061",
-      "type": "concepto-mixto",
+      "type": "diagrama",
       "title": "Corte y backtracking: el efecto barrera",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: diagrama`"
-        },
         {
           "type": "text",
           "content": "El `!` divide la cláusula en dos mitades. Después, no se puede volver a la izquierda."
@@ -2790,7 +2671,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "diagrama"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2809,14 +2692,10 @@
     },
     {
       "id": "F-062",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Corte dentro de un `or`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Si `q(a)` unifica, el `!` corta:\n- NO probar más cláusulas de `q`\n- NO probar la 2ª cláusula de `p`"
@@ -2833,7 +2712,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2852,14 +2733,10 @@
     },
     {
       "id": "F-063",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Corte, `!` y negación",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Implementación clásica de negación por falla:"
@@ -2880,7 +2757,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2899,14 +2778,10 @@
     },
     {
       "id": "F-064",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Corte rojo: el contraejemplo ejecutable",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -2957,7 +2832,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -2979,17 +2856,14 @@
       "type": "tabla",
       "title": "Reglas de uso responsable del corte",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: tabla`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [],
       "tables": [
         "| Regla | Justificación |\n|-------|---------------|\n| Preferir `(-> ;)` | Más local y legible |\n| Sólo corte **verde** cuando se pueda | Preserva declaratividad |\n| Documentar corte rojo con comentario | Debugging futuro |\n| No usar `!` en predicados de librería | Puede romper invariantes |\n| Probar sin `!` primero | Detectar falta de casos |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3015,14 +2889,10 @@
     },
     {
       "id": "F-066",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "Resumen B4",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -3048,7 +2918,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3073,10 +2945,6 @@
       "body_blocks": [
         {
           "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
-        {
-          "type": "text",
           "content": "`\\+ Goal` = **\"Goal no es demostrable con la base actual\"**."
         },
         {
@@ -3094,7 +2962,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3116,12 +2986,7 @@
       "type": "codigo",
       "title": "Ejemplo inocuo",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [
         {
           "lang": "prolog",
@@ -3129,7 +2994,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3153,10 +3020,6 @@
       "subtitle": "",
       "body_blocks": [
         {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
-        {
           "type": "list",
           "ordered": false,
           "items": [
@@ -3178,7 +3041,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3197,14 +3062,10 @@
     },
     {
       "id": "F-070",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`\\+` con variables libres — la trampa",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -3223,7 +3084,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3242,14 +3105,10 @@
     },
     {
       "id": "F-071",
-      "type": "concepto-mixto",
+      "type": "concepto-abstracto",
       "title": "`\\+` no liga variables",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
         {
           "type": "text",
           "content": "Como `\\+` prueba por **fracaso**, si tiene éxito no hay sustitución para recordar — las variables dentro **no quedan ligadas**."
@@ -3276,7 +3135,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3295,14 +3156,10 @@
     },
     {
       "id": "F-072",
-      "type": "tabla",
+      "type": "tabla-comparativa",
       "title": "`\\+` vs. `not/1`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: tabla-comparativa`"
-        },
         {
           "type": "text",
           "content": "Son semánticamente iguales. Usar `\\+` por compatibilidad ISO."
@@ -3312,7 +3169,9 @@
       "tables": [
         "| Operador | Origen | Estándar |\n|----------|--------|----------|\n| `\\+` | ISO Prolog | ✓ preferido |\n| `not/1` | Edinburgh Prolog (legado) | Deprecado |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla-comparativa"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3338,14 +3197,10 @@
     },
     {
       "id": "F-073",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Negación correcta: `dif/2`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "SWI-Prolog y muchas implementaciones tienen:"
@@ -3362,7 +3217,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3381,14 +3238,10 @@
     },
     {
       "id": "F-074",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Ejemplo combinado",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Lectura: \"Un animal es terrestre si no es acuático.\""
@@ -3401,7 +3254,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3420,14 +3275,10 @@
     },
     {
       "id": "F-075",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "Resumen B5",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -3457,7 +3308,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3476,14 +3329,10 @@
     },
     {
       "id": "F-076",
-      "type": "concepto-abstracto",
+      "type": "portada",
       "title": "☕ Descanso 10 min",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: portada`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -3519,7 +3368,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "portada"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3538,14 +3389,10 @@
     },
     {
       "id": "F-077",
-      "type": "demo",
+      "type": "socratica",
       "title": "Ejercicio colaborativo — reglas",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: socratica`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -3571,7 +3418,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "socratica"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3590,14 +3439,10 @@
     },
     {
       "id": "F-078",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Ejercicio 1 — Viajes compartidos",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Base:"
@@ -3624,7 +3469,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3643,14 +3490,10 @@
     },
     {
       "id": "F-079",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Ejercicio 1 — solución",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Trazado:\n1. `viaja(ana, parana)` → D=parana → `viaja(Q, parana)` → Q=carla (no ana, por `\\=`)\n2. `viaja(ana, rosario)` → D=rosario → `viaja(Q, rosario)` → Q=beto"
@@ -3663,7 +3506,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3688,10 +3533,6 @@
       "body_blocks": [
         {
           "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
-        {
-          "type": "text",
           "content": "Explicar la diferencia:"
         },
         {
@@ -3710,7 +3551,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3729,14 +3572,10 @@
     },
     {
       "id": "F-081",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Ejercicio 2 — respuesta",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -3755,7 +3594,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3774,14 +3615,10 @@
     },
     {
       "id": "F-082",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Ejercicio 3 — signo",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Reescribir con `!` y con `(-> ;)`:"
@@ -3798,7 +3635,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3817,14 +3656,10 @@
     },
     {
       "id": "F-083",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Ejercicio 3 — soluciones",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Con `!`:"
@@ -3855,7 +3690,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3874,14 +3711,10 @@
     },
     {
       "id": "F-084",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "¡Momento incómodo!",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Prolog **no evalúa expresiones** por defecto. Las trata como **términos**."
@@ -3898,7 +3731,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3923,10 +3758,6 @@
       "body_blocks": [
         {
           "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
-        {
-          "type": "text",
           "content": "`X is Expresión` =\n1. Evalúa `Expresión` aritméticamente\n2. Unifica el resultado con `X`"
         },
         {
@@ -3936,7 +3767,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -3955,14 +3788,10 @@
     },
     {
       "id": "F-086",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Errores comunes con `is/2`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -3981,7 +3810,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4006,10 +3837,6 @@
       "body_blocks": [
         {
           "type": "text",
-          "content": "`@tipo: tabla`"
-        },
-        {
-          "type": "text",
           "content": "Evaluados por `is/2`, `=:=`, `<`, `>`, `=<`, `>=`."
         }
       ],
@@ -4017,7 +3844,9 @@
       "tables": [
         "| Operador | Significado |\n|----------|-------------|\n| `+ - * /` | Suma, resta, mult, división (float) |\n| `//` | División entera |\n| `mod` | Resto |\n| `**` o `^` | Potencia |\n| `abs(X)` | Valor absoluto |\n| `sqrt(X)` | Raíz cuadrada |\n| `sin/cos/tan` | Trig |\n| `min(X,Y) max(X,Y)` | Min/max |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4043,14 +3872,10 @@
     },
     {
       "id": "F-088",
-      "type": "tabla",
+      "type": "tabla-comparativa",
       "title": "Comparadores aritméticos",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: tabla-comparativa`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -4066,7 +3891,9 @@
       "tables": [
         "| Operador | Evalúa lado izq. | Evalúa lado der. | Tipo |\n|----------|------------------|------------------|------|\n| `=:=` | ✓ | ✓ | Igualdad numérica |\n| `=\\=` | ✓ | ✓ | Distinto numérico |\n| `<  >  =<  >=` | ✓ | ✓ | Comparación |\n| `=` | ✗ (unifica) | ✗ (unifica) | Unificación estructural |\n| `==` | ✗ | ✗ | Identidad estructural |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla-comparativa"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4095,12 +3922,7 @@
       "type": "codigo",
       "title": "Demos relámpago",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [
         {
           "lang": "prolog",
@@ -4108,7 +3930,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4127,14 +3951,10 @@
     },
     {
       "id": "F-090",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Factorial recursivo",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -4161,7 +3981,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4180,14 +4002,10 @@
     },
     {
       "id": "F-091",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Anti-patrón: no evaluar",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -4206,7 +4024,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4225,14 +4045,10 @@
     },
     {
       "id": "F-092",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Fibonacci",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Ejecución exponencial sin memoización (2ⁿ)."
@@ -4245,7 +4061,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4264,14 +4082,10 @@
     },
     {
       "id": "F-093",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Versión con acumulador (lineal)",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Técnica que reaparece en B9 con listas."
@@ -4284,7 +4098,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4303,14 +4119,10 @@
     },
     {
       "id": "F-094",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`succ/2` como alternativa",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "`succ/2` es una **relación reversible** entre sucesor y predecesor de naturales. Funciona bidireccional — `is/2` no."
@@ -4323,7 +4135,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4342,14 +4156,10 @@
     },
     {
       "id": "F-095",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "CLP(FD): aritmética reversible",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Para aritmética *declarativa* y reversible, SWI tiene `library(clpfd)`:"
@@ -4372,7 +4182,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4391,14 +4203,10 @@
     },
     {
       "id": "F-096",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "Resumen B7",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -4428,7 +4236,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4452,10 +4262,6 @@
       "subtitle": "",
       "body_blocks": [
         {
-          "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
-        {
           "type": "list",
           "ordered": false,
           "items": [
@@ -4476,7 +4282,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4498,17 +4306,14 @@
       "type": "tabla",
       "title": "Notación",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: tabla`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [],
       "tables": [
         "| Sintaxis | Significado |\n|----------|-------------|\n| `[]` | Lista vacía |\n| `[a]` | Un elemento |\n| `[a, b, c]` | Tres elementos |\n| `[H \\| T]` | Cabeza `H`, cola `T` |\n| `[A, B \\| T]` | Dos primeros + resto |\n| `[a, b, c \\| T]` | Tres primeros + resto |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4534,14 +4339,10 @@
     },
     {
       "id": "F-099",
-      "type": "concepto-mixto",
+      "type": "diagrama",
       "title": "La estructura interna",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: diagrama`"
-        },
         {
           "type": "text",
           "content": "`[1, 2, 3]` es azúcar sintáctico de:"
@@ -4584,7 +4385,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "diagrama"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4606,12 +4409,7 @@
       "type": "codigo",
       "title": "Pattern matching con listas",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [
         {
           "lang": "prolog",
@@ -4619,7 +4417,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4638,14 +4438,10 @@
     },
     {
       "id": "F-101",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Lista vacía vs. no vacía",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Patrón base de cualquier recursión sobre listas."
@@ -4658,7 +4454,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4677,14 +4475,10 @@
     },
     {
       "id": "F-102",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`length/2`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Built-in en SWI, pero implementarla ayuda a entender la estructura."
@@ -4697,7 +4491,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4716,14 +4512,10 @@
     },
     {
       "id": "F-103",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`member/2`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -4742,7 +4534,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4761,14 +4555,10 @@
     },
     {
       "id": "F-104",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`append/3` — la joya",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -4787,7 +4577,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4806,14 +4598,10 @@
     },
     {
       "id": "F-105",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`append` como generador",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Una sola definición → decenas de usos. Esto es lo que hace Prolog seductor."
@@ -4826,7 +4614,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4848,12 +4638,7 @@
       "type": "codigo",
       "title": "`last/2` y `nth0/3`",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [
         {
           "lang": "prolog",
@@ -4861,7 +4646,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4880,14 +4667,10 @@
     },
     {
       "id": "F-107",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`msort/2` y `sort/2`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Más útiles de lo que parecen — sirven para “conjuntos” pragmáticos."
@@ -4900,7 +4683,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4919,14 +4704,10 @@
     },
     {
       "id": "F-108",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Mapas / listas de pares",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "El operador `-/2` es el `Pair` de Prolog. No tiene semántica propia — es solo un término con buen aspecto."
@@ -4949,7 +4730,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -4968,14 +4751,10 @@
     },
     {
       "id": "F-109",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Listas anidadas",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Las listas anidadas se recorren con recursión doble."
@@ -4988,7 +4767,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5007,14 +4788,10 @@
     },
     {
       "id": "F-110",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`forall/2` y `between/3`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "`forall/2` = \"para todo X tal que P, Q se cumple\". Alternativa limpia a `fail`-driven loop."
@@ -5027,7 +4804,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5046,14 +4825,10 @@
     },
     {
       "id": "F-111",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Construyendo listas",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Ineficiente por el `append`. Versión lineal se ve en B9."
@@ -5066,7 +4841,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5085,14 +4862,10 @@
     },
     {
       "id": "F-112",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "Resumen B8",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -5122,7 +4895,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5141,14 +4916,10 @@
     },
     {
       "id": "F-113",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Patrón de recursión básico",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Toda recursión sobre listas tiene la forma:"
@@ -5165,7 +4936,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5184,14 +4957,10 @@
     },
     {
       "id": "F-114",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Recursión simple — `suma_lista/2`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -5218,7 +4987,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5237,14 +5008,10 @@
     },
     {
       "id": "F-115",
-      "type": "concepto-mixto",
+      "type": "diagrama",
       "title": "Problema de stack",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: diagrama`"
-        },
         {
           "type": "text",
           "content": "Con listas largas → **stack overflow**. Necesitamos **acumulador**."
@@ -5257,7 +5024,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "diagrama"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5276,14 +5045,10 @@
     },
     {
       "id": "F-116",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Recursión con acumulador — `suma`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Ahora la operación final está **antes** de la llamada recursiva → **last-call optimization**."
@@ -5296,7 +5061,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5321,10 +5088,6 @@
       "body_blocks": [
         {
           "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
-        {
-          "type": "text",
           "content": "Cuando la **última** llamada de una cláusula es recursiva Y no hay choice points pendientes, el motor reutiliza el stack frame."
         },
         {
@@ -5338,7 +5101,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5357,14 +5122,10 @@
     },
     {
       "id": "F-118",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Reverse ingenuo vs. con acumulador",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Ingenuo O(n²):"
@@ -5395,7 +5156,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5414,14 +5177,10 @@
     },
     {
       "id": "F-119",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Mapeo — `doble/2`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Patrón `map` de programación funcional, expresado directamente en Prolog."
@@ -5434,7 +5193,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5453,14 +5214,10 @@
     },
     {
       "id": "F-120",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Filtrado — `soloPares/2`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Nota el `!` verde: evita probar la segunda cláusula si ya entró por la primera."
@@ -5473,7 +5230,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5492,14 +5251,10 @@
     },
     {
       "id": "F-121",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`maplist/2` y `maplist/3`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Primitivas de orden superior built-in:"
@@ -5516,7 +5271,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5535,14 +5292,10 @@
     },
     {
       "id": "F-122",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`foldl/4` y `foldl/5`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Equivalente funcional:\n- Haskell: `foldl (+) 0 [1,2,3,4]`\n- TypeScript: `[1,2,3,4].reduce((a,x) => a+x, 0)`"
@@ -5555,7 +5308,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5574,14 +5329,10 @@
     },
     {
       "id": "F-123",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Evitar ciclos con visitados",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Solución: llevar **lista de visitados**:"
@@ -5598,7 +5349,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5617,14 +5370,10 @@
     },
     {
       "id": "F-124",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Recursión de árboles",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Recursión estructural directa — el matching hace el trabajo."
@@ -5637,7 +5386,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5656,14 +5407,10 @@
     },
     {
       "id": "F-125",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Debugging recursión",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Comandos:\n- `trace` / `notrace`\n- `spy/1` — poner spy point en un predicado\n- `leash/1` — controlar qué puertos paran"
@@ -5676,7 +5423,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5695,14 +5444,10 @@
     },
     {
       "id": "F-126",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "Resumen B9",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -5732,7 +5477,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5751,14 +5498,10 @@
     },
     {
       "id": "F-127",
-      "type": "socratica",
+      "type": "concepto-abstracto",
       "title": "¿Qué es un meta-predicado?",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -5780,7 +5523,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "center-top",
@@ -5799,14 +5544,10 @@
     },
     {
       "id": "F-128",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`findall/3` — el workhorse",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Colecta TODAS las instancias de `Template` para las que `Goal` es verdadero."
@@ -5827,7 +5568,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5846,14 +5589,10 @@
     },
     {
       "id": "F-129",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`bagof/3`",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Diferencia clave con `findall`: **falla** si la bolsa queda vacía."
@@ -5866,7 +5605,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5889,10 +5630,6 @@
       "title": "`setof/3` y comparación final",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -5949,7 +5686,9 @@
       "tables": [
         "| Operador | Consulta | Resultado | Si no hay soluciones |\n|----------|----------|-----------|----------------------|\n| `findall/3` | `findall(C, color(C), L)` | `[rojo, verde, rojo]` | `L = []` (éxito) |\n| `bagof/3`   | `bagof(C, color(C), L)`   | `[rojo, verde, rojo]` | **falla** |\n| `setof/3`   | `setof(C, color(C), L)`   | `[rojo, verde]` | **falla** |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -5975,14 +5714,10 @@
     },
     {
       "id": "F-131",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Agrupar con `bagof` + variable libre",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Devuelve una bolsa **por cada valor de la variable libre** `Lenguaje`."
@@ -5995,7 +5730,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6014,14 +5751,10 @@
     },
     {
       "id": "F-132",
-      "type": "tabla",
+      "type": "tabla-comparativa",
       "title": "Comparación findall / bagof / setof",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: tabla-comparativa`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -6037,7 +5770,9 @@
       "tables": [
         "| Aspecto | `findall/3` | `bagof/3` | `setof/3` |\n|---------|:---:|:---:|:---:|\n| Sin soluciones | `[]` | falla | falla |\n| Duplicados | sí | sí | no |\n| Orden | preserva | preserva | ordenado |\n| Agrupa por vars libres | no | sí | sí |\n| `^` para cuantificar | — | sí | sí |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla-comparativa"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6063,14 +5798,10 @@
     },
     {
       "id": "F-133",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`call/N` — invocación dinámica",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "`call/N` permite invocar predicados cuyo nombre solo se conoce en runtime — el mecanismo de HOF."
@@ -6083,7 +5814,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6102,14 +5835,10 @@
     },
     {
       "id": "F-134",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Ejemplo integrador: promedio de edades",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Combina:\n- `findall/3` → colectar\n- `length/2` → contar\n- `sum_list/2` → sumar\n- `is/2` → calcular"
@@ -6122,7 +5851,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6141,14 +5872,10 @@
     },
     {
       "id": "F-135",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "`aggregate_all/3` (SWI)",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Wrapper limpio sobre `findall` + aritmética. Menos plumbing."
@@ -6161,7 +5888,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6180,14 +5909,10 @@
     },
     {
       "id": "F-136",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "Resumen B10",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -6217,7 +5942,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6242,16 +5969,14 @@
       "body_blocks": [
         {
           "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
-        {
-          "type": "text",
           "content": "Prolog es ideal cuando:\n- Modelas **relaciones**, no transformaciones\n- Necesitas **búsqueda exhaustiva** con backtracking\n- El problema es **declarativo** (restricciones)\n- Querés **una sola base** para múltiples consultas"
         }
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6270,14 +5995,10 @@
     },
     {
       "id": "F-138",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Aplicación 1: Coloreo de mapas",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -6296,7 +6017,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6315,14 +6038,10 @@
     },
     {
       "id": "F-139",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Aplicación 2: Sudoku en 4 líneas",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -6341,7 +6060,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6363,12 +6084,7 @@
       "type": "codigo",
       "title": "Aplicación 3: Base deductiva de vuelos",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [
         {
           "lang": "prolog",
@@ -6376,7 +6092,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6395,14 +6113,10 @@
     },
     {
       "id": "F-141",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "La misma base, varias consultas",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Una base → infinitas consultas. **Ese** es el superpoder de Prolog."
@@ -6415,7 +6129,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6437,12 +6153,7 @@
       "type": "codigo",
       "title": "Aplicación 4: N-reinas (planteo)",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [
         {
           "lang": "prolog",
@@ -6450,7 +6161,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6469,14 +6182,10 @@
     },
     {
       "id": "F-143",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Aplicación 5: Parser con DCG",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "DCG (*Definite Clause Grammars*) = sintaxis limpia para parsers lógicos."
@@ -6489,7 +6198,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6508,14 +6219,10 @@
     },
     {
       "id": "F-144",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Aplicación 6: Diagnóstico médico",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "MYCIN (1970s) y sucesores se construyeron sobre variantes de este patrón."
@@ -6528,7 +6235,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6547,14 +6256,10 @@
     },
     {
       "id": "F-145",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Aplicación 7: Planificación",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "La base del paradigma *STRIPS* y buena parte de la IA clásica de planificación."
@@ -6567,7 +6272,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6586,14 +6293,10 @@
     },
     {
       "id": "F-146",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Aplicación 8: Sistema experto",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Sistemas de recomendación con reglas explicables — **explainable AI** bien temprana."
@@ -6606,7 +6309,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6625,14 +6330,10 @@
     },
     {
       "id": "F-147",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Aplicación 9: Grafo de conocimiento",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Ontologías, RDF, OWL — todas tienen este patrón de fondo."
@@ -6645,7 +6346,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6664,14 +6367,10 @@
     },
     {
       "id": "F-148",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Aplicación 10: Restricciones laborales",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Asignación de recursos con restricciones — **scheduling** clásico."
@@ -6684,7 +6383,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6703,14 +6404,10 @@
     },
     {
       "id": "F-149",
-      "type": "socratica",
+      "type": "concepto-mixto",
       "title": "¿Qué tienen en común?",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "text",
           "content": "Todas las aplicaciones usan:\n1. **Una base** de hechos/reglas (conocimiento del dominio)\n2. **Consultas múltiples** sobre la misma base\n3. **Backtracking** para enumerar alternativas\n4. Opcional: **restricciones** (CLP) para problemas NP"
@@ -6722,7 +6419,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "center-top",
@@ -6741,14 +6440,10 @@
     },
     {
       "id": "F-150",
-      "type": "socratica",
+      "type": "concepto-abstracto",
       "title": "¿Está vivo Prolog en 2026?",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -6792,7 +6487,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "center-top",
@@ -6811,14 +6508,10 @@
     },
     {
       "id": "F-151",
-      "type": "concepto-mixto",
+      "type": "codigo",
       "title": "Datalog: el hijo exitoso",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: codigo`"
-        },
         {
           "type": "text",
           "content": "Diferencias con Prolog:\n- Sin términos compuestos ni listas\n- Sin corte ni negación por falla (en Datalog puro)\n- **Terminación garantizada** (para bases finitas)\n- Evaluación bottom-up (más eficiente para bases grandes)"
@@ -6835,7 +6528,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "codigo"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6860,10 +6555,6 @@
       "body_blocks": [
         {
           "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
-        {
-          "type": "text",
           "content": "Frameworks 2024–2026:\n- **DeepProbLog** (Manhaeve et al.)\n- **SymbolicAI** (Dinu et al.)\n- **AlphaProof** (DeepMind, 2024)"
         },
         {
@@ -6878,7 +6569,9 @@
         }
       ],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6900,17 +6593,14 @@
       "type": "tabla",
       "title": "Implementaciones modernas",
       "subtitle": "",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: tabla`"
-        }
-      ],
+      "body_blocks": [],
       "code_blocks": [],
       "tables": [
         "| Prolog | Año | Destacable |\n|--------|-----|-----------|\n| **SWI-Prolog** | 1987–2026 | Estándar de facto, ISO, comunidad activa |\n| **Scryer Prolog** | 2020–2026 | Escrito en Rust, ISO estricto, WASM |\n| **Trealla Prolog** | 2021– | C, minimalista, server-side |\n| **Tau Prolog** | 2017– | JavaScript, Prolog en el navegador |\n| **XSB** | 1990– | `tabling` potente, Datalog++ |\n| **Ciao** | 1996– | Modular, análisis estático |"
       ],
-      "directives": {},
+      "directives": {
+        "type": "tabla"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6941,10 +6631,6 @@
       "subtitle": "",
       "body_blocks": [
         {
-          "type": "text",
-          "content": "`@tipo: concepto-abstracto`"
-        },
-        {
           "type": "list",
           "ordered": false,
           "items": [
@@ -6973,7 +6659,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-abstracto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -6992,14 +6680,10 @@
     },
     {
       "id": "F-155",
-      "type": "concepto-abstracto",
+      "type": "cierre",
       "title": "Síntesis en 5 puntos",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: cierre`"
-        },
         {
           "type": "list",
           "ordered": true,
@@ -7029,7 +6713,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "cierre"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -7048,14 +6734,10 @@
     },
     {
       "id": "F-156",
-      "type": "concepto-abstracto",
+      "type": "concepto-mixto",
       "title": "TP del tema",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: concepto-mixto`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -7095,7 +6777,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "concepto-mixto"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
@@ -7119,10 +6803,6 @@
       "subtitle": "",
       "body_blocks": [
         {
-          "type": "text",
-          "content": "`@tipo: socratica`"
-        },
-        {
           "type": "list",
           "ordered": false,
           "items": [
@@ -7143,7 +6823,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "socratica"
+      },
       "asset_hints": [],
       "layout": {
         "title": "center-top",
@@ -7162,14 +6844,10 @@
     },
     {
       "id": "F-158",
-      "type": "concepto-abstracto",
+      "type": "cierre",
       "title": "Gracias",
       "subtitle": "",
       "body_blocks": [
-        {
-          "type": "text",
-          "content": "`@tipo: cierre`"
-        },
         {
           "type": "list",
           "ordered": false,
@@ -7237,7 +6915,9 @@
       ],
       "code_blocks": [],
       "tables": [],
-      "directives": {},
+      "directives": {
+        "type": "cierre"
+      },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
