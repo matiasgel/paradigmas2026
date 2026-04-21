@@ -1909,20 +1909,38 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
         all_reqs.extend(reqs)
 
     BATCH = 50
+    # Google Slides API: 60 write requests/min/user → spacing de 1.1 s entre lotes
+    BATCH_DELAY = 1.1
+    MAX_RETRIES = 5
     total = len(all_reqs)
     failed_batches: list[str] = []
-    print(f"  Enviando {total} requests en lotes de {BATCH} …")
+    n_batches = (total + BATCH - 1) // BATCH
+    print(f"  Enviando {total} requests en {n_batches} lotes de {BATCH} (delay={BATCH_DELAY}s) …")
     for i in range(0, total, BATCH):
         batch = all_reqs[i : i + BATCH]
-        label = f"Lote {i // BATCH + 1}/{(total + BATCH - 1) // BATCH}"
-        try:
-            slides_svc.presentations().batchUpdate(
-                presentationId=pres_id, body={"requests": batch}
-            ).execute()
-            print(f"  {label} ✓")
-        except Exception as exc:
-            print(f"  ⚠️  Error en {label}: {exc}")
-            failed_batches.append(f"{label}: {exc}")
+        label = f"Lote {i // BATCH + 1}/{n_batches}"
+        for attempt in range(1, MAX_RETRIES + 1):
+            try:
+                slides_svc.presentations().batchUpdate(
+                    presentationId=pres_id, body={"requests": batch}
+                ).execute()
+                print(f"  {label} ✓")
+                break
+            except Exception as exc:
+                err_str = str(exc)
+                if "429" in err_str and attempt < MAX_RETRIES:
+                    wait = BATCH_DELAY * (2 ** attempt)
+                    print(f"  ⏳ {label} — rate limit, reintento {attempt}/{MAX_RETRIES - 1} en {wait:.0f}s …")
+                    time.sleep(wait)
+                else:
+                    print(f"  ⚠️  Error en {label}: {exc}")
+                    failed_batches.append(f"{label}: {exc}")
+                    break
+        else:
+            pass  # handled inside loop
+        # Pausa entre lotes para respetar quota
+        if i + BATCH < total:
+            time.sleep(BATCH_DELAY)
 
     if failed_batches:
         print(f"  ⚠️  {len(failed_batches)} lote(s) fallaron — la presentación quedó incompleta:")
