@@ -1,33 +1,14 @@
 {
-  "$schema_version": "plan-filminas/v3",
   "meta": {
     "topic_id": "07-paradigma-logico-avanzado",
     "title": "Tema 07 — Paradigma Lógico: la segunda mitad",
     "source": "filminas.md",
-    "generated_at": "2026-04-21T01:52:17",
+    "schema_version": "3.0.0",
+    "schema_path": "_edu\\templates\\filminas-schema.yaml",
+    "generated_at": "2026-04-21T12:36:38",
     "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
-    "topics_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas",
-    "topic_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas/07-paradigma-logico-avanzado",
-    "design_system_path": "_edu/slides-config.yaml",
-    "pipeline_runtime_path": "_edu/slides-pipeline.json",
-    "schema_registry_path": "_edu/schemas/schema-registry.json"
-  },
-  "summary": {
     "total_slides": 158,
-    "images_planned": 37,
-    "tables_planned": 15,
-    "code_slides": 105,
-    "status": "READY",
-    "pending_types": 0,
-    "pending_prompts": 0,
-    "type_distribution": {
-      "concepto-abstracto": 28,
-      "tabla": 15,
-      "socratica": 9,
-      "codigo": 13,
-      "concepto-mixto": 92,
-      "demo": 1
-    }
+    "images_planned": 37
   },
   "slides": [
     {
@@ -75,6 +56,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -84,9 +67,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Two interlocking gears with an open black box in the center revealing concentric rings of light, surrounded by abstract Prolog-like geometric shapes (arrows, nested brackets, tree branches); minimalist editorial illustration, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-001-content.png",
-        "drive_id": "1oLw9IzTVsIudUX06blYqjCgRvPuNuuZ3"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Tema 07 — Paradigma Lógico: la segunda mitad. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-001-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -105,6 +88,8 @@
       "tables": [
         "| Concepto | Recordatorio |\n|----------|--------------|\n| Hecho | `madre(ana, carlos).` |\n| Regla | `abuelo(X,Z) :- progenitor(X,Y), progenitor(Y,Z).` |\n| Consulta | `?- abuelo(ana, Z).` |\n| Término | átomo, número, variable, estructura |\n| Recursión | `ancestro(X,Y) :- progenitor(X,Y). ancestro(X,Y) :- progenitor(X,Z), ancestro(Z,Y).` |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -123,7 +108,7 @@
           "index": 0,
           "table_markdown": "| Concepto | Recordatorio |\n|----------|--------------|\n| Hecho | `madre(ana, carlos).` |\n| Regla | `abuelo(X,Z) :- progenitor(X,Y), progenitor(Y,Z).` |\n| Consulta | `?- abuelo(ana, Z).` |\n| Término | átomo, número, variable, estructura |\n| Recursión | `ancestro(X,Y) :- progenitor(X,Y). ancestro(X,Y) :- progenitor(X,Z), ancestro(Z,Y).` |",
           "local_asset": "slides/assets/F-002-table-1.png",
-          "drive_id": "1SRtwIEPwDvdwfuabasB5VMoWvOuF3s9E"
+          "drive_id": null
         }
       ]
     },
@@ -162,6 +147,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "center-top",
         "body": "center-middle",
@@ -171,9 +158,9 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "Abstract lightning bolt over a grid of five circles glowing in sequence; minimal flat background pattern, subtle, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-003-bg.png",
-        "drive_id": "1tUH5NZDcs2Dj7QwnNdg2SzU-zSdaqEJc"
+        "prompt": "Escena de debate académico: dos caminos visuales opuestos con íconos contrastantes. Tema: Quiz relámpago (30 s cada pregunta). Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-003-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -220,6 +207,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -229,9 +218,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A panoramic landscape split in two halves: left side shows a small village (familiar), right side shows a vast mountain range at dawn (unexplored); flat editorial illustration with bordeaux horizon line, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-004-content.png",
-        "drive_id": "14p3c-6bqkE-MHu_3yoOlEVN5rssZyPHC"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Lo que NO vimos todavía. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-004-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -250,6 +239,8 @@
       "tables": [
         "| Min | Bloque |\n|-----|--------|\n| 0–10 | B0 Repaso |\n| 10–35 | B1 Unificación |\n| 35–60 | B2 Resolución SLD |\n| 60–85 | B3 Backtracking |\n| 85–105 | B4 Corte |\n| 105–120 | B5 Negación por falla |\n| 120–130 | ☕ Descanso + Ejercicio B6 |\n| 130–150 | B7 Aritmética |\n| 150–175 | B8 Listas |\n| 175–200 | B9 Recursión avanzada |\n| 200–220 | B10 Meta-predicados |\n| 220–240 | B11 Aplicaciones + B12 2026 + B13 Cierre |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -268,7 +259,7 @@
           "index": 0,
           "table_markdown": "| Min | Bloque |\n|-----|--------|\n| 0–10 | B0 Repaso |\n| 10–35 | B1 Unificación |\n| 35–60 | B2 Resolución SLD |\n| 60–85 | B3 Backtracking |\n| 85–105 | B4 Corte |\n| 105–120 | B5 Negación por falla |\n| 120–130 | ☕ Descanso + Ejercicio B6 |\n| 130–150 | B7 Aritmética |\n| 150–175 | B8 Listas |\n| 175–200 | B9 Recursión avanzada |\n| 200–220 | B10 Meta-predicados |\n| 220–240 | B11 Aplicaciones + B12 2026 + B13 Cierre |",
           "local_asset": "slides/assets/F-005-table-1.png",
-          "drive_id": "1PqgDxbodmJXSoYyx8aYBd5_4QlH3d9Rq"
+          "drive_id": null
         }
       ]
     },
@@ -307,6 +298,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "center-top",
         "body": "center-middle",
@@ -316,9 +309,9 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "Two puzzle pieces floating toward each other with light particles connecting them; abstract vector background, soft bokeh, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-006-bg.png",
-        "drive_id": "1livTp95dMlwhXvUOfRlMizekobmnJ7DQ"
+        "prompt": "Escena de debate académico: dos caminos visuales opuestos con íconos contrastantes. Tema: ¿Qué es \"unificar\"?. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-006-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -337,6 +330,8 @@
       "tables": [
         "| Caso | Ejemplo | Resultado |\n|------|---------|-----------|\n| **Átomos iguales** | `ana = ana` | éxito, sustitución `{}` |\n| **Variable libre** | `X = ana` | éxito, `{X/ana}` |\n| **Dos variables** | `X = Y` | éxito, `{X/Y}` (se unen) |\n| **Estructura** | `padre(A,B) = padre(juan,X)` | éxito, `{A/juan, B/X}` |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -355,7 +350,7 @@
           "index": 0,
           "table_markdown": "| Caso | Ejemplo | Resultado |\n|------|---------|-----------|\n| **Átomos iguales** | `ana = ana` | éxito, sustitución `{}` |\n| **Variable libre** | `X = ana` | éxito, `{X/ana}` |\n| **Dos variables** | `X = Y` | éxito, `{X/Y}` (se unen) |\n| **Estructura** | `padre(A,B) = padre(juan,X)` | éxito, `{A/juan, B/X}` |",
           "local_asset": "slides/assets/F-007-table-1.png",
-          "drive_id": "1l1rt0314pjUNlIrmVvuoDMf35xCD2nFe"
+          "drive_id": null
         }
       ]
     },
@@ -377,6 +372,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -424,6 +421,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -457,6 +456,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -494,6 +495,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -558,6 +561,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -567,9 +572,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A tree-like diagram with a single root branching into multiple general solutions, one highlighted branch is the broadest; abstract geometric vector, minimalist, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-012-content.png",
-        "drive_id": "1MO5L-OzvFkPE3VES5ho9lVHcFymCRHTS"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: MGU: sustitución más general. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-012-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -595,6 +600,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -650,6 +657,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -690,6 +699,8 @@
       "tables": [
         "| Operador | Qué hace | Ejemplo | Resultado |\n|----------|----------|---------|-----------|\n| `X = Y` | Unificación (liga) | `?- X = 5.` | `X = 5` |\n| `X == Y` | Identidad estricta | `?- X == 5.` | `false` |\n| `X == Y` | (después de ligar) | `?- X = 5, X == 5.` | `true` |\n| `X \\= Y` | No unifica | `?- 1 \\= 2.` | `true` |\n| `X \\== Y` | No idénticos | `?- X \\== 5.` | `true` |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -708,7 +719,7 @@
           "index": 0,
           "table_markdown": "| Operador | Qué hace | Ejemplo | Resultado |\n|----------|----------|---------|-----------|\n| `X = Y` | Unificación (liga) | `?- X = 5.` | `X = 5` |\n| `X == Y` | Identidad estricta | `?- X == 5.` | `false` |\n| `X == Y` | (después de ligar) | `?- X = 5, X == 5.` | `true` |\n| `X \\= Y` | No unifica | `?- 1 \\= 2.` | `true` |\n| `X \\== Y` | No idénticos | `?- X \\== 5.` | `true` |",
           "local_asset": "slides/assets/F-015-table-1.png",
-          "drive_id": "1iXW_5Exivbvt9ZCW3bl6MORNeIsqFcVw"
+          "drive_id": null
         }
       ]
     },
@@ -748,6 +759,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -795,6 +808,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -823,6 +838,10 @@
         {
           "type": "text",
           "content": "Decisión de diseño: **occurs-check cuesta tiempo**. Los implementadores lo desactivan para velocidad. El estudiante avanzado lo activa cuando desarrolla."
+        },
+        {
+          "type": "text",
+          "content": "> 🧘 **Para la práctica: no te preocupes.**\n> En el **99%** de los programas Prolog que vas a escribir este año, occurs-check **no es un problema**. SWI lo desactiva por defecto por una razón: es lentísimo y raramente importa. Lo veremos de nuevo solo si trabajás con estructuras que puedan generar ciclos. **Seguimos.**"
         }
       ],
       "code_blocks": [
@@ -832,6 +851,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -879,6 +900,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -922,6 +945,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -959,6 +984,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1006,6 +1033,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1049,6 +1078,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1095,6 +1126,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "center-top",
         "body": "center-middle",
@@ -1104,9 +1137,9 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "An abstract horizontal arrow splitting into three parallel paths, each resolving into a node; flat background, subtle grid, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-024-bg.png",
-        "drive_id": "1Mn457a6SmXPAni1oDrSEphoRtaYP4sPg"
+        "prompt": "Escena de debate académico: dos caminos visuales opuestos con íconos contrastantes. Tema: ¿Qué es SLD?. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-024-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -1125,6 +1158,8 @@
       "tables": [
         "| Término | Significado |\n|---------|-------------|\n| Goal | Objetivo a demostrar |\n| Resolvente | Conjunción de goals pendientes |\n| Cláusula | Hecho o regla del programa |\n| Sustitución θ | Mapeo variable → término |\n| Refutación | Demostración por contradicción |\n| Prueba | Cadena de sustituciones que vacía la resolvente |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -1143,7 +1178,7 @@
           "index": 0,
           "table_markdown": "| Término | Significado |\n|---------|-------------|\n| Goal | Objetivo a demostrar |\n| Resolvente | Conjunción de goals pendientes |\n| Cláusula | Hecho o regla del programa |\n| Sustitución θ | Mapeo variable → término |\n| Refutación | Demostración por contradicción |\n| Prueba | Cadena de sustituciones que vacía la resolvente |",
           "local_asset": "slides/assets/F-025-table-1.png",
-          "drive_id": "16uvJsjm9cKtLA7yveCHa5WxOnJ-9wedU"
+          "drive_id": null
         }
       ]
     },
@@ -1165,6 +1200,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -1210,6 +1247,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1243,6 +1282,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -1276,6 +1317,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -1313,6 +1356,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1362,6 +1407,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1409,6 +1456,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1449,6 +1498,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1458,9 +1509,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Abstract inverted tree structure with a single pen-like stroke traversing it in depth-first order, left-to-right; editorial line-art illustration, bordeaux strokes on cream, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-033-content.png",
-        "drive_id": "1ISN-peMaEQahzztF8ziQZGQpEe2Ak4ne"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Estrategia de búsqueda: DFS. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-033-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -1489,6 +1540,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1498,9 +1551,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Two stacked ordered rectangles, the top one labeled with a base triangle symbol, the bottom with a recursive loop symbol; abstract vector, minimalist, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-034-content.png",
-        "drive_id": "1bTi4I9hX_9VwS0jrECzDJZrn78F9aaoW"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Regla de escritura. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-034-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -1533,6 +1586,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1542,9 +1597,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "An abstract mathematical proof ladder ascending from premises (circles) to conclusion (diamond) with clean geometric rungs; vector illustration, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-035-content.png",
-        "drive_id": "1a_JHlc46hPVisVZShziUTaFKWLAPcGrI"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Prueba = demostración. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-035-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -1574,6 +1629,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1615,6 +1672,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1677,6 +1736,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1686,9 +1747,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A circular infographic with 4 quadrants around a central dot, each quadrant representing a key takeaway with a small abstract glyph (arrow, tree, magnifier, check); editorial icon set, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-038-content.png",
-        "drive_id": "1KhutpTA99RhyRwat7US7suUaxJJHVBAb"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Resumen B2. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-038-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -1717,6 +1778,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "center-top",
         "body": "center-middle",
@@ -1726,9 +1789,9 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "A winding path splits into branches, with reverse U-turn arrows indicating retracing; abstract flat illustration background, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-039-bg.png",
-        "drive_id": "1IT8b_t0c0gAtWdRohyP2fJvQfml6adTv"
+        "prompt": "Escena de debate académico: dos caminos visuales opuestos con íconos contrastantes. Tema: ¿Qué es el backtracking?. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-039-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -1757,6 +1820,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1766,9 +1831,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A single path diverging into three arrows with a glowing pin marker at the branching point; minimalist vector, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-040-content.png",
-        "drive_id": "1yiOwS-6CM2cQ8Zb1Z-TcETAn4Kg0chFS"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Punto de elección. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-040-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -1790,6 +1855,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -1835,6 +1902,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1890,6 +1959,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1927,6 +1998,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1981,6 +2054,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1990,9 +2065,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A vertical stack of transparent plates layered with small ropes (the trail) linking choice markers; cross-section technical illustration, flat, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-045-content.png",
-        "drive_id": "1-DjDycjX97zgNwHe5xo8PwLMPHTL0Me1"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Anatomía del stack de backtracking. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-045-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -2018,6 +2093,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2051,6 +2128,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -2113,6 +2192,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2122,9 +2203,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "An hourglass half-full with combinatorial branches filling it from the top; editorial vector illustration, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-048-content.png",
-        "drive_id": "1AA_vE-LLB6uQDFTR7vIlbiW9TnTXItnz"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Eficiencia y backtracking. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-048-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -2150,6 +2231,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2191,6 +2274,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2228,6 +2313,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2278,6 +2365,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2287,9 +2376,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "An iceberg with small tip above water and massive branching tree below; editorial vector metaphor, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-052-content.png",
-        "drive_id": "1dvM6o4m-BJRrxnWsAfYo2mSakNGDfl-y"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: El costo oculto del backtracking. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-052-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -2312,6 +2401,8 @@
       "tables": [
         "| | Backtracking Prolog | Generadores/Streams |\n|---|---|---|\n| Control | Automático | Explícito (`yield`) |\n| Memoria | Trail | Frame de iterador |\n| Reuso | Recomputación | Memoización posible |\n| Paralelismo | No trivial | `async`/`await` |\n| Ejemplo | `?- member(X, L).` | `for x in L` |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -2330,7 +2421,7 @@
           "index": 0,
           "table_markdown": "| | Backtracking Prolog | Generadores/Streams |\n|---|---|---|\n| Control | Automático | Explícito (`yield`) |\n| Memoria | Trail | Frame de iterador |\n| Reuso | Recomputación | Memoización posible |\n| Paralelismo | No trivial | `async`/`await` |\n| Ejemplo | `?- member(X, L).` | `for x in L` |",
           "local_asset": "slides/assets/F-053-table-1.png",
-          "drive_id": "1CmrtblaKePRVTg0blRJgaovqPnvNz7j2"
+          "drive_id": null
         }
       ]
     },
@@ -2349,6 +2440,8 @@
       "tables": [
         "| Truco | Sintaxis |\n|-------|----------|\n| Forzar siguiente solución | `;` en REPL |\n| Parar en la primera | `once(Goal)` |\n| Colectar todas | `findall(T, G, L)` |\n| Ignorar fracaso | `catch(G, _, true)` |\n| Backtrack forzado | `fail` |\n| Sin backtracking | `!` (siguiente bloque) |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -2367,7 +2460,7 @@
           "index": 0,
           "table_markdown": "| Truco | Sintaxis |\n|-------|----------|\n| Forzar siguiente solución | `;` en REPL |\n| Parar en la primera | `once(Goal)` |\n| Colectar todas | `findall(T, G, L)` |\n| Ignorar fracaso | `catch(G, _, true)` |\n| Backtrack forzado | `fail` |\n| Sin backtracking | `!` (siguiente bloque) |",
           "local_asset": "slides/assets/F-054-table-1.png",
-          "drive_id": "1N2CXS0DxiFYreVuzIB4dNQKM4sEbWHz_"
+          "drive_id": null
         }
       ]
     },
@@ -2396,6 +2489,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2405,9 +2500,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A pair of scissors cutting a branching tree of possibilities, cleanly severing the lower branches; editorial flat illustration, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-055-content.png",
-        "drive_id": "1J2aIHcxltbMPOyNX2nykfd-oIGXSjgjZ"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: El operador !. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-055-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -2450,6 +2545,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "center-top",
         "body": "center-middle",
@@ -2459,9 +2556,9 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "Abstract closed gate blocking multiple paths, one path remaining open; minimalist background illustration, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-056-bg.png",
-        "drive_id": "1AOXVm6ZiGe5O_sUM6_yXG4GscFOYvObc"
+        "prompt": "Escena de debate académico: dos caminos visuales opuestos con íconos contrastantes. Tema: ¿Por qué cortar?. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-056-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -2499,6 +2596,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2539,6 +2638,8 @@
       "tables": [
         "| Tipo | Efecto | Si lo quito… |\n|------|--------|--------------|\n| **Verde** | Solo eficiencia | El programa sigue funcionando igual |\n| **Rojo** | Cambia la lógica | El programa responde distinto o mal |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -2557,7 +2658,7 @@
           "index": 0,
           "table_markdown": "| Tipo | Efecto | Si lo quito… |\n|------|--------|--------------|\n| **Verde** | Solo eficiencia | El programa sigue funcionando igual |\n| **Rojo** | Cambia la lógica | El programa responde distinto o mal |",
           "local_asset": "slides/assets/F-058-table-1.png",
-          "drive_id": "1yisN0jlyM7wO37ISCBzkX02SLN_S7Qe1"
+          "drive_id": null
         }
       ]
     },
@@ -2597,6 +2698,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2648,6 +2751,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2685,6 +2790,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2726,6 +2833,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2771,6 +2880,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2789,7 +2900,7 @@
     {
       "id": "F-064",
       "type": "concepto-mixto",
-      "title": "Trampa: `!` y variables compartidas",
+      "title": "Corte rojo: el contraejemplo ejecutable",
       "subtitle": "",
       "body_blocks": [
         {
@@ -2797,17 +2908,57 @@
           "content": "`@tipo: codigo`"
         },
         {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Mismo predicado — con y sin corte. Cambia el resultado.**",
+              "level": 0
+            }
+          ]
+        },
+        {
           "type": "text",
-          "content": "Funciona, pero si olvidás un `!` → múltiples clasificaciones. El corte se usa para **exclusividad**."
+          "content": "Los cortes eran **rojos**: filtraban resultados. Sin ellos, se rompe la semántica."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Reescritura declarativa pura** (sin corte):",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "Ahora las condiciones son **mutuamente excluyentes** → no hace falta corte."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Moraleja:** si usás corte rojo, preguntate si podés reformular con condiciones mutuamente excluyentes.",
+              "level": 0
+            }
+          ]
         }
       ],
       "code_blocks": [
         {
           "lang": "prolog",
-          "content": "clasifica(X, bajo)  :- X < 10, !.\nclasifica(X, medio) :- X < 100, !.\nclasifica(_, alto).\n\n?- clasifica(5, C).       % C = bajo\n?- clasifica(50, C).      % C = medio\n?- clasifica(500, C).     % C = alto"
+          "content": "% CON cortes rojos\nclasificar(X, positivo) :- X > 0, !.\nclasificar(X, negativo) :- X < 0, !.\nclasificar(_, cero).\n\n?- clasificar(5, C).\nC = positivo.                     % ← una sola respuesta ✓\n\n% SIN cortes\nclasificar(X, positivo) :- X > 0.\nclasificar(X, negativo) :- X < 0.\nclasificar(_, cero).\n\n?- clasificar(5, C).\nC = positivo ;\nC = cero.                         % ← ¡dos! la segunda es errónea ✗"
+        },
+        {
+          "lang": "prolog",
+          "content": "clasificar(X, positivo) :- X > 0.\nclasificar(X, negativo) :- X < 0.\nclasificar(X, cero)     :- X =:= 0."
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2838,6 +2989,8 @@
       "tables": [
         "| Regla | Justificación |\n|-------|---------------|\n| Preferir `(-> ;)` | Más local y legible |\n| Sólo corte **verde** cuando se pueda | Preserva declaratividad |\n| Documentar corte rojo con comentario | Debugging futuro |\n| No usar `!` en predicados de librería | Puede romper invariantes |\n| Probar sin `!` primero | Detectar falta de casos |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -2856,7 +3009,7 @@
           "index": 0,
           "table_markdown": "| Regla | Justificación |\n|-------|---------------|\n| Preferir `(-> ;)` | Más local y legible |\n| Sólo corte **verde** cuando se pueda | Preserva declaratividad |\n| Documentar corte rojo con comentario | Debugging futuro |\n| No usar `!` en predicados de librería | Puede romper invariantes |\n| Probar sin `!` primero | Detectar falta de casos |",
           "local_asset": "slides/assets/F-065-table-1.png",
-          "drive_id": "1rWy-DJzM9_JV27K8Mhnbll7fHkQnEAz_"
+          "drive_id": null
         }
       ]
     },
@@ -2895,6 +3048,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2904,9 +3059,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Four overlapping chevrons pointing inward to a central stamp symbol (a small check); editorial vector, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-066-content.png",
-        "drive_id": "11EzeeRAkNYtvAEmpgCSy07DfjrKVBLTr"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Resumen B4. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-066-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -2939,6 +3094,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -2948,9 +3105,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A closed sealed envelope with a question mark stamp, surrounded by a circle representing the known world; vector illustration, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-067-content.png",
-        "drive_id": "1UzJXcvSc2kR5nzYF_p0oLgURcaHYoHkp"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: \\+ y su semántica. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-067-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -2972,6 +3129,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -3019,6 +3178,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3062,6 +3223,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3113,6 +3276,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3147,6 +3312,8 @@
       "tables": [
         "| Operador | Origen | Estándar |\n|----------|--------|----------|\n| `\\+` | ISO Prolog | ✓ preferido |\n| `not/1` | Edinburgh Prolog (legado) | Deprecado |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -3165,7 +3332,7 @@
           "index": 0,
           "table_markdown": "| Operador | Origen | Estándar |\n|----------|--------|----------|\n| `\\+` | ISO Prolog | ✓ preferido |\n| `not/1` | Edinburgh Prolog (legado) | Deprecado |",
           "local_asset": "slides/assets/F-072-table-1.png",
-          "drive_id": "1CseaDvqLeiCwYpNAM52G-WKU9d1NqE9f"
+          "drive_id": null
         }
       ]
     },
@@ -3195,6 +3362,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3232,6 +3401,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3286,6 +3457,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3295,9 +3468,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A yin-yang-like duality with one side bright and one shadowed, surrounded by small interrogation glyphs; editorial vector, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-075-content.png",
-        "drive_id": "1_DMiN7Pf42fFPEB6Ihj1vgeyRmn58yLk"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Resumen B5. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-075-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -3346,6 +3519,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3355,9 +3530,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A warm ceramic coffee mug with gentle steam rising, resting on a desk with faded notebook pages in the background; soft cozy editorial illustration, warm tones but still color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-076-content.png",
-        "drive_id": "1cLcR5LJYlR3PCxZ6Nmp5k4jKzgwn5Oli"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: ☕ Descanso 10 min. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-076-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -3396,6 +3571,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3447,6 +3624,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3484,6 +3663,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3529,6 +3710,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3572,6 +3755,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3613,6 +3798,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3668,6 +3855,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3709,6 +3898,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3745,6 +3936,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3754,9 +3947,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A large equals sign with a small magic wand on the right side transforming an expression into a single number; vector illustration, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-085-content.png",
-        "drive_id": "1J2gUXgOdpDZnN6wibklGNRDiU2YvtZJQ"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: is/2 — evaluación forzada. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-085-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -3788,6 +3981,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -3822,6 +4017,8 @@
       "tables": [
         "| Operador | Significado |\n|----------|-------------|\n| `+ - * /` | Suma, resta, mult, división (float) |\n| `//` | División entera |\n| `mod` | Resto |\n| `**` o `^` | Potencia |\n| `abs(X)` | Valor absoluto |\n| `sqrt(X)` | Raíz cuadrada |\n| `sin/cos/tan` | Trig |\n| `min(X,Y) max(X,Y)` | Min/max |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -3840,7 +4037,7 @@
           "index": 0,
           "table_markdown": "| Operador | Significado |\n|----------|-------------|\n| `+ - * /` | Suma, resta, mult, división (float) |\n| `//` | División entera |\n| `mod` | Resto |\n| `**` o `^` | Potencia |\n| `abs(X)` | Valor absoluto |\n| `sqrt(X)` | Raíz cuadrada |\n| `sin/cos/tan` | Trig |\n| `min(X,Y) max(X,Y)` | Min/max |",
           "local_asset": "slides/assets/F-087-table-1.png",
-          "drive_id": "1inPMBa3pB6B8J1EVC_HZ319BlLBKEKA6"
+          "drive_id": null
         }
       ]
     },
@@ -3869,6 +4066,8 @@
       "tables": [
         "| Operador | Evalúa lado izq. | Evalúa lado der. | Tipo |\n|----------|------------------|------------------|------|\n| `=:=` | ✓ | ✓ | Igualdad numérica |\n| `=\\=` | ✓ | ✓ | Distinto numérico |\n| `<  >  =<  >=` | ✓ | ✓ | Comparación |\n| `=` | ✗ (unifica) | ✗ (unifica) | Unificación estructural |\n| `==` | ✗ | ✗ | Identidad estructural |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -3887,7 +4086,7 @@
           "index": 0,
           "table_markdown": "| Operador | Evalúa lado izq. | Evalúa lado der. | Tipo |\n|----------|------------------|------------------|------|\n| `=:=` | ✓ | ✓ | Igualdad numérica |\n| `=\\=` | ✓ | ✓ | Distinto numérico |\n| `<  >  =<  >=` | ✓ | ✓ | Comparación |\n| `=` | ✗ (unifica) | ✗ (unifica) | Unificación estructural |\n| `==` | ✗ | ✗ | Identidad estructural |",
           "local_asset": "slides/assets/F-088-table-1.png",
-          "drive_id": "1PFa98xmiEig-1rARmi1-WOfSt3iRIcnc"
+          "drive_id": null
         }
       ]
     },
@@ -3909,6 +4108,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -3960,6 +4161,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4003,6 +4206,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4040,6 +4245,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4077,6 +4284,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4114,6 +4323,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4161,6 +4372,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4215,6 +4428,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4224,9 +4439,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "An abacus with sliding beads and a pocket calculator, stylized; editorial vector, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-096-content.png",
-        "drive_id": "1cdVPrwy0h7ZX1pEH92FcVeciZD2I6z00"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Resumen B7. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-096-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -4261,6 +4476,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4270,9 +4487,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A long linked chain with interconnected rounded rectangles, first one highlighted in bordeaux, the rest fading gently; editorial vector illustration, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-097-content.png",
-        "drive_id": "1zVErbZvZcnDm2Ur8xkLZhMaDmkCjIWKq"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: La estructura más importante. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-097-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -4291,6 +4508,8 @@
       "tables": [
         "| Sintaxis | Significado |\n|----------|-------------|\n| `[]` | Lista vacía |\n| `[a]` | Un elemento |\n| `[a, b, c]` | Tres elementos |\n| `[H \\| T]` | Cabeza `H`, cola `T` |\n| `[A, B \\| T]` | Dos primeros + resto |\n| `[a, b, c \\| T]` | Tres primeros + resto |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -4309,7 +4528,7 @@
           "index": 0,
           "table_markdown": "| Sintaxis | Significado |\n|----------|-------------|\n| `[]` | Lista vacía |\n| `[a]` | Un elemento |\n| `[a, b, c]` | Tres elementos |\n| `[H \\| T]` | Cabeza `H`, cola `T` |\n| `[A, B \\| T]` | Dos primeros + resto |\n| `[a, b, c \\| T]` | Tres primeros + resto |",
           "local_asset": "slides/assets/F-098-table-1.png",
-          "drive_id": "1X1xwUWhplIanFOD82CHVS44TWGGyIA1B"
+          "drive_id": null
         }
       ]
     },
@@ -4365,6 +4584,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4398,6 +4619,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -4435,6 +4658,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4472,6 +4697,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4515,6 +4742,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4558,6 +4787,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4595,6 +4826,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4628,6 +4861,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -4665,6 +4900,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4712,6 +4949,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4749,6 +4988,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4786,6 +5027,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4823,6 +5066,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4877,6 +5122,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4886,9 +5133,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A row of four nested brackets gradually larger, each containing a small abstract glyph (head, tail, arrow, chain); editorial vector, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-112-content.png",
-        "drive_id": "1t_YfZw9dcwhj_tfZfsfmedccF-Y9uxm9"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Resumen B8. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-112-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -4918,6 +5165,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -4969,6 +5218,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5006,6 +5257,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5043,6 +5296,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5083,6 +5338,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5092,9 +5349,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A vertical column of identical plates being recycled via a curved return arrow, showing reuse of a single slot; technical illustration, flat, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-117-content.png",
-        "drive_id": "1untMw-hSPWXVwOc0cvQG6cYCInUI7C41"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Last-Call Optimization (LCO). Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-117-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -5138,6 +5395,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5175,6 +5434,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5212,6 +5473,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5253,6 +5516,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5290,6 +5555,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5331,6 +5598,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5368,6 +5637,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5405,6 +5676,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5459,6 +5732,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5468,9 +5743,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Three ascending stairs, each labeled with a small abstract glyph (loop, arrow, flag), leading to a stylized trophy shape; editorial vector, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-126-content.png",
-        "drive_id": "1jKz2QCFNdqYD2p_rRtu8BS9u8OzRGUyg"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Resumen B9. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-126-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -5505,6 +5780,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "center-top",
         "body": "center-middle",
@@ -5514,9 +5791,9 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "An abstract magnifying glass examining smaller magnifying glasses inside (recursion motif); flat background illustration, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-127-bg.png",
-        "drive_id": "1EELmxyucNzcb2L498obeBqgOjGf8GZrC"
+        "prompt": "Escena de debate académico: dos caminos visuales opuestos con íconos contrastantes. Tema: ¿Qué es un meta-predicado?. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-127-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -5550,6 +5827,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5587,6 +5866,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5605,12 +5886,12 @@
     {
       "id": "F-130",
       "type": "concepto-mixto",
-      "title": "`setof/3`",
+      "title": "`setof/3` y comparación final",
       "subtitle": "",
       "body_blocks": [
         {
           "type": "text",
-          "content": "`@tipo: codigo`"
+          "content": "`@tipo: concepto-mixto`"
         },
         {
           "type": "list",
@@ -5625,6 +5906,38 @@
               "level": 0
             }
           ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Los 3 lado a lado — misma consulta.** Base: `color(rojo). color(verde). color(rojo).`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Regla mental de bolsillo:**",
+              "level": 0
+            },
+            {
+              "content": "*\"dame lo que haya, aunque sea nada\"* → **`findall`**",
+              "level": 0
+            },
+            {
+              "content": "*\"si hay algo, agrupado\"* → **`bagof`**",
+              "level": 0
+            },
+            {
+              "content": "*\"ordenado y sin duplicados\"* → **`setof`**",
+              "level": 0
+            }
+          ]
         }
       ],
       "code_blocks": [
@@ -5633,7 +5946,11 @@
           "content": "?- setof(N, E^edad(N, E), L).\nL = [ana, beto, carla].     % ordenado, sin duplicados"
         }
       ],
-      "tables": [],
+      "tables": [
+        "| Operador | Consulta | Resultado | Si no hay soluciones |\n|----------|----------|-----------|----------------------|\n| `findall/3` | `findall(C, color(C), L)` | `[rojo, verde, rojo]` | `L = []` (éxito) |\n| `bagof/3`   | `bagof(C, color(C), L)`   | `[rojo, verde, rojo]` | **falla** |\n| `setof/3`   | `setof(C, color(C), L)`   | `[rojo, verde]` | **falla** |"
+      ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5647,7 +5964,14 @@
         "local_asset": "",
         "drive_id": null
       },
-      "table_assets": []
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Operador | Consulta | Resultado | Si no hay soluciones |\n|----------|----------|-----------|----------------------|\n| `findall/3` | `findall(C, color(C), L)` | `[rojo, verde, rojo]` | `L = []` (éxito) |\n| `bagof/3`   | `bagof(C, color(C), L)`   | `[rojo, verde, rojo]` | **falla** |\n| `setof/3`   | `setof(C, color(C), L)`   | `[rojo, verde]` | **falla** |",
+          "local_asset": "slides/assets/F-130-table-1.png",
+          "drive_id": null
+        }
+      ]
     },
     {
       "id": "F-131",
@@ -5671,6 +5995,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5711,6 +6037,8 @@
       "tables": [
         "| Aspecto | `findall/3` | `bagof/3` | `setof/3` |\n|---------|:---:|:---:|:---:|\n| Sin soluciones | `[]` | falla | falla |\n| Duplicados | sí | sí | no |\n| Orden | preserva | preserva | ordenado |\n| Agrupa por vars libres | no | sí | sí |\n| `^` para cuantificar | — | sí | sí |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -5729,7 +6057,7 @@
           "index": 0,
           "table_markdown": "| Aspecto | `findall/3` | `bagof/3` | `setof/3` |\n|---------|:---:|:---:|:---:|\n| Sin soluciones | `[]` | falla | falla |\n| Duplicados | sí | sí | no |\n| Orden | preserva | preserva | ordenado |\n| Agrupa por vars libres | no | sí | sí |\n| `^` para cuantificar | — | sí | sí |",
           "local_asset": "slides/assets/F-132-table-1.png",
-          "drive_id": "1tbBhaSCKP3eMhJZgKyhgFaQ9dEmV04j2"
+          "drive_id": null
         }
       ]
     },
@@ -5755,6 +6083,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5792,6 +6122,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5829,6 +6161,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5883,6 +6217,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5892,9 +6228,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Three labeled baskets arranged on a shelf, each with different internal arrangement (loose, grouped, sorted); editorial vector, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-136-content.png",
-        "drive_id": "16EZwyea5pLT6UnOFrkmQ85VBDMo_RzjZ"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Resumen B10. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-136-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -5915,6 +6251,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -5924,9 +6262,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A small human silhouette arranging interconnected nodes and lines into a knowledge graph on a wall; editorial vector illustration, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-137-content.png",
-        "drive_id": "1KNO9A4rc_jLeUN_FhRNj4cABld471XgM"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: El valor de Prolog como modelador. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-137-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -5958,6 +6296,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6001,6 +6341,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6034,6 +6376,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -6071,6 +6415,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6104,6 +6450,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -6141,6 +6489,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6178,6 +6528,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6215,6 +6567,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6252,6 +6606,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6289,6 +6645,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6326,6 +6684,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6362,6 +6722,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "center-top",
         "body": "center-middle",
@@ -6371,9 +6733,9 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "Three different abstract puzzles (map, grid, board) converging into a single glowing gear; flat background, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-149-bg.png",
-        "drive_id": "13hbW1XZ3rPZF9nvrLYeSUbnrOjTDVO-K"
+        "prompt": "Escena de debate académico: dos caminos visuales opuestos con íconos contrastantes. Tema: ¿Qué tienen en común?. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-149-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -6430,6 +6792,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "center-top",
         "body": "center-middle",
@@ -6439,9 +6803,9 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "An old oak tree with its trunk shown half cut showing rings, and new green shoots sprouting from the cut; editorial ecology metaphor, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-150-bg.png",
-        "drive_id": "1h5CdEACx87w1u9LLQovVVNfXT44JKAPc"
+        "prompt": "Escena de debate académico: dos caminos visuales opuestos con íconos contrastantes. Tema: ¿Está vivo Prolog en 2026?. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-150-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -6471,6 +6835,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6512,6 +6878,8 @@
         }
       ],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6542,6 +6910,8 @@
       "tables": [
         "| Prolog | Año | Destacable |\n|--------|-----|-----------|\n| **SWI-Prolog** | 1987–2026 | Estándar de facto, ISO, comunidad activa |\n| **Scryer Prolog** | 2020–2026 | Escrito en Rust, ISO estricto, WASM |\n| **Trealla Prolog** | 2021– | C, minimalista, server-side |\n| **Tau Prolog** | 2017– | JavaScript, Prolog en el navegador |\n| **XSB** | 1990– | `tabling` potente, Datalog++ |\n| **Ciao** | 1996– | Modular, análisis estático |"
       ],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -6560,7 +6930,7 @@
           "index": 0,
           "table_markdown": "| Prolog | Año | Destacable |\n|--------|-----|-----------|\n| **SWI-Prolog** | 1987–2026 | Estándar de facto, ISO, comunidad activa |\n| **Scryer Prolog** | 2020–2026 | Escrito en Rust, ISO estricto, WASM |\n| **Trealla Prolog** | 2021– | C, minimalista, server-side |\n| **Tau Prolog** | 2017– | JavaScript, Prolog en el navegador |\n| **XSB** | 1990– | `tabling` potente, Datalog++ |\n| **Ciao** | 1996– | Modular, análisis estático |",
           "local_asset": "slides/assets/F-153-table-1.png",
-          "drive_id": "1F2Li1o9-kcpMKcxayPEOt55NyAQg-8yc"
+          "drive_id": null
         }
       ]
     },
@@ -6603,6 +6973,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6612,9 +6984,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A compass rose with needle pointing toward a horizon of open mountains; editorial vector illustration, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-154-content.png",
-        "drive_id": "1svRd_8EZylygjtPyV-yJLDgl507usswc"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Por qué todavía lo estudiamos. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-154-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -6657,6 +7029,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6666,9 +7040,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Five connected circles arranged in a star constellation around a central dot; editorial vector, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-155-content.png",
-        "drive_id": "1NlHLa4jltuzBCgkvaihopY0yvl5x9AgY"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Síntesis en 5 puntos. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-155-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -6721,6 +7095,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6730,9 +7106,9 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "An open notebook with a pen hovering over blank pages, small abstract glyphs floating out (gear, brain, puzzle); editorial vector illustration, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-156-content.png",
-        "drive_id": "1j9DgzEolDcNW6HBjNoqcAh6xOtpQvHD_"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: TP del tema. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-156-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -6767,6 +7143,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "center-top",
         "body": "center-middle",
@@ -6776,9 +7154,9 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "A single post-it note pinned to a cork board with a soft shadow; minimalist flat background, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-157-bg.png",
-        "drive_id": "1zvGQ99qJ0RPkP-LT1HGK5zMWkIb6psrk"
+        "prompt": "Escena de debate académico: dos caminos visuales opuestos con íconos contrastantes. Tema: Pregunta de salida. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-157-img.png",
+        "drive_id": null
       },
       "table_assets": []
     },
@@ -6847,7 +7225,7 @@
           "ordered": false,
           "items": [
             {
-              "content": "*Tema 07 — Filminas escritas por: Dr. Roberto (class-writer) — 2026-04-21*",
+              "content": "*Tema 07 — Filminas — Paradigmas y Lenguajes de Programación 2026 — UNTdF — 2026-04-21*",
               "level": 0
             },
             {
@@ -6859,6 +7237,8 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {},
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -6868,79 +7248,11 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "A warm sunrise over a landscape horizon with a single blooming flower in the foreground; editorial vector illustration, bordeaux horizon band, color palette: deep bordeaux, slate grey, off-white and gold accents, flat vector illustration, clean geometric style, no text, no words, no letters",
-        "local_asset": "slides/assets/F-158-content.png",
-        "drive_id": "1kfs6dP2FKy1L8Jj1eY3ECpU5i_6s98jr"
+        "prompt": "Ilustración técnica universitaria: objetos y escenas propios del dominio de compiladores, sin elementos decorativos. Tema: Gracias. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-158-img.png",
+        "drive_id": null
       },
       "table_assets": []
     }
-  ],
-  "_draft_instructions": {
-    "pending_type_ids": [],
-    "pending_prompt_ids": [
-      "F-001",
-      "F-003",
-      "F-004",
-      "F-006",
-      "F-012",
-      "F-024",
-      "F-033",
-      "F-034",
-      "F-035",
-      "F-038",
-      "F-039",
-      "F-040",
-      "F-045",
-      "F-048",
-      "F-052",
-      "F-055",
-      "F-056",
-      "F-066",
-      "F-067",
-      "F-075",
-      "F-076",
-      "F-085",
-      "F-096",
-      "F-097",
-      "F-112",
-      "F-117",
-      "F-126",
-      "F-127",
-      "F-136",
-      "F-137",
-      "F-149",
-      "F-150",
-      "F-154",
-      "F-155",
-      "F-156",
-      "F-157",
-      "F-158"
-    ],
-    "canonical_types": [
-      "portada",
-      "concepto-abstracto",
-      "concepto-mixto",
-      "codigo",
-      "tabla",
-      "tabla-comparativa",
-      "tabla-mixta",
-      "diagrama",
-      "socratica",
-      "demo",
-      "cierre",
-      "timeline"
-    ],
-    "next_steps": [
-      "1. Leer schema-registry.json ANTES de cualquier edición",
-      "2. Asignar type explícito desde canonical_types a cada slide en pending_type_ids",
-      "3. Copiar layout EXACTO del type_layout_map para cada tipo asignado",
-      "4. Para slides con image.layer!='none': escribir prompt VISUAL PURO (ver prompt-imagen-guide.md)",
-      "5. Actualizar summary: total_slides, images_planned, tables_planned, code_slides, type_distribution",
-      "6. Cambiar summary.status a 'READY_FOR_VALIDATION'",
-      "7. Eliminar esta clave '_draft_instructions'",
-      "8. Renombrar a: slides/plan-filminas-07-paradigma-logico-avanzado.json",
-      "9. Validar: python scripts/repair_plan.py <topic_folder> --attempt 1",
-      "10. Publicar: python scripts/slides_pipeline.py <topic_folder>"
-    ]
-  }
+  ]
 }

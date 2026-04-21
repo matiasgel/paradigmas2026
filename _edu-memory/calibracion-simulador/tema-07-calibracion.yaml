@@ -1,0 +1,276 @@
+# Calibración de Perfiles — Tema 07: Paradigma Lógico Avanzado (Prolog Clase 2+3)
+# Generado: 2026-04-21 | Agente: student-simulator (modo Batch — 4 perfiles)
+# Fuentes base: calibración Tema 03 + Tema 04 + contenido específico Tema 07
+# NOTA: Este archivo NUNCA se resetea — acumula calibración año a año
+
+tema:
+  numero: "07"
+  nombre: "Paradigma Lógico Avanzado — Prolog (Clase 2+3)"
+  duracion_clase: 240
+  bloques: 14
+  artefactos_evaluados:
+    - diseno.md
+    - minuta.md
+    - filminas.md
+    - guia-estudio.md
+    - tp.md
+    - guiaprofesor.md
+
+literatura:
+  - id: "sweller-chen-2023"
+    titulo: "Cognitive Load Theory — Revised"
+    autores: ["Sweller, J.", "Chen, O."]
+    año: 2023
+    relevancia: >
+      Clase de 240 min con B3+B4 consecutivos (50 min de backtracking + corte sin
+      ejercicio activo) excede la carga cognitiva recomendada para ansioso/disperso.
+      Segmentación (Mayer) crítica: pausa socrática obligatoria en min 80.
+
+  - id: "olipas-2022"
+    titulo: "Feelings, Challenges and Difficulties Experienced by IT Students in Learning Computer Programming"
+    autores: ["Olipas, C. N."]
+    año: 2022
+    fuente: "ERIC"
+    eric_id: "ED622663"
+    relevancia: >
+      Notación impenetrable para ansioso: =.. (univ), occurs-check, dif/2 vs \+.
+      Acumulador doble-parámetro genera activación por "no saber dónde poner qué".
+
+  - id: "mahatanankoon-wolf-2021"
+    titulo: "Cognitive Learning Strategies in an Introductory Computer Programming Course"
+    autores: ["Mahatanankoon, P.", "Wolf, J."]
+    año: 2021
+    fuente: "ISEJ"
+    eric_id: "EJ1301236"
+    relevancia: >
+      Deep vs shallow. Recursero aprueba member/append/reverse sin captar
+      declaratividad. Filtro: ej26/27/28 del TP detectan memorización vs comprensión.
+
+  - id: "hoq-et-al-2025"
+    titulo: "Automated Identification of Logical Errors — Student Misconceptions"
+    autores: ["Hoq, M.", "et al."]
+    año: 2025
+    fuente: "IEDMS"
+    eric_id: "ED675600"
+    relevancia: >
+      Misconceptions documentadas en lógica: "! = return", "=  es asignación",
+      "\+ P = P es falso". Persisten en 30-50% del cohort sin intervención directa.
+
+  - id: "mayer-2023"
+    titulo: "Multimedia Learning (3rd ed.)"
+    autores: ["Mayer, R. E."]
+    año: 2023
+    relevancia: >
+      Principio de segmentación: contenido abstracto (SLD, acumulador) debe
+      presentarse en segmentos ≤5 min con checkpoint intermedio. B11 (15 min)
+      con CSP + 4-reinas viola este principio.
+
+perfiles:
+  estrategico:
+    scores_tema07:
+      en_clase: 82
+      guia_autonoma: 89
+      tp_estimado: "85-92/100"
+      score_global: 85
+    bloque_mas_bajo: "B4_corte (72) y B11_aplicaciones (65)"
+    fortalezas:
+      - "Unificación, SLD, listas manuales"
+      - "Comprende MGU formalmente"
+      - "Escribe append/member sin apuntes"
+    misconceptions_probables:
+      - "dif/2 es solo versión nueva de \\="
+      - "Corte rojo es solo optimización más agresiva"
+    alertas:
+      - "Necesita contraejemplo verde vs rojo con misma consulta"
+      - "4-reinas: lo hace solo si tiene ≥4h extra fuera de clase"
+
+  ansioso:
+    scores_tema07:
+      en_clase: 58
+      guia_autonoma: 74
+      tp_estimado: "55-68/100"
+      score_global: 65
+    bloque_mas_bajo: "B3_backtracking (48) y B4_corte (42)"
+    zona_recuperacion: "guia-estudio.md sube +16 pts respecto a clase"
+    misconceptions_probables:
+      - "occurs-check es algo que siempre hay que activar"
+      - "=.. es un operador raro que no se usa"
+      - "findall siempre falla si no hay resultados (es bagof)"
+      - "\+ P significa P es falso (en lógica clásica)"
+    alertas:
+      - "Bloque 3+4 consecutivos = sobrecarga cognitiva"
+      - "Pausa socrática en min 80 no es opcional"
+      - "Caja 'para la práctica no te preocupes' en occurs-check"
+      - "Tabla findall/bagof/setof con misma consulta lado a lado"
+
+  disperso:
+    scores_tema07:
+      en_clase: 42
+      guia_autonoma: 51
+      tp_estimado: "38-52/100"
+      score_global: 46
+    bloque_mas_bajo: "B3_backtracking (28), B9_acumulador (24), B11_aplicaciones (15)"
+    prerequisito_gap:
+      - "Recursión no consolidada desde Tema 01"
+      - "Patrón base/recursivo sólo memorizado"
+      - "No distingue 'goal' vs 'cláusula' vs 'resolvente'"
+    misconceptions_probables:
+      - "! = return de Python"
+      - "findall devuelve una sola solución"
+      - "Acumulador = variable global"
+      - "Prolog es como SQL"
+    alertas:
+      - "Abandona durante B4 (~min 95)"
+      - "TP: falla ej17+ (acumulador) y ej23-28 (grafos/CSP/reinas)"
+      - "Necesita mapa mental visual al inicio de B3 y B9"
+      - "Demo 'cuándo backtrackea' con animación lenta"
+      - "Analogía mochila para acumulador OBLIGATORIA"
+
+  recursero:
+    scores_tema07:
+      en_clase: 60
+      guia_autonoma: 66
+      tp_estimado: "60-72/100"
+      score_global: 63
+    bloque_mas_bajo: "B4_corte (50), B9_acumulador (55)"
+    zona_comodidad: "B8 listas manuales (member/append/length) desde Tema 06"
+    misconceptions_probables:
+      - "! = return"
+      - "Acumulador es una variable global"
+      - "Orden de cláusulas no afecta semántica (solo performance)"
+      - "findall y bagof son equivalentes"
+    alertas:
+      - "Aprueba ej01-ej16 por memorización de patrones"
+      - "ej17/ej19 (acumulador) sin comprensión real"
+      - "ej26/27/28 (integradores) son el filtro deep vs shallow"
+      - "Pregunta detectora min 190: 'contar 1 a N con acumulador' — va a decrementar"
+
+predicciones_clase:
+  riesgo_alto:
+    - tema: "Bloque 3+4 — Backtracking y Corte consecutivos (50 min sin pausa)"
+      perfiles_en_riesgo: [disperso, ansioso]
+      score_cohort_promedio: 55
+      intervencion_sugerida: >
+        Pausa socrática OBLIGATORIA en min 80. Pregunta abierta:
+        "¿dónde backtrackea Prolog ahora?" — 2 min de discusión.
+
+    - tema: "Bloque 9 — Recursión con acumulador"
+      perfiles_en_riesgo: [disperso, recursero]
+      score_cohort_promedio: 54
+      intervencion_sugerida: >
+        Analogía mochila + traza pizarrón para factorial/2 → factorial/3.
+        Pregunta detectora: contar 1 a N.
+
+    - tema: "Bloque 11 — Aplicaciones: CSP + 4-reinas en 15 min"
+      perfiles_en_riesgo: [todos]
+      score_cohort_promedio: 45
+      intervencion_sugerida: >
+        Recortar a 1 solo ejemplo (colorear mapa). 4-reinas queda como
+        ejercicio del TP (ej28). En clase sólo esqueleto generate-and-test.
+
+  zona_activa:
+    tema: "Bloque 1 — Unificación + Bloque 8 — Listas"
+    perfiles_que_se_estabilizan: [todos]
+    oportunidad: "Es el bloque donde todos los perfiles se estabilizan sobre 65."
+
+  zona_recuperacion_guia:
+    perfil: ansioso
+    delta: "+16 pts (58 → 74) en score global"
+    bloques_clave: [B2_SLD, B3_backtracking, B9_acumulador]
+    detalle: >
+      La guía cumple función compensatoria crítica con ejemplos completos
+      de árbol SLD trazado y acumulador paso a paso. Comunicar en clase:
+      "esta sección está desarrollada a fondo en la guía de estudio".
+
+  faq_anticipado_criticos:
+    - perfil: disperso
+      bloque: "B3"
+      pregunta: "¿Dónde volvió Prolog? Me perdí."
+      frecuencia: "Alta (60% del cohort disperso)"
+      intervencion: "Pausa + árbol SLD en pizarrón"
+
+    - perfil: recursero
+      bloque: "B4"
+      pregunta: "¿El ! es como return en Python?"
+      frecuencia: "Muy alta (70% del cohort recursero)"
+      intervencion: "Contraejemplo ejecutable mismo código con/sin corte"
+
+    - perfil: ansioso
+      bloque: "B7"
+      pregunta: "¿X = 2+3 no me da 5?"
+      frecuencia: "Alta (50%)"
+      intervencion: "is/2 vs = en filmina dedicada"
+
+    - perfil: disperso
+      bloque: "B9"
+      pregunta: "¿Por qué el acumulador necesita un parámetro extra?"
+      frecuencia: "Alta (50%)"
+      intervencion: "Analogía mochila + traza pizarrón"
+
+    - perfil: ansioso
+      bloque: "B10"
+      pregunta: "findall / bagof / setof — ¿cuál uso?"
+      frecuencia: "Alta (65%)"
+      intervencion: "Misma consulta, 3 operadores, 3 salidas lado a lado"
+
+correcciones_aplicadas:
+  - id: C1
+    destino: "guia-estudio.md §3.3"
+    tipo: "contenido"
+    descripcion: "Mapa mental ASCII del ciclo backtracking"
+    impacto_pts: "+6 disperso"
+
+  - id: C2
+    destino: "guia-estudio.md §3.4"
+    tipo: "contenido"
+    descripcion: "Tabla verde vs rojo con contraejemplo ejecutable"
+    impacto_pts: "+8 estratégico, +4 recursero"
+
+  - id: C3
+    destino: "filminas.md F-021 (occurs-check)"
+    tipo: "framing"
+    descripcion: "Caja de calma: SWI lo desactiva, no es crítico"
+    impacto_pts: "-ansiedad perfil ansioso"
+
+  - id: C4
+    destino: "filminas.md F-063 (corte rojo)"
+    tipo: "pedagógico"
+    descripcion: "Contraejemplo ejecutable: mismo código con/sin corte"
+    impacto_pts: "+6 cohort B4"
+
+  - id: C5
+    destino: "filminas.md F-134 (meta-predicados)"
+    tipo: "pedagógico"
+    descripcion: "findall/bagof/setof lado a lado con misma consulta"
+    impacto_pts: "+8 cohort B10"
+
+  - id: C6
+    destino: "guia-estudio.md §3.9"
+    tipo: "analogía"
+    descripcion: "Analogía mochila + esquema visual antes del código"
+    impacto_pts: "+10 disperso, +6 recursero"
+
+  - id: C7
+    destino: "minuta.md min 80"
+    tipo: "ritmo"
+    descripcion: "Pausa socrática: ¿dónde backtrackea Prolog?"
+    impacto_pts: "-fatiga cohort"
+
+impacto_estimado_post_correcciones:
+  estrategico: "85 → 89 (+4)"
+  ansioso: "65 → 72 (+7)"
+  disperso: "46 → 58 (+12)"
+  recursero: "63 → 70 (+7)"
+  cohort_promedio: "65 → 72 (+7)"
+
+historial:
+  - fecha: "2026-04-21"
+    tipo: "inicial_simulacion_batch"
+    fuente: "literatura_academica + calibracion_tema03 + calibracion_tema04"
+    agente: "student-simulator (modo TA — Test All)"
+    nota: >
+      Calibración inicial derivada de perfiles temas 03 y 04, adaptados al
+      contenido específico de clase doble Prolog avanzado (240 min, 14 bloques).
+      Identificadas 7 correcciones (C1-C7) priorizadas por impacto. Sin datos
+      reales de encuesta — actualizar post-clase 2026.
+    proxima_calibracion: "post-clase-tema07-2026"

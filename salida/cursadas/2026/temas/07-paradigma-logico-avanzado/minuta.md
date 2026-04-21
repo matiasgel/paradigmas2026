@@ -102,6 +102,17 @@ color(rojo). color(verde). color(azul).
 ### Checkpoint
 "¿Qué pasa si pongo `!` al final del cuerpo de `color/1`?" — adelantar el próximo bloque.
 
+### 🛑 Pausa socrática obligatoria (min 80, ~2 min)
+
+Antes de pasar a corte, **parar y preguntar al aula**:
+
+> *"Tengo `color(rojo). color(verde). color(azul). ?- color(X), X \= rojo, write(X).`*
+> *¿Cuántas veces backtrackea Prolog antes de imprimir algo? ¿Y qué imprime?"*
+
+Dejar 30s de silencio. Levantar manos. Responder tú mismo si no sale: **backtrackea 1 vez** (rechaza `rojo`), imprime `verde`. Si alguien pregunta *"¿no imprime `azul` también?"* → decir *"solo si fuerzo con `;` o `fail`"* y enlazar con B4.
+
+Esta pausa es el **checkpoint de salud cognitiva del cohort**: si nadie responde → repetir árbol SLD antes de seguir.
+
 ---
 
 ## BLOQUE 4 — Corte (!) (85–105 min) · F-055 a F-066

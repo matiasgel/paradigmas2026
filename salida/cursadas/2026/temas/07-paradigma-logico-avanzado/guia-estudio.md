@@ -245,6 +245,34 @@ Todavía es lógicamente correcto, pero Prolog puede entrar en **loop infinito**
 
 ### 3.3 Backtracking
 
+> **🗺️ Mapa mental del ciclo de backtracking** (tenelo a mano mientras estudiás la sección):
+>
+> ```text
+>   ┌──────────────────────────────────────────────────────────────┐
+>   │  1. Elegir goal más a la izquierda de la resolvente          │
+>   │                       │                                      │
+>   │                       ▼                                      │
+>   │  2. Buscar cláusula H :- B₁…Bₙ cuya cabeza unifique          │
+>   │      ¿Hay varias? ─── sí ──► crear CHOICE POINT              │
+>   │                       │       (guardar trail + alternativas) │
+>   │                       ▼                                      │
+>   │  3. Reemplazar goal por B₁…Bₙ con θ aplicada                 │
+>   │                       │                                      │
+>   │                       ▼                                      │
+>   │  4. ¿Resolvente vacía?                                       │
+>   │       sí ──► ÉXITO (θ acumulada = respuesta)                 │
+>   │       no ──► ir a paso 1                                     │
+>   │                                                              │
+>   │  SI EN PASO 2 NO UNIFICA NINGUNA CLÁUSULA:                   │
+>   │       → BACKTRACK al último choice point                     │
+>   │       → deshacer ligaduras desde el trail                    │
+>   │       → probar siguiente alternativa                         │
+>   │       → si no quedan alternativas → FALLA la consulta        │
+>   └──────────────────────────────────────────────────────────────┘
+> ```
+>
+> **Regla mnemotécnica:** *"elegir, unificar, consumir — si falla, trail y choice point"*.
+
 #### 3.3.1 El concepto
 
 Cuando una rama del árbol SLD falla, Prolog retrocede al último **punto de elección** (*choice point*) y prueba la siguiente alternativa. Es **automático**.
@@ -304,6 +332,39 @@ abs(X, Y)  :- Y is -X.
 Sin `!`, `?- abs(3, Z).` daría `Z=3 ; Z=-3` (erróneo).
 
 **Regla de oro:** preferir corte verde. Si necesitás rojo, documentalo con comentario.
+
+> **🔴🟢 Verde vs rojo — tabla de bolsillo**
+>
+> | Criterio | Verde | Rojo |
+> |----------|-------|------|
+> | ¿Cambia resultados si lo sacás? | **No** | **Sí** |
+> | ¿Rompe semántica declarativa? | No | **Sí** |
+> | Intención | Optimización | Control de flujo |
+> | Recomendación | OK | Refactorizar a `->` si se puede |
+> | Test para distinguirlos | Correr consultas **sin** el corte: si dan mismos resultados → verde | Si cambian / aparecen soluciones extras → rojo |
+>
+> **Contraejemplo ejecutable:** corré este programa mentalmente **con** y **sin** `!`:
+>
+> ```prolog
+> clasificar(X, positivo) :- X > 0, !.
+> clasificar(X, negativo) :- X < 0, !.
+> clasificar(_, cero).
+>
+> ?- clasificar(5, C).
+> ```
+>
+> - **Con `!`** → `C = positivo.` (y punto: no explora más)
+> - **Sin `!`** → `C = positivo ; C = cero.` (dos respuestas — la segunda es **errónea**)
+>
+> Los cortes aquí son **rojos** porque filtran resultados. Reescritura correcta sin corte rojo:
+>
+> ```prolog
+> clasificar(X, positivo) :- X > 0.
+> clasificar(X, negativo) :- X < 0.
+> clasificar(X, cero)     :- X =:= 0.
+> ```
+>
+> Ahora las condiciones son **mutuamente excluyentes** — el programa es declarativo puro.
 
 #### 3.4.3 Alternativa moderna: `(Cond -> Then ; Else)`
 
@@ -467,6 +528,25 @@ X = c, Y = d.
 **Clave pedagógica:** `append/3` es un **ejemplo maestro** de cómo la lógica es más general que la función. Relaciona tres listas — podés fijar cualquier combinación.
 
 ### 3.8 Recursión con acumulador
+
+> **🎒 Analogía de la mochila** (leé esto antes de cualquier código):
+>
+> Imaginá que caminás un sendero recogiendo piedras. Tenés dos formas de contar el peso total:
+>
+> **Recursión ingenua** — *"al final pregunto cuánto pesa todo"*: llegás al final del sendero con las manos vacías y ahí empezás a sumar pesos de memoria hacia atrás. Si el sendero es larguísimo (100.000 piedras), no te alcanza la memoria.
+>
+> **Recursión con acumulador** — *"llevo una mochila y voy cargando"*: al empezar la mochila pesa 0. En cada piedra: sumás su peso a la mochila y seguís. Cuando llegás al final, la mochila ya tiene el resultado — no necesitás recordar nada del camino.
+>
+> **Regla mental para escribirlo:**
+> - El **wrapper** inicializa la mochila: `suma(L, S) :- suma(L, 0, S).`
+> - El **caso base** devuelve la mochila: `suma([], Acc, Acc).`
+> - El **caso recursivo** carga la mochila *antes* de llamar: `Acc1 is Acc + H, suma(T, Acc1, S).`
+>
+> **Pregunta detectora** (hacete esta pregunta mientras escribís):
+> > *"¿El cálculo está ANTES o DESPUÉS de la llamada recursiva?"*
+>
+> - **Antes** → tail-recursive (LCO se aplica, sin stack overflow) ✅
+> - **Después** → ingenuo (va a crecer el stack) ❌
 
 #### 3.8.1 El problema del stack
 

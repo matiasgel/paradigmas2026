@@ -305,6 +305,9 @@ false.
 
 Decisión de diseño: **occurs-check cuesta tiempo**. Los implementadores lo desactivan para velocidad. El estudiante avanzado lo activa cuando desarrolla.
 
+> 🧘 **Para la práctica: no te preocupes.**
+> En el **99%** de los programas Prolog que vas a escribir este año, occurs-check **no es un problema**. SWI lo desactiva por defecto por una razón: es lentísimo y raramente importa. Lo veremos de nuevo solo si trabajás con estructuras que puedan generar ciclos. **Seguimos.**
+
 ---
 
 ### [F-019] Variable anónima `_`
@@ -1067,20 +1070,43 @@ Así se construye `\+/1` en sistemas mínimos.
 
 ---
 
-### [F-064] Trampa: `!` y variables compartidas
+### [F-064] Corte rojo: el contraejemplo ejecutable
 `@tipo: codigo`
 
-```prolog
-clasifica(X, bajo)  :- X < 10, !.
-clasifica(X, medio) :- X < 100, !.
-clasifica(_, alto).
+**Mismo predicado — con y sin corte. Cambia el resultado.**
 
-?- clasifica(5, C).       % C = bajo
-?- clasifica(50, C).      % C = medio
-?- clasifica(500, C).     % C = alto
+```prolog
+% CON cortes rojos
+clasificar(X, positivo) :- X > 0, !.
+clasificar(X, negativo) :- X < 0, !.
+clasificar(_, cero).
+
+?- clasificar(5, C).
+C = positivo.                     % ← una sola respuesta ✓
+
+% SIN cortes
+clasificar(X, positivo) :- X > 0.
+clasificar(X, negativo) :- X < 0.
+clasificar(_, cero).
+
+?- clasificar(5, C).
+C = positivo ;
+C = cero.                         % ← ¡dos! la segunda es errónea ✗
 ```
 
-Funciona, pero si olvidás un `!` → múltiples clasificaciones. El corte se usa para **exclusividad**.
+Los cortes eran **rojos**: filtraban resultados. Sin ellos, se rompe la semántica.
+
+**Reescritura declarativa pura** (sin corte):
+
+```prolog
+clasificar(X, positivo) :- X > 0.
+clasificar(X, negativo) :- X < 0.
+clasificar(X, cero)     :- X =:= 0.
+```
+
+Ahora las condiciones son **mutuamente excluyentes** → no hace falta corte.
+
+**Moraleja:** si usás corte rojo, preguntate si podés reformular con condiciones mutuamente excluyentes.
 
 ---
 
@@ -2220,8 +2246,8 @@ Diferencia clave con `findall`: **falla** si la bolsa queda vacía.
 
 ---
 
-### [F-130] `setof/3`
-`@tipo: codigo`
+### [F-130] `setof/3` y comparación final
+`@tipo: concepto-mixto`
 
 ```prolog
 ?- setof(N, E^edad(N, E), L).
@@ -2230,6 +2256,19 @@ L = [ana, beto, carla].     % ordenado, sin duplicados
 
 - `E^` = "cuantificación existencial" — "algún E cualquiera"
 - Sin `E^`, `bagof/setof` agrupan por cada valor de las variables libres
+
+**Los 3 lado a lado — misma consulta.** Base: `color(rojo). color(verde). color(rojo).`
+
+| Operador | Consulta | Resultado | Si no hay soluciones |
+|----------|----------|-----------|----------------------|
+| `findall/3` | `findall(C, color(C), L)` | `[rojo, verde, rojo]` | `L = []` (éxito) |
+| `bagof/3`   | `bagof(C, color(C), L)`   | `[rojo, verde, rojo]` | **falla** |
+| `setof/3`   | `setof(C, color(C), L)`   | `[rojo, verde]` | **falla** |
+
+**Regla mental de bolsillo:**
+- *"dame lo que haya, aunque sea nada"* → **`findall`**
+- *"si hay algo, agrupado"* → **`bagof`**
+- *"ordenado y sin duplicados"* → **`setof`**
 
 ---
 
