@@ -1,0 +1,33 @@
+﻿topic_number: "03"
+topic_name: "Módulo III + IV parcial — Desarrollo Web con Django: Intro Web, Django y ORM"
+topic_slug: "desarrollo-web-django-orm"
+topic_folder: "salida/cursadas/2026/temas/03-desarrollo-web-django-orm"
+tp_type: "repo"
+tp_repo: "https://github.com/Laboratorio-de-Programacion-Y-lenguajes/laboratorio-de-programacion-y-lenguajes-2026-tp-4-introduccion-a-django-orm-intro-django-orm"
+class_duration: "540"   # 540 min = 9 h = 3 clases de 180 min
+class_structure:
+  - {n: 1, type: "teorica", duration: 180, title: "Intro a Programación Web + MVC"}
+  - {n: 2, type: "teorica", duration: 180, title: "Intro a Django (OOP, Class-Based Views)"}
+  - {n: 3, type: "teorica-practica", duration: 180, title: "Django ORM completo para TP-4"}
+git_branch: "tema-03-desarrollo-web-django-orm"
+created_at: "2026-04-22"
+status: "design-in-progress"
+plan_mapping:
+  modulo_iii: "completo (semana 5 teorica)"
+  modulo_iv: "parcial (persistencia + mapeo OO-Relacional + Django ORM basico)"
+design_constraints:
+  paradigm: "Django orientado a objetos — SIEMPRE class-based views y clases. PROHIBIDO function-based views."
+  audience: "Estudiantes de 3er año UNTDF, niveles heterogeneos, algunos offline → guia extensa self-contained."
+  coherence: "Incremental: programacion web (contexto) → Django (framework) → ORM (persistencia)."
+  tp_coverage: "100% de temas del TP-4 Introduccion a Django ORM"
+  base_material: "ChromaDB: introweb (filminas 2025), django-6.0-docs, python-3.14-docs, edu_knowledge"
+artifacts:
+  diseno: "diseno.md"
+  minuta: "minuta.md"
+  filminas: "filminas.md"
+  plan_filminas: "slides/plan-filminas-03-desarrollo-web-django-orm.json"
+  guia_estudio: "guia-estudio.md"
+  tp: "tp.md"
+  score: "score-pedagogico.md"
+  faq: "faq-anticipado.md"
+  slides_url: "slides/slides-url.txt"

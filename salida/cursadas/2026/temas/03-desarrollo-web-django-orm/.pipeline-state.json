@@ -1,0 +1,12 @@
+﻿{
+  "current_step": "closed",
+  "completed_steps": ["init", "design", "class", "study-guide", "tp", "slides-plan", "slides-publish", "visual-verified", "closed"],
+  "next_step": null,
+  "topic_number": "03",
+  "created_at": "2026-04-22",
+  "closed_at": "2026-04-22",
+  "slides_url": "https://docs.google.com/presentation/d/1HoMdA5RULlOZsB5d95rXpTwSKBg9frg-Rjzp_DoRdeg/edit",
+  "presentation_id": "1HoMdA5RULlOZsB5d95rXpTwSKBg9frg-Rjzp_DoRdeg",
+  "slides_count": 74,
+  "notes": "Tema Modulo III + IV parcial. Combina intro web, Django e introduccion a ORM para TP-4. Publicado y verificado: composition 74/74 PASA, coverage F-00..F-73 100%. Sin referencias a agentes en artefactos."
+}

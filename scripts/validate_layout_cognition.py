@@ -224,6 +224,8 @@ def validate_slide_cognition(slide: dict, config: dict) -> list[dict]:
     max_cols = rules.get("max_columns")
     if max_rows or max_cols:
         for tbl in slide.get("tables", []):
+            if not isinstance(tbl, dict):
+                continue
             rows = tbl.get("rows", [])
             if max_rows and len(rows) > max_rows:
                 issues.append({

@@ -1,0 +1,3905 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "03-desarrollo-web-django-orm",
+    "title": "Tema 03 — Clase 1",
+    "source": "filminas.md",
+    "generated_at": "2026-04-22T13:42:57",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
+    "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\03-desarrollo-web-django-orm",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/slides-pipeline.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 74,
+    "images_planned": 12,
+    "tables_planned": 19,
+    "code_slides": 28,
+    "status": "DRAFT",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "portada": 3,
+      "tabla": 10,
+      "demo": 7,
+      "tabla-comparativa": 9,
+      "concepto-mixto": 14,
+      "diagrama": 4,
+      "cierre": 3,
+      "codigo": 22,
+      "socratica": 2
+    }
+  },
+  "slides": [
+    {
+      "id": "F-00",
+      "type": "portada",
+      "title": "Portada — Clase 1",
+      "subtitle": "Tema 03 — Clase 1",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Introducción a Programación Web y patrón MVC"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "content": "Laboratorio de Programación y Lenguajes · UNTDF 2026"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "content": "Prof. Matías Gel"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "composición flat design con formas geométricas, rectángulos bordo y gris oscuro conectados por líneas grises, ícono abstracto de globo terráqueo con flechas circulares, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-00-bg.png",
+        "drive_id": "1bR67eEer-MSZ3yFqyu-t3BFNz0WEajOT"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-01",
+      "type": "tabla",
+      "title": "Agenda del día",
+      "subtitle": "¿Qué vemos hoy? (180 min)",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **Al final de hoy:** van a poder mapear cualquier web a Modelo / Vista / Controlador."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Bloque | Duración | Tema |\n|--------|----------|------|\n| T0 | 15 min | Apertura: DevTools Network en vivo |\n| T1 | 25 min | App Web vs Sitio Web |\n| T2 | 30 min | Cliente/Servidor + modelo 3 capas |\n| — | 20 min | **Pausa + diseño responsive** |\n| T3 | 50 min | **Patrón MVC (bloque central)** |\n| T4 | 30 min | HTTP hands-on con curl |\n| T5 | 10 min | Cierre + preview Clase 2 |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Bloque | Duración | Tema |\n|--------|----------|------|\n| T0 | 15 min | Apertura: DevTools Network en vivo |\n| T1 | 25 min | App Web vs Sitio Web |\n| T2 | 30 min | Cliente/Servidor + modelo 3 capas |\n| — | 20 min | **Pausa + diseño responsive** |\n| T3 | 50 min | **Patrón MVC (bloque central)** |\n| T4 | 30 min | HTTP hands-on con curl |\n| T5 | 10 min | Cierre + preview Clase 2 |",
+          "local_asset": "slides/assets/F-01-table-1.png",
+          "drive_id": "13Y2uF4Npvy-yUouk3pkthoQxSzzUEaL2"
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "type": "demo",
+      "title": "Apertura: DevTools abierto",
+      "subtitle": "Abrimos DevTools ahora",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Actividad conjunta (pizarra digital)"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Ir a `https://www.untdf.edu.ar`",
+              "level": 0
+            },
+            {
+              "content": "Abrir DevTools (F12) → pestaña **Network**",
+              "level": 0
+            },
+            {
+              "content": "Recargar con Ctrl+F5",
+              "level": 0
+            },
+            {
+              "content": "Observar: URL, Method, Status, Type, Size, Time",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> ¿Qué es cada fila? ¿Por qué hay varias para **una** página?"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "GET  /            200  document  45 KB  220 ms\nGET  /style.css   200  stylesheet  12 KB  18 ms\nGET  /logo.png    200  image       32 KB  25 ms"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-03",
+      "type": "tabla-comparativa",
+      "title": "App Web vs Sitio Web",
+      "subtitle": "App web vs Sitio web",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **Clave:** la **app web** tiene lógica del lado del servidor → necesita un framework como Django."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Dimensión | Sitio web estático | App web |\n|-----------|-------------------|---------|\n| Contenido | Mismo HTML para todos | Generado según usuario |\n| Estado | No tiene | Tiene (sesión, BD) |\n| Interactividad | Mínima (links) | Formularios, acciones |\n| Ejemplos UNTDF | Landing institucional | Moodle, SIU-Guaraní |\n| Backend | Archivos en servidor | Proceso + BD |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Dimensión | Sitio web estático | App web |\n|-----------|-------------------|---------|\n| Contenido | Mismo HTML para todos | Generado según usuario |\n| Estado | No tiene | Tiene (sesión, BD) |\n| Interactividad | Mínima (links) | Formularios, acciones |\n| Ejemplos UNTDF | Landing institucional | Moodle, SIU-Guaraní |\n| Backend | Archivos en servidor | Proceso + BD |",
+          "local_asset": "slides/assets/F-03-table-1.png",
+          "drive_id": "1kHYYHcS9ZvS9dsrm-YNIOK2zzL73B4iq"
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "type": "concepto-mixto",
+      "title": "Ejemplos del mundo real",
+      "subtitle": "Apps web que usan todos los días",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Estudiantes"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Moodle UNTDF** → estado: cursadas, entregas",
+              "level": 0
+            },
+            {
+              "content": "**SIU-Guaraní** → estado: inscripciones, notas",
+              "level": 0
+            },
+            {
+              "content": "**Instagram / YouTube** → estado: feed, historial",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Contra-ejemplo"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Un blog de WordPress servido como HTML pre-renderizado",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> Ejercicio rápido: ¿qué parte de cada una es \"app\" y qué parte \"sitio\"?"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# Ejemplos de apps web con estado\nmoodle.entregas.append(entrega)\nsiu_guarani.inscripciones.create(...)\ninstagram.feed.update(...)\n\n# Contra-ejemplo (sitio est?tico):\nopen('blog.html').read()"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "diagrama",
+      "title": "Cliente-Servidor — el modelo base",
+      "subtitle": "Modelo Cliente-Servidor",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Dos procesos que se comunican por red"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Cliente** → inicia la conversación (\"dame /productos\")",
+              "level": 0
+            },
+            {
+              "content": "**Servidor** → escucha, procesa y responde",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Propiedades"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Separación de responsabilidades",
+              "level": 0
+            },
+            {
+              "content": "Múltiples clientes por un servidor",
+              "level": 0
+            },
+            {
+              "content": "El cliente **NO** sabe cómo el servidor almacena los datos",
+              "level": 0
+            },
+            {
+              "content": "El servidor **NO** sabe si el cliente es Chrome, Firefox, curl o un script Python",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Diagrama flat de dos rectángulos bordo — uno pequeño a la izquierda (cliente) y uno grande a la derecha (servidor) — conectados por dos flechas horizontales grises: una arriba apuntando a la derecha, otra abajo apuntando a la izquierda. En el centro entre ambos, una nube gris. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-05-content.png",
+        "drive_id": "1Qz4esyNU-XjqNk0ACOZ67xvtvhSW9b9O"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-06",
+      "type": "diagrama",
+      "title": "Arquitectura 3 capas",
+      "subtitle": "Arquitectura en 3 capas",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Capa Presentación"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "HTML, CSS, JS que ve el usuario",
+              "level": 0
+            },
+            {
+              "content": "Responsabilidad: mostrar y capturar",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Capa Negocio (Aplicación)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Reglas del dominio",
+              "level": 0
+            },
+            {
+              "content": "Responsabilidad: decidir qué hacer",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Capa Datos (Persistencia)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Base de datos relacional (PostgreSQL, SQLite)",
+              "level": 0
+            },
+            {
+              "content": "Responsabilidad: guardar y recuperar",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> **Django** cubre las 3 capas con ayuda de librerías externas."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Tres rectángulos horizontales apilados verticalmente, todos bordo, separados por espacios grises. El superior es más angosto, el medio el más ancho, el inferior del mismo ancho que el superior. A la derecha, una flecha doble vertical gris los conecta a todos. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-06-content.png",
+        "drive_id": "1BAzMCobPRsN2ojDUVWZcJK0UhR3jIsVI"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-07",
+      "type": "concepto-mixto",
+      "title": "Ejercicio en clase: mapear un e-commerce",
+      "subtitle": "Ejercicio conjunto (10 min)",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Caso: tienda online"
+        },
+        {
+          "type": "text",
+          "content": "> Un usuario agrega un libro al carrito, paga con tarjeta y recibe email de confirmación."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Identifiquemos cada capa"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Presentación** → ¿qué ve el usuario?",
+              "level": 0
+            },
+            {
+              "content": "**Negocio** → ¿qué reglas hay? (stock, descuentos, impuestos)",
+              "level": 0
+            },
+            {
+              "content": "**Datos** → ¿qué se guarda? (pedido, pago, usuario)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En pizarra:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Libramos 3 columnas y anotamos juntos",
+              "level": 0
+            },
+            {
+              "content": "El docente reparte responsabilidades: A/B/C",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# Ejercicio: clasificar estas capas\n# Carrito de compras ? ?\n# Validaci?n de tarjeta ? ?\n# Base de productos ? ?\n# Render de HTML ? ?\n\n# Soluci?n (3 capas MVC):\n# V: carrito UI, render HTML\n# C: validaci?n tarjeta\n# M: base productos, ?rdenes"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-08",
+      "type": "diagrama",
+      "title": "Patrón MVC — la idea central",
+      "subtitle": "Patrón MVC",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Separación en 3 responsabilidades"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Modelo** → los datos y las reglas de dominio",
+              "level": 0
+            },
+            {
+              "content": "**Vista** → la presentación (HTML que ve el usuario)",
+              "level": 0
+            },
+            {
+              "content": "**Controlador** → el pegamento: recibe pedido, coordina, decide qué vista mostrar",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Por qué importa?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Equipos distintos pueden trabajar en paralelo",
+              "level": 0
+            },
+            {
+              "content": "Cambiar el look & feel no toca la lógica",
+              "level": 0
+            },
+            {
+              "content": "Cambiar la BD no toca las pantallas",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Diagrama triangular con tres rectángulos bordo en los vértices — uno arriba, uno abajo-izquierda, uno abajo-derecha — conectados entre sí por tres flechas grises curvas formando un triángulo. En el centro del triángulo, un pequeño círculo gris. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-08-content.png",
+        "drive_id": "1YdXFkxP4FLTXarjubLbY76BrLHKcR-nq"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-09",
+      "type": "concepto-mixto",
+      "title": "MVC — quién habla con quién",
+      "subtitle": "Flujo de una petición en MVC",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Secuencia"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Usuario hace click → Navegador envía `GET /libros/42`",
+              "level": 0
+            },
+            {
+              "content": "**Controlador** recibe la URL",
+              "level": 0
+            },
+            {
+              "content": "**Controlador** pide datos al **Modelo**: `Libro.get(42)`",
+              "level": 0
+            },
+            {
+              "content": "**Modelo** consulta la BD y devuelve el objeto",
+              "level": 0
+            },
+            {
+              "content": "**Controlador** pasa los datos a la **Vista**",
+              "level": 0
+            },
+            {
+              "content": "**Vista** arma el HTML",
+              "level": 0
+            },
+            {
+              "content": "**Controlador** devuelve el HTML al navegador",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "Navegador → Controlador → Modelo → BD\n               ↓              ↑\n               Vista ←────────┘\n               ↓\n          HTML al navegador"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-10",
+      "type": "tabla-comparativa",
+      "title": "Aclaración MVC vs MVT de Django",
+      "subtitle": "MVC clásico vs MVT de Django",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **Trampa**: en Django, el archivo `views.py` contiene lo que MVC llama **controladores**.\n> La \"vista\" (HTML) en Django se llama **template**."
+        },
+        {
+          "type": "text",
+          "content": "> Regla para no confundirse: cuando escribimos `class LibroDetailView(...)` en `views.py`, estamos escribiendo un **controlador**."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| MVC (Ruby on Rails, Spring) | MVT (Django) | ¿Qué hace? |\n|-----------------------------|--------------|------------|\n| Model | **Model** | Datos + reglas de dominio |\n| View (HTML) | **Template** | Presentación HTML |\n| Controller | **View** (en `views.py`) | Decide, coordina, responde |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| MVC (Ruby on Rails, Spring) | MVT (Django) | ¿Qué hace? |\n|-----------------------------|--------------|------------|\n| Model | **Model** | Datos + reglas de dominio |\n| View (HTML) | **Template** | Presentación HTML |\n| Controller | **View** (en `views.py`) | Decide, coordina, responde |",
+          "local_asset": "slides/assets/F-10-table-1.png",
+          "drive_id": "1AbGl9dc6uV3MCQeWecNWWZPRtICU6K8R"
+        }
+      ]
+    },
+    {
+      "id": "F-11",
+      "type": "concepto-mixto",
+      "title": "Ejercicio en clase: clasificar responsabilidades",
+      "subtitle": "Ejercicio conjunto (15 min) — Caso biblioteca",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Un alumno entra a /libros/ → ve listado → hace click en uno → ve detalle y puede reservar."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Clasifiquemos cada cosa en M, V o C"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "La tabla `libros` en SQLite",
+              "level": 0
+            },
+            {
+              "content": "El HTML con la lista de libros",
+              "level": 0
+            },
+            {
+              "content": "La función que recibe `/libros/` y arma la página",
+              "level": 0
+            },
+            {
+              "content": "El método `libro.tiene_disponibles()`",
+              "level": 0
+            },
+            {
+              "content": "El CSS del sitio",
+              "level": 0
+            },
+            {
+              "content": "La regla \"no se puede reservar si hay 0 disponibles\"",
+              "level": 0
+            },
+            {
+              "content": "La consulta `SELECT * FROM libros WHERE categoria='SF'`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> **Docente**: se debate cada ítem con los alumnos antes de marcar."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# Biblioteca ? MVC\n# Modelo:      Libro, Autor, Prestamo\n# Vista:       listado.html, detalle.html\n# Controlador: LibroListView, buscar_libro()\n\n# Pregunta: ?d?nde va el chequeo\n# 'el libro no se prest? en 30 d?as'?"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-12",
+      "type": "concepto-mixto",
+      "title": "HTTP — el idioma de la web",
+      "subtitle": "HTTP — modelo petición / respuesta",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Cada interacción web es"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Una petición** (request) del cliente",
+              "level": 0
+            },
+            {
+              "content": "**Una respuesta** (response) del servidor",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Stateless"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Cada petición es independiente",
+              "level": 0
+            },
+            {
+              "content": "El servidor no \"recuerda\" al cliente entre pedidos (salvo usando cookies/sesión)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> HTTP viaja sobre TCP/IP — pero como programadores web, trabajamos al nivel de request/response."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "http",
+          "content": "GET /libros/ HTTP/1.1\nHost: biblioteca.untdf.edu.ar\nCookie: sessionid=abc123\n\nHTTP/1.1 200 OK\nContent-Type: text/html\n\n<html>...</html>"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "tabla",
+      "title": "Métodos HTTP",
+      "subtitle": "Métodos HTTP que vamos a usar",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> En Clase 2-3 usaremos casi siempre **GET** y **POST**.\n> Forms con PUT/PATCH/DELETE se ven en Tema 05."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Método | Para qué | Ejemplo Django |\n|--------|----------|---------------|\n| **GET** | Leer sin efectos | Ver listado de libros |\n| **POST** | Crear / enviar datos | Registrar un préstamo |\n| **PUT** | Reemplazar entero | Actualizar perfil completo |\n| **PATCH** | Modificar parcial | Cambiar solo el email |\n| **DELETE** | Borrar | Cancelar reserva |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Método | Para qué | Ejemplo Django |\n|--------|----------|---------------|\n| **GET** | Leer sin efectos | Ver listado de libros |\n| **POST** | Crear / enviar datos | Registrar un préstamo |\n| **PUT** | Reemplazar entero | Actualizar perfil completo |\n| **PATCH** | Modificar parcial | Cambiar solo el email |\n| **DELETE** | Borrar | Cancelar reserva |",
+          "local_asset": "slides/assets/F-13-table-1.png",
+          "drive_id": "1DssvPOOnm11lFK4b3msjJpVRDG0Y4MNj"
+        }
+      ]
+    },
+    {
+      "id": "F-14",
+      "type": "tabla",
+      "title": "Códigos de estado HTTP",
+      "subtitle": "Códigos de respuesta que verán a diario",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> En DevTools → Network van a ver estos códigos en la columna **Status**."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Código | Significado | Cuándo aparece |\n|--------|-------------|----------------|\n| 200 OK | Todo bien | Petición exitosa |\n| 301 Moved | Redirigido permanente | `/libros` → `/libros/` |\n| 302 Found | Redirigido temporal | Post-login |\n| 400 Bad Request | Error del cliente | Formulario malformado |\n| 403 Forbidden | Sin permiso | Ruta protegida sin login |\n| 404 Not Found | No existe | URL mal tipeada |\n| 500 Server Error | Error del servidor | Excepción no atrapada |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Código | Significado | Cuándo aparece |\n|--------|-------------|----------------|\n| 200 OK | Todo bien | Petición exitosa |\n| 301 Moved | Redirigido permanente | `/libros` → `/libros/` |\n| 302 Found | Redirigido temporal | Post-login |\n| 400 Bad Request | Error del cliente | Formulario malformado |\n| 403 Forbidden | Sin permiso | Ruta protegida sin login |\n| 404 Not Found | No existe | URL mal tipeada |\n| 500 Server Error | Error del servidor | Excepción no atrapada |",
+          "local_asset": "slides/assets/F-14-table-1.png",
+          "drive_id": "1hnsHCUXuFqDcKT3WDwJGb_4VXGfyJ1lN"
+        }
+      ]
+    },
+    {
+      "id": "F-15",
+      "type": "demo",
+      "title": "Demo en vivo: curl",
+      "subtitle": "Demo conjunta — curl (20 min)",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tarea para ustedes ahora"
+        },
+        {
+          "type": "text",
+          "content": "Cada alumno corre los 4 comandos y anota:\n- El **status code**\n- El **Content-Type**\n- Los primeros 3 headers"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "bash",
+          "content": "# 1. GET simple\ncurl -i https://httpbin.org/get\n\n# 2. Ver solo la cabecera\ncurl -I https://www.untdf.edu.ar\n\n# 3. POST con datos\ncurl -X POST https://httpbin.org/post \\\n     -d \"nombre=Ana&libro=Sapiens\"\n\n# 4. Ver el 404\ncurl -i https://httpbin.org/status/404"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-16",
+      "type": "tabla-comparativa",
+      "title": "Framework vs Librería",
+      "subtitle": "Framework vs Librería",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Principio de Hollywood"
+        },
+        {
+          "type": "text",
+          "content": "> *\"Don't call us — we'll call you\"*\n>\n> Un framework te dice: \"escribí una clase que herede de `ListView`, yo me encargo del resto\"."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Librería | Framework |\n|----------|-----------|\n| **Vos** llamás al código | El código **te llama a vos** |\n| Vos diseñás la arquitectura | El framework impone arquitectura |\n| Ejemplo Python: `requests`, `numpy` | Ejemplo Python: **Django**, FastAPI |\n| \"Te uso cuando quiero\" | \"Llenás los huecos que te pido\" |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Librería | Framework |\n|----------|-----------|\n| **Vos** llamás al código | El código **te llama a vos** |\n| Vos diseñás la arquitectura | El framework impone arquitectura |\n| Ejemplo Python: `requests`, `numpy` | Ejemplo Python: **Django**, FastAPI |\n| \"Te uso cuando quiero\" | \"Llenás los huecos que te pido\" |",
+          "local_asset": "slides/assets/F-16-table-1.png",
+          "drive_id": "1NOdQuZuLY59nnHxOAruNmC-rDAGSDFY3"
+        }
+      ]
+    },
+    {
+      "id": "F-17",
+      "type": "tabla-comparativa",
+      "title": "Panorama de frameworks MVC web",
+      "subtitle": "Frameworks MVC para web (por lenguaje)",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En esta cátedra usamos Django"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Maduro (2005), estable, LTS",
+              "level": 0
+            },
+            {
+              "content": "Usado en Instagram, Mozilla, Disqus",
+              "level": 0
+            },
+            {
+              "content": "ORM incluido, admin generado automático",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Lenguaje | Framework | Característica |\n|----------|-----------|----------------|\n| Python | **Django** | Baterías incluidas, ORM propio, admin |\n| Python | Flask, FastAPI | Micro, componible |\n| Ruby | Ruby on Rails | Convention over configuration |\n| PHP | Laravel | Pragmático, Blade templates |\n| Java | Spring MVC | Enterprise, inyección de dependencias |\n| JavaScript | Express (backend) | Minimalista |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Lenguaje | Framework | Característica |\n|----------|-----------|----------------|\n| Python | **Django** | Baterías incluidas, ORM propio, admin |\n| Python | Flask, FastAPI | Micro, componible |\n| Ruby | Ruby on Rails | Convention over configuration |\n| PHP | Laravel | Pragmático, Blade templates |\n| Java | Spring MVC | Enterprise, inyección de dependencias |\n| JavaScript | Express (backend) | Minimalista |",
+          "local_asset": "slides/assets/F-17-table-1.png",
+          "drive_id": "1IgL_uWJd2ck-aGsucYXtnYa3V25Q2AAu"
+        }
+      ]
+    },
+    {
+      "id": "F-18",
+      "type": "concepto-mixto",
+      "title": "¿Por qué Django y no Flask?",
+      "subtitle": "¿Por qué Django y no Flask?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Flask (micro)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Vos elegís todo: ORM, forms, auth, admin",
+              "level": 0
+            },
+            {
+              "content": "Más libertad → **más decisiones**",
+              "level": 0
+            },
+            {
+              "content": "Ideal para APIs pequeñas o prototipos",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Django (baterías incluidas)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Elecciones ya tomadas: **ORM propio**, forms, auth, admin, migrations",
+              "level": 0
+            },
+            {
+              "content": "Menos libertad → **más velocidad de entrega**",
+              "level": 0
+            },
+            {
+              "content": "Ideal para apps CRUD medianas/grandes",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> **Para aprender**: Django enseña convenciones del mundo real.\n> **Para el TP-4**: Django nos da el ORM + tests + admin sin escribir nada extra."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# Django (batteries included)\nfrom django.views.generic import ListView\nfrom .models import Libro\n\nclass LibrosList(ListView):\n    model = Libro\n    # ORM + templates + routing incluidos"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "concepto-mixto",
+      "title": "Preview Clase 2",
+      "subtitle": "Preview — Clase 2 (jueves)",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Van a salir con"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Un proyecto Django instalado",
+              "level": 0
+            },
+            {
+              "content": "Una app `catalogo` creada",
+              "level": 0
+            },
+            {
+              "content": "Una primera **class-based view** funcionando",
+              "level": 0
+            },
+            {
+              "content": "El servidor `runserver` corriendo localmente",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Traen para la próxima"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Laptop con Python 3.13+ instalado",
+              "level": 0
+            },
+            {
+              "content": "Git configurado",
+              "level": 0
+            },
+            {
+              "content": "(opcional) cuenta GitHub para el TP-4",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "content": "# Pr?xima clase\n# Instalar Django\n# django-admin startproject\n# Modelo URL ? View ? Template",
+          "lang": "python"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-20",
+      "type": "demo",
+      "title": "Ticket de salida — Clase 1",
+      "subtitle": "Ticket de salida (3 min)",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En una hoja, responder:"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Diferencia entre **sitio web** y **app web** en una oración.",
+              "level": 0
+            },
+            {
+              "content": "Cuál es la diferencia entre **Modelo, Vista y Controlador** (una oración cada uno).",
+              "level": 0
+            },
+            {
+              "content": "¿Qué código HTTP devuelve una ruta que no existe?",
+              "level": 0
+            },
+            {
+              "content": "¿Qué es el **principio de Hollywood**?",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> Lo entregan al salir — sin nombre si prefieren. Se repasan las respuestas al inicio de la Clase 2."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "bash",
+          "content": "$ curl -I https://untdf.edu.ar/\nHTTP/2 200\ncontent-type: text/html\nserver: nginx\n\n$ curl -I https://api.github.com/\nHTTP/2 200\ncontent-type: application/json"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-21",
+      "type": "cierre",
+      "title": "Cierre Clase 1",
+      "subtitle": "Clase 1 cerrada",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Hoy aprendimos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "App web vs sitio web estático",
+              "level": 0
+            },
+            {
+              "content": "Arquitectura 3 capas + cliente/servidor",
+              "level": 0
+            },
+            {
+              "content": "Patrón MVC / MVT",
+              "level": 0
+            },
+            {
+              "content": "HTTP: métodos y códigos",
+              "level": 0
+            },
+            {
+              "content": "Por qué Django",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> **Próxima clase (Clase 2):** instalamos Django y escribimos nuestra primera class-based view."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "CLASE 2 — INTRODUCCIÓN A DJANGO CON POO (180 min)"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "composición flat con un gran círculo bordo a la derecha y tres pequeños círculos grises a la izquierda alineados horizontalmente, conectados por una flecha gris al círculo grande. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-21-bg.png",
+        "drive_id": "1TpMAtRcPmBZV65lIRFfUnD8mXculBn0s"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-22",
+      "type": "portada",
+      "title": "Portada — Clase 2",
+      "subtitle": "Tema 03 — Clase 2",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Introducción a Django con Programación Orientada a Objetos"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "content": "Laboratorio de Programación y Lenguajes · UNTDF 2026"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "composición flat design con un rectángulo grande bordo en el centro dividido en cuatro cuadrantes por líneas grises, con pequeños íconos abstractos geométricos en cada cuadrante. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-22-bg.png",
+        "drive_id": "1IChxdA-UbIC1VYix7OzJsoAAOzdPh5U_"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "tabla",
+      "title": "Recap Clase 1 + Agenda",
+      "subtitle": "Agenda (180 min)",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Bloque | Duración | Tema |\n|--------|----------|------|\n| T0 | 10 min | Recap Clase 1 (tickets de salida) |\n| T1 | 20 min | Framework vs librería (Hollywood) |\n| T2 | 25 min | Django en el ecosistema Python |\n| T3 | 20 min | Instalación + venv |\n| — | 15 min | **Pausa** |\n| T4 | 40 min | startproject, startapp, settings, urls |\n| T5 | 30 min | **Primera CBV — hands-on juntos** |\n| T6 | 10 min | runserver + preview Clase 3 |\n| T7 | 10 min | Ticket de salida + cierre |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Bloque | Duración | Tema |\n|--------|----------|------|\n| T0 | 10 min | Recap Clase 1 (tickets de salida) |\n| T1 | 20 min | Framework vs librería (Hollywood) |\n| T2 | 25 min | Django en el ecosistema Python |\n| T3 | 20 min | Instalación + venv |\n| — | 15 min | **Pausa** |\n| T4 | 40 min | startproject, startapp, settings, urls |\n| T5 | 30 min | **Primera CBV — hands-on juntos** |\n| T6 | 10 min | runserver + preview Clase 3 |\n| T7 | 10 min | Ticket de salida + cierre |",
+          "local_asset": "slides/assets/F-23-table-1.png",
+          "drive_id": "1BP0xypjTzNH_Dj50EBPbJk0mxep8DRBQ"
+        }
+      ]
+    },
+    {
+      "id": "F-24",
+      "type": "concepto-mixto",
+      "title": "Framework = inversión de control",
+      "subtitle": "Principio de Hollywood en acción",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lo que NO vamos a escribir"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lo que SÍ vamos a escribir"
+        },
+        {
+          "type": "text",
+          "content": "> Django arma el servidor, parsea HTTP, matchea URLs, instancia tu clase y llama tus métodos."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# NO: nosotros NO escribimos el servidor HTTP\nservidor = HTTPServer(...)\nwhile True:\n    conexion = servidor.accept()\n    pedido = parsear(conexion)\n    ..."
+        },
+        {
+          "lang": "python",
+          "content": "# SÍ: solo llenamos los \"huecos\" que pide Django\nclass ListaLibrosView(ListView):\n    model = Libro\n    template_name = \"catalogo/lista.html\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "tabla",
+      "title": "Django en el ecosistema Python",
+      "subtitle": "Django en números (2026)",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Para el TP-4 usamos **Django 5.1+** (el repo viene configurado así)."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Característica | Valor |\n|----------------|-------|\n| Primera versión | 2005 |\n| Versión LTS actual | **5.2 LTS** |\n| Usuarios notables | Instagram, Mozilla, Pinterest, Disqus |\n| Licencia | BSD (libre y comercial) |\n| Lenguaje | Python 3.13+ |\n| Baterías | ORM, admin, auth, migrations, forms, tests |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Característica | Valor |\n|----------------|-------|\n| Primera versión | 2005 |\n| Versión LTS actual | **5.2 LTS** |\n| Usuarios notables | Instagram, Mozilla, Pinterest, Disqus |\n| Licencia | BSD (libre y comercial) |\n| Lenguaje | Python 3.13+ |\n| Baterías | ORM, admin, auth, migrations, forms, tests |",
+          "local_asset": "slides/assets/F-25-table-1.png",
+          "drive_id": "1BZKSQy92_fGSGpNwZGyx6TWMn6AXVhVf"
+        }
+      ]
+    },
+    {
+      "id": "F-26",
+      "type": "codigo",
+      "title": "Instalación juntos — paso a paso",
+      "subtitle": "Setup del entorno (20 min — todos conmigo)",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Antes de seguir: TODOS levantan la mano si les falló algo. Lo resolvemos juntos."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "bash",
+          "content": "# 1. Crear venv (en la carpeta del TP)\npython -m venv .venv\n\n# 2. Activar\n# Windows:\n.venv\\Scripts\\Activate.ps1\n# Linux/Mac:\nsource .venv/bin/activate\n\n# 3. Instalar Django\npip install \"django>=5.1,<6.0\"\n\n# 4. Verificar\ndjango-admin --version\npython -c \"import django; print(django.get_version())\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-27",
+      "type": "codigo",
+      "title": "Crear proyecto + app",
+      "subtitle": "Actividad conjunta — creamos el proyecto del TP-4",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Abrir `http://127.0.0.1:8000/` — debería aparecer el cohete de Django."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "bash",
+          "content": "# 1. Crear proyecto llamado 'biblioteca'\ndjango-admin startproject biblioteca .\n# El punto al final → proyecto en la carpeta actual\n\n# 2. Entrar a la carpeta y crear la app 'catalogo'\npython manage.py startapp catalogo\n\n# 3. Migraciones iniciales\npython manage.py migrate\n\n# 4. Correr el servidor\npython manage.py runserver"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-28",
+      "type": "codigo",
+      "title": "Estructura del proyecto",
+      "subtitle": "Estructura generada",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Preguntita: ¿dónde van a ir las 4 queries del TP-4?\n> **Respuesta**: en `catalogo/queries.py` (archivo nuevo)."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "biblioteca/                ← raíz (manage.py acá)\n├── manage.py              ← CLI: runserver, migrate, test, shell\n├── biblioteca/            ← \"proyecto\" (config global)\n│   ├── settings.py        ← config central\n│   ├── urls.py            ← URLs raíz\n│   ├── wsgi.py / asgi.py  ← servidor productivo\n│   └── __init__.py\n└── catalogo/              ← \"app\" (feature)\n    ├── models.py          ← datos\n    ├── views.py           ← controladores (CBV)\n    ├── admin.py           ← admin generado\n    ├── tests.py / tests/  ← tests django.test\n    ├── apps.py            ← config app\n    └── migrations/"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-29",
+      "type": "codigo",
+      "title": "settings.py — lo mínimo a conocer",
+      "subtitle": "settings.py — lo que tocan en el TP",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **Importante**: agregar `\"catalogo\"` a `INSTALLED_APPS` es obligatorio para que detecte los modelos."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# biblioteca/settings.py\n\nINSTALLED_APPS = [\n    \"django.contrib.admin\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    \"catalogo\",              # ← agregamos nuestra app\n]\n\nDATABASES = {\n    \"default\": {\n        \"ENGINE\": \"django.db.backends.sqlite3\",\n        \"NAME\": BASE_DIR / \"db.sqlite3\",\n    }\n}\n\nLANGUAGE_CODE = \"es-ar\"\nTIME_ZONE = \"America/Argentina/Ushuaia\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-30",
+      "type": "codigo",
+      "title": "URLconf — el router de Django",
+      "subtitle": "URL routing con `.as_view()`",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **Regla cátedra**: TODA URL usa `.as_view()` — porque todas las vistas son clases."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# biblioteca/urls.py (raíz)\nfrom django.contrib import admin\nfrom django.urls import path, include\n\nurlpatterns = [\n    path(\"admin/\", admin.site.urls),\n    path(\"catalogo/\", include(\"catalogo.urls\")),\n]"
+        },
+        {
+          "lang": "python",
+          "content": "# catalogo/urls.py (nuevo — lo creamos juntos)\nfrom django.urls import path\nfrom .views import HolaMundoView\n\napp_name = \"catalogo\"\n\nurlpatterns = [\n    path(\"hola/\", HolaMundoView.as_view(), name=\"hola\"),\n]"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-31",
+      "type": "codigo",
+      "title": "Primera Class-Based View — TemplateView",
+      "subtitle": "Actividad conjunta — escribimos HolaMundoView",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **Sin decoradores. Sin funciones. Siempre clase.**"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# catalogo/views.py\nfrom django.views.generic import TemplateView\n\n\nclass HolaMundoView(TemplateView):\n    \"\"\"Primera CBV de la cátedra — muestra un saludo parametrizable.\"\"\"\n\n    template_name = \"catalogo/hola.html\"\n\n    def get_context_data(self, **kwargs):\n        ctx = super().get_context_data(**kwargs)\n        ctx[\"mensaje\"] = \"Hola 3° año de Sistemas UNTDF\"\n        ctx[\"anio\"] = 2026\n        return ctx"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-32",
+      "type": "codigo",
+      "title": "El template",
+      "subtitle": "catalogo/templates/catalogo/hola.html",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Ruta exacta: `catalogo/templates/catalogo/hola.html` (sí, `catalogo` dos veces — convención)."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "html",
+          "content": "<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Hola Django</title>\n</head>\n<body>\n    <h1>{{ mensaje }}</h1>\n    <p>Año académico: {{ anio }}</p>\n    <p>Si ves esto, tu primera CBV funciona.</p>\n</body>\n</html>"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-33",
+      "type": "demo",
+      "title": "Probar en el navegador",
+      "subtitle": "Demo conjunta",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Abrir: `http://127.0.0.1:8000/catalogo/hola/`"
+        },
+        {
+          "type": "text",
+          "content": "> Debe verse:\n> **Hola 3° año de Sistemas UNTDF**\n> *Año académico: 2026*"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Si falla"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**404**: URL mal tipeada o `include` mal hecho",
+              "level": 0
+            },
+            {
+              "content": "**500 TemplateDoesNotExist**: ruta del template mal — recordar `templates/catalogo/`",
+              "level": 0
+            },
+            {
+              "content": "**500 ImproperlyConfigured**: falta `\"catalogo\"` en `INSTALLED_APPS`",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "bash",
+          "content": "python manage.py runserver"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-34",
+      "type": "tabla-comparativa",
+      "title": "¿Por qué CBV y no FBV?",
+      "subtitle": "Function-Based View (NO usamos) vs Class-Based View (SÍ usamos)",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **Decisión docente**: venimos del Módulo I con POO, por coherencia Django se usa POO."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| FBV (prohibido en cátedra) | CBV (estándar cátedra) |\n|----------------------------|------------------------|\n| `def home(request): ...` | `class HomeView(TemplateView): ...` |\n| `@login_required` (decorador) | `LoginRequiredMixin` |\n| `@permission_required(...)` | `PermissionRequiredMixin` |\n| Lógica mezclada en una función | Métodos extensibles: `get_context_data`, `get_queryset`, `form_valid` |\n| No se reusa fácilmente | Herencia + mixins |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| FBV (prohibido en cátedra) | CBV (estándar cátedra) |\n|----------------------------|------------------------|\n| `def home(request): ...` | `class HomeView(TemplateView): ...` |\n| `@login_required` (decorador) | `LoginRequiredMixin` |\n| `@permission_required(...)` | `PermissionRequiredMixin` |\n| Lógica mezclada en una función | Métodos extensibles: `get_context_data`, `get_queryset`, `form_valid` |\n| No se reusa fácilmente | Herencia + mixins |",
+          "local_asset": "slides/assets/F-34-table-1.png",
+          "drive_id": "1QsRXnwfOqQhonH0IeVW5pkMaGJ71wW5b"
+        }
+      ]
+    },
+    {
+      "id": "F-35",
+      "type": "diagrama",
+      "title": "Jerarquía de CBVs genéricas",
+      "subtitle": "CBVs que van a usar",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Raíz"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**View** → base de todo",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Nivel intermedio"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**TemplateView** → mostrar un HTML con contexto",
+              "level": 0
+            },
+            {
+              "content": "**RedirectView** → redireccionar",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por modelo (CRUD)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**ListView** → listar objetos",
+              "level": 0
+            },
+            {
+              "content": "**DetailView** → mostrar uno",
+              "level": 0
+            },
+            {
+              "content": "**CreateView** → formulario de creación",
+              "level": 0
+            },
+            {
+              "content": "**UpdateView** → formulario de edición",
+              "level": 0
+            },
+            {
+              "content": "**DeleteView** → confirmar borrado",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> Para el **TP-4** no piden vistas, pero van a ver `ListView` en Clase 3 como preview."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Diagrama de árbol con un rectángulo bordo grande arriba, dos rectángulos bordo medianos debajo conectados por líneas grises, y tres rectángulos bordo pequeños en la base conectados a los medianos. Estilo flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-35-content.png",
+        "drive_id": "1193qdMAZO22n2qzzLzmp7c70XiFSMjLu"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-36",
+      "type": "codigo",
+      "title": "Ejercicio en clase: HolaView con nombre dinámico",
+      "subtitle": "Ejercicio conjunto (10 min)",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Modificar `HolaMundoView` para que el saludo incluya un nombre pasado por URL."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ruta esperada"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Pistas"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "En `urls.py`: `path(\"hola/<str:nombre>/\", HolaMundoView.as_view(), name=\"hola\")`",
+              "level": 0
+            },
+            {
+              "content": "En la vista: el parámetro llega como `self.kwargs[\"nombre\"]`",
+              "level": 0
+            },
+            {
+              "content": "Agregarlo al contexto en `get_context_data`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Resolución conjunta"
+        },
+        {
+          "type": "text",
+          "content": "Resolvemos la pista 3 juntos en la pizarra — 5 min."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "/catalogo/hola/Matias/  →  \"Hola Matias — 3° año...\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-37",
+      "type": "demo",
+      "title": "runserver + autoreload",
+      "subtitle": "Flujo de trabajo con runserver",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ciclo típico"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Editar un archivo `.py`",
+              "level": 0
+            },
+            {
+              "content": "Django detecta el cambio → reinicia automáticamente",
+              "level": 0
+            },
+            {
+              "content": "Recargar el navegador → ver el cambio",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lo que NO se recarga automático"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Archivos en `templates/` → sí reloads (el template se re-renderiza)",
+              "level": 0
+            },
+            {
+              "content": "Archivos estáticos → requieren Ctrl+F5 para saltar la cache",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "runserver es SOLO para desarrollo"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Nunca se usa en producción",
+              "level": 0
+            },
+            {
+              "content": "Producción → gunicorn/uwsgi + nginx (Tema futuro)",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "content": "$ python manage.py runserver\nWatching for file changes with StatReloader\nDjango version 5.1, using settings 'biblioteca.settings'\nStarting development server at http://127.0.0.1:8000/",
+          "lang": "bash"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-38",
+      "type": "concepto-mixto",
+      "title": "Preview Clase 3",
+      "subtitle": "Preview — Clase 3",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La clase más importante del Tema 03"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Persistencia e **impedance mismatch**",
+              "level": 0
+            },
+            {
+              "content": "**Modelos Django** del TP-4 (Autor, Categoria, Libro, Prestamo)",
+              "level": 0
+            },
+            {
+              "content": "Migraciones (`makemigrations` + `migrate`)",
+              "level": 0
+            },
+            {
+              "content": "CRUD con QuerySet",
+              "level": 0
+            },
+            {
+              "content": "**Las 4 queries del TP-4** resueltas juntos",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> **Traen**: el proyecto `biblioteca` + app `catalogo` funcionando de hoy.\n> **No traen**: el TP-4 clonado todavía — lo hacemos juntos en Clase 3."
+        }
+      ],
+      "code_blocks": [
+        {
+          "content": "# Pr?xima clase: ORM\nLibro.objects.all()\nLibro.objects.filter(disponible=True)\nLibro.objects.get(pk=1)",
+          "lang": "python"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-39",
+      "type": "demo",
+      "title": "Ticket de salida — Clase 2",
+      "subtitle": "Ticket de salida (3 min)",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En una hoja:"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "¿Qué significa que Django usa el **principio de Hollywood**?",
+              "level": 0
+            },
+            {
+              "content": "¿Por qué agregamos `\"catalogo\"` a `INSTALLED_APPS`?",
+              "level": 0
+            },
+            {
+              "content": "¿Qué hace `.as_view()` en una URL?",
+              "level": 0
+            },
+            {
+              "content": "¿Por qué **no** usamos funciones como vistas en esta cátedra?",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> Se entrega al salir. Se revisan las respuestas al inicio de Clase 3."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# manage.py ? comandos esenciales\n$ python manage.py runserver\n$ python manage.py makemigrations\n$ python manage.py migrate\n$ python manage.py shell\n$ python manage.py test"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-40",
+      "type": "cierre",
+      "title": "Cierre Clase 2",
+      "subtitle": "Clase 2 cerrada",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Hoy aprendimos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Framework = inversión de control",
+              "level": 0
+            },
+            {
+              "content": "Estructura de proyecto Django",
+              "level": 0
+            },
+            {
+              "content": "settings, URLconf, TemplateView",
+              "level": 0
+            },
+            {
+              "content": "Primera CBV funcionando",
+              "level": 0
+            },
+            {
+              "content": "Regla cátedra: **CBV siempre**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> **Próxima clase (Clase 3):** la más intensa — ORM completo + las 4 queries del TP-4."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "CLASE 3 — DJANGO ORM COMPLETO PARA TP-4 (180 min)"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Composición flat design con un gran rectángulo bordo central con una línea gris vertical que lo divide, y pequeños círculos grises dispersos alrededor. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-40-bg.png",
+        "drive_id": "1-ZRSJJyZGUFz609nhk6rfN8seO-jCzi7"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-41",
+      "type": "portada",
+      "title": "Portada — Clase 3",
+      "subtitle": "Tema 03 — Clase 3",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Django ORM completo para TP-4"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "content": "La clase más densa: 4 modelos, 4 queries, tests"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Composición flat design con cuatro cilindros bordo de distintos tamaños alineados horizontalmente, conectados entre sí por flechas grises dobles. Sobre los cilindros, un rectángulo bordo con líneas horizontales grises dentro. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-41-bg.png",
+        "drive_id": "1kWXogGT1rAAqteYk3BmF3sS-ZIohI7zH"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-42",
+      "type": "tabla",
+      "title": "Agenda Clase 3",
+      "subtitle": "Agenda (180 min) — CLASE ORM",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **Objetivo**: al final de hoy, pueden resolver el 100% del TP-4."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Bloque | Duración | Tema |\n|--------|----------|------|\n| T0 | 10 min | Recap Clase 2 + objetivos |\n| T1 | 15 min | Persistencia + impedance mismatch |\n| T2 | 30 min | Modelos + campos (Autor, Categoria) |\n| T3 | 20 min | Relaciones FK / M2M (Libro, Prestamo) |\n| — | 15 min | **Pausa** |\n| T4 | 20 min | Migraciones |\n| T5 | 30 min | CRUD con QuerySet — en el shell |\n| T6 | 25 min | **Las 4 queries del TP-4** |\n| T7 | 15 min | django.test.TestCase + cierre |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Bloque | Duración | Tema |\n|--------|----------|------|\n| T0 | 10 min | Recap Clase 2 + objetivos |\n| T1 | 15 min | Persistencia + impedance mismatch |\n| T2 | 30 min | Modelos + campos (Autor, Categoria) |\n| T3 | 20 min | Relaciones FK / M2M (Libro, Prestamo) |\n| — | 15 min | **Pausa** |\n| T4 | 20 min | Migraciones |\n| T5 | 30 min | CRUD con QuerySet — en el shell |\n| T6 | 25 min | **Las 4 queries del TP-4** |\n| T7 | 15 min | django.test.TestCase + cierre |",
+          "local_asset": "slides/assets/F-42-table-1.png",
+          "drive_id": "1zyNazJPnfHwe1rV31MMTEqy-EPuOd7NK"
+        }
+      ]
+    },
+    {
+      "id": "F-43",
+      "type": "concepto-mixto",
+      "title": "Persistencia — el problema",
+      "subtitle": "Persistencia — el problema",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En memoria tenemos objetos"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En disco tenemos tablas relacionales"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Cómo pasamos de uno al otro?"
+        },
+        {
+          "type": "text",
+          "content": "> Ése es el problema del **ORM**: Object-Relational Mapping."
+        }
+      ],
+      "code_blocks": [
+        {
+          "content": "-- SQL manual tradicional\nSELECT * FROM libros\nWHERE categoria_id = 3\nORDER BY fecha_publicacion DESC;",
+          "lang": "sql"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-44",
+      "type": "tabla",
+      "title": "Soluciones en Python",
+      "subtitle": "Alternativas para persistir en Python",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **Cátedra**: Django ORM para el TP-4. SQLAlchemy se ve en Tema 06 para comparar."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Solución | Tipo | Uso típico |\n|----------|------|------------|\n| pickle / shelve | Serialización | Caché local, NO para BD multiusuario |\n| CSV / JSON | Archivos planos | Export/import |\n| **Django ORM** | ORM integrado | Apps web Django |\n| SQLAlchemy | ORM standalone | Apps Python cualquier framework |\n| Peewee | ORM minimalista | Scripts pequeños |\n| SQL crudo | Sin ORM | Control total, más código |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Solución | Tipo | Uso típico |\n|----------|------|------------|\n| pickle / shelve | Serialización | Caché local, NO para BD multiusuario |\n| CSV / JSON | Archivos planos | Export/import |\n| **Django ORM** | ORM integrado | Apps web Django |\n| SQLAlchemy | ORM standalone | Apps Python cualquier framework |\n| Peewee | ORM minimalista | Scripts pequeños |\n| SQL crudo | Sin ORM | Control total, más código |",
+          "local_asset": "slides/assets/F-44-table-1.png",
+          "drive_id": "1AM39cO_07hWo314q_kgoP2flGO6WwJ5M"
+        }
+      ]
+    },
+    {
+      "id": "F-45",
+      "type": "tabla-comparativa",
+      "title": "Impedance Mismatch — el choque",
+      "subtitle": "Mundo OO vs mundo relacional",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Rol del **ORM**: traducir automáticamente entre los dos mundos."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Mundo OO (Python) | Mundo Relacional (SQL) |\n|-------------------|------------------------|\n| Objetos con identidad y métodos | Filas con PK, sin comportamiento |\n| Herencia (Libro(Publicacion)) | No hay herencia nativa — hay estrategias |\n| Colecciones (`libro.categorias`) | FK + tablas intermedias (M2M) |\n| `==` lógico (`__eq__`) | Identidad = misma PK |\n| Navegación: `libro.autor.nombre` | JOIN explícito |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Mundo OO (Python) | Mundo Relacional (SQL) |\n|-------------------|------------------------|\n| Objetos con identidad y métodos | Filas con PK, sin comportamiento |\n| Herencia (Libro(Publicacion)) | No hay herencia nativa — hay estrategias |\n| Colecciones (`libro.categorias`) | FK + tablas intermedias (M2M) |\n| `==` lógico (`__eq__`) | Identidad = misma PK |\n| Navegación: `libro.autor.nombre` | JOIN explícito |",
+          "local_asset": "slides/assets/F-45-table-1.png",
+          "drive_id": "122cA99gFmEQD_FItBFxoCBS3umYyAtJ2"
+        }
+      ]
+    },
+    {
+      "id": "F-46",
+      "type": "codigo",
+      "title": "Primer modelo Django — Autor",
+      "subtitle": "Empezamos el TP-4 — modelo Autor",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Decisiones"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`CharField` requiere `max_length` (límite de columna VARCHAR)",
+              "level": 0
+            },
+            {
+              "content": "`EmailField` → valida formato + usa VARCHAR",
+              "level": 0
+            },
+            {
+              "content": "`unique=True` → índice único en la BD",
+              "level": 0
+            },
+            {
+              "content": "`blank=True` → opcional en formularios",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> Escribimos este modelo juntos ahora en el proyecto del TP-4."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# catalogo/models.py\nfrom django.db import models\n\n\nclass Autor(models.Model):\n    nombre = models.CharField(max_length=120)\n    email = models.EmailField(unique=True)\n    biografia = models.TextField(blank=True)\n\n    def __str__(self) -> str:\n        return self.nombre"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-47",
+      "type": "codigo",
+      "title": "Modelo Categoria",
+      "subtitle": "Modelo Categoria — el más simple",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ejercicio en clase (5 min)"
+        },
+        {
+          "type": "text",
+          "content": "> Cada alumno lo escribe en su archivo `models.py` y lo muestra al compañero de al lado."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Preguntita"
+        },
+        {
+          "type": "text",
+          "content": "¿Qué pasa si dos categorías quieren llamarse \"fantasía\"?"
+        },
+        {
+          "type": "text",
+          "content": "> **Respuesta**: `IntegrityError: UNIQUE constraint failed` → exactamente lo que queremos."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class Categoria(models.Model):\n    nombre = models.CharField(max_length=80, unique=True)\n\n    def __str__(self) -> str:\n        return self.nombre"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-48",
+      "type": "tabla-comparativa",
+      "title": "null vs blank — el clásico",
+      "subtitle": "null vs blank — no son lo mismo",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Regla práctica"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Campos de texto (Char/Text): **solo** `blank=True` (Django usa `\"\"` en vez de NULL)",
+              "level": 0
+            },
+            {
+              "content": "Campos de fecha/número: **ambos** si el campo es opcional: `null=True, blank=True`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En el TP-4"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`biografia = TextField(blank=True)` → opcional",
+              "level": 0
+            },
+            {
+              "content": "`fecha_devolucion = DateField(null=True, blank=True)` → puede estar sin devolver",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Parámetro | Dónde actúa | Ejemplo |\n|-----------|-------------|---------|\n| `null=True` | **Base de datos** — permite NULL | `fecha_devolucion = DateField(null=True)` |\n| `blank=True` | **Validación de formularios** — permite vacío | `biografia = TextField(blank=True)` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Parámetro | Dónde actúa | Ejemplo |\n|-----------|-------------|---------|\n| `null=True` | **Base de datos** — permite NULL | `fecha_devolucion = DateField(null=True)` |\n| `blank=True` | **Validación de formularios** — permite vacío | `biografia = TextField(blank=True)` |",
+          "local_asset": "slides/assets/F-48-table-1.png",
+          "drive_id": "1O39FOD4DaV_fKvtbDBBpc3oMWjSXqp3m"
+        }
+      ]
+    },
+    {
+      "id": "F-49",
+      "type": "codigo",
+      "title": "Modelo Libro — con relaciones",
+      "subtitle": "Modelo Libro — FK y M2M",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Escribimos juntos. Una línea a la vez. Paramos en cada campo a discutir el \"por qué\"."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class Libro(models.Model):\n    titulo = models.CharField(max_length=200)\n    isbn = models.CharField(max_length=32, unique=True)\n    fecha_publicacion = models.DateField()\n    cantidad_total = models.PositiveIntegerField(default=1)\n\n    autor = models.ForeignKey(\n        Autor,\n        on_delete=models.PROTECT,\n        related_name=\"libros\",\n    )\n    categorias = models.ManyToManyField(\n        Categoria,\n        related_name=\"libros\",\n        blank=True,\n    )\n\n    def __str__(self) -> str:\n        return self.titulo"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-50",
+      "type": "tabla-comparativa",
+      "title": "on_delete — decisión de dominio",
+      "subtitle": "on_delete — qué pasa al borrar el \"padre\"",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Preguntita conjunta"
+        },
+        {
+          "type": "text",
+          "content": "> ¿Por qué en el TP-4 `Libro→Autor` es PROTECT y `Prestamo→Libro` es CASCADE?"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Estrategia | Efecto | Cuándo usarla |\n|------------|--------|---------------|\n| **CASCADE** | Borra los hijos | `Prestamo → Libro` (TP-4) |\n| **PROTECT** | Prohíbe borrar si hay hijos | `Libro → Autor` (TP-4) |\n| **SET_NULL** | Pone NULL en los hijos | \"autor desconocido\" tolerable |\n| **SET_DEFAULT** | Pone un default | Autor \"Anónimo\" |\n| **DO_NOTHING** | Django no hace nada | Control manual |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Estrategia | Efecto | Cuándo usarla |\n|------------|--------|---------------|\n| **CASCADE** | Borra los hijos | `Prestamo → Libro` (TP-4) |\n| **PROTECT** | Prohíbe borrar si hay hijos | `Libro → Autor` (TP-4) |\n| **SET_NULL** | Pone NULL en los hijos | \"autor desconocido\" tolerable |\n| **SET_DEFAULT** | Pone un default | Autor \"Anónimo\" |\n| **DO_NOTHING** | Django no hace nada | Control manual |",
+          "local_asset": "slides/assets/F-50-table-1.png",
+          "drive_id": "1XxVy5rZIWn-zN7eNsb5asAzT9paO5VMb"
+        }
+      ]
+    },
+    {
+      "id": "F-51",
+      "type": "codigo",
+      "title": "Métodos de dominio en Libro",
+      "subtitle": "Métodos de Libro — reglas de dominio",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> `self.prestamos` existe porque pusimos `related_name=\"prestamos\"` en Prestamo.\n> `__isnull=True` es el lookup ORM para `IS NULL`."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class Libro(models.Model):\n    # ... campos arriba ...\n\n    def prestamos_activos(self) -> int:\n        return self.prestamos.filter(\n            fecha_devolucion__isnull=True\n        ).count()\n\n    def disponibles(self) -> int:\n        return self.cantidad_total - self.prestamos_activos()\n\n    def tiene_disponibles(self) -> bool:\n        return self.disponibles() > 0"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-52",
+      "type": "codigo",
+      "title": "Modelo Prestamo",
+      "subtitle": "Modelo Prestamo — cierra el grafo",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **Regla de dominio**: `fecha_devolucion IS NULL` ⇔ préstamo activo."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class Prestamo(models.Model):\n    libro = models.ForeignKey(\n        Libro,\n        on_delete=models.CASCADE,\n        related_name=\"prestamos\",\n    )\n    nombre_prestatario = models.CharField(max_length=120)\n    fecha_prestamo = models.DateField()\n    fecha_devolucion = models.DateField(null=True, blank=True)\n\n    def esta_activo(self) -> bool:\n        return self.fecha_devolucion is None\n\n    def __str__(self) -> str:\n        estado = \"activo\" if self.esta_activo() else \"devuelto\"\n        return f\"{self.libro.titulo} — {self.nombre_prestatario} ({estado})\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-53",
+      "type": "codigo",
+      "title": "Migraciones — cómo llega a la BD",
+      "subtitle": "Migraciones — conjunto",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **Clave**: `makemigrations` **NO** toca la BD. Solo escribe un archivo.\n> `migrate` sí toca la BD."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "bash",
+          "content": "# 1. Generar archivo de migración a partir de models.py\npython manage.py makemigrations catalogo\n\n# Output esperado:\n# Migrations for 'catalogo':\n#   catalogo/migrations/0001_initial.py\n#     - Create model Autor\n#     - Create model Categoria\n#     - Create model Libro\n#     - Create model Prestamo\n\n# 2. Aplicar a SQLite\npython manage.py migrate\n\n# 3. (Didáctico) Ver el SQL generado\npython manage.py sqlmigrate catalogo 0001"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-54",
+      "type": "codigo",
+      "title": "El shell de Django — CRUD en vivo",
+      "subtitle": "Entramos al shell juntos",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Esto es **exactamente** lo que hace el test `setUpTestData` del TP-4."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "bash",
+          "content": "python manage.py shell"
+        },
+        {
+          "lang": "python",
+          "content": ">>> from catalogo.models import Autor, Categoria, Libro\n>>> from datetime import date\n\n>>> # CREATE\n>>> ursula = Autor.objects.create(\n...     nombre=\"Ursula K. Le Guin\",\n...     email=\"ursula@example.com\",\n...     biografia=\"Autora de SF y fantasía.\"\n... )\n\n>>> sf = Categoria.objects.create(nombre=\"ciencia ficción\")\n>>> fant = Categoria.objects.create(nombre=\"fantasía\")\n\n>>> libro = Libro.objects.create(\n...     titulo=\"Los desposeídos\",\n...     isbn=\"978-0000000001\",\n...     fecha_publicacion=date(1974, 1, 1),\n...     cantidad_total=2,\n...     autor=ursula,\n... )\n>>> libro.categorias.add(sf, fant)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-55",
+      "type": "codigo",
+      "title": "QuerySet — lectura",
+      "subtitle": "Lectura con QuerySet (en el shell)",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **QuerySet es lazy**: la consulta se ejecuta cuando iteras, sliceas o llamás `list()`."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# Todos los libros\n>>> Libro.objects.all()\n<QuerySet [<Libro: Los desposeídos>]>\n\n# Uno por PK o condición única\n>>> Libro.objects.get(isbn=\"978-0000000001\")\n<Libro: Los desposeídos>\n\n# Filter (siempre devuelve QuerySet)\n>>> Libro.objects.filter(autor=ursula)\n<QuerySet [<Libro: Los desposeídos>]>\n\n# Lookup con __ (doble guión bajo)\n>>> Libro.objects.filter(autor__nombre__icontains=\"le guin\")\n<QuerySet [<Libro: Los desposeídos>]>\n\n# Exclude\n>>> Libro.objects.exclude(cantidad_total__lt=2)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-56",
+      "type": "codigo",
+      "title": "QuerySet — update y delete",
+      "subtitle": "Update y Delete",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> `F()` permite expresiones referenciando la misma columna **sin traer el valor a Python**."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# Update individual\n>>> libro.cantidad_total = 3\n>>> libro.save()\n\n# Update masivo (una sola query SQL)\n>>> from django.db.models import F\n>>> Libro.objects.filter(autor=ursula).update(\n...     cantidad_total=F(\"cantidad_total\") + 1\n... )\n1   # filas afectadas\n\n# Delete individual\n>>> libro.delete()\n\n# Delete masivo\n>>> Categoria.objects.filter(nombre__startswith=\"obsoleta\").delete()"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-57",
+      "type": "concepto-mixto",
+      "title": "Las 4 queries del TP-4 — intro",
+      "subtitle": "El core del TP-4 — 4 funciones en queries.py",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lo que el autograder va a probar"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "`libros_por_categoria(nombre)` — filter con M2M",
+              "level": 0
+            },
+            {
+              "content": "`autores_con_mas_de_n_libros(n)` — annotate + filter",
+              "level": 0
+            },
+            {
+              "content": "`libros_sin_disponibilidad()` — annotate + Q + F",
+              "level": 0
+            },
+            {
+              "content": "`top_n_libros_mas_prestados(n)` — annotate + order_by + slicing",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Las vamos a escribir juntos, una por una"
+        },
+        {
+          "type": "text",
+          "content": "> **Regla**: todo resuelto con ORM puro. Nada de `for libro in ...: if libro.disponibles() == 0`."
+        }
+      ],
+      "code_blocks": [
+        {
+          "content": "# Las 4 queries del TP-4\n# Q1: libros_por_categoria(categoria_id)\n# Q2: autores_con_mas_de_n_libros(n)\n# Q3: libros_sin_disponibilidad()\n# Q4: top_n_libros_mas_prestados(n)",
+          "lang": "python"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-58",
+      "type": "codigo",
+      "title": "Query 1 — libros_por_categoria",
+      "subtitle": "Query 1 — filter a través de M2M",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué SQL genera?"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Demo en shell"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# catalogo/queries.py\nfrom .models import Libro\n\ndef libros_por_categoria(nombre_categoria: str):\n    return Libro.objects.filter(categorias__nombre=nombre_categoria)"
+        },
+        {
+          "lang": "sql",
+          "content": "SELECT \"catalogo_libro\".*\nFROM \"catalogo_libro\"\nINNER JOIN \"catalogo_libro_categorias\" ON (...)\nINNER JOIN \"catalogo_categoria\" ON (...)\nWHERE \"catalogo_categoria\".\"nombre\" = 'fantasía'"
+        },
+        {
+          "lang": "python",
+          "content": ">>> from catalogo.queries import libros_por_categoria\n>>> libros_por_categoria(\"fantasía\")\n<QuerySet [<Libro: Los desposeídos>]>\n>>> print(libros_por_categoria(\"fantasía\").query)  # ver el SQL"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-59",
+      "type": "codigo",
+      "title": "Query 2 — autores_con_mas_de_n_libros",
+      "subtitle": "Query 2 — annotate + filter",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Qué hace `annotate`"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Agrega una **columna calculada** a cada fila del QuerySet",
+              "level": 0
+            },
+            {
+              "content": "Acá: a cada Autor le agrega `cantidad_libros` = `COUNT(*)` de sus libros",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Uso"
+        },
+        {
+          "type": "text",
+          "content": "> Anti-patrón (NO hacer):\n> ```python\n> autores = [a for a in Autor.objects.all() if a.libros.count() > n]  # ❌ N+1 queries\n> ```"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "from django.db.models import Count\nfrom .models import Autor\n\ndef autores_con_mas_de_n_libros(n: int):\n    return Autor.objects.annotate(\n        cantidad_libros=Count(\"libros\")\n    ).filter(cantidad_libros__gt=n)"
+        },
+        {
+          "lang": "python",
+          "content": ">>> autores_con_mas_de_n_libros(1)\n# → autores que tienen 2 o MÁS libros"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-60",
+      "type": "codigo",
+      "title": "Query 3 — libros_sin_disponibilidad",
+      "subtitle": "Query 3 — la más compleja: annotate + Q + F",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Descompuesto"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`annotate(activos=Count(\"prestamos\", filter=Q(...)))`: cuenta **solo** los préstamos activos (`filter=` dentro de Count)",
+              "level": 0
+            },
+            {
+              "content": "`.filter(activos=F(\"cantidad_total\"))`: devuelve los libros donde esa cuenta iguala `cantidad_total` (columna de la misma tabla → necesita `F`)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> Ejercicio conjunto (10 min): escriban en pizarra qué SQL genera, fila por fila."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "from django.db.models import Count, Q, F\nfrom .models import Libro\n\ndef libros_sin_disponibilidad():\n    return Libro.objects.annotate(\n        activos=Count(\n            \"prestamos\",\n            filter=Q(prestamos__fecha_devolucion__isnull=True),\n        )\n    ).filter(activos=F(\"cantidad_total\"))"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-61",
+      "type": "codigo",
+      "title": "Query 4 — top_n_libros_mas_prestados",
+      "subtitle": "Query 4 — annotate + order_by + slicing",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Claves"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`Count(\"prestamos\")` → cuenta TODOS los préstamos (activos + devueltos)",
+              "level": 0
+            },
+            {
+              "content": "`order_by(\"-campo\")` → el `-` es DESC",
+              "level": 0
+            },
+            {
+              "content": "`[:n]` → slicing → `LIMIT n` en SQL",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Uso"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "from django.db.models import Count\nfrom .models import Libro\n\ndef top_n_libros_mas_prestados(n: int):\n    return (\n        Libro.objects\n        .annotate(total_prestamos=Count(\"prestamos\"))\n        .order_by(\"-total_prestamos\")[:n]\n    )"
+        },
+        {
+          "lang": "python",
+          "content": ">>> top_n_libros_mas_prestados(3)\n<QuerySet [<Libro: ...>, <Libro: ...>, <Libro: ...>]>"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-62",
+      "type": "socratica",
+      "title": "Ejercicio en clase: variantes de las queries",
+      "subtitle": "Ejercicio conjunto (15 min)",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Para cada alumno — escribir en papel"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Variante Q1: libros de una categoría, ordenados por fecha_publicacion desc",
+              "level": 0
+            },
+            {
+              "content": "Variante Q2: autores con **menos de** n libros",
+              "level": 0
+            },
+            {
+              "content": "Variante Q3: libros con **al menos una copia** disponible (contrario al Q3 real)",
+              "level": 0
+            },
+            {
+              "content": "Variante Q4: top N **prestatarios** (qué persona pidió más libros)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> Resolvemos las 4 en pizarra en conjunto — cada alumno pasa al frente con su propuesta.\n> Pista Q4: GROUP BY por `nombre_prestatario` → `values(\"nombre_prestatario\").annotate(...)`."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Escena flat: cuatro rect?ngulos bordo en cuadr?cula 2x2 sobre fondo blanco. Cada rect?ngulo contiene un signo de pregunta gris oscuro en su centro. Flechas grises finas conectan los cuatro rect?ngulos formando un ciclo. Sin texto, sin letras, sin etiquetas, sin c?digo, sin n?meros. Alta resoluci?n.",
+        "local_asset": "slides/assets/F-62-bg.png",
+        "drive_id": "1M9LINI7jbvoLTUCChcowfgQcdgBU4P6l"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-63",
+      "type": "codigo",
+      "title": "Tests con django.test.TestCase",
+      "subtitle": "django.test.TestCase — lo que ya viene en el TP-4",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ejecutar"
+        },
+        {
+          "type": "text",
+          "content": "> `TestCase` envuelve todo en una transacción → rollback automático. BD limpia entre tests."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "from datetime import date\nfrom django.test import TestCase\nfrom catalogo.models import Autor, Categoria, Libro, Prestamo\n\nclass ModelsTestCase(TestCase):\n\n    @classmethod\n    def setUpTestData(cls):\n        \"\"\"Datos compartidos — UNA vez por clase de test.\"\"\"\n        cls.autor = Autor.objects.create(nombre=\"Ursula\", email=\"u@ex.com\")\n        # ...\n\n    def test_disponibilidad_sin_prestamos(self):\n        self.assertEqual(self.libro.prestamos_activos(), 0)\n        self.assertEqual(self.libro.disponibles(), 2)"
+        },
+        {
+          "lang": "bash",
+          "content": "python manage.py test catalogo -v 2"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-64",
+      "type": "tabla-comparativa",
+      "title": "setUpTestData vs setUp",
+      "subtitle": "setUpTestData vs setUp",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Regla"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Datos compartidos**: usar `setUpTestData` (más rápido)",
+              "level": 0
+            },
+            {
+              "content": "**Datos mutados por test**: usar `setUp` (aislamiento)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En el TP-4 ya está resuelto — usa `setUpTestData`"
+        },
+        {
+          "type": "text",
+          "content": "> Eso significa que los tests corren más rápido → feedback más rápido → mejor DX."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Método | Cuándo corre | Rollback |\n|--------|--------------|----------|\n| `setUpTestData` (classmethod) | **Una vez** por clase de tests | Transacción de clase |\n| `setUp` (método) | **Una vez** por cada test | Por cada test |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Método | Cuándo corre | Rollback |\n|--------|--------------|----------|\n| `setUpTestData` (classmethod) | **Una vez** por clase de tests | Transacción de clase |\n| `setUp` (método) | **Una vez** por cada test | Por cada test |",
+          "local_asset": "slides/assets/F-64-table-1.png",
+          "drive_id": "1-2sSRw1YW5O25FZRWqHb5GSJ55iUPpXy"
+        }
+      ]
+    },
+    {
+      "id": "F-65",
+      "type": "tabla",
+      "title": "Anti-patrones ORM",
+      "subtitle": "Anti-patrones que el autograder va a castigar",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **Pauta de corrección**: si el test corre > 2 segundos, probablemente hay N+1."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Anti-patrón | Por qué es malo | Alternativa ORM |\n|-------------|-----------------|-----------------|\n| `for libro in Libro.objects.all(): if libro.disponibles() == 0: ...` | **N+1 queries** | `libros_sin_disponibilidad()` con annotate |\n| `len(qs)` para contar | Trae todo a memoria | `qs.count()` |\n| `qs[0]` para \"el primero\" | Hace sort implícito confuso | `qs.order_by(...).first()` |\n| Usar SQL crudo sin motivo | Pierde portabilidad | Lookups ORM |\n| `.filter(x=1).filter(y=2).filter(z=3)` en M2M | Joins duplicados | Usar Q combinado |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Anti-patrón | Por qué es malo | Alternativa ORM |\n|-------------|-----------------|-----------------|\n| `for libro in Libro.objects.all(): if libro.disponibles() == 0: ...` | **N+1 queries** | `libros_sin_disponibilidad()` con annotate |\n| `len(qs)` para contar | Trae todo a memoria | `qs.count()` |\n| `qs[0]` para \"el primero\" | Hace sort implícito confuso | `qs.order_by(...).first()` |\n| Usar SQL crudo sin motivo | Pierde portabilidad | Lookups ORM |\n| `.filter(x=1).filter(y=2).filter(z=3)` en M2M | Joins duplicados | Usar Q combinado |",
+          "local_asset": "slides/assets/F-65-table-1.png",
+          "drive_id": "1qX8NasNmqY9n_6KDTZowH2q-JAaV8aVU"
+        }
+      ]
+    },
+    {
+      "id": "F-66",
+      "type": "tabla",
+      "title": "Cheatsheet de lookups",
+      "subtitle": "Lookups ORM que aparecen en el TP-4",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Lookup | SQL equivalente | Ejemplo |\n|--------|-----------------|---------|\n| `__exact` | `= valor` | `filter(nombre__exact=\"Ursula\")` |\n| `__iexact` | `= valor` (case-insensitive) | `filter(email__iexact=...)` |\n| `__contains` | `LIKE %valor%` | `filter(titulo__contains=\"desp\")` |\n| `__icontains` | idem, case-insensitive | `filter(titulo__icontains=\"SAPI\")` |\n| `__gt / __gte / __lt / __lte` | `> >= < <=` | `filter(cantidad_total__gt=0)` |\n| `__in` | `IN (...)` | `filter(id__in=[1, 2, 3])` |\n| `__isnull=True/False` | `IS NULL / IS NOT NULL` | `filter(fecha_devolucion__isnull=True)` |\n| `__date / __year / __month` | Extraer fecha | `filter(fecha_prestamo__year=2026)` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Lookup | SQL equivalente | Ejemplo |\n|--------|-----------------|---------|\n| `__exact` | `= valor` | `filter(nombre__exact=\"Ursula\")` |\n| `__iexact` | `= valor` (case-insensitive) | `filter(email__iexact=...)` |\n| `__contains` | `LIKE %valor%` | `filter(titulo__contains=\"desp\")` |\n| `__icontains` | idem, case-insensitive | `filter(titulo__icontains=\"SAPI\")` |\n| `__gt / __gte / __lt / __lte` | `> >= < <=` | `filter(cantidad_total__gt=0)` |\n| `__in` | `IN (...)` | `filter(id__in=[1, 2, 3])` |\n| `__isnull=True/False` | `IS NULL / IS NOT NULL` | `filter(fecha_devolucion__isnull=True)` |\n| `__date / __year / __month` | Extraer fecha | `filter(fecha_prestamo__year=2026)` |",
+          "local_asset": "slides/assets/F-66-table-1.png",
+          "drive_id": "1AL146RZ4dcoXouudkzaPaRH3j0g8JswZ"
+        }
+      ]
+    },
+    {
+      "id": "F-67",
+      "type": "concepto-mixto",
+      "title": "Flujo de trabajo para el TP-4",
+      "subtitle": "Flujo recomendado para resolver el TP-4",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Iteración por modelo"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Escribir modelo en `models.py`",
+              "level": 0
+            },
+            {
+              "content": "`makemigrations` + `migrate`",
+              "level": 0
+            },
+            {
+              "content": "`python manage.py test catalogo.tests.test_models -v 2`",
+              "level": 0
+            },
+            {
+              "content": "Ver tests rojos → corregir",
+              "level": 0
+            },
+            {
+              "content": "Cuando todos verdes → commit",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Iteración por query"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Escribir query en `queries.py`",
+              "level": 0
+            },
+            {
+              "content": "Probar en shell (`python manage.py shell`)",
+              "level": 0
+            },
+            {
+              "content": "`python manage.py test catalogo.tests.test_queries -v 2`",
+              "level": 0
+            },
+            {
+              "content": "Corregir → commit",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> **Meta**: ≥ 8 commits significativos, autograder verde en GitHub Actions."
+        }
+      ],
+      "code_blocks": [
+        {
+          "content": "$ git checkout -b feature/q1\n$ python manage.py test catalogo\n$ git add queries.py\n$ git commit -m 'Q1: libros_por_categoria'\n$ git push origin feature/q1",
+          "lang": "bash"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-68",
+      "type": "tabla",
+      "title": "Checklist final del TP-4",
+      "subtitle": "Checklist — antes del push final",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Si los 10 están ✅ → push a main → autograder → nota."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| # | Item | ✅ |\n|---|------|---|\n| 1 | `models.py` sin `pass` en ninguna clase | |\n| 2 | `queries.py` sin `raise NotImplementedError` | |\n| 3 | `python manage.py migrate` corre sin errores | |\n| 4 | `python manage.py test` → 100% verde local |  |\n| 5 | GitHub Actions verde en el PR |  |\n| 6 | README leído → todos los items cumplidos |  |\n| 7 | Sin código comentado viejo |  |\n| 8 | `__str__` en todos los modelos |  |\n| 9 | Uso de `related_name` explícito |  |\n| 10 | Solo CBVs (no hay `def vista_...`) |  |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| # | Item | ✅ |\n|---|------|---|\n| 1 | `models.py` sin `pass` en ninguna clase | |\n| 2 | `queries.py` sin `raise NotImplementedError` | |\n| 3 | `python manage.py migrate` corre sin errores | |\n| 4 | `python manage.py test` → 100% verde local |  |\n| 5 | GitHub Actions verde en el PR |  |\n| 6 | README leído → todos los items cumplidos |  |\n| 7 | Sin código comentado viejo |  |\n| 8 | `__str__` en todos los modelos |  |\n| 9 | Uso de `related_name` explícito |  |\n| 10 | Solo CBVs (no hay `def vista_...`) |  |",
+          "local_asset": "slides/assets/F-68-table-1.png",
+          "drive_id": "1smkYixgdXr_QSIw4gnTfmqVLkNhuE_kJ"
+        }
+      ]
+    },
+    {
+      "id": "F-69",
+      "type": "socratica",
+      "title": "Ejercicio final conjunto — escribir Query 2 desde cero",
+      "subtitle": "Ejercicio final — 10 min en pizarra",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> **Objetivo**: cada alumno, sin mirar filminas, escribe `autores_con_mas_de_n_libros(n)`."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Entrega en papel"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "`from django.db.models import ___`",
+              "level": 0
+            },
+            {
+              "content": "`def autores_con_mas_de_n_libros(n: int):`",
+              "level": 0
+            },
+            {
+              "content": "`    return Autor.objects.___`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Docente recoge, lee en voz alta los errores más comunes"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "\"Te olvidaste el import de Count\"",
+              "level": 0
+            },
+            {
+              "content": "\"annotate va antes de filter\"",
+              "level": 0
+            },
+            {
+              "content": "\"usar `cantidad_libros__gt=n`, no `> n`\"",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Ilustraci?n flat: una mano gris oscuro abstracta sosteniendo una pluma bordo, con una hoja de papel rectangular blanca debajo con l?neas grises horizontales. A la izquierda, un engranaje bordo grande. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin c?digo, sin n?meros. Alta resoluci?n.",
+        "local_asset": "slides/assets/F-69-bg.png",
+        "drive_id": "1wpGc7aWsqNYVWAimwYStoCONrtOMr1Yp"
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-70",
+      "type": "demo",
+      "title": "Ticket de salida — Clase 3",
+      "subtitle": "Ticket de salida (5 min)",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Responder en hoja:"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Diferencia entre `null=True` y `blank=True`",
+              "level": 0
+            },
+            {
+              "content": "¿Qué hace `annotate` en un QuerySet?",
+              "level": 0
+            },
+            {
+              "content": "¿Por qué `libros_sin_disponibilidad` usa `F(\"cantidad_total\")` y no `cantidad_total`?",
+              "level": 0
+            },
+            {
+              "content": "Una línea: qué vas a hacer **esta noche** antes del próximo commit.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> Se entrega al salir. Los resultados moldean la clase de consulta del martes."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# Checklist TP-4 ? celdas verdes\nassert Autor._meta.verbose_name == 'autor'\nassert Libro.objects.filter(...).exists()\nassert test_q1_passes()\nassert test_q2_passes()\n# Todas verdes ? 10/10"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-71",
+      "type": "concepto-mixto",
+      "title": "Camino Tema 04",
+      "subtitle": "Preview Tema 04",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lo que viene después del TP-4"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Select_related / prefetch_related** — optimizar joins (evitar N+1)",
+              "level": 0
+            },
+            {
+              "content": "**Agregaciones avanzadas** — `aggregate`, `Avg`, `Sum`, `StdDev`",
+              "level": 0
+            },
+            {
+              "content": "**Transacciones** — `with transaction.atomic():`",
+              "level": 0
+            },
+            {
+              "content": "**Señales** — pre_save, post_save (con cuidado)",
+              "level": 0
+            },
+            {
+              "content": "**Custom Managers** — encapsular queries comunes",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> El Tema 03 les da las herramientas básicas. El Tema 04 las afila."
+        }
+      ],
+      "code_blocks": [
+        {
+          "content": "# Tema 04: Forms + Views\nfrom django.views.generic import CreateView\nfrom .forms import LibroForm\n\nclass LibroCreate(CreateView):\n    form_class = LibroForm",
+          "lang": "python"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-72",
+      "type": "concepto-mixto",
+      "title": "Preparación para Tema 05 — Forms + Views",
+      "subtitle": "Hacia Tema 05 — de ORM a Web completa",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ahora saben"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Escribir modelos",
+              "level": 0
+            },
+            {
+              "content": "Escribir queries complejas",
+              "level": 0
+            },
+            {
+              "content": "Testear ambos",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Les falta"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Mostrarlos en HTML** → templates con `{% for %}`, `{% if %}`",
+              "level": 0
+            },
+            {
+              "content": "**Crear/editar vía formulario** → `ModelForm` + `CreateView` / `UpdateView`",
+              "level": 0
+            },
+            {
+              "content": "**Login / permisos** → `LoginRequiredMixin`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> Todo eso con CBVs. Empezamos Tema 05 después de entregar el TP-4."
+        }
+      ],
+      "code_blocks": [
+        {
+          "content": "# Tema 05: Auth + Sessions\nfrom django.contrib.auth.mixins import LoginRequiredMixin\n\nclass PerfilView(LoginRequiredMixin, TemplateView):\n    template_name = 'perfil.html'",
+          "lang": "python"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-73",
+      "type": "cierre",
+      "title": "Cierre del Tema 03",
+      "subtitle": "Tema 03 cerrado",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Recorrimos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "3 capas web → cliente/servidor → MVC / MVT",
+              "level": 0
+            },
+            {
+              "content": "Django instalado, proyecto + app + CBV",
+              "level": 0
+            },
+            {
+              "content": "Modelos, relaciones, migraciones",
+              "level": 0
+            },
+            {
+              "content": "CRUD + las 4 queries del TP-4",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Próximo paso: ustedes"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Clonar TP-4 de GitHub Classroom",
+              "level": 0
+            },
+            {
+              "content": "Resolver, commitear, pushear",
+              "level": 0
+            },
+            {
+              "content": "**Consultas**: próximo martes de 14 a 16 h",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> \"Un buen ORM te deja pensar en objetos; un gran ORM te deja pensar en dominio.\""
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Composición flat design con cuatro rectángulos bordo formando un cuadrado equilibrado en el centro, conectados por líneas grises diagonales cruzadas. En el centro, un pequeño círculo gris. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-73-bg.png",
+        "drive_id": "1DzYyJBFlmtiXiGnC4181PBHiyOiBDlLw"
+      },
+      "table_assets": []
+    }
+  ]
+}

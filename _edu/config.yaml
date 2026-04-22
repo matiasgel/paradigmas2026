@@ -35,6 +35,11 @@ lms_provider: "moodle, google-classroom"
 academic_guardrail_enabled: "true"
 command_aliases: "true"
 
+# --- Validators (S1.1 / S1.2 / S4.1) ---
+accessibility_check_enabled: true
+composition_check_enabled: true
+cognitive_validation_enabled: true
+
 # --- Course Structure ---
 topics_folder: "salida/cursadas/2026/temas"    # carpeta donde viven los temas de la cursada activa
 plan_folder: "salida/cursadas/2026"            # carpeta donde viven plan-minimo.md y plan-borrador.md

@@ -140,8 +140,12 @@ def estimate_visual_density(slide: dict) -> dict:
     tables = slide.get("tables", [])
     if tables:
         for tbl in tables:
-            rows = tbl.get("rows", [])
-            weights["table"] = 20 + len(rows) * 2
+            if isinstance(tbl, dict):
+                rows = tbl.get("rows", [])
+                weights["table"] = 20 + len(rows) * 2
+            else:
+                # Table referenced as string (pre-rendered asset path)
+                weights["table"] = 30.0
 
     # Image
     image = slide.get("image", {})

@@ -43,6 +43,13 @@ _edu-knowledge/models/
 # Sprint 11 — Knowledge Graph artifacts
 _edu-knowledge/universal-kg.json
 
+# ChromaDB — base vectorial generada (regenerar con scripts de ingesta)
+_edu-knowledge/chroma_db/
+
+# Logs y archivos temporales del pipeline
+*.log
+objects.inv
+
 # Sprint 13 — Student state
 salida/cursadas/*/students/
 
