@@ -83,14 +83,14 @@ def copy_edu_root(temp_dir: Path) -> None:
         shutil.rmtree(git_dir)
 
 
-def init_push_repo(temp_dir: Path, repo: str) -> None:
+def init_push_repo(temp_dir: Path, repo: str, branch: str, force: bool) -> None:
     code, out = run_command(["git", "init"], cwd=temp_dir)
     if code != 0:
         raise RuntimeError(f"git init falló: {out}")
 
-    code, out = run_command(["git", "checkout", "-b", "main"], cwd=temp_dir)
+    code, out = run_command(["git", "checkout", "-b", branch], cwd=temp_dir)
     if code != 0:
-        raise RuntimeError(f"git checkout main falló: {out}")
+        raise RuntimeError(f"git checkout {branch} falló: {out}")
 
     code, out = run_command(["git", "add", "--all"], cwd=temp_dir)
     if code != 0:
@@ -104,7 +104,10 @@ def init_push_repo(temp_dir: Path, repo: str) -> None:
     if code != 0:
         raise RuntimeError(f"git remote add origin falló: {out}")
 
-    code, out = run_command(["git", "push", "-u", "origin", "main"], cwd=temp_dir)
+    push_cmd = ["git", "push", "-u", "origin", branch]
+    if force:
+        push_cmd.append("--force")
+    code, out = run_command(push_cmd, cwd=temp_dir)
     if code != 0:
         raise RuntimeError(f"git push falló: {out}")
 
@@ -143,7 +146,7 @@ def main() -> None:
         print(f"📁 Copiando edu-standalone a {temp_dir}...")
         copy_edu_root(temp_dir)
         print("🧾 Inicializando repo local y empujando a GitHub...")
-        init_push_repo(temp_dir, full_repo)
+        init_push_repo(temp_dir, full_repo, args.branch, args.force)
         print(f"✅ Exportado correctamente a https://github.com/{full_repo}")
 
 if __name__ == "__main__":
