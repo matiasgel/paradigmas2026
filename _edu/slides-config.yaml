@@ -1,8 +1,8 @@
-﻿# Sistema de diseÃ±o para la exportaciÃ³n de filminas (Google Slides)
+# Sistema de diseño para la exportación de filminas (Google Slides)
 # Generado por /edu_slides_designer
 
 # --- Template Google Slides ---
-# 0 = "Simple Light" (default). Cambiar por el ID de un template propio si tenÃ©s.
+# 0 = "Simple Light" (default). Cambiar por el ID de un template propio si tenés.
 template_id: "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI"
 
 # --- Paleta de colores ---
@@ -13,7 +13,7 @@ palette:
   background: "#FFFFFF"
   text: "#1A1A1A"
 
-# --- TipografÃ­a (Google Fonts recomendadas) ---
+# --- Tipografía (Google Fonts recomendadas) ---
 typography:
   title:
     font: "Roboto"
@@ -33,7 +33,7 @@ typography:
     weight: "regular"
 
 # --- Layouts por tipo de filmina ---
-# Cada layout define cÃ³mo se estructura el contenido para ese tipo de slide.
+# Cada layout define cómo se estructura el contenido para ese tipo de slide.
 layouts:
   portada:
     title:
@@ -79,7 +79,7 @@ layouts:
       row_even: "#F9F9F9"
       row_odd: "#FFFFFF"
 
-  "pregunta-socrÃ¡tica":
+  "pregunta-socrática":
     title:
       font: title
       align: center
@@ -119,9 +119,9 @@ layouts:
       align: left
       color: text
 
-# --- Tipos de filmina â€” Tabla canÃ³nica inmutable ---
-# Esta tabla es la ÃšNICA fuente de verdad para tipos, layouts e imagen.
-# El script solo lee de aquÃ­. Los agentes asignan tipos explÃ­citos desde esta tabla.
+# --- Tipos de filmina — Tabla canónica inmutable ---
+# Esta tabla es la ÚNICA fuente de verdad para tipos, layouts e imagen.
+# El script solo lee de aquí. Los agentes asignan tipos explícitos desde esta tabla.
 slide_types:
   portada:
     layout: {title: center-middle, body: center-bottom, image: background, code: none, table: none}
@@ -132,11 +132,11 @@ slide_types:
   concepto-mixto:
     layout: {title: full-title, body: left-middle, image: none, code: right-half, table: none}
     image_layer: none
-    note: "Texto izquierda + cÃ³digo derecha. AÃ±adido v2 post-Bug 1."
+    note: "Texto izquierda + código derecha. Añadido v2 post-Bug 1."
   tabla-mixta:
     layout: {title: full-title, body: left-top-split, image: none, code: left-bottom-split, table: right-half}
     image_layer: none
-    note: "Texto/cÃ³digo a la izquierda y tabla a la derecha. AÃ±adido para evitar pÃ©rdida de tablas en slides mixtas."
+    note: "Texto/código a la izquierda y tabla a la derecha. Añadido para evitar pérdida de tablas en slides mixtas."
   codigo:
     layout: {title: full-title, body: subtitle-only, image: none, code: full-bottom, table: none}
     image_layer: none
@@ -162,19 +162,19 @@ slide_types:
     layout: {title: full-title, body: left-middle, image: none, code: right-half, table: none}
     image_layer: none
 
-# --- Estrategia de imÃ¡genes (Gemini) ---
+# --- Estrategia de imágenes (Gemini) ---
 gemini_image_strategy:
   default: "content"
-  max_per_presentation: 20
-  max_images_per_presentation: 20  # alias de compatibilidad
+  max_per_presentation: 12
+  max_images_per_presentation: 12  # alias de compatibilidad
   fallback: "none"
-  safety_rules: "Sin texto, sin letras, sin cÃ³digo, sin etiquetas ni fÃ³rmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, acadÃ©mico."
+  safety_rules: "Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico."
   prompt_guide: |
-    REGLA: describir SOLO geometrÃ­a (formas, colores, posiciones, tamaÃ±os).
-    NUNCA nombrar conceptos tÃ©cnicos â€” Gemini los convierte en etiquetas de texto.
-    Template: [Elemento]: [forma] [color] [posiciÃ³n]. [RelaciÃ³n posicional]. [Estilo flat]. Sin texto, sin letras.
+    REGLA: describir SOLO geometría (formas, colores, posiciones, tamaños).
+    NUNCA nombrar conceptos técnicos — Gemini los convierte en etiquetas de texto.
+    Template: [Elemento]: [forma] [color] [posición]. [Relación posicional]. [Estilo flat]. Sin texto, sin letras.
 
-# --- Render semÃ¡ntico de Markdown en Google Slides ---
+# --- Render semántico de Markdown en Google Slides ---
 markdown_rendering:
   unordered_bullet_preset: "BULLET_DISC_CIRCLE_SQUARE"
   ordered_bullet_preset: "NUMBERED_DIGIT_ALPHA_ROMAN"
