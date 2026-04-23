@@ -1,3 +1,111 @@
+<!-- BMAD:START -->
+# BMAD Method — Project Instructions
+
+## Project Configuration
+
+- **Project**: paradigmas2026
+- **User**: Matiasgel
+- **Communication Language**: spanish
+- **Document Output Language**: spanish
+- **User Skill Level**: intermediate
+- **Output Folder**: {project-root}/salida
+- **Planning Artifacts**: {project-root}/salida/planning-artifacts
+- **Implementation Artifacts**: {project-root}/salida/implementation-artifacts
+- **Project Knowledge**: {project-root}/docs
+
+## BMAD Runtime Structure
+
+- **Agent definitions**: `_bmad/bmm/agents/` (BMM module) and `_bmad/core/agents/` (core)
+- **Workflow definitions**: `_bmad/bmm/workflows/` (organized by phase)
+- **Core tasks**: `_bmad/core/tasks/` (help, editorial review, indexing, sharding, adversarial review)
+- **Core workflows**: `_bmad/core/workflows/` (brainstorming, party-mode, advanced-elicitation)
+- **Workflow engine**: `_bmad/core/tasks/workflow.xml` (executes YAML-based workflows)
+- **Module configuration**: `_bmad/bmm/config.yaml`
+- **Core configuration**: `_bmad/core/config.yaml`
+- **Agent manifest**: `_bmad/_config/agent-manifest.csv`
+- **Workflow manifest**: `_bmad/_config/workflow-manifest.csv`
+- **Help manifest**: `_bmad/_config/bmad-help.csv`
+- **Agent memory**: `_bmad/_memory/`
+
+## Propósito del Proyecto
+
+> **REGLA FUNDAMENTAL:** Todo pedido al usuario o cualquier instrucción dirigida a BMAD en este proyecto tiene como **único objetivo desarrollar el módulo `edu-standalone`**. Los agentes y workflows de BMAD se usan como herramientas de trabajo, pero **NUNCA se modifican los archivos de BMAD** (`_bmad/`). Cualquier artefacto generado debe depositarse en `salida/edu-standalone/` según las reglas del módulo EDU.
+
+## Key Conventions
+
+- Always load `_bmad/bmm/config.yaml` before any agent activation or workflow execution
+- Store all config fields as session variables: `{user_name}`, `{communication_language}`, `{output_folder}`, `{planning_artifacts}`, `{implementation_artifacts}`, `{project_knowledge}`
+- MD-based workflows execute directly — load and follow the `.md` file
+- YAML-based workflows require the workflow engine — load `workflow.xml` first, then pass the `.yaml` config
+- Follow step-based workflow execution: load steps JIT, never multiple at once
+- Save outputs after EACH step when using the workflow engine
+- The `{project-root}` variable resolves to the workspace root at runtime
+- **NUNCA modificar archivos dentro de `_bmad/`** — BMAD es solo el framework de trabajo, no el producto final
+
+## Available Agents
+
+| Agent | Persona | Title | Capabilities |
+|---|---|---|---|
+| bmad-master | BMad Master | BMad Master Executor, Knowledge Custodian, and Workflow Orchestrator | runtime resource management, workflow orchestration, task execution, knowledge custodian |
+| analyst | Mary | Business Analyst | market research, competitive analysis, requirements elicitation, domain expertise |
+| architect | Winston | Architect | distributed systems, cloud infrastructure, API design, scalable patterns |
+| dev | Amelia | Developer Agent | story execution, test-driven development, code implementation |
+| pm | John | Product Manager | PRD creation, requirements discovery, stakeholder alignment, user interviews |
+| qa | Quinn | QA Engineer | test automation, API testing, E2E testing, coverage analysis |
+| quick-flow-solo-dev | Barry | Quick Flow Solo Dev | rapid spec creation, lean implementation, minimum ceremony |
+| sm | Bob | Scrum Master | sprint planning, story preparation, agile ceremonies, backlog management |
+| tech-writer | Paige | Technical Writer | agent capabilities |
+| ux-designer | Sally | UX Designer | user research, interaction design, UI patterns, experience strategy |
+
+## Slash Commands
+
+Type `/bmad-` in Copilot Chat to see all available BMAD workflows and agent activators. Agents are also available in the agents dropdown.
+
+## GitHub Copilot — Manual Completo (actualizado marzo 2026)
+
+Para conocer todas las funciones de GitHub Copilot, mejores prácticas, novedades 2026 y cómo BMAD las aprovecha, consultar:
+
+📄 **[docs/copilot.md](../docs/copilot.md)**
+
+Incluye (actualizado):
+- Arquitectura de las **8 capas** de personalización de Copilot
+- Custom instructions (`copilot-instructions.md`, `.instructions.md` con `applyTo`, `AGENTS.md`, `CLAUDE.md`)
+- Custom agents (`.agent.md`) — campos nuevos: `icon`, `temperature`, `max-tokens`, tool `fetch`
+- Prompt files (`.prompt.md`) — variable `${file:ruta}` nueva, `${changes}`, `${problems}`
+- Agent Skills (`SKILL.md`) — capacidades portables (estándar abierto agentskills.io)
+- Hooks de ciclo de vida (GA) — campo `condition` nuevo, variables `$WORKSPACE_ROOT`, `$SESSION_ID`
+- Servidores MCP — config en `.vscode/mcp.json`, tipos stdio/http/sse, 9+ servidores populares
+- Modos de agente: Ask, Agent, Plan (GA), Background, Cloud — llamadas paralelas de herramientas
+- Variables de contexto: `#changes`, `#problems`, `#testFailure`, `#sym`, `#searchResults`
+- Modelos disponibles: Claude Sonnet 4.7, o3-mini, Gemini 2.0 Flash, GPT-4.5 y más
+- Copilot Coding Agent (Cloud) — asignar issues de GitHub a Copilot para PRs automáticos
+- Copilot Extensions — `@docker`, `@azure`, `@sentry`, etc.
+- Estrategias BMAD + Copilot (7 estrategias actualizadas)
+- Mejores prácticas, anti-patrones y checklist de deploy para agentes/prompts
+
+## Commit & Push at Session End
+
+**MANDATORY RULE for all agents:** At the end of a session where files have been created or modified and the user has accepted the changes, the agent MUST automatically execute the following steps:
+
+1. Check for changes with `git status`
+2. Stage all changes: `git add -A`
+3. Create a descriptive commit with the format:
+   `git commit -m "agent: <brief summary of changes made>"`
+   - Use the active agent name as prefix (e.g. `dev:`, `pm:`, `analyst:`, `sm:`, `architect:`, `qa:`)
+   - The message must clearly summarize what artifacts were created or modified
+4. Push to the current branch: `git push`
+
+**When to commit:**
+- After successfully completing a workflow or task
+- When the user confirms the changes are correct
+- At the end of the session if there are new or modified uncommitted files
+
+**When NOT to commit:**
+- If the user explicitly indicates they don't want a commit yet
+- If there are errors or incomplete changes pending
+<!-- BMAD:END -->
+
+
  EDU:START -->
 # EDU — Academic Course Production Suite
 
@@ -82,4 +190,14 @@ Los agentes están disponibles como `@edu-agent-nombre` en el dropdown de agente
 9. **Memoria colectiva SQLite FTS5** — `_edu-memory/memory.db` almacena errores de agentes, correcciones del usuario, hallazgos de calidad, insights pedagógicos y retrospectivas. Cada entrada tiene `course_id` (ej: `leng-2026`), categoría y tema. Usar `python scripts/edu_memory.py search "query"` para buscar. Los agentes DEBEN consultar la memoria antes de generar contenido (`agent-error`, `agent-correction` para evitar errores repetidos) y escribir en ella al detectar errores o recibir correcciones.
 10. **Multi-clase con `course_id`** — `config.yaml` define `course_prefix` (ej: `leng`) + `course_year` (ej: `2026`) → `course_id` = `leng-2026`. Todas las rutas (`course_output_folder`, `topics_folder`) usan `{course_id}`. Un workspace puede contener múltiples materias. Usar `/edu-switch-course` para cambiar de materia activa.
 11. **Knowledge Base ChromaDB** — `_edu-knowledge/` contiene referencias académicas (12 documentos) y documentación de herramientas (16 documentos + 6 fuentes OpenMAIC) ingestados en ChromaDB (414 chunks vectorizados). Todos los agentes DEBEN consultar la knowledge base antes de implementar funcionalidades de los sprints de mejoras. Usar `python scripts/knowledge_base.py search "query"` para buscar. Filtrar por tipo: `--type reference` (papers académicos) o `--type tool` (docs de herramientas). Documentos disponibles: Multimedia Learning (Fiorella/Mayer 2023), Cognitive Load Theory (Sweller/Chen 2023), WCAG 2.2/3.0 (W3C), FSRS v4 (Ye 2023), Bloom Taxonomy & Assessment (Haladyna 2024), Learning Analytics (Ifenthaler/Tsai/Yan 2020-2024), CS Education & GitHub (SIGCSE/Feliciano/Denny 2023-2024), Slide Composition (Duarte/Scheiter 2019-2023), Adaptive Learning & ITS (VanLehn/ALEKS/Du 2023), MCP Protocol (Anthropic 2024-2025), MAIC (Yu et al. 2024, Tsinghua), OpenMAIC Platform (THU-MAIC 2026). API importable: `from scripts.knowledge_base import query_knowledge; result = query_knowledge("cognitive load slides")`
+
+12. **Scripts son INMUTABLES para agentes** — Los archivos en `scripts/` (todos los `.py` y `requirements.txt`) son de SOLO LECTURA para todos los agentes EDU. Los agentes pueden LEER y EJECUTAR scripts, pero NUNCA crear, editar, renombrar ni borrar archivos en `scripts/`. Si un script necesita una corrección o nueva funcionalidad → el docente lo escala al Arquitecto. Esta regla aplica también a `scripts/` en `production/scripts/`. Los scripts son el contrato técnico del pipeline — modificarlos sin control de versiones rompe la reproducibilidad.
+
+13. **Schemas son INMUTABLES para agentes** — Los archivos en `_edu/schemas/` (todos los `.json`, incluyendo `schema-registry.json`) son INMUTABLES para todos los agentes EDU. Los agentes leen schemas para validar, pero NUNCA los modifican. Si un tipo de filmina nuevo es necesario o un campo debe cambiar → escalar al Arquitecto con bump de versión mayor (`schema-registry.json` → `"version": "4.0.0"`). Cualquier agente que detecte inconsistencia en un schema debe reportarla al docente sin tocar el archivo.
+
+14. **Templates son INMUTABLES para agentes** — Los archivos en `_edu/templates/` (`class-template.md`, `filminas-schema.yaml`, `filminas-template.md`, `prompt-imagen-guide.md`, etc.) no pueden ser modificados por agentes. Se usan como referencia de lectura. Si el docente quiere actualizar un template → edición directa por el docente, no por agente.
+
+15. **refresh_plan.py — Uso obligatorio al re-publicar** — Si `filminas.md` fue modificado DESPUÉS de que `slides_pipeline.py` ya generó imágenes y subió assets a Google Drive, se DEBE usar `python scripts/refresh_plan.py {topic_folder}` en lugar de regenerar el plan desde cero. Este script preserva `image.local_asset`, `image.drive_id`, `image.prompt`, `layout` y `type` de las filminas existentes, evitando regenerar imágenes Gemini costosas. Solo re-parsea el contenido textual nuevo.
+
+16. **generate_gift_quiz.py — Cuestionarios Moodle GIFT** — Para generar cuestionarios importables en Moodle desde el plan de filminas de un tema: `python scripts/generate_gift_quiz.py --topic {nombre} --course {course_id}`. Genera un archivo `.gift` y un manifiesto `.json` en `{topic_folder}/slides/`. Compatible con Moodle 5. Si existe `exam-blueprint.json` en la carpeta del tema, lo usa para asignar niveles Bloom a cada pregunta.
 <!-- EDU:END -->
