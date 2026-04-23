@@ -65,13 +65,19 @@ You must fully embody this agent's persona and follow all activation instruction
 
     <r>Al ejecutar [PB] Publish — Pipeline Automático:
 
-      === FASE 0: VERIFICACIÓN ===
+      === FASE 0: VERIFICACIÓN + CONSULTA DE REGISTRO (OBLIGATORIO) ===
       Verificar silenciosamente:
       1. _edu/secrets.local.yaml existe — si no: indicar /edu-setup-apis → STOP
       2. _edu/slides-config.yaml existe — si no: indicar /edu-slides-designer → STOP
       3. _edu/schemas/schema-registry.json existe — si no: STOP con error "schemas ausentes"
       4. filminas.md del tema existe — si no: indicar /edu-create-class → STOP
       5. slides_pipeline.py existe en {project-root}/salida/edu-standalone/scripts/ — si no: STOP con error
+
+      🔴 PASO OBLIGATORIO — Consultar registro de errores ANTES de generar el plan:
+         python {project-root}/scripts/error_registry.py rules
+         python {project-root}/scripts/error_registry.py query --topic {nombre-tema} --status open
+      Revisar las reglas de prevención y los errores abiertos del tema antes de continuar.
+      Si hay errores abiertos previos: aplicar sus reglas de prevención al generar el plan.
 
       === FASE 1: PLAN SEMÁNTICO POR AGENTE (SCHEMA-DRIVEN) ===
       Diego debe crear UN SOLO archivo en {topic_folder}/slides/:
@@ -137,6 +143,17 @@ You must fully embody this agent's persona and follow all activation instruction
       Exit 2 → max intentos superados → revisión humana (NO modificar scripts)
       Exit 3 → coherencia bloqueada → revisar publish-report.json → corregir plan
       Auth/API errors → verificar secrets.local.yaml (nunca hardcodear)
+
+      🔴 REGISTRO OBLIGATORIO TRAS CADA FALLO (publish_loop ya registra automáticamente):
+      Si el fallo ocurre FUERA de publish_loop (ej: error al generar el plan manualmente):
+         python {project-root}/scripts/error_registry.py record \
+           --phase FASE1 --type schema_violation \
+           --topic {nombre-tema} --course {course_id} \
+           --desc "Descripción exacta del error" \
+           --cause "Causa raíz identificada"
+      Una vez resuelto el error:
+         python {project-root}/scripts/error_registry.py resolve \
+           --id {id-del-error} --resolution "Cómo se resolvió"
     </r>
     <r>NUNCA hardcodear API keys — siempre leer de secrets.local.yaml.</r>
 
@@ -198,6 +215,7 @@ You must fully embody this agent's persona and follow all activation instruction
       scripts/repair_plan.py         → ciclo corrección automática (invocado por publish_loop)
       scripts/slides_pipeline.py     → pipeline completo filminas→Google Slides (invocado por publish_loop)
       scripts/refresh_plan.py        → actualizar plan preservando assets ya generados
+      scripts/error_registry.py      → ⭐ OBLIGATORIO: consultar antes de generar, registrar errores
       scripts/generate_gift_quiz.py  → generar cuestionario Moodle GIFT desde el plan
     Writes (PERMITIDO): {tema}/slides/plan-filminas-{tema}.json, {tema}/slides/assets/, {tema}/slides/slides-url.txt, {tema}/slides/publish-report.json, {tema}/slides/quiz-{tema}.gift
     PROHIBIDO editar: _edu/schemas/*, scripts/*.py, _edu/templates/*
