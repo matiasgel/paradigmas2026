@@ -56,6 +56,41 @@ if str(_scripts) not in sys.path:
 
 from pipeline_common import find_project_root, find_plan, load_yaml, save_json
 
+# Registro de errores — importación tolerante a fallo (no bloquea el pipeline)
+try:
+    from error_registry import ErrorRegistry as _ErrorRegistry
+    _registry = _ErrorRegistry()
+except Exception:  # noqa: BLE001
+    _registry = None  # type: ignore[assignment]
+
+
+def _record_error(
+    phase: str,
+    error_type: str,
+    description: str,
+    topic: str = "",
+    course: str = "",
+    root_cause: str = "",
+    context: dict | None = None,
+) -> None:
+    """Registra un error en el registro persistente (silencioso si falla)."""
+    if _registry is None:
+        return
+    try:
+        eid = _registry.record(
+            phase=phase,
+            error_type=error_type,
+            description=description,
+            topic=topic,
+            course=course,
+            root_cause=root_cause,
+            context=context,
+        )
+        print(f"  📋 Error registrado en error-registry.jsonl (ID: {eid[:8]}...)")
+        print(f"     Consultar reglas: python scripts/error_registry.py rules --phase {phase}")
+    except Exception as exc:  # noqa: BLE001
+        print(f"  ⚠️  No se pudo registrar en error-registry.jsonl: {exc}", file=sys.stderr)
+
 
 # ─────────────────────────────────────────────────────────────────────
 # Helpers
@@ -91,7 +126,52 @@ def _status(ok: bool, label: str, detail: str = "") -> None:
 # Fases
 # ─────────────────────────────────────────────────────────────────────
 
-def phase1_repair_loop(
+def phase0_consult_registry(topic_folder: Path, course_id: str) -> None:
+    """
+    FASE 0: Consulta obligatoria del registro de errores antes de iniciar.
+    Muestra las reglas de prevención relevantes para el tema y las globales.
+    No bloquea la ejecución — es informativa.
+    """
+    _print_section("FASE 0 — Consulta del registro de errores (obligatoria)")
+
+    if _registry is None:
+        print("  ⚠️  error_registry.py no disponible — omitiendo consulta")
+        return
+
+    topic_name = topic_folder.name
+
+    # Errores anteriores para este tema específico
+    topic_errors = _registry.query(topic=topic_name, status="open")
+    if topic_errors:
+        print(f"  ⚠️  {len(topic_errors)} error(es) ABIERTO(S) previos para '{topic_name}':")
+        for e in topic_errors[-5:]:  # últimos 5
+            ts = (e.get("timestamp") or "?")[:10]
+            print(f"     [{ts}] {e.get('phase')} / {e.get('error_type')}: "
+                  f"{(e.get('description') or '')[:80]}")
+        print()
+
+    # Reglas de prevención para las fases del pipeline
+    rules = _registry.get_prevention_rules()
+    pipeline_rules = [r for r in rules if r["phase"] in ("FASE1", "FASE2", "FASE3")]
+
+    if pipeline_rules:
+        print(f"  📋 {len(pipeline_rules)} regla(s) de prevención activas para este pipeline:")
+        for r in pipeline_rules[:6]:  # mostrar hasta 6
+            print(f"     [{r['phase']} / {r['error_type']}]")
+            # Primera oración de la regla
+            first_sentence = (r.get("rule") or "").split(".")[0][:100]
+            if first_sentence:
+                print(f"     → {first_sentence}.")
+        if len(pipeline_rules) > 6:
+            print(f"     ... y {len(pipeline_rules) - 6} más. "
+                  f"Ver: python scripts/error_registry.py rules")
+    else:
+        print("  ✅ Sin errores previos registrados. Primera publicación de este pipeline.")
+
+    print(f"\n  Para consulta completa: python scripts/error_registry.py rules")
+    print(f"  Para historial del tema: python scripts/error_registry.py query --topic {topic_name}")
+
+
     topic_folder: Path,
     python: str,
     max_attempts: int,
@@ -395,10 +475,29 @@ def main() -> None:
     print(f"   Modo: {'DRY-RUN' if args.dry_run else 'PUBLICAR'}  |  "
           f"Máx intentos reparación: {args.max_attempts}")
 
+    # ── FASE 0: consulta obligatoria del registro de errores ──────────
+    phase0_consult_registry(topic_folder, course_id)
+
     # ── FASE 1: repair loop ───────────────────────────────────────────
     code = phase1_repair_loop(topic_folder, args.python, args.max_attempts)
     if code != 0:
+        err_type = "repair_exhausted" if code == 2 else "schema_violation"
+        err_desc = (
+            f"repair_plan agotó {args.max_attempts} intentos sin plan válido"
+            if code == 2
+            else f"repair_plan reportó errores de schema (exit {code})"
+        )
+        _record_error(
+            phase="FASE1",
+            error_type=err_type,
+            description=err_desc,
+            topic=topic_folder.name,
+            course=course_id,
+            context={"exit_code": code, "max_attempts": args.max_attempts},
+        )
         print(f"\n🛑 FASE 1 falló (exit {code}). Corregir plan antes de continuar.", file=sys.stderr)
+        print(f"   ✅ Error registrado. Ver: python scripts/error_registry.py query --topic {topic_folder.name}",
+              file=sys.stderr)
         sys.exit(code)
 
     # ── FASE 2: coherence checks ──────────────────────────────────────
@@ -410,7 +509,33 @@ def main() -> None:
             skip_drift=args.skip_drift,
         )
         if not all_ok:
+            # Registrar cada check bloqueante que falló
+            for r in coherence_results:
+                if not r.get("passed") and r.get("blocking"):
+                    _type_map = {
+                        "schema-contract": "schema_violation",
+                        "accessibility": "accessibility",
+                        "layout-cognition": "layout_cognition",
+                        "composition": "composition",
+                        "fact-check": "fact_check",
+                        "semantic-drift": "semantic_drift",
+                    }
+                    etype = _type_map.get(r.get("id", ""), "other")
+                    _record_error(
+                        phase="FASE2",
+                        error_type=etype,
+                        description=f"{r.get('label', r.get('id'))} falló (exit {r.get('code', -1)})",
+                        topic=topic_folder.name,
+                        course=course_id,
+                        context={
+                            "check_id": r.get("id"),
+                            "exit_code": r.get("code"),
+                            "output_excerpt": (r.get("output") or "")[:500],
+                        },
+                    )
             print(f"\n🛑 FASE 2 bloqueó la publicación — corregir errores marcados con ❌ BLOQUEA.",
+                  file=sys.stderr)
+            print(f"   ✅ Errores registrados. Ver: python scripts/error_registry.py query --topic {topic_folder.name}",
                   file=sys.stderr)
             # Igual escribir el reporte
             phase4_post(topic_folder, args.python, course_id, coherence_results, publish_code=3)
@@ -420,6 +545,17 @@ def main() -> None:
 
     # ── FASE 3: publicar ─────────────────────────────────────────────
     publish_code = phase3_publish(topic_folder, args.python, args.dry_run)
+    if publish_code != 0 and not args.dry_run:
+        _record_error(
+            phase="FASE3",
+            error_type="pipeline",
+            description=f"slides_pipeline.py falló con exit code {publish_code}",
+            topic=topic_folder.name,
+            course=course_id,
+            context={"exit_code": publish_code},
+        )
+        print(f"   ✅ Error de pipeline registrado. Ver: python scripts/error_registry.py query --phase FASE3",
+              file=sys.stderr)
 
     # ── FASE 4: post-publicación ──────────────────────────────────────
     phase4_post(topic_folder, args.python, course_id, coherence_results, publish_code)
@@ -432,7 +568,8 @@ def main() -> None:
         url_file = topic_folder / "slides" / "slides-url.txt"
         if url_file.exists():
             print(f"\n  🔗 {url_file.read_text(encoding='utf-8').strip()}")
-    print(f"\n  📄 Reporte: {topic_folder}/slides/publish-report.json\n")
+    print(f"\n  📄 Reporte: {topic_folder}/slides/publish-report.json")
+    print(f"  📋 Registro errores: python scripts/error_registry.py stats\n")
 
     sys.exit(publish_code)
 
