@@ -20,8 +20,11 @@ Orquestar la producción completa de un tema invocando agentes en secuencia con 
 4. [DIRECTOR → Roberto] Generar minuta + filminas
    → checkpoint: content-complete
 5. [QUALITY LOOP] coherencia-validator + guardrail automático
-6. [DIRECTOR → Pipeline] parse_filminas → validate_plan → slides_pipeline
-   → Si filminas.md se actualizó DESPUÉS de generar assets: usar refresh_plan.py
+6. [DIRECTOR → Pipeline] publish_loop.py (valida schema → coherencia → publica)
+   → Si filminas.md se actualizó DESPUÉS de generar assets: refresh_plan.py primero
+   → publish_loop incluye: repair_plan + validate_plan + validate_accessibility +
+     validate_layout_cognition + validate_slide_composition + slides_pipeline
+   → Reporte: {topic_folder}/slides/publish-report.json
    → checkpoint: slides-pipeline-complete
 7. [DIRECTOR → Valeria] Generar TP (si asignado)
    → checkpoint: tp-complete
@@ -49,11 +52,12 @@ Si la sesión se interrumpe, `/edu-resume-topic` retoma desde el último checkpo
 
 | Script | Cuándo invocar |
 |--------|----------------|
-| `scripts/parse_filminas.py {topic}` | Paso 6: generar plan DRAFT desde filminas.md |
-| `scripts/validate_plan.py {topic}` | Paso 6: validar plan JSON antes del pipeline |
-| `scripts/repair_plan.py {topic}` | Paso 6: ciclo corrección automática si falla validación |
-| `scripts/refresh_plan.py {topic}` | Paso 6: si filminas.md fue editado DESPUÉS de generar assets (preserva drive_ids) |
-| `scripts/slides_pipeline.py {topic}` | Paso 6: pipeline completo → Google Slides |
+| `scripts/publish_loop.py {topic} --course {id}` | ⭐ Paso 6: **ENTRADA PRINCIPAL** — loop validación+coherencia+publicación |
+| `scripts/refresh_plan.py {topic}` | Paso 6: si filminas.md se actualizó DESPUÉS de generar assets (preserva drive_ids) |
+| `scripts/parse_filminas.py {topic}` | Pre-paso 6: generar plan DRAFT (solo si Diego no generó el plan aún) |
+| `scripts/validate_plan.py {topic}` | Solo si se quiere validar en aislamiento (publish_loop lo incluye) |
+| `scripts/repair_plan.py {topic}` | Solo si se quiere reparar en aislamiento (publish_loop lo incluye) |
+| `scripts/slides_pipeline.py {topic}` | Solo si se quiere re-publicar sin re-validar (publish_loop lo incluye) |
 | `scripts/generate_gift_quiz.py --topic {name} --course {id}` | Paso 10: generar cuestionario Moodle GIFT |
 | `scripts/edu_memory.py search "query"` | Siempre: consultar memoria antes de generar contenido |
 | `scripts/edu_director.py --topic {name} --course {id}` | Alternativa: orquestación automática completa |
