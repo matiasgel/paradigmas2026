@@ -373,6 +373,18 @@ python scripts/slides_pipeline.py temas/NN-nombre --publish-only # solo publicar
 
 ---
 
+### 🚀 Exportar curso nuevo limpio a GitHub
+
+Para desplegar un curso nuevo con `edu-standalone` como raíz limpia en la rama `main`, usá el comando de exportación GitHub.
+
+```
+python scripts/export_repo.py --repo judiciales2026ush --visibility public --description "Curso Judiciales 2026 USh" --force --branch main
+```
+
+Este comando crea o actualiza el repositorio `judiciales2026ush` con solo el contenido de `edu-standalone` en el root de la rama `main`. No trae ramas adicionales ni archivos de otros cursos. El repo resultante queda listo para usar en un curso nuevo.
+
+---
+
 ### 🏁 Fase 4 — Cierre del Cursado (una vez al final del año)
 
 ```
