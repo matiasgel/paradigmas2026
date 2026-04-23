@@ -21,6 +21,7 @@ Orquestar la producción completa de un tema invocando agentes en secuencia con 
    → checkpoint: content-complete
 5. [QUALITY LOOP] coherencia-validator + guardrail automático
 6. [DIRECTOR → Pipeline] parse_filminas → validate_plan → slides_pipeline
+   → Si filminas.md se actualizó DESPUÉS de generar assets: usar refresh_plan.py
    → checkpoint: slides-pipeline-complete
 7. [DIRECTOR → Valeria] Generar TP (si asignado)
    → checkpoint: tp-complete
@@ -28,6 +29,7 @@ Orquestar la producción completa de un tema invocando agentes en secuencia con 
 9. [DIRECTOR → Simulador] Simulación pedagógica (si S7.4 activo)
    → checkpoint: simulation-complete
 10. [DIRECTOR] Resumen final → docente decide si publicar
+    → Opcional: generar cuestionario Moodle con generate_gift_quiz.py
 ```
 
 ## Checkpoints
@@ -43,8 +45,24 @@ Si la sesión se interrumpe, `/edu-resume-topic` retoma desde el último checkpo
 4. Memory-aware — consulta errores previos
 5. Schema-validated — cada artefacto se valida
 
+## Scripts del Pipeline (SOLO LECTURA/EJECUCIÓN — NO EDITAR)
+
+| Script | Cuándo invocar |
+|--------|----------------|
+| `scripts/parse_filminas.py {topic}` | Paso 6: generar plan DRAFT desde filminas.md |
+| `scripts/validate_plan.py {topic}` | Paso 6: validar plan JSON antes del pipeline |
+| `scripts/repair_plan.py {topic}` | Paso 6: ciclo corrección automática si falla validación |
+| `scripts/refresh_plan.py {topic}` | Paso 6: si filminas.md fue editado DESPUÉS de generar assets (preserva drive_ids) |
+| `scripts/slides_pipeline.py {topic}` | Paso 6: pipeline completo → Google Slides |
+| `scripts/generate_gift_quiz.py --topic {name} --course {id}` | Paso 10: generar cuestionario Moodle GIFT |
+| `scripts/edu_memory.py search "query"` | Siempre: consultar memoria antes de generar contenido |
+| `scripts/edu_director.py --topic {name} --course {id}` | Alternativa: orquestación automática completa |
+
 ## Restricciones
 
 - TODOS los quality loops existentes se respetan
 - Los agentes existentes NO se modifican — el Director los invoca tal cual
 - Registro completo en memory.db
+- 🔒 **Scripts y Schemas son INMUTABLES** — El Director NUNCA edita archivos en `scripts/` ni en `_edu/schemas/`. Solo los ejecuta o lee. Si un script falla → reportar, NO modificar.
+- 🔒 **Templates son INMUTABLES** — `_edu/templates/` no se edita. Solo se lee como referencia.
+- Si se detecta necesidad de cambio en schema o script → escalar al Arquitecto con descripción del cambio necesario.

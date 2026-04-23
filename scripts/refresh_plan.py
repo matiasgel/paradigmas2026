@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-refresh_plan.py — Re-parsea filminas.md y actualiza plan-filminas preservando imágenes ya generadas.
+refresh_plan.py ÔÇö Re-parsea filminas.md y actualiza plan-filminas preservando im├ígenes ya generadas.
 ======================================================================================================
 Uso:
     python scripts/refresh_plan.py salida/cursadas/2026/temas/07-paradigma-logico-avanzado
@@ -36,7 +36,7 @@ def main() -> None:
 
     filminas_path = topic_folder / "filminas.md"
     if not filminas_path.exists():
-        print(f"ERROR: No se encontró {filminas_path}")
+        print(f"ERROR: No se encontr├│ {filminas_path}")
         sys.exit(1)
 
     slides_dir = topic_folder / "slides"
@@ -49,7 +49,7 @@ def main() -> None:
     registry = load_registry(project_root)
     schema = load_filminas_schema(project_root)
 
-    # Cargar plan existente para preservar imágenes
+    # Cargar plan existente para preservar im├ígenes
     existing_by_id: dict[str, dict] = {}
     if plan_path.exists():
         with open(plan_path, encoding="utf-8") as f:
@@ -58,7 +58,7 @@ def main() -> None:
             existing_by_id[slide["id"]] = slide
         print(f"Plan existente cargado: {len(existing_by_id)} slides")
     else:
-        print("No hay plan existente — creando desde cero")
+        print("No hay plan existente ÔÇö creando desde cero")
 
     # Re-parsear filminas.md con parser corregido
     print(f"Parseando {filminas_path} ...")
@@ -73,11 +73,11 @@ def main() -> None:
         existing = existing_by_id.get(sid, {})
 
         # Tipo: prioridad al @tipo: de filminas.md (source of truth);
-        # fallback al existente si el nuevo parse no detectó directiva
+        # fallback al existente si el nuevo parse no detect├│ directiva
         directive_type = raw.get("directives", {}).get("type", "").strip()
         slide_type = directive_type or existing.get("type") or "pending"
 
-        # Layout: del registry según tipo
+        # Layout: del registry seg├║n tipo
         layout = existing.get("layout") or (
             type_layout_map.get(slide_type, {}).get("layout", {})
             if slide_type != "pending" else {}
@@ -148,8 +148,8 @@ def main() -> None:
     }
 
     save_json(plan_path, plan)
-    print(f"\n✓ Plan actualizado: {plan_path}")
-    print(f"  Slides: {len(merged_slides)} | Imágenes preservadas: {sum(1 for s in merged_slides if s['image']['local_asset'])}")
+    print(f"\nÔ£ô Plan actualizado: {plan_path}")
+    print(f"  Slides: {len(merged_slides)} | Im├ígenes preservadas: {sum(1 for s in merged_slides if s['image']['local_asset'])}")
 
     # Verificar que no hay @tipo: en body_blocks
     tipo_count = sum(
@@ -159,9 +159,9 @@ def main() -> None:
         if b.get("type") == "text" and "@tipo:" in str(b.get("content", ""))
     )
     if tipo_count:
-        print(f"  ⚠ ATENCIÓN: quedan {tipo_count} bloques con @tipo: en body_blocks")
+        print(f"  ÔÜá ATENCI├ôN: quedan {tipo_count} bloques con @tipo: en body_blocks")
     else:
-        print("  ✓ Sin directivas @tipo: en body_blocks")
+        print("  Ô£ô Sin directivas @tipo: en body_blocks")
 
 
 if __name__ == "__main__":

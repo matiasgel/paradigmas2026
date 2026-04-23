@@ -48,7 +48,6 @@ import yaml
 # Google API
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
-from google.oauth2.service_account import Credentials as SACredentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
@@ -304,9 +303,6 @@ def _parse_directive_pairs(text: str) -> dict[str, str]:
 
 def _parse_schema_directive(line: str, schema: dict[str, Any]) -> dict[str, Any] | None:
     stripped = line.strip()
-    # Soporta directivas envueltas en backticks: `@tipo: portada` → @tipo: portada
-    if stripped.startswith("`") and stripped.endswith("`") and len(stripped) > 2:
-        stripped = stripped[1:-1].strip()
     directives = schema.get("directives", {})
     for name, prefix in directives.items():
         if stripped.lower().startswith(str(prefix).lower()):
@@ -1313,17 +1309,6 @@ def generate_assets(
 def _get_creds(secrets_path: Path, token_path: Path) -> Credentials:
     secrets   = load_yaml(secrets_path)
     creds_file = Path(secrets["google_credentials_path"])
-    if not creds_file.is_absolute():
-        creds_file = (secrets_path.parent.parent / creds_file).resolve()
-
-    # Detect service account vs OAuth client
-    try:
-        cred_data = json.loads(creds_file.read_text(encoding="utf-8"))
-    except Exception:
-        cred_data = {}
-    if cred_data.get("type") == "service_account":
-        return SACredentials.from_service_account_file(str(creds_file), scopes=SCOPES)
-
     creds: Credentials | None = None
 
     if token_path.exists():
@@ -1909,38 +1894,20 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
         all_reqs.extend(reqs)
 
     BATCH = 50
-    # Google Slides API: 60 write requests/min/user → spacing de 1.1 s entre lotes
-    BATCH_DELAY = 1.1
-    MAX_RETRIES = 5
     total = len(all_reqs)
     failed_batches: list[str] = []
-    n_batches = (total + BATCH - 1) // BATCH
-    print(f"  Enviando {total} requests en {n_batches} lotes de {BATCH} (delay={BATCH_DELAY}s) …")
+    print(f"  Enviando {total} requests en lotes de {BATCH} …")
     for i in range(0, total, BATCH):
         batch = all_reqs[i : i + BATCH]
-        label = f"Lote {i // BATCH + 1}/{n_batches}"
-        for attempt in range(1, MAX_RETRIES + 1):
-            try:
-                slides_svc.presentations().batchUpdate(
-                    presentationId=pres_id, body={"requests": batch}
-                ).execute()
-                print(f"  {label} ✓")
-                break
-            except Exception as exc:
-                err_str = str(exc)
-                if "429" in err_str and attempt < MAX_RETRIES:
-                    wait = BATCH_DELAY * (2 ** attempt)
-                    print(f"  ⏳ {label} — rate limit, reintento {attempt}/{MAX_RETRIES - 1} en {wait:.0f}s …")
-                    time.sleep(wait)
-                else:
-                    print(f"  ⚠️  Error en {label}: {exc}")
-                    failed_batches.append(f"{label}: {exc}")
-                    break
-        else:
-            pass  # handled inside loop
-        # Pausa entre lotes para respetar quota
-        if i + BATCH < total:
-            time.sleep(BATCH_DELAY)
+        label = f"Lote {i // BATCH + 1}/{(total + BATCH - 1) // BATCH}"
+        try:
+            slides_svc.presentations().batchUpdate(
+                presentationId=pres_id, body={"requests": batch}
+            ).execute()
+            print(f"  {label} ✓")
+        except Exception as exc:
+            print(f"  ⚠️  Error en {label}: {exc}")
+            failed_batches.append(f"{label}: {exc}")
 
     if failed_batches:
         print(f"  ⚠️  {len(failed_batches)} lote(s) fallaron — la presentación quedó incompleta:")

@@ -22,28 +22,12 @@ env/
 salida/cursadas/*/temas/*/slides/assets/
 salida/cursadas/*/temas/*/slides/slides-url.txt
 
-# Imágenes generadas (todas las extensiones comunes)
-salida/cursadas/*/temas/*/slides/assets/*.png
-salida/cursadas/*/temas/*/slides/assets/*.jpg
-salida/cursadas/*/temas/*/slides/assets/*.jpeg
-salida/cursadas/*/temas/*/slides/assets/*.gif
-salida/cursadas/*/temas/*/slides/assets/*.webp
-# Imágenes sueltas en la raíz del tema
-salida/cursadas/*/temas/*/*.png
-salida/cursadas/*/temas/*/*.jpg
-salida/cursadas/*/temas/*/*.jpeg
-salida/cursadas/*/temas/*/*.gif
-salida/cursadas/*/temas/*/*.webp
-
-# Ignorar todos los .jpg generados automáticamente en cualquier carpeta
-**/*.jpg
-
 # Test runs (generados por test_pipeline.py)
 reporte/
 
-# Temas de prueba / fixtures temporales (solo ignorar carpeta "prueba" exacta, no temas que contienen "pruebas" en el nombre)
-# salida/cursadas/*/temas/*prueba*/
-# salida/cursadas/*/temas/*pruebas*/
+# Temas de prueba / fixtures temporales
+salida/cursadas/*/temas/*prueba*/
+salida/cursadas/*/temas/*pruebas*/
 
 # Sprint 5 — Analytics (datos de alumnos)
 analytics/*.csv
@@ -66,13 +50,3 @@ salida/cursadas/*/students/
 # IDE
 .vscode/
 .idea/
-salida/cursadas/2026/temas/04-funcional-avanzado/slides/**
-ingesta/*
-
-# Cursada iapjn-2026 — NO pertenece a este repo
-salida/cursadas/iapjn-2026/
-.clj-kondo/**
-.lsp/**
-_edu-knowledge/*
-*.log
-objects.inv
