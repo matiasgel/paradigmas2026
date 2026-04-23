@@ -14,3 +14,8 @@ scripts/requirements.txt    linguist-generated
 
 # Templates — solo cambiar con versión controlada
 _edu/templates/*            linguist-generated
+
+# Registro persistente de errores — merge=union acumula entradas de todas las ramas
+# NUNCA usar merge=ours aquí: queremos que todos los errores se consoliden
+error-registry.jsonl        merge=union
+error-registry.jsonl        -text
