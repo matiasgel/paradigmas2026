@@ -73,3 +73,6 @@ ingesta/*
 salida/cursadas/iapjn-2026/
 .clj-kondo/**
 .lsp/**
+_edu-knowledge/*
+*.log
+objects.inv
