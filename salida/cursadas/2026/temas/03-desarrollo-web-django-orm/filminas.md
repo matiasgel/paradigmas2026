@@ -813,23 +813,23 @@ Abrir: `http://127.0.0.1:8000/catalogo/hola/`
 @imagen: content
 @prompt-imagen: Diagrama de árbol con un rectángulo bordo grande arriba, dos rectángulos bordo medianos debajo conectados por líneas grises, y tres rectángulos bordo pequeños en la base conectados a los medianos. Estilo flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
-# CBVs que van a usar
+# CBVs que van a usar (Temas 03 y 05)
 
 ## Raíz
 - **View** → base de todo
 
 ## Nivel intermedio
-- **TemplateView** → mostrar un HTML con contexto
-- **RedirectView** → redireccionar
+- **TemplateView** → mostrar un HTML con contexto (este tema)
+- **RedirectView** → redireccionar (este tema)
 
-## Por modelo (CRUD)
-- **ListView** → listar objetos
-- **DetailView** → mostrar uno
-- **CreateView** → formulario de creación
-- **UpdateView** → formulario de edición
-- **DeleteView** → confirmar borrado
+## Para listar y ver — Tema 05
+- **ListView** → listar objetos del modelo
+- **DetailView** → ver un objeto individual
 
-> Para el **TP-4** no piden vistas, pero van a ver `ListView` en Clase 3 como preview.
+## Para crear/editar/borrar — Tema 05
+- **CreateView / UpdateView / DeleteView** → formularios CRUD
+
+> Hoy usamos **TemplateView**. ListView y los CBVs de formulario los vemos en el Tema 05.
 
 ---
 
@@ -893,13 +893,12 @@ Resolvemos la pista 3 juntos en la pizarra — 5 min.
 ## La clase más importante del Tema 03
 
 - Persistencia e **impedance mismatch**
-- **Modelos Django** del TP-4 (Autor, Categoria, Libro, Prestamo)
+- **Modelos Django**: campos, relaciones FK y M2M
 - Migraciones (`makemigrations` + `migrate`)
 - CRUD con QuerySet
-- **Las 4 queries del TP-4** resueltas juntos
+- **Queries avanzadas**: `annotate`, `Q` y `F`
 
 > **Traen**: el proyecto `biblioteca` + app `catalogo` funcionando de hoy.
-> **No traen**: el TP-4 clonado todavía — lo hacemos juntos en Clase 3.
 
 ---
 
@@ -936,7 +935,7 @@ Resolvemos la pista 3 juntos en la pizarra — 5 min.
 - Primera CBV funcionando
 - Regla cátedra: **CBV siempre**
 
-> **Próxima clase (Clase 3):** la más intensa — ORM completo + las 4 queries del TP-4.
+> **Próxima clase (Clase 3):** la más intensa — ORM completo + queries avanzadas con annotate, Q y F.
 
 ---
 
@@ -952,8 +951,8 @@ Resolvemos la pista 3 juntos en la pizarra — 5 min.
 @prompt-imagen: Composición flat design con cuatro cilindros bordo de distintos tamaños alineados horizontalmente, conectados entre sí por flechas grises dobles. Sobre los cilindros, un rectángulo bordo con líneas horizontales grises dentro. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
 # Tema 03 — Clase 3
-## Django ORM completo para TP-4
-### La clase más densa: 4 modelos, 4 queries, tests
+## Django ORM completo
+### Modelos, relaciones, QuerySet avanzado y tests
 
 ---
 
@@ -972,10 +971,10 @@ Resolvemos la pista 3 juntos en la pizarra — 5 min.
 | — | 15 min | **Pausa** |
 | T4 | 20 min | Migraciones |
 | T5 | 30 min | CRUD con QuerySet — en el shell |
-| T6 | 25 min | **Las 4 queries del TP-4** |
+| T6 | 25 min | **Queries avanzadas: annotate, Q y F** |
 | T7 | 15 min | django.test.TestCase + cierre |
 
-> **Objetivo**: al final de hoy, pueden resolver el 100% del TP-4.
+> **Objetivo**: al final de hoy, pueden escribir modelos Django, ejecutar migraciones, consultar con QuerySet y usar annotate/Q/F.
 
 ---
 
@@ -1041,18 +1040,18 @@ id | titulo  | autor_id
 
 ---
 
-### [F-46] Primer modelo Django — Autor
+### [F-46] Primer modelo Django — campos básicos
 
 @tipo: codigo
 
-# Empezamos el TP-4 — modelo Autor
+# Definir un modelo Django
 
 ```python
-# catalogo/models.py
+# cine/models.py
 from django.db import models
 
 
-class Autor(models.Model):
+class Director(models.Model):
     nombre = models.CharField(max_length=120)
     email = models.EmailField(unique=True)
     biografia = models.TextField(blank=True)
@@ -1061,25 +1060,26 @@ class Autor(models.Model):
         return self.nombre
 ```
 
-## Decisiones
+## Cada decisión importa
 
 - `CharField` requiere `max_length` (límite de columna VARCHAR)
-- `EmailField` → valida formato + usa VARCHAR
+- `EmailField` → valida formato automáticamente
 - `unique=True` → índice único en la BD
-- `blank=True` → opcional en formularios
+- `blank=True` → campo opcional en formularios
+- Cada **clase** = una tabla; cada **atributo de campo** = una columna
 
-> Escribimos este modelo juntos ahora en el proyecto del TP-4.
+> Django genera automáticamente un campo `id` (PK autoincrement).
 
 ---
 
-### [F-47] Modelo Categoria
+### [F-47] Modelo Genero — el más simple
 
 @tipo: codigo
 
-# Modelo Categoria — el más simple
+# Un modelo de una sola columna
 
 ```python
-class Categoria(models.Model):
+class Genero(models.Model):
     nombre = models.CharField(max_length=80, unique=True)
 
     def __str__(self) -> str:
@@ -1088,13 +1088,13 @@ class Categoria(models.Model):
 
 ## Ejercicio en clase (5 min)
 
-> Cada alumno lo escribe en su archivo `models.py` y lo muestra al compañero de al lado.
+> Cada alumno lo escribe en su archivo `models.py` y agrega un segundo campo a elección.
 
 ## Preguntita
 
-¿Qué pasa si dos categorías quieren llamarse "fantasía"?
+¿Qué pasa si intentamos guardar dos géneros con el mismo nombre?
 
-> **Respuesta**: `IntegrityError: UNIQUE constraint failed` → exactamente lo que queremos.
+> **Respuesta**: `IntegrityError: UNIQUE constraint failed` — la restricción vive en la BD, no solo en Django.
 
 ---
 
@@ -1106,7 +1106,7 @@ class Categoria(models.Model):
 
 | Parámetro | Dónde actúa | Ejemplo |
 |-----------|-------------|---------|
-| `null=True` | **Base de datos** — permite NULL | `fecha_devolucion = DateField(null=True)` |
+| `null=True` | **Base de datos** — permite NULL | `fecha_cancelacion = DateTimeField(null=True)` |
 | `blank=True` | **Validación de formularios** — permite vacío | `biografia = TextField(blank=True)` |
 
 ## Regla práctica
@@ -1114,34 +1114,33 @@ class Categoria(models.Model):
 - Campos de texto (Char/Text): **solo** `blank=True` (Django usa `""` en vez de NULL)
 - Campos de fecha/número: **ambos** si el campo es opcional: `null=True, blank=True`
 
-## En el TP-4
+## Ejemplos concretos
 
-- `biografia = TextField(blank=True)` → opcional
-- `fecha_devolucion = DateField(null=True, blank=True)` → puede estar sin devolver
+- `biografia = TextField(blank=True)` → texto opcional
+- `fecha_cancelacion = DateTimeField(null=True, blank=True)` → puede no tener fecha
 
 ---
 
-### [F-49] Modelo Libro — con relaciones
+### [F-49] Relaciones — ForeignKey y ManyToManyField
 
 @tipo: codigo
 
-# Modelo Libro — FK y M2M
+# ForeignKey y ManyToManyField
 
 ```python
-class Libro(models.Model):
+class Pelicula(models.Model):
     titulo = models.CharField(max_length=200)
-    isbn = models.CharField(max_length=32, unique=True)
-    fecha_publicacion = models.DateField()
-    cantidad_total = models.PositiveIntegerField(default=1)
+    anio = models.PositiveIntegerField()
+    duracion_min = models.PositiveIntegerField(default=90)
 
-    autor = models.ForeignKey(
-        Autor,
+    director = models.ForeignKey(
+        Director,
         on_delete=models.PROTECT,
-        related_name="libros",
+        related_name="peliculas",
     )
-    categorias = models.ManyToManyField(
-        Categoria,
-        related_name="libros",
+    generos = models.ManyToManyField(
+        Genero,
+        related_name="peliculas",
         blank=True,
     )
 
@@ -1149,7 +1148,9 @@ class Libro(models.Model):
         return self.titulo
 ```
 
-> Escribimos juntos. Una línea a la vez. Paramos en cada campo a discutir el "por qué".
+> **ForeignKey** — "muchos a uno": muchas películas pueden tener el mismo director.
+> **ManyToManyField** — "muchos a muchos": una película puede tener varios géneros.
+> Django genera automáticamente la tabla intermedia para M2M.
 
 ---
 
@@ -1161,71 +1162,80 @@ class Libro(models.Model):
 
 | Estrategia | Efecto | Cuándo usarla |
 |------------|--------|---------------|
-| **CASCADE** | Borra los hijos | `Prestamo → Libro` (TP-4) |
-| **PROTECT** | Prohíbe borrar si hay hijos | `Libro → Autor` (TP-4) |
-| **SET_NULL** | Pone NULL en los hijos | "autor desconocido" tolerable |
-| **SET_DEFAULT** | Pone un default | Autor "Anónimo" |
+| **CASCADE** | Borra los hijos | `Proyeccion → Pelicula` |
+| **PROTECT** | Prohíbe borrar si hay hijos | `Pelicula → Director` |
+| **SET_NULL** | Pone NULL en los hijos | "director desconocido" tolerable |
+| **SET_DEFAULT** | Pone un default | Director "Anónimo" |
 | **DO_NOTHING** | Django no hace nada | Control manual |
 
 ## Preguntita conjunta
 
-> ¿Por qué en el TP-4 `Libro→Autor` es PROTECT y `Prestamo→Libro` es CASCADE?
+> Si borramos un `Director`, ¿qué debería pasar con sus `Pelicula`?
+> Si borramos una `Pelicula`, ¿qué debería pasar con sus `Proyeccion`?
+
+> **La respuesta depende del dominio** — no hay una única correcta.
 
 ---
 
-### [F-51] Métodos de dominio en Libro
+### [F-51] Métodos de dominio en modelos
 
 @tipo: codigo
 
-# Métodos de Libro — reglas de dominio
+# Los modelos encapsulan lógica de dominio
 
 ```python
-class Libro(models.Model):
-    # ... campos arriba ...
+class Pelicula(models.Model):
+    # ... campos ...
 
-    def prestamos_activos(self) -> int:
-        return self.prestamos.filter(
-            fecha_devolucion__isnull=True
+    def proyecciones_activas(self) -> int:
+        return self.proyecciones.filter(
+            fecha_cancelacion__isnull=True
         ).count()
 
-    def disponibles(self) -> int:
-        return self.cantidad_total - self.prestamos_activos()
+    def tiene_proyecciones(self) -> bool:
+        return self.proyecciones_activas() > 0
 
-    def tiene_disponibles(self) -> bool:
-        return self.disponibles() > 0
+    def duracion_en_horas(self) -> float:
+        return round(self.duracion_min / 60, 1)
 ```
 
-> `self.prestamos` existe porque pusimos `related_name="prestamos"` en Prestamo.
-> `__isnull=True` es el lookup ORM para `IS NULL`.
+> `self.proyecciones` existe porque pusimos `related_name="proyecciones"` en `Proyeccion`.
+> `__isnull=True` es el lookup ORM equivalente a `IS NULL`.
+
+## Ventaja
+
+> La lógica de dominio vive en el modelo — no en la vista ni en el template.
+> Fácil de testear de forma aislada.
 
 ---
 
-### [F-52] Modelo Prestamo
+### [F-52] Modelo con FK y campo nullable — Proyeccion
 
 @tipo: codigo
 
-# Modelo Prestamo — cierra el grafo
+# Modelo con campo opcional
 
 ```python
-class Prestamo(models.Model):
-    libro = models.ForeignKey(
-        Libro,
+class Proyeccion(models.Model):
+    pelicula = models.ForeignKey(
+        Pelicula,
         on_delete=models.CASCADE,
-        related_name="prestamos",
+        related_name="proyecciones",
     )
-    nombre_prestatario = models.CharField(max_length=120)
-    fecha_prestamo = models.DateField()
-    fecha_devolucion = models.DateField(null=True, blank=True)
+    sala = models.CharField(max_length=50)
+    fecha_hora = models.DateTimeField()
+    fecha_cancelacion = models.DateTimeField(null=True, blank=True)
 
-    def esta_activo(self) -> bool:
-        return self.fecha_devolucion is None
+    def esta_activa(self) -> bool:
+        return self.fecha_cancelacion is None
 
     def __str__(self) -> str:
-        estado = "activo" if self.esta_activo() else "devuelto"
-        return f"{self.libro.titulo} — {self.nombre_prestatario} ({estado})"
+        estado = "activa" if self.esta_activa() else "cancelada"
+        return f"{self.pelicula.titulo} — {self.sala} ({estado})"
 ```
 
-> **Regla de dominio**: `fecha_devolucion IS NULL` ⇔ préstamo activo.
+> `fecha_cancelacion IS NULL` ⇔ proyección activa — regla de dominio en el modelo.
+> `null=True, blank=True` porque es un campo de fecha opcional.
 
 ---
 
@@ -1240,18 +1250,18 @@ class Prestamo(models.Model):
 python manage.py makemigrations catalogo
 
 # Output esperado:
-# Migrations for 'catalogo':
-#   catalogo/migrations/0001_initial.py
-#     - Create model Autor
-#     - Create model Categoria
-#     - Create model Libro
-#     - Create model Prestamo
+# Migrations for 'cine':
+#   cine/migrations/0001_initial.py
+#     - Create model Director
+#     - Create model Genero
+#     - Create model Pelicula
+#     - Create model Proyeccion
 
 # 2. Aplicar a SQLite
 python manage.py migrate
 
 # 3. (Didáctico) Ver el SQL generado
-python manage.py sqlmigrate catalogo 0001
+python manage.py sqlmigrate cine 0001
 ```
 
 > **Clave**: `makemigrations` **NO** toca la BD. Solo escribe un archivo.
@@ -1270,30 +1280,27 @@ python manage.py shell
 ```
 
 ```python
->>> from catalogo.models import Autor, Categoria, Libro
->>> from datetime import date
+>>> from cine.models import Director, Genero, Pelicula
 
 >>> # CREATE
->>> ursula = Autor.objects.create(
-...     nombre="Ursula K. Le Guin",
-...     email="ursula@example.com",
-...     biografia="Autora de SF y fantasía."
+>>> kubrick = Director.objects.create(
+...     nombre="Stanley Kubrick",
+...     email="kubrick@example.com",
 ... )
 
->>> sf = Categoria.objects.create(nombre="ciencia ficción")
->>> fant = Categoria.objects.create(nombre="fantasía")
+>>> ciencia_ficcion = Genero.objects.create(nombre="ciencia ficción")
+>>> drama = Genero.objects.create(nombre="drama")
 
->>> libro = Libro.objects.create(
-...     titulo="Los desposeídos",
-...     isbn="978-0000000001",
-...     fecha_publicacion=date(1974, 1, 1),
-...     cantidad_total=2,
-...     autor=ursula,
+>>> pelicula = Pelicula.objects.create(
+...     titulo="2001: A Space Odyssey",
+...     anio=1968,
+...     duracion_min=149,
+...     director=kubrick,
 ... )
->>> libro.categorias.add(sf, fant)
+>>> pelicula.generos.add(ciencia_ficcion)
 ```
 
-> Esto es **exactamente** lo que hace el test `setUpTestData` del TP-4.
+> El patrón `objects.create(...)` para FK y `.add(...)` para M2M es el mismo en todo Django.
 
 ---
 
@@ -1304,24 +1311,24 @@ python manage.py shell
 # Lectura con QuerySet (en el shell)
 
 ```python
-# Todos los libros
->>> Libro.objects.all()
-<QuerySet [<Libro: Los desposeídos>]>
+# Todas las películas
+>>> Pelicula.objects.all()
+<QuerySet [<Pelicula: 2001: A Space Odyssey>]>
 
-# Uno por PK o condición única
->>> Libro.objects.get(isbn="978-0000000001")
-<Libro: Los desposeídos>
+# Una por PK o condición única
+>>> Pelicula.objects.get(titulo="2001: A Space Odyssey")
+<Pelicula: 2001: A Space Odyssey>
 
 # Filter (siempre devuelve QuerySet)
->>> Libro.objects.filter(autor=ursula)
-<QuerySet [<Libro: Los desposeídos>]>
+>>> Pelicula.objects.filter(director=kubrick)
+<QuerySet [<Pelicula: 2001: A Space Odyssey>]>
 
 # Lookup con __ (doble guión bajo)
->>> Libro.objects.filter(autor__nombre__icontains="le guin")
-<QuerySet [<Libro: Los desposeídos>]>
+>>> Pelicula.objects.filter(director__nombre__icontains="kubrick")
+<QuerySet [<Pelicula: 2001: A Space Odyssey>]>
 
 # Exclude
->>> Libro.objects.exclude(cantidad_total__lt=2)
+>>> Pelicula.objects.exclude(anio__lt=2000)
 ```
 
 > **QuerySet es lazy**: la consulta se ejecuta cuando iteras, sliceas o llamás `list()`.
@@ -1336,194 +1343,214 @@ python manage.py shell
 
 ```python
 # Update individual
->>> libro.cantidad_total = 3
->>> libro.save()
+>>> pelicula.duracion_min = 160
+>>> pelicula.save()
 
 # Update masivo (una sola query SQL)
 >>> from django.db.models import F
->>> Libro.objects.filter(autor=ursula).update(
-...     cantidad_total=F("cantidad_total") + 1
+>>> Pelicula.objects.filter(director=kubrick).update(
+...     duracion_min=F("duracion_min") + 5
 ... )
 1   # filas afectadas
 
 # Delete individual
->>> libro.delete()
+>>> pelicula.delete()
 
 # Delete masivo
->>> Categoria.objects.filter(nombre__startswith="obsoleta").delete()
+>>> Genero.objects.filter(nombre__startswith="obsoleto").delete()
 ```
 
 > `F()` permite expresiones referenciando la misma columna **sin traer el valor a Python**.
 
 ---
 
-### [F-57] Las 4 queries del TP-4 — intro
+### [F-57] Más allá del filter — annotate, Q y F
 
 @tipo: concepto-abstracto
 @imagen: content
 @prompt-imagen: Cuatro rectángulos bordo pequeños alineados horizontalmente, cada uno con un número abstracto de líneas grises horizontales dentro (representando consultas SQL), unidos por una línea gris horizontal base. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
-# El core del TP-4 — 4 funciones en queries.py
+# Queries avanzadas — tres herramientas del ORM
 
-## Lo que el autograder va a probar
+## filter / exclude — condiciones sobre filas
 
-1. `libros_por_categoria(nombre)` — filter con M2M
-2. `autores_con_mas_de_n_libros(n)` — annotate + filter
-3. `libros_sin_disponibilidad()` — annotate + Q + F
-4. `top_n_libros_mas_prestados(n)` — annotate + order_by + slicing
+```python
+Pelicula.objects.filter(anio__gte=2020)
+```
 
-## Las vamos a escribir juntos, una por una
+## annotate — agrega una columna calculada a cada fila
 
-> **Regla**: todo resuelto con ORM puro. Nada de `for libro in ...: if libro.disponibles() == 0`.
+```python
+Director.objects.annotate(n=Count("peliculas"))
+# → ahora cada director tiene un campo extra "n"
+```
+
+## Q — condiciones lógicas compuestas (AND/OR/NOT)
+
+```python
+Pelicula.objects.filter(Q(anio__gt=2000) | Q(duracion_min__lt=80))
+```
+
+## F — referenciar una columna desde otra
+
+```python
+Pelicula.objects.filter(anio__gt=F("anio") - 10)  # conceptual
+```
 
 ---
 
-### [F-58] Query 1 — libros_por_categoria
+### [F-58] annotate + Count — aggregate por fila
 
 @tipo: codigo
 
-# Query 1 — filter a través de M2M
+# annotate — una columna extra por fila
 
 ```python
-# catalogo/queries.py
-from .models import Libro
+from django.db.models import Count
 
-def libros_por_categoria(nombre_categoria: str):
-    return Libro.objects.filter(categorias__nombre=nombre_categoria)
+# Cantidad de películas por director
+directores = Director.objects.annotate(
+    cant_peliculas=Count("peliculas")
+)
+
+# Acceder al campo anotado
+for d in directores:
+    print(d.nombre, d.cant_peliculas)
+
+# Filtrar sobre la anotación
+directores_prolijos = Director.objects.annotate(
+    cant_peliculas=Count("peliculas")
+).filter(cant_peliculas__gt=3)
 ```
 
 ## ¿Qué SQL genera?
 
 ```sql
-SELECT "catalogo_libro".*
-FROM "catalogo_libro"
-INNER JOIN "catalogo_libro_categorias" ON (...)
-INNER JOIN "catalogo_categoria" ON (...)
-WHERE "catalogo_categoria"."nombre" = 'fantasía'
-```
-
-## Demo en shell
-
-```python
->>> from catalogo.queries import libros_por_categoria
->>> libros_por_categoria("fantasía")
-<QuerySet [<Libro: Los desposeídos>]>
->>> print(libros_por_categoria("fantasía").query)  # ver el SQL
+SELECT director.*, COUNT(pelicula.id) AS cant_peliculas
+FROM director
+LEFT JOIN pelicula ON pelicula.director_id = director.id
+GROUP BY director.id
+HAVING COUNT(pelicula.id) > 3
 ```
 
 ---
 
-### [F-59] Query 2 — autores_con_mas_de_n_libros
+### [F-59] Expresiones Q — OR, NOT y combinaciones
 
 @tipo: codigo
 
-# Query 2 — annotate + filter
+# Q — para condiciones que filter() no puede
 
 ```python
-from django.db.models import Count
-from .models import Autor
+from django.db.models import Q
 
-def autores_con_mas_de_n_libros(n: int):
-    return Autor.objects.annotate(
-        cantidad_libros=Count("libros")
-    ).filter(cantidad_libros__gt=n)
+# OR — películas cortas O recientes
+Pelicula.objects.filter(
+    Q(duracion_min__lt=90) | Q(anio__gte=2020)
+)
+
+# NOT — películas que NO pertenecen al género "acción"
+Pelicula.objects.filter(~Q(generos__nombre="acción"))
+
+# AND explícito (equivalente a pasar dos argumentos)
+Pelicula.objects.filter(
+    Q(duracion_min__gt=60) & Q(anio__lt=2010)
+)
 ```
 
-## Qué hace `annotate`
+## Cuándo usar Q
 
-- Agrega una **columna calculada** a cada fila del QuerySet
-- Acá: a cada Autor le agrega `cantidad_libros` = `COUNT(*)` de sus libros
-
-## Uso
-
-```python
->>> autores_con_mas_de_n_libros(1)
-# → autores que tienen 2 o MÁS libros
-```
-
-> Anti-patrón (NO hacer):
-> ```python
-> autores = [a for a in Autor.objects.all() if a.libros.count() > n]  # ❌ N+1 queries
-> ```
+- Necesitás **OR** (los filtros encadenados son siempre AND)
+- Necesitás **NOT** explícito
+- Construís condiciones dinámicamente en el código
 
 ---
 
-### [F-60] Query 3 — libros_sin_disponibilidad
+### [F-60] Expresiones F — operaciones entre columnas
 
 @tipo: codigo
 
-# Query 3 — la más compleja: annotate + Q + F
+# F — referenciar otra columna sin traer el valor a Python
+
+```python
+from django.db.models import F
+
+# Update masivo — 1 sola query SQL
+# (en vez de N SELECTs + N UPDATEs)
+Pelicula.objects.filter(anio__lt=2000).update(
+    duracion_min=F("duracion_min") + 5
+)
+
+# Comparar dos columnas de la misma fila
+# (proyecciones donde la sala tiene más capacidad que plazas vendidas)
+Proyeccion.objects.filter(
+    fecha_cancelacion__isnull=True
+).annotate(n=Count("pelicula__proyecciones"))
+```
+
+## ¿Por qué F y no un valor Python?
+
+```python
+# Sin F: N queries (1 SELECT por objeto, 1 UPDATE por objeto)
+for p in Pelicula.objects.filter(anio__lt=2000):
+    p.duracion_min += 5
+    p.save()                   # ← N queries
+
+# Con F: 1 sola query UPDATE en la BD
+Pelicula.objects.filter(anio__lt=2000).update(
+    duracion_min=F("duracion_min") + 5
+)
+```
+
+---
+
+### [F-61] Combinando annotate, Q y F
+
+@tipo: codigo
+
+# annotate con filter=Q() + comparación con F()
 
 ```python
 from django.db.models import Count, Q, F
-from .models import Libro
 
-def libros_sin_disponibilidad():
-    return Libro.objects.annotate(
-        activos=Count(
-            "prestamos",
-            filter=Q(prestamos__fecha_devolucion__isnull=True),
-        )
-    ).filter(activos=F("cantidad_total"))
-```
-
-## Descompuesto
-
-- `annotate(activos=Count("prestamos", filter=Q(...)))`: cuenta **solo** los préstamos activos (`filter=` dentro de Count)
-- `.filter(activos=F("cantidad_total"))`: devuelve los libros donde esa cuenta iguala `cantidad_total` (columna de la misma tabla → necesita `F`)
-
-> Ejercicio conjunto (10 min): escriban en pizarra qué SQL genera, fila por fila.
-
----
-
-### [F-61] Query 4 — top_n_libros_mas_prestados
-
-@tipo: codigo
-
-# Query 4 — annotate + order_by + slicing
-
-```python
-from django.db.models import Count
-from .models import Libro
-
-def top_n_libros_mas_prestados(n: int):
-    return (
-        Libro.objects
-        .annotate(total_prestamos=Count("prestamos"))
-        .order_by("-total_prestamos")[:n]
+# Directores con más proyecciones activas que películas en total
+Director.objects.annotate(
+    total_peliculas=Count("peliculas"),
+    proyecciones_activas=Count(
+        "peliculas__proyecciones",
+        filter=Q(peliculas__proyecciones__fecha_cancelacion__isnull=True)
     )
+).filter(
+    proyecciones_activas__gt=F("total_peliculas")
+)
 ```
 
-## Claves
+## Descomposición
 
-- `Count("prestamos")` → cuenta TODOS los préstamos (activos + devueltos)
-- `order_by("-campo")` → el `-` es DESC
-- `[:n]` → slicing → `LIMIT n` en SQL
+1. `annotate(total_peliculas=...)` — cuenta las películas por director
+2. `annotate(proyecciones_activas=..., filter=Q(...))` — cuenta solo las activas
+3. `.filter(...__gt=F(...))` — compara dos columnas calculadas de la misma fila
 
-## Uso
-
-```python
->>> top_n_libros_mas_prestados(3)
-<QuerySet [<Libro: ...>, <Libro: ...>, <Libro: ...>]>
-```
+> `filter=Q(...)` **dentro de Count** = qué filas contar.
+> `F("columna")` en el `.filter()` externo = referenciar otra columna de la misma fila.
 
 ---
 
-### [F-62] Ejercicio en clase: variantes de las queries
+### [F-62] Ejercicio conjunto — queries avanzadas
 
 @tipo: socratica
 
 # Ejercicio conjunto (15 min)
 
-## Para cada alumno — escribir en papel
+## Con los modelos Director / Genero / Pelicula / Proyeccion — escribir en papel
 
-1. Variante Q1: libros de una categoría, ordenados por fecha_publicacion desc
-2. Variante Q2: autores con **menos de** n libros
-3. Variante Q3: libros con **al menos una copia** disponible (contrario al Q3 real)
-4. Variante Q4: top N **prestatarios** (qué persona pidió más libros)
+1. **annotate**: Géneros con más de 5 películas (annotate + Count + filter)
+2. **Q**: Películas del siglo XXI **O** con duración menor a 80 min
+3. **F**: Aumentar 10 min la duración de todas las películas anteriores a 1970 con `F()`
+4. **Combinado**: Los 3 directores con más proyecciones activas (annotate + filter + order_by + slice)
 
-> Resolvemos las 4 en pizarra en conjunto — cada alumno pasa al frente con su propuesta.
-> Pista Q4: GROUP BY por `nombre_prestatario` → `values("nombre_prestatario").annotate(...)`.
+> Resolvemos las 4 en pizarra — cada alumno propone su versión.
+> El docente señala errores comunes (import faltante, annotate antes de filter).
 
 ---
 
@@ -1531,33 +1558,40 @@ def top_n_libros_mas_prestados(n: int):
 
 @tipo: codigo
 
-# django.test.TestCase — lo que ya viene en el TP-4
+# django.test.TestCase — test aislados con BD limpia
 
 ```python
-from datetime import date
 from django.test import TestCase
-from catalogo.models import Autor, Categoria, Libro, Prestamo
+from .models import Director, Pelicula, Proyeccion
 
-class ModelsTestCase(TestCase):
+class PeliculaTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
         """Datos compartidos — UNA vez por clase de test."""
-        cls.autor = Autor.objects.create(nombre="Ursula", email="u@ex.com")
-        # ...
+        cls.director = Director.objects.create(
+            nombre="Stanley Kubrick",
+            email="kubrick@example.com"
+        )
+        cls.pelicula = Pelicula.objects.create(
+            titulo="2001: A Space Odyssey",
+            anio=1968,
+            duracion_min=149,
+            director=cls.director,
+        )
 
-    def test_disponibilidad_sin_prestamos(self):
-        self.assertEqual(self.libro.prestamos_activos(), 0)
-        self.assertEqual(self.libro.disponibles(), 2)
+    def test_proyecciones_activas_inicial(self):
+        self.assertEqual(self.pelicula.proyecciones_activas(), 0)
+        self.assertFalse(self.pelicula.tiene_proyecciones())
 ```
 
 ## Ejecutar
 
 ```bash
-python manage.py test catalogo -v 2
+python manage.py test cine -v 2
 ```
 
-> `TestCase` envuelve todo en una transacción → rollback automático. BD limpia entre tests.
+> `TestCase` envuelve cada test en una transacción → rollback automático → BD limpia entre tests.
 
 ---
 
@@ -1577,118 +1611,118 @@ python manage.py test catalogo -v 2
 - **Datos compartidos**: usar `setUpTestData` (más rápido)
 - **Datos mutados por test**: usar `setUp` (aislamiento)
 
-## En el TP-4 ya está resuelto — usa `setUpTestData`
-
-> Eso significa que los tests corren más rápido → feedback más rápido → mejor DX.
+> Preferir `setUpTestData` para datos de referencia que los tests solo leen.
+> Usar `setUp` cuando un test puede modificar o borrar datos de otros.
 
 ---
 
-### [F-65] Anti-patrones ORM
+### [F-65] Anti-patrones ORM — los más comunes
 
 @tipo: tabla
 
-# Anti-patrones que el autograder va a castigar
+# Anti-patrones que generan N+1 queries
 
 | Anti-patrón | Por qué es malo | Alternativa ORM |
 |-------------|-----------------|-----------------|
-| `for libro in Libro.objects.all(): if libro.disponibles() == 0: ...` | **N+1 queries** | `libros_sin_disponibilidad()` con annotate |
+| `for p in Pelicula.objects.all(): p.director.nombre` | **N+1 queries** | `select_related("director")` (Tema 04) |
+| `for p in ...: if p.proyecciones_activas() == 0:` | **N+1 queries** | `annotate` + `filter` |
 | `len(qs)` para contar | Trae todo a memoria | `qs.count()` |
-| `qs[0]` para "el primero" | Hace sort implícito confuso | `qs.order_by(...).first()` |
-| Usar SQL crudo sin motivo | Pierde portabilidad | Lookups ORM |
-| `.filter(x=1).filter(y=2).filter(z=3)` en M2M | Joins duplicados | Usar Q combinado |
+| `qs[0]` para "el primero" | Sin orden garantizado | `qs.order_by(...).first()` |
+| `.filter(x=1).filter(y=2).filter(z=3)` en M2M | Joins duplicados | Usar `Q` combinado |
 
-> **Pauta de corrección**: si el test corre > 2 segundos, probablemente hay N+1.
+> La regla: si ves un loop Python con consultas ORM adentro, probablemente hay un N+1.
 
 ---
 
-### [F-66] Cheatsheet de lookups
+### [F-66] Cheatsheet de lookups ORM
 
 @tipo: tabla
 
-# Lookups ORM que aparecen en el TP-4
+# Lookups más usados
 
 | Lookup | SQL equivalente | Ejemplo |
 |--------|-----------------|---------|
-| `__exact` | `= valor` | `filter(nombre__exact="Ursula")` |
-| `__iexact` | `= valor` (case-insensitive) | `filter(email__iexact=...)` |
-| `__contains` | `LIKE %valor%` | `filter(titulo__contains="desp")` |
-| `__icontains` | idem, case-insensitive | `filter(titulo__icontains="SAPI")` |
-| `__gt / __gte / __lt / __lte` | `> >= < <=` | `filter(cantidad_total__gt=0)` |
+| `__exact` | `= valor` | `filter(nombre__exact="Kubrick")` |
+| `__iexact` | `= valor` case-insensitive | `filter(email__iexact=...)` |
+| `__contains` | `LIKE %valor%` | `filter(titulo__contains="space")` |
+| `__icontains` | idem, case-insensitive | `filter(titulo__icontains="SPACE")` |
+| `__gt / __gte / __lt / __lte` | `> >= < <=` | `filter(anio__gte=2000)` |
 | `__in` | `IN (...)` | `filter(id__in=[1, 2, 3])` |
-| `__isnull=True/False` | `IS NULL / IS NOT NULL` | `filter(fecha_devolucion__isnull=True)` |
-| `__date / __year / __month` | Extraer fecha | `filter(fecha_prestamo__year=2026)` |
+| `__isnull=True/False` | `IS NULL / IS NOT NULL` | `filter(fecha_cancelacion__isnull=True)` |
+| `__date / __year / __month` | Extraer fecha | `filter(fecha_hora__year=2026)` |
+| (navegación con `__`) | JOIN | `filter(director__nombre="Kubrick")` |
 
 ---
 
-### [F-67] Flujo de trabajo para el TP-4
+### [F-67] Ciclo de desarrollo con Django ORM
 
 @tipo: concepto-abstracto
 @imagen: content
 @prompt-imagen: Diagrama horizontal tipo pipeline, cinco rectángulos bordo pequeños alineados horizontalmente conectados por flechas grises cortas. Debajo, una flecha gris larga que vuelve del último al primero formando un bucle. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
-# Flujo recomendado para resolver el TP-4
+# Flujo de trabajo con modelos y queries
 
-## Iteración por modelo
+## Ciclo por modelo
 
-1. Escribir modelo en `models.py`
+1. Definir clase en `models.py`
 2. `makemigrations` + `migrate`
-3. `python manage.py test catalogo.tests.test_models -v 2`
-4. Ver tests rojos → corregir
-5. Cuando todos verdes → commit
+3. Probar en el shell (`python manage.py shell`)
+4. Escribir tests en `tests.py`
+5. Verde → commit
 
-## Iteración por query
+## Ciclo por query
 
-1. Escribir query en `queries.py`
-2. Probar en shell (`python manage.py shell`)
-3. `python manage.py test catalogo.tests.test_queries -v 2`
+1. Experimentar en el shell con datos reales
+2. Escribir la función con el QuerySet
+3. `python manage.py test -v 2`
 4. Corregir → commit
 
-> **Meta**: ≥ 8 commits significativos, autograder verde en GitHub Actions.
+> **El shell es tu laboratorio**: probá todo ahí antes de escribirlo en código.
 
 ---
 
-### [F-68] Checklist final del TP-4
+### [F-68] Modelado con Django ORM — buenas prácticas
 
 @tipo: tabla
 
-# Checklist — antes del push final
+# Buenas prácticas al modelar
 
-| # | Item | ✅ |
-|---|------|---|
-| 1 | `models.py` sin `pass` en ninguna clase | |
-| 2 | `queries.py` sin `raise NotImplementedError` | |
-| 3 | `python manage.py migrate` corre sin errores | |
-| 4 | `python manage.py test` → 100% verde local |  |
-| 5 | GitHub Actions verde en el PR |  |
-| 6 | README leído → todos los items cumplidos |  |
-| 7 | Sin código comentado viejo |  |
-| 8 | `__str__` en todos los modelos |  |
-| 9 | Uso de `related_name` explícito |  |
-| 10 | Solo CBVs (no hay `def vista_...`) |  |
+| Práctica | Por qué |
+|----------|---------|
+| `__str__` en todos los modelos | Admin y shell muestran texto útil |
+| `related_name` explícito en FK y M2M | `autor.libro_set` → `autor.libros` (más legible) |
+| `blank=True` para texto opcional, ambos para fecha/número | Evitar NULLs en campos de texto |
+| Métodos de dominio en el modelo | Lógica cohesionada, fácil de testear |
+| Commitear siempre las migraciones | Las migraciones son parte del código |
+| Usar `print(qs.query)` para debug | Ver el SQL generado en el shell |
 
-> Si los 10 están ✅ → push a main → autograder → nota.
+> Un buen modelo Django es legible, tiene `__str__`, `related_name` y métodos de dominio.
 
 ---
 
-### [F-69] Ejercicio final conjunto — escribir Query 2 desde cero
+### [F-69] Ejercicio final conjunto — escribir un annotate desde cero
 
 @tipo: socratica
 
-# Ejercicio final — 10 min en pizarra
+# Ejercicio final — 10 min en papel
 
-> **Objetivo**: cada alumno, sin mirar filminas, escribe `autores_con_mas_de_n_libros(n)`.
+> **Objetivo**: sin mirar las filminas, cada alumno escribe:
+
+## Enunciado
+
+> Dado el modelo `Director` con `peliculas` como `related_name`, escribir una función que devuelva los directores con **más de** `n` películas.
 
 ## Entrega en papel
 
 1. `from django.db.models import ___`
-2. `def autores_con_mas_de_n_libros(n: int):`
-3. `    return Autor.objects.___`
+2. `def directores_con_mas_de_n_peliculas(n: int):`
+3. `    return Director.objects.___`
 
-## Docente recoge, lee en voz alta los errores más comunes
+## El docente lee en voz alta los errores más comunes
 
-- "Te olvidaste el import de Count"
-- "annotate va antes de filter"
-- "usar `cantidad_libros__gt=n`, no `> n`"
+- "Faltó importar `Count`"
+- "`annotate` va antes de `filter`"
+- "El nombre del campo anotado tiene que coincidir: `cant_peliculas__gt=n`"
 
 ---
 
@@ -1702,20 +1736,20 @@ python manage.py test catalogo -v 2
 
 1. Diferencia entre `null=True` y `blank=True`
 2. ¿Qué hace `annotate` en un QuerySet?
-3. ¿Por qué `libros_sin_disponibilidad` usa `F("cantidad_total")` y no `cantidad_total`?
-4. Una línea: qué vas a hacer **esta noche** antes del próximo commit.
+3. ¿Para qué sirve `F()` en una query ORM?
+4. ¿Qué diferencia hay entre `aggregate()` y `annotate()`?
 
 > Se entrega al salir. Los resultados moldean la clase de consulta del martes.
 
 ---
 
-### [F-71] Camino Tema 04
+### [F-71] Preview Tema 04
 
 @tipo: concepto-abstracto
 
-# Preview Tema 04
+# Preview Tema 04 — para profundizar en ORM
 
-## Lo que viene después del TP-4
+## Temas que vienen
 
 - **Select_related / prefetch_related** — optimizar joins (evitar N+1)
 - **Agregaciones avanzadas** — `aggregate`, `Avg`, `Sum`, `StdDev`
@@ -1723,29 +1757,7 @@ python manage.py test catalogo -v 2
 - **Señales** — pre_save, post_save (con cuidado)
 - **Custom Managers** — encapsular queries comunes
 
-> El Tema 03 les da las herramientas básicas. El Tema 04 las afila.
-
----
-
-### [F-72] Preparación para Tema 05 — Forms + Views
-
-@tipo: concepto-abstracto
-
-# Hacia Tema 05 — de ORM a Web completa
-
-## Ahora saben
-
-- Escribir modelos
-- Escribir queries complejas
-- Testear ambos
-
-## Les falta
-
-- **Mostrarlos en HTML** → templates con `{% for %}`, `{% if %}`
-- **Crear/editar vía formulario** → `ModelForm` + `CreateView` / `UpdateView`
-- **Login / permisos** → `LoginRequiredMixin`
-
-> Todo eso con CBVs. Empezamos Tema 05 después de entregar el TP-4.
+> El Tema 03 les da las herramientas básicas. El Tema 04 las afina.
 
 ---
 
@@ -1762,7 +1774,7 @@ python manage.py test catalogo -v 2
 - 3 capas web → cliente/servidor → MVC / MVT
 - Django instalado, proyecto + app + CBV
 - Modelos, relaciones, migraciones
-- CRUD + las 4 queries del TP-4
+- CRUD + queries avanzadas con annotate, Q y F
 
 ## Próximo paso: ustedes
 
