@@ -25,7 +25,10 @@ _edu/calibracion-config.json
 
 # EDU collective memory — WAL/SHM son temporales de SQLite, no se versionan
 _edu-memory/memory.db-wal
-_edu-memory/memory.db-shm
+_edu-memory/**
+.venv/**/*
+.venv/*
+_edu_knowledge/**
 
 # Material del curso (PDFs y TXT — no versionar)
 material/
@@ -33,3 +36,7 @@ material/
 # Ingesta (PDFs fuente — no versionar)
 ingesta/
 salida/cursadas/**/slides/
+
+_edu-knowledge/**
+*.log
+objects.inv
