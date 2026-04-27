@@ -41,6 +41,9 @@ salida/cursadas/*/temas/*/interactivos/
 # Sprint 10 — Modelos ML descargados
 _edu-knowledge/models/
 
+# ChromaDB — se guarda en disco local (EDU_CHROMA_PATH en .env), nunca en git
+_edu-knowledge/chroma_db/
+
 # Sprint 11 — Knowledge Graph artifacts
 _edu-knowledge/universal-kg.json
 
