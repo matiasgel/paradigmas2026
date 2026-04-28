@@ -1,38 +1,14 @@
 {
-  "$schema_version": "plan-filminas/v3",
   "meta": {
     "topic_id": "08-paradigma-oo-ts",
     "title": "Paradigma Orientado a Objetos",
     "source": "filminas.md",
-    "generated_at": "2026-04-28T12:33:49",
+    "schema_version": "3.0.0",
+    "schema_path": "_edu\\templates\\filminas-schema.yaml",
+    "generated_at": "2026-04-28T12:56:14",
     "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
-    "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
-    "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\08-paradigma-oo-ts",
-    "design_system_path": "_edu/slides-config.yaml",
-    "pipeline_runtime_path": "_edu/slides-pipeline.json",
-    "schema_registry_path": "_edu/schemas/schema-registry.json"
-  },
-  "summary": {
     "total_slides": 36,
-    "images_planned": 15,
-    "tables_planned": 10,
-    "code_slides": 20,
-    "status": "READY_FOR_VALIDATION",
-    "pending_types": 0,
-    "pending_prompts": 0,
-    "type_distribution": {
-      "portada": 1,
-      "socratica": 3,
-      "tabla": 4,
-      "concepto-abstracto": 9,
-      "timeline": 1,
-      "codigo": 10,
-      "demo": 1,
-      "concepto-mixto": 2,
-      "tabla-comparativa": 3,
-      "diagrama": 1,
-      "cierre": 1
-    }
+    "images_planned": 12
   },
   "slides": [
     {
@@ -63,6 +39,12 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {
+        "type": "portada",
+        "image": "background",
+        "image_prompt": "sala de clases universitaria con pizarrón que muestra un diagrama de herencia de clases, ambiente académico moderno, paleta roja y blanca"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "center-bottom",
@@ -72,8 +54,8 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "sala de clases universitaria con pizarrón que muestra un diagrama de herencia de clases, ambiente académico moderno, paleta roja y blanca",
-        "local_asset": "slides/assets/F-01-bg.png",
+        "prompt": "sala de clases universitaria con pizarrón que muestra un diagrama de herencia de clases, ambiente académico moderno, paleta roja y blanca. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-01-img.png",
         "drive_id": null
       },
       "table_assets": []
@@ -132,6 +114,12 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {
+        "type": "socratica",
+        "image": "background",
+        "image_prompt": "tres puertas distintas etiquetadas con los tres paradigmas del cursado (Funcional, Lógico, OO), más una base representando el imperativo, ilustración minimalista, paleta roja"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "center-top",
         "body": "center-middle",
@@ -141,8 +129,8 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "tres puertas distintas etiquetadas con los tres paradigmas del cursado (Funcional, Lógico, OO), más una base representando el imperativo, ilustración minimalista, paleta roja",
-        "local_asset": "slides/assets/F-02-bg.png",
+        "prompt": "tres puertas distintas etiquetadas con los tres paradigmas del cursado (Funcional, Lógico, OO), más una base representando el imperativo, ilustración minimalista, paleta roja. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-02-img.png",
         "drive_id": null
       },
       "table_assets": []
@@ -162,6 +150,11 @@
       "tables": [
         "| Pilar | Pregunta que responde | Ejemplo en una línea |\n|-------|-----------------------|----------------------|\n| **Encapsulamiento** | ¿Cómo protejo el estado interno? | `private saldo: number` |\n| **Abstracción** | ¿Qué expongo al exterior? | `abstract area(): number` |\n| **Herencia** | ¿Cómo reutilizo y especializo? | `class Perro extends Animal` |\n| **Polimorfismo** | ¿Cómo trato distintos tipos uniformemente? | `formas.forEach(f => f.area())` |"
       ],
+      "directives": {
+        "type": "tabla",
+        "image": "none"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -233,6 +226,12 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {
+        "type": "concepto-abstracto",
+        "image": "content",
+        "image_prompt": "línea de tiempo histórica de lenguajes de programación con Simula 67 marcado como punto de origen del paradigma OO, estilo académico"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -242,8 +241,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "línea de tiempo histórica de lenguajes de programación con Simula 67 marcado como punto de origen del paradigma OO, estilo académico",
-        "local_asset": "slides/assets/F-04-content.png",
+        "prompt": "línea de tiempo histórica de lenguajes de programación con Simula 67 marcado como punto de origen del paradigma OO, estilo académico. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-04-img.png",
         "drive_id": null
       },
       "table_assets": []
@@ -299,6 +298,12 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {
+        "type": "concepto-abstracto",
+        "image": "content",
+        "image_prompt": "retrato estilizado de Alan Kay trabajando en Xerox PARC en los años 70, rodeado de computadoras históricas, ilustración académica"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -308,8 +313,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "retrato estilizado de Alan Kay trabajando en Xerox PARC en los años 70, rodeado de computadoras históricas, ilustración académica",
-        "local_asset": "slides/assets/F-05-content.png",
+        "prompt": "retrato estilizado de Alan Kay trabajando en Xerox PARC en los años 70, rodeado de computadoras históricas, ilustración académica. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-05-img.png",
         "drive_id": null
       },
       "table_assets": []
@@ -354,6 +359,12 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {
+        "type": "socratica",
+        "image": "background",
+        "image_prompt": "dos caminos divergentes en un bosque, uno limpio hacia Smalltalk y otro más ancho y pragmático hacia Java y TypeScript, ilustración conceptual académica"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "center-top",
         "body": "center-middle",
@@ -363,8 +374,8 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "dos caminos divergentes en un bosque, uno limpio hacia Smalltalk y otro más ancho y pragmático hacia Java y TypeScript, ilustración conceptual académica",
-        "local_asset": "slides/assets/F-06-bg.png",
+        "prompt": "dos caminos divergentes en un bosque, uno limpio hacia Smalltalk y otro más ancho y pragmático hacia Java y TypeScript, ilustración conceptual académica. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-06-img.png",
         "drive_id": null
       },
       "table_assets": []
@@ -394,6 +405,11 @@
       "tables": [
         "| Lenguaje | Año | Característica OO |\n|----------|-----|-------------------|\n| Simula 67 | 1967 | Clases, objetos, herencia |\n| Smalltalk-80 | 1980 | Todo es objeto, mensajes, metaclases — **OO puro** |\n| C++ | 1983 | OO sobre C — herencia múltiple, sin GC, tipos estáticos |\n| Eiffel | 1986 | OO con contratos formales (precondiciones, postcondiciones) |\n| Java | 1995 | OO con JVM, GC, herencia simple, interfaces — **OO pragmático** |\n| Python | 1991 | OO multi-paradigma, duck typing dinámico |\n| JavaScript | 1995 | OO **prototípico** (herencia sin clases hasta ES6) |\n| TypeScript | 2012 | OO sobre JS — tipado estático estructural, `class` ES6+ |"
       ],
+      "directives": {
+        "type": "timeline",
+        "image": "none"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-top-split",
@@ -480,6 +496,12 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "concepto-abstracto",
+        "image": "content",
+        "image_prompt": "diagrama de jerarquía de clases de Smalltalk mostrando que números, booleanos y clases heredan de Object, estilo académico limpio con paleta roja y blanca"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -489,8 +511,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "diagrama de jerarquía de clases de Smalltalk mostrando que números, booleanos y clases heredan de Object, estilo académico limpio con paleta roja y blanca",
-        "local_asset": "slides/assets/F-08-content.png",
+        "prompt": "diagrama de jerarquía de clases de Smalltalk mostrando que números, booleanos y clases heredan de Object, estilo académico limpio con paleta roja y blanca. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-08-img.png",
         "drive_id": null
       },
       "table_assets": []
@@ -542,6 +564,10 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "codigo"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -604,6 +630,10 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "codigo"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -666,6 +696,12 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "concepto-abstracto",
+        "image": "content",
+        "image_prompt": "diagrama de tres sobres con flechas representando los tres tipos de mensajes Smalltalk (unario, binario, palabra clave), paleta roja y blanca, estilo académico"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -675,8 +711,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "diagrama de tres sobres con flechas representando los tres tipos de mensajes Smalltalk (unario, binario, palabra clave), paleta roja y blanca, estilo académico",
-        "local_asset": "slides/assets/F-11-content.png",
+        "prompt": "diagrama de tres sobres con flechas representando los tres tipos de mensajes Smalltalk (unario, binario, palabra clave), paleta roja y blanca, estilo académico. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-11-img.png",
         "drive_id": null
       },
       "table_assets": []
@@ -713,6 +749,10 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "codigo"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -769,6 +809,10 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "codigo"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -831,6 +875,12 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "concepto-abstracto",
+        "image": "content",
+        "image_prompt": "diagrama de metaclases de Smalltalk mostrando que Animal es instancia de Animal class y Animal class es instancia de Metaclass, fondo blanco, diseño académico"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -840,8 +890,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "diagrama de metaclases de Smalltalk mostrando que Animal es instancia de Animal class y Animal class es instancia de Metaclass, fondo blanco, diseño académico",
-        "local_asset": "slides/assets/F-14-content.png",
+        "prompt": "diagrama de metaclases de Smalltalk mostrando que Animal es instancia de Animal class y Animal class es instancia de Metaclass, fondo blanco, diseño académico. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-14-img.png",
         "drive_id": null
       },
       "table_assets": []
@@ -891,6 +941,10 @@
       "tables": [
         "| Uso | Ejemplo |\n|-----|---------|\n| **Pedagogía** | Pharo es el entorno de enseñanza de OO puro en Inria y U. de Berna |\n| **Investigación** | Moose (análisis de código) está escrito en Pharo |\n| **Comprensión** | Entender OO puro hace entender los trade-offs de TypeScript, Python, Java |"
       ],
+      "directives": {
+        "type": "demo"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -932,6 +986,10 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "codigo"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -994,6 +1052,10 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "concepto-mixto"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1041,6 +1103,10 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "codigo"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -1094,6 +1160,10 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "codigo"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -1140,6 +1210,10 @@
       "tables": [
         "| Aspecto | TypeScript (estructural) | Java (nominal) | Smalltalk (dinámico) |\n|---------|--------------------------|-----------------|----------------------|\n| Base de compatibilidad | Forma del objeto | Declaración explícita | Responde al mensaje |\n| `implements` | Opcional | Obligatorio | No existe |\n| Verificación | Compilación | Compilación | Runtime |\n| Flexibilidad | Alta | Media | Máxima |\n| Seguridad | Alta (estática) | Alta (estática) | Solo en runtime |"
       ],
+      "directives": {
+        "type": "tabla-comparativa"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -1183,6 +1257,10 @@
       "tables": [
         "| Modificador | Acceso | Smalltalk equivalente |\n|-------------|--------|-----------------------|\n| `public` | Desde cualquier lugar | Mensajes (todo) |\n| `protected` | Clase + subclases | No existe formalmente |\n| `private` | Solo la clase | Instancia vars siempre privadas |\n| `readonly` | Inmutable post-init | — |\n| `abstract` (clase) | No instanciable | Convención — no existe keyword |\n| `abstract` (método) | Obliga implementación en subclase | `^ self subclassResponsibility` |"
       ],
+      "directives": {
+        "type": "tabla"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -1243,6 +1321,10 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "concepto-mixto"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1321,6 +1403,12 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {
+        "type": "concepto-abstracto",
+        "image": "content",
+        "image_prompt": "tres figuras geométricas (círculo rojo, rectángulo azul, triángulo verde) conectadas por flechas a una clase abstracta Forma, diagrama UML limpio, paleta académica"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1330,8 +1418,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "tres figuras geométricas (círculo rojo, rectángulo azul, triángulo verde) conectadas por flechas a una clase abstracta Forma, diagrama UML limpio, paleta académica",
-        "local_asset": "slides/assets/F-23-content.png",
+        "prompt": "tres figuras geométricas (círculo rojo, rectángulo azul, triángulo verde) conectadas por flechas a una clase abstracta Forma, diagrama UML limpio, paleta académica. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-23-img.png",
         "drive_id": null
       },
       "table_assets": []
@@ -1364,6 +1452,10 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "codigo"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -1407,6 +1499,10 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "codigo"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -1449,6 +1545,10 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "codigo"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "subtitle-only",
@@ -1472,8 +1572,12 @@
       "body_blocks": [],
       "code_blocks": [],
       "tables": [
-        "| Aspecto | Smalltalk | TypeScript |\n|---------|-----------|-----------|\n| Método abstracto | `^ self subclassResponsibility` | `abstract area(): number` |\n| Error si no se implementa | Runtime (al llamar) | **Compilación** (inmediato) |\n| Iteración | `do: [:f | ...]` — mensaje a Collection | `.forEach(f => ...)` — método de Array |\n| Instanciación | `Circulo new radio: 5; yourself` | `new Circulo(5, \"rojo\")` |\n| Constructor | No existe — configuración por mensajes | Método especial `constructor()` |\n| Tipo de variable | Dinámico — cualquier objeto | Estático — `Forma[]` |\n| Extender dominio | Nueva subclase | Nueva subclase (OCP — igual) |\n| Redefinir `+` | ✅ es un mensaje | ❌ operadores no redefinibles |\n| Error de tipo | Runtime | Compilación |"
+        "| Aspecto | Smalltalk | TypeScript |\n|---------|-----------|-----------|\n| Método abstracto | `^ self subclassResponsibility` | `abstract area(): number` |\n| Error si no se implementa | Runtime (al llamar) | **Compilación** (inmediato) |\n| Iteración | Mensaje `do:` sobre Collection | Método `.forEach()` sobre Array |\n| Instanciación | `Circulo new radio: 5; yourself` | `new Circulo(5, \"rojo\")` |\n| Tipo de variable | Dinámico — cualquier objeto | Estático — `Forma[]` |\n| Error de tipo | Runtime | Compilación |"
       ],
+      "directives": {
+        "type": "tabla-comparativa"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -1490,7 +1594,7 @@
       "table_assets": [
         {
           "index": 0,
-          "table_markdown": "| Aspecto | Smalltalk | TypeScript |\n|---------|-----------|-----------|\n| Método abstracto | `^ self subclassResponsibility` | `abstract area(): number` |\n| Error si no se implementa | Runtime (al llamar) | **Compilación** (inmediato) |\n| Iteración | `do: [:f | ...]` — mensaje a Collection | `.forEach(f => ...)` — método de Array |\n| Instanciación | `Circulo new radio: 5; yourself` | `new Circulo(5, \"rojo\")` |\n| Constructor | No existe — configuración por mensajes | Método especial `constructor()` |\n| Tipo de variable | Dinámico — cualquier objeto | Estático — `Forma[]` |\n| Extender dominio | Nueva subclase | Nueva subclase (OCP — igual) |\n| Redefinir `+` | ✅ es un mensaje | ❌ operadores no redefinibles |\n| Error de tipo | Runtime | Compilación |",
+          "table_markdown": "| Aspecto | Smalltalk | TypeScript |\n|---------|-----------|-----------|\n| Método abstracto | `^ self subclassResponsibility` | `abstract area(): number` |\n| Error si no se implementa | Runtime (al llamar) | **Compilación** (inmediato) |\n| Iteración | Mensaje `do:` sobre Collection | Método `.forEach()` sobre Array |\n| Instanciación | `Circulo new radio: 5; yourself` | `new Circulo(5, \"rojo\")` |\n| Tipo de variable | Dinámico — cualquier objeto | Estático — `Forma[]` |\n| Error de tipo | Runtime | Compilación |",
           "local_asset": "slides/assets/F-27-table-1.png",
           "drive_id": null
         }
@@ -1579,6 +1683,12 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {
+        "type": "socratica",
+        "image": "background",
+        "image_prompt": "pizarrón universitario con tres preguntas escritas en tiza sobre fondo oscuro, ambiente de aula de debate, estilo académico"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "center-top",
         "body": "center-middle",
@@ -1588,8 +1698,8 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "pizarrón universitario con tres preguntas escritas en tiza sobre fondo oscuro, ambiente de aula de debate, estilo académico",
-        "local_asset": "slides/assets/F-28-bg.png",
+        "prompt": "pizarrón universitario con tres preguntas escritas en tiza sobre fondo oscuro, ambiente de aula de debate, estilo académico. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-28-img.png",
         "drive_id": null
       },
       "table_assets": []
@@ -1640,6 +1750,12 @@
         }
       ],
       "tables": [],
+      "directives": {
+        "type": "concepto-abstracto",
+        "image": "content",
+        "image_prompt": "pantalla de computadora con GitHub Copilot autocompletando una jerarquía de clases TypeScript con herencia y polimorfismo, ambiente moderno, fondo oscuro"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1649,8 +1765,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "pantalla de computadora con GitHub Copilot autocompletando una jerarquía de clases TypeScript con herencia y polimorfismo, ambiente moderno, fondo oscuro",
-        "local_asset": "slides/assets/F-29-content.png",
+        "prompt": "pantalla de computadora con GitHub Copilot autocompletando una jerarquía de clases TypeScript con herencia y polimorfismo, ambiente moderno, fondo oscuro. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-29-img.png",
         "drive_id": null
       },
       "table_assets": []
@@ -1685,6 +1801,10 @@
       "tables": [
         "| Patrón | Tipo | Qué resuelve | Ejemplo |\n|--------|------|--------------|---------|\n| **Strategy** | Comportamiento | Algoritmos intercambiables sin modificar el cliente | Ordenamiento — burbuja, merge |\n| **Observer** | Comportamiento | Notificar a múltiples objetos cuando cambia el estado | EventEmitter, Redux |\n| **Factory Method** | Creación | Delegar la instanciación a subclases | `crearForma(tipo): Forma` |\n| **Decorator** | Estructura | Agregar responsabilidades dinámicamente | Middleware en Express.js |\n| **Template Method** | Comportamiento | Esqueleto en clase base, pasos en subclases | `toString()` usa `area()` abstracto |"
       ],
+      "directives": {
+        "type": "tabla"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -1728,6 +1848,10 @@
       "tables": [
         "| Concepto OO | Smalltalk | TypeScript |\n|-------------|-----------|-----------|\n| Todo es objeto | ✅ absoluto | ❌ primitivos (`number`, `boolean`) |\n| Mensajes | ✅ única forma de interacción | ✅ llamadas a métodos |\n| Clases como objetos | ✅ metaclases | ⚠️ parcial — métodos `static` |\n| Herencia | ✅ simple (`subclass:`) | ✅ simple (`extends`) |\n| Polimorfismo | ✅ dinámico puro | ✅ dinámico + verificación estática |\n| Encapsulamiento | ✅ inst. vars siempre privadas | ✅ `private`/`protected`/`readonly` |\n| Clases abstractas | ⚠️ `subclassResponsibility` (runtime) | ✅ `abstract` (compilación) |\n| Interfaces | ❌ no existen | ✅ duck typing estático |\n| Bloques/lambdas | ✅ objetos de primera clase | ✅ arrow functions |\n| Operadores redefinibles | ✅ son mensajes | ❌ operadores fijos |\n| Verificación de tipos | Runtime | Compilación |"
       ],
+      "directives": {
+        "type": "tabla-comparativa"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -1771,6 +1895,10 @@
       "tables": [
         "| Pilar | Definición en una línea | TypeScript | Smalltalk |\n|-------|------------------------|------------|-----------|\n| **Encapsulamiento** | Ocultar el estado interno | `private saldo: number` | Variables de inst. siempre privadas |\n| **Abstracción** | Exponer solo la interfaz | `abstract area(): number` | `^ self subclassResponsibility` |\n| **Herencia** | Reutilizar y especializar | `class Perro extends Animal` | `Animal subclass: #Perro` |\n| **Polimorfismo** | Un contrato, muchas formas | `formas.forEach(f => f.area())` | `formas do: [:f | f area]` |"
       ],
+      "directives": {
+        "type": "tabla"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "table-intro",
@@ -1824,6 +1952,12 @@
       "tables": [
         "| | Funcional | Lógico | OO (extiende Imperativo) |\n|-|-----------|--------|-------------------------|\n| **Control** | Recursión, combinadores | Motor de inferencia | Despacho de mensajes + loops/if |\n| **Estado** | Inmutable | Hechos / unificación | Mutable, encapsulado en objetos |\n| **Abstracción** | Funciones de orden superior | Relaciones | Clases, interfaces |\n| **Reutilización** | Composición funcional | Reglas generales | Herencia, composición |\n| **Lenguaje tipo** | Haskell, Elixir, TS parcial | Prolog | Smalltalk, Java, TypeScript |\n| **Modelo central** | Transformación de datos | Satisfacción de restricciones | Objetos que colaboran |"
       ],
+      "directives": {
+        "type": "diagrama",
+        "image": "content",
+        "image_prompt": "mapa conceptual con tres nodos principales (Funcional, Lógico, OO) y un nodo base (Imperativo) del que OO extiende, flechas que muestran relaciones y contrastes, estilo de mapa mental académico con paleta roja y blanca"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1833,8 +1967,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "mapa conceptual con tres nodos principales (Funcional, Lógico, OO) y un nodo base (Imperativo) del que OO extiende, flechas que muestran relaciones y contrastes, estilo de mapa mental académico con paleta roja y blanca",
-        "local_asset": "slides/assets/F-33-content.png",
+        "prompt": "mapa conceptual con tres nodos principales (Funcional, Lógico, OO) y un nodo base (Imperativo) del que OO extiende, flechas que muestran relaciones y contrastes, estilo de mapa mental académico con paleta roja y blanca. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-33-img.png",
         "drive_id": null
       },
       "table_assets": [
@@ -1932,6 +2066,12 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {
+        "type": "concepto-abstracto",
+        "image": "content",
+        "image_prompt": "lista de conceptos clave resaltados en una pizarra universitaria con marcadores de colores, ambiente académico de preparación para examen"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
@@ -1941,112 +2081,52 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "lista de conceptos clave resaltados en una pizarra universitaria con marcadores de colores, ambiente académico de preparación para examen",
-        "local_asset": "slides/assets/F-34-content.png",
+        "prompt": "lista de conceptos clave resaltados en una pizarra universitaria con marcadores de colores, ambiente académico de preparación para examen. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-34-img.png",
         "drive_id": null
       },
       "table_assets": []
     },
     {
       "id": "F-35",
-      "type": "concepto-abstracto",
+      "type": "tabla",
       "title": "TP08 — GitHub + autograding",
       "subtitle": "TP08 — OO en TypeScript",
       "body_blocks": [
         {
-          "type": "heading",
-          "level": 2,
-          "content": "Cómo funciona el autograding"
-        },
-        {
-          "type": "list",
-          "ordered": true,
-          "items": [
-            {
-              "content": "Aceptás el assignment en GitHub Classroom → se crea tu repositorio personal",
-              "level": 0
-            },
-            {
-              "content": "Codeás los ejercicios en TypeScript",
-              "level": 0
-            },
-            {
-              "content": "Hacés `git push` → GitHub Actions ejecuta los tests automáticamente",
-              "level": 0
-            },
-            {
-              "content": "Ves la nota directamente en el commit — sin esperar corrección manual",
-              "level": 0
-            }
-          ]
-        },
-        {
-          "type": "heading",
-          "level": 2,
-          "content": "Los ejercicios:"
-        },
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "**Ejercicio 1:** jerarquía de clases con herencia y polimorfismo",
-              "level": 0
-            },
-            {
-              "content": "**Ejercicio 2:** interfaces — contratos estructurales",
-              "level": 0
-            },
-            {
-              "content": "**Ejercicio 3:** dominio libre — modelar una entidad del mundo real",
-              "level": 0
-            },
-            {
-              "content": "**Ejercicio 4 (opcional):** comparar el mismo dominio en Smalltalk",
-              "level": 0
-            }
-          ]
-        },
-        {
-          "type": "heading",
-          "level": 2,
-          "content": "El stack técnico:"
-        },
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "**Tests:** Vitest (unitarios automáticos)",
-              "level": 0
-            },
-            {
-              "content": "**CI:** GitHub Actions (`.github/workflows/autograding.yml` ya incluido)",
-              "level": 0
-            },
-            {
-              "content": "**Lenguaje:** TypeScript 5.x + Node 22",
-              "level": 0
-            }
-          ]
+          "type": "text",
+          "content": "GitHub Classroom crea tu repositorio personal y el autograding publica la nota en cada `git push`."
         }
       ],
       "code_blocks": [],
-      "tables": [],
+      "tables": [
+        "| Tramo | Qué hacés | Cómo se evalúa |\n|-------|-----------|----------------|\n| Ejercicio 1 | Jerarquía con herencia y polimorfismo | Tests Vitest |\n| Ejercicio 2 | Interfaces y contratos estructurales | Tests Vitest |\n| Ejercicio 3 | Dominio libre en TypeScript OO | Tests + revisión docente |\n| Entrega | `git push` dispara GitHub Actions | Nota automática en el commit |"
+      ],
+      "directives": {
+        "type": "tabla"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
+        "body": "table-intro",
+        "image": "none",
         "code": "none",
-        "table": "none"
+        "table": "table-main"
       },
       "image": {
-        "layer": "content",
-        "prompt": "pantalla de GitHub Actions mostrando checks verdes después de hacer push de código TypeScript, interfaz de GitHub Classroom, ambiente moderno de desarrollo",
-        "local_asset": "slides/assets/F-35-content.png",
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
         "drive_id": null
       },
-      "table_assets": []
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Tramo | Qué hacés | Cómo se evalúa |\n|-------|-----------|----------------|\n| Ejercicio 1 | Jerarquía con herencia y polimorfismo | Tests Vitest |\n| Ejercicio 2 | Interfaces y contratos estructurales | Tests Vitest |\n| Ejercicio 3 | Dominio libre en TypeScript OO | Tests + revisión docente |\n| Entrega | `git push` dispara GitHub Actions | Nota automática en el commit |",
+          "local_asset": "slides/assets/F-35-table-1.png",
+          "drive_id": null
+        }
+      ]
     },
     {
       "id": "F-36",
@@ -2104,6 +2184,12 @@
       ],
       "code_blocks": [],
       "tables": [],
+      "directives": {
+        "type": "cierre",
+        "image": "background",
+        "image_prompt": "aula universitaria al final de la clase con luz cálida, estudiantes guardando cosas y conversando, ambiente de cierre de jornada académica, paleta roja y blanca"
+      },
+      "asset_hints": [],
       "layout": {
         "title": "center-middle",
         "body": "center-bottom",
@@ -2113,8 +2199,8 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "aula universitaria al final de la clase con luz cálida, estudiantes guardando cosas y conversando, ambiente de cierre de jornada académica, paleta roja y blanca",
-        "local_asset": "slides/assets/F-36-bg.png",
+        "prompt": "aula universitaria al final de la clase con luz cálida, estudiantes guardando cosas y conversando, ambiente de cierre de jornada académica, paleta roja y blanca. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
+        "local_asset": "slides/assets/F-36-img.png",
         "drive_id": null
       },
       "table_assets": []

@@ -966,12 +966,9 @@ formas.forEach(f => console.log(f.toString()));
 |---------|-----------|-----------|
 | Método abstracto | `^ self subclassResponsibility` | `abstract area(): number` |
 | Error si no se implementa | Runtime (al llamar) | **Compilación** (inmediato) |
-| Iteración | `do: [:f | ...]` — mensaje a Collection | `.forEach(f => ...)` — método de Array |
+| Iteración | Mensaje `do:` sobre Collection | Método `.forEach()` sobre Array |
 | Instanciación | `Circulo new radio: 5; yourself` | `new Circulo(5, "rojo")` |
-| Constructor | No existe — configuración por mensajes | Método especial `constructor()` |
 | Tipo de variable | Dinámico — cualquier objeto | Estático — `Forma[]` |
-| Extender dominio | Nueva subclase | Nueva subclase (OCP — igual) |
-| Redefinir `+` | ✅ es un mensaje | ❌ operadores no redefinibles |
 | Error de tipo | Runtime | Compilación |
 
 ---
@@ -1180,31 +1177,18 @@ formas.forEach(f => console.log(f.area())); // polimorfismo
 
 ### [F-35] TP08 — GitHub + autograding
 
-@tipo: concepto-abstracto
-@imagen: content
-@prompt-imagen: pantalla de GitHub Actions mostrando checks verdes después de hacer push de código TypeScript, interfaz de GitHub Classroom, ambiente moderno de desarrollo
+@tipo: tabla
 
 # TP08 — OO en TypeScript
 
-## Cómo funciona el autograding
+GitHub Classroom crea tu repositorio personal y el autograding publica la nota en cada `git push`.
 
-1. Aceptás el assignment en GitHub Classroom → se crea tu repositorio personal
-2. Codeás los ejercicios en TypeScript
-3. Hacés `git push` → GitHub Actions ejecuta los tests automáticamente
-4. Ves la nota directamente en el commit — sin esperar corrección manual
-
-## Los ejercicios:
-
-- **Ejercicio 1:** jerarquía de clases con herencia y polimorfismo
-- **Ejercicio 2:** interfaces — contratos estructurales
-- **Ejercicio 3:** dominio libre — modelar una entidad del mundo real
-- **Ejercicio 4 (opcional):** comparar el mismo dominio en Smalltalk
-
-## El stack técnico:
-
-- **Tests:** Vitest (unitarios automáticos)
-- **CI:** GitHub Actions (`.github/workflows/autograding.yml` ya incluido)
-- **Lenguaje:** TypeScript 5.x + Node 22
+| Tramo | Qué hacés | Cómo se evalúa |
+|-------|-----------|----------------|
+| Ejercicio 1 | Jerarquía con herencia y polimorfismo | Tests Vitest |
+| Ejercicio 2 | Interfaces y contratos estructurales | Tests Vitest |
+| Ejercicio 3 | Dominio libre en TypeScript OO | Tests + revisión docente |
+| Entrega | `git push` dispara GitHub Actions | Nota automática en el commit |
 
 ---
 

@@ -11,7 +11,11 @@ week: 7
 class_number: 1
 class_duration: "120"  # minutos — constraint de generación, no modificar sin /edu-set-duration
 
-status: "produccion"
+status: "publicado"
+
+# Google Slides
+slides_url: "https://docs.google.com/presentation/d/1vllZ6oVcrRpkpN12JtdXUZNBI-qclbqMd0YXrm-1LDo/edit"
+slides_published_at: "2026-04-28"
 
 # Lenguajes del tema
 primary_language: "TypeScript"
