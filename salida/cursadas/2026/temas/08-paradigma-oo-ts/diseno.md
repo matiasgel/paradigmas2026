@@ -4,7 +4,8 @@
 **Institución:** UNTDF — Instituto IDEI  
 **Docente:** Matías Gel  
 **Duración de clase:** 120 minutos ← CONSTRAINT DE GENERACIÓN. No superar.  
-**Estado:** borrador  
+**Estado:** APROBADO  
+**Fecha de aprobación:** 2026-04-28  
 **Fecha de diseño:** 2026-04-27  
 **Módulo del plan:** IV — Paradigma de Programación Orientada a Objetos  
 **Semana:** 7 | **Clase en el ciclo:** 1 de 1  
@@ -516,6 +517,6 @@ Lo siguiente está **FUERA de scope** de esta clase. Decirlo explícitamente si 
 
 ## Estado del Documento
 
-- [ ] Borrador generado por Marcos (topic-designer)
-- [ ] Revisado por Matías (docente)
-- [ ] **APROBADO** ← desbloquea la generación de minuta.md y filminas.md
+- [x] Borrador generado por Marcos (topic-designer)
+- [x] Revisado por Matías (docente)
+- [x] **APROBADO** ← desbloquea la generación de minuta.md y filminas.md

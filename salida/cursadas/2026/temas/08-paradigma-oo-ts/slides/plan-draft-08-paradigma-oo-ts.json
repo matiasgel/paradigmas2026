@@ -1,0 +1,2153 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "08-paradigma-oo-ts",
+    "title": "Paradigma Orientado a Objetos",
+    "source": "filminas.md",
+    "generated_at": "2026-04-28T12:33:49",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
+    "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\08-paradigma-oo-ts",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/slides-pipeline.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 36,
+    "images_planned": 15,
+    "tables_planned": 10,
+    "code_slides": 20,
+    "status": "DRAFT",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "portada": 1,
+      "socratica": 3,
+      "tabla": 4,
+      "concepto-abstracto": 9,
+      "timeline": 1,
+      "codigo": 10,
+      "demo": 1,
+      "concepto-mixto": 2,
+      "tabla-comparativa": 3,
+      "diagrama": 1,
+      "cierre": 1
+    }
+  },
+  "slides": [
+    {
+      "id": "F-01",
+      "type": "portada",
+      "title": "Paradigma OO — TypeScript + Smalltalk",
+      "subtitle": "Paradigma Orientado a Objetos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "TypeScript · Smalltalk · Los 4 pilares"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Paradigmas y Lenguajes de Programación 2026**",
+              "level": 0
+            },
+            {
+              "content": "UNTDF — Instituto IDEI | Módulo IV — Semana 7",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "sala de clases universitaria con pizarrón que muestra un diagrama de herencia de clases, ambiente académico moderno, paleta roja y blanca",
+        "local_asset": "slides/assets/F-01-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-02",
+      "type": "socratica",
+      "title": "¿Qué sumamos hoy?",
+      "subtitle": "¿Qué sumamos hoy al cursado?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Paradigmas vistos en el cursado:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Funcional** → *¿qué transformar?* — funciones puras, inmutabilidad",
+              "level": 0
+            },
+            {
+              "content": "**Lógico** → *¿qué es verdad?* — hechos, reglas, motor de inferencia",
+              "level": 0
+            },
+            {
+              "content": "**OO** → *(hoy)* — extensión del imperativo que encapsula estado y comportamiento",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El imperativo como base común:"
+        },
+        {
+          "type": "text",
+          "content": "OO **extiende** el imperativo — agrega encapsulamiento, herencia y polimorfismo sobre la base de instrucciones secuenciales y estado mutable."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La pregunta generadora:"
+        },
+        {
+          "type": "text",
+          "content": "> *¿Qué tiene OO que los paradigmas funcional y lógico no tienen?*"
+        },
+        {
+          "type": "text",
+          "content": "Respuesta esperada: **estado encapsulado en objetos, comunicación por mensajes, identidad de entidades**"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "tres puertas distintas etiquetadas con los tres paradigmas del cursado (Funcional, Lógico, OO), más una base representando el imperativo, ilustración minimalista, paleta roja",
+        "local_asset": "slides/assets/F-02-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-03",
+      "type": "tabla",
+      "title": "Los 4 pilares — adelanto",
+      "subtitle": "Los 4 pilares del paradigma OO",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Estos cuatro conceptos son el contenido central de la clase y del **Parcial 1**.  \nLos trabajaremos primero en **Smalltalk** (OO puro) y luego en **TypeScript** (OO pragmático)."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Pilar | Pregunta que responde | Ejemplo en una línea |\n|-------|-----------------------|----------------------|\n| **Encapsulamiento** | ¿Cómo protejo el estado interno? | `private saldo: number` |\n| **Abstracción** | ¿Qué expongo al exterior? | `abstract area(): number` |\n| **Herencia** | ¿Cómo reutilizo y especializo? | `class Perro extends Animal` |\n| **Polimorfismo** | ¿Cómo trato distintos tipos uniformemente? | `formas.forEach(f => f.area())` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Pilar | Pregunta que responde | Ejemplo en una línea |\n|-------|-----------------------|----------------------|\n| **Encapsulamiento** | ¿Cómo protejo el estado interno? | `private saldo: number` |\n| **Abstracción** | ¿Qué expongo al exterior? | `abstract area(): number` |\n| **Herencia** | ¿Cómo reutilizo y especializo? | `class Perro extends Animal` |\n| **Polimorfismo** | ¿Cómo trato distintos tipos uniformemente? | `formas.forEach(f => f.area())` |",
+          "local_asset": "slides/assets/F-03-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "type": "concepto-abstracto",
+      "title": "Simula 67 — el primer paso",
+      "subtitle": "Origen: Simula 67",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Nygaard & Dahl — Noruega, 1967"
+        },
+        {
+          "type": "text",
+          "content": "Primer lenguaje con objetos y clases — diseñado para **simular sistemas físicos**."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Un `barco` tiene estado (velocidad, posición) y comportamiento (moverse, frenar)",
+              "level": 0
+            },
+            {
+              "content": "Múltiples barcos son *instancias* de la misma `clase Barco`",
+              "level": 0
+            },
+            {
+              "content": "No era \"OO puro\" — era ALGOL extendido con mecanismos de simulación",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Innovación central:"
+        },
+        {
+          "type": "text",
+          "content": "> Agrupar **datos** (estado) con las **operaciones** que los modifican → encapsulamiento"
+        },
+        {
+          "type": "text",
+          "content": "Antes de Simula: los datos eran estructuras separadas de las funciones que las procesaban.  \nSimula dijo: *el barco sabe cómo moverse — no me lo decís vos desde afuera.*"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "línea de tiempo histórica de lenguajes de programación con Simula 67 marcado como punto de origen del paradigma OO, estilo académico",
+        "local_asset": "slides/assets/F-04-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "concepto-abstracto",
+      "title": "Alan Kay — la visión original",
+      "subtitle": "Alan Kay — Xerox PARC, 1970s",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La cita fundacional:"
+        },
+        {
+          "type": "text",
+          "content": "> *\"The big idea is 'messaging' — that is what the kernel of Smalltalk/Squeak is all about. The key in making great and growable systems is much more to design how its modules communicate rather than what their internal properties and behaviors should be.\"*  \n> — Alan Kay, 1998"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Los tres principios originales de Smalltalk:"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Todo es un objeto** — incluyendo números, booleanos, clases y métodos",
+              "level": 0
+            },
+            {
+              "content": "**Los objetos se comunican únicamente por mensajes**",
+              "level": 0
+            },
+            {
+              "content": "**Cada objeto tiene su propia memoria** — encapsulamiento absoluto",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Dato:** Kay consideraba que el nombre \"OO\" fue un **error** — el centro no son los objetos, son los **mensajes**.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "retrato estilizado de Alan Kay trabajando en Xerox PARC en los años 70, rodeado de computadoras históricas, ilustración académica",
+        "local_asset": "slides/assets/F-05-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-06",
+      "type": "socratica",
+      "title": "Kay vs. lo que el mundo hizo después",
+      "subtitle": "La tensión central del paradigma OO",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Kay quería esto:"
+        },
+        {
+          "type": "text",
+          "content": "Objetos autónomos como células biológicas — cada uno con su propia lógica interna, comunicándose **solo por mensajes**. Sin clases rígidas si no eran necesarias. Sin primitivos. Todo objeto."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El mundo hizo esto:"
+        },
+        {
+          "type": "text",
+          "content": "Java, C++, Python, TypeScript — lenguajes con **clases** como mecanismo central, primitivos por performance, verificación estática para escalar en equipo."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La pregunta:"
+        },
+        {
+          "type": "text",
+          "content": "> *¿Importa la pureza filosófica o el resultado práctico?*"
+        },
+        {
+          "type": "text",
+          "content": "No hay una respuesta única. La tensión **pureza vs. pragmatismo** es la pregunta de diseño de lenguajes más importante del paradigma OO — y es lo que esta clase explora."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "dos caminos divergentes en un bosque, uno limpio hacia Smalltalk y otro más ancho y pragmático hacia Java y TypeScript, ilustración conceptual académica",
+        "local_asset": "slides/assets/F-06-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-07",
+      "type": "timeline",
+      "title": "Evolución del OO — de la pureza al pragmatismo",
+      "subtitle": "Evolución de los lenguajes OO",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Tendencia:** cada generación gana en pragmatismo, pierde en pureza.",
+              "level": 0
+            },
+            {
+              "content": "**Pregunta clave de la clase:** ¿importa la pureza, o solo el resultado?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Lenguaje | Año | Característica OO |\n|----------|-----|-------------------|\n| Simula 67 | 1967 | Clases, objetos, herencia |\n| Smalltalk-80 | 1980 | Todo es objeto, mensajes, metaclases — **OO puro** |\n| C++ | 1983 | OO sobre C — herencia múltiple, sin GC, tipos estáticos |\n| Eiffel | 1986 | OO con contratos formales (precondiciones, postcondiciones) |\n| Java | 1995 | OO con JVM, GC, herencia simple, interfaces — **OO pragmático** |\n| Python | 1991 | OO multi-paradigma, duck typing dinámico |\n| JavaScript | 1995 | OO **prototípico** (herencia sin clases hasta ES6) |\n| TypeScript | 2012 | OO sobre JS — tipado estático estructural, `class` ES6+ |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-top-split",
+        "image": "none",
+        "code": "none",
+        "table": "right-half"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Lenguaje | Año | Característica OO |\n|----------|-----|-------------------|\n| Simula 67 | 1967 | Clases, objetos, herencia |\n| Smalltalk-80 | 1980 | Todo es objeto, mensajes, metaclases — **OO puro** |\n| C++ | 1983 | OO sobre C — herencia múltiple, sin GC, tipos estáticos |\n| Eiffel | 1986 | OO con contratos formales (precondiciones, postcondiciones) |\n| Java | 1995 | OO con JVM, GC, herencia simple, interfaces — **OO pragmático** |\n| Python | 1991 | OO multi-paradigma, duck typing dinámico |\n| JavaScript | 1995 | OO **prototípico** (herencia sin clases hasta ES6) |\n| TypeScript | 2012 | OO sobre JS — tipado estático estructural, `class` ES6+ |",
+          "local_asset": "slides/assets/F-07-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-08",
+      "type": "concepto-abstracto",
+      "title": "\"Todo es un objeto\" — sin excepciones",
+      "subtitle": "Smalltalk — \"Todo es un objeto\"",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "No hay primitivos. Ninguno."
+        },
+        {
+          "type": "text",
+          "content": "En Smalltalk cada valor es una instancia de una clase:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`5` → instancia de `SmallInteger` → hereda de `Integer → Number → Magnitude → Object`",
+              "level": 0
+            },
+            {
+              "content": "`true` → instancia de `True` → hereda de `Boolean → Object`",
+              "level": 0
+            },
+            {
+              "content": "`$A` → instancia de `Character` → hereda de `Magnitude → Object`",
+              "level": 0
+            },
+            {
+              "content": "`'hola'` → instancia de `String` → hereda de `Collection → Object`",
+              "level": 0
+            },
+            {
+              "content": "La clase `Animal` → instancia de su **metaclase** `Animal class`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En TypeScript — primitivos existen:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Autoboxing** = TypeScript/JS envuelven primitivos en objetos temporalmente. Smalltalk no necesita simularlo — son objetos de verdad.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "typeof 5        // \"number\"  ← NO es un objeto\ntypeof true     // \"boolean\" ← NO es un objeto\n(5).toString()  // funciona por autoboxing implícito del runtime JS"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "diagrama de jerarquía de clases de Smalltalk mostrando que números, booleanos y clases heredan de Object, estilo académico limpio con paleta roja y blanca",
+        "local_asset": "slides/assets/F-08-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-09",
+      "type": "codigo",
+      "title": "\"Todo es un objeto\" — en código",
+      "subtitle": "Todo es objeto — ejemplos reales",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El número 5 sabe su clase"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Los booleanos son objetos reales"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Las clases son objetos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Consecuencia directa:** podés enviar mensajes a las clases igual que a cualquier objeto.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "smalltalk",
+          "content": "5 class.               \"→ SmallInteger\"\n5 class superclass.    \"→ Integer\"\n5 class superclass superclass. \"→ Number\"\n5 factorial.           \"→ 120\"\n5 between: 1 and: 10.  \"→ true\"\n5 printString.         \"→ '5'\""
+        },
+        {
+          "lang": "smalltalk",
+          "content": "true class.       \"→ True\"\nfalse class.      \"→ False\"\ntrue & false.     \"→ false\"\ntrue | false.     \"→ true\"\n(3 > 2) ifTrue: ['mayor'] ifFalse: ['menor'].  \"→ 'mayor'\""
+        },
+        {
+          "lang": "smalltalk",
+          "content": "SmallInteger superclass.        \"→ Integer\"\nSmallInteger allSubclasses.     \"→ todas las subclases\"\nSmallInteger methodDictionary.  \"→ todos los métodos\"\nSmallInteger canUnderstand: #factorial.  \"→ true\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-10",
+      "type": "codigo",
+      "title": "Cascades y `yourself` — sintaxis expresiva",
+      "subtitle": "Cascades — encadenar mensajes al mismo objeto",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El problema sin cascades:"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Con cascades — el `;` repite el receptor:"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Comparación con TypeScript — method chaining"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Nota:** `yourself` retorna el **receptor del cascade** (la colección), no el resultado del último mensaje enviado. Sin él, `col` sería `'tercero'` — el valor de retorno del último `add:`.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "smalltalk",
+          "content": "| col |\ncol := OrderedCollection new.\ncol add: 'primero'.\ncol add: 'segundo'.\ncol add: 'tercero'."
+        },
+        {
+          "lang": "smalltalk",
+          "content": "| col |\ncol := (OrderedCollection new)\n    add: 'primero';\n    add: 'segundo';\n    add: 'tercero';\n    yourself.   \"← retorna la colección, no el último add:\""
+        },
+        {
+          "lang": "typescript",
+          "content": "// En TypeScript con fluent interface / builder pattern:\nclass ColeccionBuilder {\n  private items: string[] = [];\n  add(item: string): this { this.items.push(item); return this; }\n  build(): string[] { return this.items; }\n}\n\nconst col = new ColeccionBuilder()\n  .add(\"primero\")\n  .add(\"segundo\")\n  .add(\"tercero\")\n  .build();"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "concepto-abstracto",
+      "title": "Mensajes — los tres tipos",
+      "subtitle": "Mensajes — tres tipos, una filosofía",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Mensajes unarios — sin argumentos (mayor precedencia)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Mensajes binarios — un argumento, notación infija"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Mensajes de palabra clave — uno o más argumentos (menor precedencia)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Regla:** `unarios > binarios > palabras clave`. Usá paréntesis para cambiar el orden.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "smalltalk",
+          "content": "5 factorial.      \"→ 120\"\n'hola' size.      \"→ 4\"\n3.14 rounded.     \"→ 3\"\n3.14 class.       \"→ Float\""
+        },
+        {
+          "lang": "smalltalk",
+          "content": "3 + 4.        \"→ 7    ← '+' es mensaje enviado a 3 con argumento 4\"\n5 > 3.        \"→ true\"\n'ho' , 'la'.  \"→ 'hola'\"\n3 + 4 * 2.    \"→ 14   ← ¡NO es 11! binarios de izquierda a derecha\""
+        },
+        {
+          "lang": "smalltalk",
+          "content": "10 between: 5 and: 15.      \"→ true\"\nanArray at: 2 put: 99.      \"→ modifica posición 2\"\na ifTrue: [x] ifFalse: [y]. \"→ condicional\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "diagrama de tres sobres con flechas representando los tres tipos de mensajes Smalltalk (unario, binario, palabra clave), paleta roja y blanca, estilo académico",
+        "local_asset": "slides/assets/F-11-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-12",
+      "type": "codigo",
+      "title": "Clases y herencia en Smalltalk",
+      "subtitle": "Clases y herencia — definición completa",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definir la jerarquía"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Polimorfismo puro"
+        },
+        {
+          "type": "text",
+          "content": "El cliente solo sabe que recibe objetos que entienden `hablar`. No importa el tipo concreto."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "smalltalk",
+          "content": "Object subclass: #Animal\n    instanceVariableNames: 'nombre'\n    category: 'Ejemplo'.\n\nAnimal subclass: #Perro\n    instanceVariableNames: 'raza'\n    category: 'Ejemplo'.\n\n\"Accessors\"\nAnimal >> nombre       ^ nombre\nAnimal >> nombre: n    nombre := n\nPerro  >> raza: r      raza := r\n\n\"Comportamiento\"\nAnimal >> hablar       ^ 'Soy un animal'\nPerro  >> hablar       ^ 'Guau! Soy ', nombre, ', un ', raza"
+        },
+        {
+          "lang": "smalltalk",
+          "content": "| animales |\nanimales := OrderedCollection new.\nanimales add: (Animal new nombre: 'Genérico').\nanimales add: (Perro new nombre: 'Rex'; raza: 'Labrador'; yourself).\n\nanimales do: [:a | Transcript showCr: a hablar].\n\"→ Soy un animal\"\n\"→ Guau! Soy Rex, un Labrador\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "codigo",
+      "title": "Bloques — las lambdas de Smalltalk",
+      "subtitle": "Bloques — código como objeto",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Un bloque es un objeto que representa código diferido"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Los bloques son los mecanismos de control"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Comparación con TypeScript"
+        },
+        {
+          "type": "text",
+          "content": "Los bloques de Smalltalk son **objetos de primera clase** — igual que las funciones en TypeScript."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "smalltalk",
+          "content": "\"Bloque con argumentos\"\n| cuadrado |\ncuadrado := [:x | x * x].\ncuadrado value: 5.    \"→ 25\"\ncuadrado value: 12.   \"→ 144\"\n\n\"Bloque como condicional — ifTrue: recibe un bloque\"\n(temperatura > 30) ifTrue: ['Calor'] ifFalse: ['Fresco']."
+        },
+        {
+          "lang": "smalltalk",
+          "content": "\"Iteración — do: recibe un bloque\"\n#(1 2 3 4 5) do: [:n | Transcript showCr: n printString].\n\n\"Collect — equivalente a map\"\n#(1 2 3) collect: [:n | n * 2].  \"→ #(2 4 6)\"\n\n\"Select — equivalente a filter\"\n#(1 2 3 4 5) select: [:n | n > 3].  \"→ #(4 5)\""
+        },
+        {
+          "lang": "typescript",
+          "content": "const cuadrado = (x: number) => x * x;\ncuadrado(5); // 25\n\n[1, 2, 3, 4, 5].forEach(n => console.log(n));\n[1, 2, 3].map(n => n * 2);           // [2, 4, 6]\n[1, 2, 3, 4, 5].filter(n => n > 3); // [4, 5]"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-14",
+      "type": "concepto-abstracto",
+      "title": "Metaclases — las clases son objetos",
+      "subtitle": "Metaclases — lo que hace único a Smalltalk",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La cadena de metaclases"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Métodos de clase via metaclase"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Comparación con TypeScript"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Diferencia:** en TypeScript los métodos `static` son un atajo sintáctico. Las clases no son ciudadanos de primera clase — no podés inspeccionar su metaclase ni enviarles mensajes arbitrarios en runtime.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "smalltalk",
+          "content": "Animal class.            \"→ Animal class\"\nAnimal class class.      \"→ Metaclass\"\nAnimal class superclass. \"→ Object class\""
+        },
+        {
+          "lang": "smalltalk",
+          "content": "Animal class >> crearConNombre: unNombre\n    ^ self new nombre: unNombre\n\n| p |\np := Perro crearConNombre: 'Fido'.\np hablar.  \"→ 'Guau! Soy Fido...'\""
+        },
+        {
+          "lang": "typescript",
+          "content": "class Animal {\n  static crearConNombre(nombre: string): Animal {\n    const a = new Animal();\n    a.nombre = nombre;\n    return a;\n  }\n}\nconst p = Animal.crearConNombre(\"Fido\");"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "diagrama de metaclases de Smalltalk mostrando que Animal es instancia de Animal class y Animal class es instancia de Metaclass, fondo blanco, diseño académico",
+        "local_asset": "slides/assets/F-14-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-15",
+      "type": "demo",
+      "title": "Smalltalk hoy — Pharo",
+      "subtitle": "Pharo — Smalltalk moderno (2026)",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ejecutar Smalltalk hoy, sin instalar nada"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Para qué sirve aprender Pharo hoy?"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El IDE de Pharo — todo es un objeto, incluso el IDE"
+        },
+        {
+          "type": "text",
+          "content": "El IDE de Pharo está escrito en Pharo. Podés inspeccionar el IDE con el IDE. No hay separación entre herramienta y lenguaje."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Recurso:** https://pharo.org/ → IDE descargable en 2 minutos.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "smalltalk",
+          "content": "\"En Pharo Playground — ejecutá esto:\"\n| col |\ncol := OrderedCollection new.\n1 to: 10 do: [:i | col add: i * i].\ncol select: [:n | n > 20].\n\"→ OrderedCollection (25 36 49 64 81 100 )\""
+        }
+      ],
+      "tables": [
+        "| Uso | Ejemplo |\n|-----|---------|\n| **Pedagogía** | Pharo es el entorno de enseñanza de OO puro en Inria y U. de Berna |\n| **Investigación** | Moose (análisis de código) está escrito en Pharo |\n| **Comprensión** | Entender OO puro hace entender los trade-offs de TypeScript, Python, Java |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Uso | Ejemplo |\n|-----|---------|\n| **Pedagogía** | Pharo es el entorno de enseñanza de OO puro en Inria y U. de Berna |\n| **Investigación** | Moose (análisis de código) está escrito en Pharo |\n| **Comprensión** | Entender OO puro hace entender los trade-offs de TypeScript, Python, Java |",
+          "local_asset": "slides/assets/F-15-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-16",
+      "type": "codigo",
+      "title": "Clases en TypeScript — encapsulamiento",
+      "subtitle": "Clases TypeScript — la base",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Estructura canónica con modificadores de acceso"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "class CuentaBancaria {\n  private saldo: number;       // solo accesible internamente\n  protected titular: string;   // accesible en subclases\n  readonly numero: string;     // inmutable post-construcción\n\n  constructor(titular: string, numero: string, saldoInicial: number) {\n    this.titular = titular;\n    this.numero = numero;\n    this.saldo = saldoInicial;\n  }\n\n  depositar(monto: number): void {\n    if (monto > 0) this.saldo += monto;\n  }\n\n  retirar(monto: number): boolean {\n    if (monto > 0 && monto <= this.saldo) {\n      this.saldo -= monto;\n      return true;\n    }\n    return false;\n  }\n\n  obtenerSaldo(): number { return this.saldo; }\n}\n\nconst c = new CuentaBancaria(\"Ana\", \"001-99\", 1000);\nc.depositar(500);\nconsole.log(c.obtenerSaldo()); // 1500\n// c.saldo = 9999;             // ❌ Error de compilación"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-17",
+      "type": "concepto-mixto",
+      "title": "Shorthand de constructor — menos boilerplate",
+      "subtitle": "Shorthand constructor — TypeScript idiomático",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Sin shorthand (verboso):"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Con shorthand (idiomático):"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Mixto — con valores por defecto:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Regla:** si el constructor solo asigna propiedades → shorthand. Si tiene lógica (validaciones, transformaciones) → forma explícita.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "class Punto {\n  private x: number;\n  private y: number;\n  constructor(x: number, y: number) {\n    this.x = x;\n    this.y = y;\n  }\n}"
+        },
+        {
+          "lang": "typescript",
+          "content": "class Punto {\n  constructor(private x: number, private y: number) {}\n\n  distanciaAlOrigen(): number {\n    return Math.sqrt(this.x ** 2 + this.y ** 2);\n  }\n}"
+        },
+        {
+          "lang": "typescript",
+          "content": "class Configuracion {\n  constructor(\n    public readonly host: string,\n    public puerto: number = 3000,\n    private debug: boolean = false\n  ) {}\n}\n\nconst cfg = new Configuracion(\"localhost\");\nconsole.log(cfg.host, cfg.puerto); // \"localhost\" 3000"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-18",
+      "type": "codigo",
+      "title": "Herencia con `extends` — polimorfismo en acción",
+      "subtitle": "Herencia y polimorfismo — TypeScript",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La jerarquía Animal → Perro → PerroEntrenado"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Polimorfismo en práctica"
+        },
+        {
+          "type": "text",
+          "content": "TypeScript resuelve el método en **runtime** según el tipo real del objeto — aunque la variable sea `Animal`."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "class Animal {\n  constructor(protected nombre: string) {}\n  hablar(): string { return `Soy ${this.nombre}, un animal.`; }\n}\n\nclass Perro extends Animal {\n  constructor(nombre: string, private raza: string) {\n    super(nombre); // OBLIGATORIO — llama al constructor del padre\n  }\n  hablar(): string { return `${this.nombre} dice: ¡Guau!`; }\n  describirse(): string { return `${this.nombre} es un ${this.raza}`; }\n}\n\nclass PerroEntrenado extends Perro {\n  hablar(): string { return `${super.hablar()} (bien entrenado)`; }\n}"
+        },
+        {
+          "lang": "typescript",
+          "content": "const animales: Animal[] = [\n  new Animal(\"Genérico\"),\n  new Perro(\"Rex\", \"Labrador\"),\n  new PerroEntrenado(\"Max\", \"Poodle\"),\n];\n\nanimales.forEach(a => console.log(a.hablar()));\n// \"Soy Genérico, un animal.\"\n// \"Rex dice: ¡Guau!\"\n// \"Max dice: ¡Guau! (bien entrenado)\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "codigo",
+      "title": "Interfaces — contratos estructurales",
+      "subtitle": "Interfaces — abstracción sin implementación",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Una clase puede implementar múltiples interfaces"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Interfaces como tipos de parámetros"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Nota:** una clase puede extender **una sola clase** pero implementar **múltiples interfaces** — esto resuelve el problema de la herencia múltiple de forma segura.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "interface Describible { describirse(): string; }\ninterface Serializable { serializar(): string; }\n\nclass Perro extends Animal implements Describible, Serializable {\n  constructor(nombre: string, private raza: string) { super(nombre); }\n\n  hablar(): string { return `${this.nombre}: ¡Guau!`; }\n\n  describirse(): string { return `${this.nombre} es un ${this.raza}`; }\n\n  serializar(): string {\n    return JSON.stringify({ nombre: this.nombre, raza: this.raza });\n  }\n}"
+        },
+        {
+          "lang": "typescript",
+          "content": "function mostrar(obj: Describible): void {\n  console.log(obj.describirse());\n}\n\nmostrar(new Perro(\"Rex\", \"Labrador\")); // ✓"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-20",
+      "type": "tabla-comparativa",
+      "title": "Tipado estructural — duck typing estático",
+      "subtitle": "Tipado estructural vs. Nominal vs. Dinámico",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Duck typing estático — ejemplo"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Gabbrielli & Martini (2023):** TypeScript es un lenguaje *gradualmente tipado* — la compatibilidad se define por estructura, no por nombre de clase.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "interface Medible { area(): number; }\n\nclass Circulo { area() { return Math.PI * 5 ** 2; } }\n\n// Sin declarar 'implements Medible' — funciona igual:\nconst cuadradoLiteral = { area: () => 25 };\n\nfunction imprimirArea(m: Medible) {\n  console.log(`Área: ${m.area().toFixed(2)}`);\n}\n\nimprimirArea(new Circulo());    // ✓\nimprimirArea(cuadradoLiteral);  // ✓ — estructuralmente compatible"
+        }
+      ],
+      "tables": [
+        "| Aspecto | TypeScript (estructural) | Java (nominal) | Smalltalk (dinámico) |\n|---------|--------------------------|-----------------|----------------------|\n| Base de compatibilidad | Forma del objeto | Declaración explícita | Responde al mensaje |\n| `implements` | Opcional | Obligatorio | No existe |\n| Verificación | Compilación | Compilación | Runtime |\n| Flexibilidad | Alta | Media | Máxima |\n| Seguridad | Alta (estática) | Alta (estática) | Solo en runtime |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | TypeScript (estructural) | Java (nominal) | Smalltalk (dinámico) |\n|---------|--------------------------|-----------------|----------------------|\n| Base de compatibilidad | Forma del objeto | Declaración explícita | Responde al mensaje |\n| `implements` | Opcional | Obligatorio | No existe |\n| Verificación | Compilación | Compilación | Runtime |\n| Flexibilidad | Alta | Media | Máxima |\n| Seguridad | Alta (estática) | Alta (estática) | Solo en runtime |",
+          "local_asset": "slides/assets/F-20-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-21",
+      "type": "tabla",
+      "title": "Modificadores de acceso y clases abstractas",
+      "subtitle": "Modificadores y abstracción",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Clase abstracta en TypeScript"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "abstract class Forma {\n  protected color: string;\n  constructor(color: string) { this.color = color; }\n\n  abstract area(): number;      // error en compilación si falta\n  abstract perimetro(): number;\n\n  esMasGrande(otra: Forma): boolean {\n    return this.area() > otra.area();\n  }\n}\n\n// new Forma(\"rojo\"); // ❌ Cannot create an instance of an abstract class"
+        }
+      ],
+      "tables": [
+        "| Modificador | Acceso | Smalltalk equivalente |\n|-------------|--------|-----------------------|\n| `public` | Desde cualquier lugar | Mensajes (todo) |\n| `protected` | Clase + subclases | No existe formalmente |\n| `private` | Solo la clase | Instancia vars siempre privadas |\n| `readonly` | Inmutable post-init | — |\n| `abstract` (clase) | No instanciable | Convención — no existe keyword |\n| `abstract` (método) | Obliga implementación en subclase | `^ self subclassResponsibility` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Modificador | Acceso | Smalltalk equivalente |\n|-------------|--------|-----------------------|\n| `public` | Desde cualquier lugar | Mensajes (todo) |\n| `protected` | Clase + subclases | No existe formalmente |\n| `private` | Solo la clase | Instancia vars siempre privadas |\n| `readonly` | Inmutable post-init | — |\n| `abstract` (clase) | No instanciable | Convención — no existe keyword |\n| `abstract` (método) | Obliga implementación en subclase | `^ self subclassResponsibility` |",
+          "local_asset": "slides/assets/F-21-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-22",
+      "type": "concepto-mixto",
+      "title": "Composición vs. herencia",
+      "subtitle": "Composición vs. herencia — elegir bien",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El anti-patrón: herencia por reutilización"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La solución: composición"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Regla:** usá herencia cuando la subclase **es-un** tipo de la superclase (relación semántica real). Usá composición cuando solo querés **reutilizar comportamiento**.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// ❌ Pila NO ES UN Array — herencia por conveniencia\nclass Pila extends Array<number> {\n  tope(): number { return this[this.length - 1]; }\n}\n\nconst p = new Pila();\np[0] = 99;      // ✓ TypeScript lo permite — pero rompe la abstracción de Pila\np.splice(0, 1); // ✓ TypeScript lo permite — viola el contrato de una Pila"
+        },
+        {
+          "lang": "typescript",
+          "content": "// ✓ Pila TIENE UN array — no es un array\nclass Pila<T> {\n  private items: T[] = [];\n\n  push(item: T): void { this.items.push(item); }\n  pop(): T | undefined { return this.items.pop(); }\n  tope(): T | undefined { return this.items[this.items.length - 1]; }\n  estaVacia(): boolean { return this.items.length === 0; }\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "concepto-abstracto",
+      "title": "El dominio — formas geométricas",
+      "subtitle": "Dominio compartido — mismo problema, dos lenguajes",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El problema:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Jerarquía de **formas geométricas** (Círculo, Rectángulo, Triángulo)",
+              "level": 0
+            },
+            {
+              "content": "Cada forma tiene un `color` y puede calcular su `área` y `perímetro`",
+              "level": 0
+            },
+            {
+              "content": "Una colección itera todas las formas **polimórficamente**",
+              "level": 0
+            },
+            {
+              "content": "El cliente no sabe (ni necesita saber) el tipo concreto de cada forma",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Por qué este dominio?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Pequeño pero **estructuralmente completo** — usa los 4 pilares",
+              "level": 0
+            },
+            {
+              "content": "Sebesta (2019) lo usa para contrastar OO puro vs. pragmático",
+              "level": 0
+            },
+            {
+              "content": "Revela cómo cada lenguaje **fuerza** (o no) la abstracción",
+              "level": 0
+            },
+            {
+              "content": "Es el dominio tipo del **Parcial 1**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "tres figuras geométricas (círculo rojo, rectángulo azul, triángulo verde) conectadas por flechas a una clase abstracta Forma, diagrama UML limpio, paleta académica",
+        "local_asset": "slides/assets/F-23-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "codigo",
+      "title": "Formas en Smalltalk — OO puro",
+      "subtitle": "Formas en Smalltalk",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Uso — polimorfismo puro"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "smalltalk",
+          "content": "Object subclass: #Forma\n    instanceVariableNames: 'color'\n    category: 'Geometria'.\n\nForma subclass: #Circulo\n    instanceVariableNames: 'radio'.\nForma subclass: #Rectangulo\n    instanceVariableNames: 'ancho alto'.\n\nForma >> area\n    ^ self subclassResponsibility   \"error en runtime si subclase no implementa\"\n\nCirculo >> radio: r    radio := r\nCirculo >> area        ^ Float pi * radio * radio\nCirculo >> perimetro   ^ 2 * Float pi * radio\n\nRectangulo >> ancho: a alto: h    ancho := a. alto := h.\nRectangulo >> area                ^ ancho * alto\nRectangulo >> perimetro           ^ 2 * (ancho + alto)"
+        },
+        {
+          "lang": "smalltalk",
+          "content": "| formas |\nformas := OrderedCollection new.\nformas add: (Circulo new radio: 5; color: 'rojo'; yourself).\nformas add: (Rectangulo new ancho: 4 alto: 6; color: 'azul'; yourself).\n\nformas do: [:f | Transcript showCr: f area printString].\n\"→ 78.53981...\"\n\"→ 24\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "codigo",
+      "title": "Formas en TypeScript — definición base",
+      "subtitle": "Formas en TypeScript — clase abstracta",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Polimorfismo"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "abstract class Forma {\n  constructor(protected color: string) {}\n  abstract area(): number;\n  abstract perimetro(): number;\n\n  toString(): string {\n    return `${this.constructor.name}(${this.color}) → área=${this.area().toFixed(2)}, p=${this.perimetro().toFixed(2)}`;\n  }\n}\n\nclass Circulo extends Forma {\n  constructor(private radio: number, color: string) { super(color); }\n  area(): number { return Math.PI * this.radio ** 2; }\n  perimetro(): number { return 2 * Math.PI * this.radio; }\n}\n\nclass Rectangulo extends Forma {\n  constructor(private ancho: number, private alto: number, color: string) {\n    super(color);\n  }\n  area(): number { return this.ancho * this.alto; }\n  perimetro(): number { return 2 * (this.ancho + this.alto); }\n}"
+        },
+        {
+          "lang": "typescript",
+          "content": "const formas: Forma[] = [\n  new Circulo(5, \"rojo\"),\n  new Rectangulo(4, 6, \"azul\"),\n];\nformas.forEach(f => console.log(f.toString()));"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-26",
+      "type": "codigo",
+      "title": "Extender el dominio — Principio Open/Closed",
+      "subtitle": "Agregar Triángulo sin tocar código existente",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Principio Open/Closed (OCP):"
+        },
+        {
+          "type": "text",
+          "content": "> *Abierto para extensión, cerrado para modificación.*"
+        },
+        {
+          "type": "text",
+          "content": "Agregar `Triangulo` **no requiere modificar** `Forma`, `Circulo` ni `Rectangulo`."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "class Triangulo extends Forma {\n  constructor(\n    private base: number,\n    private lado1: number,\n    private lado2: number,\n    color: string\n  ) { super(color); }\n\n  area(): number {\n    // Fórmula de Herón\n    const s = (this.base + this.lado1 + this.lado2) / 2;\n    return Math.sqrt(s * (s - this.base) * (s - this.lado1) * (s - this.lado2));\n  }\n\n  perimetro(): number { return this.base + this.lado1 + this.lado2; }\n}\n\n// El cliente polimórfico no cambió ni una línea:\nconst formas: Forma[] = [\n  new Circulo(5, \"rojo\"),\n  new Rectangulo(4, 6, \"azul\"),\n  new Triangulo(3, 4, 5, \"verde\"),  // ← solo esto se agregó\n];\n\nformas.forEach(f => console.log(f.toString()));\n// \"Circulo(rojo) → área=78.54, p=31.42\"\n// \"Rectangulo(azul) → área=24.00, p=20.00\"\n// \"Triangulo(verde) → área=6.00, p=12.00\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-27",
+      "type": "tabla-comparativa",
+      "title": "Comparación directa — tabla",
+      "subtitle": "Smalltalk vs. TypeScript — mismo dominio",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Aspecto | Smalltalk | TypeScript |\n|---------|-----------|-----------|\n| Método abstracto | `^ self subclassResponsibility` | `abstract area(): number` |\n| Error si no se implementa | Runtime (al llamar) | **Compilación** (inmediato) |\n| Iteración | `do: [:f | ...]` — mensaje a Collection | `.forEach(f => ...)` — método de Array |\n| Instanciación | `Circulo new radio: 5; yourself` | `new Circulo(5, \"rojo\")` |\n| Constructor | No existe — configuración por mensajes | Método especial `constructor()` |\n| Tipo de variable | Dinámico — cualquier objeto | Estático — `Forma[]` |\n| Extender dominio | Nueva subclase | Nueva subclase (OCP — igual) |\n| Redefinir `+` | ✅ es un mensaje | ❌ operadores no redefinibles |\n| Error de tipo | Runtime | Compilación |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | Smalltalk | TypeScript |\n|---------|-----------|-----------|\n| Método abstracto | `^ self subclassResponsibility` | `abstract area(): number` |\n| Error si no se implementa | Runtime (al llamar) | **Compilación** (inmediato) |\n| Iteración | `do: [:f | ...]` — mensaje a Collection | `.forEach(f => ...)` — método de Array |\n| Instanciación | `Circulo new radio: 5; yourself` | `new Circulo(5, \"rojo\")` |\n| Constructor | No existe — configuración por mensajes | Método especial `constructor()` |\n| Tipo de variable | Dinámico — cualquier objeto | Estático — `Forma[]` |\n| Extender dominio | Nueva subclase | Nueva subclase (OCP — igual) |\n| Redefinir `+` | ✅ es un mensaje | ❌ operadores no redefinibles |\n| Error de tipo | Runtime | Compilación |",
+          "local_asset": "slides/assets/F-27-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-28",
+      "type": "socratica",
+      "title": "Reflexión guiada",
+      "subtitle": "Comparación — análisis del dominio",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tres preguntas para discutir:"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "content": "1. ¿En qué caso Smalltalk es más expresivo?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Mensajes como ciudadanos de primera clase",
+              "level": 0
+            },
+            {
+              "content": "Cascades — construir objetos en una línea",
+              "level": 0
+            },
+            {
+              "content": "Metaclases — las clases mismas son configurables en runtime",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "content": "2. ¿En qué caso TypeScript es más robusto para equipos?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Errores en compilación → el IDE te avisa antes de ejecutar",
+              "level": 0
+            },
+            {
+              "content": "`abstract` obliga a la implementación antes de deployar",
+              "level": 0
+            },
+            {
+              "content": "Tipado estructural permite verificar contratos en el repositorio",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "content": "3. ¿Cuál sigue más la visión original de Alan Kay?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Smalltalk — sin duda",
+              "level": 0
+            },
+            {
+              "content": "TypeScript hace concesiones al desarrollo industrial moderno",
+              "level": 0
+            },
+            {
+              "content": "La pregunta interesante: ¿Kay estaría de acuerdo con esas concesiones?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "pizarrón universitario con tres preguntas escritas en tiza sobre fondo oscuro, ambiente de aula de debate, estilo académico",
+        "local_asset": "slides/assets/F-28-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-29",
+      "type": "concepto-abstracto",
+      "title": "OO + LLMs — el paradigma dominante",
+      "subtitle": "OO en el mundo moderno",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El paradigma más entrenado"
+        },
+        {
+          "type": "text",
+          "content": "Los LLMs (GPT, Copilot, Claude) fueron entrenados con billones de tokens de código OO — Python, Java, TypeScript dominan los repositorios públicos."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Implicación:** Copilot es más preciso con código OO bien estructurado:",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Demo — pedirle a Copilot una jerarquía"
+        },
+        {
+          "type": "text",
+          "content": "Copilot genera la jerarquía completa — porque reconoce el **patrón OO** del prompt."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Prompt bien estructurado → Copilot completa la jerarquía\nabstract class Vehiculo {\n  constructor(protected marca: string, protected velocidadMax: number) {}\n  abstract tipoCombustible(): string;\n  // Copilot sugiere → velocidadActual, acelerar(), frenar(), toString()...\n}"
+        },
+        {
+          "lang": "text",
+          "content": "\"Creá una jerarquía de clases para un sistema de notificaciones\ncon tipos Email, SMS y Push. Usa abstract, implements y polimorfismo.\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "pantalla de computadora con GitHub Copilot autocompletando una jerarquía de clases TypeScript con herencia y polimorfismo, ambiente moderno, fondo oscuro",
+        "local_asset": "slides/assets/F-29-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-30",
+      "type": "tabla",
+      "title": "Patrones GoF — OO destilado",
+      "subtitle": "Patrones de Diseño GoF (Gang of Four, 1994)",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Los patrones GoF son **soluciones OO reutilizables a problemas recurrentes**."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Template Method** ya lo usamos sin nombrarlo: `toString()` en `Forma` llama a `area()` — definido en la clase abstracta, implementado en subclases.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "CIERRE (15 min)"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Patrón | Tipo | Qué resuelve | Ejemplo |\n|--------|------|--------------|---------|\n| **Strategy** | Comportamiento | Algoritmos intercambiables sin modificar el cliente | Ordenamiento — burbuja, merge |\n| **Observer** | Comportamiento | Notificar a múltiples objetos cuando cambia el estado | EventEmitter, Redux |\n| **Factory Method** | Creación | Delegar la instanciación a subclases | `crearForma(tipo): Forma` |\n| **Decorator** | Estructura | Agregar responsabilidades dinámicamente | Middleware en Express.js |\n| **Template Method** | Comportamiento | Esqueleto en clase base, pasos en subclases | `toString()` usa `area()` abstracto |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Patrón | Tipo | Qué resuelve | Ejemplo |\n|--------|------|--------------|---------|\n| **Strategy** | Comportamiento | Algoritmos intercambiables sin modificar el cliente | Ordenamiento — burbuja, merge |\n| **Observer** | Comportamiento | Notificar a múltiples objetos cuando cambia el estado | EventEmitter, Redux |\n| **Factory Method** | Creación | Delegar la instanciación a subclases | `crearForma(tipo): Forma` |\n| **Decorator** | Estructura | Agregar responsabilidades dinámicamente | Middleware en Express.js |\n| **Template Method** | Comportamiento | Esqueleto en clase base, pasos en subclases | `toString()` usa `area()` abstracto |",
+          "local_asset": "slides/assets/F-30-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-31",
+      "type": "tabla-comparativa",
+      "title": "Síntesis — Smalltalk vs. TypeScript",
+      "subtitle": "Síntesis del Módulo IV — Clase 1",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Conclusión:** Smalltalk realiza la visión de Kay con más pureza. TypeScript hace concesiones al desarrollo industrial moderno.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Concepto OO | Smalltalk | TypeScript |\n|-------------|-----------|-----------|\n| Todo es objeto | ✅ absoluto | ❌ primitivos (`number`, `boolean`) |\n| Mensajes | ✅ única forma de interacción | ✅ llamadas a métodos |\n| Clases como objetos | ✅ metaclases | ⚠️ parcial — métodos `static` |\n| Herencia | ✅ simple (`subclass:`) | ✅ simple (`extends`) |\n| Polimorfismo | ✅ dinámico puro | ✅ dinámico + verificación estática |\n| Encapsulamiento | ✅ inst. vars siempre privadas | ✅ `private`/`protected`/`readonly` |\n| Clases abstractas | ⚠️ `subclassResponsibility` (runtime) | ✅ `abstract` (compilación) |\n| Interfaces | ❌ no existen | ✅ duck typing estático |\n| Bloques/lambdas | ✅ objetos de primera clase | ✅ arrow functions |\n| Operadores redefinibles | ✅ son mensajes | ❌ operadores fijos |\n| Verificación de tipos | Runtime | Compilación |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Concepto OO | Smalltalk | TypeScript |\n|-------------|-----------|-----------|\n| Todo es objeto | ✅ absoluto | ❌ primitivos (`number`, `boolean`) |\n| Mensajes | ✅ única forma de interacción | ✅ llamadas a métodos |\n| Clases como objetos | ✅ metaclases | ⚠️ parcial — métodos `static` |\n| Herencia | ✅ simple (`subclass:`) | ✅ simple (`extends`) |\n| Polimorfismo | ✅ dinámico puro | ✅ dinámico + verificación estática |\n| Encapsulamiento | ✅ inst. vars siempre privadas | ✅ `private`/`protected`/`readonly` |\n| Clases abstractas | ⚠️ `subclassResponsibility` (runtime) | ✅ `abstract` (compilación) |\n| Interfaces | ❌ no existen | ✅ duck typing estático |\n| Bloques/lambdas | ✅ objetos de primera clase | ✅ arrow functions |\n| Operadores redefinibles | ✅ son mensajes | ❌ operadores fijos |\n| Verificación de tipos | Runtime | Compilación |",
+          "local_asset": "slides/assets/F-31-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-32",
+      "type": "tabla",
+      "title": "Los 4 pilares — síntesis con código",
+      "subtitle": "Los 4 pilares — síntesis",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Los 4 pilares en un solo fragmento"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "abstract class Forma {              // abstracción — no instanciable\n  constructor(protected color: string) {} // encapsulamiento\n\n  abstract area(): number;          // abstracción — obliga implementación\n}\n\nclass Circulo extends Forma {       // herencia\n  constructor(private radio: number, color: string) { super(color); }\n  area(): number { return Math.PI * this.radio ** 2; } // encapsulamiento\n}\n\nconst formas: Forma[] = [new Circulo(5, \"rojo\")];\nformas.forEach(f => console.log(f.area())); // polimorfismo"
+        }
+      ],
+      "tables": [
+        "| Pilar | Definición en una línea | TypeScript | Smalltalk |\n|-------|------------------------|------------|-----------|\n| **Encapsulamiento** | Ocultar el estado interno | `private saldo: number` | Variables de inst. siempre privadas |\n| **Abstracción** | Exponer solo la interfaz | `abstract area(): number` | `^ self subclassResponsibility` |\n| **Herencia** | Reutilizar y especializar | `class Perro extends Animal` | `Animal subclass: #Perro` |\n| **Polimorfismo** | Un contrato, muchas formas | `formas.forEach(f => f.area())` | `formas do: [:f | f area]` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Pilar | Definición en una línea | TypeScript | Smalltalk |\n|-------|------------------------|------------|-----------|\n| **Encapsulamiento** | Ocultar el estado interno | `private saldo: number` | Variables de inst. siempre privadas |\n| **Abstracción** | Exponer solo la interfaz | `abstract area(): number` | `^ self subclassResponsibility` |\n| **Herencia** | Reutilizar y especializar | `class Perro extends Animal` | `Animal subclass: #Perro` |\n| **Polimorfismo** | Un contrato, muchas formas | `formas.forEach(f => f.area())` | `formas do: [:f | f area]` |",
+          "local_asset": "slides/assets/F-32-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-33",
+      "type": "diagrama",
+      "title": "Mapa de paradigmas del cursado",
+      "subtitle": "Los tres paradigmas del cursado — mapa comparativo",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**OO** es una extensión del **imperativo** — por eso no se estudia como paradigma separado sino como evolución.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Para el Parcial 1:** deberías poder contrastar al menos dos de estos paradigmas para el mismo problema y argumentar las decisiones de diseño.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| | Funcional | Lógico | OO (extiende Imperativo) |\n|-|-----------|--------|-------------------------|\n| **Control** | Recursión, combinadores | Motor de inferencia | Despacho de mensajes + loops/if |\n| **Estado** | Inmutable | Hechos / unificación | Mutable, encapsulado en objetos |\n| **Abstracción** | Funciones de orden superior | Relaciones | Clases, interfaces |\n| **Reutilización** | Composición funcional | Reglas generales | Herencia, composición |\n| **Lenguaje tipo** | Haskell, Elixir, TS parcial | Prolog | Smalltalk, Java, TypeScript |\n| **Modelo central** | Transformación de datos | Satisfacción de restricciones | Objetos que colaboran |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "mapa conceptual con tres nodos principales (Funcional, Lógico, OO) y un nodo base (Imperativo) del que OO extiende, flechas que muestran relaciones y contrastes, estilo de mapa mental académico con paleta roja y blanca",
+        "local_asset": "slides/assets/F-33-content.png",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| | Funcional | Lógico | OO (extiende Imperativo) |\n|-|-----------|--------|-------------------------|\n| **Control** | Recursión, combinadores | Motor de inferencia | Despacho de mensajes + loops/if |\n| **Estado** | Inmutable | Hechos / unificación | Mutable, encapsulado en objetos |\n| **Abstracción** | Funciones de orden superior | Relaciones | Clases, interfaces |\n| **Reutilización** | Composición funcional | Reglas generales | Herencia, composición |\n| **Lenguaje tipo** | Haskell, Elixir, TS parcial | Prolog | Smalltalk, Java, TypeScript |\n| **Modelo central** | Transformación de datos | Satisfacción de restricciones | Objetos que colaboran |",
+          "local_asset": "slides/assets/F-33-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-34",
+      "type": "concepto-abstracto",
+      "title": "Conceptos clave — Parcial 1",
+      "subtitle": "Para el Parcial 1 — lo que hay que saber",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Los 4 pilares — definición + ejemplo en código:"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Encapsulamiento** → `private`, `protected`, accessors",
+              "level": 0
+            },
+            {
+              "content": "**Abstracción** → `abstract`, interfaces",
+              "level": 0
+            },
+            {
+              "content": "**Herencia** → `extends`, `super()`",
+              "level": 0
+            },
+            {
+              "content": "**Polimorfismo** → override, despacho dinámico",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Diferencias clave a argumentar:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**OO puro (Smalltalk)** vs. **OO pragmático (TypeScript)** — todo es objeto vs. primitivos",
+              "level": 0
+            },
+            {
+              "content": "**Polimorfismo por herencia** (`extends`) vs. **por interfaz** (`implements`)",
+              "level": 0
+            },
+            {
+              "content": "**Tipado nominal** (Java) vs. **estructural** (TS) vs. **duck typing dinámico** (Smalltalk)",
+              "level": 0
+            },
+            {
+              "content": "**Composición** vs. **herencia** — cuándo elegir cada una",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Formato del Parcial 1:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Dominio: un problema modelado en **dos paradigmas** (OO + funcional o lógico)",
+              "level": 0
+            },
+            {
+              "content": "Implementación en TypeScript (OO) + argumentación de decisiones",
+              "level": 0
+            },
+            {
+              "content": "Duración: 100 minutos | Material: documentación oficial + apuntes",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "lista de conceptos clave resaltados en una pizarra universitaria con marcadores de colores, ambiente académico de preparación para examen",
+        "local_asset": "slides/assets/F-34-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-35",
+      "type": "concepto-abstracto",
+      "title": "TP08 — GitHub + autograding",
+      "subtitle": "TP08 — OO en TypeScript",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Cómo funciona el autograding"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Aceptás el assignment en GitHub Classroom → se crea tu repositorio personal",
+              "level": 0
+            },
+            {
+              "content": "Codeás los ejercicios en TypeScript",
+              "level": 0
+            },
+            {
+              "content": "Hacés `git push` → GitHub Actions ejecuta los tests automáticamente",
+              "level": 0
+            },
+            {
+              "content": "Ves la nota directamente en el commit — sin esperar corrección manual",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Los ejercicios:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Ejercicio 1:** jerarquía de clases con herencia y polimorfismo",
+              "level": 0
+            },
+            {
+              "content": "**Ejercicio 2:** interfaces — contratos estructurales",
+              "level": 0
+            },
+            {
+              "content": "**Ejercicio 3:** dominio libre — modelar una entidad del mundo real",
+              "level": 0
+            },
+            {
+              "content": "**Ejercicio 4 (opcional):** comparar el mismo dominio en Smalltalk",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El stack técnico:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Tests:** Vitest (unitarios automáticos)",
+              "level": 0
+            },
+            {
+              "content": "**CI:** GitHub Actions (`.github/workflows/autograding.yml` ya incluido)",
+              "level": 0
+            },
+            {
+              "content": "**Lenguaje:** TypeScript 5.x + Node 22",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "pantalla de GitHub Actions mostrando checks verdes después de hacer push de código TypeScript, interfaz de GitHub Classroom, ambiente moderno de desarrollo",
+        "local_asset": "slides/assets/F-35-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-36",
+      "type": "cierre",
+      "title": "Cierre — Parcial 1",
+      "subtitle": "Cierre — Tema 08",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "TP08 — disponible en GitHub Classroom:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Repositorio:** asignado al aceptar el assignment",
+              "level": 0
+            },
+            {
+              "content": "**Fecha límite:** una semana | **Autograding:** automático en cada push via GitHub Actions",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Próxima semana:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Semana 8 — Parcial Práctico Nº 1**",
+              "level": 0
+            },
+            {
+              "content": "Dominio: dos paradigmas para un mismo problema (OO + funcional o lógico)",
+              "level": 0
+            },
+            {
+              "content": "Duración: 100 minutos | Material: documentación + apuntes",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Preguntas:"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "aula universitaria al final de la clase con luz cálida, estudiantes guardando cosas y conversando, ambiente de cierre de jornada académica, paleta roja y blanca",
+        "local_asset": "slides/assets/F-36-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    }
+  ],
+  "_draft_instructions": {
+    "pending_type_ids": [],
+    "pending_prompt_ids": [],
+    "canonical_types": [
+      "portada",
+      "concepto-abstracto",
+      "concepto-mixto",
+      "codigo",
+      "tabla",
+      "tabla-comparativa",
+      "tabla-mixta",
+      "diagrama",
+      "socratica",
+      "demo",
+      "cierre",
+      "timeline"
+    ],
+    "next_steps": [
+      "1. Leer schema-registry.json ANTES de cualquier edición",
+      "2. Asignar type explícito desde canonical_types a cada slide en pending_type_ids",
+      "3. Copiar layout EXACTO del type_layout_map para cada tipo asignado",
+      "4. Para slides con image.layer!='none': escribir prompt VISUAL PURO (ver prompt-imagen-guide.md)",
+      "5. Actualizar summary: total_slides, images_planned, tables_planned, code_slides, type_distribution",
+      "6. Cambiar summary.status a 'READY_FOR_VALIDATION'",
+      "7. Eliminar esta clave '_draft_instructions'",
+      "8. Renombrar a: slides/plan-filminas-08-paradigma-oo-ts.json",
+      "9. Validar: python scripts/repair_plan.py <topic_folder> --attempt 1",
+      "10. Publicar: python scripts/slides_pipeline.py <topic_folder>"
+    ]
+  }
+}

@@ -11,7 +11,7 @@ week: 7
 class_number: 1
 class_duration: "120"  # minutos — constraint de generación, no modificar sin /edu-set-duration
 
-status: "en-curso"
+status: "produccion"
 
 # Lenguajes del tema
 primary_language: "TypeScript"
@@ -22,11 +22,11 @@ secondary_languages:
 # Artefactos
 artifacts:
   diseno: "diseno.md"
-  minuta: ""
-  filminas: ""
-  guia_estudio: ""
+  minuta: "minuta.md"
+  filminas: "filminas.md"
+  guia_estudio: "guia-estudio.md"
   tp: ""
-  guia_profesor: ""
+  guia_profesor: "guia-profesor.md"
 
 # Trazabilidad al plan mínimo
 plan_minimo_items:
