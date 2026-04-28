@@ -14,7 +14,7 @@ class_duration: "120"  # minutos — constraint de generación, no modificar sin
 status: "publicado"
 
 # Google Slides
-slides_url: "https://docs.google.com/presentation/d/1vllZ6oVcrRpkpN12JtdXUZNBI-qclbqMd0YXrm-1LDo/edit"
+slides_url: "https://docs.google.com/presentation/d/1PGVvLSVhhLkRWs3He17CSsomX6QShZdGY6QEh6nggDA/edit"
 slides_published_at: "2026-04-28"
 
 # Lenguajes del tema

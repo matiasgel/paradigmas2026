@@ -5,7 +5,7 @@
     "source": "filminas.md",
     "schema_version": "3.0.0",
     "schema_path": "_edu\\templates\\filminas-schema.yaml",
-    "generated_at": "2026-04-28T12:56:14",
+    "generated_at": "2026-04-28T13:06:49",
     "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
     "total_slides": 36,
     "images_planned": 12
@@ -1706,7 +1706,7 @@
     },
     {
       "id": "F-29",
-      "type": "concepto-abstracto",
+      "type": "demo",
       "title": "OO + LLMs — el paradigma dominante",
       "subtitle": "OO en el mundo moderno",
       "body_blocks": [
@@ -1717,56 +1717,41 @@
         },
         {
           "type": "text",
-          "content": "Los LLMs (GPT, Copilot, Claude) fueron entrenados con billones de tokens de código OO — Python, Java, TypeScript dominan los repositorios públicos."
+          "content": "Los LLMs (GPT, Copilot, Claude) fueron entrenados con enormes repositorios OO — Python, Java y TypeScript dominan el corpus."
         },
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "**Implicación:** Copilot es más preciso con código OO bien estructurado:",
+              "content": "**Implicación:** cuando el prompt pide una jerarquía con `abstract`, `implements` y polimorfismo, Copilot suele completar mejor.",
               "level": 0
             }
           ]
-        },
-        {
-          "type": "heading",
-          "level": 2,
-          "content": "Demo — pedirle a Copilot una jerarquía"
-        },
-        {
-          "type": "text",
-          "content": "Copilot genera la jerarquía completa — porque reconoce el **patrón OO** del prompt."
         }
       ],
       "code_blocks": [
         {
           "lang": "typescript",
-          "content": "// Prompt bien estructurado → Copilot completa la jerarquía\nabstract class Vehiculo {\n  constructor(protected marca: string, protected velocidadMax: number) {}\n  abstract tipoCombustible(): string;\n  // Copilot sugiere → velocidadActual, acelerar(), frenar(), toString()...\n}"
-        },
-        {
-          "lang": "text",
-          "content": "\"Creá una jerarquía de clases para un sistema de notificaciones\ncon tipos Email, SMS y Push. Usa abstract, implements y polimorfismo.\""
+          "content": "// Prompt a Copilot:\n// \"Modelá Email, SMS y Push con una interfaz común\"\ninterface Notificacion { enviar(): void }\n\nabstract class Canal implements Notificacion {\n  constructor(protected destino: string) {}\n  abstract enviar(): void;\n}"
         }
       ],
       "tables": [],
       "directives": {
-        "type": "concepto-abstracto",
-        "image": "content",
-        "image_prompt": "pantalla de computadora con GitHub Copilot autocompletando una jerarquía de clases TypeScript con herencia y polimorfismo, ambiente moderno, fondo oscuro"
+        "type": "demo"
       },
       "asset_hints": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
+        "image": "none",
+        "code": "right-half",
         "table": "none"
       },
       "image": {
-        "layer": "content",
-        "prompt": "pantalla de computadora con GitHub Copilot autocompletando una jerarquía de clases TypeScript con herencia y polimorfismo, ambiente moderno, fondo oscuro. Alta resolución, paleta bordo institucional, blanco, gris carbon. Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico.",
-        "local_asset": "slides/assets/F-29-img.png",
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
         "drive_id": null
       },
       "table_assets": []

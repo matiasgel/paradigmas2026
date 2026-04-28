@@ -1009,35 +1009,26 @@ formas.forEach(f => console.log(f.toString()));
 
 ### [F-29] OO + LLMs — el paradigma dominante
 
-@tipo: concepto-abstracto
-@imagen: content
-@prompt-imagen: pantalla de computadora con GitHub Copilot autocompletando una jerarquía de clases TypeScript con herencia y polimorfismo, ambiente moderno, fondo oscuro
+@tipo: demo
 
 # OO en el mundo moderno
 
 ## El paradigma más entrenado
 
-Los LLMs (GPT, Copilot, Claude) fueron entrenados con billones de tokens de código OO — Python, Java, TypeScript dominan los repositorios públicos.
+Los LLMs (GPT, Copilot, Claude) fueron entrenados con enormes repositorios OO — Python, Java y TypeScript dominan el corpus.
 
-**Implicación:** Copilot es más preciso con código OO bien estructurado:
+**Implicación:** cuando el prompt pide una jerarquía con `abstract`, `implements` y polimorfismo, Copilot suele completar mejor.
 
 ```typescript
-// Prompt bien estructurado → Copilot completa la jerarquía
-abstract class Vehiculo {
-  constructor(protected marca: string, protected velocidadMax: number) {}
-  abstract tipoCombustible(): string;
-  // Copilot sugiere → velocidadActual, acelerar(), frenar(), toString()...
+// Prompt a Copilot:
+// "Modelá Email, SMS y Push con una interfaz común"
+interface Notificacion { enviar(): void }
+
+abstract class Canal implements Notificacion {
+  constructor(protected destino: string) {}
+  abstract enviar(): void;
 }
 ```
-
-## Demo — pedirle a Copilot una jerarquía
-
-```
-"Creá una jerarquía de clases para un sistema de notificaciones
-con tipos Email, SMS y Push. Usa abstract, implements y polimorfismo."
-```
-
-Copilot genera la jerarquía completa — porque reconoce el **patrón OO** del prompt.
 
 ---
 
