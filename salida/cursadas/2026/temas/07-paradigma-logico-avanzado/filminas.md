@@ -1,10 +1,15 @@
-# Filminas — Tema 07: Paradigma Lógico — Clase 2+3 (Unificación, Backtracking, Listas y Aplicaciones)
+# Filminas — Tema 07: Paradigma Lógico — Clase 2+3 (Unificación, Listas, Backtracking y Corte)
 
 **Materia:** Paradigmas y Lenguajes de Programación 2026
 **Docente:** Matías Gel — UNTDF / IDEI
 **Duración:** 240 minutos | **Clase:** doble (fusión de clases 2 y 3 del módulo III)
 **Fecha:** 2026-04-21
-**Total:** ≈158 filminas — ritmo 1 cada 1–2 minutos
+**Total:** ≈158 filminas planeadas
+
+> **⚠️ NOTA DE DICTADO (2026-04-27):** Este archivo fue reorganizado para reflejar el orden y contenido real de la clase.
+> **Orden real dictado:** B0 Repaso → B1 Unificación → **B2 Listas** → B3 SLD → B4 Backtracking → B5 Corte → B6 Panorama 2026
+> **Bloques NO cubiertos en clase:** B7 Aritmética, B8 Recursión avanzada, B9 Meta-predicados, B10 Aplicaciones (marcados con ⚠️ NO DICTADO).
+> La Negación por falla fue mencionada brevemente en el contexto del corte (implementación de `not/1`).
 
 ---
 
@@ -17,8 +22,11 @@
 
 **Prolog en profundidad**
 
-- Clase 2: unificación, backtracking, corte, aritmética
-- Clase 3: listas, recursión avanzada, meta-predicados, aplicaciones
+- Unificación (algoritmo, MGU, operadores)
+- Listas (`[H|T]`, `member`, `append`, `last`, `msort`, `forall`)
+- Resolución SLD + Backtracking
+- Corte (`!`) verde vs. rojo
+- Panorama Prolog 2026
 - Clase doble — 240 min
 
 > *"We are going to open the black box of Prolog."*
@@ -61,23 +69,22 @@ Clase 1 dejó la **caja negra cerrada**:
 
 ---
 
-### [F-005] Mapa de la clase (240 min)
+### [F-005] Mapa de la clase — como fue dictada
 `@tipo: timeline`
 
-| Min | Bloque |
-|-----|--------|
-| 0–10 | B0 Repaso |
-| 10–35 | B1 Unificación |
-| 35–60 | B2 Resolución SLD |
-| 60–85 | B3 Backtracking |
-| 85–105 | B4 Corte |
-| 105–120 | B5 Negación por falla |
-| 120–130 | ☕ Descanso + Ejercicio B6 |
-| 130–150 | B7 Aritmética |
-| 150–175 | B8 Listas |
-| 175–200 | B9 Recursión avanzada |
-| 200–220 | B10 Meta-predicados |
-| 220–240 | B11 Aplicaciones + B12 2026 + B13 Cierre |
+| Min | Bloque | Estado |
+|-----|--------|--------|
+| 0–10 | B0 Repaso Clase 1 | ✅ dictado |
+| 10–50 | B1 Unificación (algoritmo, MGU, `=`, `==`, `=..`, pattern matching) | ✅ dictado |
+| 50–85 | B2 Listas (`[H\|T]`, `member`, `append`, `last`, `msort`, `forall`, `between`) | ✅ dictado |
+| 85–115 | B3 Resolución SLD (vocabulario, árbol, regla de selección, DFS) | ✅ dictado |
+| 115–145 | B4 Backtracking (choice points, trail, fail-loop, árbol de búsqueda) | ✅ dictado |
+| 145–175 | B5 Corte — `!` verde vs. rojo, `max/3`, `if-then-else`, impl. `not/1` | ✅ dictado |
+| 175–200 | B6 Panorama 2026 (Datalog, neuro-simbólico, implementaciones) | ✅ dictado |
+| — | Aritmética `is/2` | ⚠️ no dictado |
+| — | Recursión con acumulador / `reverse/2` | ⚠️ no dictado |
+| — | Meta-predicados (`findall`, `bagof`, `setof`) | ⚠️ no dictado |
+| — | Aplicaciones (N-reinas, mapa de colores) | ⚠️ no dictado |
 
 ---
 
@@ -399,7 +406,15 @@ X = a, Y = b.    % unificación estructural clásica
 
 ---
 
-## BLOQUE 2 — Resolución SLD (25 min) · F-024 a F-038
+## BLOQUE 2 — Listas (35 min) · [Ver BLOQUE 8 original → F-097 a F-112]
+
+> ℹ️ **Nota de dictado:** En la clase real, las Listas fueron enseñadas ANTES que SLD/Backtracking (después de Unificación). El contenido de listas está en el BLOQUE 8 original de este archivo. Para la guía del alumno y el diseño actualizado, Listas es el Bloque 2.
+
+---
+
+## BLOQUE 3 — Resolución SLD (25 min) · F-024 a F-038
+
+*(En el dictado real: Bloque 3 — después de Listas)*
 
 ---
 
@@ -638,7 +653,9 @@ Es la famosa **Closed World Assumption**: lo que no está probado, no está en l
 
 ---
 
-## BLOQUE 3 — Backtracking (25 min) · F-039 a F-054
+## BLOQUE 4 — Backtracking (25 min) · F-039 a F-054
+
+*(En el dictado real: Bloque 4 — después de SLD)*
 
 ---
 
@@ -914,7 +931,9 @@ Son duales: un generador Python ≈ un predicado Prolog con múltiples respuesta
 
 ---
 
-## BLOQUE 4 — Corte (!) (20 min) · F-055 a F-066
+## BLOQUE 5 — Corte (!) (20 min) · F-055 a F-066
+
+*(En el dictado real: Bloque 5 — incluye implementación de `not/1` como única mención de negación por falla)*
 
 ---
 
@@ -1133,7 +1152,9 @@ Ahora las condiciones son **mutuamente excluyentes** → no hace falta corte.
 
 ---
 
-## BLOQUE 5 — Negación por falla (15 min) · F-067 a F-075
+## ⚠️ NO DICTADO — Negación por falla · F-067 a F-075
+
+> Este bloque **no fue dictado** en la clase del 2026-04-21. La negación por falla fue mencionada brevemente en el Bloque 5 (Corte) a través de la implementación de `not(P) :- call(P), !, fail.` pero no se desarrolló como bloque independiente.
 
 ---
 
@@ -1276,7 +1297,9 @@ Lectura: "Un animal es terrestre si no es acuático."
 
 ---
 
-## BLOQUE 6 — ☕ Descanso + Ejercicio colaborativo (20 min) · F-076 a F-083
+## ⚠️ NO DICTADO — Ejercicio colaborativo · F-076 a F-083
+
+> Este bloque **no fue dictado** en la clase del 2026-04-21.
 
 ---
 
@@ -1409,7 +1432,9 @@ signo(X, S) :-
 
 ---
 
-## BLOQUE 7 — Aritmética (20 min) · F-084 a F-096
+## ⚠️ NO DICTADO — Aritmética · F-084 a F-096
+
+> Este bloque **no fue dictado** en la clase del 2026-04-21. Solo se mencionó `is/2` vs. `=` en el ejercicio relámpago de Unificación (F-022/F-023).
 
 ---
 
@@ -1642,7 +1667,9 @@ X in 1..10, Y in 1..10, X+Y#=11.    % restricción pendiente
 
 ---
 
-## BLOQUE 8 — Listas (25 min) · F-097 a F-112
+## BLOQUE 2 (original: 8) — Listas (35 min) · F-097 a F-112
+
+*(Dictado como Bloque 2, inmediatamente después de Unificación)*
 
 ---
 
@@ -1931,7 +1958,9 @@ Ineficiente por el `append`. Versión lineal se ve en B9.
 
 ---
 
-## BLOQUE 9 — Recursión avanzada (25 min) · F-113 a F-126
+## ⚠️ NO DICTADO — Recursión avanzada · F-113 a F-126
+
+> Este bloque **no fue dictado** en la clase del 2026-04-21. Recursión con acumulador, LCO y `reverse/2` no fueron cubiertos.
 
 ---
 
@@ -2193,7 +2222,9 @@ Comandos:
 
 ---
 
-## BLOQUE 10 — Meta-predicados (20 min) · F-127 a F-136
+## ⚠️ NO DICTADO — Meta-predicados · F-127 a F-136
+
+> Este bloque **no fue dictado** en la clase del 2026-04-21. `findall/3`, `bagof/3` y `setof/3` no fueron cubiertos.
 
 ---
 
@@ -2375,7 +2406,9 @@ Wrapper limpio sobre `findall` + aritmética. Menos plumbing.
 
 ---
 
-## BLOQUE 11 — Aplicaciones (20 min) · F-137 a F-149
+## ⚠️ NO DICTADO — Aplicaciones · F-137 a F-149
+
+> Este bloque **no fue dictado** en la clase del 2026-04-21. Mapa de colores, N-reinas y base deductiva de grafos no fueron cubiertos.
 
 ---
 
@@ -2650,7 +2683,9 @@ Esto separa Prolog de otros lenguajes: el programa ES la base de datos.
 
 ---
 
-## BLOQUE 12 — Prolog en 2026 (10 min) · F-150 a F-154
+## BLOQUE 6 (original: 12) — Panorama Prolog 2026 (25 min) · F-150 a F-154
+
+*(Dictado como cierre, incluye Datalog, neuro-simbólico e implementaciones modernas)*
 
 ---
 
@@ -2739,7 +2774,7 @@ La tendencia: **LLMs que delegan razonamiento formal** a motores lógicos.
 
 ---
 
-## BLOQUE 13 — Cierre (10 min) · F-155 a F-158
+## Cierre · F-155 a F-158
 
 ---
 

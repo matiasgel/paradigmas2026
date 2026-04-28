@@ -32,24 +32,33 @@ Esta guía NO reemplaza la clase — la **expande**. Su estructura:
 
 ---
 
+> **⚠️ Nota sobre la clase del 2026-04-21:**
+> La clase doble cubrió los temas **marcados con ✅** en la lista de objetivos. Los marcados con 📖 **no fueron dictados en clase** pero son parte del programa — estudiarlos de forma autónoma con esta guía.
+>
+> **Temas ✅ cubiertos en clase:** Unificación, Listas, Resolución SLD, Backtracking, Corte (`!`), Panorama 2026.
+>
+> **Temas 📖 para auto-estudio:** Aritmética (`is/2`), Recursión con acumulador, Meta-predicados (`findall`/`bagof`/`setof`), Aplicaciones (N-reinas, mapa de colores).
+
+---
+
 ## 1. Objetivos de Aprendizaje
 
 Al finalizar el estudio de este tema deberías poder:
 
-| # | Objetivo | Nivel Bloom |
-|---|----------|-------------|
-| 1 | Definir unificación y aplicar su algoritmo a mano | Recordar, Aplicar |
-| 2 | Trazar árboles SLD de consultas con 2+ niveles de recursión | Analizar |
-| 3 | Distinguir entre `=`, `==`, `=:=`, `is/2` | Comprender |
-| 4 | Explicar cómo funciona el backtracking y el trail | Comprender |
-| 5 | Decidir cuándo usar `!` (corte verde vs. rojo) | Evaluar |
-| 6 | Justificar el uso de `dif/2` en lugar de `\+` con variables | Evaluar |
-| 7 | Escribir `append/3`, `member/2`, `reverse/2` sin mirar apuntes | Aplicar |
-| 8 | Convertir una recursión ingenua en una con acumulador | Crear |
-| 9 | Elegir entre `findall`, `bagof` y `setof` en cada caso | Evaluar |
-| 10 | Modelar un dominio de conocimiento y consultarlo | Crear |
-| 11 | Resolver un puzzle de restricciones (generate-and-test o CLP(FD)) | Crear |
-| 12 | Situar Prolog en el ecosistema 2026 (Datalog, neuro-simbólico) | Comprender |
+| # | Objetivo | Nivel Bloom | Clase |
+|---|----------|-------------|-------|
+| 1 | Definir unificación y aplicar su algoritmo a mano | Recordar, Aplicar | ✅ dictado |
+| 2 | Trazar árboles SLD de consultas con 2+ niveles de recursión | Analizar | ✅ dictado |
+| 3 | Distinguir entre `=`, `==`, `=:=`, `is/2` | Comprender | ✅ parcial (`=:=` e `is/2` por auto-estudio) |
+| 4 | Explicar cómo funciona el backtracking y el trail | Comprender | ✅ dictado |
+| 5 | Decidir cuándo usar `!` (corte verde vs. rojo) | Evaluar | ✅ dictado |
+| 6 | Justificar el uso de `dif/2` en lugar de `\+` con variables | Evaluar | 📖 auto-estudio |
+| 7 | Escribir `append/3`, `member/2` sin mirar apuntes | Aplicar | ✅ dictado |
+| 8 | Convertir una recursión ingenua en una con acumulador | Crear | 📖 auto-estudio |
+| 9 | Elegir entre `findall`, `bagof` y `setof` en cada caso | Evaluar | 📖 auto-estudio |
+| 10 | Modelar un dominio de conocimiento y consultarlo | Crear | ✅ base dictada |
+| 11 | Resolver un puzzle de restricciones (generate-and-test o CLP(FD)) | Crear | 📖 auto-estudio |
+| 12 | Situar Prolog en el ecosistema 2026 (Datalog, neuro-simbólico) | Comprender | ✅ dictado |
 
 ---
 

@@ -33,27 +33,25 @@
 
 ---
 
-## 3. Plan de clase (240 min)
+## 3. Plan de clase — Dictado Real (240 min)
 
-| Min | Bloque | Contenido | Pedagogía |
-|-----|--------|-----------|-----------|
-| 0–10 | B0 | Repaso Clase 1 | Quiz relámpago |
-| 10–35 | B1 | Unificación (algoritmo + MGU + occurs-check) | Exposición + pizarrón |
-| 35–60 | B2 | Resolución SLD + árbol SLD | Pizarrón |
-| 60–85 | B3 | Backtracking + choice points + trail | Live SWISH |
-| 85–105 | B4 | Corte (`!`): verde vs. rojo, `(-> ;)` | Live + dilema |
-| 105–120 | B5 | Negación por falla, CWA, `dif/2` | Contra-ejemplos |
-| **120–130** | **☕ DESCANSO** | 10 min | Obligatorio |
-| 130–150 | B6 | Ejercicio colaborativo (3 ejercicios en pares) | Trabajo en pares |
-| 150–170 | B7 | Aritmética: `is/2`, operadores, anti-patrones | Live-coding |
-| 170–195 | B8 | Listas: `[H\|T]`, `member`, `append`, `length` | Derivación en vivo |
-| 195–220 | B9 | Recursión con acumulador + LCO | Comparación |
-| 200–220 | B10 | Meta-predicados: `findall`, `bagof`, `setof` | Live-coding |
-| 220–240 | B11 | Aplicaciones (coloreo, vuelos, Sudoku, DCG) | Demos breves |
-| 240–250 | B12 | Prolog 2026 (Datalog, neuro-simbólico) | Exposición (compresible) |
-| 250–260 | B13 | Cierre + TP + pregunta de salida | Cierre activo |
+> **⚠️ Actualizado post-dictado (2026-04-27):** refleja el orden y contenido real de la clase. Difiere del plan original — Listas fue adelantada al Bloque 2.
 
-**Nota:** los 10 min extra (hasta 260) son provisión para preguntas/pausas.
+| Min | Bloque | Contenido | Pedagogía | Estado |
+|-----|--------|-----------|-----------|--------|
+| 0–10 | B0 | Repaso Clase 1 | Quiz relámpago | ✅ dictado |
+| 10–50 | B1 | Unificación (algoritmo, MGU, occurs-check, `=`/`==`/`=..`, pattern matching) | Exposición + pizarrón | ✅ dictado |
+| 50–85 | B2 | **Listas** (`[H\|T]`, `member`, `append`, `last`, `msort`, `forall`, `between`) | Derivación en vivo | ✅ dictado |
+| 85–115 | B3 | Resolución SLD + árbol SLD | Pizarrón | ✅ dictado |
+| 115–145 | B4 | Backtracking + choice points + trail | Live SWISH | ✅ dictado |
+| 145–175 | B5 | Corte (`!`): verde vs. rojo, `(-> ;)`, impl. de `not/1` | Live + dilema | ✅ dictado |
+| 175–200 | B6 | Panorama 2026: Datalog, neuro-simbólico, implementaciones | Exposición breve | ✅ dictado |
+| — | ~~B7~~ | ~~Aritmética: `is/2`~~ | — | ⚠️ no dictado |
+| — | ~~B8~~ | ~~Recursión con acumulador + LCO~~ | — | ⚠️ no dictado |
+| — | ~~B9~~ | ~~Meta-predicados: `findall`, `bagof`, `setof`~~ | — | ⚠️ no dictado |
+| — | ~~B10~~ | ~~Aplicaciones (coloreo, vuelos, N-reinas)~~ | — | ⚠️ no dictado |
+
+**Nota:** los temas no dictados están en la guía de estudio para auto-aprendizaje del alumno.
 
 ---
 
@@ -228,6 +226,11 @@ Pregunta de salida: "Dame un ejemplo cotidiano que sería más fácil en Prolog 
 
 ## 10. Retroalimentación con iteraciones previas
 
+**De la clase del 2026-04-21 (dictado real):**
+- Las Listas fueron adelantadas al Bloque 2 (antes de SLD/Backtracking) — esto funcionó bien; los alumnos necesitaban la estructura concreta para entender la unificación en uso.
+- Aritmética, Meta-predicados y Aplicaciones no fueron cubiertos — quedan en la guía de estudio para auto-aprendizaje.
+- La negación por falla fue mencionada brevemente a través de la implementación de `not(P) :- call(P), !, fail.` en el bloque de Corte.
+
 **De Tema 06 (clase 1):**
 - Los alumnos se trabaron en `:-` (leerlo como "si"). Reforzar en B0.
 - El ejemplo `ancestro/2` fue exitoso → usarlo de referencia constante.
@@ -236,7 +239,7 @@ Pregunta de salida: "Dame un ejemplo cotidiano que sería más fácil en Prolog 
 **De cursadas anteriores (memoria colectiva `_edu-memory/memory.db`):**
 - El corte (`!`) siempre confunde. Reforzar con F-061 (diagrama de barrera).
 - La trampa de `\+` con variables libres aparece en el 40% de los parciales. Insistir en B5.
-- CLP(FD) despierta mucho interés → tenerlo como "extensión premium" en B11.
+- CLP(FD) despierta mucho interés → tenerlo como "extensión premium" en próximos ciclos.
 
 ---
 

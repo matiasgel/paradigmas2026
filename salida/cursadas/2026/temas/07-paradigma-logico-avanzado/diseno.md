@@ -4,8 +4,8 @@
 **Institución:** UNTDF — Instituto IDEI
 **Docente:** Matías Gel
 **Duración de clase:** 240 minutos (clase doble — fusiona clases 2 y 3 del módulo III)
-**Estado:** APROBADO (auto-aprobación solicitada por el docente)
-**Fecha de diseño:** 2026-04-21
+**Estado:** APROBADO — Actualizado post-dictado 2026-04-27
+**Fecha de diseño:** 2026-04-21 | **Actualización post-dictado:** 2026-04-27
 **Clase en el ciclo:** 2 de 2 (cierre del módulo Prolog)
 **Prerrequisito:** Tema 06 aprobado (hechos, reglas, consultas, trazado básico, recursión simple)
 
@@ -13,14 +13,15 @@
 
 ## 1. Objetivo General de la Clase
 
-Completar el dominio del **Paradigma Lógico** cubriendo los mecanismos internos del motor Prolog (unificación y backtracking) y las estructuras de datos que lo hacen un lenguaje de propósito general (listas y términos compuestos). Al finalizar la clase el alumno debe ser capaz de:
+Completar el dominio del **Paradigma Lógico** cubriendo los mecanismos internos del motor Prolog (unificación y backtracking) y las estructuras de datos fundamentales (listas). Al finalizar la clase el alumno debe ser capaz de:
 
 1. Explicar el algoritmo de unificación y su rol en la resolución.
-2. Trazar árboles de búsqueda SLD con backtracking, corte y negación por falla.
-3. Usar aritmética Prolog respetando la asimetría `is/2` vs. `=/2`.
-4. Procesar listas con las primitivas canónicas (`append/3`, `member/2`, `length/2`, `reverse/2`) y escribir relaciones recursivas con acumulador.
-5. Resolver un puzzle no trivial (p.ej. 8 reinas simplificado, mapa de colores) usando *generate and test* y restricciones.
-6. Situar Prolog en el panorama 2026 (bases deductivas, razonamiento neuro-simbólico, DCG).
+2. Trazar árboles de búsqueda SLD con backtracking y corte.
+3. Procesar listas con las primitivas canónicas (`append/3`, `member/2`, `length/2`) directamente desde Prolog.
+4. Distinguir corte verde de corte rojo y aplicar el corte con responsabilidad.
+5. Situar Prolog en el panorama 2026 (bases deductivas, razonamiento neuro-simbólico).
+
+> **⚠️ Nota post-dictado (2026-04-27):** Los siguientes objetivos del diseño original **no fueron cubiertos** en la clase: aritmética `is/2`, recursión con acumulador/LCO, meta-predicados (`findall`/`bagof`/`setof`), aplicaciones de restricciones (N-reinas, mapa de colores). Quedan disponibles para auto-estudio en la guía del alumno.
 
 ---
 
@@ -46,26 +47,25 @@ Completar el dominio del **Paradigma Lógico** cubriendo los mecanismos internos
 
 ---
 
-## 4. Estructura de la Clase (240 min)
+## 4. Estructura de la Clase — Dictado Real (240 min)
 
-| Bloque | Duración | Contenido | Tipo |
-|--------|----------|-----------|------|
-| **B0** | 10 min | Repaso activo de Clase 1 (quiz relámpago en pizarra) | Repaso guiado |
-| **B1** | 25 min | Unificación: definición operacional, algoritmo, casos especiales, occurs-check | Exposición + trazado |
-| **B2** | 25 min | Resolución SLD: resolvente, selección, regla de escritura; árbol SLD | Pizarrón + demo en vivo |
-| **B3** | 25 min | Backtracking: árbol de búsqueda, puntos de elección, soluciones múltiples | Demo SWISH en vivo |
-| **B4** | 20 min | Corte (`!`): rojo vs. verde, ejemplos con `max/3`, `if-then-else` | Código + dilema ético |
-| **B5** | 15 min | Negación por falla (`\+`): semántica, trampa del `not` lógico | Contraejemplos |
-| **B6** | 20 min | **Pausa pedagógica + ejercicio colaborativo**: 3 consultas con trazado | Trabajo en pares |
-| **B7** | 20 min | Aritmética: `is/2`, operadores, comparadores, diferencias con unificación | Exposición + live-coding |
-| **B8** | 25 min | Listas: notación `[H|T]`, `append/3`, `member/2`, `length/2` desde cero | Demostración derivada |
-| **B9** | 25 min | Recursión avanzada: acumuladores, last-call optimization, `reverse/2` | Pizarrón + comparación |
-| **B10** | 20 min | Meta-predicados: `findall/3`, `bagof/3`, `setof/3` — colección de soluciones | Live-coding |
-| **B11** | 20 min | Aplicaciones: mapa de colores, 8-reinas (resumen), base deductiva grafos | Demo interactiva |
-| **B12** | 10 min | Mirada 2026: DCG (1 min), bases deductivas (Datalog), neuro-simbólico (LLM+Prolog) | Exposición breve |
-| **B13** | 10 min | Cierre, síntesis, TP y pregunta de salida | Cierre |
+> **⚠️ Reorganizado post-dictado (2026-04-27):** El orden real de la clase difirió del diseño original. Las Listas fueron dictadas ANTES de SLD/Backtracking. Los bloques no cubiertos se marcan con ⚠️.
 
-**Total:** 240 min
+| Bloque | Duración | Contenido | Tipo | Estado |
+|--------|----------|-----------|------|--------|
+| **B0** | 10 min | Repaso activo de Clase 1 (quiz relámpago en pizarra) | Repaso guiado | ✅ dictado |
+| **B1** | 40 min | Unificación: algoritmo, MGU, occurs-check, `=`/`==`/`=..`, variable anónima, pattern matching, ejercicio relámpago | Exposición + trazado | ✅ dictado |
+| **B2** | 35 min | **Listas**: `[H\|T]`, `member/2`, `append/3`, `last/2`, `nth0/3`, `msort/sort`, pares, anidadas, `forall/2`, `between/3`, construir listas | Demo derivada + live | ✅ dictado |
+| **B3** | 30 min | Resolución SLD: resolvente, selección, regla de escritura, árbol SLD, DFS | Pizarrón + demo | ✅ dictado |
+| **B4** | 30 min | Backtracking: choice points, trail, fail-driven loop, árbol de búsqueda, bucle infinito | Live SWISH | ✅ dictado |
+| **B5** | 30 min | Corte (`!`): verde vs. rojo, `max/3`, `if-then-else`, implementación de `not/1` | Código + dilema ético | ✅ dictado |
+| **B6** | 25 min | Panorama 2026: Datalog, neuro-simbólico, implementaciones modernas (SWI, Scryer, Tau, XSB) | Exposición breve | ✅ dictado |
+| ~~B7~~ | — | ~~Aritmética: `is/2`, operadores~~ | — | ⚠️ no dictado |
+| ~~B8~~ | — | ~~Recursión avanzada: acumuladores, LCO, `reverse/2`~~ | — | ⚠️ no dictado |
+| ~~B9~~ | — | ~~Meta-predicados: `findall/3`, `bagof/3`, `setof/3`~~ | — | ⚠️ no dictado |
+| ~~B10~~ | — | ~~Aplicaciones: mapa de colores, N-reinas, CLP(FD)~~ | — | ⚠️ no dictado |
+
+**Total dictado:** ~200 min
 
 ---
 

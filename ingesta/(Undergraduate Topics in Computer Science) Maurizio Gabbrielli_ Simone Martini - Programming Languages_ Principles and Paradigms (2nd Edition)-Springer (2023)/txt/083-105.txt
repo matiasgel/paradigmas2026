@@ -1,0 +1,1280 @@
+# Fuente
+- archivo: 083-105.pdf
+- ruta: /home/matiasgel/Documentos/paradigmas2026/ingesta/(Undergraduate Topics in Computer Science) Maurizio Gabbrielli_ Simone Martini - Programming Languages_ Principles and Paradigms (2nd Edition)-Springer (2023)/083-105.pdf
+- extraido: 2026-04-27T21:01:30
+
+# Contenido
+
+Names and the Environment
+
+4
+
+The evolution of programming languages can be seen in large measure as a process
+which has led, by means of appropriate abstraction mechanisms, to the deﬁnition of
+formalisms that are increasingly distant from the physical machine. In this context,
+names play a fundamental role. A name, indeed, is nothing more than a (possibly
+meaningful) sequence of characters used to represent some other thing. They allow
+the abstraction either of aspects of data, for example using a name to denote a location
+in memory, or aspects of control, for example representing a set of commands with
+a name. The correct handling of names requires precise semantic rules as well as
+adequate implementation mechanisms.
+
+In this chapter, we will analyse these rules. We will, in particular, look at the
+concept of environment and the constructs used to organise it. We will also look at
+visibility (or scope) rules. We leave until the next chapter treatment of the imple-
+mentation of these concepts. Let us immediately observe how, in languages with
+procedures, in order to deﬁne precisely the concept of environment one needs other
+concepts, related to parameter passing. We will see these concepts in Chap. 7. In
+the case of object-oriented languages, ﬁnally, there are other speciﬁc visibility rules
+which we will consider in Chap. 10.
+
+4.1 Names and Denotable Objects
+
+When we declare a new variable in a program:
+
+int fie ;
+
+or we deﬁne a new function:
+
+int foo ( ){
+fie = 1;
+
+}
+
+© The Author(s), under exclusive license to Springer Nature Switzerland AG 2023
+M. Gabbrielli and S. Martini, Programming Languages: Principles and Paradigms,
+Undergraduate Topics in Computer Science,
+https://doi.org/10.1007/978-3-031-34144-1_4
+
+63
+
+64
+
+4 Names and the Environment
+
+we introduce new names, such as fie and foo to represent an object (a variable
+and a function in our example). The character sequence fie can be used every time
+that we want to refer to the new variable, just as the character sequence foo allows
+us to call the function that assigns to fie the value 1.
+
+A name is therefore a sequence of characters used to represent, or denote, another
+
+object.1
+
+In most languages, names are identiﬁers, that is alphanumeric tokens. However,
+other symbols can also be names. For example, + and - are names that may denote
+(primitive) operations.
+
+Even though it might seem obvious, it is important to emphasize that a name and
+the object it denotes are not the same thing. A name, indeed, is just a character string,
+while its denotation can be a complex object such as a variable, a function, a type,
+and so on. And in fact, a single object can have more than one name (in this case,
+one speaks of aliasing), while a single name can denote different objects at different
+times. Therefore, when we say “the variable fie” or “the function foo”, it should
+be remembered that these are abbreviations for “the variable with the name fie”
+and “the function with the name foo”. More generally, in programming practice,
+when a name is used, it is almost always meant to refer to the object that it denotes.
+The use of names implements a ﬁrst, elementary, data abstraction mechanism.
+For example, when, in an imperative language, we deﬁne a name using a variable,
+we are introducing a symbolic identiﬁer for a memory location; therefore we are
+abstracting from the low-level details of memory addresses. If, then, we use the
+assignment command:
+
+fie = 2;
+
+the value 2 will be stored in the location reserved for the variable named fie. At
+the programming level, the use of the name avoids the need to bother with whatever
+this location is. The correspondence between name and memory location must be
+guaranteed by the implementation. We will use the term environment to refer to that
+part of the implementation responsible for the associations between names and the
+objects that they denote. We will see better in Sect. 6.2.1 what exactly constitutes a
+variable and how it can be associated with values.
+
+Names are fundamental even for implementing a form of control abstraction.
+A procedure2 is a name associated with a set of commands, together with certain
+visibility rules which make available to the programmer its sole interface (which is
+composed of the procedure’s name and possibly some parameters). We will see the
+speciﬁcs of control abstraction in Chap. 7.
+
+1 Here and in the rest of this chapter, “object” is intended in a wide sense, with no reference to
+technical terms used in the area of object-oriented languages.
+2 Here and elsewhere, we will use the generic term “procedure” for procedures as well as functions,
+methods and subprograms. See also Sect. 7.1.
+
+4.1 Names and Denotable Objects
+
+65
+
+4.1.1 Denotable Objects
+
+The objects to which a name can be given are called denotable objects. Even if there
+are considerable differences between programming languages, the following is a
+non-exhaustive list of possible denotable objects:
+
+(cid:129) Objects whose names are deﬁned by the user: variables, formal parameters, pro-
+cedures (in the broad sense), user-deﬁned types, labels, modules, user-deﬁned
+constants, exceptions.
+
+(cid:129) Objects whose names are deﬁned by the programming language: primitive types,
+
+primitive operations, predeﬁned constants.
+
+The association (or binding) between a name and an object it denotes can therefore
+be created at different times. Some names are associated with objects during the
+design of a language, while other associations are introduced only when a program
+is executed. Considering the entire process ranging from a programming language’s
+deﬁnition to the execution of a speciﬁc program, we can identify the following phases
+for the creation of bindings of names to objects:
+
+Design of language
+
+In this phase, bindings between primitive constants, types
+and operations of the language are deﬁned (for example, + indicates addition, and
+int denotes the type of integers, etc.).
+
+Program writing Given that the programmer chooses names when they write a
+program, we can consider this phase as one with the partial deﬁnition of some
+bindings, later to be completed. The binding of an identiﬁer to a variable, for
+example, is deﬁned in the program but is effectively created only when the space
+for the variable is allocated in memory.
+
+Compile time The compiler, translating the constructs of the high-level language
+into machine code, allocates memory space for some of the data structures that
+can be statically processed. For example, this is the case for the global variables of
+a program. The connection between a variable’s identiﬁer and the corresponding
+memory location is formed at this time.
+
+Runtime This term denotes the entire period of time between starting and termi-
+nation of a program. All the associations that have not previously been created
+must be formed at runtime. This is the case, for example, for bindings of variable
+identiﬁers to memory locations for the local variables in a recursive procedure,
+or for pointer variables whose memory is allocated dynamically.
+
+In the previous description we have ignored other important phases, such as link-
+ing and loading in which other bindings (for example for external names referring
+to objects in other modules). In practice, however, two principle phases are distin-
+guished using the terms “static” and “dynamic”. The term “static” is used to refer
+to everything that happens prior to execution, while “dynamic” refers to everything
+that happens during execution. Thus, for example, static memory management is per-
+
+66
+
+4 Names and the Environment
+
+formed by the compiler, while dynamic management is performed by appropriate
+operations executed by the abstract machine at runtime.
+
+4.2 Environments and Blocks
+
+Not all associations between names and denotable objects are ﬁxed once and for
+all at the start of program execution. Many can vary during execution. To be able
+to understand how these associations behave, we need to introduce the concept of
+environment.
+
+Deﬁnition 4.1 (Environment) The set of associations between names and denotable
+objects which exist at runtime at a speciﬁc point in the program and at a speciﬁc time
+during execution, is called the (referencing) environment.
+
+Usually, when we speak of environments, we refer only to associations that are not
+established by the language deﬁnition. The environment is therefore that component
+of the abstract machine which, for every name introduced by the programmer and at
+every point in the program, allows the determination of what the correct association
+is. Note that the environment does not exist at the level of the physical machine. The
+presence of the environment constitutes one of the principle characteristics of high-
+level languages which must be simulated in a suitable fashion by each implementation
+of the language.
+
+A declaration is a construct that allows the introduction of an association in the
+
+environment. High-level languages often have explicit declarations, such as:
+
+int x ;
+int f (){
+
+r e t u r n 0;
+
+}
+type T = int ;
+
+(the ﬁrst is a declaration of a variable, the second of a function named f, the third
+is declaration of a new type, T, which coincides with type int). Some languages
+allow implicit declarations which introduce an association in the environment for a
+name when it is ﬁrst used. The denoted object’s type is deduced from the context in
+which the name is used for the ﬁrst time (or sometimes from the syntactic form of
+the name).
+
+As we will see in detail below, there are various degrees of freedom in associations
+between names and denotable objects. First of all, a single name can denote different
+objects in different parts of the program. Consider, for example, the code of Fig. 4.1.
+The outermost name fie denotes an integer variable, while the inner one is of type
+character.
+
+It is also possible that a single object is denoted by more than one name in
+different environments. For example, if we pass a variable by reference to a pro-
+cedure, the variable is accessible using its name in the calling program and by means
+
+4.2 Environments and Blocks
+
+67
+
+Fig. 4.1 A name denoting
+different objects
+
+of the name of the formal parameter in the body of the procedure (see Sect. 7.1.2).
+Alternatively, we can use pointers to create data structures in which the same object
+is then accessible using different names.
+
+While different names for the same object are used in different environments, no
+particular problems arise. The situation is more complicated when a single object is
+visible using different names in the same environment. This is called aliasing and the
+different names for the same object called aliases. If the name of a variable passed
+by reference to a procedure is also visible inside the same procedure, we have a
+situation of aliasing. Other aliasing situations can easily occur using pointers. If X
+and Y are variables of pointer type, the assignment X = Y allows us to access the
+same location using both X and Y.
+
+Let us consider, for example, the following fragment of C program where, as we
+will do in the future, we assume that write(Z) is a procedure which allows us to
+print the value of the integer variable Z:
+
+int * X , * Y ;
+X = ( int *) m a l l o c ( s i z e o f ( int ));
+
+// X , Y p o i n t e r s to i n t e g e r s
+
+* X = 5;
+Y = X ;
+* Y =10;
+w r i t e (* X );
+
+// a l l o c a t e h e a p m e m o r y
+// * d e r e f e r e n c e
+// Y p o i n t s to the s a m e o b j e c t as X
+
+The names X and Y denote two different variables, which, however, after the execution
+of the assignment command X = Y, allow to access the same memory location
+(therefore, the write command will output 10).
+
+It is, ﬁnally, possible that a single name, in a single textual region of the program,
+can denote different objects according to the execution ﬂow of the program. The
+situation is more common than it might seem at ﬁrst sight. It is the case, for example,
+for a recursive procedure declaring a local name. Other cases of this type, which
+are more subtle, will be discussed below in this chapter when will discuss dynamic
+scope (Sect. 4.3.2).
+
+4.2.1 Blocks
+
+Almost all important programming languages today permit the use of blocks, a
+structuring method for programs introduced by Algol 60. Block structuring is fun-
+damental to the organisation of the environment.
+
+68
+
+4 Names and the Environment
+
+Deﬁnition 4.2 (Block) A block is a textual region of the program, identiﬁed by a
+start sign and an end sign, which can contain declarations local to that region (that
+is, which appear within the region).
+
+The start—and end—block signs vary according to the programming language:
+begin ... end for languages in the Algol family, braces {...} for C and Java,
+round brackets (...) for Lisp and its dialects, let ... in ... end in ML, a
+simple positive indentation in Python,3 etc. Moreover, the exact deﬁnition of block
+in the speciﬁc programming language can differ slightly from the one given above. In
+some cases, for example, one talks about block only when there are local declarations.
+Often, though, blocks have another important function, that of grouping a series of
+commands into a syntactic entity which can be considered as a single (composite)
+command. These distinctions, however, are not relevant as far as we are concerned.
+We will, therefore, use the deﬁnition given above and we distinguish two cases:
+
+Block associated with a procedure This is a block associated with declarations
+local to a procedure. It corresponds textually to the body of the procedure itself,
+extended with the declarations of formal parameters.
+
+In-line block This is a block which does not correspond to a declaration of pro-
+cedure and which can appear (in general) in any position where a command can
+appear.
+
+4.2.2 Types of Environment
+
+The environment changes during the execution of a program. However, the changes
+occur generally at two precise times: on the entry and exit of a block. The block
+can therefore be considered as the construct of least granularity to which a constant
+environment can be associated.4
+
+A block’s environment, meaning by this terminology the environment existing
+when the block is executed, is initially composed of associations between names
+declared locally to the block itself. In most block-based languages, blocks can be
+nested; that is, the deﬁnition of one block can be wholly included in that of another.
+An example of nested in-line blocks is shown in Fig. 4.1. The overlapping of blocks
+so the last open block is not the ﬁrst block to be closed is never permitted. In other
+words a sequence of commands of the following kind is not permitted:
+
+open block A ;
+
+open block B ;
+
+c l o s e b l o c k A ;
+
+c l o s e b l o c k B ;
+
+3 But observe that a Python’s indented sequence of program lines (called a “suite” in Python’s docu-
+mentation) does not necessarily introduces a local environment. Local environments are introduced
+by those suites that form a module, a function body, and a class deﬁnition.
+4 Declarations in the block are evaluated when the block is entered and are visible throughout the
+block. There exist many exceptions to this rule, some of which will be discussed below.
+
+4.2 Environments and Blocks
+
+69
+
+Different languages vary, then, in the type of nesting they permit. In C, for exam-
+ple, blocks associated with procedures cannot be nested inside each other (that is,
+there cannot be procedure declarations inside other procedures), while in most other
+languages this restriction is not present.5
+
+Block nesting is an important mechanism for structuring the environment. Suitable
+
+mechanisms allow declarations local to a block to be visible in nested blocks.
+
+Remaining informal for the time being, we say that a name local to a block is
+visible in another block when the association created for that name is present in the
+environment of the second block. Those mechanisms of the language which regulate
+how and when a name is visible are called visibility rules. The canonical visibility
+rule for languages with blocks is well known:
+
+A name local to a block is visible in that block and in all blocks nested within it, unless there
+is a new deﬁnition of the same name in those nested blocks. In this case, in the block which
+contains the redeﬁnition, the new declaration hides the previous one.6
+
+In the case in which there is a redeﬁnition, the visibility rule establishes that only
+the last name declared will be visible in the internal block, while in the exterior one
+there is a visibility hole. The association for the name declared in the external block
+will be, in fact, deactivated for the whole of the interior block (containing the new
+declaration) and will be reactivated on exit from the inner block. Note that there is
+no visibility from the outside inwards—an association introduced in a block is not
+active (or, the name that it deﬁnes is not visible) in any block which is exterior to
+the block where the association is introduced. Analogously, if we have two blocks
+at the same nesting level (and then neither of the two contains the other), a name
+introduced locally in one block is not visible in the other.
+
+The deﬁnition just given, although apparently precise, is insufﬁciently so to estab-
+lish what the environment will be at a generic point in a program. We will assume
+this rule for the rest of this section; next section will restate with more precision the
+visibility rules. We can identify three components of an environment, as stated in the
+following deﬁnition.
+
+Deﬁnition 4.3 (Type of environment) The environment associated with a block is
+formed of the following components:
+
+Local environment This is composed of the set of associations for names declared
+locally to the block. In the case in which the block is for a procedure, the local
+environment contains also the associations for the formal parameters. Indeed, as
+
+5 The reasons for this restriction in C will be made clear in the next chapter, after have seen the
+techniques for implementing scope rules.
+6 Let us note from the onset that there may be exceptions to this general rule. One of the most
+relevant is the visibility of names local to a class deﬁnition in Python, which does not include its
+nested blocks.
+
+70
+
+4 Names and the Environment
+
+Fig. 4.2 Nested blocks with
+different environments
+
+far as the environment is concerned, formal parameters act as locally declared
+names.
+
+Non-local environment This is the environment formed from the associations for
+names which are visible from inside a block but which have not been declared
+locally.
+
+Global environment
+
+Finally, this is the environment formed from associations
+
+for names which can be used in all blocks of the program.
+
+The environment local to a block can be determined by considering only the
+declarations present in the block. We must look outside the block to deﬁne the non-
+local environment. The global environment is part of the non-local environment.
+Names introduced in the local environment can be themselves present in the non-local
+environment. In such cases, the innermost (local) declaration hides the outermost one.
+The visibility rules specify how names declared in external blocks are visible in
+internal ones. In some cases, it is possible to import names from other, separately
+deﬁned modules. The associations for these names may be part of the global envi-
+ronment, or the local environment, according to the language-speciﬁc rules.
+
+We will now consider the example in Fig. 4.2, where, for ease of reference, we
+assume that the blocks can be labelled (as before, we assume also that write(x)
+allows us to print an integer value). The labels behave as comments as far as the
+execution is concerned.
+
+Let us assume that block A is the outermost. It corresponds to the main program.
+The declaration of the variable a introduces an association in the global environment.
+Inside block B two variables are declared locally (b and c). The environment for
+B is therefore formed of the local environment, containing the association for the two
+names (b and c) and from the global environment containing the association for a.
+Inside block C, two local variables (c and d) are declared. The environment of
+C is therefore formed from the local environment, which contains the association
+
+4.2 Environments and Blocks
+
+71
+
+for the two names (c and d) and from the non-local environment containing the
+same global environment as above, and also the association for the name b which is
+inherited from the environment of block B. Note that the local declaration of c in
+block C hides the declaration of c present in block B. The print command present in
+block C will therefore print the value 6.
+
+In block D, ﬁnally, we have a local environment containing the association for the
+local name e, the usual global environment and the non-local environment, which,
+in addition to the association for a, contains the association for the names b and c
+introduced in block B. Given that variable c has not been internally re-declared, in
+this case, therefore, the variable declared in block B remains visible and the value
+printed will be 5. Note that the association for the name d does not appear in the
+environment non-local to D, given that this name is introduced in an exterior block
+which does not contain D. The visibility rules, indeed, allows only the inheritance of
+names declared in exterior blocks from interior ones and not vice versa.
+
+4.2.3 Operations on Environments
+
+As we have seen, changes in the environment are produced at entry into and exit
+from a block. In more detail, during the execution of the program, when a new block
+is entered, the following modiﬁcations are made to the environment:
+
+1. Associations between locally declared names and the corresponding denotable
+
+objects are created.
+
+2. Associations with names declared external to and redeﬁned inside the block are
+
+deactivated.
+
+Also when the block is exited, the environment is modiﬁed as follows:
+
+1. The associations for names declared locally to the block and the objects they
+
+denote are destroyed.
+
+2. The associations are reactivated between names that existed external to the block
+
+and which were redeﬁned inside it.
+
+More generally, we can identify the following operations on names and on the
+
+environment:
+
+Creation of associations between names and denoted object (naming) This is
+the elaboration of a declaration (or the connection of a formal to an actual param-
+eter) when a new block containing local or parameter declarations is entered.
+Reference to a denoted object via its name This is the use of the name (in an
+expression, in a command, or in any other context). The name is used to access
+the denoted object.
+
+Deactivation of association between name and denoted object This happens
+when entering a block in which a new association for that name is created locally.
+
+72
+
+4 Names and the Environment
+
+The old association is not destroyed but remains (inactive) in the environment. It
+will be usable again when the block containing the new association is left.
+
+Reactivation of an association between name and denoted object When leav-
+ing block in which a new association for that name is created locally, reactivation
+occurs. The previous association, which was deactivated on entry to the block,
+can now be used.
+
+Destruction of an association between name and denoted object (unnaming)
+
+This is performed on local associations when the block in which these associa-
+tions were created is exited. The association is removed from environment and
+can no longer be used.
+
+Let us explicitly note, therefore, that any environment contains both active and
+inactive associations (they correspond to declarations that have been hidden by the
+effects of the visibility rules). As far as denotable objects are concerned, the following
+operations are permitted:
+
+Creation of a denotable object This operation is performed while allocating the
+storage necessary to contain the object. Sometimes, creation includes also the
+initialisation of the object.
+
+Access to a denotable object Using the name, and hence the environment, we
+can access the denotable object and thus access its value (for example, to read the
+content of a variable). The rules deﬁning the environment should be enough to
+make the association between a name and the object to which it refers one-to-one
+(at a given point in the program and during a given execution).
+
+Modiﬁcation of a denotable object
+
+It may be possible to access and modify a
+denotable object via a name (for example, by assigning a value to a variable), if
+the object is modiﬁable.
+
+Destruction of a denotable object An object can be destroyed by reallocating the
+
+memory reserved for it.
+
+In many languages, the operations of creating an association between the name
+and a denotable object and that of creating a denotable object take place at the same
+time. This is the case, for example, in a declaration of the form:
+
+int x ;
+
+This declaration introduces into the environment a new association between the name
+x and an integer variable. At the same time, it allocates the memory for the variable.
+Yet, this is not always the case and, in general, it is not stated that the lifetime of a
+denotable object, that is the time between the creation of the object and its destruction,
+coincides with the lifetime of the association between a name and that object. Indeed,
+a denotable object can have a lifetime that is greater than the association between a
+name and the object itself, as the case in which a variable is passed to a procedure
+by reference. The association between the formal parameter and associated variable
+has a lifetime less than that of the variable itself. More generally, a situation of this
+
+4.3 Scope Rules
+
+73
+
+type occurs when a temporary name (for example, one local to a block) is introduced
+for an object which already has a name.
+
+Note that the situation we are considering is not that shown in Fig. 4.2. In this
+case, indeed, the internal declaration of the variable, c, does not introduce a new
+name for an existing object, but introduces a new object (a new variable).
+
+Even if, at ﬁrst sight, this seems odd, it can also be the case that the lifetime of
+an association between name and a denoted object is greater than that of the object
+itself. More precisely, it can be the case that a name allows access to an object
+which no longer exists. Such an anomalous situation can occur, for example, if we
+call by reference an existing object and then deallocate the memory for it before the
+procedure terminates. The formal parameter to the procedure, in this case, will denote
+an object which no longer exists. A situation of this type, in which it is possible to
+access an object whose memory has been reallocated, is called a dangling reference
+and is a symptom of an error. We will return to the problem of dangling references
+in Chap. 8, where we will present some methods to handle them.
+
+4.3 Scope Rules
+
+We have seen how, on block entry and exit, the environment can change as a result
+of the operations for the creation, destruction, activation and deactivation of asso-
+ciations. These changes are reasonably clear for local environments, but are less
+clear where the non-local environment is concerned. The visibility rules stated in
+the previous section indeed lend themselves to at least two different interpretations.
+Consider for example the following program fragment:
+
+A :{ int x = 0;
+
+void fie (){
+x = 1;
+
+}
+
+B :{ int x ;
+fie ();
+
+}
+
+w r i t e ( x );
+
+}
+
+Which value will be printed? To answer this question, the fundamental problem
+is knowing which declaration of x should be used for the non-local occurrence of x
+in fie’s body. On the one hand, we can reasonably think that the value 1 is printed,
+given that procedure fie is deﬁned in block A and, therefore, the x which appears
+in the body of the procedure could be that deﬁned on the ﬁrst line of A. On the
+other hand, however, we can also reason as follows. When we call procedure fie,
+we are in block B, so the x in the body of the procedure is the one declared locally
+to block B. This local variable is now no longer visible when we exit block B, so
+
+74
+
+4 Names and the Environment
+
+write(x) refers to the variable x declared and initialised to 0 in block A and never
+again modiﬁed. Therefore the procedure prints the value 0.
+
+Before the reader tries to ﬁnd possible tricks in the above reasoning, we must
+assert that they are both legitimate. The result of the program fragment depends on
+the scope rule being used. The visibility rule that we have stated above establishes
+that a “name local to a block is visible in that block and in all blocks nested within it,”
+but does not specify whether this concept of nesting must be considered in a static
+(that is based on the text of the program) or dynamic (that is based on the ﬂow of
+execution) fashion. When the visibility rules, also called scope rules, depend only on
+the syntactic structure of the program, we will talk of a language with static or lexical
+scope. When it is inﬂuenced also by the control ﬂow at runtime, we are dealing with
+a language with dynamic scope. In the following sections we will analyse these two
+concepts in detail.
+
+4.3.1 Static Scope
+
+In a language with static (or lexical) scope, the environment in force at any point of the
+program and at any point during execution depends uniquely on the syntactic structure
+of the program itself. Such an environment can then be determined completely by
+the compiler, hence the term “static”.
+
+Obviously there can be different static scope rules. One of the simplest, for exam-
+ple, is that of the ﬁrst version of the Basic language which allowed a single global
+environment in which it was possible to use only a small number of names (some
+hundreds) and where declarations were not used.
+
+Much more interesting is the static scope rule that is used in those block-structured
+languages that allow nesting. This was introduced in Algol 60 and is retained, with
+few modiﬁcations, by most modern languages, including Ada, Pascal, Java, and
+Python. The rule can be deﬁned as follows:
+
+Deﬁnition 4.4 (Static Scope) The static scope rule, or the rule of nearest nested
+scope, is deﬁned by the following three rules:
+
+(i) The declarations local to a block deﬁne the local environment of that block. The
+local declarations of a block include only those present in the block (usually
+at the start of the block itself) and not those possibly present in blocks nested
+inside the block in question.
+
+(ii) If a name is used inside a block, the valid association for this name is the one
+present in the environment local to the block, if it exists. If no association for the
+name exists in the environment local to the block, the associations existing in
+the environment local to the block immediately containing the starting block are
+considered. If the association is found in this block, it is the valid one, otherwise
+the search continues with the blocks containing the one with which we started,
+from the nearest to the furthest. If, during this search, the outermost block is
+reached and it contains no association for the name, then this association must
+
+4.3 Scope Rules
+
+Fig. 4.3 An example of
+static scope
+
+75
+
+be looked up in the language’s predeﬁned environment. If no association exists
+here, there is an error.
+
+(iii) A block can be assigned a name, in which case the name is part of the local envi-
+ronment of the block which immediately includes the block to which the name
+has been assigned. This is the case also for blocks associated with procedures.
+
+This deﬁnition corresponds to the informal visibility rules that we have already
+
+discussed, suitably completed by a static interpretation of the concept of nesting.
+
+Among the various details of the rule, note (point (iii)) that the deﬁnition of a
+procedure introduces an association for the name of the procedure in the environ-
+ment local to the block containing the declaration (therefore, because of nesting, the
+association is also visible in body of the procedure, allowing the deﬁnition of recur-
+sive procedures). The procedure’s formal parameters, however, are present only in
+the environment local to the procedure and are not visible in the environment which
+contains the procedure’s declaration.
+
+In a language with static scope, we will call scope of a declaration that portion of
+
+the program in which the declaration is visible according to Deﬁnition 4.4.
+
+We conclude our analysis of static scope by discussing the example in Fig. 4.3.
+The ﬁrst and third occurrences of write print the value 4, while the second prints
+the value 0. Note that the formal parameter, n, is not visible outside of the body of
+the procedure.
+
+Static scope allows the determination of all the environments present in a program
+simply by reading its text. This has two important consequences of a positive nature.
+First, the programmer has a better understanding of the program, as far as they can
+connect every occurrence of a name to its correct declaration by observing the textual
+structure of the program and without having to simulate its execution. Moreover, this
+connection can also be made by the compiler which can therefore determine each
+and every use of a name. This makes it possible, at compile time, to perform a great
+number of correctness tests using the information contained in types; it can also
+perform considerable number of code optimisations. For example, if the compiler
+knows (using declarations) that the variable x which occurs in a block is an integer
+variable, it will signal an error in the case in which a character is assigned to this
+variable. Similarly, if the compiler knows that the constant fie is associated with
+
+76
+
+4 Names and the Environment
+
+Fig. 4.4 An example of
+dynamic scope
+
+the value 10, it can substitute the value 10 for every reference to fie, so avoiding
+having to arrange for this operation to be performed at runtime. If, instead, the correct
+declaration for x and for fie can be determined only at execution time, it is clear
+that these checks and this optimisation are not possible at compilation time.
+
+Note that, even with the static scope rules, the compiler cannot know in general
+which memory location will be assigned to the variable with name x nor what its
+value might be, given that this information depends on the execution of the program.
+When using the static scope rule, however, the compiler is in possession of some
+important information about the storage of variables (in particular it knows the offsets
+relative to a ﬁxed position, as we will see in detail in the next chapter), that it uses
+to compile efﬁcient accesses to variables. As we will see, this information is not
+available using dynamic scope, which, therefore, leads to less efﬁcient execution.
+For these reasons, most current languages use some form of static scope.
+
+4.3.2 Dynamic Scope
+
+Dynamic scope was introduced in some languages, such as, for example, APL,
+Lisp (some versions), SNOBOL and Perl, mainly to simplify runtime environment
+management. Static scope imposes a fairly complicated runtime regime because the
+various non-local environments are involved in a way that does not reﬂect the normal
+ﬂow of activation and deactivation of blocks. Let us consider the fragment of code
+in Fig. 4.4 and follow its execution. First, the outermost block is entered and the
+association between the name x and the constant 0 is created, as well as that between
+the names fie, foo and associated procedures. Next the call to the procedure foo is
+executed and control enters the block associated with the procedure. In this block, the
+link between the name x and the constant 1 is created; then the call to procedure fie
+is executed which causes entry to a new block (the one for the latter procedure). It is
+at this point that the command write(x) is executed and given that x is not a name
+local to the block introduced by the procedure fie, the association for the name x
+must be looked up in outer blocks. According to the rules of static scope, as presented
+in the last section, the ﬁrst external block in which to look for the association for x is
+not the last activated block (i.e., the one for foo, in our example). The external block
+depends on the structure of the program, not on its execution. In this case, then, the
+correct association for the name x used by fie is the one located in the ﬁrst block,
+
+4.3 Scope Rules
+
+77
+
+so that the value 0 is printed. The block for foo, even if it contains a declaration for
+x and is still active, is not considered.
+
+Generalising from the previous example, we can say that, under static scope,
+the sequence of blocks that must be considered to resolve references to non-local
+names is different from the sequence of blocks that is opened and exited during
+the program’s normal ﬂow of control. The opening and closing can be handled in a
+natural manner using the LIFO (Last In First Out) discipline, that is using a stack.
+The sequence of blocks that need examining to implement static scope depends on
+the syntactic structure of the program and being able to handle it correctly at runtime
+depends upon the use of additional data structures, as we will see in detail in the next
+chapter.
+
+To simplify the management of the runtime environment some languages use then
+the dynamic scope rule. This rule determines the associations between names and
+denoted objects using the backward execution of the program. In such languages,
+resolving non-local names requires only a stack dedicated to handling blocks at
+runtime. In our example, this means that, when the command write(x) is executed,
+the association for the name and x is sought in the second block (relative to procedure
+foo), rather than in the ﬁrst block, because this is the last block, different from the
+current one, in which we entered and from which we have not yet exited. Given that
+in the second block, we ﬁnd the declaration const x = 1, in the case of dynamic
+scope the preceding program prints the value 1.
+
+The dynamic scope rule, also called the rule of the most recent association, can
+
+be deﬁned as follows.
+
+Deﬁnition 4.5 (Dynamic Scope) According to the rule of dynamic scope, the valid
+association for a name X, at any point P of a program, is the most recent (in the
+temporal sense) association created for X which is still active when the control ﬂow
+arrives at P.
+
+Let us observe that this rule does not contradict the informal visibility rule that we
+stated in Sect. 4.2.2. A moment’s reﬂection shows, indeed, that the dynamic scope
+rule expresses the same visibility rule when the concept of block nesting is understood
+in a dynamic sense.
+
+Let us again note how the difference between static and dynamic scope enters only
+into the determination of the environment which is both non-local and non-global.
+For the local and global environment, the two rules coincide.
+
+Let us conclude by discussing the example in Fig. 4.5. In a language with dynamic
+scope, the code prints the value 1 because when the command write(x) is exe-
+cuted, the last association created for x which is still active associates x with 1. The
+association which associates x to 2, even if it is the most recent one to be created, is
+no longer active when procedure fie is executed and is therefore not considered.
+
+Note that dynamic scope allows the modiﬁcation of the behaviour of a proce-
+dure without using explicit parameters but only by redeﬁning some of the non-
+local variables used. To explain this point, assume that we have a procedure
+visualise(text) which can visualise text in various colours, according to the
+
+78
+
+4 Names and the Environment
+
+Fig. 4.5 Another example of
+dynamic scope
+
+value of the non-local variable colour. If we assume that in the majority of cases,
+the procedure visualises text in black, it is natural to assume that we do not wish to
+introduce another parameter to the procedure in order to determine the colour. If the
+language uses dynamic scope, in the case in which the procedure has to visualise a
+text in red, it will be enough to introduce the declaration for the variable colour
+before the call of the procedure. We can therefore write:
+
+...
+{ var c o l o u r = red ;
+v i s u a l i s e ( head );
+
+}
+
+Then the call to procedure visualise now will use the colour red, because of the effect
+of dynamic scope. This ﬂexibility of dynamic scope may appear advantageous, at
+a ﬁrst sight. However, it often makes programs more difﬁcult to read, given that
+the same procedure call, in conditions differing by only one non-local variable can
+produce different results. If the variable (colour in our example) is modiﬁed in
+an area of program that is distant from the procedure call, understanding what has
+happened will probably turn out to be difﬁcult.
+
+For this reason, as well as for runtime efﬁciency, dynamic scope remains little
+used in modern general-purpose languages, which instead use the static scope rule.
+
+4.3.3 Some Scope Problems
+
+The visibility and scope rules still leave several ambiguities, which each language
+resolves in its own way. We will touch here on a couple of them, as examples of the
+subtleties that a language designer (and any informed user) must tackle.
+
+The ﬁrst issue is the portion of block in which a certain name is visible. In Java
+and C, the scope of a declaration starts at the point of declaration and ends at the end
+of the block of declaration. This means that in the following C code (same happens
+in Java in a similar situation)
+
+int val = 1 0 0 0
+void f (){
+
+int foo = val ;
+int val = 1 0 0 ;
+
+}
+
+4.3 Scope Rules
+
+79
+
+in the body of f there are two different names val. The ﬁrst line of the body assigns
+the value of the global name val (1000) to the local foo. The second line of the
+body introduces a new name val, local to f, with value 100, whose scope extends
+until the end of the body of f. In Python, which does not have explicit declarations,
+a new name is introduced in a block whenever a name is used for the ﬁrst time at the
+left of an assignment. However, in Python, the scope of a name is the whole block
+in which it is introduced. Python’s analogue of the previous fragment would be
+
+val = 1 0 0 0
+def f ():
+
+foo = val
+val =100
+
+The scope of the global val does not include the body of f, because a local val is
+present there. The Python fragment above may be compiled (remember that Python’s
+compilation is a simple affair, without any important static semantics check). But
+any call to f would raise an exception for the violation of the rule of “deﬁne before
+use”: any name must be assigned a value before it could be used in an expression.7
+The name val assigned to foo is local to f, but it will get a value only after that
+assignment.
+
+Languages with explicit declarations insist that a name should be declared before
+use. There are cases, however, where this constraint cannot be satisﬁed. A typical
+example is given by mutually (or implicitly) recursive functions: a function f which
+in its body calls g, whose body contains a call to f. No matter which of the two
+functions is deﬁned ﬁrst, the rule “declaration before use” is violated. To overcome
+this problem, in ANSI C one must use function declarations, that is language con-
+structs that introduce the function’s name, return type, and parameters (if any), but
+not the body.8 The following is a correct ANSI C program, whose ﬁrst line is the
+declaration of g, which is deﬁned after the deﬁnition of f:
+
+int g ( int n );
+int f ( int n ){
+
+r e t u r n g ( n );
+
+}
+int g ( int n ){
+
+if ( n == 0) r e t u r n 0;
+r e t u r n f (n -1);
+
+}
+
+More recent versions of C (notably, C99) allow compilation without the declaration
+of the functions used before their deﬁnition. In these cases, a compilation warning
+is usually issued (“implicit declaration of function g”). Python, on the other hand,
+
+7 Java has a similar rule, which, however, is statically checked by the compiler, which uses a fairly
+sophisticated analysis of all possible execution paths in a program.
+8 C distinguishes between function declaration and function deﬁnition, which is the construct intro-
+ducing the body of the function. Declaration and deﬁnition may appear at different places in the
+program, even in different ﬁles.
+
+80
+
+4 Names and the Environment
+
+has no problem with mutual recursion, since there is no static check on the scopes
+of names used in the body of functions.
+
+The rule of declaration before use is relaxed in as many ways as there are pro-
+gramming languages. Java, for example, allows a declaration to appear at any point
+in a block. If the declaration is of a variable, its scope extends from the point of
+declaration to the end of the block (except the holes in scope due to redeﬁnitions in
+nested blocks). If, on the other hand, the declaration refers to a member of a class
+(either a ﬁeld or a method), it is visible in all the class in which it appears, indepen-
+dent of the order in which the declarations occur (thus making mutually recursive
+methods possible).
+
+4.4 Summary
+
+In this chapter we have seen the primary aspects of name handling in high-level
+languages. The presence of the environment, that is of a set of associations between
+names and the objects they represent, constitute one of the principal characteristics
+that differentiate high-level from low-level languages. Given the lack of environment
+in low-level languages, name management, as well as that of the environment, is an
+important aspect in the implementation of a high-level language. We will see imple-
+mentation aspects of name management in the next chapter. Here we are interested
+in those aspects which must be known to every user (programmer) of a high-level
+language so that they fully understand the signiﬁcance of names and, therefore, of
+the behaviour of programs.
+
+In particular, we have analysed the aspects that are listed below:
+
+(cid:129) The concept of denotable objects. These are the objects to which names can be
+given. Denotable objects vary according to the language under consideration, even
+if some categories of object (for example, variables) are fairly general.
+
+(cid:129) Environment. The set of associations existing at runtime between names and deno-
+
+table objects.
+
+(cid:129) Blocks. In-line or associated with procedures, these are the fundamental construct
+
+for structuring the environment and for the deﬁnition of visibility rules.
+
+(cid:129) Environment Types. These are the three components which at any time characterise
+the overall environment: local environment, global environment and non-local
+environment.
+
+(cid:129) Operations on Environments. Associations present in the environment in addition
+to being created and destroyed, can also be deactivated, a re-activated and, clearly,
+can be used.
+
+(cid:129) Scope Rules. Those rules which, in every language, determine the visibility of
+
+names.
+
+(cid:129) Static Scope. The kind of scope rule typically used by the most important pro-
+
+gramming languages.
+
+4.6 Exercises
+
+81
+
+(cid:129) Dynamic Scope. The scope rule that is easiest to implement. Used today in few
+
+languages.
+
+In an informal fashion, we can say that the rules which deﬁne the environment are
+composed of rules for visibility between blocks and of scope rules, which characterise
+how the non-local environment is determined. In the presence of procedures, the rules
+we have given are not yet sufﬁcient to deﬁne the concept of environment. We will
+return to this issue in Chap. 7 (in particular at the end of Sect. 7.2.1).
+
+4.5 Bibliographical Notes
+
+General texts on programming languages, such as [1–3], treat the concepts seen in
+this chapter, although they usually present them together with their implementations.
+For clarity of exposition, we have chosen to present in this chapter only the semantical
+concepts for name handling, while we will consider their implementation in the next
+chapter.
+
+4.6 Exercises
+
+Exercises 6–13, while really being centered on issues relating to scope, presuppose
+knowledge of parameter passing which we will discuss in Chap. 7.
+
+1. Consider the following program fragment written in a pseudo-language which
+uses static scope and where the primitive read(Y) allows the reading of the
+variable Y from standard input.
+
+...
+int X = 0;
+int Y ;
+void fie (){
+X ++;
+
+}
+void foo (){
+X ++;
+fie ();
+
+}
+read ( Y );
+if Y > 0{ int X = 5;
+
+foo ();}
+
+else foo ();
+w r i t e ( X );
+
+State what the printed values are.
+
+82
+
+4 Names and the Environment
+
+2. Consider the following program fragment written in a pseudo-language that uses
+
+dynamic scope.
+
+...
+int X ;
+X = 1;
+int Y ;
+void fie () {
+foo ();
+X = 0;
+
+}
+void foo (){
+int X ;
+X = 5;
+
+}
+read ( Y );
+if Y > 0{ int X ;
+X = 4;
+fie ();}
+fie ();
+
+else
+w r i t e ( X );
+
+State which is (or are) the printed values.
+
+3. Consider the following code fragment in which there are gaps indicated by (*)
+
+and (**). Provide code to insert in these positions in such a way that:
+
+a. If the language being used employs static scope, the two calls to the procedure
+
+foo assign the same value to x.
+
+b. If the language being used employs dynamic scope, the two calls to the pro-
+
+cedure foo assign different values to x.
+
+The function foo must be appropriately declared at (*).
+
+{ int i ;
+(*)
+for ( i =0; i <=1; i ++){
+
+int x ;
+(**)
+x = foo ();
+}
+
+}
+
+4. Provide an example of a denotable object whose life is longer than that of the
+
+references (names, pointers, etc.) to it.
+
+5. Provide an example of a connection between a name and a denotable object
+
+whose life is longer than that of the object itself.
+
+6. Say what will be printed by the following code fragment written in a pseudo-
+
+language which uses static scope; the parameters are passed by a value.
+
+4.6 Exercises
+
+83
+
+{ int x = 2;
+
+int fie ( int y ){
+
+x = x + y ;
+
+}
+
+{ int x = 5;
+
+fie ( x );
+w r i t e ( x );
+
+}
+
+w r i t e ( x );
+
+}
+
+7. Say what is printed by the code in the previous exercise if it uses dynamic scope
+
+and call by reference.
+
+8. State what is printed by the following fragment of code written in a pseudo-
+
+language which uses static scope and passes parameters by reference.
+
+{ int x = 2;
+
+void fie ( r e f e r e n c e int y ){
+
+x = x + y ;
+y = y + 1;
+
+}
+{ int x = 5;
+int y = 5;
+fie ( x );
+w r i t e ( x );
+
+}
+w r i t e ( x );
+
+}
+
+9. State what will be printed by the following code fragment written in a pseudo-
+language which uses static scope and passes its parameters by value (a command
+of the form foo(w++) passes the current value of w to foo and then increments
+it by one).
+
+{ int x = 2;
+
+void fie ( v a l u e int y ){
+
+x = x + y ;
+
+}
+{ int x = 5;
+fie ( x ++);
+w r i t e ( x );
+
+}
+w r i t e ( x );
+
+}
+
+10. State what will be printed by the following fragment of code written in a pseudo-
+
+language which uses static scope and call by name.
+
+{ int x = 2;
+
+void fie ( name int y ){
+
+x = x + y ;
+
+}
+
+84
+
+4 Names and the Environment
+
+{ int x = 5;
+
+{ int x = 7
+}
+
+fie ( x ++);
+w r i t e ( x );
+
+}
+w r i t e ( x );
+
+}
+
+11. State what will be printed by the following code written in a pseudo-language
+
+which uses dynamic scope and call by reference.
+
+{ int x = 1;
+int y = 1;
+void fie ( r e f e r e n c e int z ){
+
+z
+
+= x + y + z ;
+
+}
+{ int y = 3;
+
+{ int x = 3
+}
+fie ( y );
+w r i t e ( y );
+
+}
+w r i t e ( y );
+
+}
+
+12. State what will be printed by the following fragment of code written in a pseudo-
+
+language which uses static scope and call by reference.
+
+{ int x = 0;
+
+int A ( r e f e r e n c e int y ) {
+int x =2;
+y = y +1;
+r e t u r n B ( y )+ x ;
+
+}
+int B ( r e f e r e n c e int y ){
+
+int C ( r e f e r e n c e int y ){
+
+int x = 3;
+r e t u r n A ( y )+ x + y ;
+
+}
+if ( y ==1) r e t u r n C ( x )+ y ;
+e l s e r e t u r n x + y ;
+
+}
+w r i t e ( A ( x ));
+
+}
+
+13. Consider the following fragment of code in a language with static scope and
+
+parameter passing both by value and by name:
+
+{ int z = 0;
+
+int O m e g a (){
+
+r e t u r n O m e g a ();
+
+}
+
+References
+
+85
+
+int foo ( int x , int y ){
+if ( x ==0) r e t u r n x ;
+e l s e r e t u r n x + y ;
+
+}
+w r i t e ( foo ( z , O m e g a ()+ z ));
+
+}
+
+(i) State what will be the result of the execution of this fragment in the case in
+
+which the parameters to foo are passed by name.
+
+(ii) State what will be the result of the execution of this fragment in the case in
+
+which the parameters to foo are passed by value.
+
+References
+
+1. T.W. Pratt, M.V. Zelkowitz, Programming Languages: Design and Implementation, 4th ed.
+
+(Pearson, 2000)
+
+2. M.L. Scott, Programming Language Pragmatics (Morgan Kaufmann Publishers, 2000)
+3. R. Sethi, Programming Languages: Concepts and Constructs (Addison-Wesley, 1996)

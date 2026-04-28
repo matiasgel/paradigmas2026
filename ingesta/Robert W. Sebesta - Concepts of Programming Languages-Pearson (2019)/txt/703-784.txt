@@ -1,0 +1,6541 @@
+# Fuente
+- archivo: 703-784.pdf
+- ruta: /home/matiasgel/Documentos/paradigmas2026/ingesta/Robert W. Sebesta - Concepts of Programming Languages-Pearson (2019)/703-784.pdf
+- extraido: 2026-04-27T21:02:32
+
+# Contenido
+
+16 
+
+Logic Programming 
+Languages
+
+ 16.1  Introduction
+
+ 16.2  A Brief Introduction to Predicate Calculus
+
+ 16.3  Predicate Calculus and Proving Theorems
+
+ 16.4  An Overview of Logic Programming
+
+ 16.5  The Origins of Prolog
+
+ 16.6  The Basic Elements of Prolog
+
+ 16.7  Deficiencies of Prolog
+
+ 16.8  Applications of Logic Programming
+
+M16_SEBE8029_12_SE_C16.indd   679
+
+1/5/18   11:06 PM
+
+679
+
+680 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+T he objectives of this chapter are to introduce the concepts of logic programming 
+
+and logic programming languages, including a brief description of a subset of 
+Prolog. We begin with an introduction to predicate calculus, which is the basis 
+for logic programming languages. This is followed by a discussion of how predicate 
+ calculus can be used for automatic theorem-proving systems. Then, we present a 
+ general overview of logic programming. Next, a lengthy section introduces the basics 
+of the Prolog programming language, including arithmetic, list processing, and a trace 
+tool that can be used to help debug programs and also to illustrate how the Prolog 
+system works. The final two sections describe some of the problems of Prolog as a logic 
+language and some of the application areas in which Prolog has been used.
+
+16.1  Introduction
+
+Chapter 15 discusses the functional programming paradigm, which is sig-
+nificantly different from the software development methodologies used with 
+the imperative languages. In this chapter, we describe another different pro-
+gramming methodology. In this case, the approach is to express programs 
+in a form of symbolic logic and use a logical inferencing process to produce 
+results. Logic programs are declarative rather than procedural, which means 
+that only the specifications of the desired results are stated rather than detailed 
+procedures for producing them. Programs in logic programming languages are 
+collections of facts and rules. Such a program is used by asking it questions, 
+which it attempts to answer by consulting the facts and rules. “Consulting” is 
+perhaps misleading here, for the process is far more complex than that word 
+connotes. This approach to problem solving may sound like it addresses only 
+a very narrow category of problems, but it is more f lexible than might be 
+thought.
+
+Programming that uses a form of symbolic logic as a programming lan-
+guage is often called logic programming, and languages based on symbolic 
+logic are called logic programming languages, or declarative languages. We 
+have chosen to describe the logic programming language Prolog, because it is 
+the only widely used logic language.
+
+The syntax of logic programming languages is remarkably different from 
+that of the imperative and functional languages. The semantics of logic pro-
+grams also bears little resemblance to that of imperative-language programs. 
+These observations should lead the reader to some curiosity about the nature 
+of logic programming and declarative languages.
+
+16.2  A Brief Introduction to Predicate Calculus
+
+Before we can discuss logic programming, we must brief ly investigate its basis, 
+which is formal logic. This is not our first contact with formal logic in this text; 
+it was used extensively in the axiomatic semantics described in Chapter 3.
+
+M16_SEBE8029_12_SE_C16.indd   680
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.2  A Brief Introduction to Predicate Calculus 
+
+  681
+
+A proposition can be thought of as a logical statement that may or may 
+not be true. It consists of objects and the relationships among objects. Formal 
+logic was developed to provide a method for describing propositions, with the 
+goal of allowing those formally stated propositions to be checked for validity.
+
+Symbolic logic can be used for the three basic needs of formal logic: to 
+express propositions, to express the relationships between propositions, and to 
+describe how new propositions can be inferred from other propositions that 
+are assumed to be true.
+
+There is a close relationship between formal logic and mathematics. In 
+fact, much of mathematics can be thought of in terms of logic. The fundamen-
+tal axioms of number and set theory are the initial set of propositions, which 
+are assumed to be true. Theorems are the additional propositions that can be 
+inferred from the initial set.
+
+The particular form of symbolic logic that is used for logic programming 
+is called first-order  predicate  calculus (though it is a bit imprecise, we 
+will usually refer to it as predicate calculus). In the following subsections, we 
+present a brief look at predicate calculus. Our goal is to lay the groundwork 
+for a discussion of logic programming and the logic programming language 
+Prolog.
+
+16.2.1  Propositions
+
+The  objects  in  logic  programming  propositions  are  represented  by  simple 
+terms, which are either constants or variables. A constant is a symbol that rep-
+resents an object. A variable is a symbol that can represent different objects at 
+different times, although in a sense that is far closer to mathematics than the 
+variables in an imperative programming language.
+
+The simplest propositions, which are called atomic propositions, consist 
+of compound terms. A compound term is one element of a mathematical 
+relation, written in a form that has the appearance of mathematical function 
+notation. Recall from Chapter 15 that a mathematical function is a mapping, 
+which can be represented either as an expression or as a table or list of tuples. 
+Compound terms are elements of the tabular definition of a function.
+
+A compound term is composed of two parts: a functor, which is the func-
+tion symbol that names the relation, and an ordered list of parameters, which 
+together represent an element of the relation. A compound term with a single 
+parameter is a 1-tuple; one with two parameters is a 2-tuple, and so forth. For 
+example, we might have the two propositions
+
+man(jake)
+like(bob, steak)
+
+which state that {jake} is a 1-tuple in the relation named man, and that {bob, 
+steak} is a 2-tuple in the relation named like. If we added the proposition
+
+man(fred)
+
+M16_SEBE8029_12_SE_C16.indd   681
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+682 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+to the two previous propositions, then the relation man would have two distinct 
+elements, {jake} and {fred}. All of the simple terms in these propositions—man, 
+jake, like, bob, and steak—are constants. Note that these propositions have no 
+intrinsic semantics. They mean whatever we want them to mean. For example, 
+the second example may mean that bob likes steak, or that steak likes bob, or 
+that bob is in some way similar to a steak.
+
+Propositions can be stated in two modes: one in which the proposition is 
+defined to be true, and one in which the truth of the proposition is something 
+that is to be determined. In other words, propositions either can be facts or 
+queries. The example propositions above could be either.
+
+Compound propositions have two or more atomic propositions, which 
+are connected by logical connectors, or operators, in the same way com-
+pound logic expressions are constructed in imperative languages. The names, 
+symbols, and meanings of the predicate calculus logical connectors are as 
+follows:
+
+Name
+
+Symbol
+
+Example
+
+Meaning
+
+negation
+conjunction
+disjunction
+equivalence
+implication
+
+⫎
+x
+h
+
+K
+⊃
+⊂
+
+⫎ a
+a x b
+a h b
+a  K  b
+a  ⊃  b
+a  ⊂  b
+
+not a
+a and b
+a or b
+a is equivalent to b
+a implies b
+b implies a
+
+The following are examples of compound propositions:
+
+ a x b  ⊃  c
+ a x ⫎ b  ⊃  d
+
+The ⫎ operator has the highest precedence. The operators  x, h, and  K  
+all have higher precedence than  ⊃  and  ⊂ . So, the second example above is 
+equivalent to
+
+(a x (⫎ b))  ⊃  d
+
+Variables can appear in propositions but only when introduced by spe-
+cial symbols called quantifiers. Predicate calculus includes two quantifiers, as 
+described below, where X is a variable and P is a proposition:
+
+Name
+
+universal
+existential
+
+Example
+5 X.P
+E X.P
+
+Meaning
+
+For all X, P is true.
+There exists a value of X such 
+that P is true.
+
+M16_SEBE8029_12_SE_C16.indd   682
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.2  A Brief Introduction to Predicate Calculus 
+
+  683
+
+The period between X and P simply separates the variable from the proposi-
+tion. For example, consider the following:
+
+5X. (woman (X)  ⊃  human (X))
+EX. (mother (mary, X) x  male (X))
+
+The first of these propositions means that for any value of X, if X is a woman, 
+then X is a human. The second means that there exists a value of X such that 
+mary is the mother of X and X is a male; in other words, mary has a son. The 
+scope of the universal and existential quantifiers is the atomic propositions to 
+which they are attached. This scope can be extended using parentheses, as in 
+the two compound propositions just described. So, the universal and existential 
+quantifiers have higher precedence than any of the operators.
+
+16.2.2  Clausal Form
+
+We are discussing predicate calculus because it is the basis for logic program-
+ming languages. As with other languages, logic languages are best in their 
+simplest form, meaning that redundancy should be minimized.
+
+One problem with predicate calculus as we have described it thus far is that 
+there are too many different ways of stating propositions that have the same 
+meaning; that is, there is a great deal of redundancy. This is not such a problem 
+for logicians, but if predicate calculus is to be used in an automated (comput-
+erized) system, it is a serious problem. To simplify matters, a standard form 
+for propositions is desirable. Clausal form, which is a relatively simple form of 
+propositions, is one such standard form. All propositions can be expressed in 
+clausal form. A proposition in clausal form has the following general syntax:
+
+B1 h B2 h  c h Bn  ⊂  A1 x A2 x  c x Am
+
+in which the A’s and B’s are terms. The meaning of this clausal form propo-
+sition is as follows: If all of the A’s are true, then at least one B is true. The 
+primary characteristics of clausal form propositions are the following: Existen-
+tial quantifiers are not required; universal quantifiers are implicit in the use of 
+variables in the atomic propositions; and no operators other than conjunction 
+and disjunction are required. Also, conjunction and disjunction need appear 
+only in the order shown in the general clausal form: disjunction on the left side 
+and conjunction on the right side. All predicate calculus propositions can be 
+algorithmically converted to clausal form. Nilsson (1971) gives proof that this 
+can be done, as well as a simple conversion algorithm for doing it.
+
+The right side of a clausal form proposition is called the antecedent. The 
+left side is called the consequent because it is the consequence of the truth of 
+the antecedent. As examples of clausal form propositions, consider the following:
+
+likes (bob, trout)  ⊂  likes (bob, fish) x  fish (trout)
+
+M16_SEBE8029_12_SE_C16.indd   683
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+684 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+father (louis, al) h  father (louis, violet)  ⊂
+
+father (al, bob) x mother (violet, bob) x grandfather (louis, bob)
+
+The English version of the first of these states that if bob likes fish and a trout 
+is a fish, then bob likes trout. The second states that if al is bob’s father and 
+violet is bob’s mother and louis is bob’s grandfather, then louis is either al’s 
+father or violet’s father.
+
+16.3  Predicate Calculus and Proving Theorems
+
+Predicate calculus provides a method of expressing collections of propositions. 
+One use of collections of propositions is to determine whether any interesting 
+or useful facts can be inferred from them. This is exactly analogous to the work 
+of mathematicians, who strive to discover new theorems that can be inferred 
+from known axioms and theorems.
+
+The early days of computer science (the 1950s and early 1960s) saw a great 
+deal of interest in automating the theorem-proving process. One of the most 
+significant breakthroughs in automatic theorem proving was the discovery of 
+the resolution principle by Alan Robinson (1965) at Syracuse University.
+
+Resolution is an inference rule that allows inferred propositions to be 
+computed from given propositions, thus providing a method with potential 
+application to automatic theorem proving. Resolution was devised to be applied 
+to propositions in clausal form. The concept of resolution is the following: 
+Suppose there are two propositions with the forms
+
+ P1  ⊂  P2
+ Q1  ⊂  Q2
+
+Their meaning is that P2 implies P1 and Q2 implies Q1. Furthermore, suppose 
+that P1 is identical to Q2, so that we could rename P1 and Q2 as T. Then, we 
+could rewrite the two propositions as
+
+ T  ⊂  P2
+ Q1  ⊂  T
+
+Now, because P2 implies T and T implies Q1, it is logically obvious that P2 
+implies Q1, which we could write as
+
+Q1  ⊂  P2
+
+The process of inferring this proposition from the original two propositions 
+is resolution.
+
+As another example, consider the two propositions:
+
+older (joanne, jake)  ⊂  mother (joanne, jake)
+wiser (joanne, jake)  ⊂  older (joanne, jake)
+
+From these propositions, the following proposition can be constructed using 
+resolution:
+
+M16_SEBE8029_12_SE_C16.indd   684
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.3  Predicate Calculus and Proving Theorems 
+
+  685
+
+wiser(joanne, jake) ⊂  mother(joanne, jake)
+
+The mechanics of this resolution construction are simple: The terms of the 
+left sides of the two clausal propositions are OR’d together to make the left side 
+of the new proposition. Then the right sides of the two clausal propositions are 
+AND’d together to get the right side of the new proposition. Next, any term 
+that appears on both sides of the new proposition is removed from both sides. 
+The process is exactly the same when the propositions have multiple terms 
+on either or both sides. The left side of the new inferred proposition initially 
+contains all of the terms of the left sides of the two given propositions. The new 
+right side is similarly constructed. Then the term that appears on both sides of 
+the new proposition is removed. For example, if we have
+
+father(bob, jake)h  mother(bob, jake) ⊂  parent(bob, jake)
+grandfather(bob, fred) ⊂  father(bob, jake)x  father(jake, fred)
+
+resolution says that
+
+mother(bob, jake)h  grandfather(bob, fred) ⊂
+         parent(bob, jake)x  father(jake, fred)
+
+which has all but one of the atomic propositions of both of the original prop-
+ositions. The one atomic proposition that allowed the operation father (bob, 
+jake) in the left side of the first and in the right side of the second is left out. 
+In English, we would say
+
+if:
+
+and:
+
+then:
+
+bob is the parent of jake implies that bob is either the father or 
+mother of jake
+bob is the father of jake and jake is the father of fred implies that bob 
+is the grandfather of fred
+if bob is the parent of jake and jake is the father of fred then: either 
+bob is jake’s mother or bob is fred’s grandfather
+
+Resolution is actually more complex than these simple examples illustrate. 
+In particular, the presence of variables in propositions requires resolution to 
+find values for those variables that allow the matching process to succeed. This 
+process of determining useful values for variables is called unification. The tem-
+porary assigning of values to variables to allow unification is called instantiation.
+It is common for the resolution process to instantiate a variable with a 
+value, fail to complete the required matching, and then be required to backtrack 
+and instantiate the variable with a different value. We will discuss unification 
+and backtracking more extensively in the context of Prolog.
+
+A critically important property of resolution is its ability to detect any 
+inconsistency in a given set of propositions. This is based on the formal prop-
+erty of resolution called refutation complete. What this means is that given a 
+set of inconsistent propositions, resolution can prove them to be inconsistent. 
+This allows resolution to be used to prove theorems, which can be done as 
+
+M16_SEBE8029_12_SE_C16.indd   685
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+686 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+follows: We can envision a theorem proof in terms of predicate calculus as 
+a given set of pertinent propositions, with the negation of the theorem itself 
+stated as a new proposition. The theorem is negated so that resolution can be 
+used to prove the theorem by finding an inconsistency. This is proof by con-
+tradiction, a frequently used approach to proving theorems in mathematics. 
+Typically, the original propositions are called the hypotheses, and the negation 
+of the theorem is called the goal.
+
+Theoretically, this process is valid and useful. The time required for reso-
+lution, however, can be a problem. Although resolution is a finite process when 
+the set of propositions is finite, the time required to find an inconsistency in a 
+large database of propositions may be huge.
+
+Theorem proving is the basis for logic programming. Much of what is 
+computed can be couched in the form of a list of given facts and relationships 
+as hypotheses, and a goal to be inferred from the hypotheses, using resolution.
+Resolution on a hypotheses and a goal that are general propositions, even 
+if they are in clausal form, is often not practical. Although it may be possible 
+to prove a theorem using clausal form propositions, it may not happen in a 
+reasonable amount of time. One way to simplify the resolution process is to 
+restrict the form of the propositions. One useful restriction is to require the 
+propositions to be Horn clauses. Horn clauses only can be in one of two forms: 
+They have either a single atomic proposition on the left side or an empty left 
+side.1 The left side of a clausal form proposition is sometimes called the head, 
+and Horn clauses with left sides are called headed Horn clauses. Headed Horn 
+clauses are used to state relationships, such as
+
+likes(bob, trout)  ⊂  likes(bob, fish) x  fish(trout)
+
+Horn clauses with empty left sides, which are often used to state facts, are 
+
+called headless Horn clauses. For example,
+
+father(bob, jake)
+
+Most, but not all, propositions can be stated as Horn clauses. The restric-
+tion to Horn clauses makes resolution a practical process for proving theorems.
+
+16.4  An Overview of Logic Programming
+
+Languages used for logic programming are called declarative languages, because 
+programs written in them consist of declarations rather than assignments and 
+control f low statements. These declarations are actually statements, or propo-
+sitions, in symbolic logic.
+
+One of the essential characteristics of logic programming languages is their 
+semantics, which is called declarative semantics. The basic concept of this 
+semantics is that there is a simple way to determine the meaning of each state-
+ment, and it does not depend on how the statement might be used to solve a 
+
+1.  Horn clauses are named after Alfred Horn (1951), who studied clauses in this form.
+
+M16_SEBE8029_12_SE_C16.indd   686
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+ 
+16.4  An Overview of Logic Programming 
+
+  687
+
+problem. Declarative semantics is considerably simpler than the semantics of 
+the imperative languages. For example, the meaning of a given proposition in a 
+logic programming language can be concisely determined from the statement 
+itself. In an imperative language, the semantics of a simple assignment statement 
+requires examination of local declarations, knowledge of the scoping rules of the 
+language, and possibly even examination of programs in other files just to deter-
+mine the types of the variables in the assignment statement. Then, assuming the 
+expression of the assignment contains variables, the execution of the program 
+prior to the assignment statement must be traced to determine the values of those 
+variables. The resulting action of the statement, then, depends on its run-time 
+context. Comparing this semantics with that of a proposition in a logic language, 
+with no need to consider textual context or execution sequences, it is clear that 
+declarative semantics is far simpler than the semantics of imperative languages. 
+Thus, declarative semantics is often stated as one of the advantages that declar-
+ative languages have over imperative languages (Hogger, 1984, pp. 240–241).
+
+Programming in both imperative and functional languages is primarily 
+procedural, which means that the programmer knows what is to be accom-
+plished by a program and instructs the computer on exactly how the computa-
+tion is to be done. In other words, the computer is treated as a simple device 
+that obeys orders. Everything that is computed must have every detail of that 
+computation spelled out. Some believe that this is the essence of the difficulty 
+of programming using imperative and functional languages.
+
+Programming in a logic programming language is nonprocedural. Programs 
+in such languages do not state exactly how a result is to be computed but rather 
+describe the form of the result. The difference is that we assume the computer 
+system can somehow determine how the result is to be computed. What is needed 
+to provide this capability for logic programming languages is a concise means 
+of supplying the computer with both the relevant information and a method 
+of inference for computing desired results. Predicate calculus supplies the basic 
+form of communication to the computer, and resolution provides the inference 
+technique.
+
+Sorting is commonly used to illustrate the difference between procedural 
+and nonprocedural systems. In a language like Java, sorting is done by explain-
+ing in a Java program all of the details of some sorting algorithm to a computer 
+that has a Java compiler. The computer, after translating the Java program into 
+machine code or some interpretive intermediate code, follows the instructions 
+and produces the sorted list.
+
+In a nonprocedural language, it is necessary only to describe the character-
+istics of the sorted list: It is some permutation of the given list such that for each 
+pair of adjacent elements, a given relationship holds between the two elements. 
+To state this formally, suppose the list to be sorted is in an array named list that 
+has a subscript range 1 . . . n. The concept of sorting the elements of the given 
+list, named old_list, and placing them in a separate array, named new_list, can 
+then be expressed as follows:
+
+sort(old_list, new_list) ⊂  permute(old_list, new_list) x  sorted(new_list)
+sorted (list)  ⊂ 5j such that 11 … j 6 n, list(j) … list(j + 1)
+
+M16_SEBE8029_12_SE_C16.indd   687
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+688 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+where permute is a predicate that returns true if its second parameter array is 
+a permutation of its first parameter array.
+
+From  this  description,  the  nonprocedural  language  system  could  pro-
+duce the sorted list. That makes nonprocedural programming sound like the 
+mere production of concise software requirements specifications, which is a 
+fair assessment. Unfortunately, however, it is not that simple. Logic programs 
+that use only resolution face serious problems of execution efficiency. In our 
+example of sorting, if the list is long, the number of permutations is huge, and 
+they must be generated and tested, one by one, until the one that is in order 
+is found—a very lengthy process. Of course, one must consider the possibility 
+that the best form of a logic language may not yet have been determined, and 
+good methods of creating programs in logic programming languages for large 
+problems have not yet been developed.
+
+16.5  The Origins of Prolog
+
+As was stated in Chapter 2, Alain Colmerauer and Phillippe Roussel at the 
+University of Aix-Marseille, with some assistance from Robert Kowalski at the 
+University of Edinburgh, developed the fundamental design of Prolog. Col-
+merauer and Roussel were interested in natural-language processing; Kowalski 
+was interested in automated theorem proving. The collaboration between the 
+University of Aix-Marseille and the University of Edinburgh continued until 
+the mid-1970s. Since then, research on the development and use of the lan-
+guage has progressed independently at those two locations, resulting in, among 
+other things, two syntactically different dialects of Prolog.
+
+The development of Prolog and other research efforts in logic program-
+ming received limited attention outside of Edinburgh and Marseille until the 
+announcement in 1981 that the Japanese government was launching a large 
+research  project  called  the  Fifth  Generation  Computing  Systems  (FGCS; 
+Fuchi, 1981; Moto-oka, 1981). One of the primary objectives of the project 
+was to develop intelligent machines, and Prolog was chosen as the basis for this 
+effort. The announcement of FGCS aroused a sudden strong interest in arti-
+ficial intelligence and logic programming in researchers and the governments 
+of the United States and several European countries.
+
+After a decade of effort, the FGCS project was quietly dropped. Despite 
+the great assumed potential of logic programming and Prolog, little of great 
+significance had been discovered. This led to the decline in the interest in and 
+use of Prolog, although it still has its proponents.
+
+16.6  The Basic Elements of Prolog
+
+There are now a number of different dialects of Prolog. These can be grouped 
+into several categories: those that grew from the Marseille group, those that 
+came from the Edinburgh group, and some dialects that have been developed 
+
+M16_SEBE8029_12_SE_C16.indd   688
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.6  The Basic Elements of Prolog 
+
+  689
+
+for microcomputers, such as micro-Prolog, which is described by Clark and 
+McCabe (1984). The syntactic forms of these are somewhat different. Rather 
+than attempt to describe the syntax of several dialects of Prolog or some hybrid 
+of them, we have chosen one particular, widely available dialect, which is the 
+one developed at Edinburgh. This form of the language is sometimes called 
+Edinburgh syntax. Its first implementation was on a DEC System-10 (Warren 
+et al., 1979). Prolog implementations are available for virtually all popular com-
+puter platforms, for example, from the Free Software Organization (http://
+www.gnu.org).
+
+16.6.1  Terms
+
+As with programs in other languages, Prolog programs consist of collections 
+of statements. There are only a few kinds of statements in Prolog, but they 
+can be complex. All Prolog statements, as well as Prolog data, are constructed 
+from terms.
+
+A Prolog term is a constant, a variable, or a structure. A constant is either 
+an atom or an integer. Atoms are the symbolic values of Prolog and are similar 
+to their counterparts in LISP. In particular, an atom is either a string of letters, 
+digits, and underscores that begins with a lowercase letter or a string of any 
+printable ASCII characters delimited by apostrophes.
+
+A variable is any string of letters, digits, and underscores that begins with 
+an uppercase letter or an underscore ( _ ). Variables are not bound to types by 
+declarations. The binding of a value, and thus a type, to a variable is called an 
+instantiation. Instantiation occurs only in the resolution process. A variable 
+that has not been assigned a value is called uninstantiated. Instantiations last 
+only as long as it takes to satisfy one complete goal, which involves the proof 
+or disproof of one proposition. Prolog variables are only distant relatives, in 
+terms of both semantics and use, to the variables in the imperative languages.
+The last kind of term is called a structure. Structures represent the atomic 
+
+propositions of predicate calculus, and their general form is the same:
+
+functor(parameter list)
+
+The functor is any atom and is used to identify the structure. The parameter list 
+can be any list of atoms, variables, or other structures. As discussed at length in 
+the following subsection, structures are the means of specifying facts in Prolog. 
+They can also be thought of as objects, in which case they allow facts to be 
+stated in terms of several related atoms. In this sense, structures are relations, 
+for they state relationships among terms. A structure is also a predicate when 
+its context specifies it to be a query (question).
+
+16.6.2  Fact Statements
+
+Our discussion of Prolog statements begins with those statements used to con-
+struct the hypotheses, or database of assumed information—the statements 
+from which new information can be inferred.
+
+M16_SEBE8029_12_SE_C16.indd   689
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+690 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+Prolog has two basic statement forms; these correspond to the headless and 
+headed Horn clauses of predicate calculus. The simplest form of headless Horn 
+clause in Prolog is a single structure, which is interpreted as an unconditional 
+assertion, or fact. Logically, facts are simply propositions that are assumed to 
+be true.
+
+The following examples illustrate the kinds of facts one can have in a Pro-
+
+log program. Notice that every Prolog statement is terminated by a period.
+
+female(shelley).
+male(bill).
+female(mary).
+male(jake).
+father(bill, jake).
+father(bill, shelley).
+mother(mary, jake).
+mother(mary, shelley).
+
+These simple structures state certain facts about jake, shelley, bill, and 
+mary. For example, the first states that shelley is a female. The last four 
+connect their two parameters with a relationship that is named in the functor 
+atom; for example, the fifth proposition might be interpreted to mean that 
+bill is the father of jake. Note that these Prolog propositions, like those 
+of predicate calculus, have no intrinsic semantics. They mean whatever the 
+programmer wants them to mean. For example, the proposition
+
+father(bill, jake).
+
+could mean bill and jake have the same father or that jake is the father 
+of bill. The most common and straightforward meaning, however, might be 
+that bill is the father of jake.
+
+16.6.3  Rule Statements
+
+The other basic form of Prolog statement for constructing the database cor-
+responds to a headed Horn clause. This form can be related to a known theo-
+rem in mathematics from which a conclusion can be drawn if the set of given 
+conditions is satisfied. The right side is the antecedent, or if part, and the left 
+side is the consequent, or then part. If the antecedent of a Prolog statement is 
+true, then the consequent of the statement must also be true. Because they are 
+Horn clauses, the consequent of a Prolog statement is a single term, while the 
+antecedent can be either a single term or a conjunction.
+
+Conjunctions contain multiple terms that are separated by logical AND 
+operations. In Prolog, the AND operation is implied. The structures that spec-
+ify atomic propositions in a conjunction are separated by commas, so one could 
+consider the commas to be AND operators. As an example of a conjunction, 
+consider the following:
+
+M16_SEBE8029_12_SE_C16.indd   690
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.6  The Basic Elements of Prolog 
+
+  691
+
+female(shelley), child(shelley).
+
+The general form of the Prolog headed Horn clause statement is
+
+consequence :- antecedent_expression.
+
+It is read as follows: “consequence can be concluded if the antecedent expres-
+sion is true or can be made to be true by some instantiation of its variables.” 
+For example,
+
+ancestor(mary, shelley) :- mother(mary, shelley).
+
+states that if mary is the mother of shelley, then mary is an ancestor of 
+shelley. Headed Horn clauses are called rules, because they state rules of 
+implication between propositions.
+
+As with clausal form propositions in predicate calculus, Prolog statements 
+can use variables to generalize their meaning. Recall that variables in clausal 
+form provide a kind of implied universal quantifier. The following demon-
+strates the use of variables in Prolog statements:
+
+parent(X, Y) :- mother(X, Y).
+parent(X, Y) :- father(X, Y).
+grandparent(X, Z) :- parent(X, Y) , parent(Y, Z).
+
+These statements give rules of implication among some variables, or universal 
+objects. In this case, the universal objects are X, Y, and Z. The first rule states 
+that if there are instantiations of X and Y such that mother(X, Y) is true, then 
+for those same instantiations of X and Y, parent(X, Y) is true.
+
+The = operator, which is an infix operator, succeeds if its two term oper-
+ands are the same. For example, X  =  Y. The not operator, which is a unary 
+operator, reverses its operand, in the sense that it succeeds if its operand fails. 
+For example, not(X = Y) succeeds if X is not equal to Y.
+
+16.6.4  Goal Statements
+
+So far, we have described the Prolog statements for logical propositions, which 
+are used to describe both known facts and rules that describe logical relation-
+ships among facts. These statements are the basis for the theorem-proving 
+model. The theorem is in the form of a proposition that we want the system 
+to either prove or disprove. In Prolog, these propositions are called goals, or 
+queries. The syntactic form of Prolog goal statements is identical to that of 
+headless Horn clauses. For example, we could have
+
+man(fred).
+
+to which the system will respond either yes or no. The answer yes means that 
+the system has proved the goal was true under the given database of facts and 
+
+M16_SEBE8029_12_SE_C16.indd   691
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+692 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+relationships. The answer no means that either the goal was determined to be 
+false or the system was simply unable to prove it.
+
+Conjunctive propositions and propositions with variables are also legal 
+goals. When variables are present, the system not only asserts the validity of 
+the goal but also identifies the instantiations of the variables that make the goal 
+true. For example,
+
+father(X, mike).
+
+can be asked. The system will then attempt, through unification, to find an 
+instantiation of X that results in a true value for the goal.
+
+Because goal statements and some nongoal statements have the same form 
+(headless Horn clauses), a Prolog implementation must have some means of 
+distinguishing between the two. Interactive Prolog implementations do this 
+by simply having two modes, indicated by different interactive prompts: one 
+for entering fact and rule statements and one for entering goals. The user can 
+change the mode at any time.
+
+16.6.5  The Inferencing Process of Prolog
+
+This section examines Prolog resolution. Efficient use of Prolog requires that 
+the programmer know precisely what the Prolog system does with his or her 
+program.
+
+When a goal is a compound proposition, each of the facts (structures) is 
+called a subgoal. To prove that a goal is true, the inferencing process must find 
+a chain of inference rules and/or facts in the database that connect the goal to 
+one or more facts in the database. For example, if Q is the goal, then either Q 
+must be found as a fact in the database or the inferencing process must find a 
+fact P1 and a sequence of propositions P2, P3 c, Pn such that
+
+P2 :- P1
+P3 :- P2
+. . .
+Q :- Pn
+
+Of course, the process can be and often is complicated by rules with compound 
+right sides and rules with variables. The process of finding the Ps, when they 
+exist, is basically a comparison, or matching, of terms with each other.
+
+Because the process of proving a subgoal is done through a proposition- 
+matching process, it is sometimes called matching. In some cases, proving a 
+subgoal is called satisfying that subgoal.
+Consider the following query:
+
+man(bob).
+
+This goal statement is the simplest kind. It is relatively easy for resolution to 
+determine whether it is true or false: The pattern of this goal is compared with 
+the facts and rules in the database. If the database includes the fact
+
+M16_SEBE8029_12_SE_C16.indd   692
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.6  The Basic Elements of Prolog 
+
+  693
+
+man(bob).
+
+the proof is trivial. If, however, the database contains the following fact and 
+inference rule,
+
+father(bob).
+man(X) :- father(X).
+
+Prolog would be required to find these two statements and use them to infer 
+the truth of the goal. This would necessitate unification to instantiate X tem-
+porarily to bob.
+
+Now consider the goal
+
+man(X).
+
+In this case, Prolog must match the goal against the propositions in the data-
+base. The first proposition that it finds that has the form of the goal, with any 
+object as its parameter, will cause X to be instantiated with that object’s value. 
+X is then displayed as the result. If there is no proposition having the form of 
+the goal, the system indicates, by saying no, that the goal cannot be satisfied.
+
+There are two opposite approaches to attempting to match a given goal 
+to a fact in the database. The system can begin with the facts and rules of the 
+database and attempt to find a sequence of matches that lead to the goal. This 
+approach is called bottom-up resolution, or forward chaining. The alterna-
+tive is to begin with the goal and attempt to find a sequence of matching prop-
+ositions that lead to some set of original facts in the database. This approach 
+is called top-down resolution, or backward chaining. In general, backward 
+chaining works well when there is a reasonably small set of candidate answers. 
+The forward chaining approach is better when the number of possibly correct 
+answers is large; in this situation, backward chaining would require a very large 
+number of matches to get to an answer. Prolog implementations use backward 
+chaining for resolution, presumably because its designers believed backward 
+chaining was more suitable for a larger class of problems than forward chaining.
+The  following  example  illustrates  the  difference  between  forward  and 
+
+backward chaining. Consider the query:
+
+man(bob).
+
+Assume the database contains
+
+father(bob).
+man(X) :- father(X).
+
+Forward chaining would search for and find the first proposition. The goal 
+is then inferred by matching the first proposition with the right side of the sec-
+ond rule (father(X)) through instantiation of X to bob and then matching the 
+left side of the second proposition to the goal. Backward chaining would first 
+
+M16_SEBE8029_12_SE_C16.indd   693
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+694 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+match the goal with the left side of the second proposition (man(X)) through 
+the instantiation of X to bob. As its last step, it would match the right side of 
+the second proposition (now father(bob)) with the first proposition.
+
+The next design question arises whenever the goal has more than one 
+structure, as in our example. The question then is whether the solution search 
+is  done  depth  first  or  breadth  first.  A depth-first  search  finds  a  complete 
+sequence of propositions—a proof—for the first subgoal before working on 
+the others. A breadth-first search works on all subgoals of a given goal in 
+parallel. Prolog’s designers chose the depth-first approach primarily because 
+it can be done with fewer computer resources. The breadth-first approach is a 
+parallel search that can require a large amount of memory.
+
+The last feature of Prolog’s resolution mechanism that must be discussed 
+is backtracking. When a goal with multiple subgoals is being processed and 
+the system fails to show the truth of one of the subgoals, the system abandons 
+the subgoal it cannot prove. It then reconsiders the previous subgoal, if there 
+is one, and attempts to find an alternative solution to it. This backing up in 
+the goal to the reconsideration of a previously proven subgoal is called back-
+tracking. A new solution is found by beginning the search where the previous 
+search for that subgoal stopped. Multiple solutions to a subgoal result from 
+different instantiations of its variables. Backtracking can require a great deal of 
+time and space because it may have to find all possible proofs to every subgoal. 
+These subgoal proofs may not be organized to minimize the time required 
+to find the one that will result in the final complete proof, which exacerbates 
+the problem.
+
+To solidify your understanding of backtracking, consider the following 
+example. Assume that there is a set of facts and rules in the database and that 
+Prolog has been presented with the following compound goal:
+
+male(X), parent(X, shelley).
+
+This goal asks whether there is an instantiation of  X such that X is a male 
+and X is a parent of shelley. As its first step, Prolog finds the first fact in 
+the database with male as its functor. It then instantiates X to the parameter 
+of the found fact, say mike. Then, it attempts to prove that parent(mike, 
+shelley) is true. If it fails, it backtracks to the first subgoal, male(X), and 
+attempts to resatisfy it with some alternative instantiation of X. The resolution 
+process may have to find every male in the database before it finds the one 
+that is a parent of shelley. It definitely must find all males to prove that 
+the goal cannot be satisfied. Note that our example goal might be processed 
+more efficiently if the order of the two subgoals were reversed. Then, only 
+after resolution had found a parent of shelley would it try to match that 
+person with the male subgoal. This is more efficient if shelley has fewer 
+parents than there are males in the database, which seems like a reasonable 
+assumption. Section 16.7.1 discusses a method of limiting the backtracking 
+done by a Prolog system.
+
+Database searches in Prolog always proceed in the direction of first to last.
+
+M16_SEBE8029_12_SE_C16.indd   694
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.6  The Basic Elements of Prolog 
+
+  695
+
+The following two subsections describe Prolog examples that further illus-
+
+trate the resolution process.
+
+16.6.6  Simple Arithmetic
+
+Prolog supports integer variables and integer arithmetic. Originally, the arith-
+metic operators were functors, so that the sum of 7 and the variable X was 
+formed with
+
++(7, X)
+
+Prolog now allows a more abbreviated syntax for arithmetic with the is 
+operator. This operator takes an arithmetic expression as its right operand and 
+a variable as its left operand. All variables in the expression must already be 
+instantiated, but the left-side variable cannot be previously instantiated. For 
+example, in
+
+A is B / 17 + C.
+
+if  B  and  C  are  instantiated  but  A  is  not,  then  this  clause  will  cause  A  to  be 
+instantiated with the value of the expression. When this happens, the clause 
+is satisfied. If either B or C is not instantiated or A is instantiated, the clause is 
+not satisfied and no instantiation of A can take place. The semantics of an is 
+proposition is considerably different from that of an assignment statement in 
+an imperative language. This difference can lead to an interesting scenario. 
+Because the  is operator makes the clause in which it appears look like an 
+assignment statement, a beginning Prolog programmer may be tempted to 
+write a statement such as
+
+Sum is Sum + Number.
+
+which is never useful, or even legal, in Prolog. If Sum is not instantiated, the 
+reference to it in the right side is undefined and the clause fails. If Sum is already 
+instantiated, the clause fails, because the left operand cannot have a current 
+instantiation when is is evaluated. In either case, the instantiation of Sum to 
+the new value will not take place. (If the value of Sum + Number is required, it 
+can be bound to some new name.)
+
+Prolog does not have assignment statements in the same sense as imper-
+ative languages. They are simply not needed in most of the programming for 
+which Prolog was designed. The usefulness of assignment statements in imper-
+ative languages often depends on the capability of the programmer to control 
+the execution control f low of the code in which the assignment statement is 
+embedded. Because this type of control is not always possible in Prolog, such 
+statements are far less useful.
+
+As a simple example of the use of numeric computation in Prolog, con-
+sider the following problem: Suppose we know the average speeds of several 
+
+M16_SEBE8029_12_SE_C16.indd   695
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+696 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+automobiles  on  a  particular  racetrack  and  the  amount  of  time  they  are  on 
+the track. This basic information can be coded as facts, and the relationship 
+between speed, time, and distance can be written as a rule, as in the following:
+
+speed(ford, 100).
+speed(chevy, 105).
+speed(dodge, 95).
+speed(volvo, 80).
+time(ford, 20).
+time(chevy, 21).
+time(dodge, 24).
+time(volvo, 24).
+distance(X, Y) :- speed(X, Speed),
+                  time(X, Time),
+                  Y is Speed * Time.
+
+Now, queries can request the distance traveled by a particular car. For 
+
+example, the query
+
+distance(chevy, Chevy_Distance).
+
+instantiates Chevy_Distance with the value 2205. The first two clauses in the 
+right side of the distance computation statement instantiate the variables Speed 
+and Time with the corresponding values of the given automobile functor. After 
+satisfying the goal, Prolog also displays the name Chevy_Distance and its value.
+At this point it is instructive to take an operational look at how a Prolog 
+system produces results. Prolog has a built-in structure named trace that dis-
+plays the instantiations of values to variables at each step during the attempt to 
+satisfy a given goal. trace is used to understand and debug Prolog programs. 
+To understand trace, it is best to introduce a different model of the execution 
+of Prolog programs, called the tracing model.
+
+The tracing model describes Prolog execution in terms of four events: 
+(1) call, which occurs at the beginning of an attempt to satisfy a goal, (2) exit, 
+which occurs when a goal has been satisfied, (3) redo, which occurs when 
+backtrack causes an attempt to resatisfy a goal, and (4) fail, which occurs when 
+a goal fails. Call and exit can be related directly to the execution model of a 
+subprogram in an imperative language if processes like distance are thought 
+of as subprograms. The other two events are unique to logic programming 
+systems. In the following trace example, a trace of the computation of the 
+value for Chevy_Distance, the goal requires no redo or fail events:
+
+trace.
+distance(chevy, Chevy_Distance).
+
+(1) 1 Call: distance(chevy, _0)?
+(2) 2 Call: speed(chevy, _5)?
+
+M16_SEBE8029_12_SE_C16.indd   696
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.6  The Basic Elements of Prolog 
+
+  697
+
+(2) 2 Exit: speed(chevy, 105)
+(3) 2 Call: time(chevy, _6)?
+(3) 2 Exit: time(chevy, 21)
+(4) 2 Call: _0 is 105*21?
+(4) 2 Exit: 2205 is 105*21
+(1) 1 Exit: distance(chevy, 2205)
+
+Chevy_Distance = 2205
+
+Symbols in the trace that begin with the underscore character ( _ ) are 
+internal  variables  used  to  store  instantiated  values.  The  first  column  of 
+the trace indicates the subgoal whose match is currently being attempted. 
+For example, in the example trace, the first line with the indication (3) is 
+an attempt to instantiate the temporary variable _6 with a time value for 
+chevy, where time is the second term in the right side of the statement that 
+describes the computation of distance. The second column indicates the 
+call depth of the matching process. The third column indicates the current 
+action.
+
+To illustrate backtracking, consider the following example database and 
+
+traced compound goal:
+
+likes(jake, chocolate).
+likes(jake, apricots).
+likes(darcie, licorice).
+likes(darcie, apricots).
+
+trace.
+likes(jake, X), likes(darcie, X).
+
+(1) 1 Call: likes(jake, _0)?
+(1) 1 Exit: likes(jake, chocolate)
+(2) 1 Call: likes(darcie, chocolate)?
+(2) 1 Fail: likes(darcie, chocolate)
+(1) 1 Redo: likes(jake, _0)?
+(1) 1 Exit: likes(jake, apricots)
+(3) 1 Call: likes(darcie, apricots)?
+(3) 1 Exit: likes(darcie, apricots)
+
+X = apricots
+
+One can think about Prolog computations graphically as follows: Consider 
+each goal as a box with four ports—call, fail, exit, and redo. Control enters a 
+goal in the forward direction through its call port. Control can also enter a 
+goal from the reverse direction through its redo port. Control can also leave 
+a goal in two ways: If the goal succeeded, control leaves through the exit port; 
+if the goal failed, control leaves through the fail port. A model of the example 
+is shown in Figure 16.1. In this example, control f lows through each subgoal 
+
+M16_SEBE8029_12_SE_C16.indd   697
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+698 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+Figure 16.1
+
+Control flow model 
+for the goal likes 
+(jake, X), likes 
+(darcie, X)
+
+Call
+
+Fail
+
+likes (jake, X)
+
+Exit
+
+Call
+
+Redo
+
+Fail
+
+likes (darcie, X)
+
+Exit
+
+Redo
+
+twice. The second subgoal fails the first time, which forces a return through 
+redo to the first subgoal.
+
+16.6.7  List Structures
+
+So far, the only Prolog data structure we have discussed is the atomic prop-
+osition, which looks more like a function call than a data structure. Atomic 
+propositions, which are also called structures, are actually a form of records. 
+The other basic data structure supported is the list. Lists are sequences of any 
+number of elements, where the elements can be atoms, atomic propositions, 
+or any other terms, including other lists.
+
+Prolog uses the syntax of ML and Haskell to specify lists. The list elements 
+are separated by commas, and the entire list is delimited by square brackets, 
+as in
+
+[apple, prune, grape, kumquat]
+
+The notation [] is used to denote the empty list. Instead of having explicit 
+functions for constructing and dismantling lists, Prolog simply uses a special 
+notation. [X  |  Y] denotes a list with head X and tail Y, where head and tail 
+correspond to CAR and CDR in LISP. This is similar to the notation used in ML 
+and Haskell.
+
+A list can be created with a simple structure, as in
+
+new_list([apple, prune, grape, kumquat]).
+
+which states that the constant list [apple,  prune,  grape,  kumquat] is a 
+new element of the relation named new_list (a name we just made up). This 
+statement does not bind the list to a variable named new_list; rather, it does 
+the kind of thing that the proposition
+
+M16_SEBE8029_12_SE_C16.indd   698
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.6  The Basic Elements of Prolog 
+
+  699
+
+male(jake)
+
+does. That is, it states that [apple,  prune,  grape,  kumquat] is a new 
+element of new_list. Therefore, we could have a second proposition with a 
+list argument, such as
+
+new_list([apricot, peach, pear])
+
+In query mode, one of the elements of new_list can be dismantled into head 
+and tail with
+
+new_list([New_List_Head | New_List_Tail]).
+
+If new_list has been set to have the two elements as shown, this statement 
+instantiates New_List_Head with the head of the first list element (in this 
+case, apple) and New_List_Tail with the tail of the list (or [prune, grape, 
+kumquat]). If this were part of a compound goal and backtracking forced a new 
+evaluation of it, New_List_Head and New_List_Tail would be reinstantiated 
+to apricot and [peach,  pear], respectively, because [apricot,  peach, 
+pear] is the next element of new_list.
+
+The | operator used to dismantle lists can also be used to create lists from 
+
+given instantiated head and tail components, as in
+
+[Element_1 | List_2]
+
+If Element_1 has been instantiated with pickle and List_2 has been instan-
+tiated with [peanut, prune, popcorn], the sample notation will create, for 
+this one reference, the list [pickle, peanut, prune, popcorn].
+
+As stated previously, the list notation that includes the | symbol is univer-
+sal: It can specify either a list construction or a list dismantling. Note further 
+that the following are equivalent:
+
+[apricot, peach, pear | []]
+[apricot, peach | [pear]]
+[apricot | [peach, pear]]
+
+With lists, certain basic operations are often required, such as those found 
+in LISP, ML, and Haskell. As an example of such operations in Prolog, we 
+examine a definition of append, which is related to such a function in LISP. In 
+this example, the differences and similarities between functional and declarative 
+languages can be seen. We need not specify how Prolog is to construct a new 
+list from the given lists; rather, we need specify only the characteristics of the 
+new list in terms of the given lists.
+
+In appearance, the Prolog definition of append is very similar to the ML 
+version that appears in Chapter 15, and a kind of recursion in resolution is used 
+in a similar way to produce the new list. In the case of Prolog, the recursion 
+is caused and controlled by the resolution process. As with ML and Haskell, 
+
+M16_SEBE8029_12_SE_C16.indd   699
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+700 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+a pattern-matching process is used to choose, based on the actual parameter, 
+between two different definitions of the append process.
+
+The first two parameters to the append operation in the following code 
+
+are the two lists to be appended, and the third parameter is the resulting list:
+
+append([], List, List).
+append([Head | List_1], List_2, [Head | List_3]) :-
+            append(List_1, List_2, List_3).
+
+The first proposition specifies that when the empty list is appended to any 
+other  list,  that  other  list  is  the  result.  This  statement  corresponds  to  the 
+ recursion-terminating step of the ML append function. Note that the ter-
+minating proposition is placed before the recursion proposition. This is done 
+because we know that Prolog will match the two propositions in order, starting 
+with the first (because of its use of the depth-first order).
+
+The second proposition specifies several characteristics of the new list. 
+It corresponds to the recursion step in the ML function. The left-side pred-
+icate states that the first element of the new list is the same as the first ele-
+ment of the first given list, because they are both named Head. Whenever 
+Head is instantiated to a value, all occurrences of Head in the goal are, in 
+effect, simultaneously instantiated to that value. The right side of the sec-
+ond statement specifies that the tail of the first given list (List_1) has the 
+second given list (List_2) appended to it to form the tail (List_3) of the 
+resulting list.
+
+One way to read the second statement of append is as follows: Append-
+
+ing the list [Head  |  List_1] to any list List_2 produces the list [Head 
+|  List_3], but only if the list List_3 is formed by appending List_1 to 
+List_2. In LISP, this would be
+
+(CONS (CAR FIRST) (APPEND (CDR FIRST) SECOND))
+
+In both the Prolog and LISP versions, the resulting list is not constructed until 
+the recursion produces the terminating condition; in this case, the first list must 
+become empty. Then, the resulting list is built using the append function itself; 
+the elements taken from the first list are added, in reverse order, to the second 
+list. The reversing is done by the unraveling of the recursion.
+
+One fundamental difference between Prolog’s append and those of LISP 
+and ML is that Prolog’s append is a predicate—it does not return a list, it 
+returns yes or no. The new list is the value of its third parameter.
+
+To illustrate how the append process progresses, consider the following 
+
+traced example:
+
+trace.
+append([bob, jo], [jake, darcie], Family).
+
+(1) 1 Call: append([bob, jo], [jake, darcie], _10)?
+
+M16_SEBE8029_12_SE_C16.indd   700
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.6  The Basic Elements of Prolog 
+
+  701
+
+(2) 2 Call: append([jo], [jake, darcie], _18)?
+(3) 3 Call: append([], [jake, darcie], _25)?
+(3) 3 Exit: append([], [jake, darcie], [jake, darcie])
+(2) 2 Exit: append([jo], [jake, darcie], [jo, jake,
+                    darcie])
+(1) 1 Exit: append([bob, jo], [jake, darcie],
+                   [bob, jo, jake, darcie])
+Family = [bob, jo, jake, darcie]
+yes
+
+The first two calls, which represent subgoals, have List_1 nonempty, so they 
+create the recursive calls from the right side of the second statement. The 
+left side of the second statement effectively specifies the arguments for the 
+recursive calls, or goals, thus dismantling the first list one element per step. 
+When the first list becomes empty, in a call, or subgoal, the current instance 
+of the right side of the second statement succeeds by matching the first state-
+ment. The effect of this is to return as the third parameter the value of the 
+empty list appended to the second original parameter list. On successive exits, 
+which represent successful matches, the elements that were removed from 
+the first list are appended to the resulting list, Family. When the exit from 
+the first goal is accomplished, the process is complete, and the resulting list 
+is displayed.
+
+Another difference between Prolog’s append and those of LISP and ML is 
+that Prolog’s append is more f lexible than that of those languages. For exam-
+ple, in Prolog we can use append to determine what two lists can be appended 
+to get [a, b, c] with
+
+append(X, Y, [a, b, c]).
+
+This results in the following:
+
+X = []
+Y = [a, b, c]
+
+If we type a semicolon at this output we get the alternative result:
+
+X = [a]
+Y = [b, c]
+
+Continuing, we get the following:
+
+X = [a, b]
+Y = [c];
+X = [a, b, c]
+Y = []
+
+M16_SEBE8029_12_SE_C16.indd   701
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+702 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+The append predicate can also be used to create other list operations, such 
+as the following, whose effect we invite the reader to determine. Note that 
+list_op_2 is meant to be used by providing a list as its first parameter and a 
+variable as its second, and the result of list_op_2 is the value to which the 
+second parameter is instantiated.
+
+list_op_2([], []).
+list_op_2([Head | Tail], List) :-
+list_op_2(Tail, Result), append(Result, [Head], List).
+
+As you may have been able to determine,  list_op_2 causes the Prolog 
+system  to  instantiate  its  second  parameter  with  a  list  that  has  the  ele-
+ments of the list of the first parameter, but in reverse order. For exam-
+ple, ([apple, orange, grape], Q) instantiates Q with the list [grape, 
+orange, apple].
+
+Once again, although the LISP and Prolog languages are fundamentally 
+different, similar operations can use similar approaches. In the case of the 
+reverse operation, both the Prolog’s list_op_2 and LISP’s reverse function 
+include the recursion-terminating condition, along with the basic process of 
+appending the reversal of the CDR or tail of the list to the CAR or head of the 
+list to create the result list.
+
+The following is a trace of this process, now named reverse:
+
+trace.
+reverse([a, b, c], Q).
+
+(1) 1 Call: reverse([a, b, c], _6)?
+(2) 2 Call: reverse([b, c], _65636)?
+(3) 3 Call: reverse([c], _65646)?
+(4) 4 Call: reverse([], _65656)?
+(4) 4 Exit: reverse([], [])
+(5) 4 Call: append([], [c], _65646)?
+(5) 4 Exit: append([], [c], [c])
+(3) 3 Exit: reverse([c], [c])
+(6) 3 Call: append([c], [b], _65636)?
+(7) 4 Call: append([], [b], _25)?
+(7) 4 Exit: append([], [b], [b])
+(6) 3 Exit: append([c], [b], [c, b])
+(2) 2 Exit: reverse([b, c], [c, b])
+(8) 2 Call: append([c, b], [a], _6)?
+(9) 3 Call: append([b], [a], _32)?
+(10) 4 Call: append([], [a], _39)?
+(10) 4 Exit: append([], [a], [a])
+(9) 3 Exit: append([b], [a], [b, a])
+(8) 2 Exit: append([c, b], [a], [c, b, a])
+(1) 1 Exit: reverse([a, b, c], [c, b, a])
+
+Q = [c, b, a]
+
+M16_SEBE8029_12_SE_C16.indd   702
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.7  Deficiencies of Prolog 
+
+  703
+
+Suppose we need to be able to determine whether a given symbol is in a 
+
+given list. A straightforward Prolog description of this is
+
+member(Element, [Element | _]).
+member(Element, [_ | List]) :- member(Element, List).
+
+The underscore indicates an “anonymous” variable; it is used to mean 
+that we do not care what instantiation it might get from unification. The first 
+ statement  in  the  previous  example  succeeds  if  Element  is  the  head  of  the 
+list, either initially or after several recursions through the second statement. 
+The second statement succeeds if Element is in the tail of the list. Consider 
+the  following traced examples:
+
+trace.
+member(a, [b, c, d]).
+(1) 1 Call: member(a, [b, c, d])?
+(2) 2 Call: member(a, [c, d])?
+(3) 3 Call: member(a, [d])?
+(4) 4 Call: member(a, [])?
+(4) 4 Fail: member(a, [])
+(3) 3 Fail: member(a, [d])
+(2) 2 Fail: member(a, [c, d])
+(1) 1 Fail: member(a, [b, c, d])
+no
+
+member(a, [b, a, c]).
+(1) 1 Call: member(a, [b, a, c])?
+(2) 2 Call: member(a, [a, c])?
+(2) 2 Exit: member(a, [a, c])
+(1) 1 Exit: member(a, [b, a, c])
+yes
+
+16.7  Deficiencies of Prolog
+
+Although Prolog is a useful tool, it is neither a pure nor a perfect logic pro-
+gramming language. This section describes some of the problems with Prolog.
+
+16.7.1  Resolution Order Control
+
+Prolog, for reasons of efficiency, allows the user to control the ordering of 
+ pattern matching during resolution. In a pure logic programming environment, 
+the order of attempted matches that take place during resolution is nondeter-
+ministic, and all matches could be attempted concurrently. However, because 
+Prolog always matches in the same order, starting at the beginning of the data-
+base and at the left end of a given goal, the user can profoundly affect efficiency 
+
+M16_SEBE8029_12_SE_C16.indd   703
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+704 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+by ordering the database statements to optimize a particular application. For 
+example, if the user knows that certain rules are much more likely to succeed 
+than the others during a particular “execution,” then the program can be made 
+more efficient by placing those rules at the beginning of the database.
+
+In addition to allowing the user to control database and subgoal order-
+ing, Prolog, in another concession to efficiency, allows some explicit control 
+of backtracking. This is done with the cut operator, which is specified by an 
+exclamation point (!). The cut operator is actually a goal, not an operator. 
+As a goal, it always succeeds immediately, but it cannot be resatisfied through 
+backtracking. Thus, a side effect of the cut is that subgoals to its left in a 
+compound goal also cannot be resatisfied through backtracking. For example, 
+in the goal
+
+a, b, !, c, d.
+
+if both a and b succeed but c fails, the whole goal fails. This goal would be used 
+if it were known that whenever c fails, it is a waste of time to resatisfy b or a.
+
+The purpose of the cut then is to allow the user to make programs more 
+efficient by telling the system when it should not attempt to resatisfy subgoals 
+that presumably could not result in a complete proof.
+
+As an example of the use of the cut operator, consider the member rules 
+
+from Section 16.6.7, which are:
+
+member(Element, [Element | _]).
+member(Element, [_ | List]) :- member(Element, List).
+
+If the list argument to member represents a set, then it can be satisfied only once 
+(sets contain no duplicate elements). Therefore, if member is used as a subgoal 
+in a multiple subgoal goal statement, there can be a problem. The problem is 
+that if member succeeds but the next subgoal fails, backtracking will attempt to 
+resatisfy member by continuing a prior match. But because the list argument 
+to member has only one copy of the element to begin with, member cannot 
+possibly succeed again, which eventually causes the whole goal to fail, in spite 
+of any additional attempts to resatisfy member. For example, consider the goal:
+
+dem_candidate(X) :- member(X, democrats), tests(X).
+
+This goal determines whether a given person is a democrat and is a good 
+candidate to run for a particular position. The tests subgoal checks a vari-
+ety of characteristics of the given democrat to determine the suitability of 
+the person for the position. If the set of democrats has no duplicates, then 
+we do not want to back up to the member subgoal if the tests subgoal fails, 
+because member will search all of the other democrats but fail, because there 
+are no duplicates. The second attempt of member subgoal will be a waste of 
+computation time. The solution to this inefficiency is to add a right side to 
+the first statement of the member definition, with the cut operator as the sole 
+element, as in
+
+M16_SEBE8029_12_SE_C16.indd   704
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.7  Deficiencies of Prolog 
+
+  705
+
+member(Element, [Element | _]) :- !.
+
+Backtracking will not attempt to resatisfy member but instead will cause the 
+entire subgoal to fail.
+
+Cut is particularly useful in  a programming strategy  in  Prolog called 
+generate and test. In programs that use the generate-and-test strategy, the 
+goal consists of subgoals that generate potential solutions, which are then 
+checked by later “test” subgoals. Rejected solutions require backtracking to 
+“generator” subgoals, which generate new potential solutions. As an example 
+of a generate-and-test program, consider the following, which appears in 
+Clocksin and Mellish (2013):
+
+divide(N1, N2, Result) :- is_integer(Result),
+
+Product1 is Result * N2,
+Product2 is (Result + 1) * N2,
+Product1 =< N1, Product2 >
+  N1, !.
+
+This program performs integer division, using addition and multiplication. 
+Because most Prolog systems provide division as an operator, this program actu-
+ally is not useful, other than to illustrate a simple generate-and-test program.
+
+The  predicate  is_integer  succeeds  as  long  as  its  parameter  can  be 
+instantiated to some nonnegative integer. If its argument is not instantiated, 
+is_integer instantiates it to the value 0. If the argument is instantiated to an 
+integer, is_integer instantiates it to the next larger integer value.
+
+So, in divide, is_integer is the generator subgoal. It generates ele-
+ments of the sequence 0, 1, 2, . . . , one each time it is satisfied. All of the other 
+subgoals are the testing subgoals—they check to determine whether the value 
+produced by is_integer is, in fact, the quotient of the first two parameters, 
+N1 and N2. The purpose of the cut as the last subgoal is simple: It prevents 
+divide from ever trying to find an alternative solution once it has found the 
+solution. Although is_integer can generate a huge number of candidates, 
+only one is the solution, so the cut here prevents useless attempts to produce 
+secondary solutions.
+
+Use of the cut operator has been compared to the use of the goto in imper-
+ative languages (van Emden, 1980). Although it is sometimes needed, it is pos-
+sible to abuse it. Indeed, it is sometimes used to make logic programs have a 
+control f low that is inspired by imperative programming styles.
+
+The ability to tamper with control f low in a Prolog program is a deficiency, 
+because it is directly detrimental to one of the important advantages of logic 
+programming—that programs do not specify how solutions are to be found. 
+Rather, they simply specify what the solution should look like. This design 
+makes programs easier to write and easier to read. They are not cluttered with 
+the details of how the solutions are to be determined and, in particular, the 
+precise order in which the computations are done to produce the solution. So, 
+while logic programming requires no control f low directions, Prolog programs 
+frequently use them, mostly for the sake of efficiency.
+
+M16_SEBE8029_12_SE_C16.indd   705
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+706 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+16.7.2  The Closed-World Assumption
+
+The nature of Prolog’s resolution sometimes creates misleading results. The 
+only truths, as far as Prolog is concerned, are those that can be proved using its 
+database. It has no knowledge of the world other than its database. When the 
+system receives a query and the database does not have information to prove the 
+query absolutely, the query is assumed to be false. Prolog can prove that a given 
+goal is true, but it cannot prove that a given goal is false. It simply assumes that, 
+because it cannot prove a goal true, the goal must be false. In essence, Prolog 
+is a true/fail system, rather than a true/false system.
+
+Actually, the closed-world assumption should not be at all foreign to you—
+our judicial system operates the same way. Suspects are innocent until proven 
+guilty. They need not be proven innocent. If a trial cannot prove a person 
+guilty, he or she is considered innocent.
+
+The problem of the closed-world assumption is related to the negation 
+
+problem, which is discussed in the following subsection.
+
+16.7.3  The Negation Problem
+
+Another problem with Prolog is its difficulty with negation. Consider the fol-
+lowing database of two facts and a relationship:
+
+parent(bill, jake).
+parent(bill, shelley).
+sibling(X, Y) :- (parent(M, X), parent(M, Y).
+
+Now, suppose we typed the query
+
+sibling(X, Y).
+
+Prolog will respond with
+
+X = jake
+Y = jake
+
+Thus, Prolog “thinks” jake is a sibling of himself. This happens because the 
+system first instantiates M with bill and X with jake to make the first subgoal, 
+parent(M,  X), true. It then starts at the beginning of the database again to 
+match the second subgoal, parent(M,  Y), and arrives at the instantiations 
+of M with bill and Y with jake. Because the two subgoals are satisfied inde-
+pendently, with both matchings starting at the database’s beginning, the shown 
+response appears. To avoid this result, X must be specified to be a sibling of Y 
+only if they have the same parents and they are not the same. Unfortunately, 
+stating that they are not equal is not straightforward in Prolog, as we will dis-
+cuss. The most exacting method would require adding a fact for every pair of 
+atoms, stating that they were not the same. This can, of course, cause the data-
+base to become very large, for there is often far more negative information than 
+
+M16_SEBE8029_12_SE_C16.indd   706
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.7  Deficiencies of Prolog 
+
+  707
+
+positive information. For example, most people have 364 more unbirthdays 
+than they have birthdays.
+
+A simple alternative solution is to state in the goal that X must not be the 
+
+same as Y, as in
+
+sibling(X, Y) :- parent(M, X), parent(M, Y), not(X = Y).
+
+In other situations, the solution is not so simple.
+
+The Prolog not operator is satisfied in this case if resolution cannot satisfy 
+the subgoal X = Y. Therefore, if the not succeeds, it does not necessarily mean 
+that X is not equal to Y; rather, it means that resolution cannot prove from the 
+database that X is the same as Y. Thus, the Prolog not operator is not equivalent 
+to a logical NOT operator, in which NOT means that its operand is probably 
+true. This nonequivalency can lead to a problem if we happen to have a goal 
+of the form
+
+not(not(some_goal)).
+
+which would be equivalent to
+
+some_goal.
+
+if Prolog’s not operator were a true logical NOT operator. In some cases, 
+however, they are not the same. For example, consider again the member 
+rules:
+
+member(Element, [Element | _]) :- !.
+member(Element, [_ | List]) :- member(Element, List).
+
+To discover one of the elements of a given list, we could use the goal
+
+member(X, [mary, fred, barb]).
+
+which would cause X to be instantiated with mary, which would then be printed. 
+But if we used
+
+not(not(member(X, [mary, fred, barb]))).
+
+the following sequence of events would take place: First, the inner goal would 
+succeed, instantiating X to mary. Then, Prolog would attempt to satisfy the 
+next goal:
+
+not(member(X, [mary, fred, barb])).
+
+This statement would fail because member succeeded. When this goal failed, 
+X would be uninstantiated, because Prolog always uninstantiates all variables 
+in all goals that fail. Next, Prolog would attempt to satisfy the outer not goal, 
+
+M16_SEBE8029_12_SE_C16.indd   707
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+708 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+which would succeed, because its argument had failed. Finally, the result, which 
+is X, would be printed. But X would not be currently instantiated, so the system 
+would indicate that. Generally, uninstantiated variables are printed in the form 
+of a string of digits preceded by an underscore. So, the fact that Prolog’s not is 
+not equivalent to a logical NOT can be, at the very least, misleading.
+
+The fundamental reason why logical NOT cannot be an integral part of 
+
+Prolog is the form of the Horn clause:
+
+A :- B1 ¨ B2 ¨  . . .  ¨ Bn
+
+If all the B propositions are true, it can be concluded that A is true. But regard-
+less of the truth or falseness of any or all of the B’s, it cannot be concluded that 
+A is false. From positive logic, one can conclude only positive logic. Thus, the 
+use of Horn clause form prevents any negative conclusions.
+
+16.7.4 
+
+Intrinsic Limitations
+
+A fundamental goal of logic programming, as stated in Section 16.4, is to pro-
+vide nonprocedural programming; that is, a system by which programmers 
+specify what a program is supposed to do but need not specify how that is to be 
+accomplished. The example given there for sorting is rewritten here:
+
+sort(old_list, new_list) ⊂ permute(old_list, new_list) ¨ sorted(new_list)
+sorted(list) ⊂ 5j such that 1 … j 6 n, list(j) … list (j+1)
+
+It is straightforward to write this in Prolog. For example, the sorted subgoal 
+can be expressed as
+
+sorted ([]).
+sorted ([x]).
+sorted ([x, y | list]) :- x <= y, sorted ([y | list]).
+
+The problem with this sort process is that it has no idea of how to sort, other 
+than simply to enumerate all permutations of the given list until it happens to 
+create the one that has the list in sorted order—a very slow process, indeed.
+
+So far, no one has discovered a process by which the description of a sorted 
+list can be transformed into some efficient algorithm for sorting. Resolution is 
+capable of many interesting things, but certainly not this. Therefore, a Prolog 
+program that sorts a list must specify the details of how that sorting can be 
+done, as is the case in an imperative or functional language.
+
+Do all of these problems mean that logic programming should be aban-
+doned? Absolutely not! As it is, it is capable of dealing with many useful appli-
+cations. Furthermore, it is based on an intriguing concept and is therefore 
+interesting in and of itself. Finally, there is the possibility that new inferencing 
+techniques will be developed that will allow a logic programming language 
+system to efficiently deal with progressively larger classes of problems.
+
+M16_SEBE8029_12_SE_C16.indd   708
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+16.8  Applications of Logic Programming 
+
+  709
+
+16.8  Applications of Logic Programming
+
+In this section, we brief ly describe a few of the larger classes of present and 
+potential applications of logic programming in general and Prolog in particular.
+
+16.8.1  Relational Database Management Systems
+
+Relational database management systems (RDBMSs) store data in the form 
+of tables. Queries on such databases are often stated in Structured Query 
+Language (SQL). SQL is nonprocedural in the same sense that logic pro-
+gramming is nonprocedural. The user does not describe how to retrieve the 
+answer; rather, he or she describes only the characteristics of the answer. 
+The connection between logic programming and RDBMSs should be obvi-
+ous. Simple tables of information can be described by Prolog structures, 
+and relationships between tables can be conveniently and easily described 
+by Prolog rules. The retrieval process is inherent in the resolution opera-
+tion. The goal statements of Prolog provide the queries for the RDBMS. 
+Logic programming is thus a natural match to the needs of implementing 
+an RDBMS.
+
+One  of  the  advantages  of  using  logic  programming  to  implement  an 
+RDBMS is that only a single language is required. In a typical RDBMS, a 
+database language includes statements for data definitions, data manipulation, 
+and queries, all of which are embedded in a general-purpose programming lan-
+guage, such as COBOL. The general-purpose language is used for processing 
+the data and input and output functions. All of these functions can be done in 
+a logic programming language.
+
+Another advantage of using logic programming to implement an RDBMS 
+is that deductive capability is built in. Conventional RDBMSs cannot deduce 
+anything from a database other than what is explicitly stored in them. They 
+contain only facts, rather than facts and inference rules. The primary disad-
+vantage of using logic programming for an RDBMS, compared with a con-
+ventional RDBMS, is that the logic programming implementation is slower. 
+Logical  inferences  take  longer  than  ordinary  table  look-up  methods  using 
+imperative programming techniques.
+
+16.8.2  Expert Systems
+
+Expert systems are computer systems designed to emulate human expertise in 
+some particular domain. They consist of a database of facts, an inferencing pro-
+cess, some heuristics about the domain, and some friendly human interface that 
+makes the system appear much like an expert human consultant. In addition 
+to their initial knowledge base, which is provided by a human expert, expert 
+systems learn from the process of being used, so their databases must be capable 
+of growing dynamically. Also, an expert system should include the capability 
+of interrogating the user to get additional information when it determines that 
+such information is needed.
+
+M16_SEBE8029_12_SE_C16.indd   709
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+710 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+One of the central problems for the designer of an expert system is dealing 
+with the inevitable inconsistencies and incompleteness of the database. Logic 
+programming appears to be well suited to deal with these problems. For exam-
+ple, default inference rules can help deal with the problem of incompleteness.
+Prolog can and has been used to construct expert systems. It can easily 
+fulfill the basic needs of expert systems, using resolution as the basis for query 
+processing, using its ability to add facts and rules to provide the learning capa-
+bility, and using its trace facility to inform the user of the “reasoning” behind 
+a given result. Missing from Prolog is the automatic ability of the system to 
+query the user for additional information when it is needed.
+
+One of the most widely known uses of logic programming in expert systems 
+is the expert system construction system known as APES, which is described 
+in Sergot (1983) and Hammond (1983). The APES system includes a very 
+f lexible facility for gathering information from the user during expert system 
+construction. It also includes a second interpreter for producing explanations 
+to its answers to queries.
+
+APES has been successfully used to produce several expert systems, includ-
+ing one for the rules of a government social benefits program and one for 
+the British Nationality Act, which is the definitive source for rules of British 
+citizenship.
+
+16.8.3  Natural-Language Processing
+
+Certain  kinds  of  natural-language  processing  can  be  done  with  logic  pro-
+gramming. In particular, natural-language interfaces to computer software 
+systems, such as intelligent databases and other intelligent knowledge-based 
+systems, can be conveniently done with logic programming. For describing 
+language syntax, forms of logic programming have been found to be equiva-
+lent to context-free grammars. Proof procedures in logic programming sys-
+tems have been found to be equivalent to certain parsing strategies. In fact, 
+backward-chaining resolution can be used directly to parse sentences whose 
+structures are described by context-free grammars. It has also been discov-
+ered that some kinds of semantics of natural languages can be made clear by 
+modeling the languages with logic programming. In particular, research in 
+logic-based semantics networks has shown that sets of sentences in natural 
+languages can be expressed in clausal form (Deliyanni and Kowalski, 1979). 
+Kowalski (1979) also discusses logic-based semantic networks.
+
+S U M M A R Y
+
+Symbolic logic provides the basis for logic programming and logic program-
+ming languages. The approach of logic programming is to use as a database 
+a collection of facts and rules that state relationships between facts and to use 
+an automatic inferencing process to check the validity of new propositions, 
+
+M16_SEBE8029_12_SE_C16.indd   710
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+Review Questions 
+
+  711
+
+assuming the facts and rules of the database are true. This approach is the one 
+developed for automatic theorem proving.
+
+Prolog is the most widely used logic programming language. The origins 
+of logic programming lie in Robinson’s development of the resolution rule for 
+logical inference. Prolog was developed primarily by Colmeraeur and Roussel 
+at Marseille, with some help from Kowalski at Edinburgh.
+
+Logic programs are nonprocedural, which means that the characteristics of 
+
+the solution are given but the process of getting the solution is not.
+
+Prolog statements are facts, rules, or goals. Most are made up of struc-
+tures, which are atomic propositions, and logic operators, although arithmetic 
+expressions are also allowed.
+
+Resolution is the primary activity of a Prolog interpreter. This process, 
+which uses backtracking extensively, involves mainly pattern matching among 
+propositions. When variables are involved, they can be instantiated to values 
+to provide matches. This instantiation process is called unification.
+
+There are a number of problems with the current state of logic program-
+ming. For reasons of efficiency, and even to avoid infinite loops, programmers 
+must sometimes state control f low information in their programs. Also, there 
+are the problems of the closed-world assumption and negation.
+
+Logic programming has been used in a number of different areas, pri-
+marily in relational database systems, expert systems, and natural-language 
+processing.
+
+B I B L I O G R A P H I C   N O T E S
+
+The Prolog language is described in several books. Edinburgh’s form of the 
+language is covered in Clocksin and Mellish (2003). The microcomputer imple-
+mentation is described in Clark and McCabe (1984).
+
+Hogger  (1991)  is  an  excellent  book  on  the  general  topic  of  logic  pro-
+gramming. It is the source of the material in this chapter’s section on logic 
+programming applications.
+
+R E V I E W   Q U E S T I O N S
+
+1.  What are the three primary uses of symbolic logic in formal logic?
+
+2.  What are the two parts of a compound term?
+
+3.  What are the two modes in which a proposition can be stated?
+4.  What is the general form of a proposition in clausal form?
+5.  What are antecedents? Consequences?
+6.  Give general (not rigorous) definitions of resolution and unification.
+7.  What are the forms of Horn clauses?
+
+M16_SEBE8029_12_SE_C16.indd   711
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+712 
+
+  Chapter 16  
+
+ Logic Programming Languages
+
+8.  What is the basic concept of declarative semantics?
+
+9.  What does it mean for a language to be nonprocedural?
+
+10.  What are the three forms of a Prolog term?
+
+11.  What is an uninstantiated variable?
+
+12.  What are the syntactic forms and usage of fact and rule statements in 
+
+Prolog?
+
+13.  What is a conjunction?
+
+14.  Explain the two approaches to matching goals to facts in a database.
+
+15.  Explain the difference between a depth-first and a breadth-first search 
+
+when discussing how multiple goals are satisfied.
+
+16.  Explain how backtracking works in Prolog.
+
+17.  Explain what is wrong with the Prolog statement K is K + 1.
+
+18.  What are the two ways a Prolog programmer can control the order of 
+
+pattern matching during resolution?
+
+19.  Explain the generate-and-test programming strategy in Prolog.
+
+20.  Explain the closed-world assumption used by Prolog. Why is this a 
+
+limitation?
+
+21.  Explain the negation problem with Prolog. Why is this a limitation?
+
+22.  Explain the connection between automatic theorem proving and Prolog’s 
+
+inferencing process.
+
+23.  Explain the difference between procedural and nonprocedural languages.
+
+24.  Explain why Prolog systems must do backtracking.
+
+25.  What is the relationship between resolution and unification in Prolog?
+
+P R O B L E M   S E T
+
+1.  Compare the concept of data typing in C# with that of Prolog.
+
+2.  Describe how a multiple-processor machine could be used to implement 
+
+resolution. Could Prolog, as currently defined, use this method?
+
+3.  Write a Prolog description of your family tree (based only on facts), 
+
+going back to your grandparents and including all descendants. Be sure 
+to include all relationships.
+
+4.  Write a set of rules for family relationships, including all relationships 
+
+from grandparents through two generations. Now add these to the facts 
+of Problem 3, and eliminate as many of the facts as you can.
+
+M16_SEBE8029_12_SE_C16.indd   712
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+ 
+Programming Exercises 
+
+  713
+
+5.  Write the following English conditional statements as Prolog-headed 
+
+Horn clauses:
+
+a.  If Fred is the father of Mike, then Fred is an ancestor of Mike.
+
+b.  If Mike is the father of Joe and Mike is the father of Mary, then Mary is 
+
+the sister of Joe.
+
+c.  If Mike is the brother of Fred and Fred is the father of Mary, then Mike is 
+
+the uncle of Mary.
+
+6.  Explain two ways in which the list-processing capabilities of Scheme and 
+
+Prolog are similar.
+
+7.  In what way are the list-processing capabilities of Scheme and Prolog 
+
+different?
+
+8.  Write a comparison of Prolog with ML, including two similarities and 
+
+two differences.
+
+9.  From a book on Prolog, learn and write a description of an occur-
+check problem. Why does Prolog allow this problem to exist in its 
+implementation?
+
+10.  Find a good source of information on Skolem normal form and write a 
+
+brief but clear explanation of it.
+
+P R O G R A M M I N G   E X E R C I S E S
+
+1.  Using the structures parent(X, Y), male(X), and female(X), write a 
+
+structure that defines mother(X, Y).
+
+2.  Using the structures parent(X, Y), male(X), and female(X), write a 
+
+structure that defines sister(X, Y).
+
+3.  Write a Prolog program that finds the maximum of a list of numbers.
+
+4.  Write a Prolog program that succeeds if the intersection of two given list 
+
+parameters is empty.
+
+5.  Write a Prolog program that returns a list containing the union of the 
+
+elements of two given lists.
+
+6.  Write a Prolog program that returns the final element of a given list.
+
+7.  Write a Prolog program that implements quicksort.
+
+M16_SEBE8029_12_SE_C16.indd   713
+
+1/5/18   11:06 PM
+
+ 
+ 
+ 
+M16_SEBE8029_12_SE_C16.indd   714
+
+1/5/18   11:06 PM
+
+Bibliography
+
+ACM. (1979) “Part A: Preliminary Ada Reference Manual” and “Part B: Rationale 
+
+for the Design of the Ada Programming Language.” SIGPLAN Notices, Vol. 14, 
+No. 6.
+
+ACM. (1993a) “History of Programming Language Conference Proceedings.” ACM 
+
+SIGPLAN Notices, Vol. 28, No. 3, March.
+
+ACM. (1993b) “High Performance FORTRAN Language Specification Part 1.” 
+
+FORTRAN Forum, Vol. 12, No. 4.
+
+Aho, A. V., B. W. Kernighan, and P. J. Weinberger. (1988) The AWK Programming 
+
+Language. Addison-Wesley, Reading, MA.
+
+Aho, A. V., M. S. Lam, R. Sethi, and J. D. Ullman. (2006) Compilers: Principles, 
+
+Techniques, and Tools, 2e. Addison-Wesley, Reading, MA.
+
+Albahari, J. and B. Abrahari (2012) C# 5.0 in a Nutshell, O’Reilly Media, Sebastopol, CA.
+Andrews, G. R., and F. B. Schneider. (1983) “Concepts and Notations for Concurrent 
+
+Programming.” ACM Computing Surveys, Vol. 15, No. 1, pp. 3–43.
+
+ANSI. (1966) American National Standard Programming Language FORTRAN. 
+
+American National Standards Institute, New York.
+
+ANSI. (1976) American National Standard Programming Language PL/I. ANSI 
+
+X3.53–1976. American National Standards Institute, New York.
+
+ANSI. (1978a) American National Standard Programming Language FORTRAN. 
+
+ANSI X3.9–1978. American National Standards Institute, New York.
+ANSI. (1978b) American National Standard Programming Language Minimal 
+
+BASIC. ANSI X3.60–1978. American National Standards Institute, New York.
+
+ANSI. (1989) American National Standard Programming Language C. ANSI 
+
+X3.159–1989. American National Standards Institute, New York.
+
+ANSI. (1992) American National Standard Programming Language FORTRAN 90. 
+
+ANSI X3. 198–1992. American National Standards Institute, New York.
+Arden, B. W., B. A. Galler, and R. M. Graham. (1961) “MAD at Michigan.” 
+
+Datamation, Vol. 7, No. 12, pp. 27–28.
+
+ARM. (1995) Ada Reference Manual. ISO/IEC/ANSI 8652:19. Intermetrics, 
+
+Cambridge, MA.
+
+Arnold, K., J. Gosling, and D. Holmes. (2006) The Java (TM) Programming 
+
+Language, 4e. Addison-Wesley, Reading, MA.
+
+Backus, J. (1954) “The IBM 701 Speedcoding System.” J. ACM, Vol. 1, pp. 4–6.
+
+715
+
+Z01_SEBE8029_12_SE_BIB.indd   715
+
+1/5/18   10:12 PM
+
+716 
+
+  Bibliography
+
+Backus, J. (1959) “The Syntax and Semantics of the Proposed International Algebraic 
+Language of the Zurich ACM-GAMM Conference.” Proceedings International 
+Conference on Information Processing. UNESCO, Paris, pp. 125–132.
+
+Backus, J. (1978) “Can Programming Be Liberated from the von Neumann Style? 
+A Functional Style and Its Algebra of Programs.” Commun. ACM, Vol. 21, 
+No. 8, pp. 613–641.
+
+Backus, J., F. L. Bauer, J. Green, C. Katz, J. McCarthy, P. Naur, A. J. Perlis, H. 
+
+Rutishauser, K. Samelson, B. Vauquois, J. H. Wegstein, A. van Wijngaarden, and 
+M. Woodger. (1963) “Revised Report on the Algorithmic Language ALGOL 60.” 
+Commun. ACM, Vol. 6, No. 1, pp. 1–17.
+
+Ben-Ari, M. (1982) Principles of Concurrent Programming. Prentice Hall, Engle-
+
+wood Cliffs, NJ.
+
+Birtwistle, G. M., O.-J. Dahl, B. Myhrhaug, and K. Nygaard. (1973) Simula BEGIN. 
+
+Van Nostrand Reinhold, New York.
+
+Bodwin, J. M., L. Bradley, K. Kanda, D. Litle, and U. F. Pleban. (1982) “Experience 
+
+with an Experimental Compiler Generator Based on Denotational Semantics.” 
+ACM SIGPLAN Notices, Vol. 17, No. 6, pp. 216–229.
+
+Bohm, C., and G. Jacopini. (1966) “Flow Diagrams, Turing Machines, and Languages 
+with Only Two Formation Rules.” Commun. ACM, Vol. 9, No. 5, pp. 366–371.
+Bolsky, M., and D. Korn. (1995) The New KornShell Command and Programming 
+
+Language. Prentice Hall, Englewood Cliffs, NJ.
+
+Booch, G. (1987) Software Engineering with Ada, 2e. Benjamin/Cummings, Red-
+
+wood City, CA.
+
+Brinch Hansen, P. (1973) Operating System Principles. Prentice Hall, Englewood 
+
+Cliffs, NJ.
+
+Brinch Hansen, P. (1975) “The Programming Language Concurrent-Pascal.” IEEE 
+
+Transactions on Software Engineering, Vol. 1, No. 2, pp. 199–207.
+
+Brinch Hansen, P. (1977) The Architecture of Concurrent Programs. Prentice Hall, 
+
+Englewood Cliffs, NJ.
+
+Brinch Hansen, P. (1978) “Distributed Processes: A Concurrent Programming Con-
+
+cept.” Commun. ACM, Vol. 21, No. 11, pp. 934–941.
+
+Brown, J. A., S. Pakin, and R. P. Polivka. (1988) APL2 at a Glance. Prentice Hall, 
+
+Englewood Cliffs, NJ.
+
+Campione, M., K. Walrath, and A. Huml. (2001) The Java Tutorial, 3e. Addison-
+
+Wesley, Reading, MA.
+
+Chambers, C., and D. Ungar. (1991) “Making Pure Object-Oriented Languages 
+
+Practical.” SIGPLAN Notices, Vol. 26, No. 1, pp. 1–15.
+
+Chomsky, N. (1956) “Three Models for the Description of Language.” IRE Transac-
+
+tions on Information Theory, Vol. 2, No. 3, pp. 113–124.
+
+Chomsky, N. (1959) “On Certain Formal Properties of Grammars.” Information and 
+
+Control, Vol. 2, No. 2, pp. 137–167.
+
+Christiansen, T., B. D. Foy, and L. Wall, with J. Orwant. (2013) Programming Perl, 
+
+4e. O’Reilly & Associates, Sebastopol, CA.
+
+Church, A. (1941) Annals of Mathematics Studies. Calculi of Lambda Conversion, 
+Vol. 6. Princeton University Press, Princeton, NJ. Reprinted by Klaus Reprint 
+Corporation, New York, 1965.
+
+Clark, K. L., and F. G. McCabe. (1984) Micro-PROLOG: Programming in Logic. 
+
+Prentice Hall, Englewood Cliffs, NJ.
+
+Clarke, L. A., J. C. Wileden, and A. L. Wolf. (1980) “Nesting in Ada Is for the Birds.” 
+
+ACM SIGPLAN Notices, Vol. 15, No. 11, pp. 139–145.
+
+Z01_SEBE8029_12_SE_BIB.indd   716
+
+1/5/18   10:12 PM
+
+ 
+ 
+ 
+ 
+Bibliography 
+
+  717
+
+Cleaveland, J. C. (1986) An Introduction to Data Types. Addison-Wesley, 
+
+Reading, MA.
+
+Cleaveland, J. C., and R. C. Uzgalis. (1976) Grammars for Programming Languages: 
+What Every Programmer Should Know About Grammar. American Elsevier, 
+New York.
+
+Clocksin, W. F., and C. S. Mellish. (2013) Programming in Prolog: Using the ISO 
+
+Standard. Springer-Verlag, New York.
+
+Cohen, J. (1981) “Garbage Collection of Linked Data Structures.” ACM Computing 
+
+Surveys, Vol. 13, No. 3, pp. 341–368.
+
+Conway, R., and R. Constable. (1976) “PL/-CS—A Disciplined Subset of PL/I.” 
+
+Technical Report TR76/293. Department of Computer Science, Cornell Univer-
+sity, Ithaca, NY.
+
+Cornell University. (1977) PL/C User’s Guide, Release 7.6. Department of Computer 
+
+Science, Cornell University, Ithaca, NY.
+
+Correa, N. (1992) “Empty Categories, Chain Binding, and Parsing.” In Principle— 
+
+Based Parsing, R. C. Berwick, S. P. Abney, and C. Tenny (eds.). Kluwer Academic 
+Publishers, Boston, pp. 83–121.
+
+Cousineau, G., M. Mauny, and K. Callaway. (1998) The Functional Approach to 
+
+Programming. Cambridge University Press, Cambridge, UK.
+
+Dahl, O.-J., E. W. Dijkstra, and C. A. R. Hoare. (1972) Structured Programming. 
+
+Academic Press, New York.
+
+Dahl, O.-J., and K. Nygaard. (1967) SIMULA 67 Common Base Proposal. Norwe-
+
+gian Computing Center Document, Oslo.
+
+Deliyanni, A., and R. A. Kowalski. (1979) “Logic and Semantic Networks.” Commun. 
+
+ACM, Vol. 22, No. 3, pp. 184–192.
+
+Department of Defense. (1960) COBOL, Initial Specifications for a Common Busi-
+ness Oriented Language. U.S. Department of Defense, Washington, D.C.
+
+Department of Defense. (1961) COBOL—1961, Revised Specifications for 
+a Common Business Oriented Language. U.S. Department of Defense, 
+Washington, D.C.
+
+Department of Defense. (1962) COBOL—1961 EXTENDED, Extended Specifica-
+tions for a Common Business Oriented Language. U.S. Department of Defense, 
+Washington, D.C.
+
+Department of Defense. (1975a) Requirements for High Order Programming 
+
+Languages, STRAWMAN. July. U.S. Department of Defense, Washington, D.C.
+
+Department of Defense. (1975b) Requirements for High Order Program-
+
+ming Languages, WOODENMAN. August. U.S. Department of Defense, 
+Washington, D.C.
+
+Department of Defense. (1976) Requirements for High Order Programming 
+
+Languages, TINMAN. June. U.S. Department of Defense, Washington, D.C.
+
+Department of Defense. (1977) Requirements for High Order Programming 
+
+Languages, IRONMAN. January. U.S. Department of Defense, Washington, D.C.
+
+Department of Defense. (1978) Requirements for High Order Programming 
+
+Languages, STEELMAN. June. U.S. Department of Defense, Washington, D.C.
+
+Department of Defense. (1980) Requirements for High Order Programming Lan-
+
+guages, STONEMAN. February. U.S. Department of Defense, Washington, D.C.
+
+DeRemer, F. (1971) “Simple LR(k) Grammars.” Commun. ACM, Vol. 14, No. 7, 
+
+pp. 453–460.
+
+DeRemer, F., and T. Pennello. (1982) “Efficient Computation of LALR(1) Look-
+
+Ahead Sets.” ACM TOPLAS, Vol. 4, No. 4, pp. 615–649.
+
+Z01_SEBE8029_12_SE_BIB.indd   717
+
+1/5/18   10:12 PM
+
+ 
+ 
+ 
+718 
+
+  Bibliography
+
+Deutsch, L. P., and D. G. Bobrow. (1976) “An Efficient Incremental Automatic 
+
+Garbage Collector.” Commun. ACM, Vol. 11, No. 3, pp. 522–526.
+
+Dijkstra, E. W. (1968a) “Goto Statement Considered Harmful.” Commun. ACM, 
+
+Vol. 11, No. 3, pp. 147–149.
+
+Dijkstra, E. W. (1968b) “Cooperating Sequential Processes.” In Programming Lan-
+
+guages, F. Genuys (ed.). Academic Press, New York, pp. 43–112.
+
+Dijkstra, E. W. (1972) “The Humble Programmer.” Commun. ACM, Vol. 15, 
+
+No. 10, pp. 859–866.
+
+Dijkstra, E. W. (1975) “Guarded Commands, Nondeterminacy, and Formal Deriva-
+
+tion of Programs.” Commun. ACM, Vol. 18, No. 8, pp. 453–457.
+
+Dijkstra, E. W. (1976) A Discipline of Programming. Prentice Hall, Englewood 
+
+Cliffs, NJ.
+
+Dybvig, R. K. (2011) The Scheme Programming Language, 4e. MIT Press, Boston.
+Ellis, M. A., and B. Stroustrup. (1990) The Annotated C++ Reference Manual. 
+
+Addison-Wesley, Reading, MA.
+
+Farber, D. J., R. E. Griswold, and I. P. Polonsky. (1964) “SNOBOL, a String Manipu-
+
+lation Language.” J. ACM, Vol. 11, No. 1, pp. 21–30.
+
+Farrow, R. (1982) “LINGUIST 86: Yet Another Translator Writing System Based on 
+Attribute Grammars.” ACM SIGPLAN Notices, Vol. 17, No. 6, pp. 160–171.
+Fischer, C. N., G. F. Johnson, J. Mauney, A. Pal, and D. L. Stock. (1984) “The Poe 
+Language-Based Editor Project.” ACM SIGPLAN Notices, Vol. 19, No. 5, 
+pp. 21–29.
+
+Fischer, C. N., and R. J. LeBlanc. (1977) UW-Pascal Reference Manual. Madison 
+
+Academic Computing Center, Madison, WI.
+
+Fischer, C. N., and R. J. LeBlanc. (1980) “Implementation of Runtime Diagnos-
+
+tics in Pascal.” IEEE Transactions on Software Engineering, Vol. SE-6, No. 4, 
+pp. 313–319.
+
+Fischer, C. N., and R. J. LeBlanc. (1991) Crafting a Compiler with C. Benjamin-
+
+Cummings, Menlo Park, CA.
+
+Flanagan, D. (2011) JavaScript: The Definitive Guide, 6e. O’Reilly Media, Sebas-
+
+topol, CA.
+
+Flanagan, D., and Y. Matsumoto. (2008) The Ruby Programming Language, O’Reilly 
+
+Media, Sebastopol, CA.
+
+Floyd, R. W. (1967) “Assigning Meanings to Programs.” Proceedings Symposium 
+
+Applied Mathematics. Mathematical Aspects of Computer Science, J. T. Schwartz 
+(ed.). American Mathematical Society, Providence, RI.
+
+Frege, G. (1892) “Über Sinn und Bedeutung.” Zeitschrift für Philosophie und Phi-
+
+losophisches Kritik, Vol. 100, pp. 25–50.
+
+Friedl, J. E. F. (2006) Mastering Regular Expressions, 3e. O’Reilly Media, 
+
+Sebastopol, CA.
+
+Friedman, D. P., and D. S. Wise. (1979) “Reference Counting’s Ability to Collect 
+
+Cycles Is Not Insurmountable.” Information Processing Letters, Vol. 8, No. 1, 
+pp. 41–45.
+
+Fuchi, K. (1981) “Aiming for Knowledge Information Processing Systems.” Proceed-
+ings of the International Conference on Fifth Generation Computing Systems. 
+Japan Information Processing Development Center, Tokyo. Republished (1982) 
+by North-Holland Publishing, Amsterdam.
+
+Gehani, N. (1983) Ada: An Advanced Introduction. Prentice Hall, Englewood 
+
+Cliffs, NJ.
+
+Z01_SEBE8029_12_SE_BIB.indd   718
+
+1/5/18   10:12 PM
+
+ 
+ 
+ 
+ 
+Bibliography 
+
+  719
+
+Gilman, L., and A. J. Rose. (1983) APL: An Interactive Approach, 3e. John Wiley, 
+
+New York.
+
+Goodenough, J. B. (1975) “Exception Handling: Issues and Proposed Notation.” 
+
+Commun. ACM, Vol. 18, No. 12, pp. 683–696.
+
+Goos, G., and J. Hartmanis (eds.). (1983) The Programming Language Ada Reference 
+Manual. American National Standards Institute. ANSI/-MIL-STD-1815-A–1983. 
+Lecture Notes in Computer Science 155. Springer-Verlag, New York.
+
+Gordon, M. (1979) The Denotational Description of Programming Languages, An 
+
+Introduction. Springer-Verlag, New York.
+
+Graham, P. (1996) ANSI Common LISP. Prentice Hall, Englewood Cliffs, NJ.
+Gries, D. (1981) The Science of Programming. Springer-Verlag, New York.
+Halstead, R. H., Jr. (1985) “Multilisp: A Language for Concurrent Symbolic Com-
+putation.” ACM Transactions on Programming Language and Systems, Vol. 7, 
+No. 4, October 1985, pp. 501–538.
+
+Halvorson, M. (2013) Microsoft Visual Basic 2013 Step by Step. Microsoft Press, 
+
+Redmond, WA.
+
+Hammond, P. (1983) APES: A User Manual. Department of Computing Report 82/9. 
+
+Imperial College of Science and Technology, London.
+
+Harbison, S. P., III, and G. L. Steele, Jr. (2002) C: A Reference Manual, 5e. Prentice 
+
+Hall, Upper Saddle River, NJ.
+
+Henderson, P. (1980) Functional Programming: Application and Implementation. 
+
+Prentice Hall, Englewood Cliffs, NJ.
+
+Hoare, C. A. R. (1969) “An Axiomatic Basis of Computer Programming.” Commun. 
+
+ACM, Vol. 12, No. 10, pp. 576–580.
+
+Hoare, C. A. R. (1972) “Proof of Correctness of Data Representations.” Acta Infor-
+
+matica, Vol. 1, pp. 271–281.
+
+Hoare, C. A. R. (1973) “Hints on Programming Language Design.” Proceed-
+
+ings ACM SIGACT/SIGPLAN Conference on Principles of Programming 
+Languages. Also published as Technical Report STAN-CS-73-403, Stanford 
+University Computer Science Department.
+
+Hoare, C. A. R. (1974) “Monitors: An Operating System Structuring Concept.” 
+
+Commun. ACM, Vol. 17, No. 10, pp. 549–557.
+
+Hoare, C. A. R. (1978) “Communicating Sequential Processes.” Commun. ACM, 
+
+Vol. 21, No. 8, pp. 666–677.
+
+Hoare, C. A. R. (1981) “The Emperor’s Old Clothes.” Commun. ACM, Vol. 24, 
+
+No. 2, pp. 75–83.
+
+Hoare, C. A. R., and N. Wirth. (1973) “An Axiomatic Definition of the Programming 
+
+Language Pascal.” Acta Informatica, Vol. 2, pp. 335–355.
+
+Hogger, C. J. (1984) Introduction to Logic Programming. Academic Press, 
+
+London.
+
+Hogger, C. J. (1991) Essentials of Logic Programming. Oxford Science Publications, 
+
+Oxford, England.
+
+Holt, R. C., G. S. Graham, E. D. Lazowska, and M. A. Scott. (1978) Structured 
+Concurrent Programming with Operating Systems Applications. Addison-
+Wesley, Reading, MA.
+
+Horn, A. (1951) “On Sentences Which Are True of Direct Unions of Algebras.” 
+
+J. Symbolic Logic, Vol. 16, pp. 14–21.
+
+Hudak, P., and J. Fasel. (1992) “A Gentle Introduction to Haskell.” ACM SIGPLAN 
+
+Notices, Vol. 27, No. 5, May 1992, pp. T1–T53.
+
+Z01_SEBE8029_12_SE_BIB.indd   719
+
+1/5/18   10:12 PM
+
+ 
+ 
+ 
+720 
+
+  Bibliography
+
+Hughes, J. (1989) “Why Functional Programming Matters.” The Computer Journal, 
+
+Vol. 32, No. 2, pp. 98–107.
+
+Huskey, H. K., R. Love, and N. Wirth. (1963) “A Syntactic Description of BC 
+
+NELIAC.” Commun. ACM, Vol. 6, No. 7, pp. 367–375.
+
+IBM. (1954) “Preliminary Report, Specifications for the IBM Mathematical FOR-
+mula TRANslating System, FORTRAN.” IBM Corporation, New York.
+
+IBM. (1956) “Programmer’s Reference Manual, The FORTRAN Automatic Coding 
+
+System for the IBM 704 EDPM.” IBM Corporation, New York.
+
+IBM. (1964) The New Programming Language. IBM UK Laboratories, Hursley, 
+
+England.
+
+Ichbiah, J. D., J. C. Heliard, O. Roubine, J. G. P. Barnes, B. Krieg-Brueckner, and 
+B. A. Wichmann. (1979) “Part B: Rationale for the Design of the Ada Program-
+ming Language.” ACM SIGPLAN Notices, Vol. 14, No. 6.
+
+IEEE. (1985) “Binary Floating-Point Arithmetic.” IEEE Standard 754, IEEE, 
+
+New York.
+
+INCITS/ISO/IEC. (1997) 1539-1-1997, Information Technology—Programming 
+
+Languages—FORTRAN, Part 1: Base Language. American National Standards 
+Institute, New York.
+
+Ingerman, P. Z. (1967). “Panini-Backus Form Suggested.” Commun. ACM, Vol. 10, 
+
+No. 3, p. 137.
+
+ISO. (1998) ISO14882-1, ISO/IEC Standard – Information Technology—
+
+Programming Language—C++. International Organization for Standardization, 
+Geneva, Switzerland.
+
+ISO. (1999) ISO/IEC 9899:1999, Programming Language C. American National 
+
+Standards Institute, New York.
+
+ISO/IEC. (1996) 14977:1996, Information Technology—Syntactic Metalanguage— 
+
+Extended BNF. International Organization for Standardization, Geneva, 
+Switzerland.
+
+ISO/IEC. (2002) 1989:2002, Information Technology—Programming Languages—
+
+COBOL. American National Standards Institute, New York.
+
+ISO/IEC. (2010) 1539-1, Information Technology—Programming Languages—Fortran. 
+
+American National Standards Institute, New York.
+
+ISO/IEC. (2014) 8652/2012(E), Ada 2012 Reference Manual. Springer-Verlag, 
+
+New York.
+
+Iverson, K. E. (1962) A Programming Language. John Wiley, New York.
+Jensen, K., and N. Wirth. (1974) Pascal Users Manual and Report. Springer-Verlag, 
+
+Berlin.
+
+Johnson, S. C. (1975) “Yacc: Yet Another Compiler-Compiler.” Computing Science 
+
+Report 32. AT&T Bell Laboratories, Murray Hill, NJ.
+
+Jones, N. D. (ed.). (1980) Semantic-Directed Compiler Generation. Lecture Notes in 
+
+Computer Science, Vol. 94. Springer-Verlag, Heidelberg, FRG.
+
+Kay, A. (1969) The Reactive Engine. PhD Thesis. University of Utah, September.
+Kernighan, B. W., and D. M. Ritchie. (1978) The C Programming Language. 
+
+Prentice Hall, Englewood Cliffs, NJ.
+
+Knuth, D. E. (1965) “On the Translation of Languages from Left to Right.” Informa-
+
+tion & Control, Vol. 8, No. 6, pp. 607–639.
+
+Knuth, D. E. (1967) “The Remaining Trouble Spots in ALGOL 60.” Commun. 
+
+ACM, Vol. 10, No. 10, pp. 611–618.
+
+Knuth, D. E. (1968) “Semantics of Context-Free Languages.” Mathematical Systems 
+
+Theory, Vol. 2, No. 2, pp. 127–146.
+
+Z01_SEBE8029_12_SE_BIB.indd   720
+
+1/5/18   10:12 PM
+
+ 
+ 
+ 
+ 
+Bibliography 
+
+  721
+
+Knuth, D. E. (1974) “Structured Programming with GOTO Statements.” ACM 
+
+Computing Surveys, Vol. 6, No. 4, pp. 261–301.
+
+Knuth, D. E. (1981) The Art of Computer Programming, Vol. II, 2e. Addison-Wesley, 
+
+Reading, MA.
+
+Knuth, D. E., and L. T. Pardo. (1977) “Early Development of Programming Lan-
+
+guages.” In Encyclopedia of Computer Science and Technology, G. Holzman and 
+A. Kent (eds.). Vol. 7. Dekker, New York, pp. 419–493.
+
+Kowalski, R. A. (1979) Logic for Problem Solving. Artificial Intelligence Series, 
+
+Vol. 7. Elsevier-North Holland, New York.
+
+Laning, J. H., Jr., and N. Zierler. (1954) “A Program for Translation of Mathematical 
+Equations for Whirlwind I.” Engineering memorandum E-364. Instrumentation 
+Laboratory, Massachusetts Institute of Technology, Cambridge, MA.
+
+Ledgard, H. F., and M. Marcotty. (1975) “A Genealogy of Control Structures.” 
+
+Commun. ACM, Vol. 18, No. 11, pp. 629–639.
+
+Lippman, S. B., and J. Lajoie. (2012) C++ Primer, 5e. Addison-Wesley, Upper Saddle 
+
+River, NJ.
+
+Lischner, R. (2000) Delphi in a Nutshell. O’Reilly Media, Sebastopol, CA.
+Liskov, B., R. L. Atkinson, T. Bloom, J. E. B. Moss, C. Scheffert, R. Scheif ler, and A. 
+
+Snyder. (1981) CLU Reference Manual. Springer, New York.
+
+Lomet, D. (1975) “Scheme for Invalidating References to Freed Storage.” IBM Jour-
+
+nal of Research and Development, Vol. 19, pp. 26–35.
+
+Lutz, M. (2013) Learning Python, 5e. O’Reilly Media, Sebastopol, CA.
+MacLaren, M. D. (1977) “Exception Handling in PL/I.” ACM SIGPLAN Notices, 
+
+Vol. 12, No. 3, pp. 101–104.
+
+Marcotty, M., H. F. Ledgard, and G. V. Bochmann. (1976) “A Sampler of Formal 
+
+Definitions.” ACM Computing Surveys, Vol. 8, No. 2, pp. 191–276.
+
+Mather, D. G., and S. V. Waite (eds.). (1971) BASIC, 6e. University Press of New 
+
+England, Hanover, NH.
+
+McCarthy, J. (1960) “Recursive Functions of Symbolic Expressions and Their Com-
+putation by Machine, Part I.” Commun. ACM, Vol. 3, No. 4, pp. 184–195.
+
+McCarthy, J., P. W. Abrahams, D. J. Edwards, T. P. Hart, and M. Levin. (1965) LISP 
+
+1.5 Programmer’s Manual, 2e. MIT Press, Cambridge, MA.
+
+McCracken, D. (1970) “Whither APL.” Datamation, September 15, pp. 53–57.
+Metcalf, M., J. Reid, and M. Cohen. (2004) Fortran 95/2003 Explained, 3e. Oxford 
+
+University Press, Oxford, England.
+
+Meyer, B. (1990) Introduction to the Theory of Programming Languages. Prentice 
+
+Hall, Englewood Cliffs, NJ.
+
+Milner, R., R. Harper, and M. Tof le. (1997) The Definition of Standard ML-Revised. 
+
+MIT Press, Cambridge, MA.
+
+Milos, D., U. Pleban, and G. Loegel. (1984) “Direct Implementation of Compiler 
+Specifications.” POPL ’84 Proceedings of the 11th ACM SIGACT-SIGPLAN 
+Symposium on Programming Languages, pp. 196–202.
+
+Mitchell, J. G., W. Maybury, and R. Sweet. (1979) Mesa Language Manual, Version 
+
+5.0, CSL-79-3. Xerox Research Center, Palo Alto, CA.
+
+Moss, C. (1994) Prolog++: The Power of Object-Oriented and Logic Programming. 
+
+Addison-Wesley, Reading, MA.
+
+Moto-oka, T. (1981) “Challenge for Knowledge Information Processing Systems.” 
+Proceedings of the International Conference on Fifth Generation Computing 
+Systems. Japan Information Processing Development Center, Tokyo. Republished 
+(1982) by North-Holland Publishing, Amsterdam.
+
+Z01_SEBE8029_12_SE_BIB.indd   721
+
+1/5/18   10:12 PM
+
+ 
+ 
+ 
+722 
+
+  Bibliography
+
+Naur, P. (ed.). (1960) “Report on the Algorithmic Language ALGOL 60.” Commun. 
+
+ACM, Vol. 3, No. 5, pp. 299–314.
+
+Newell, A., and H. A. Simon. (1956) “The Logic Theory Machine—A Complex 
+Information Processing System.” IRE Transactions on Information Theory, 
+Vol. IT-2, No. 3, pp. 61–79.
+
+Newell, A., and F. M. Tonge. (1960) “An Introduction to Information Processing 
+
+Language V.” Commun. ACM, Vol. 3, No. 4, pp. 205–211.
+
+Nilsson, N. J. (1971) Problem Solving Methods in Artificial Intelligence. McGraw-
+
+Hill, New York.
+
+Pagan, F. G. (1981) Formal Specifications of Programming Languages. Prentice Hall, 
+
+Englewood Cliffs, NJ.
+
+Papert, S. (1980) MindStorms: Children, Computers and Powerful Ideas. Basic 
+
+Books, New York.
+
+Perlis, A., and K. Samelson. (1958) “Preliminary Report—International Algebraic 
+
+Language.” Commun. ACM, Vol. 1, No. 12, pp. 8–22.
+
+Peyton Jones, S. L. (1987) The Implementation of Functional Programming 
+
+Languages. Prentice Hall, Englewood Cliffs, NJ.
+
+Pratt, T. W., and M. V. Zelkowitz. (2001) Programming Languages: Design and 
+
+Implementation, 4e. Prentice Hall, Englewood Cliffs, NJ.
+
+Remington-Rand. (1952) “UNIVAC Short Code.” Unpublished collection of dit-
+toed notes. Preface by A. B. Tonik, dated October 25, 1955 (1 p.); Preface by 
+J. R. Logan, undated but apparently from 1952 (1 p.); Preliminary exposition, 
+1952? (22 pp., in which pp. 20–22 appear to be a later replacement); Short code 
+supplementary information, topic one (7 pp.); Addenda #1, 2, 3, 4 (9 pp.).
+
+Reppy, J. H. (1999) Concurrent Programming in ML. Cambridge University Press, 
+
+New York.
+
+Richards, M. (1969) “BCPL: A Tool for Compiler Writing and Systems Program-
+
+ming.” Proc. AFIPS SJCC, Vol. 34, pp. 557–566.
+
+Robbins, A. (2005) Unix in a Nutshell, 4e. O’Reilly Media, Sebastopol, CA.
+Robinson, J. A. (1965) “A Machine-Oriented Logic Based on the Resolution Princi-
+
+ple.” Journal of the ACM, Vol. 12, pp. 23–41.
+
+Roussel, P. (1975) “PROLOG: Manual de Reference et D’utilisation.” Research 
+Report. Artificial Intelligence Group, University of Aix-Marseille, Luming, 
+France.
+
+Rubin, F. (1987) “‘GOTO Statement Considered Harmful’ considered harmful” 
+
+(letter to editor). Commun. ACM, Vol. 30, No. 3, pp. 195–196.
+
+Rutishauser, H. (1967) Description of ALGOL 60. Springer-Verlag, New York.
+Sammet, J. E. (1969) Programming Languages: History and Fundamentals. Prentice 
+
+Hall, Englewood Cliffs, NJ.
+
+Sammet, J. E. (1976) “Roster of Programming Languages for 1974–75.” Commun. 
+
+ACM, Vol. 19, No. 12, pp. 655–669.
+
+Schorr, H., and W. Waite. (1967) “An Efficient Machine Independent Procedure for 
+Garbage Collection in Various List Structures.” Commun. ACM, Vol. 10, No. 8, 
+pp. 501–506.
+
+Scott, D. S., and C. Strachey. (1971) “Towards a Mathematical Semantics for Com-
+puter Language.” In Proceedings, Symposium on Computers and Automation, 
+J. Fox (ed.). Polytechnic Institute of Brooklyn Press, New York, pp. 19–46.
+
+Scott, M. (2009) Programming Language Pragmatics, 3e. Morgan Kaufman, 
+
+San Francisco, CA.
+
+Sebesta, R. W. (1991) VAX Structured Assembly Language Programming, 2e. 
+
+Benjamin/Cummings, Redwood City, CA.
+
+Z01_SEBE8029_12_SE_BIB.indd   722
+
+1/5/18   10:12 PM
+
+ 
+ 
+ 
+ 
+Bibliography 
+
+  723
+
+Sergot, M. J. (1983) “A Query-the-User Facility for Logic Programming.” In Inte-
+
+grated Interactive Computer Systems, P. Degano and E. Sandewall (eds.). North-
+Holland Publishing, Amsterdam.
+
+Shaw, C. J. (1963) “A Specification of JOVIAL.” Commun. ACM, Vol. 6, No. 12, 
+
+pp. 721–736.
+
+Smith, J. B. (2006) Practical OCaml. Apress, Springer-Verlag, New York.
+Sommerville, I. (2010) Software Engineering, 9e. Addison-Wesley, Reading, MA.
+Steele, G. L., Jr. (1990) Common LISP The Language, 2e. Digital Press, 
+
+Burlington, MA.
+
+Stoy, J. E. (1977) Denotational Semantics: The Scott–Strachey Approach to Pro-
+
+gramming Language Semantics. MIT Press, Cambridge, MA.
+
+Stroustrup, B. (1983) “Adding Classes to C: An Exercise in Language Evolution.” 
+
+Software—Practice and Experience, Vol. 13, pp. 139–161.
+
+Stroustrup, B. (1984) “Data Abstraction in C.” AT&T Bell Laboratories Technical 
+
+Journal, Vol. 63, No. 8, pp. 1701–1732.
+
+Stroustrup, B. (1986) The C++ Programming Language. Addison-Wesley, Read-
+
+ing, MA.
+
+Stroustrup, B. (1988) “What Is Object-Oriented Programming?” IEEE Software, 
+
+May 1988, pp. 10–20.
+
+Stroustrup, B. (1994) The Design and Evolution of C++. Addison-Wesley, Reading, MA.
+Stroustrup, B. (1997) The C++ Programming Language, 3e. Addison-Wesley, Read-
+
+ing, MA.
+
+Sussman, G. J., and G. L. Steele, Jr. (1975) “Scheme: An Interpreter for Extended 
+
+Lambda Calculus.” MIT AI Memo No. 349 (December 1975).
+
+Suzuki, N. (1982) “Analysis of Pointer ‘Rotation’.” Commun. ACM, Vol. 25, No. 5, 
+
+pp. 330–335.
+
+Syme, D., A. Granicz, and A. Cisternino. (2010) Expert F# 2.0. Apress, Springer-
+
+Verlag, New York.
+
+Tatroe, K., P. MacIntyre, and R. Lerdorf. (2013) Programming PHP, 3e. O’Reilly 
+
+Media, Sebastopol, CA.
+
+Tanenbaum, A. S. (2005) Structured Computer Organization, 5e. Prentice Hall, 
+
+Englewood Cliffs, NJ.
+
+Teitelbaum, T., and T. Reps. (1981) “The Cornell Program Synthesizer: A Syntax-
+Directed Programming Environment.” Commun. ACM, Vol. 24, No. 9, 
+pp. 563–573.
+
+Tenenbaum, A. M., Y. Langsam, and M. J. Augenstein. (1990) Data Structures Using 
+
+C. Prentice Hall, Englewood Cliffs, NJ.
+
+Thomas, D., A. Hunt, and C. Fowler. (2013) Programming Ruby 1.9 & 2.0: The 
+
+Pragmatic Programmers Guide (The Facets of Ruby). The Pragmatic Bookshelf, 
+Raleigh, NC.
+
+Thompson, S. (1999) Haskell: The Craft of Functional Programming, 2e. Addison-
+
+Wesley, Reading, MA.
+
+Turner, D. (1986) “An Overview of Miranda.” ACM SIGPLAN Notices, Vol. 21, 
+
+No. 12, pp. 158–166.
+
+Ullman, J. D. (1998) Elements of ML Programming. ML97 edition. Prentice Hall, 
+
+Englewood Cliffs, NJ.
+
+van Emden, M. H. (1980) “McDermott on Prolog: A Rejoinder.” SIGART Newslet-
+
+ter, No. 72, August, pp. 19–20.
+
+van Wijngaarden, A., B. J. Mailloux, J. E. L. Peck, and C. H. A. Koster. (1969) 
+
+“Report on the Algorithmic Language ALGOL 68.” Numerische Mathematik, 
+Vol. 14, No. 2, pp. 79–218.
+
+Z01_SEBE8029_12_SE_BIB.indd   723
+
+1/5/18   10:12 PM
+
+ 
+ 
+ 
+724 
+
+  Bibliography
+
+Wadler, P. (1998) “Why No One Uses Functional Languages.” ACM SIGPLAN 
+
+Notices, Vol. 33, No. 2, February 1998, pp. 25–30.
+
+Warren, D. H. D., L. M. Pereira, and F. C. N. Pereira. (1979) “User’s Guide to DEC 
+System-10 Prolog.” Occasional Paper 15. Department of Artificial Intelligence, 
+University of Edinburgh, Scotland.
+
+Watt, D. A. (1979) “An Extended Attribute Grammar for Pascal.” ACM SIGPLAN 
+
+Notices, Vol. 14, No. 2, pp. 60–74.
+
+Wegner, P. (1972) “The Vienna Definition Language.” ACM Computing Surveys, 
+
+Vol. 4, No. 1, pp. 5–63.
+
+Weissman, C. (1967) LISP 1.5 Primer. Dickenson Press, Belmont, CA.
+Wexelblat, R. L. (ed.). (1981) History of Programming Languages. Academic Press, 
+
+New York.
+
+Wheeler, D. J. (1950) “Programme Organization and Initial Orders for the EDSAC.” 
+
+Proc. R. Soc. London, Ser. A, Vol. 202, pp. 573–589.
+
+Wilkes, M. V. (1952) “Pure and Applied Programming.” In Proceedings of the ACM 
+
+National Conference, Vol. 2. Toronto, pp. 121–124.
+
+Wilkes, M. V., D. J. Wheeler, and S. Gill. (1951) The Preparation of Programs for an 
+Electronic Digital Computer, with Special Reference to the EDSAC and the Use 
+of a Library of Subroutines. Addison-Wesley, Reading, MA.
+
+Wilkes, M. V., D. J. Wheeler, and S. Gill. (1957) The Preparation of Programs for an 
+
+Electronic Digital Computer, 2e. Addison-Wesley, Reading, MA.
+
+Wilson, P. R. (2005) “Uniprocessor Garbage Collection Techniques.” Available at 
+
+http://www.cs.utexas.edu/users/oops/papers.htm#bigsurv.
+
+Wirth, N. (1971) “The Programming Language Pascal.” Acta Informatica, Vol. 1, 
+
+No. 1, pp. 35–63.
+
+Wirth, N. (1973) Systematic Programming: An Introduction. Prentice Hall, 
+
+Englewood Cliffs, NJ.
+
+Wirth, N. (1975) “On the Design of Programming Languages.” Information Pro-
+cessing 74 (Proceedings of IFIP Congress 74). North Holland, Amsterdam, 
+pp. 386–393.
+
+Wirth, N. (1977) “Modula: A Language for Modular Multi-Programming.” 
+
+Software—Practice and Experience, Vol. 7, pp. 3–35.
+
+Wirth, N., and C. A. R. Hoare. (1966) “A Contribution to the Development of 
+
+ALGOL.” Commun. ACM, Vol. 9, No. 6, pp. 413–431.
+
+Zuse, K. (1972) “Der Plankalkül.” Manuscript prepared in 1945, published in 
+Berichte der Gesellschaft für Mathematik und Datenverarbeitung, No. 63 
+(Bonn, 1972); Part 3, 285 pp. English translation of all but pp. 176–196 in 
+No. 106 (Bonn, 1976), pp. 42–244.
+
+Z01_SEBE8029_12_SE_BIB.indd   724
+
+1/5/18   10:12 PM
+
+ 
+ 
+ 
+ 
+Index
+
+A
+Absolute addressing
+manual, 201
+pointers and, 280
+problems with, 38, 40
+
+Abstract cells, 202, 284
+Abstract class, 489, 492,  
+
+515, 517
+in C#, 514–515
+in C++, 507
+in Java, 510
+
+Abstract data types, 19, 
+
+236–237, 312, 485–486, 
+549, 560
+in Ada, 479
+in C#, 461–462
+in C++, 453–459, 467–468
+in C# 2005, 471
+design issues for, 452–453
+f loating-point as, 450
+in Java, 459–461
+in Java 5.0, 468–470
+language-defined, 237
+object-oriented 
+
+programming and, 352
+
+parameterized, 466–471
+in Ruby, 463–466
+for stacks, 457, 467, 476
+user-defined, 237, 450–451
+
+Abstract method, 489, 514
+
+in C#, 514–515
+of a Java abstract class, 512
+
+Abstraction, 2, 15, 19, 125, 
+
+198, 357
+beginnings of data, 70–71
+benefits of, 19, 80, 225
+in BNF, 114
+concept, 448–449
+data, 19, 80, 366, 449–452
+process, 366, 449
+in Smalltalk, 84
+subprogram, 367
+Accept clause body, 553
+Accept clauses, 553–559, 561
+Access
+
+deep, 437–439
+in nested subprograms, 
+
+376, 430
+in nonblocking 
+
+synchronized, 569
+
+shallow, 439–441
+types, 273
+
+ACM (Association for Com-
+
+puting Machinery), 51
+Communications of the 
+ACM, 53, 624
+
+GAMM and, 51
+Grace Murray Hopper 
+Award, 454, 498
+Turing Award of, 624
+Activation record instance, 
+420, 422, 424–435,  
+437–439, 647–648
+of static ancestors, 431–435
+
+Z02_SEBE8029_12_SE_IDX.indd   725
+
+1/8/18   5:03 PM
+
+725
+
+726 
+
+  Index
+
+Activation records, 420
+
+local_offset of a variable in, 426
+in stack, 430
+Active subprograms
+
+in referencing environments, 224
+in stack-dynamic local variables, 424
+
+Actor tasks, 554, 570
+Actual parameters, 203, 251, 343, 369–372, 
+374, 378–380, 383–385, 391, 398, 410,  
+418, 422, 424, 516, 634, 638, 645, 648,  
+661, 662, 667
+
+Ad hoc binding, 393–394
+Ad hoc polymorphism, 399
+Ada, 12, 33, 55, 74, 198, 211, 373, 376, 391, 
+
+404, 422, 429, 543, 594
+2005 version of, 82–83
+abstract data types in, 479
+assignment statement, 251
+attribute grammar of, 130
+Boolean operator in, 13
+compilers, 23
+concurrency in, 552–560
+declarations of constrained anonymous 
+
+types, 290
+derived types, 290
+design process, 79–80
+evaluation of, 81–82
+exception handling in, 14
+exponentiation operator of, 304
+functions of, 397
+historical background of, 79
+implement monitors and monitors of, 550
+language overview of, 80–81
+packages in, 80, 560
+parentheses in, 251
+pass-by-value-result of, 397
+subrange types, 290
+subtypes of, 293, 490
+tasks, 552, 560–561, 570, 575
+termination of selection construct, 12
+type equivalence, 288, 291
+
+Ada 83, 82, 550
+Ada 95, 82–83, 543
+
+constructing monitors, 550
+pointers of, 396
+
+Addresses, 258, 273, 277–280, 293, 341, 380, 
+
+420–422, 426, 680
+of array elements, 293
+in memory, 387
+offset of, 265, 280
+for out-mode parameters, 379
+segment of, 280
+of variables, 201–202
+
+Aho, Al, 92
+AI (artificial intelligence), 6, 93, 688
+LISP in, 45–46, 48, 632, 653
+in Perl, 93
+Project at MIT, 46, 632
+
+ALGOL 58, 113
+
+design effort, 55
+overview of, 52
+report on, 53
+
+ALGOL 60, 51, 57, 61, 62, 67
+
+BNF in, 55
+design process, 53–54
+evaluation of, 54–56
+example of an, 55–56
+overview of, 54
+primary deficiency of, 71
+
+ALGOL 68
+
+design process, 71
+evaluation of, 72–73
+language overview of, 72
+orthogonality in, 72
+
+ALGOL Bulletin, 53
+Aliases, 201–202, 276, 279, 380–381, 385, 392
+Aliasing, 14–15, 201–202, 380–381, 391–392, 
+
+396–397, 410
+
+Allocation, 46, 69, 72, 207–209, 217, 237,  
+
+245–247, 252–253, 275, 281–282, 375, 421
+of objects, 492–493
+storage, 46, 69, 208, 217, 246–247, 252, 283
+
+Ambiguous grammars, 118–119, 333
+AND operator, 153, 155
+and then Boolean operator, 13
+Anonymous variables, 273
+ANSI (American National Standards Institute), 58
+
+on C, 76
+Minimal BASIC standard, 62
+standardization of C++, 454, 498, 594
+
+Z02_SEBE8029_12_SE_IDX.indd   726
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+Antecedents, 144, 147, 683, 690–701
+APES system, 710
+APL (A Programming Language), 13, 21
+origins and characteristics of, 69–70
+
+Append function, 656
+append operations, 700
+Apple, 87, 88
+Apply-to-all functional forms, 628, 649–650
+Arithmetic expressions, 41, 58, 90, 117, 165, 
+
+332, 653, 711
+associativity in, 305–307
+characteristics of, 302–303
+coercions in, 313–315
+conditional, 308–309
+design issues for, 303
+grammar for, 175–176, 184, 188
+in Lisp, 308
+mixed-mode, 313, 314
+operand evaluation order in, 309–311
+parentheses in, 307
+precedence in, 303–305
+in Prolog, 711
+purpose of, 303
+referential transparency in, 310–311
+in Ruby, 307–308
+rules of operator evaluation order,  
+
+305–307
+
+side effects in, 309–311
+Array types, 99, 250–261
+
+array initialization in, 254–255
+array operations in, 255–256
+design issues for, 250
+evaluation of, 258
+implementation of, 258–260
+indices and, 251–252
+jagged arrays in, 256
+rectangular arrays in, 256
+slices in, 257
+subscript bindings in, 252–254
+
+Artificial intelligence (AI). see AI (artificial 
+
+intelligence)
+
+ASCII (American Standard Code for 
+
+Information Interchange), 138, 241, 689
+
+Assemblies, .NET, 474
+Assertions, 150
+
+Index 
+
+  727
+
+in axiomatic semantics, 143–144
+in Java, 604–605
+
+Assignment statements, 11, 18, 20, 47, 136, 150, 
+
+152, 218, 251, 253, 261, 277, 286
+ambiguous grammar for, 118
+attribute grammar for simple, 131
+in axiomatic semantics, 145–147
+compound assignment operators in, 320
+conditional targets and, 320
+in denotational semantics, 141
+as expressions, 322–323
+in functional programming languages, 
+
+323–324
+
+grammar for simple, 117–118
+mixed-mode, 324
+multiple, 323
+simple, 319–320
+unary assignment data types in, 321
+
+Association for Computing Machinery (ACM). 
+see ACM (Association for Computing 
+Machinery)
+Associative arrays
+definition, 261
+implementation of, 262–263
+structure and operations of, 261–263
+
+Associativity, 127, 176, 181, 302
+of operators, 115, 122–123
+rules of operator evaluation order, 303, 
+
+305–307
+
+Atomic propositions, 681–683, 685, 689–690, 
+
+698, 711
+
+Atoms, 650
+
+Lisp, 47, 629–630
+predicate functions for symbolic, 641
+Prolog, 689, 706, 708
+AT&T Bell Laboratories, 455
+Attribute computation functions, 129
+Attribute grammars, 128, 292
+
+basic concepts of, 129
+computing attribute values in, 132–133
+defined, 129–130
+evaluation of, 133–134
+examples of, 130–132
+intrinsic attributes in, 130
+static semantics and, 128–129
+
+Z02_SEBE8029_12_SE_IDX.indd   727
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+728 
+
+  Index
+
+Attributes, 171, 198, 517
+binding, 203–204
+defined, 129
+instance data as, 464
+intrinsic, 130
+of variables, names, 199, 201
+Automatic generalization, 403
+Automatic programming, 39
+awk scripting language, 92
+Axiomatic semantics, 680
+assertions in, 143–144
+assignment statements in, 145–147
+evaluation of, 155
+logical pretest loops in, 149–152
+program proofs in, 152–155
+selection in, 148–149
+sequences in, 147–148
+weakest preconditions in, 144–145
+
+Axioms, 144, 155, 681, 684
+
+B
+B, language, 75
+Babbage, Charles, 37, 80, 366
+Backtracking, 685, 694, 697, 699, 704–705, 711
+Backus, John, 40–41
+
+BNF (Backus-Naur Form) (see BNF 
+
+(Backus-Naur Form))
+
+Fortran by, 18, 41, 624
+FP (functional programming), 624–625
+speedcoding system by, 39
+
+Backward chaining, 693
+Base class, 486
+base prefix, 514
+Basic (Beginner’s All-purpose Symbolic 
+
+Instruction Code)
+design process, 61–62
+evaluation of, 62–63
+example of, 63
+BASIC-PLUS, 62
+Bauer, Fritz, 51
+BCD (binary coded decimal), 240
+Bell Laboratories. see AT&T Bell Laboratories
+BINAC computer, 38
+binary coded decimal (BCD), 240
+Binary operators, 256, 303
+Binary semaphore, 547
+
+Binding, 632, 635, 656
+
+of actual parameters to formal parameters, 370
+ad hoc, 393–394
+attributes to variables, 203–204
+deep, 393–394, 437
+definition, 203
+difference between access, 437
+dynamic type, 205–207
+exceptions to handlers, C++, 595
+exceptions to handlers, Java, 599–600
+explicit heap-dynamic variables in, 209–210
+implicit heap-dynamic variables in, 210–211
+lifetime of, 207
+shallow, 393–394, 437
+stack-dynamic variables in, 208–209
+static type, 314
+static variables in, 207–208
+static-type, 493, 512
+storage, 207, 226
+subscript, 252–254
+type, 204–207
+to a variable, 689
+
+Binding time, 203
+Blocked tasks, 542
+Blocks
+
+in Ruby, 668
+for scope, 213–215
+
+BNF (Backus-Naur Form), 53–54
+
+describing lists in, 115
+fundamentals of, 114–115
+origins of, 113–114
+Böhm, Corrado, 332, 359
+Boolean abstract data types, 461–462
+Boolean data types, 76, 332
+Boolean expressions, 316–318, 661
+boolean type variables, 76, 90, 241, 581
+Borland JBuilder, 29
+Bottom-up parsers, 173–174
+LR parsers and, 186–190
+parsing problem for, 184–186
+shift-reduce algorithms for, 186
+
+Bottom-up resolution, 693
+Bound variables, 207, 634
+Bounded wildcard types, 403
+Bounds, 72, 259–260, 401
+Boxing, 509
+
+Z02_SEBE8029_12_SE_IDX.indd   728
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+Breadth-first searches, 694
+break statements, 338–339, 604
+
+multiple-selection statements and, 338–340
+in user-located loop control mechanisms, 350
+
+Brinch Hansen, Per, 548–549, 551–552
+Built-in iterators, 354
+Business applications, 6
+Business record computerization. see COBOL
+Byron, Augusta Ada, 80
+Byte code, 27
+byte integer, 238
+byte operands, 304
+
+C
+C, 198
+
+compilers, 23
+encapsulation in, 472
+evaluation of, 76–77
+expressivity in, 13
+for statement, 345–347
+historical background of, 75–76
+language categories in, 20
+limited dynamic strings of, 246
+local variables in, 376
+mixed-mode assignment in, 324
+name and structure type equivalence of, 291
+orthogonality in, 10
+parameters, 384
+pointers in, 278
+popularity of, 3
+portable system of, generally, 75–77
+preprocessor instruction, 27
+rules and exceptions in, 10
+static specifier of, 208
+struct data type, 263
+switch statement of, 337
+type checking in, 14
+union constructs in, 271
+user-located loop control in, 350–351
+writability of, 13
+
+C#, 164, 198, 237, 238, 240, 242–244, 247–250, 
+253, 254, 256, 257, 263, 270, 371–372, 376, 
+411, 453, 461–462, 539, 543, 549
+4.0 version, 580
+5.0 version, 99
+2010 version, 206
+
+Index 
+
+  729
+
+abstract data types in, 461–462, 479
+arrays of, 253–255, 388
+assemblies, 473–474
+Boolean types in, 241
+classes, 479, 551
+code segments, 349
+decimal data types of, 240
+declaration of a variable, 208
+design process for, 98
+dynamic binding, 514–515
+encapsulation constructs in, 461–462
+enumeration types in, 247, 248
+evaluation of, 99–100, 515
+event handling in, 613–616
+example of, 100
+for statement of, 347
+general characteristics, 513
+generic collection classes, 353
+generic library classes, 353
+goto, 355–356
+heap-dynamic and stack-dynamic objects  
+
+in, 210
+
+inferencing process, 667
+information hiding in, 462
+inheritance in, 513–514
+integer types of, 238
+lambda expression in, 667–668
+language overview of, 98–99
+List, 253
+method for displaying strings in, 339
+mixed-mode expressions in, 324, 398
+multiple selection structure, 359
+name forms, 199–200
+named constants of, 226
+nested class, 515
+nesting method in, 407
+as .NET language, 98–100
+object-oriented programming in, 513–515
+objects of, 253
+overloaded subprograms in, 398
+parameter passing methods of, 379, 384, 
+
+387–388
+
+pointers of, 279–281, 395
+predefined overloaded subprograms of, 398
+reference type of, 294
+references of Java, 279–280
+
+Z02_SEBE8029_12_SE_IDX.indd   729
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+730 
+
+  Index
+
+C# (continued)
+
+ref lection in, 526–528
+selection statement nesting in, 334
+static semantics rule of, 339
+string classes of, 243
+struct data type, 263
+support for concurrency, 581
+switch statement, 339
+threads, 570–575
+a var declaration of a variable, 204
+variable declarations in, 215–216
+
+C++, 16, 20, 29, 50, 55, 74, 76
+
+abstract data types in, 453–459, 467–468
+arrays, 250, 253–254
+assignment statement of, 203
+Boolean types of, 241
+classes, 499–509
+code segment, 210
+constant reference parameters, 389
+constructors in, 457
+declaration of a variable, 208
+declarations in, 215, 217
+Delphi, 88
+design process for, 86
+destructors in, 457
+dynamic binding in, 504–507
+dynamic binding of values, 226
+encapsulation constructs in, 456, 472–473
+enumeration types of, 248–249
+evaluation of, 87, 507–509
+exception handling in, 14, 594–598
+for statement of, 216, 347
+formal parameters of, 370, 384
+functions, 222
+general characteristics, 497
+global variable of, 217
+information hiding in, 456
+inheritance in, 497–504
+integer types of, 238
+language overview of, 87
+limited dynamic strings of, 246
+local variables in, 376
+mixed-mode assignment in, 324
+names in, 199–200
+namespaces, 475–476
+nesting selectors in, 334
+
+object-oriented programming in, 496–509
+objects, 499
+operators, 311, 313
+overloaded subprograms in, 398
+parameterized abstract data types, 467–468
+pattern-matching capabilities of, 244
+pointers in, 22, 99, 202, 210, 277–282, 
+
+393–394
+
+reference parameters in, 384
+reference types in, 278
+static specifier of, 208
+struct data type in, 263
+switch statement of, 337
+typedef in, 291
+unary operator of, 275
+union constructs in, 271
+user-located loop control in, 350–351
+
+C89, 76, 198, 215, 241, 332, 350, 386
+C99, 76, 198, 199, 215, 217, 241, 317, 332, 345, 
+
+347, 350, 386
+C# 2005, 399, 403, 411
+
+assemblies in, 473–474
+generic classes in, 471
+generic functions in, 403
+namespaces in, 475–476
+parameterized abstract data types in, 471
+
+Call chains, 426
+Calls
+
+dynamic binding of method, 519–521
+indirect, 394–396
+semantics of subprogram, 418
+
+Cambridge Polish, 631
+Cambridge University, 40, 75
+Camel notation, 199
+Caml, 50, 658
+canonical LR algorithm, 187
+Captured variables, 668
+CAR functions, 268, 639–640, 643–646, 650, 
+
+698, 702
+
+Case expressions, 338–339
+Case sensitivity, 200
+case statements, 73, 316, 341
+catch, 566–567, 594, 599–603, 606, 617
+C-based languages, 36, 198–200, 211, 213, 
+252, 255, 305, 306, 308, 314–322, 335, 
+345–347, 367, 430, 436, 449, 589, 669
+
+Z02_SEBE8029_12_SE_IDX.indd   730
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+CBL (Common Business Language), 57
+CDE (Solaris Common Desktop  
+
+Environment), 29
+
+CDR functions, 639–640, 643–646, 650, 698, 702
+Central processing units (CPUs), 17–18, 418
+CGI (Common Gateway Interface), 94
+chain_offset, 431, 434, 439
+Chambers, Craig, 508
+char arrays, 242, 254
+char type parameters, 400
+Character string types
+in C and C++, 254
+design issues for, 242
+evaluation of, 245
+implementation of, 245–247
+string length options in, 244–245
+string operations in, 242–244
+
+Character types, 241–242
+Checked exceptions, 601
+Child class, 486
+Chomsky, Noam, 113–114
+Church, Alonzo, 627
+Cii Honeywell/Bull language, 80
+Clark, K. L., 689
+Clarke, L. A., 220
+Class instance record (CIR), 519
+Class methods, 487
+Class variables, 487
+Classes, 486
+
+abstract, 489
+base, 486
+child, 486
+derived, 486
+of exceptions, 599
+inner, 512
+interlocked, 573, 582
+local nested, 513
+parent, 486
+super, 486
+wrapper, 90
+
+Clausal form, 683–684
+Clients, 450–453, 456, 459, 472, 476, 487, 503
+Clocksin, W. F., 705
+CLOS (Common LISP Object System), 653
+Closed accept clause, 557
+Closed-world assumption, 706
+
+Index 
+
+  731
+
+Closures, 405–407
+CML (Concurrent ML), 576, 592
+COBOL, 6, 23
+
+computerizing business records in, 56–61
+design process for, 57–58
+evaluation of, 58–61
+FLOW-MATIC and, 57
+form of a record declaration, 264
+historical background of, 57
+
+Coercions, 90, 287, 291
+
+in arithmetic expressions, 313–315
+of deproceduring, 72
+Colmerauer, Alain, 77, 688
+Column major order, 259
+Common Business Language (CBL), 57
+Common Gateway Interface (CGI), 94
+Common Intermediate Language (CIL), 474, 527
+Common LISP, 49–50, 625, 651–653
+
+backquote operator (`), 652
+lists in, 268–269
+
+Common LISP Object System (CLOS), 20, 653
+Communicating Sequential Processes (CSP), 
+
+356–357, 360, 555
+
+Communications of the ACM, 53, 624
+Compatible types, 286
+Competition synchronization, 539–541
+
+in Ada, 557–559
+in Java, 564–565
+with monitors, 549
+need for, 541
+with semaphores, 547–548
+Compiler design, 4, 129, 162, 203
+
+BNF-based, 55
+
+Compiler implementation, 23
+Complex data types, 240
+Compound assignment operators, 320
+Compound terms, 681
+Computer architecture, 17–19, 69, 198,  
+
+535–537, 624
+
+Concurrency. see also Competition 
+
+synchronization; Cooperation 
+synchronization
+in Ada, 552–560
+in C# threads, 570–575
+categories of, 537–538
+in Concurrent ML, 576
+
+Z02_SEBE8029_12_SE_IDX.indd   731
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+732 
+
+  Index
+
+Concurrency (continued)
+
+design issues for language support for, 
+
+543–544
+
+explicit locks in, Java 5.0, 569–570
+F# support for, 577–578
+in functional languages, 575–578
+fundamental concepts of, 539–543
+in High-Performance Fortran, 578–580
+introduction to, 534–539
+in Java threads, 560–570
+language design for, 543
+message passing in, 551–552
+monitors in, 549–551
+in Multi-LISP, 575
+multiprocessor architectures in, 535–537
+nonblocking synchronization in, 569
+protected objects in, 559–560
+reasons for using, 538–539
+semaphores in, 544–548
+statement-level, 578–580
+subprogram-level, 539–544
+task termination, 555, 557
+thread priorities in, 563–564
+Concurrent ML (CML), 576, 592
+Concurrent Pascal, 549
+Conditional expressions, 46, 308–309, 343,  
+
+626, 655
+
+Conditional targets, 320
+Conjunctions, 690
+CONS functions, 639–640
+Consequents, 144, 683, 690
+const constants, 226
+Constructors, 453, 457
+Context-free grammars, 113, 114, 710
+Continuation, 596
+Control expressions, 332
+Control f low, 537, 596, 637–638
+exception-handling, 593
+paths, 330
+statements, 92
+
+Control statements, 330
+Control structures, 2, 5, 331
+Cooper, Alan, 64–65
+Cooper, Jack, 80
+Cooperation synchronization, 539
+
+in Ada, 557
+
+in Java, 565–568
+with monitors, 549–550
+with semaphores, 544–547
+
+Coroutines, 71, 407–410
+Costs of languages, 15–17
+Counter-controlled loops, 344
+
+in C-based languages, 345–347
+design issues for iterative, 345
+in functional languages, 348
+in Python, 347–348
+
+CPUs (central processing units), 17–18, 418
+CSP (Communicating Sequential Processes), 
+
+356–357, 360, 555
+
+Currie, Malcolm, 79
+Curried functions, 658
+Currying, 657
+Cut, Prolog, 704–705
+
+D
+Dahl, Ole-Johan, 70–71
+Dangling pointers, 275–276
+Dangling references, 275
+Data members, 456
+Data structures, 352–355
+Data types, 9–11, 37, 50. see also Abstract  
+data types; Array types; Associative 
+arrays
+Boolean, 241
+character, 241–242
+character string, 242–247
+complex, 240
+decimal, 240–241
+definition, 236
+descriptors, 237
+enumeration types, 247–249
+equivalence in, 288–291
+f loating-point, 239–240
+f loating-point as an abstract, 450
+integer, 238–239
+of a language, 198
+in Lisp, 629–631
+lists, 268–270
+numeric, 238–241
+ones-complement notation, 239
+pointer, 273–280
+primitive, 238–242
+
+Z02_SEBE8029_12_SE_IDX.indd   732
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+record, 263–266
+reference, 278–285
+string length options in, 244–245
+string operations in, 242–244
+in terms of precision and range, 239
+theory and, 292–293
+tuple, 266–267
+twos-complement notation, 239
+union, 270–272
+user-defined, 72, 73, 236
+user-defined abstract, 450–451
+
+Data-based iterators, 360
+Dead task, 542
+Deadlocks, 543
+Deallocation, 207, 492–493
+Decimal data types, 240
+Declaration order, 215–216
+Declarative languages, 680, 686–687
+Decorating parse trees, 132
+Decrement fields, 573
+Deep access, 437–439
+Deep binding, 393
+Deferred reference counting, 282
+Definitions
+
+of records, 264
+in Scheme program, 634–636
+in subprograms, 367–368
+
+Delegates, 395–396
+delete operator, 456, 457
+in associative arrays, 261
+C++, 210, 253, 276, 499
+explicit deallocation using, 497
+
+Delphi, 88, 98, 462
+Denotational semantics, 137–142, 628, 669
+
+assignment statements in, 141
+evaluation of, 142
+examples of, 138–139
+expressions in, 140–141
+logical pretest loops in, 141–142
+state of programs and, 140
+
+Department of Defense (DoD), 57, 58,  
+
+79–80
+
+Dependents, 54, 55, 79–83
+DEPOSIT subprogram, 545
+Depth-first searches, 694
+Dereferencing pointers, 277
+
+Index 
+
+  733
+
+Derivations, 115–117
+Derived classes, 486, 500–501
+Derived types, 289
+Descriptors, 237
+Design issues
+
+for abstract data types, 452–453
+for arithmetic expressions, 303
+for array types, 250
+for character string types, 242
+for enumeration types, 247
+for exception handling, 591–594
+for functions, 396–397
+for iterative counter-controlled  
+
+statements, 345
+
+for language support for concurrency,  
+
+543–544, 580
+
+for logically controlled loop, 348–349
+for multiple selectors, 336–337
+for names, 199
+for object-oriented languages, 489–494
+particular to pointers, 274
+specific to records, 264
+for subprograms, 374
+trade-offs, 21–22
+for two-way selectors, 332
+for union types, 271
+
+Destructors, 457
+Diamond inheritance, 491
+Dictionaries, 97, 262
+Dijkstra, Edsger, 356
+
+guarded commands by, 356–359, 551
+on PL/I, 68
+semaphores by, 544
+on synchronization operations, 549
+
+Direct left recursion, 180
+Discriminated unions, 271
+Disjoint tasks, 539
+dispose, 281
+DLLs (dynamic link libraries), 65, 474
+DO CONCURRENT constructs, 43
+DoD (Department of Defense), 57, 58
+Domain set, 625
+Dot notation, 249, 264
+Double f loating-point data types, 239
+do-while statements, 350
+Dynabook, 83
+
+Z02_SEBE8029_12_SE_IDX.indd   733
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+734 
+
+  Index
+
+Dynamic binding, 205, 488–489
+
+in Ada, 82
+in C#, 514–515
+in C++, 87, 226, 504–507
+in Java, 512
+of messages to methods, 493, 495
+of method calls to methods, 484, 519–521
+in object-oriented programming,  
+
+488–489, 493
+
+in Ruby, 517
+in Smalltalk, 495–496
+of subprogram calls, 82
+
+Dynamic chains, 426
+Dynamic dispatch, 488
+Dynamic languages, 69–70
+Dynamic length strings, 245
+Dynamic link libraries (DLLs), 65, 474
+Dynamic links, 422–423
+Dynamic scoping, 220–222, 437–441, 632
+Dynamic semantics, 129
+
+axiomatic semantics as, 142–155
+denotational semantics as, 137–142
+operational semantics as, 134–137
+
+Dynamic type binding, 205–207
+Dynamic type checking, 286
+
+E
+Eager approach, 282
+EBNF (Extended BNF), 125–127
+ECMA (European Computer Manufacturers 
+
+Association), 94
+Edinburgh syntax, 689
+Edwards, Daniel J., 632
+Eich, Brendan, 94
+Elaboration, 208
+Elemental operators, Fortran 95+, 198
+Elliptical references, 265
+else-if clause, 341
+Encapsulation constructs
+
+in C, 472
+in C#, 461–462, 473–474
+in C++, 456, 472–473, 475–476
+introduction to, 471–472
+in Java, 476–477
+naming, 474–478
+in Ruby, 463, 477–478
+
+entry clauses, 553
+Enumeration constants, 247
+Enumeration types, 247–250, 337
+
+in C#, 249
+in C++, 248–249
+design issues for, 247–248
+designs, 247–249
+evaluation of, 249–250
+in F#, 249
+in Java 5.0, 249
+in ML, 249
+
+Environment pointers (EPs), 418
+Epilogue of subprogram linkage, 419
+EPs (Environment pointers), 418
+EQ? function, 641
+Equivalence, 288–291
+Erasure rule, 181
+Errors
+
+in arithmetic expressions, 315
+
+European Computer Manufacturers Association 
+
+(ECMA), 94
+
+EVAL functions, 632, 635–636, 650–651
+Evaluation environments, 653
+Event handling
+
+in C#, 613–616
+introduction to, 608–609
+in Java, 609–613
+
+Event listeners, 610–611
+Events, 591–592, 608–610
+Exception handling
+
+in Ada, 14
+basic concepts of, 589–591
+in C++, 14, 594–598
+design issues for, 591–594
+introduction to, 588–594
+in Java, 598–605
+in Python, 605–607
+in Ruby, 607–608
+
+Exceptions, 315
+Exclusivity of objects, 489–490
+Executable images, 25
+Execution efficiency, 670
+Expert systems, 709–710
+Explicit declarations, 204
+Explicit heap-dynamic variables, 209–210
+Explicit locks in, Java 5.0, 569–570
+
+Z02_SEBE8029_12_SE_IDX.indd   734
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+Explicit type conversions, 315
+Expressions
+
+assignment statements as, 322–323
+Boolean, 143, 316–318, 661
+in C#, 324, 398
+case, 338–339
+coercion in, 313–315
+conditional, 46, 308–309, 343, 626, 655
+control, 332
+in denotational semantics, 140–141
+errors in, 315
+mixed-mode, 313
+in recursive-descent parsers, 175–180
+relational, 316
+short-circuit evaluation in, 318–319
+unambiguous grammar for, 120
+
+Expressivity, 13
+Extended accept clause, 556
+Extended BNF (EBNF), 125–127
+eXtensible Stylesheet Language 
+Transformations (XSLT), 21
+
+extern qualifiers, 217
+
+F
+F#, 29, 403–404, 625, 663–666
+
+generic functions in, 403–404
+generic library classes, 353
+support for concurrency, 577–578
+
+Fact statements, 689–690
+Farber, J. D., 70
+Fatbars, 357
+Feature multiplicity, 8
+FETCH subprogram, 545
+Fetch-execute cycle, 18, 26
+FGCS (Fifth Generation Computing  
+
+Systems), 688
+Fibonacci number, 659
+Fields, 264–265
+Fifth Generation Computing Systems  
+
+(FGCS), 688
+
+Filter, 656
+Finalization, 593
+finalize methods, 509
+finally clauses, 603–604
+FindAll method, 667
+Finite automata, 165
+
+Index 
+
+  735
+
+Finite mappings, 293
+Firm coercion, 72
+First-order predicate calculus, 681
+Fixed heap-dynamic arrays, 252–253
+Fixed stack-dynamic arrays, 252–253
+flex arrays, 72
+float, 14, 90, 205, 286–289, 313, 324,  
+
+387, 394
+in C, 472
+in C#, 395, 461, 572
+in C++, 595
+coercions, 90
+in strong typing, 287
+in type checking, 14, 286–287
+in type conversions, 313–315
+
+float variable, 287
+Floating-point data types, 239, 240, 450
+Floating-point operations, 37, 39–40, 75,  
+
+287, 306
+FLOW-MATIC, 57
+FLPL (Fortran List Processing Language), 46
+Flynn, Michael J., 536
+for statements, 216
+
+in C-based languages, 345–347, 352
+in Java, 13, 352
+in Python, 347–348
+
+foreach statements
+
+in C#, 99, 254, 353
+of Perl, 360
+
+Form, 12
+Formal parameters, 368–370
+Fortran, 5, 18, 61, 62, 66, 198
+design process for, 41
+evaluation of, 43–45
+exponentiation in, 306
+High-Performance, 578–580
+historical background of, 40–41, 51, 251, 
+
+316, 330, 624
+
+label parameters in, 590
+nested subprograms in, 429
+Read statement, 588–589
+stand-alone statement, 320
+subprograms in, 419
+versions of, 41–43, 67, 211, 263, 373, 386
+Fortran List Processing Language (FLPL), 46
+Forward chaining, 693
+
+Z02_SEBE8029_12_SE_IDX.indd   735
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+736 
+
+  Index
+
+FP (functional programming), 45–50, 623–671
+Free Software Organization, 689
+Free unions, 271
+Fully attributed parse trees, 130
+Fully qualified references, 265
+Functional compositions, 648–649
+Functional compositions in Scheme, 639–640
+Functional forms, 627–628, 648–650
+Functional programming (FP), 45–50, 623–671
+Functional programming languages, 294, 310, 
+
+330, 369, 406
+assignment statements in, 323–324
+Common Lisp, 651–653
+concurrency in, 575–578
+Concurrent ML (CML), 576
+F#, 577–578, 663–666
+functional forms in, 627–628
+fundamentals of, 628–629
+Haskell, 658–663
+imperative languages supporting, 666–669
+imperative languages vs., 669–671
+introduction, 624–625
+LISP, 629–632
+mathematical functions in, 625–628
+Multi-LISP (ML), 575, 653–658
+Scheme, 633–651
+simple functions in, 626–627
+
+Functions
+
+of Ada, 397
+attribute computation, 129
+of C++, 222
+of C# 2005, generic, 403
+of C#, generic, 399–401
+CAR, 268, 639–640, 643–646, 650, 698, 702
+CDR, 639–640, 643–646, 650, 698, 702
+composition, 627
+CONS, 639–640
+curried, 658
+design issues for, 396–397
+EVAL, 650
+of F#, generic, 403–404
+of Java 5.0, generic, 401–403
+of JavaScript, 667
+mathematical, functional programming 
+
+languages, 625–628
+
+in Scheme, 634–636
+as subprograms, 373
+
+Functors, 695
+future constructs, 575
+
+G
+GAMM (German Society for Applied 
+Mathematics and Mechanics), 51
+
+Garbage collection, 97
+Gates, Bill, 65
+Genealogy of languages, 35
+Generality, 16
+Generate and test, 705
+Generation, 112
+Generators, 112–113, 660
+Generic subprograms
+in C++, 399–401
+in C# 2005, 403
+in F#, 403–404
+in Java 5.0, 401–403
+
+German Society for Applied Mathematics and 
+
+Mechanics (GAMM), 51
+getPriority methods, 563
+Getter methods, 516
+Glennie, Alick E., 40–41
+Global scope, 217–219
+GNOME, 29
+Go, 85
+Goals, 691–692
+Google, 455, 537
+Gosling, James, 89
+GOTO, 188–190
+Grammars. see also Attribute grammars
+
+ambiguous, 118–119, 333
+context-free, 113, 114, 710
+derivations and, 115–117
+LL grammar class, 180–183
+recognizers and, 127–128
+for simple assignment statements, 117
+for a small language, 116
+unambiguous, 120–122, 124–125
+van Wijngaarden, 72
+
+Griswold, R.E., 70
+Guarded commands, 356–359, 551
+Guards, 544, 559, 659
+GUIs (graphical user interfaces), 13, 608–609
+
+C#, 614
+Java, 609–610
+UNIX and, 29
+
+Z02_SEBE8029_12_SE_IDX.indd   736
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+using Windows Forms, 614, 617
+VB, 63
+
+H
+Hammond, P., 710
+Handles, 185–187
+Hansen, Brinch, 551
+Harbison, Samuel P., 338
+Hashes, 93, 96, 261, 353, 360, 471
+Haskell, 369, 625, 658–663
+Headed horn clauses, 686, 690–691
+Header files, 473
+Headless horn clauses, 686, 690–691
+Heap-dynamic arrays, 252
+Heap-dynamic variables, 209–211, 275, 280
+Heaps, 209–210, 246
+Heavyweight tasks, 539
+Hejlsberg, Anders, 98
+Hidden concurrency, 537
+Higher-order functions, 627–628
+High-Order Language Working Group 
+
+(HOLWG), 79
+
+High-Performance Fortran (HPF), 578–580
+Hoare, C.A.R., 71
+on Ada, 81
+and ALGOL 60, 73
+on language design, 13, 21, 359
+message passing design, 551–552
+on monitors, 549
+Pascal by, 73
+on pointers, 280
+
+HOLWG (High-Order Language Working 
+
+Group), 79
+Hopper, Grace
+
+award in name of, 454, 498
+compiling systems by, 39
+on programming languages, 57
+
+Horn clauses, 686
+HPF (High-Performance Fortran), 578–580
+HTML (HyperText Markup Language), 406
+
+introduction to, 6, 21
+JavaScript and, 94–95, 162
+JSP and, 101–102
+PHP and, 96
+XML and, 101
+Hursley Laboratory, 67
+Hybrid implementation systems, 26–27
+
+Index 
+
+  737
+
+HyperText Markup Language (HTML). see 
+HTML (HyperText Markup Language)
+
+Hypotheses, 686
+
+I
+IAL (International Algorithmic Language), 52
+IBM, 46
+
+701 computer, 39
+704 computer, 40–41, 631, 639
+700-series machines, 51
+COMTRAN, 57
+Fortran developed by, 40–45
+mainframe design, 9–10
+orthogonality and, 10
+PL/I developed by, 66–69
+SHARE and, 53
+
+“The IBM Mathematical FORmula 
+
+TRANslating System: FORTRAN,” 41
+
+Identifiers, 111, 237
+Identity operands, 304
+IEEE Floating-Point Standard, 239
+
+format, 239
+
+IEEE Floating-Point Standard 754, 239
+IF selector function, 637
+if statements
+
+assignments and, 322
+in Extended BNF, 125
+Java, 115, 179, 334
+JSP and, 101–102
+in multiple-selection statements, 341–343
+nested, 339
+in nesting selectors, 333–336
+in recursive-descent parsers, 175
+rule for, 125, 175
+in selector expressions, 336
+
+IFIP (International Federation of Information 
+
+Processing), 73
+
+if-then-else statements, 308, 342
+Imperative programming languages, 397, 624, 
+
+626, 666–669
+functional languages supporting, 666–669
+functional languages vs., 669–671
+
+Implementation methods
+array types, 258–260
+associative arrays, 262–263
+character string types, 245–247
+of compiler, 23
+
+Z02_SEBE8029_12_SE_IDX.indd   737
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+738 
+
+  Index
+
+Implementation methods (continued)
+
+hybrid implementation systems, 26–27
+Just-in-Time (JIT) implementation  
+
+system, 27
+
+parameter-passing methods, 382–383
+pointer types, 280–285
+record types, 265–266
+reference types, 280–285
+union types, 273
+
+Implicit declarations, 204
+Implicit heap-dynamic variables, 210–211
+Implicit locks in, 569–570
+import declarations, 477
+include statements, 538
+Incremental mark-sweep garbage  
+
+collection, 284
+
+Indicants, 72
+Indices, 251–252
+Inference rules, 692, 693, 709–710
+
+for computing the precondition for a while 
+
+loop, 149
+
+general form of, 144
+resolution, 684
+as rule of consequence, 146
+for selection statements, 145, 148
+in sequences, 147, 152
+Inferencing process, 692–695
+Infix operators, 303
+Information hiding
+
+C#, 462
+C++, 456
+Ruby, 464–465
+
+Information Processing Language (IPL), 45
+Inheritance
+
+C#, 513–514
+C++, 497–504
+Java, 510–512
+Ruby, 517
+Smalltalk, 495
+
+Inherited attributes, 129
+Initial values, 226
+Initialization, 254–255
+Initialization of objects, 494
+Inner classes, 512
+Inout mode parameter passing, 379
+Instance data storage, 519
+
+Instance methods, 463, 487
+Instance variables, 463, 487
+Instantiation, 689
+Instruction-level concurrency, 535
+int, 14, 90, 167–170, 247
+
+in C, 203, 213, 254, 314, 472
+in C#, 216, 395, 461
+in C++, 222, 226, 278, 395, 398, 400, 458, 
+
+468, 596, 605
+
+in F#, 404
+in Java, 202, 225, 286, 287, 313, 468,  
+
+566–569, 572, 581
+
+in ML, 654–655
+in Python, 238
+in type checking, 286, 386
+unary minus operator and, 304
+
+int integer, 238
+int type parameters, 400
+int variable, 286
+integer, 238–239
+byte, 238
+int, 238
+long, 238
+short, 238
+types of, 238–239
+
+Intercession, 522
+Interface abstract class, 510
+Interlocked classes, 573, 582
+International Algorithmic Language  
+
+(IAL), 52
+
+International Federation of Information 
+
+Processing (IFIP), 73
+
+International Standards Organization (ISO),  
+
+94, 241
+
+Interpreter, 631–632
+Intrinsic attributes, 130
+Intrinsic condition queue, 565
+Intrinsic limitations, 708
+IPL (Information Processing Language), 45
+is operators, 695
+ISO (International Standards Organization),  
+
+94, 241
+
+Iterative statements, 343–355
+
+counter-controlled loops and, 344–348
+data structures for, 352–355
+design issues for, 345, 348–349
+
+Z02_SEBE8029_12_SE_IDX.indd   738
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+examples, 349–350
+for statements, 345–348
+logically controlled loops and, 348–350
+user-located loop controls as, 350–351
+
+Iverson, Kenneth P., 69
+
+J
+Jacopini, Giuseppe, 330, 332, 359
+Jagged arrays, 256
+JARs (Java Archives), 474
+Java, 509–513, 539, 543
+
+5.0, generic functions in, 401–403
+5.0, parameterized abstract data types, 
+
+468–470
+
+abstract data types, 459–461, 468–470
+assertions in, 604–605
+binding exceptions to handlers, 599–600
+classes of exceptions, 599–600
+competition synchronization in, 564–565
+concurrency in Java threads, 560–570
+cooperation synchronization in, 565–568
+design choices, 600–602
+design process, 89
+dynamic binding in, 226, 512
+evaluation of, 90–92, 461, 513, 570, 605
+event handling with, 609–613
+event model, 610–613
+exception handlers of, 599–600
+exception handling in, 598–605
+explicit locks in, 569–570
+expressivity in, 13
+feature multiplicity in, 8
+finally clauses, 603–604
+for statements of, 216, 347
+general characteristics, 509
+imperative-based object-orientation of, 
+
+89–92
+
+inheritance in, 510–512
+integer types of, 238
+language overview of, 89–90
+mixed-mode assignment in, 324
+names in, 199
+nested classes, 512–513
+nesting selectors in, 334
+nonblocking synchronization in, 569
+objects of, 509
+
+Index 
+
+  739
+
+overloaded subprograms in, 398
+packages, 476–477
+parameterized abstract data types in, 
+
+468–470
+parameters, 384
+pattern-matching capabilities of, 244
+popularity of, 3
+primitive scalar types and classes of, 528
+priorities of threads, 563–564
+ref lection in, 523–525
+semaphores in, 564
+Swing GUI components, 609–610
+switch statement of, 337
+Thread class, 561–563
+user-located loop control in, 350
+while and do statements, 350
+
+Java Archives (JARs), 474
+Java Server Pages Standard Tag Library (JSTL), 
+
+21, 101
+
+Java Virtual Machine, 27
+JavaScript, 6, 20, 26, 29, 609, 670
+anonymous function in, 667
+dynamic type binding in, 205–206
+functions for, 667
+origins and characteristics of, 94–96
+
+join methods, 561–562
+JOVIAL, 53
+JSP, 100–102
+JSTL (Java Server Pages Standard Tag Library), 
+
+21, 101
+
+Just-in-Time (JIT) compilers, 91, 98, 163
+Just-in-Time (JIT) implementation system, 27
+
+K
+Kay, Alan, 83–84
+Kemeny, John, 61–62
+Kernighan, Brian, 92, 356
+Keys, 261
+Keyword parameters, 370
+Keywords, 370
+Knuth, Donald, 40, 55, 103, 187, 356
+Korn, David, 92
+Kowalski, Robert
+
+on logic-based semantic networks, 710
+Prolog by, 77, 688
+
+Kurtz, Thomas, 61
+
+Z02_SEBE8029_12_SE_IDX.indd   739
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+740 
+
+  Index
+
+L
+Lambda calculus, 627
+Lambda expressions, 50, 91, 627, 635
+
+in C#, 667–668
+in Java 8, 668
+in Python, 668
+in Scheme, 635
+
+Language design
+Ada, 80
+ALGOL 58, 52–53
+ALGOL 60, 53–56
+ALGOL 68, 72
+BASIC, 62
+C#, 98–99
+C++, 87
+categories in, 20–21
+COBOL, 56–61
+computer architecture, 17–19
+concurrency, 543
+early design process, 51
+for Fortran, 43
+Hoare’s observation, 13, 21, 359
+hybrid implementation system, 26
+inf luences on, 17–20
+Java, 89–90
+PL/I, 67, 68
+Prolog programs, 77–78
+SIMULA 67, 71
+Smalltalk, 84
+trade-offs, 21–22
+
+Language generators, 112–113
+Language recognizers, 112
+Laning and Zierler system, 41
+Lattner, C., 87
+Lazy approach, 282
+Lazy evaluation, 661–663
+LCF (Logic for Computable Functions), 50
+Learning new languages, 2
+Left factoring, 183
+Left recursive grammar rules, 123
+Left-hand side (LHS), 114–115, 123, 138, 
+173–174, 181, 184, 186, 188, 190,  
+192, 207
+grammar rules for, 115, 123, 173
+
+Leftmost derivations, 116
+Lerdorf, Rasmus, 96
+
+let
+
+in F#, 664
+in Haskell, 660
+in ML, 214, 656
+in Scheme, 214, 646–647
+scope of, 215
+Level numbers, 264
+Lexemes, 111, 164
+Lexical analysis, 163–171
+
+lexical analyzer, 164–165
+process, 164
+Lifetime, 207–211
+Lightweight task, 539
+Limited dynamic length strings, 245
+Linkers, 25, 420
+Linking, 25
+Linking and loading, 25
+LISP, 205, 220, 222, 237. see also Common 
+LISP; Multi-LISP (ML); Scheme  
+language
+allocation and deallocation in, 281
+artificial intelligence and, 45–46
+common, 651–653
+data structures in, 47, 48, 629–631
+data types in, 629–631
+descendants of, 49–50
+design goals of, 282
+design process for, 46
+evaluation of, 48–49
+expressions in, 308
+functional programming in, 47
+implementation of, 639
+interpreter in, 631–632
+languages related to, 50
+list processing and, 45–46
+ref lections in, 527
+single-size allocation heap in, 281–282
+syntax of, 48
+
+List comprehensions, 270
+LIST functions, Scheme, 268
+Lists, 115
+
+in Common LISP, 268–269
+descriptions of, 115
+functions of, 638–641
+in Multi-LISP (ML), 269
+predicate functions for, 641–642
+
+Z02_SEBE8029_12_SE_IDX.indd   740
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+in Prolog, 698–703
+in Scheme language, 269
+simple, 47, 630, 643–644, 646
+types of, 268–270
+
+Liveness, 543
+LiveScript, 94
+LL algorithms, 173
+LL grammar class, 180–183
+Load modules, 25
+Loaders, 420
+Local nested classes, 513
+Local referencing environments, 375–376
+Local variables, 217–219, 376, 426
+Local_offset, 426
+Locks, 569–570
+Locks-and-keys approach, 281
+Logic for Computable Functions (LCF), 50
+Logic programming languages
+applications of, 709–710
+clausal form in, 684, 686, 691
+expert systems and, 709–710
+natural-language processing, 710
+overview of, 686–688
+predicate calculus for, 680–684
+Prolog, 688–708
+relational database management systems 
+
+and, 709
+
+resolution construction, 684–685
+theorem-proving in, 684–686
+
+Logical concurrency, 537
+Logically controlled loops, 348–350
+long integer, 238
+Loop invariants, 149–153
+Loop parameters, 344
+Loop variables, 346
+Loops
+
+in axiomatic semantics, 149–152
+counter-controlled, 344–348
+logically controlled, 348–350
+user-located, 350–351
+
+Lost heap-dynamic variables, 276–277
+LR parsers, 186–190
+Lua, 279
+
+arrays in, 254
+enumeration types of, 249
+
+L-value, 201
+
+Index 
+
+  741
+
+M
+MAC OS X, 87
+Mark-sweep garbage collection, 283
+Markup languages, defined, 21
+Markup-programming hybrid languages, 100–102
+Massachusetts Institute of Technology (MIT), 41
+match expressions, 272
+Matching subgoals, 692
+Matching type parameters, 595
+Mathematical functions, 625–628
+Matsumoto, Yukihiro, 97
+Mauchly, John, 38
+McCabe, F. G., 689
+McCarthy, John, 46, 629, 631–632
+McCracken, Daniel, 21
+Meek coercion, 72
+Mellish, C. S., 6, 705
+Member functions, 456, 505
+Memory cells, 198, 200, 202
+Memory leakage, 276–277
+Message interface, 486
+Message protocol, 486
+Message-passing model, 550
+Messages
+
+binding dynamically, 493, 495
+in object-oriented languages, 486
+passing of, 486, 489, 490, 498, 515,  
+
+551–552
+Metadata, 522
+MetaLanguage (ML), 50
+Metalanguages, 114
+Metasymbols, 126
+Method calls, 519–512
+Methods, 486
+Microsoft, 65
+
+.NET computing platform, 86, 98, 163
+Visual Studio .NET by, 29
+
+Milner, Robin, 50
+MIL-STD 1815, 80
+MIMD (Multiple-Instruction, Multiple-Data) 
+
+computers, 536
+Minsky, Marvin, 46
+Miranda, 50
+MIT (Massachusetts Institute of Technology), 41
+
+AI Project, 46
+LISP at, 46
+
+Z02_SEBE8029_12_SE_IDX.indd   741
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+742 
+
+  Index
+
+MIT (continued)
+
+Lisp at, 629, 633
+Scheme language, 49
+Whirlwind computer, 41
+
+Mixed inheritance, 511
+Mixed-mode assignment statements, 324
+Mixed-mode expressions, 324
+ML (MetaLanguage), 50
+M-notation, 631
+Modules, 477–478
+Monitors, 549–551
+MSDOS.exe, 64
+Multicast delegates, 396
+Multi-LISP (ML), 575, 653–658, 671
+
+lists in, 269
+
+Multiparadigm programming, 498
+Multiple assignment statements, 323
+Multiple inheritance, 487, 491–492
+Multiple-Instruction, Multiple-Data (MIMD) 
+
+computers, 536
+
+Multiple-selection statements
+design issues for, 336–337
+examples of, 337–340
+implementation of, 340–341
+using if, 341–343
+Multiprocessors, 535–537
+Multithreaded program, 569, 574, 578
+
+N
+Name type equivalence, 288
+Named constant, 224–226
+Names
+
+in C#, 199
+in C++, 199–200
+case sensitive, 200
+in C-based languages, 199–200
+design issues for, 199
+forms, 199–200
+in Java, 199, 200
+keywords, 200
+in PHP, 199
+reserved words and, 200
+in Ruby, 199
+special words, 200
+variable, 199, 201
+
+Narrowing type conversions, 302
+
+National Physical Laboratory, 67
+Natural operational semantics, 135
+Naur, Peter, 53, 113
+NCC (Norwegian Computing Center), 70
+Negation problem, Prolog, 706–708
+Nested classes
+in C#, 515
+in Java, 512–513
+object-oriented programming, 493–494
+
+Nested list structures, 47, 630
+Nested subprograms, 376, 429–435
+Nesting classes, 494
+Nesting selectors, 333–336
+nesting_depth, 431
+.NET languages, 27, 29, 98, 353, 474, 527, 574, 
+
+582, 613, 663
+
+NetBeans, 29
+Netscape, 94
+Neumann, John von, 17
+new, 458, 492, 509
+
+for allocation of heap objects, 275
+in C#, 461, 513–514
+in C++, 209–210, 253, 456
+in heap management, 281
+in Java, 469
+in Ruby, 516
+
+New Programming Language (NPL), 67
+Newell, Allen, 45
+next iterators, 352
+Nil values, 47, 273
+Nonblocking synchronization, 569
+nonlocal, 219
+Nonstrict languages, 661
+Nonterminal symbols, 114
+Norwegian Computing Center (NCC), 70
+NOT operators, 316, 691, 707
+NPL (New Programming Language), 67
+NULL, 642
+Numeric data types, 238
+Numeric predicate functions, 637
+Numeric type
+
+complex values, 240
+decimal data types, 240–241
+f loating-point data types, 239–240
+integer, 238–239
+Nygaard, Kristen, 70
+
+Z02_SEBE8029_12_SE_IDX.indd   742
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+Index 
+
+  743
+
+O
+Object slicing, 493
+Objective-C, 87–88
+Object-oriented constructs, 519–521
+Object-oriented languages, 19, 85, 206, 219, 
+
+279, 291, 360
+allocation of objects in, 492–493
+deallocation of objects in, 492–493
+design issues in, 489–494
+dynamic binding in, 493
+exclusivity of objects in, 489–490
+initialization of objects in, 494
+multiple inheritance in, 491–492
+nested classes in, 493–494
+single inheritance in, 491–492
+static binding in, 493
+subclasses vs. subtypes in, 490–491
+Object-oriented programming, 3, 20,  
+
+485, 663
+in C#, 513–515
+in C++, 85–88, 496–509
+inheritance, 485–488
+instance data storage, 519
+in Java, 89–92, 509–513
+message passing in, 551–552
+in Objective-C, 87–88
+in Ruby, 515–518
+in Smalltalk, 83–85, 494–496
+Stroustrup on, 498–499
+support for, 494–518
+
+Objects, 486
+
+allocation of, 492–493
+in C++, 497
+of C#, 253
+in concurrency, 559–560
+deallocation of, 492–493
+exclusivity of, 489–490
+initialization of, 494
+in Java, 509
+in Ruby, 516
+
+OCaml, 50, 205, 484, 625, 658, 663
+Open accept clause, 557
+Operand evaluation order, 309–311
+Operational semantics, 134–137
+
+evaluation of, 136–137
+natural, 135
+
+problems with, 135
+process of, 135–136
+structural, 135
+
+Operator evaluation order, 303–309
+Operator overloading, 8, 98, 311–313
+Operator precedence, 119–122
+Operator precedence rules, 304
+Optimization, 15
+or else statements, 334
+OR operators, 271
+Orthogonality, 9–11
+otherwise, 659
+Out mode parameter passing, 378
+Output functions, 636
+Overf low, 315
+Overloaded operators, 311–313
+Overloaded subprograms, 398
+Overridden methods, 487, 491
+override commands, 487, 514
+
+P
+Package scope, 476
+Package specification, 552
+Packages, 80, 476–477
+Pairwise disjointness test, 182
+Papert, Seymour, 83
+Paradigms of programming, 498–499
+Parameter profiles, 398
+Parameterized abstract data types
+
+in C++, 467–468
+in C# 2005, 471
+in Java 5.0, 468–470
+
+Parameter-passing methods, 376
+
+of common languages, 383–385
+design considerations in, 389
+examples of, 389–392
+implementation models for, 377–382
+implementation of, 382–383
+semantic models of, 377
+
+Parameters
+
+actual, 369
+array formal, 372
+formal, 369
+keyword, 370
+in multidimensional arrays, 387–389
+positional, 370
+
+Z02_SEBE8029_12_SE_IDX.indd   743
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+744 
+
+  Index
+
+Parameters (continued)
+
+for subprograms, 368–372
+subprograms as, 392–394
+type checking, 385–387
+
+Parametric polymorphism, 399
+params, 99
+Parent class, 486, 491
+
+differences between subclasses and,  
+
+486–487
+Parentheses, 307
+Parse trees, 24–25, 117–118
+Parsing, 25, 55, 119
+
+bottom-up, 173–174, 183–190
+complexity of, 174–175
+introduction to, 171–172
+LL grammar class in, 180–183
+LR parsers for, 186–190
+recursive-descent, 175–180
+shift-reduce algorithms for, 186
+top-down, 172–173
+Partial correctness, 152
+Partial evaluation, 658
+Pascal, 55, 248, 276, 281, 289, 295, 376, 394, 
+
+549, 577
+Concurrent, 549
+evaluation of, 74–75
+historical background, 73
+Turbo, 98
+
+Pass-by-assignment, 385
+Pass-by-copy, 380
+Pass-by-name, 381–382
+Pass-by-reference, 380–381
+Pass-by-result, 378–379
+Pass-by-value-result, 379–380
+Passed by value, 378
+pcall constructs, 575
+PDA (Pushdown automaton), 186
+Peripheral processors, 535
+Perl, 92–94, 341, 350
+
+array assignments, 255
+arrays, 92, 253
+assignment statements in, 322
+associative arrays in, 261
+binary logic operators of, 317
+built-in pattern-matching operations, 244
+clause form, 334
+
+coercion rules for mixed-mode  
+
+assignment, 324
+
+compound assignment operators of, 320
+conditional targets on assignment 
+
+statements, 320
+dynamic scoping in, 220
+enumeration types of, 249
+expressions in, 303, 309
+foreach statement, 99, 360
+as a general-purpose language, 93
+hashes, 96, 261, 262
+hybrid implementation system, 27
+mixed-mode assignment in, 324
+multiple-source assignment statements  
+
+in, 323
+
+nesting selectors in, 334
+origins and characteristics of, 92–94
+passing parameters of, 384
+strings in, 245
+subscripting in, 251
+unary arithmetic operators in, 321
+Unicode in, 241
+as a UNIX utility, 93
+user-located loop control in, 350
+variable names in, 199
+variables in, 93
+Perlis, Alan, 44, 51
+PHP, 6, 26, 29, 217, 386, 670
+
+access to HTML form data, 96
+built-in pattern-matching operations, 244
+foreach statement, 99
+formal parameters of, 370
+function definitions, 217
+global variables of, 217–218
+origins and characteristics of, 96
+relational operators of, 316
+scalar types of, 339
+switch statement, 339
+type binding in, 205, 286
+variable names in, 199
+
+Phrases, 185–186
+Physical concurrency, 537
+pipeline operators (| >), 665
+Plankalkül, 36–37
+PL/I, 66–69
+
+design process, 67
+
+Z02_SEBE8029_12_SE_IDX.indd   744
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+Index 
+
+  745
+
+evaluation of, 68–69
+historical background, 66
+language overview of, 67–68
+
+Pointer types
+
+in C and C++, 277–278
+dangling, 275–276, 280–281
+design issues with, 274
+heap management and, 281–285
+implementation of, 280–281
+lost heap-dynamic variables in, 276–277
+operations in, 274–275
+problems with, 275–277
+representations of, 280
+
+Polonsky, I. P., 70
+Polymorphic references, 488
+Polymorphic subprograms, 399
+Polymorphism, 399, 411, 488
+Portability, 16
+Positional parameters, 370
+Postconditions, 143, 147
+
+in assignment statements, 145–147
+introduction to, 143
+in logical pretest loops, 149–152
+in program proofs, 152–155
+in selection statements, 148–149
+in sequences, 147–148
+weakest precondition and, 144–145
+
+Posttest, 344
+Precedence, 303–305
+Precision, 239
+Predicate calculus
+
+clausal form, 683–684
+collections of propositions, 684–686
+for logic programming languages, 680–684
+propositions, 681–683
+
+Predicate functions, 129, 637, 641–642
+Predicate transformers, 150
+Prefix operators, 321
+Preprocessors, 27–29
+Pretest, 349–350
+Primitive data types, 9
+
+Boolean, 241
+character, 241–242
+complex, 240
+decimal, 240–241
+f loating point, 239
+
+integer, 238–239
+numeric, 238–240
+
+Primitive numeric functions, 633–634
+Principle of substitution, 490
+Priorities of tasks, 563–564
+Priorities of threads, 571
+private, 464, 500–503, 512–513
+
+in C#, 461
+in C++, 456, 462
+in Ruby, 464
+
+Procedure-oriented programming, 20
+Procedures, 372–373
+Process abstraction, 449
+Processes, 539
+Producer-consumer problem, 540
+Productions, 114
+Program counter, 18
+Program proofs, 152–155
+Programming design methodologies, 19–20
+Programming domains
+
+artificial intelligence in, 6
+business applications in, 6
+scientific applications in, 5
+Web software and, 6
+
+Programming environments, 29
+Prolog, 6, 21, 680–681, 688–708
+
+arithmetic expression in, 695–698
+basic elements of, 688–703
+closed-world assumption in, 706
+deficiencies of, 703–708
+design process for, 77
+evaluation of, 78
+fact statements, 689–690
+goal statements, 691–692
+inferencing process of, 692–695
+intrinsic limitations in, 708
+language overview of, 77–78
+list structures in, 698–703
+negation problem in, 706–708
+origin of, 688
+resolution order control in, 703–705
+rule statements, 690–691
+terms, 689
+Prolog++, 20, 78
+Prologue of subprogram linkage, 419
+Properties, C#, 461
+
+Z02_SEBE8029_12_SE_IDX.indd   745
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+746 
+
+  Index
+
+Propositions, 681–683
+protected access modifiers, 462
+Protected objects, 550, 559–560
+Protocol, 368, 450, 489, 495, 511, 514, 517
+for event-handling methods, 610–611,  
+
+614, 617
+
+function’s, 393–394
+message, 486
+of overloaded subprogram, 398
+of a subprogram, 368
+
+Prototypes, 368
+Pseudocodes, 37–40
+
+introduction to, 37–38
+related work, 40
+Short Code, 38–39
+Speedcoding, 39
+UNIVAC “compiling” system, 39
+
+public, 464, 500–503, 512–513
+
+in C#, 461
+in C++, 456, 462
+in Ruby, 464
+
+Pure interpretation, 26
+Pure virtual function, 506
+Pure virtual method, 489
+Pushdown automaton (PDA), 186
+Python, 217
+
+arrays in, 254, 269
+associative arrays in, 262
+binary arithmetic operations in, 405
+compound assignment operators of, 320
+control expressions in, 332
+data types in, 238, 240
+declarations in, 257
+enumeration types of, 249
+exception handling in, 605–607
+formal parameters of, 370–372
+function header of, 370–371
+global variable in, 217, 218
+global variables of, 376
+for statement of, 347–348
+hashes, 96, 264
+list comprehension in, 270
+nesting functions in, 219
+origins and characteristics of, 96–97
+parameter passing methods of, 385
+polymorphism in, 399
+
+range function, 270, 348
+records, 263
+ref lective operations in, 527
+scopes in, 223
+selection statement, 335
+selector statement, 341–342
+slice reference, 257
+strings of, 243–244
+subprogram headers of, 367
+subprograms of, 397, 411, 472
+then and else clauses, 333
+tuple type of, 266–267, 293
+type binding in, 205
+Unicode in, 241
+user-located loop control in, 350–351
+variables of, 250
+
+Q
+Quantifiers, 682–683
+Quasi-concurrency, 408
+Quasi-concurrent subprograms, 537
+Queries, 709–710
+Quicksort algorithm, 661
+QUOTE, 638, 652
+
+R
+Race conditions, 540
+Radio buttons, 609–611, 614
+raise statements, 606, 617
+Raised exceptions, 591, 595, 598
+RAND Corporation, 45
+Range, 239
+
+set, 625–626
+Raw methods, 401
+RDBMSs (Relational database management 
+
+systems), 709
+Read statement, 588
+Readability, 7–8, 15, 249
+Reader macros, 652
+Readers, 625
+Read-evaluate-print loops (REPLs), 633
+readonly constants, 226
+Ready task, 541
+Real types, 133, 654–655
+Recognition, 112
+Record types
+
+Z02_SEBE8029_12_SE_IDX.indd   746
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+definition of records in, 264/
+evaluation of, 265
+implementation of, 265–266
+references to fields in, 264–265
+
+Rectangular arrays, 256
+Recursion, 427–429, 626
+Recursive rules, 115
+Recursive-descent parsers, 175–183
+LL grammar class in, 180–183
+recursive-descent subprogram, 175–180
+
+ref type, F#, 577
+Reference counters, 282
+Reference parameters, 279, 384
+Reference types
+
+dangling pointers and, 280–281
+heap management and, 281–285
+implementation of, 281–285
+of Java and C#, 280
+representations of, 280
+variables, 278–279
+
+Referencing environments, 223–224
+Referential transparency, 310–311, 628
+Ref lection, 522
+
+in C#, 526–528
+in Java, 523–525
+
+Refutation complete, 685
+Regular expressions, 12, 244
+Regular grammars, 113, 165
+Regular languages, 165
+Relational database management systems 
+
+(RDBMSs), 709
+
+Relational expressions, 316
+Relational operators, 316
+Release semaphore subprogram, 544–548
+Reliability, 14–15
+Rendezvous, 552, 554
+repeat, 18
+REPLs (read-evaluate-print loops), 633
+Reserved words, 199–200
+Resolution, 684–686
+bottom-up, 693
+closed-world assumption in, 706
+defined, 684
+order control, 703–705
+in Prolog, 692–695, 703, 705
+top-down, 693
+
+Index 
+
+  747
+
+Resumes, 408, 410
+Resumption, 592
+Returned values, 397
+Returns, 418
+reverse functions, 702
+Richards, Martin, 75
+Right recursive grammar rules, 123
+Right-hand side (RHS), 114, 123, 138, 174, 
+
+181, 186, 188, 207
+Ritchie, Dennis, 75–76, 356
+Rossum, Guido van, 96
+Roussel, Phillippe, 77, 688, 711
+Row major order, 259
+Ruby
+
+abstract data types in, 463–466
+binary logic operators of, 317
+built-in pattern-matching operations, 244
+case expressions, 339, 341
+case statement, 342
+classes of, 463–464
+compound assignment operators of, 320
+constructors in, 463
+dynamic binding, 517
+encapsulation of, 463
+enumeration types of, 249
+evaluation of, 466, 517–518
+exception handling in, 607–608
+exponentiation in, 306
+formal parameters of, 370, 372
+forms of multiple-selection constructs, 339–340
+general characteristics, 515–517
+hashes, 262–263
+information hiding in, 464–465
+inheritance in, 517
+iterators of, 360
+modules, 477–478
+object-oriented programming in, 515–518
+objects in, 516
+origins and characteristics of, 97–98
+parameter passing methods of, 385
+polymorphism in, 399
+records, 263
+selection statement, 335
+subprogram headers of, 367
+type binding in, 205
+user-located loop control in, 350
+
+Z02_SEBE8029_12_SE_IDX.indd   747
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+748 
+
+  Index
+
+Rule of consequence, 146
+Rules, 114–115, 117, 120
+run methods, 560–561, 570
+Running task, 542
+Run-time stacks, 424
+Russell, Stephen B., 632
+R-value, 202
+
+S
+Satisfying subgoals, 692
+Scalable algorithms, 535
+Schedulers, 541
+Scheme language, 49
+
+apply-to-all functional forms in, 649–650
+code-building functions in, 650–651
+control f low in, 637–638
+defining functions in, 634–636
+examples of function definitions in, 643–646
+functional compositions in, 648–649
+functional forms in, 648–650
+interpreter in, 633
+LET, 646–647
+list functions in, 638–641
+lists in, 269
+numeric predicate functions in, 637
+origins of, 633
+output functions in, 636
+predicate functions in, 641–642
+primitive numeric functions in, 633–634
+tail recursive functions in, 647–648
+
+Schwartz, Jules I., 53
+Scientific applications, 5
+Scope
+
+blocks for, 213–215
+declaration order for, 215–216
+dynamic scoping, 220–222, 437–441
+global, 217–219
+lifetime and, 222–223
+named constants and, 224–226
+referencing environments and, 223–224
+static scoping, 220
+in subprograms, implementing, 437–441
+
+Scott, Dana, 142
+Scripting languages, 92–98
+
+JavaScript, 94–96
+Perl, 92–94
+
+PHP, 96
+Python, 96
+Ruby, 97–98
+
+Scripts, 162
+select statements, 555–556
+Selection, 148–149
+Selection statements
+
+multiple-selection, 336–343
+postconditions in, 148–149
+two-way, 332
+
+Selector expressions, 336
+Semantic domains, 137
+Semantics. see also Axiomatic semantics; 
+
+Denotational semantics
+dynamic, 134–155
+introduction to, 110–111
+natural operational, 135
+operational, 134–137
+static, 128–129
+structural operational, 135
+
+Semaphores, 544–548
+Sentences, 111
+Sentential forms, 116
+Sequences, 147–148
+Sergot, M. J., 710
+Server tasks, 554
+Servlet containers, 101
+Setter methods, 464, 516
+S-expressions, 632
+Shallow access, 439–441
+Shallow binding, 393–394
+SHARE, 51, 53, 67
+Shared inheritance, 491
+Shaw, J. C., 45
+Shift-reduce algorithms, 186
+Short Code, 38–39
+short integer, 238
+Short Range Committee, 58
+Short-circuit evaluation, 318–319
+Side effects, 309–311, 396–397
+SIGPLAN Notices, 80, 103
+SIMD (Single-Instruction, Multiple-Data) 
+
+computers, 536
+Simon, Herbert, 45
+Simple assignment statements, 130, 687
+Simple functions, 626–627
+
+Z02_SEBE8029_12_SE_IDX.indd   748
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+Simple lists, 630, 643–644
+Simple phrases, 185
+Simplicity, 8–9, 13, 73–75, 163
+SIMULA 67, 19, 384, 453, 485–486, 498, 500
+
+design process for, 70–71
+language overview of, 71
+support for coroutines in, 71
+Single inheritance, 487, 491–492
+Single-Instruction, Multiple-Data (SIMD) 
+
+computers, 536
+Single-size cells, 281–282
+sleep methods, 562, 577
+Slices, 242, 257
+Smalltalk, 86, 494–496
+
+dynamic binding, 495–496
+evaluation of, 496
+general characteristics, 494–495
+inheritance in, 495
+
+SNOBOL, 69–70
+Solaris Common Desktop Environment  
+
+(CDE), 29
+
+Source languages, 23, 26, 41
+special, 50
+Special words, 12
+Speedcoding, 39
+SQL (Structured Query Language), 709
+Stack-dynamic arrays, 54, 252
+Stack-dynamic local variables, 421–429
+Stack-dynamic variables, 208–209
+Stanford University, 73
+start methods, 561
+Start symbols, 115
+State diagrams, 165
+State of programs, 140
+Statement-level concurrency, 535, 538, 578–580
+Statement-level control structures
+
+counter-controlled loops, 344–348
+for statements, 345–348
+guarded commands by, 356–359
+iterative statements, 343–355
+logically controlled loops, 348
+two-way selection statements, 332
+unconditional branch statement, 355–356
+
+Static ancestors, 212
+Static arrays, 252
+Static binding, 204–205, 493
+
+Index 
+
+  749
+
+Static chaining, 430–435
+Static length strings, 244
+Static links, 430–431
+static modifiers, 208, 253
+Static parents, 212, 430–431
+Static scoping, 49, 50, 376, 435, 439, 472, 633, 
+
+652, 653
+
+Static semantics, 128–129
+Static type bindings, 204–205
+Static variables, 209, 210, 375
+
+in binding, 207–208
+
+static_depth, 431
+Steele Jr., Guy L., 338
+Steelman requirements document, 80
+Stepsize, 344
+Stichting Mathematisch Centrum, 96
+Storage bindings, 207–211
+Strachey, Christopher, 142
+Strawman requirements document, 79–80
+Strict programming languages, 661
+Strong typing, 287
+structs, 10, 36, 90, 449, 453, 513
+
+in C#, 99, 462, 479
+
+Structural operational semantics, 135
+Structure type equivalence, 288
+Structured Query Language (SQL), 709
+Structures, 689–690
+Subclasses, 486, 489–490
+Subgoals, 704–706
+Subprogram calls, 367
+Subprogram definition, 367
+Subprogram headers, 367
+Subprogram linkage, 418
+Subprogram-level concurrency, 539–544
+Subprograms
+
+in C++, 399–401
+in C# 2005, 403
+calling indirectly, 394–396
+characteristics of, 366–367
+closures, 374, 405–407
+coroutines, 407–410
+definitions in, 367–368
+design issues for, 374, 396–397
+in F#, 403–404
+functions as, 372–373
+fundamentals of, 366–373
+
+Z02_SEBE8029_12_SE_IDX.indd   749
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+750 
+
+  Index
+
+Subprograms (continued)
+generic, 374, 399–404
+in Java 5.0, 401–403
+local variables in, 375–376
+multidimensional arrays and, 387–389
+nested, 376
+overloaded, 374, 398
+parameter profile of, 368
+parameter-passing methods, 376–392
+parameters as, 392–394
+parameters in, 368–372
+procedures as, 372–373
+protocol of, 368
+user-defined overloaded data types in, 
+
+404–405
+
+Subprograms, implementing
+
+blocks in, 436–437
+calls in, 418
+deep access in, 437–439
+dynamic scoping in, 437–441
+of nested subprograms, 429–435
+with recursion, 427–429
+returns in, 418
+shallow access in, 439–441
+stack-dynamic local variables for, 421–429
+static chaining, 430–435
+without recursion, 425–427
+
+Subrange types, in Ada, 290
+Subscript bindings, 252–254
+Subscripts, 251
+Substring references, 242
+subtype enumeration type, 290
+Subtype polymorphism, 399
+Subtypes, 293, 490–491
+Sun Microsystems, 89, 94
+Superclass, 486, 500
+Swing GUI components, 609–610
+Symbolic atoms and lists, 641–642
+Symbolic logic, 681
+Synchronization, 536, 539. see also 
+
+Competition synchronization; 
+Cooperation synchronization
+of CML, 576
+explicit locks as, 569–570
+nonblocking, 569
+of threads, 573–574
+
+Synchronous message passing, 551–552
+Syntactic domains, 137–139
+Syntax. see also Attribute grammars
+ambiguous grammars in, 118–119
+analysis, 163
+analyzer, 24, 28
+associativity in, 122–123
+BNF and, 113–114, 126
+context-free grammars and, 113, 114
+derivations in, 115–117
+design, 12
+in Extended BNF, 125–127
+fundamentals of, 114–115
+generators in, 112–113
+grammars and, 115–117, 127–128
+if-then-else statements, 308, 342
+of Java, 110, 111
+of JavaScript, 94
+of LISP, 48
+list descriptions in, 115
+of ML, 50
+operator precedence in, 119–122
+parsing and, 117–118
+of Python, 97
+recognizers in, 112, 127–128
+of Ruby, 98
+of Smalltalk, 84, 86
+unambiguous grammars in, 120, 124–125
+
+Synthesized attributes, 129
+Syracuse University, 684
+System.Object, 98
+Systems programming, 66, 75
+Systems software, 22
+
+T
+Tail recursive functions, 647–648
+Task(s), 539–544
+
+concurrent execution of, 543
+descriptors, 544
+heavyweight, 539
+lightweight, 539
+states, 541–542
+termination, 555, 557
+task specifications, 552–553
+Task termination, 555
+Task-ready queue, 542, 562
+
+Z02_SEBE8029_12_SE_IDX.indd   750
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+Template functions, 399
+Terminal symbols, 118, 138, 176
+Terminal values, 344
+terminate, 557
+Terms, 689
+Ternary operators, 309
+Tests, 661
+Texas A&M University, 454, 498
+Text boxes, 609
+Theorem-proving, 680, 684, 691
+Theory of data types, 236
+Thompson, Ken, 75
+Threads, 539
+
+in C#, 570–575
+in Java, 560–570
+priorities of, 563–564
+synchronization of, 573–574
+Thread class, 561–563
+Threads of control, 537
+throw statements, 620
+Thrown exceptions, 599
+throws clauses, 601
+Tokens, 114, 164–166
+Tombstones, 280–281
+Top-down parsers, 172–173
+Top-down resolution, 693
+Total correctness, 152
+Tracing models, 696
+Trimming, 72
+Tripod, 64, 65
+try blocks, 569, 571
+try clauses, 594–596, 600, 602–604
+Tuples, 266–267
+Turing machine, 631
+Turner, David, 50
+twos complement, 239
+Two-way selection statements
+clause forms in, 332–333
+control expressions for, 332
+design issues for, 332–333
+nesting selectors in, 333–336
+selector expressions in, 336
+
+Type bindings
+
+dynamic, 205–207
+static, 204–205
+
+Type checking, 14, 207, 286–287
+
+Index 
+
+  751
+
+Type conversions, 313–315
+Type, defined, 202
+type enumeration type, 247–250
+Type equivalence, 288–291
+Type error, 286
+Type inference, 204
+typedef, 291
+
+U
+Unambiguous grammars, 120–122, 124–125
+
+for if-else, 124–125
+
+Unary assignment data types, 311–312, 321
+Unary operators, 321
+Unchecked exceptions, 601, 617
+Unconditional branch statements, 355–356
+undef, 93, 140–141
+undefined, 254
+Underf low, 315
+Ungar, David, 508
+Unicode, 51, 241
+Unification, 685, 692
+Uninstantiated variables, 708
+union, 273
+Union types, 270–273
+
+design issues for, 271
+discriminated vs. free unions, 271
+evaluation of, 273
+in F#, 271–272
+implementation of, 273
+
+UNIVAC, 38–39
+UNIVAC Scientific Exchange (USE), 51
+University of Aix-Marseille, 77, 688
+University of Edinburgh, 50, 77, 688
+University of Utah, 83
+UNIX, 29, 93
+Unlimited extent, 406
+unsafe, C#, 90, 279
+USE (UNIVAC Scientific Exchange), 51
+User-located loop control mechanisms, 350–351
+using directive, 476
+
+V
+val statements, 656
+Value, 202
+Value types, 273
+van Rossum, Guido, 96
+
+Z02_SEBE8029_12_SE_IDX.indd   751
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+752 
+
+  Index
+
+van Wijngaarden grammars, 72
+var declarations, 204
+Variables, 200–202, 237
+
+addresses of, 201–202
+explicit heap-dynamic variables, 209–210
+implicit heap-dynamic variables, 210–211
+names of, 201
+scope of, 211–213
+type of, 202
+value of, 202
+
+Variable-size cells, 284–285
+VAX minicomputers, 9
+VB (Visual BASIC), 13, 63
+VDL (Vienna Definition Language), 136–137
+Vector processors, 535–537
+vehicle class, 486
+Vienna Definition Language (VDL), 136–137
+Virtual method tables (vtables), 519
+virtual reserved word, 528
+Visible variables, 211
+Visual BASIC (VB), 13, 63
+Visual Studio, 29
+void, 10, 367, 371
+void * pointers, 278
+von Neumann architecture, 17–18, 26, 624
+von Neumann bottlenecks, 26
+vtables (virtual method tables), 519
+
+W
+wait semaphores, 544–548
+Wall, Larry, 92
+Weakest preconditions, 144–145
+Web browsers, 534
+Web software, 6
+
+Weinberger, Peter, 92
+Well-definedness, 16
+Wheeler, David J., 40
+when clause, 557
+while, 90
+
+Java, 110, 111
+in logical pretest loops, 149–152
+loops, 213, 350, 566, 573
+statement, 318, 322, 349–350
+
+Whitaker, Lt. Col. William, 79
+Widening type conversions, 313
+Widgets, 608–609
+Wildcard types, 402–403
+Wileden, J. C., 220
+Wilkes, Maurice V., 40
+Windows, 64, 65
+Wirth, Niklaus, 73
+Wolf, A. L., 220
+Wrapper classes, 90
+Writability, 13
+
+X
+Xerox Palo Alto Research Center (Xerox 
+
+PARC), 84
+
+XML (eXtensible Markup Language),  
+
+101–102
+
+XSLT (eXtensible Stylesheet Language 
+
+Transformations), 101
+
+Y
+yacc, 128, 189
+
+Z
+Zuse, Konrad, 36–37
+
+Z02_SEBE8029_12_SE_IDX.indd   752
+
+1/8/18   5:03 PM
+
+ 
+ 
+ 
+ 
+Z02_SEBE8029_12_SE_IDX.indd   753
+
+1/8/18   5:03 PM
+
+Z02_SEBE8029_12_SE_IDX.indd   754
+
+1/8/18   5:03 PM
+
+Z02_SEBE8029_12_SE_IDX.indd   755
+
+1/8/18   5:03 PM
+
+Z02_SEBE8029_12_SE_IDX.indd   756
+
+1/8/18   5:03 PM
+
+Z02_SEBE8029_12_SE_IDX.indd   757
+
+1/8/18   5:03 PM
+
+Z02_SEBE8029_12_SE_IDX.indd   758
+
+1/8/18   5:03 PM
+
+Z02_SEBE8029_12_SE_IDX.indd   759
+
+1/8/18   5:03 PM
+
+Z02_SEBE8029_12_SE_IDX.indd   760
+
+1/8/18   5:03 PM
