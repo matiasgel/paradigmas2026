@@ -1,0 +1,44 @@
+# Topic metadata — Tema 08
+# Generado: 2026-04-27 | Agente: topic-designer (Marcos)
+
+topic_number: "08"
+topic_name: "Paradigma OO: TypeScript + Smalltalk"
+topic_folder: "salida/cursadas/2026/temas/08-paradigma-oo-ts"
+course_id: "2026"
+
+module: "IV"
+week: 7
+class_number: 1
+class_duration: "120"  # minutos — constraint de generación, no modificar sin /edu-set-duration
+
+status: "en-curso"
+
+# Lenguajes del tema
+primary_language: "TypeScript"
+contrast_language: "Smalltalk"  # OO puro — sirve para contrastar con TS multiparadigma
+secondary_languages:
+  - "Python"   # comparativo OO adicional
+
+# Artefactos
+artifacts:
+  diseno: "diseno.md"
+  minuta: ""
+  filminas: ""
+  guia_estudio: ""
+  tp: ""
+  guia_profesor: ""
+
+# Trazabilidad al plan mínimo
+plan_minimo_items:
+  - "Niveles de polimorfismo"
+  - "Encapsulamiento y abstracción"
+  - "Paradigmas de programación: orientado a objetos"
+
+# Git
+git_branch: "tema-08-paradigma-oo"
+
+# Notas
+notes: >
+  El docente solicita usar Smalltalk como lenguaje OO puro para contrastar con TypeScript.
+  Smalltalk: todo es objeto, mensajes, herencia simple, sin tipos estáticos.
+  TypeScript: OO sobre JS, tipado estático, herencia prototípica + clases ES6+.
