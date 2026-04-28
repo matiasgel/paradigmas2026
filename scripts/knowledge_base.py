@@ -58,6 +58,37 @@ ROOT = find_project_root()
 KNOWLEDGE_DIR = ROOT / "_edu-knowledge"
 
 
+def _load_dotenv() -> None:
+    """Carga variables de entorno desde .env si existe (sin dependencias externas)."""
+    env_path = ROOT / ".env"
+    if not env_path.exists():
+        # Buscar también en workspace root (.git marca la raíz real)
+        ws = ROOT.parent
+        while ws != ws.parent:
+            candidate = ws / ".env"
+            if candidate.exists():
+                env_path = candidate
+                break
+            if (ws / ".git").exists():
+                break
+            ws = ws.parent
+
+    if env_path.exists():
+        with open(env_path, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, _, value = line.partition("=")
+                key = key.strip()
+                value = value.strip().strip('"').strip("'")
+                if key and key not in os.environ:
+                    os.environ[key] = value
+
+
+_load_dotenv()
+
+
 def _resolve_chroma_dir() -> Path:
     """Resuelve la ruta de ChromaDB desde env EDU_CHROMA_PATH o ~/.edu/chroma_db.
 
