@@ -46,7 +46,7 @@ Las siguientes propuestas del documento `docs/investigacion.md` se integran en e
 | **TP 4** — ORM + Persistencia | CRUD completo con migrations | GitHub Classroom con autograding |
 | **App Integradora I** | BlogApp: desde templates hasta auth | GitHub Classroom con autograding (semana 10) |
 | **App Integradora II** | BlogApp + REST API | GitHub Classroom con autograding final (semana 16) |
-| Parcial 1 | Semana 7 (teórico) | Presencial |
+| Parcial 1 | Semana 9 (inicio teórico) | Presencial |
 | Parcial 2 | Semana 13 (teórico) | Presencial |
 
 > **GitHub Classroom en toda la cursada**: Todos los TPs y apps integradoras se entregan via
@@ -235,40 +235,48 @@ Basada en Prather et al. 2024, Jacobs 2025 y Frydenberg et al. 2025:
 
 | Bloque | Duración | Contenido |
 |--------|----------|-----------|
-| T1 | 45' | CRUD con Django ORM: `create()`, `filter()`, `exclude()`, `get()`, `update()`, `delete()` |
-| T2 | 45' | Consultas avanzadas: `Q objects`, `annotate()`, `aggregate()`, `select_related()` |
-| T3 | 30' | Django Admin: `ModelAdmin`, list_display, actions, customización |
-| T4 | 20' | **Parcial 1** (escritura) |
+| T1 | 45' | ORM avanzado en Django: `QuerySet`, chaining, lazy evaluation y CRUD (`create()`, `filter()`, `exclude()`, `get()`, `update()`, `delete()`) |
+| T2 | 45' | Consultas dinámicas y performance: `Q objects`, `annotate()`, `aggregate()`, `order_by()`, `select_related()` y `prefetch_related()` |
+| T3 | 30' | Puente MVC: request/response cycle e introducción a vistas OOP con `View`, `as_view()`, `dispatch()`, `get()` y `post()` |
+| T4 | 20' | Introducción a formularios: HTML `<form>`, CSRF, `Form` vs `ModelForm`, `is_valid()` y patrón POST/Redirect/GET |
 
 #### Semana 8 — Práctica (3 hs)
 
 | Bloque | Duración | Contenido |
 |--------|----------|-----------|
-| P1 | 60' | TP 3 en Codespaces: implementar modelos con migrations |
-| P2 | 60' | Tests de modelos con `pytest-django`: fixtures, `@pytest.mark.django_db` |
+| P1 | 60' | TP 3 en Codespaces: implementar modelos con migrations y consultas ORM relevantes |
+| P2 | 60' | Primera vista basada en `View` + template mínimo + tests de modelos y vistas con `pytest-django` |
+| P3 | 60' | Primer `ModelForm` de alta/edición con validación básica del flujo GET/POST |
 
 **TP 3 — Django MVC + ORM** *(entrega: semana 9, lunes 23:59)*
 - Plataforma: GitHub Classroom con autograding (tests pytest-django automáticos)
-- Requisitos: Modelos + admin + views básicas + tests ≥80% coverage
+- Requisitos: Modelos + admin + consultas ORM + primeras vistas basadas en `View` + tests de modelos y vistas simples ≥80% coverage
 
 ---
 
-### MÓDULO V — Vistas, Templates + UI *(Semanas 9–11 — 18 hs)*
+### MÓDULO V — Vistas, Templates + UI *(Semanas 9–11 — 18 hs, con puente en semana 8)*
 *Cubre: plan-minimo.md → Módulo V completo*
 
-#### Semanas 9–10 — Contenido principal
+#### Semana 9 — Teoría (3 hs)
 
-| Tema | Contenido |
-|------|-----------|
-| Django Templates | Template Language, herencia (`{% extends %}`), bloques, filtros, tags |
-| Vistas genéricas | `ListView`, `DetailView`, `CreateView`, `UpdateView`, `DeleteView` |
-| Bootstrap + Django | Integrar Bootstrap 5 en templates Django — reutilizando lo de Módulo 0 |
-| Formularios | `ModelForm`, `Form`, validación, `clean_*`, `is_valid()` |
-| HTML5 + Django | `<form>`, CSRF token, redirect, messages framework |
+| Bloque | Duración | Contenido |
+|--------|----------|-----------|
+| T1 | 60' | **Parcial 1** |
+| T2 | 40' | Vistas OOP en Django: `View` como base conceptual y transición a `TemplateView`, `ListView` y `DetailView` |
+| T3 | 40' | Django Templates: Template Language, herencia (`{% extends %}`), bloques, `include`, filtros, tags y contexto |
+| T4 | 20' | Formularios Django: `ModelForm`, `clean_*`, errores de validación y redisplay del formulario inválido |
+
+#### Semana 9 — Práctica (3 hs)
+
+| Bloque | Duración | Contenido |
+|--------|----------|-----------|
+| P1 | 60' | Refactor de vistas: de `View` base a primeras genéricas (`ListView`, `DetailView`) |
+| P2 | 60' | Integrar Bootstrap 5 en templates Django: layout base, listados, detalle, navegación y messages framework |
+| P3 | 60' | Formularios con `ModelForm` y primera aproximación a `CreateView` y `UpdateView` |
 
 #### Semana 10 — Entrega App Integradora I
 
-- **BlogApp I**: modelos + admin + vistas géricas + templates Bootstrap + formularios
+- **BlogApp I**: modelos + admin + vistas OOP (con `View` base o genéricas) + templates Bootstrap + formularios
 - Presentación en clase (15'/grupo), repositorio GitHub Classroom
 - Criterio: funcionalidad completa, tests ≥75% coverage, commits ordenados
 
@@ -374,4 +382,4 @@ Antes de confirmar este plan, verificar:
 - [ ] Todos los repos tienen Codespaces + GitHub Copilot habilitado
 - [ ] Stack (Python 3.13, Django 5.1, Bootstrap 5.3.3) disponible en Codespaces
 - [ ] Política de IA redactada y comunicada a los alumnos desde semana 1
-- [ ] Parciales: semana 8 (parcial 1) y semana 13 (parcial 2) — confirmar con calendario académico
+- [ ] Parciales: semana 9 (parcial 1) y semana 13 (parcial 2) — confirmar con calendario académico

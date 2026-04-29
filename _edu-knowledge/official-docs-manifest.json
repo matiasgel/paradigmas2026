@@ -1,0 +1,40 @@
+{
+  "generated_at": "2026-04-29T13:46:32.892841+00:00",
+  "sources": [
+    {
+      "name": "Python official documentation 3.14",
+      "start_url": "https://docs.python.org/3/contents.html",
+      "prefix": "https://docs.python.org/3/",
+      "output": "_edu-knowledge\\tools\\python-official-docs-3.14.md",
+      "pages_saved": 515,
+      "pages_seen": 518,
+      "failures": []
+    },
+    {
+      "name": "Django official documentation 6.0",
+      "start_url": "https://docs.djangoproject.com/en/6.0/",
+      "prefix": "https://docs.djangoproject.com/en/6.0/",
+      "output": "_edu-knowledge\\tools\\django-official-docs-6.0.md",
+      "pages_saved": 652,
+      "pages_seen": 657,
+      "failures": []
+    },
+    {
+      "name": "Bootstrap official documentation 5.3",
+      "start_url": "https://getbootstrap.com/docs/5.3/getting-started/introduction/",
+      "prefix": "https://getbootstrap.com/docs/5.3/",
+      "output": "_edu-knowledge\\tools\\bootstrap-official-docs-5.3.md",
+      "pages_saved": 55,
+      "pages_seen": 65,
+      "failures": []
+    },
+    {
+      "name": "HTML Living Standard",
+      "start_url": "https://html.spec.whatwg.org/",
+      "output": "_edu-knowledge\\tools\\html-living-standard.md",
+      "pages_saved": 1,
+      "pages_seen": 1,
+      "failures": []
+    }
+  ]
+}

@@ -859,8 +859,3 @@ if qs:
 
 - **Two Scoops of Django 3.x** — Daniel Roy Greenfeld & Audrey Roy Greenfeld — Cap. 6 (Model Best Practices) y Cap. 10 (CBVs)
 - **Django for Professionals** — William S. Vincent — Cap. sobre ORM y Templates
-
-### Material fuente del curso
-
-- `material/orm.pdf` — práctica anterior: ORM básico sobre dominio Biblioteca (16 páginas)
-- `salida/cursadas/2026/plan-actualizado.md` — plan de la materia con contexto de esta clase

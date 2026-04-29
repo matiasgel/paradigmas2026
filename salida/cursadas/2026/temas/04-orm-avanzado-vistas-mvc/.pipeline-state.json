@@ -1,0 +1,21 @@
+{
+  "topic_id": "04-orm-avanzado-vistas-mvc",
+  "course_id": "if009-2026",
+  "last_step": "correction-loops-complete",
+  "timestamp": "2026-session-02",
+  "status": "content-complete",
+  "checkpoints": {
+    "design": { "status": "PASS", "artifact": "diseno.md" },
+    "filminas": { "status": "CREATED", "artifact": "filminas.md", "slides": 69 },
+    "minuta": { "status": "CORRECTED", "artifact": "minuta.md", "loop": "loop-1", "corrections": 11, "total_min": 180 },
+    "guia_estudio": { "status": "CORRECTED", "artifact": "guia-estudio.md", "loop": "loop-2", "corrections": 2 },
+    "guia_profesor": { "status": "CREATED", "artifact": "guia-profesor.md" },
+    "loop_1_writing": { "status": "PASS", "issues_found": 11, "issues_fixed": 11 },
+    "loop_2_coherence": { "status": "PASS", "issues_found": 2, "issues_fixed": 2 },
+    "loop_3_guardrail": { "status": "PASS", "issues_found": 0 },
+    "topic_yaml": { "status": "UPDATED", "new_status": "content-complete" },
+    "git_commit": { "status": "DONE", "hash": "be86d6f", "branch": "lenguajes" }
+  },
+  "pending": [],
+  "notes": "Producción completa. Listo para publicación en Google Slides con publish_loop.py."
+}
