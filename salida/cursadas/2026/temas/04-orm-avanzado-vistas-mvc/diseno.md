@@ -78,12 +78,16 @@ CLASE PRÁCTICA (180 min) ──────────────────
 
 ## 4. CLASE TEÓRICA — ORM avanzado + puente a interfaz MVC (180 min)
 
+> **Conocimiento previo de la práctica anterior (orm.pdf — 16 páginas):**  
+> Los estudiantes ya saben: shell de Django, CRUD básico (`.save()`, `.filter()`, `.all()`, `.get()`), ordenamiento (`.order_by()`), eliminación (`.delete()`), Managers personalizados con `get_queryset()`, métodos de modelo a nivel instancia. El dominio era Biblioteca (Autor, Libro, Lector).  
+> **Esta clase arranca** desde lazy evaluation en profundidad, Q objects, F expressions, aggregations y N+1 — todo genuinamente nuevo para los estudiantes. El dominio cambia a **BlogApp** (Post, Category, Comment).
+
 ### Objetivos (Bloom)
 
-1. **Analizar** (4) el ciclo de vida de un `QuerySet`: lazy evaluation, caché, y cuándo se evalúa.
-2. **Aplicar** (3) chaining de métodos sobre `QuerySet` para filtrar, excluir, ordenar y obtener resultados.
-3. **Construir** (4) consultas complejas usando `Q objects`, `F expressions`, `annotate()` y `aggregate()`.
-4. **Evaluar** (5) el costo de N+1 queries e implementar `select_related` / `prefetch_related` como solución.
+1. **Analizar** (4) el ciclo de vida de un `QuerySet`: lazy evaluation, caché interna, y cuándo se evalúa realmente.
+2. **Construir** (4) consultas complejas usando `Q objects`, `F expressions`, `annotate()` y `aggregate()` — no vistas en la práctica anterior.
+3. **Evaluar** (5) el costo del problema N+1 con `connection.queries` e implementar `select_related` / `prefetch_related`.
+4. **Extender** (3) managers personalizados ya conocidos hacia el dominio BlogApp, aplicando `only()`, `defer()` y `values()`.
 5. **Comprender** (2) el ciclo request/response de Django y la responsabilidad de cada capa MVT.
 6. **Reconocer** (2) `View` como clase base, `as_view()`, `dispatch()`, y los métodos `get()` / `post()`.
 7. **Distinguir** (2) `Form` de `ModelForm` y el patrón POST/Redirect/GET como buena práctica.
@@ -103,59 +107,78 @@ CLASE PRÁCTICA (180 min) ──────────────────
 
 ---
 
-### §T1 — QuerySet API avanzado (45 min)
+### §T1 — QuerySet API: de lo básico a lo profesional (45 min)
 
-> **Punto de partida explícito**: los estudiantes ya saben crear modelos, correr migraciones y hacer CRUD básico en el shell. Esta sección profundiza la API.
+> **Puente pedagógico**: los estudiantes usaron `filter()`, `all()`, `get()` y `order_by()` en la práctica anterior sobre el modelo Biblioteca. Saben que funciona — hoy entendemos **por qué funciona** y sumamos las herramientas que faltan.
 
-#### QuerySet como API de consulta orientada a objetos
+#### Lazy evaluation: por qué el ORM no consulta la BD inmediatamente
 
-- Un `QuerySet` es un objeto Python que representa una consulta diferida a la BD.
-- **Lazy evaluation**: la consulta SQL **no se ejecuta** hasta que se consume el QuerySet (iteración, slicing, `list()`, `bool()`, `len()`).
-- **Caché**: el resultado se almacena al evaluar; una segunda iteración **no vuelve a la BD**.
+Esto **no estaba en la práctica anterior** — el porqué de la eficiencia del ORM:
+
+- Un `QuerySet` es un **objeto Python diferido** — representa la consulta, no el resultado.
+- La SQL **solo se ejecuta** cuando se consume: iteración, `list()`, slicing, `bool()`, `len()`, `repr()`.
+- **Caché interna**: una vez evaluado, una segunda iteración **no vuelve a la BD**.
 
 ```python
-# Solo se construye el QuerySet — no va a la BD todavía
+# Construye el QuerySet — cero SQL ejecutada
 qs = Post.objects.filter(published=True).order_by("-created_at")
 
-# Aquí sí evalúa (iteración en template o explícita)
+# SQL ejecuta aquí (iteración)
 for post in qs:
     print(post.title)
+
+# Segunda iteración — usa caché, no va a la BD
+for post in qs:
+    print(post.title)   # sin SQL extra
 ```
 
-#### Chaining: operaciones encadenables
+**Por qué importa**: en templates Django, el QuerySet se evalúa una sola vez. Construirlo en la vista (como ya haremos en §T3) es económico.
 
-Todos los métodos que devuelven `QuerySet` son encadenables:
+#### Chaining: encadenar vs repetir filtros
 
 ```python
+# Los alumnos ya conocen filter() y order_by() por separado
+# Hoy los combinamos en cadenas expresivas
 Post.objects.filter(published=True)\
             .exclude(author__is_staff=True)\
             .order_by("-created_at")\
             .values("title", "author__username")[:10]
 ```
 
-#### Métodos de recuperación (devuelven instancia, no QuerySet)
+> **Cada método devuelve un nuevo QuerySet** — la BD no recibe nada hasta el slicing `[:10]`.
 
-| Método | Resultado | Excepción si falla |
+#### Métodos nuevos: más allá de `.get()` y `.filter()`
+
+| Método | Resultado | Novedad vs orm.pdf |
 |--------|-----------|-------------------|
-| `.get(pk=1)` | una instancia | `DoesNotExist` / `MultipleObjectsReturned` |
-| `.first()` / `.last()` | instancia o `None` | — |
-| `.get_or_create(...)` | `(obj, created)` | — |
-| `.update_or_create(...)` | `(obj, created)` | — |
+| `.first()` / `.last()` | instancia o `None` | ✅ nuevo |
+| `.get_or_create(...)` | `(obj, created: bool)` | ✅ nuevo |
+| `.update_or_create(...)` | `(obj, created: bool)` | ✅ nuevo |
+| `.exists()` | `bool` | ✅ nuevo |
+| `.count()` | `int` | ✅ nuevo |
+| `.values("campo")` | `QuerySet` de dicts | ✅ nuevo |
+| `.values_list("campo", flat=True)` | `QuerySet` de valores | ✅ nuevo |
+| `.only("campo")` | instancias parciales (eficiente) | ✅ nuevo |
+| `.defer("campo")` | excluir campos pesados (ej: `body`) | ✅ nuevo |
 
-#### Escritura masiva
+#### Escritura masiva — nuevo respecto a la práctica anterior
 
 ```python
-# create() devuelve la instancia guardada
-post = Post.objects.create(title="Nuevo", author=user, published=False)
+# Los alumnos conocen .save() individual
+# Hoy: update() y bulk_create() para operaciones masivas
 
-# update() devuelve cantidad de filas afectadas — NO llama a save()
+# update() → SQL UPDATE directo, no llama a .save(), más eficiente
 Post.objects.filter(author=user).update(published=True)
 
-# delete() devuelve (n, dict) con conteo por tipo
-Post.objects.filter(published=False, created_at__lt=cutoff).delete()
+# delete() ya visto — lo que es nuevo: el valor de retorno
+n_deleted, by_type = Post.objects.filter(published=False).delete()
+# by_type → {'blog.Post': 3, 'blog.Comment': 12}
 
-# bulk_create — inserts masivos sin save() individual
-Post.objects.bulk_create([Post(title=t) for t in titles])
+# bulk_create → inserts masivos sin llamar save() por cada objeto
+Post.objects.bulk_create([
+    Post(title="Post A", author=user),
+    Post(title="Post B", author=user),
+])
 ```
 
 **Filminas previstas §T1: ~12**
@@ -568,10 +591,10 @@ class PostCreateView(View):
 
 ### Objetivos (Bloom)
 
-1. **Ejecutar** (3) consultas avanzadas con Q objects, F expressions, annotate y aggregate en Django shell sobre BlogApp.
-2. **Construir** (3) managers personalizados con `get_queryset()` para encapsular consultas frecuentes.
-3. **Implementar** (3) una primera CBV con `View` base que conecte URL → contexto de modelo → template.
-4. **Demostrar** (3) el flujo GET/POST con un `ModelForm` mínimo en la práctica guiada.
+1. **Ejecutar** (3) consultas avanzadas con Q objects, F expressions, `annotate()` y `aggregate()` — genuinamente nuevas — sobre BlogApp en el shell.
+2. **Transferir** (4) el conocimiento de Managers del modelo Biblioteca (orm.pdf) al modelo BlogApp, usando `only()` y `defer()` adicionalmente.
+3. **Implementar** (3) una primera CBV con `View` base que conecte URL → contexto de modelo → template con herencia.
+4. **Demostrar** (3) el flujo GET/POST con un `ModelForm` mínimo y el patrón PRG.
 5. **Detectar** (4) el problema N+1 con `connection.queries` y aplicar `select_related` como solución.
 
 ### Agenda
@@ -600,18 +623,26 @@ from blog.models import Post, Category, Comment
 from django.contrib.auth.models import User
 ```
 
+> **Nota para el docente**: los estudiantes ya hicieron CRUD básico, filter/order/delete y managers en la práctica Biblioteca (orm.pdf). Los ejercicios 1 y 2 abajo son puente rápido hacia BlogApp. Los ejercicios 3–6 son el contenido nuevo real.
+
 #### Ejercicios guiados (resolución paso a paso con el docente)
 
-**Ejercicio 1 — Recuperación segura y chaining**
+**Ejercicio 1 — Puente: adaptar lo conocido al dominio BlogApp (10 min)**
 ```python
-# ¿Qué diferencia hay entre get() y filter().first()?
-cat_python = Category.objects.get(slug="python")                    # DoesNotExist si no existe
-cat_python = Category.objects.filter(slug="python").first()         # None si no existe
+# Repaso rápido — mismos conceptos, nuevo modelo
+# Los alumnos ya hicieron esto con Libro/Autor/Lector
 
-# 5 posts publicados más recientes con su categoría
-recientes = Post.objects.filter(published=True)\
-                        .select_related("author")\
-                        .order_by("-created_at")[:5]
+# get() vs filter().first() — consolidar la diferencia
+cat = Category.objects.get(slug="python")           # DoesNotExist si no existe
+cat = Category.objects.filter(slug="python").first() # None si no existe — más seguro
+
+# Métodos nuevos: exists() y count()
+Category.objects.filter(slug="python").exists()     # True/False — no trae el objeto
+Post.objects.filter(published=True).count()          # int — eficiente
+
+# values_list: solo los títulos, sin instanciar Post
+titulos = Post.objects.filter(published=True).values_list("title", flat=True)
+print(list(titulos))
 ```
 
 **Ejercicio 2 — Q objects: búsqueda multi-campo**
@@ -674,21 +705,34 @@ for p in posts:
 print(f"Queries: {len(connection.queries)}")   # → 1
 ```
 
-**Ejercicio 6 — Manager personalizado**
+**Ejercicio 6 — Manager personalizado para BlogApp (extensión de lo ya visto)**
+
+> Los alumnos crearon un `Manager` para Libro en la práctica anterior. Hoy lo **transfieren a BlogApp y extienden** con `only()` para eficiencia.
+
 ```python
-# blog/models.py — ampliar Post
+# blog/models.py — misma idea que Libro.disponibles, ahora para Post
 class PublishedManager(models.Manager):
     def get_queryset(self):
+        # Misma estructura que vieron en orm.pdf
         return super().get_queryset().filter(published=True)
 
+    def recientes(self, n=10):
+        """Top N publicados — método nuevo sobre el manager."""
+        return self.get_queryset()\
+                   .select_related("author")\
+                   .only("title", "created_at", "author__username")\
+                   .order_by("-created_at")[:n]
+
 class Post(models.Model):
-    objects = models.Manager()          # manager por defecto
+    objects = models.Manager()          # manager por defecto (siempre declarar)
     published = PublishedManager()      # manager custom
 
-# Uso:
-Post.published.all()                   # solo publicados
-Post.published.order_by("-created_at")[:5]
+# Uso — lo que hicieron con Libro.disponibles.all(), ahora:
+Post.published.all()                    # solo publicados
+Post.published.recientes(5)             # top 5 con only() — eficiente
 ```
+
+**Diferencia clave respecto a la práctica anterior**: `only()` y `select_related()` dentro del manager — los alumnos ven cómo el manager puede encapsular estrategias de performance.
 
 ---
 
