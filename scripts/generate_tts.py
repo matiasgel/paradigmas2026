@@ -22,7 +22,7 @@ import re
 import sys
 from pathlib import Path
 
-from pipeline_common import find_project_root, load_yaml
+from pipeline_common import ensure_git_ignored_dir, find_project_root, load_yaml
 
 
 def extract_slide_scripts(minuta_path: Path) -> list[dict]:
@@ -119,8 +119,7 @@ def main() -> int:
         print("ℹ️  No se encontraron guiones de filminas en minuta.md")
         return 0
 
-    audio_dir = topic_folder / "audio"
-    audio_dir.mkdir(parents=True, exist_ok=True)
+    audio_dir = ensure_git_ignored_dir(topic_folder, "audio")
 
     if provider == "edge-tts":
         print(f"🔊 Generando {len(slides)} audios con edge-tts (voz: {voice})...")

@@ -55,6 +55,7 @@ from googleapiclient.http import MediaFileUpload
 # Pipeline compartido
 from pipeline_common import (
     Result,
+    ensure_git_ignored_path,
     find_project_root,
     load_json,
     load_registry,
@@ -1273,7 +1274,7 @@ def generate_assets(
         img = _get_slide_image(slide)
         layer = img.get("layer", "none")
         if layer != "none" and img.get("prompt") and img.get("local_asset"):
-            lp = topic_folder / img["local_asset"]
+            lp = ensure_git_ignored_path(topic_folder, img["local_asset"])
             if not lp.exists():
                 print(f"  🖼️  Generando imagen ({layer}) para {slide['id']} …")
                 _gemini_image(img["prompt"], lp, gemini_api_key)
@@ -1285,7 +1286,7 @@ def generate_assets(
         updated_ta = []
         for ta in slide.get("table_assets") or []:
             ta = dict(ta)
-            lp = topic_folder / ta["local_asset"]
+            lp = ensure_git_ignored_path(topic_folder, ta["local_asset"])
             if not lp.exists() and ta.get("table_markdown"):
                 print(f"  📊 Renderizando tabla {slide['id']}-table-{ta['index'] + 1} …")
                 _render_table_png(ta["table_markdown"], lp, config)
@@ -1943,7 +1944,7 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
         print(f"  ⚠️  No se pudo limpiar textos del template: {exc}")
 
     url      = f"https://docs.google.com/presentation/d/{pres_id}/edit"
-    url_path = topic_folder / "slides" / "slides-url.txt"
+    url_path = ensure_git_ignored_path(topic_folder, Path("slides") / "slides-url.txt")
     url_path.parent.mkdir(parents=True, exist_ok=True)
     url_path.write_text(url, encoding="utf-8")
 

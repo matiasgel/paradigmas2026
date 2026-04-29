@@ -67,6 +67,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from pipeline_common import ensure_git_ignored_path
 
 # ══════════════════════════════════════════════════════════════════════
 # Constantes
@@ -478,7 +479,7 @@ def run_pipeline(
 
     # Extraer URL del output del pipeline
     pres_id: str | None = None
-    url_file = topic_folder / "slides" / "slides-url.txt"
+    url_file = ensure_git_ignored_path(topic_folder, Path("slides") / "slides-url.txt")
     if url_file.exists():
         url = url_file.read_text(encoding="utf-8").strip()
         meta["phases"]["publish"]["presentation_url"] = url
@@ -626,7 +627,7 @@ def generate_report(
         gallery_html = "<p class='warn'>No se generaron capturas de pantalla.</p>"
 
     # ── Assets generados ──────────────────────────────────────────────
-    assets_dir = topic_folder / "slides" / "assets"
+    assets_dir = ensure_git_ignored_path(topic_folder, Path("slides") / "assets")
     asset_items = sorted(assets_dir.glob("*.png")) if assets_dir.exists() else []
     assets_html = "\n".join(
         _thumb_tag(p, p.name, test_dir) for p in asset_items
@@ -763,7 +764,7 @@ def generate_report(
 
 def copy_assets_to_report(test_dir: Path, topic_folder: Path, meta: dict) -> None:
     """Copia los assets generados (PNG) al directorio raíz del reporte para fácil acceso."""
-    assets_src = topic_folder / "slides" / "assets"
+    assets_src = ensure_git_ignored_path(topic_folder, Path("slides") / "assets")
     if not assets_src.exists():
         return
     assets_dst = test_dir / "assets"
