@@ -1,6 +1,6 @@
 # Guía de Estudio — Tema 07: Paradigma Lógico — Clase 2+3
 
-> **Para el alumno:** este documento es tu compañero de estudio autónomo. Cubre en profundidad todo lo visto en la clase doble y te prepara para el TP y el parcial.
+> **Para el alumno:** este documento es tu compañero de estudio autónomo. Cubre en profundidad todo lo visto en la clase doble y te prepara para comprender y aplicar el paradigma lógico con Prolog.
 >
 > **Materia:** Paradigmas y Lenguajes de Programación 2026
 > **Docente:** Matías Gel — UNTDF / IDEI
@@ -18,7 +18,7 @@ Esta guía NO reemplaza la clase — la **expande**. Su estructura:
 3. **Desarrollo teórico** (el 80% del documento)
 4. **Ejemplos trabajados paso a paso**
 5. **Puntos clave** (lo que tenés que recordar sí o sí)
-6. **Autoevaluación** (20 preguntas con respuesta al final)
+6. **Autoevaluación** (15 preguntas con respuesta al final)
 7. **Glosario**
 8. **Referencias**
 
@@ -32,15 +32,6 @@ Esta guía NO reemplaza la clase — la **expande**. Su estructura:
 
 ---
 
-> **⚠️ Nota sobre la clase del 2026-04-21:**
-> La clase doble cubrió los temas **marcados con ✅** en la lista de objetivos. Los marcados con 📖 **no fueron dictados en clase** pero son parte del programa — estudiarlos de forma autónoma con esta guía.
->
-> **Temas ✅ cubiertos en clase:** Unificación, Listas, Resolución SLD, Backtracking, Corte (`!`), Panorama 2026.
->
-> **Temas 📖 para auto-estudio:** Aritmética (`is/2`), Recursión con acumulador, Meta-predicados (`findall`/`bagof`/`setof`), Aplicaciones (N-reinas, mapa de colores).
-
----
-
 ## 1. Objetivos de Aprendizaje
 
 Al finalizar el estudio de este tema deberías poder:
@@ -49,16 +40,13 @@ Al finalizar el estudio de este tema deberías poder:
 |---|----------|-------------|-------|
 | 1 | Definir unificación y aplicar su algoritmo a mano | Recordar, Aplicar | ✅ dictado |
 | 2 | Trazar árboles SLD de consultas con 2+ niveles de recursión | Analizar | ✅ dictado |
-| 3 | Distinguir entre `=`, `==`, `=:=`, `is/2` | Comprender | ✅ parcial (`=:=` e `is/2` por auto-estudio) |
+| 3 | Distinguir entre `=`, `==`, `=:=`, `is/2` | Comprender | ✅ dictado (`=:=` e `is/2` por auto-estudio) |
 | 4 | Explicar cómo funciona el backtracking y el trail | Comprender | ✅ dictado |
 | 5 | Decidir cuándo usar `!` (corte verde vs. rojo) | Evaluar | ✅ dictado |
 | 6 | Justificar el uso de `dif/2` en lugar de `\+` con variables | Evaluar | 📖 auto-estudio |
 | 7 | Escribir `append/3`, `member/2` sin mirar apuntes | Aplicar | ✅ dictado |
-| 8 | Convertir una recursión ingenua en una con acumulador | Crear | 📖 auto-estudio |
-| 9 | Elegir entre `findall`, `bagof` y `setof` en cada caso | Evaluar | 📖 auto-estudio |
-| 10 | Modelar un dominio de conocimiento y consultarlo | Crear | ✅ base dictada |
-| 11 | Resolver un puzzle de restricciones (generate-and-test o CLP(FD)) | Crear | 📖 auto-estudio |
-| 12 | Situar Prolog en el ecosistema 2026 (Datalog, neuro-simbólico) | Comprender | ✅ dictado |
+| 8 | Modelar un dominio de conocimiento y consultarlo | Crear | ✅ base dictada |
+| 9 | Situar Prolog en el ecosistema 2026 (Datalog, neuro-simbólico) | Comprender | ✅ dictado |
 
 ---
 
@@ -125,21 +113,7 @@ Formalmente: $\theta$ es MGU si para cualquier otra $\sigma$ que unifique $t_1$ 
 
 **Práctica:** esto importa porque las variables quedan lo más libres posible para el resto de la resolución — más flexibilidad para el resto del programa.
 
-#### 3.1.4 Occurs-check: el gotcha
-
-**Problema:** ¿qué pasa con `?- X = f(X).`?
-
-- Sin occurs-check (SWI-Prolog por defecto): crea un **término cíclico** `X = f(f(f(...)))`, que Prolog representa internamente pero puede causar loops en algoritmos que iteran.
-- Con occurs-check: la unificación **falla** — es la semántica correcta.
-
-**Por qué SWI lo desactiva:** el occurs-check agrega costo lineal a cada unificación. En 99% de los programas no hace falta. Pero si estás trabajando con estructuras que pueden generar ciclos → activalo:
-
-```prolog
-?- set_prolog_flag(occurs_check, true).
-?- unify_with_occurs_check(X, f(X)).    % también explícito
-```
-
-#### 3.1.5 Los operadores `=`, `==`, `\=`, `\==`, `=..`
+#### 3.1.4 Los operadores `=`, `==`, `\=`, `\==`, `=..`
 
 | Operador | Semántica | Efecto en variables |
 |----------|-----------|---------------------|
@@ -149,7 +123,7 @@ Formalmente: $\theta$ es MGU si para cualquier otra $\sigma$ que unifique $t_1$ 
 | `\==/2` | No idénticos | — |
 | `=../2` | Descompone término a lista | Liga el resultado |
 
-Ejemplos críticos para el parcial:
+Ejemplos clave:
 
 ```prolog
 ?- X = 5.            X = 5.
@@ -421,15 +395,6 @@ El orden cambia la respuesta porque `\+` depende del estado de las variables.
 
 **Regla:** usar `\+` sólo con goals **ground** (sin variables libres).
 
-#### 3.5.3 `dif/2` como alternativa correcta
-
-```prolog
-?- dif(X, Y), X = 1, Y = 2.    true.
-?- dif(X, Y), X = 1, Y = 1.    false.
-```
-
-`dif/2` se **pospone** hasta que las variables estén ligadas y entonces verifica. Es la negación correcta en CLP.
-
 ### 3.6 Aritmética
 
 #### 3.6.1 El momento incómodo
@@ -465,24 +430,6 @@ Reglas:
 - `=:=` vs. `==` vs. `=` (tres cosas distintas, mirá sección 3.1.5)
 - `2 + 3 == 5` es **false** (`+(2,3)` no es idéntico a `5`)
 - `2 + 3 =:= 5` es **true** (evaluación numérica)
-
-#### 3.6.4 Factorial correcto
-
-```prolog
-factorial(0, 1).
-factorial(N, F) :-
-    N > 0,
-    N1 is N - 1,
-    factorial(N1, F1),
-    F is N * F1.
-```
-
-Observa:
-- `N > 0` antes de la recursiva (terminación)
-- `N1 is N - 1` antes de la recursiva (ground en la llamada)
-- `F is N * F1` después (cuando F1 ya está ligado)
-
-Anti-patrón: `factorial(N, N * factorial(N-1)).` — Prolog guarda el árbol de términos pero **nunca evalúa**.
 
 ### 3.7 Listas
 
@@ -536,115 +483,9 @@ X = c, Y = d.
 
 **Clave pedagógica:** `append/3` es un **ejemplo maestro** de cómo la lógica es más general que la función. Relaciona tres listas — podés fijar cualquier combinación.
 
-### 3.8 Recursión con acumulador
+### 3.8 Aplicaciones canónicas
 
-> **🎒 Analogía de la mochila** (leé esto antes de cualquier código):
->
-> Imaginá que caminás un sendero recogiendo piedras. Tenés dos formas de contar el peso total:
->
-> **Recursión ingenua** — *"al final pregunto cuánto pesa todo"*: llegás al final del sendero con las manos vacías y ahí empezás a sumar pesos de memoria hacia atrás. Si el sendero es larguísimo (100.000 piedras), no te alcanza la memoria.
->
-> **Recursión con acumulador** — *"llevo una mochila y voy cargando"*: al empezar la mochila pesa 0. En cada piedra: sumás su peso a la mochila y seguís. Cuando llegás al final, la mochila ya tiene el resultado — no necesitás recordar nada del camino.
->
-> **Regla mental para escribirlo:**
-> - El **wrapper** inicializa la mochila: `suma(L, S) :- suma(L, 0, S).`
-> - El **caso base** devuelve la mochila: `suma([], Acc, Acc).`
-> - El **caso recursivo** carga la mochila *antes* de llamar: `Acc1 is Acc + H, suma(T, Acc1, S).`
->
-> **Pregunta detectora** (hacete esta pregunta mientras escribís):
-> > *"¿El cálculo está ANTES o DESPUÉS de la llamada recursiva?"*
->
-> - **Antes** → tail-recursive (LCO se aplica, sin stack overflow) ✅
-> - **Después** → ingenuo (va a crecer el stack) ❌
-
-#### 3.8.1 El problema del stack
-
-Recursión ingenua:
-```prolog
-suma([], 0).
-suma([H|T], S) :- suma(T, ST), S is H + ST.
-```
-
-Con una lista de 100.000 elementos → **stack overflow**, porque cada llamada recursiva tiene que esperar el resultado para sumar.
-
-#### 3.8.2 La versión con acumulador
-
-```prolog
-suma(L, S) :- suma(L, 0, S).
-
-suma([], Acc, Acc).
-suma([H|T], Acc, S) :-
-    Acc1 is Acc + H,
-    suma(T, Acc1, S).
-```
-
-**La clave:** la llamada recursiva es la **última operación**.
-
-#### 3.8.3 Last-Call Optimization (LCO)
-
-Cuando la última llamada es recursiva y no hay choice points pendientes, el motor Prolog **reutiliza el stack frame**. Resultado: recursión en **memoria constante**, equivalente a un loop imperativo.
-
-Todos los Prologs modernos la implementan. Por eso "recursión en Prolog" NO es más lenta que un `while`.
-
-#### 3.8.4 Reverse con acumulador
-
-```prolog
-reverse(L, R) :- rev(L, [], R).
-rev([], Acc, Acc).
-rev([H|T], Acc, R) :- rev(T, [H|Acc], R).
-```
-
-Trazado mental para `[1,2,3]`:
-```
-rev([1,2,3], [], R)
-rev([2,3], [1], R)
-rev([3], [2,1], R)
-rev([], [3,2,1], R)
-R = [3,2,1].
-```
-
-O(n), memoria constante.
-
-### 3.9 Meta-predicados
-
-#### 3.9.1 `findall/3`
-
-```prolog
-findall(+Template, +Goal, -List).
-```
-
-Colecta **todas** las instancias de `Template` para las que `Goal` es verdadero. Si no hay soluciones, `List = []`.
-
-```prolog
-?- findall(N, edad(N, 22), L).
-L = [ana, carla].
-```
-
-#### 3.9.2 `bagof/3` y `setof/3`
-
-**`bagof/3`:** como `findall` pero **falla** si no hay soluciones + **agrupa** por variables libres.
-
-**`setof/3`:** como `bagof` pero **ordenado** y **sin duplicados**.
-
-```prolog
-?- setof(N, E^edad(N, E), L).
-L = [ana, beto, carla].
-```
-
-El operador `^` cuantifica existencialmente — dice "no me importa el valor de E".
-
-#### 3.9.3 Tabla comparativa
-
-| Aspecto | `findall/3` | `bagof/3` | `setof/3` |
-|---------|:---:|:---:|:---:|
-| Sin soluciones | `[]` | falla | falla |
-| Duplicados | sí | sí | no |
-| Orden | preserva | preserva | ordenado |
-| Agrupa por vars libres | no | sí | sí |
-
-### 3.10 Aplicaciones canónicas
-
-#### 3.10.1 Generate and test
+#### 3.8.1 Generate and test
 
 ```prolog
 color(rojo). color(verde). color(azul).
@@ -654,9 +495,9 @@ mapa(N, S, E, O) :-
     N \= S, N \= E, S \= O, E \= O.
 ```
 
-Genera todas las combinaciones, filtra las válidas. Combinado con CLP(FD) evita combinatoria explosiva.
+Genera todas las combinaciones, filtra las válidas.
 
-#### 3.10.2 Base deductiva con consultas múltiples
+#### 3.8.2 Base deductiva con consultas múltiples
 
 ```prolog
 vuelo(ush, bue, 2200).
@@ -675,21 +516,6 @@ ruta(A, B, [A|R], T) :-
 - ¿Hay alguna con escala en MVD?
 
 Esto es lo que **ningún otro paradigma** te da: reversibilidad total.
-
-#### 3.10.3 CLP(FD) para puzzles
-
-```prolog
-:- use_module(library(clpfd)).
-
-n_reinas(N, Qs) :-
-    length(Qs, N),
-    Qs ins 1..N,
-    all_distinct(Qs),
-    diagonales_distintas(Qs),
-    label(Qs).
-```
-
-CLP(FD) hace **búsqueda con restricciones** — evita la fuerza bruta. Es la técnica moderna para puzzles grandes.
 
 ---
 
@@ -760,52 +586,7 @@ member(X, [_|T]) :- member(X, T). % caso 2: X está en la cola
 true.
 ```
 
-### Ejemplo 4 — `reverse` con acumulador
-
-Queremos invertir `[1, 2, 3]` a `[3, 2, 1]`.
-
-**Idea del acumulador:** ir "rotando" la lista hacia el acumulador.
-
-```prolog
-reverse(L, R) :- rev(L, [], R).
-
-rev([], Acc, Acc).
-rev([H|T], Acc, R) :- rev(T, [H|Acc], R).
-```
-
-Trazado:
-```
-rev([1,2,3], [], R)
-    H=1, T=[2,3], Acc=[]
-    llama rev([2,3], [1], R)
-        H=2, T=[3], Acc=[1]
-        llama rev([3], [2,1], R)
-            H=3, T=[], Acc=[2,1]
-            llama rev([], [3,2,1], R)
-                caso base: R = [3,2,1]
-```
-
-**Observar:** cada cabeza va al frente del acumulador → al llegar al final, el acumulador tiene la lista invertida.
-
-### Ejemplo 5 — `findall` para promediar
-
-```prolog
-edad(ana, 22). edad(beto, 30). edad(carla, 22).
-
-promedio_edad(P) :-
-    findall(E, edad(_, E), L),
-    length(L, N),
-    sum_list(L, S),
-    P is S / N.
-```
-
-**Trazado:**
-1. `findall(E, edad(_, E), L)` → L = [22, 30, 22]
-2. `length(L, 3)` → N = 3
-3. `sum_list(L, 74)` → S = 74
-4. `P is 74 / 3` → P ≈ 24.67
-
-### Ejemplo 6 — Resolver coloreo de 4 regiones
+### Ejemplo 4 — Resolver coloreo de 4 regiones
 
 Base:
 ```prolog
@@ -852,13 +633,9 @@ Prolog enumera todas las combinaciones válidas gracias al backtracking.
 
 8. **`append/3` es reversible** — entiéndelo y tendrás Prolog en el bolsillo.
 
-9. **Recursión con acumulador → LCO → memoria constante.**
-
-10. **`findall/bagof/setof`**: usar `findall` salvo agrupación o unicidad.
-
 ---
 
-## 6. Autoevaluación (20 preguntas)
+## 6. Autoevaluación (15 preguntas)
 
 Respondé sin mirar. Las respuestas están al final.
 
@@ -872,45 +649,35 @@ Respondé sin mirar. Las respuestas están al final.
 8. ¿Qué diferencia hay entre `?- 2+3 = 5.` y `?- 2+3 =:= 5.`?
 9. Escribir `member/2` desde cero.
 10. Escribir `append/3` desde cero.
-11. ¿Qué es LCO?
-12. Convertir `suma([], 0). suma([H|T], S) :- suma(T, ST), S is H + ST.` en versión con acumulador.
-13. ¿Qué diferencia hay entre `findall/3` y `bagof/3` cuando no hay soluciones?
-14. ¿Qué hace `=../2`?
-15. Dado `?- setof(E, N^edad(N, E), L).`, ¿qué significa el `^`?
-16. ¿Un corte verde cambia las respuestas del programa?
-17. ¿Cuál es la alternativa moderna al corte para codificar if-then-else?
-18. Escribir una regla Prolog que diga "X es tío de Y si X es hermano de un progenitor de Y".
-19. ¿Qué predicado usarías para forzar aritmética reversible (X + Y = 10 con X, Y variables)?
-20. Nombrar 3 implementaciones modernas de Prolog.
+11. ¿Qué hace `=../2`?
+12. ¿Un corte verde cambia las respuestas del programa?
+13. ¿Cuál es la alternativa moderna al corte para codificar if-then-else?
+14. Escribir una regla Prolog que diga "X es tío de Y si X es hermano de un progenitor de Y".
+15. Nombrar 3 implementaciones modernas de Prolog.
 
 ### Respuestas
 
 1. `true`.
 2. `false` (X es variable libre, 5 es número; no son idénticos).
 3. `{X/b, Z/a, Y/c}`.
-4. Éxito (sin occurs-check, crea término cíclico).
+4. Éxito (SWI-Prolog sin occurs-check crea término cíclico).
 5. `rojo\nverde\nazul\n` y luego `false.`.
 6. Closed World Assumption: lo no demostrado se asume falso.
 7. Porque al ejecutar `\+ X = 1` con X libre, Prolog demuestra `X = 1` (con X ligado temporalmente) → `\+` falla.
 8. `=` intenta unificar `+(2,3)` con `5` → falla. `=:=` evalúa ambos → `5 = 5` → true.
 9. Ver sección 3.7.2.
 10. Ver sección 3.7.2.
-11. Last-Call Optimization: el motor reutiliza el stack frame si la última llamada es recursiva y no hay choice points.
-12. Ver sección 3.8.2.
-13. `findall/3` devuelve `[]`; `bagof/3` falla.
-14. Descompone un término en lista `[funtor | args]`.
-15. Cuantificación existencial: "para algún N cualquiera".
-16. No.
-17. `(Condición -> Then ; Else)`.
-18. `tio(X, Y) :- hermano(X, P), progenitor(P, Y).`
-19. `library(clpfd)` con `#=`.
-20. SWI-Prolog, Scryer Prolog, Trealla Prolog, Tau Prolog, Ciao.
+11. Descompone un término en lista `[funtor | args]`.
+12. No.
+13. `(Condición -> Then ; Else)`.
+14. `tio(X, Y) :- hermano(X, P), progenitor(P, Y).`
+15. SWI-Prolog, Scryer Prolog, Trealla Prolog, Tau Prolog, Ciao.
 
 **Calificación:**
-- 18–20: excelente, listo para el TP.
-- 14–17: bien, revisá 2–3 puntos flojos.
-- 10–13: releer secciones 3.1, 3.4, 3.7, 3.8.
-- <10: re-estudiar desde la sección 3.
+- 13–15: excelente.
+- 10–12: bien, revisá los puntos flojos.
+- 7–9: releer secciones 3.1, 3.3, 3.4, 3.7.
+- <7: re-estudiar desde la sección 3.
 
 ---
 
@@ -921,17 +688,13 @@ Respondé sin mirar. Las respuestas están al final.
 | **Átomo** | Constante (minúscula o entre comillas) |
 | **Backtracking** | Retroceso automático al último choice point |
 | **Base de conocimiento** | Conjunto de hechos y reglas |
-| **CLP(FD)** | Constraint Logic Programming over Finite Domains |
 | **Cláusula de Horn** | Implicación con una sola cabeza |
 | **Choice point** | Punto del árbol donde Prolog guarda alternativas |
 | **CWA** | Closed World Assumption |
 | **Datalog** | Subconjunto restringido y terminante de Prolog |
-| **DCG** | Definite Clause Grammar (parsers en Prolog) |
 | **DFS** | Depth-first search (búsqueda en profundidad) |
 | **Ground** | Término sin variables libres |
-| **LCO** | Last-Call Optimization |
 | **MGU** | Most General Unifier |
-| **Occurs-check** | Verificación de ciclos en unificación |
 | **Predicado** | Relación entre argumentos (p. ej. `padre/2`) |
 | **Resolvente** | Conjunción de goals pendientes |
 | **SLD** | Selective Linear resolution for Definite clauses |
@@ -972,10 +735,8 @@ Respondé sin mirar. Las respuestas están al final.
 ## 9. Siguientes pasos
 
 Una vez cerrado este tema:
-1. Completá el **TP** (2 semanas, ver `tp.md`).
-2. Guardá esta guía — va a estar en el parcial.
-3. Para el parcial: practicá **a mano** 5 trazados SLD.
-4. Próxima clase: **Paradigma OO con TypeScript** (Tema 08). Preparate pensando: si Prolog es "relaciones", OO es "mensajes y estado".
+1. Practicá **a mano** 5 trazados SLD — es la mejor forma de afianzar el backtracking.
+2. Próxima clase: **Paradigma OO con TypeScript** (Tema 08). Preparate pensando: si Prolog es "relaciones", OO es "mensajes y estado".
 
 ---
 

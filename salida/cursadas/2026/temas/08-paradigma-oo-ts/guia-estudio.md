@@ -1,6 +1,6 @@
 # Guía de Estudio — Tema 08: Paradigma OO — TypeScript + Smalltalk
 
-> **Para el alumno:** este documento es tu compañero de estudio autónomo. Cubre en profundidad todo lo visto en clase y te prepara para el TP08 y el Parcial 1.
+> **Para el alumno:** este documento es tu compañero de estudio autónomo. Cubre en profundidad todo lo visto en clase y te prepara para comprender y aplicar el paradigma OO.
 >
 > **Materia:** Paradigmas y Lenguajes de Programación 2026  
 > **Docente:** Matías Gel — UNTDF / IDEI  
@@ -18,7 +18,7 @@ Esta guía **expande** la clase, no la reemplaza. Estructura:
 2. **Conocimientos previos** — qué necesitás saber antes
 3. **Desarrollo teórico** — conceptos en profundidad con ejemplos
 4. **Ejemplos trabajados paso a paso**
-5. **Puntos clave para el Parcial 1**
+5. **Puntos clave del tema**
 6. **Autoevaluación** — 20 preguntas con respuesta al final
 7. **Glosario**
 8. **Referencias**
@@ -565,9 +565,9 @@ figuras.forEach(f => console.log(`  ${f.constructor.name}: ${f.area().toFixed(2)
 
 ---
 
-## 4. Puntos Clave para el Parcial 1
+## 4. Puntos Clave del Tema
 
-Estos son los conceptos que **sí o sí** aparecerán en el Parcial 1:
+Estos son los conceptos centrales que debés dominar al terminar el tema:
 
 1. **Los 4 pilares:** encapsulamiento, abstracción, herencia, polimorfismo — saber definirlos Y ejemplificarlos en código.
 
@@ -581,7 +581,7 @@ Estos son los conceptos que **sí o sí** aparecerán en el Parcial 1:
 
 5. **`abstract`** → qué hace, cuándo usarlo, cómo se comporta en runtime vs. compilación.
 
-6. **El dominio de figuras:** deberías poder implementarlo de memoria — es el ejercicio tipo del parcial.
+6. **El dominio de figuras:** deberías poder implementarlo de memoria — es el ejercicio tipo de integración del tema.
 
 ---
 
@@ -636,7 +636,7 @@ n class.
 ```
 15. ¿Cuáles son los tres tipos de mensajes en Smalltalk y cuál tiene mayor precedencia?
 
-**Integración de paradigmas (tipo Parcial):**
+**Integración de paradigmas:**
 
 16. ¿Cuándo es más conveniente resolver un problema con el paradigma funcional vs. el OO?
 17. ¿En qué se parece el polimorfismo de Smalltalk al duck typing de Python?
