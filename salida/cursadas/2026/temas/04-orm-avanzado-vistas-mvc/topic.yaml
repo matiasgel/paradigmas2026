@@ -1,0 +1,36 @@
+topic_number: "04"
+topic_name: "Módulo IV avanzado + Módulo V intro — ORM avanzado + puente a interfaz MVC"
+topic_slug: "orm-avanzado-vistas-mvc"
+topic_folder: "salida/cursadas/2026/temas/04-orm-avanzado-vistas-mvc"
+tp_type: "repo"
+tp_repo: ""   # TP-5 pendiente de definición (alcance: modelos + admin + ORM + primeras vistas + ModelForm)
+class_duration: "360"   # 360 min = 6 h = 1 clase teórica de 180 min + 1 clase práctica de 180 min
+class_structure:
+  - {n: 1, type: "teorica", duration: 180, title: "ORM avanzado: QuerySet API + Q objects + puente a Class-Based Views + Formularios intro"}
+  - {n: 2, type: "practica", duration: 180, title: "BlogApp en Codespaces: consultas avanzadas + primera vista CBV + primer ModelForm"}
+git_branch: "tema-04-orm-avanzado-vistas-mvc"
+created_at: "2026-04-29"
+status: "content-complete"
+semana_plan: "8"
+replan_ref: "salida/cursadas/2026/plan-actualizado.md"
+plan_mapping:
+  modulo_iv: "avanzado — CRUD completo, consultas dinámicas, Q objects, annotate/aggregate, select_related/prefetch_related"
+  modulo_v: "intro — primer CBV con View base, ciclo request/response, intro Form/ModelForm"
+design_constraints:
+  paradigm: "Django orientado a objetos — SIEMPRE class-based views y clases. PROHIBIDO function-based views."
+  prerequisite: "ORM básico ya visto en práctica fuera de este plan: modelos, campos, relaciones, migraciones, CRUD básico con shell."
+  audience: "Estudiantes de 3er año UNTDF, niveles heterogéneos — diseño presupone ORM básico conocido."
+  coherence: "Clase puente: profundizar QuerySet API → conectar modelos a vistas → introducir formularios como primer contacto con Módulo V."
+  domain: "BlogApp (Post, Category, Comment) — dominio unificador de semanas 8 y 9."
+  tp_coverage: "TP-5 (por definir): modelos + admin + consultas ORM avanzadas + primeras vistas View + ModelForm básico."
+  base_material: "django-6.0-docs (QuerySet API, class-based views, forms), edu_knowledge, plan-actualizado.md §3"
+  parcial: "Parcial 1 movido al inicio de Semana 9 teórica — no condiciona esta clase."
+artifacts:
+  diseno: "diseno.md"
+  filminas: "filminas.md"
+  minuta: "minuta.md"
+  guia_estudio: "guia-estudio.md"
+  guia_profesor: "guia-profesor.md"
+  filminas: "filminas.md"
+  guia_estudio: "guia-estudio.md"
+  tp: "tp.md"
