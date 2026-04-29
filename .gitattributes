@@ -1,0 +1,21 @@
+# ============================================================
+# EDU Standalone — Protected Files
+# Schemas y scripts son INMUTABLES para agentes.
+# Solo cambian con bump de versión mayor planificado.
+# ============================================================
+
+# Schemas — NO editar manualmente ni por agentes
+_edu/schemas/*.json         linguist-generated
+_edu/schemas/*.json         merge=ours
+
+# Scripts del pipeline — NO editar por agentes (leer, ejecutar, NO modificar)
+scripts/*.py                linguist-generated
+scripts/requirements.txt    linguist-generated
+
+# Templates — solo cambiar con versión controlada
+_edu/templates/*            linguist-generated
+
+# Registro persistente de errores — merge=union acumula entradas de todas las ramas
+# NUNCA usar merge=ours aquí: queremos que todos los errores se consoliden
+error-registry.jsonl        merge=union
+error-registry.jsonl        -text

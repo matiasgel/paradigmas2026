@@ -23,8 +23,6 @@ Al terminar este tema podés:
 7. Modelar entidades con **Django ORM**: campos, relaciones FK/M2M, `null`/`blank`, `on_delete`.
 8. Generar y aplicar **migraciones** (`makemigrations` + `migrate`).
 9. Consultar la base con **QuerySet**: filter, annotate, Q, F, order_by, slicing.
-10. Resolver al 100% el **TP-4** (los 4 modelos + las 4 queries + tests verdes).
-
 ---
 
 ## 2. Parte I — Introducción a la programación web
@@ -373,48 +371,10 @@ Probá: `http://127.0.0.1:8000/catalogo/hola/`
 - **RedirectView** — redirigir.
 - **ListView** — listar objetos de un modelo (Tema 05).
 - **DetailView** — ver uno solo (Tema 05).
-- **CreateView / UpdateView / DeleteView** — ABM con ModelForms (Tema 05).
+- **CreateView / UpdateView / DeleteView** — ABM con ModelForms (**Tema 05**, no incluido en este tema).
 
-Para el TP-4 no necesitás vistas. Pero vas a usar CBVs desde el primer ejercicio post-TP.
+En este tema trabajamos con modelos y queries. Las vistas se ven en el Tema 05.
 
-### 4.9. Tutorial A — CRUD mínimo de juguete (opcional, 15 min)
-
-Supongamos que querés listar todos los autores con una `ListView`:
-
-```python
-# catalogo/views.py
-from django.views.generic import ListView
-from .models import Autor
-
-class AutorListView(ListView):
-    model = Autor
-    template_name = "catalogo/autor_list.html"
-    context_object_name = "autores"
-```
-
-```html
-<!-- catalogo/templates/catalogo/autor_list.html -->
-<h1>Autores</h1>
-<ul>
-{% for autor in autores %}
-    <li>{{ autor.nombre }} ({{ autor.email }})</li>
-{% empty %}
-    <li>No hay autores aún.</li>
-{% endfor %}
-</ul>
-```
-
-```python
-# catalogo/urls.py
-from .views import HolaMundoView, AutorListView
-
-urlpatterns = [
-    path("hola/", HolaMundoView.as_view(), name="hola"),
-    path("autores/", AutorListView.as_view(), name="autor-list"),
-]
-```
-
-Abrí `/catalogo/autores/`. Si no hay autores, muestra el mensaje empty. **Esto lo verás completo en Tema 05**.
 
 ---
 
@@ -459,16 +419,16 @@ El **ORM** (Object-Relational Mapper) es una capa que traduce entre los dos mund
 | pickle, shelve | Caché local | No para producción multiusuario |
 | SQL crudo | Control total | Más código, menos portable |
 
-### 5.3. Modelos Django — el TP-4
+### 5.3. Modelos Django — campos y relaciones
 
-Definamos los 4 modelos del TP-4. Abrí `tp-repo/catalogo/models.py` y reemplazá los `pass`:
+Veamos cómo definir modelos con diferentes tipos de campos y relaciones. Usaremos un dominio genérico (`Director`, `Genero`, `Pelicula`, `Proyeccion`) para ilustrar los conceptos:
 
 ```python
-# catalogo/models.py
+# cine/models.py
 from django.db import models
 
 
-class Autor(models.Model):
+class Director(models.Model):
     nombre = models.CharField(max_length=120)
     email = models.EmailField(unique=True)
     biografia = models.TextField(blank=True)
@@ -477,59 +437,55 @@ class Autor(models.Model):
         return self.nombre
 
 
-class Categoria(models.Model):
+class Genero(models.Model):
     nombre = models.CharField(max_length=80, unique=True)
 
     def __str__(self) -> str:
         return self.nombre
 
 
-class Libro(models.Model):
+class Pelicula(models.Model):
     titulo = models.CharField(max_length=200)
-    isbn = models.CharField(max_length=32, unique=True)
-    fecha_publicacion = models.DateField()
-    cantidad_total = models.PositiveIntegerField(default=1)
+    anio = models.PositiveIntegerField()
+    duracion_min = models.PositiveIntegerField(default=90)
 
-    autor = models.ForeignKey(
-        Autor,
+    director = models.ForeignKey(
+        Director,
         on_delete=models.PROTECT,
-        related_name="libros",
+        related_name="peliculas",
     )
-    categorias = models.ManyToManyField(
-        Categoria,
-        related_name="libros",
+    generos = models.ManyToManyField(
+        Genero,
+        related_name="peliculas",
         blank=True,
     )
 
-    def prestamos_activos(self) -> int:
-        return self.prestamos.filter(fecha_devolucion__isnull=True).count()
+    def proyecciones_activas(self) -> int:
+        return self.proyecciones.filter(fecha_cancelacion__isnull=True).count()
 
-    def disponibles(self) -> int:
-        return self.cantidad_total - self.prestamos_activos()
-
-    def tiene_disponibles(self) -> bool:
-        return self.disponibles() > 0
+    def tiene_proyecciones(self) -> bool:
+        return self.proyecciones_activas() > 0
 
     def __str__(self) -> str:
         return self.titulo
 
 
-class Prestamo(models.Model):
-    libro = models.ForeignKey(
-        Libro,
+class Proyeccion(models.Model):
+    pelicula = models.ForeignKey(
+        Pelicula,
         on_delete=models.CASCADE,
-        related_name="prestamos",
+        related_name="proyecciones",
     )
-    nombre_prestatario = models.CharField(max_length=120)
-    fecha_prestamo = models.DateField()
-    fecha_devolucion = models.DateField(null=True, blank=True)
+    sala = models.CharField(max_length=50)
+    fecha_hora = models.DateTimeField()
+    fecha_cancelacion = models.DateTimeField(null=True, blank=True)
 
-    def esta_activo(self) -> bool:
-        return self.fecha_devolucion is None
+    def esta_activa(self) -> bool:
+        return self.fecha_cancelacion is None
 
     def __str__(self) -> str:
-        estado = "activo" if self.esta_activo() else "devuelto"
-        return f"{self.libro.titulo} — {self.nombre_prestatario} ({estado})"
+        estado = "activa" if self.esta_activa() else "cancelada"
+        return f"{self.pelicula.titulo} — {self.sala} ({estado})"
 ```
 
 ### 5.4. Campos comunes que vas a usar
@@ -592,9 +548,10 @@ Django crea automáticamente una tabla intermedia `catalogo_libro_categorias`. *
 | `SET(func)` | Pone valor calculado | |
 | `DO_NOTHING` | Django no hace nada | Control manual |
 
-**Justificación de los on_delete del TP-4**:
-- `Libro → Autor = PROTECT`: la biblioteca **no debe** borrar un autor que todavía tiene libros en el catálogo — sería corromper el catálogo bibliográfico.
-- `Prestamo → Libro = CASCADE`: si se descarta un libro del catálogo, sus registros de préstamo histórico desaparecen con él (decisión del TP — en una biblioteca real querrías mantener el historial, usarías `SET_NULL`).
+**¿Cómo elegir on_delete?**: depende del dominio. Preguntarse: *"Si borro el padre, ¿qué debería pasar con los hijos?"*
+- Si los hijos **no deben existir** sin el padre → `CASCADE`.
+- Si el padre **no puede desaparecer** mientras tenga hijos → `PROTECT`.
+- Si "sin referencia" es válido → `SET_NULL`.
 
 ### 5.8. Migraciones
 
@@ -640,57 +597,54 @@ python manage.py migrate
 Entrá al shell: `python manage.py shell`.
 
 ```python
->>> from catalogo.models import Autor, Categoria, Libro, Prestamo
->>> from datetime import date
+>>> from cine.models import Director, Genero, Pelicula
 
 # CREATE
->>> ursula = Autor.objects.create(
-...     nombre="Ursula K. Le Guin",
-...     email="ursula@example.com",
-...     biografia="Autora de SF y fantasía.",
+>>> kubrick = Director.objects.create(
+...     nombre="Stanley Kubrick",
+...     email="kubrick@example.com",
 ... )
 
->>> sf = Categoria.objects.create(nombre="ciencia ficción")
->>> fant = Categoria.objects.create(nombre="fantasía")
+>>> ciencia_ficcion = Genero.objects.create(nombre="ciencia ficción")
+>>> drama = Genero.objects.create(nombre="drama")
 
->>> libro = Libro.objects.create(
-...     titulo="Los desposeídos",
-...     isbn="978-0000000001",
-...     fecha_publicacion=date(1974, 1, 1),
-...     cantidad_total=2,
-...     autor=ursula,
+>>> pelicula = Pelicula.objects.create(
+...     titulo="2001: A Space Odyssey",
+...     anio=1968,
+...     duracion_min=149,
+...     director=kubrick,
 ... )
->>> libro.categorias.add(sf, fant)  # M2M: add/remove/set/clear
+>>> pelicula.generos.add(ciencia_ficcion)  # M2M: add/remove/set/clear
 
 # READ
->>> Libro.objects.all()
-<QuerySet [<Libro: Los desposeídos>]>
+>>> Pelicula.objects.all()
+<QuerySet [<Pelicula: 2001: A Space Odyssey>]>
 
->>> Libro.objects.get(isbn="978-0000000001")  # get = 1 o excepción
-<Libro: Los desposeídos>
+>>> Pelicula.objects.get(titulo="2001: A Space Odyssey")  # get = 1 o excepción
+<Pelicula: 2001: A Space Odyssey>
 
->>> Libro.objects.filter(autor=ursula)  # QuerySet (puede ser 0, 1, N)
-<QuerySet [<Libro: Los desposeídos>]>
+>>> Pelicula.objects.filter(director=kubrick)  # QuerySet (puede ser 0, 1, N)
+<QuerySet [<Pelicula: 2001: A Space Odyssey>]>
 
->>> Libro.objects.filter(autor__nombre__icontains="le guin")
+>>> Pelicula.objects.filter(director__nombre__icontains="kubrick")
 # lookups: double underscore navega relaciones
 
 # UPDATE (individual)
->>> libro.cantidad_total = 3
->>> libro.save()
+>>> pelicula.duracion_min = 160
+>>> pelicula.save()
 
 # UPDATE (masivo — 1 query SQL)
 >>> from django.db.models import F
->>> Libro.objects.filter(autor=ursula).update(
-...     cantidad_total=F("cantidad_total") + 1
+>>> Pelicula.objects.filter(director=kubrick).update(
+...     duracion_min=F("duracion_min") + 5
 ... )
 1
 
 # DELETE
->>> libro.delete()
+>>> pelicula.delete()
 
 # QuerySet encadenado
->>> Libro.objects.filter(cantidad_total__gt=0).exclude(categorias__nombre="obsoleta").order_by("-fecha_publicacion")[:5]
+>>> Pelicula.objects.filter(duracion_min__gt=90).exclude(generos__nombre="infantil").order_by("-anio")[:5]
 ```
 
 **Claves para entender QuerySet**:
@@ -704,251 +658,144 @@ Entrá al shell: `python manage.py shell`.
 
 | Lookup | SQL | Ejemplo |
 |--------|-----|---------|
-| `__exact` | `= valor` | `filter(nombre__exact="Ursula")` |
+| `__exact` | `= valor` | `filter(nombre__exact="Kubrick")` |
 | `__iexact` | `= valor` case-insensitive | `filter(email__iexact="U@E.com")` |
-| `__contains` | `LIKE %valor%` | `filter(titulo__contains="desp")` |
-| `__icontains` | `LIKE` case-insensitive | `filter(titulo__icontains="SAPI")` |
+| `__contains` | `LIKE %valor%` | `filter(titulo__contains="space")` |
+| `__icontains` | `LIKE` case-insensitive | `filter(titulo__icontains="SPACE")` |
 | `__startswith / __endswith` | `LIKE valor%` / `%valor` | |
-| `__gt, __gte, __lt, __lte` | `> >= < <=` | `filter(cantidad_total__gt=0)` |
+| `__gt, __gte, __lt, __lte` | `> >= < <=` | `filter(anio__gte=2000)` |
 | `__in` | `IN (...)` | `filter(id__in=[1,2,3])` |
 | `__range` | `BETWEEN` | `filter(fecha__range=(d1, d2))` |
-| `__isnull` | `IS NULL/NOT NULL` | `filter(fecha_devolucion__isnull=True)` |
-| `__date, __year, __month, __day` | Extraer | `filter(fecha_prestamo__year=2026)` |
+| `__isnull` | `IS NULL/NOT NULL` | `filter(fecha_cancelacion__isnull=True)` |
+| `__date, __year, __month, __day` | Extraer | `filter(fecha_hora__year=2026)` |
 | Navegación con `__` | JOIN | `filter(autor__nombre="Ursula")` |
 
 ---
 
-## 6. Parte V — Las 4 queries del TP-4 en profundidad
+## 6. Parte V — Queries avanzadas: annotate, Q y F
 
-Esta es la sección **más importante** de toda la guía. Si entendés esto, el TP-4 sale. Cada query se explica 3 veces: qué hace, cómo funciona el ORM, qué SQL genera.
+Esta es la sección más importante para dominar el ORM. Cada herramienta se explica con su concepto, cómo funciona internamente y qué SQL genera.
 
-### 6.1. Query 1 — `libros_por_categoria(nombre_categoria)`
+### 6.1. annotate — columna calculada por fila
+
+`annotate` agrega un campo extra a cada fila del QuerySet, calculado como una expresión (generalmente una función de agregación).
 
 ```python
-def libros_por_categoria(nombre_categoria: str):
-    return Libro.objects.filter(categorias__nombre=nombre_categoria)
+from django.db.models import Count, Avg
+
+# Cantidad de películas por director
+directores = Director.objects.annotate(
+    cant_peliculas=Count("peliculas")
+)
+
+# Acceder al campo anotado
+for d in directores:
+    print(d.nombre, d.cant_peliculas)
+
+# Filtrar sobre la anotación
+directores_prolijos = Director.objects.annotate(
+    cant_peliculas=Count("peliculas")
+).filter(cant_peliculas__gt=3)
 ```
-
-**Qué hace**: devuelve todos los Libros que tienen una categoría con ese nombre.
-
-**Cómo funciona el ORM**: `categorias__nombre` atraviesa:
-1. `categorias` → la M2M → tabla intermedia
-2. `nombre` → al campo `nombre` de Categoria
 
 **SQL generado**:
 ```sql
-SELECT "catalogo_libro".*
-FROM "catalogo_libro"
-INNER JOIN "catalogo_libro_categorias"
-    ON ("catalogo_libro"."id" = "catalogo_libro_categorias"."libro_id")
-INNER JOIN "catalogo_categoria"
-    ON ("catalogo_libro_categorias"."categoria_id" = "catalogo_categoria"."id")
-WHERE "catalogo_categoria"."nombre" = 'fantasía'
+SELECT director.*, COUNT(pelicula.id) AS cant_peliculas
+FROM director
+LEFT JOIN pelicula ON pelicula.director_id = director.id
+GROUP BY director.id
+HAVING COUNT(pelicula.id) > 3
 ```
 
-**Gotcha**: si un libro tiene 2 categorías que matchean, va a aparecer 2 veces. En el TP-4 no pasa, pero en casos reales agregar `.distinct()`.
+**Anti-patrón**:
+```python
+# ❌ N+1 queries: 1 para Director.objects.all() + N para d.peliculas.count()
+[d for d in Director.objects.all() if d.peliculas.count() > 3]
+```
 
-### 6.2. Query 2 — `autores_con_mas_de_n_libros(n)`
+### 6.2. Expresiones Q — condiciones lógicas (OR, NOT, AND)
+
+`Q` permite construir condiciones lógicas complejas que `filter()` solo no puede expresar.
 
 ```python
-from django.db.models import Count
+from django.db.models import Q
 
-def autores_con_mas_de_n_libros(n: int):
-    return Autor.objects.annotate(
-        cantidad_libros=Count("libros")
-    ).filter(cantidad_libros__gt=n)
+# OR — películas cortas O recientes
+Pelicula.objects.filter(
+    Q(duracion_min__lt=90) | Q(anio__gte=2020)
+)
+
+# NOT — películas que NO son del género "acción"
+Pelicula.objects.filter(~Q(generos__nombre="acción"))
+
+# AND explícito (equivalente a pasar dos args a filter)
+Pelicula.objects.filter(
+    Q(duracion_min__gt=60) & Q(anio__lt=2010)
+)
 ```
 
-**Qué hace**: devuelve los autores que tienen **más de** `n` libros.
+**Cuándo usar Q**: cuando necesitás OR, NOT, o construís condiciones dinámicamente.
 
-**`annotate` paso a paso**:
-- Recorre cada Autor en memoria lógica.
-- A cada uno le "pega" un campo extra `cantidad_libros` que es `COUNT(libros)`.
-- Luego `.filter(cantidad_libros__gt=n)` filtra por ese campo anotado.
+### 6.3. Expresiones F — referencias a columnas
 
-**SQL generado**:
-```sql
-SELECT "catalogo_autor".*, COUNT("catalogo_libro"."id") AS "cantidad_libros"
-FROM "catalogo_autor"
-LEFT OUTER JOIN "catalogo_libro"
-    ON ("catalogo_autor"."id" = "catalogo_libro"."autor_id")
-GROUP BY "catalogo_autor"."id"
-HAVING COUNT("catalogo_libro"."id") > 1
-```
+`F` referencia otra columna de la misma fila sin traer el valor a Python. Permite updates masivos eficientes y comparaciones entre columnas.
 
-**Anti-patrón que NO hay que hacer**:
 ```python
-# ❌ N+1 queries: 1 para Autor.objects.all() + N para a.libros.count()
-[a for a in Autor.objects.all() if a.libros.count() > n]
+from django.db.models import F
+
+# Update masivo — 1 sola query SQL
+Pelicula.objects.filter(anio__lt=2000).update(
+    duracion_min=F("duracion_min") + 5
+)
+
+# ¿Por qué F y no un valor Python?
+# Sin F: N queries (SELECT + UPDATE por objeto)
+for p in Pelicula.objects.filter(anio__lt=2000):
+    p.duracion_min += 5
+    p.save()  # ← N queries
+
+# Con F: 1 sola UPDATE en la BD
+Pelicula.objects.filter(anio__lt=2000).update(
+    duracion_min=F("duracion_min") + 5
+)
 ```
 
-### 6.3. Query 3 — `libros_sin_disponibilidad()`
+### 6.4. annotate + Q + F — combinación avanzada
+
+Las tres herramientas combinadas son el patrón más poderoso del ORM.
 
 ```python
 from django.db.models import Count, Q, F
 
-def libros_sin_disponibilidad():
-    return Libro.objects.annotate(
-        activos=Count(
-            "prestamos",
-            filter=Q(prestamos__fecha_devolucion__isnull=True)
-        )
-    ).filter(activos=F("cantidad_total"))
+# Directores con más proyecciones activas que películas en total
+Director.objects.annotate(
+    total_peliculas=Count("peliculas"),
+    proyecciones_activas=Count(
+        "peliculas__proyecciones",
+        filter=Q(peliculas__proyecciones__fecha_cancelacion__isnull=True)
+    )
+).filter(
+    proyecciones_activas__gt=F("total_peliculas")
+)
 ```
-
-**Qué hace**: devuelve los libros donde **todos** los ejemplares están prestados (prestamos activos = cantidad_total).
 
 **Descomposición**:
-1. `annotate(activos=...)` — a cada libro le agrega un campo `activos` con la cuenta de préstamos con `fecha_devolucion IS NULL`.
-2. El `filter=Q(...)` **dentro de `Count`** filtra **qué préstamos** contar, no qué libros.
-3. Luego `.filter(activos=F("cantidad_total"))` — `F("cantidad_total")` hace referencia a la columna de la misma fila.
+1. `annotate(total_peliculas=Count(...))` — cuenta películas por director.
+2. `annotate(proyecciones_activas=Count(..., filter=Q(...)))` — `filter=Q(...)` **dentro de Count** filtra qué filas contar (no qué directors devolver).
+3. `.filter(...__gt=F("total_peliculas"))` — `F()` referencia una columna de la misma fila para comparar.
 
-**¿Por qué `F()`?** Porque si escribieras `filter(activos=self.cantidad_total)`, Python intentaría evaluar `self.cantidad_total` inmediatamente (no tiene sentido sin un objeto). `F()` le dice al ORM: *"cuando generes el SQL, usá la columna cantidad_total de la misma fila"*.
-
-**SQL generado**:
-```sql
-SELECT "catalogo_libro".*,
-       COUNT("catalogo_prestamo"."id") FILTER (
-           WHERE "catalogo_prestamo"."fecha_devolucion" IS NULL
-       ) AS "activos"
-FROM "catalogo_libro"
-LEFT OUTER JOIN "catalogo_prestamo"
-    ON ("catalogo_libro"."id" = "catalogo_prestamo"."libro_id")
-GROUP BY "catalogo_libro"."id"
-HAVING COUNT("catalogo_prestamo"."id") FILTER (
-    WHERE "catalogo_prestamo"."fecha_devolucion" IS NULL
-) = "catalogo_libro"."cantidad_total"
-```
-
-**Restricción del TP**: resolver con ORM puro (NO con `for libro in ...: if libro.disponibles() == 0`).
-
-### 6.4. Query 4 — `top_n_libros_mas_prestados(n)`
-
-```python
-def top_n_libros_mas_prestados(n: int):
-    return (
-        Libro.objects
-        .annotate(total_prestamos=Count("prestamos"))
-        .order_by("-total_prestamos")[:n]
-    )
-```
-
-**Qué hace**: los N libros con más préstamos en total (activos + devueltos).
-
-**Claves**:
-- `Count("prestamos")` cuenta **todos** los préstamos de cada libro (sin filtro).
-- `order_by("-total_prestamos")` — `-` = DESC.
-- `[:n]` — slicing se traduce a `LIMIT n` en SQL (no trae todo a Python).
-
-**SQL generado**:
-```sql
-SELECT "catalogo_libro".*, COUNT("catalogo_prestamo"."id") AS "total_prestamos"
-FROM "catalogo_libro"
-LEFT OUTER JOIN "catalogo_prestamo"
-    ON ("catalogo_libro"."id" = "catalogo_prestamo"."libro_id")
-GROUP BY "catalogo_libro"."id"
-ORDER BY "total_prestamos" DESC
-LIMIT 5
-```
-
-### 6.5. `annotate` vs `aggregate` — la diferencia clave
+### 6.5. annotate vs aggregate
 
 | Método | Devuelve | Ejemplo |
 |--------|----------|---------|
-| `annotate()` | Un QuerySet con **una columna extra por fila** | `Autor.objects.annotate(n=Count("libros"))` → 1 fila por autor + `n` |
-| `aggregate()` | Un **dict** con **un solo valor** (toda la tabla) | `Libro.objects.aggregate(total=Count("id"))` → `{"total": 42}` |
+| `annotate()` | QuerySet con **una columna extra por fila** | `Director.objects.annotate(n=Count("peliculas"))` → 1 fila por director + `n` |
+| `aggregate()` | **Dict** con **un valor total** | `Pelicula.objects.aggregate(total=Count("id"))` → `{"total": 42}` |
 
 Regla: `annotate` por fila, `aggregate` para toda la query.
 
 ---
 
-## 7. Tutorial B — Resolver el TP-4 paso a paso
-
-Este tutorial asume que clonaste el repo del TP-4.
-
-### 7.1. Setup
-
-```bash
-git clone <url-del-classroom> tp-4
-cd tp-4
-
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-# o: source .venv/bin/activate
-
-pip install -r requirements.txt
-
-# Verificar que los tests fallan (rojo inicial)
-python manage.py test -v 2
-```
-
-### 7.2. Implementar `models.py`
-
-Abrí `catalogo/models.py`. Reemplazá cada `pass` con el código de §5.3 de esta guía. **Commit cada modelo** para llegar a ≥8 commits:
-
-```bash
-git add catalogo/models.py
-git commit -m "feat(models): implementar Autor con email único"
-# ... siguiente modelo ...
-git commit -m "feat(models): implementar Categoria"
-# ...
-git commit -m "feat(models): implementar Libro con FK y M2M + métodos de dominio"
-git commit -m "feat(models): implementar Prestamo con nullable fecha_devolucion"
-```
-
-### 7.3. Migraciones
-
-```bash
-python manage.py makemigrations catalogo
-python manage.py migrate
-
-git add catalogo/migrations/
-git commit -m "chore(migrations): migración inicial"
-```
-
-### 7.4. Tests de modelos en verde
-
-```bash
-python manage.py test catalogo.tests.test_models -v 2
-```
-
-Si hay rojo, leer el traceback, corregir, repetir.
-
-### 7.5. Implementar `queries.py`
-
-Abrí `catalogo/queries.py`. Reemplazá cada `raise NotImplementedError` con el código de §6 de esta guía.
-
-```bash
-git add catalogo/queries.py
-git commit -m "feat(queries): libros_por_categoria"
-# siguiente query
-git commit -m "feat(queries): autores_con_mas_de_n_libros con annotate"
-# ...
-```
-
-### 7.6. Tests completos
-
-```bash
-python manage.py test -v 2
-```
-
-Todo verde → push → GitHub Actions corre el autograder → nota.
-
-### 7.7. Si Actions falla pero local OK
-
-Lo más común: olvidaste commitear las migraciones.
-
-```bash
-git status
-# Si ves catalogo/migrations/0001_initial.py en "untracked", arréglalo:
-git add catalogo/migrations/
-git commit -m "chore: agregar migraciones faltantes"
-git push
-```
-
----
-
-## 8. Tutorial C — Django shell en 10 queries indispensables
+## 7. Tutorial C — Django shell en 10 queries indispensables
 
 Abrí `python manage.py shell` y practicá estas 10:
 
@@ -990,9 +837,9 @@ Abrí `python manage.py shell` y practicá estas 10:
 
 ---
 
-## 9. Tutorial D — Leer errores del autograder
+## 8. Tutorial D — Depurar errores comunes de Django ORM
 
-El autograder corre `python manage.py test` en GitHub Actions. Si falla, la pestaña **Actions** del repo muestra el log. Errores típicos:
+Al correr tests con `python manage.py test`, estos son los errores más comunes y cómo resolverlos:
 
 ### 9.1. `IntegrityError: UNIQUE constraint failed: catalogo_autor.email`
 
@@ -1022,7 +869,7 @@ El autograder corre `python manage.py test` en GitHub Actions. Si falla, la pest
 
 ---
 
-## 10. Anti-patrones a evitar
+## 9. Anti-patrones a evitar
 
 | Anti-patrón | Por qué es malo | Qué hacer |
 |-------------|-----------------|-----------|
@@ -1037,7 +884,7 @@ El autograder corre `python manage.py test` en GitHub Actions. Si falla, la pest
 
 ---
 
-## 11. FAQ — preguntas más frecuentes
+## 10. FAQ — preguntas frecuentes
 
 **1. ¿Por qué CBV y no FBV si los tutoriales de la web usan FBV?**
 Por coherencia POO con el resto de la cátedra y por reusabilidad vía mixins. Los tutoriales genéricos usan FBV porque son más cortos en texto, no porque sean mejores.
@@ -1086,24 +933,19 @@ Permite combinar condiciones con `&` (AND), `|` (OR), `~` (NOT). Sin `Q`, los fi
 
 ---
 
-## 12. Checklist final del TP-4
+## 11. Buenas prácticas al modelar con Django ORM
 
-Antes de hacer push a main, verificá:
-
-- [ ] `catalogo/models.py` sin ningún `pass` — los 4 modelos implementados.
-- [ ] `catalogo/queries.py` sin ningún `raise NotImplementedError` — las 4 queries implementadas.
-- [ ] `__str__` en los 4 modelos.
-- [ ] `related_name` explícito en FKs y M2M.
-- [ ] `python manage.py makemigrations` no genera nada nuevo (ya está todo migrado).
-- [ ] `python manage.py migrate` corre sin errores.
-- [ ] `python manage.py test -v 2` → **todos verdes localmente**.
-- [ ] Los archivos de migración **están commiteados** (`git status` limpio).
-- [ ] ≥ 8 commits con mensajes descriptivos.
-- [ ] Push a `main` → GitHub Actions → **verde**.
+- [ ] `__str__` en todos los modelos — admin y shell muestran texto útil.
+- [ ] `related_name` explícito en FKs y M2M — más legible que `_set`.
+- [ ] `blank=True` para texto opcional; `null=True, blank=True` para fecha/número opcional.
+- [ ] Métodos de dominio en el modelo — lógica cohesionada y fácil de testear.
+- [ ] Migraciones commiteadas al repo — son parte del código.
+- [ ] Probar queries con `print(qs.query)` — ver el SQL generado.
+- [ ] Usar `annotate` en lugar de loops con queries adentro — evitar N+1.
 
 ---
 
-## 13. Glosario
+## 12. Glosario
 
 - **App (Django)**: módulo con una feature específica (models + views + urls + templates).
 - **CBV**: Class-Based View — vista implementada como clase.
@@ -1122,7 +964,7 @@ Antes de hacer push a main, verificá:
 
 ---
 
-## 14. Recursos de referencia
+## 13. Recursos de referencia
 
 Toda la documentación oficial de Django 6.0 está **offline** en ChromaDB de la cátedra (colección `django-6.0-docs`, 2443 fragmentos indexados) y Python 3.14 idem (`python-3.14-docs`, 5306 fragmentos). Consultá a tu docente para cómo buscar.
 

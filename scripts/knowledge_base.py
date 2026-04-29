@@ -7,13 +7,13 @@ y material del curso de ingesta/ en ChromaDB. Si los PDFs de ingesta/ no tienen 
 generados, los convierte automáticamente con pdfminer.
 
 Uso:
-    # Ingestar conocimiento base
+    # Ingestar conocimiento base (incremental — no borra datos existentes)
     python scripts/knowledge_base.py ingest
 
-    # Ingestar incluyendo material del curso (ingesta/)
+    # Ingestar incluyendo material del curso (ingesta/) — incremental
     python scripts/knowledge_base.py ingest --include-material
 
-    # Re-ingestar todo (borra y recrea)
+    # Re-ingestar todo desde cero (borra la collection COMPLETA primero)
     python scripts/knowledge_base.py ingest --force --include-material
 
     # Buscar
@@ -56,7 +56,53 @@ def find_project_root() -> Path:
 
 ROOT = find_project_root()
 KNOWLEDGE_DIR = ROOT / "_edu-knowledge"
-CHROMA_DIR = KNOWLEDGE_DIR / "chroma_db"
+
+
+def _load_dotenv() -> None:
+    """Carga variables de entorno desde .env si existe (sin dependencias externas)."""
+    env_path = ROOT / ".env"
+    if not env_path.exists():
+        # Buscar también en workspace root (.git marca la raíz real)
+        ws = ROOT.parent
+        while ws != ws.parent:
+            candidate = ws / ".env"
+            if candidate.exists():
+                env_path = candidate
+                break
+            if (ws / ".git").exists():
+                break
+            ws = ws.parent
+
+    if env_path.exists():
+        with open(env_path, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, _, value = line.partition("=")
+                key = key.strip()
+                value = value.strip().strip('"').strip("'")
+                if key and key not in os.environ:
+                    os.environ[key] = value
+
+
+_load_dotenv()
+
+
+def _resolve_chroma_dir() -> Path:
+    """Resuelve la ruta de ChromaDB desde env EDU_CHROMA_PATH o ~/.edu/chroma_db.
+
+    La base de datos NUNCA debe quedar dentro del repo (no se versiona).
+    Configurar EDU_CHROMA_PATH en .env para un path personalizado.
+    """
+    env_path = os.environ.get("EDU_CHROMA_PATH", "").strip()
+    if env_path:
+        return Path(env_path).expanduser().resolve()
+    # Fallback: directorio de usuario (~/.edu/chroma_db)
+    return Path.home() / ".edu" / "chroma_db"
+
+
+CHROMA_DIR = _resolve_chroma_dir()
 TOOLS_DIR = KNOWLEDGE_DIR / "tools"
 REFS_DIR = KNOWLEDGE_DIR / "references"
 
@@ -365,7 +411,14 @@ def collect_documents(include_material: bool = False) -> list[dict]:
 
 
 def ingest(force: bool = False, include_material: bool = False):
-    """Ingest all documents into ChromaDB."""
+    """Ingest all documents into ChromaDB.
+
+    Por defecto (no destructivo): agrega/actualiza documentos sin borrar los existentes.
+    Usar --force solo para borrar toda la colección y reingestar desde cero.
+    """
+    # Asegurar que el directorio de ChromaDB exista
+    CHROMA_DIR.mkdir(parents=True, exist_ok=True)
+
     client = get_client()
 
     if force:
@@ -377,11 +430,10 @@ def ingest(force: bool = False, include_material: bool = False):
 
     collection = get_or_create_collection(client)
 
-    # Check if already populated
     existing = collection.count()
     if existing > 0 and not force:
-        print(f"ℹ️  Collection ya tiene {existing} documentos. Usar --force para re-ingestar.")
-        return
+        print(f"ℹ️  Collection existente: {existing} chunks. Modo incremental — solo se agregan/actualizan documentos nuevos.")
+        print(f"   Usar --force para borrar todo y reingestar desde cero.")
 
     print("📥 Recolectando documentos...")
     chunks = collect_documents(include_material=include_material)
@@ -407,17 +459,19 @@ def ingest(force: bool = False, include_material: bool = False):
             "heading": chunk["heading"],
         })
 
-    # Batch insert (ChromaDB limit: 5461 per batch)
+    # Batch upsert — no destructivo: actualiza existentes y agrega nuevos
     batch_size = 5000
     for start in range(0, len(ids), batch_size):
         end = min(start + batch_size, len(ids))
-        collection.add(
+        collection.upsert(
             ids=ids[start:end],
             documents=documents[start:end],
             metadatas=metadatas[start:end],
         )
 
-    print(f"\n✅ Ingestados {len(chunks)} chunks de {len(set(c['source'] for c in chunks))} documentos")
+    after = collection.count()
+    print(f"\n✅ Procesados {len(chunks)} chunks de {len(set(c['source'] for c in chunks))} documentos")
+    print(f"   Total en collection: {after} chunks")
     print(f"   ChromaDB path: {CHROMA_DIR}")
 
 # ---------------------------------------------------------------------------
