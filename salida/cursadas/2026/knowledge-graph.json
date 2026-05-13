@@ -1,0 +1,201 @@
+{
+  "@context": {
+    "edu": "https://edu-module.org/ontology#",
+    "hasPrerequisite": "edu:hasPrerequisite",
+    "partOf": "edu:partOf",
+    "contradicts": "edu:contradicts"
+  },
+  "@graph": [
+    {
+      "@id": "edu:untdf_—_instituto_idei_—_2026",
+      "label": "UNTDF — Instituto IDEI — 2026",
+      "source": "plan-minimo",
+      "layer": "concept",
+      "bloom_level": null
+    },
+    {
+      "@id": "edu:metadata_de_la_asignatura",
+      "label": "Metadata de la Asignatura",
+      "source": "plan-minimo",
+      "layer": "concept",
+      "bloom_level": null
+    },
+    {
+      "@id": "edu:contenidos_mínimos_obligatorios",
+      "label": "Contenidos Mínimos Obligatorios",
+      "source": "plan-minimo",
+      "layer": "concept",
+      "bloom_level": null
+    },
+    {
+      "@id": "edu:módulo_i_—_diseño_y_construcción_de_aplicaciones_en_entornos_de_desarrollo_ágil",
+      "label": "MÓDULO I — Diseño y construcción de aplicaciones en entornos de desarrollo ágil",
+      "source": "plan-minimo",
+      "layer": "subtopic",
+      "bloom_level": null
+    },
+    {
+      "@id": "edu:módulo_ii_—_pruebas_unitarias",
+      "label": "MÓDULO II — Pruebas Unitarias",
+      "source": "plan-minimo",
+      "layer": "subtopic",
+      "bloom_level": null
+    },
+    {
+      "@id": "edu:módulo_iii_—_lenguajes_y_frameworks_para_desarrollo_de_aplicaciones_web",
+      "label": "MÓDULO III — Lenguajes y Frameworks para desarrollo de aplicaciones WEB",
+      "source": "plan-minimo",
+      "layer": "subtopic",
+      "bloom_level": null
+    },
+    {
+      "@id": "edu:módulo_iv_—_manejo_de_persistencia",
+      "label": "MÓDULO IV — Manejo de Persistencia",
+      "source": "plan-minimo",
+      "layer": "subtopic",
+      "bloom_level": null
+    },
+    {
+      "@id": "edu:módulo_v_—_desarrollo_de_interfaces_de_usuario_utilizando_el_patrón_mvc",
+      "label": "MÓDULO V — Desarrollo de interfaces de usuario utilizando el patrón MVC",
+      "source": "plan-minimo",
+      "layer": "subtopic",
+      "bloom_level": null
+    },
+    {
+      "@id": "edu:módulo_vi_—_autorización_y_autenticación",
+      "label": "MÓDULO VI — Autorización y Autenticación",
+      "source": "plan-minimo",
+      "layer": "subtopic",
+      "bloom_level": null
+    },
+    {
+      "@id": "edu:módulo_vii_—_desarrollo_de_servicios_con_django",
+      "label": "MÓDULO VII — Desarrollo de servicios con Django",
+      "source": "plan-minimo",
+      "layer": "subtopic",
+      "bloom_level": null
+    },
+    {
+      "@id": "edu:evaluación_(según_programa_oficial)",
+      "label": "Evaluación (según programa oficial)",
+      "source": "plan-minimo",
+      "layer": "concept",
+      "bloom_level": null
+    },
+    {
+      "@id": "edu:semanas_especiales_(no_de_dictado_de_contenido_nuevo)",
+      "label": "Semanas Especiales (no de dictado de contenido nuevo)",
+      "source": "plan-minimo",
+      "layer": "concept",
+      "bloom_level": null
+    },
+    {
+      "@id": "edu:bibliografía_obligatoria",
+      "label": "Bibliografía Obligatoria",
+      "source": "plan-minimo",
+      "layer": "concept",
+      "bloom_level": null
+    },
+    {
+      "@id": "edu:estado",
+      "label": "Estado",
+      "source": "plan-minimo",
+      "layer": "concept",
+      "bloom_level": null
+    }
+  ],
+  "edges": [
+    {
+      "from": "untdf_—_instituto_idei_—_2026",
+      "to": "metadata_de_la_asignatura",
+      "relation": "hasPrerequisite",
+      "source": "sequential-order",
+      "confidence": 1.0
+    },
+    {
+      "from": "metadata_de_la_asignatura",
+      "to": "contenidos_mínimos_obligatorios",
+      "relation": "hasPrerequisite",
+      "source": "sequential-order",
+      "confidence": 1.0
+    },
+    {
+      "from": "módulo_i_—_diseño_y_construcción_de_aplicaciones_en_entornos_de_desarrollo_ágil",
+      "to": "contenidos_mínimos_obligatorios",
+      "relation": "partOf",
+      "source": "plan-minimo",
+      "confidence": 1.0
+    },
+    {
+      "from": "módulo_ii_—_pruebas_unitarias",
+      "to": "contenidos_mínimos_obligatorios",
+      "relation": "partOf",
+      "source": "plan-minimo",
+      "confidence": 1.0
+    },
+    {
+      "from": "módulo_iii_—_lenguajes_y_frameworks_para_desarrollo_de_aplicaciones_web",
+      "to": "contenidos_mínimos_obligatorios",
+      "relation": "partOf",
+      "source": "plan-minimo",
+      "confidence": 1.0
+    },
+    {
+      "from": "módulo_iv_—_manejo_de_persistencia",
+      "to": "contenidos_mínimos_obligatorios",
+      "relation": "partOf",
+      "source": "plan-minimo",
+      "confidence": 1.0
+    },
+    {
+      "from": "módulo_v_—_desarrollo_de_interfaces_de_usuario_utilizando_el_patrón_mvc",
+      "to": "contenidos_mínimos_obligatorios",
+      "relation": "partOf",
+      "source": "plan-minimo",
+      "confidence": 1.0
+    },
+    {
+      "from": "módulo_vi_—_autorización_y_autenticación",
+      "to": "contenidos_mínimos_obligatorios",
+      "relation": "partOf",
+      "source": "plan-minimo",
+      "confidence": 1.0
+    },
+    {
+      "from": "módulo_vii_—_desarrollo_de_servicios_con_django",
+      "to": "contenidos_mínimos_obligatorios",
+      "relation": "partOf",
+      "source": "plan-minimo",
+      "confidence": 1.0
+    },
+    {
+      "from": "contenidos_mínimos_obligatorios",
+      "to": "evaluación_(según_programa_oficial)",
+      "relation": "hasPrerequisite",
+      "source": "sequential-order",
+      "confidence": 1.0
+    },
+    {
+      "from": "evaluación_(según_programa_oficial)",
+      "to": "semanas_especiales_(no_de_dictado_de_contenido_nuevo)",
+      "relation": "hasPrerequisite",
+      "source": "sequential-order",
+      "confidence": 1.0
+    },
+    {
+      "from": "semanas_especiales_(no_de_dictado_de_contenido_nuevo)",
+      "to": "bibliografía_obligatoria",
+      "relation": "hasPrerequisite",
+      "source": "sequential-order",
+      "confidence": 1.0
+    },
+    {
+      "from": "bibliografía_obligatoria",
+      "to": "estado",
+      "relation": "hasPrerequisite",
+      "source": "sequential-order",
+      "confidence": 1.0
+    }
+  ]
+}

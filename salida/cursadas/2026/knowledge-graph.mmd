@@ -1,0 +1,28 @@
+graph TD
+    untdf_—_instituto_idei_—_2026["UNTDF — Instituto IDEI — 2026"]
+    metadata_de_la_asignatura["Metadata de la Asignatura"]
+    contenidos_mínimos_obligatorios["Contenidos Mínimos Obligatorios"]
+    módulo_i_—_diseño_y_construcción_de_aplicaciones_en_entornos_de_desarrollo_ágil["MÓDULO I — Diseño y construcción de aplicaciones en entornos de desarrollo ágil"]
+    módulo_ii_—_pruebas_unitarias["MÓDULO II — Pruebas Unitarias"]
+    módulo_iii_—_lenguajes_y_frameworks_para_desarrollo_de_aplicaciones_web["MÓDULO III — Lenguajes y Frameworks para desarrollo de aplicaciones WEB"]
+    módulo_iv_—_manejo_de_persistencia["MÓDULO IV — Manejo de Persistencia"]
+    módulo_v_—_desarrollo_de_interfaces_de_usuario_utilizando_el_patrón_mvc["MÓDULO V — Desarrollo de interfaces de usuario utilizando el patrón MVC"]
+    módulo_vi_—_autorización_y_autenticación["MÓDULO VI — Autorización y Autenticación"]
+    módulo_vii_—_desarrollo_de_servicios_con_django["MÓDULO VII — Desarrollo de servicios con Django"]
+    evaluación_(según_programa_oficial)["Evaluación (según programa oficial)"]
+    semanas_especiales_(no_de_dictado_de_contenido_nuevo)["Semanas Especiales (no de dictado de contenido nuevo)"]
+    bibliografía_obligatoria["Bibliografía Obligatoria"]
+    estado["Estado"]
+    untdf_—_instituto_idei_—_2026 -->|hasPrerequisite| metadata_de_la_asignatura
+    metadata_de_la_asignatura -->|hasPrerequisite| contenidos_mínimos_obligatorios
+    módulo_i_—_diseño_y_construcción_de_aplicaciones_en_entornos_de_desarrollo_ágil -->|partOf| contenidos_mínimos_obligatorios
+    módulo_ii_—_pruebas_unitarias -->|partOf| contenidos_mínimos_obligatorios
+    módulo_iii_—_lenguajes_y_frameworks_para_desarrollo_de_aplicaciones_web -->|partOf| contenidos_mínimos_obligatorios
+    módulo_iv_—_manejo_de_persistencia -->|partOf| contenidos_mínimos_obligatorios
+    módulo_v_—_desarrollo_de_interfaces_de_usuario_utilizando_el_patrón_mvc -->|partOf| contenidos_mínimos_obligatorios
+    módulo_vi_—_autorización_y_autenticación -->|partOf| contenidos_mínimos_obligatorios
+    módulo_vii_—_desarrollo_de_servicios_con_django -->|partOf| contenidos_mínimos_obligatorios
+    contenidos_mínimos_obligatorios -->|hasPrerequisite| evaluación_(según_programa_oficial)
+    evaluación_(según_programa_oficial) -->|hasPrerequisite| semanas_especiales_(no_de_dictado_de_contenido_nuevo)
+    semanas_especiales_(no_de_dictado_de_contenido_nuevo) -->|hasPrerequisite| bibliografía_obligatoria
+    bibliografía_obligatoria -->|hasPrerequisite| estado

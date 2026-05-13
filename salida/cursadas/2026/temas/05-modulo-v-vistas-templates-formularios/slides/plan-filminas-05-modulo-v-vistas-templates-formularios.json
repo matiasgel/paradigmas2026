@@ -1,0 +1,1315 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "05-modulo-v-vistas-templates-formularios",
+    "title": "Módulo V — Vistas OOP, Templates y Formularios con datos ORM",
+    "source": "filminas.md",
+    "generated_at": "2026-05-13T10:00:00",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas",
+    "topic_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas/05-modulo-v-vistas-templates-formularios",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/schemas/pipeline-runtime.schema.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 26,
+    "images_planned": 8,
+    "tables_planned": 3,
+    "code_slides": 8,
+    "status": "ready",
+    "pending_types": [],
+    "pending_prompts": [],
+    "type_distribution": {
+      "portada": 1,
+      "diagrama": 3,
+      "codigo": 8,
+      "tabla": 2,
+      "concepto-mixto": 1,
+      "tabla-comparativa": 1,
+      "concepto-abstracto": 3,
+      "demo": 5,
+      "timeline": 1,
+      "cierre": 1
+    }
+  },
+  "slides": [
+    {
+      "id": "F-00",
+      "type": "portada",
+      "title": "Portada",
+      "subtitle": "Módulo V — Vistas, Templates y Formularios",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "El ORM constituye la capa de persistencia del sistema."
+        },
+        {
+          "type": "text",
+          "content": "En este módulo se expone la información al usuario mediante **vistas, templates y formularios**."
+        },
+        {
+          "type": "text",
+          "content": "Semana 9 · BlogApp · Django 5.1 · Bootstrap 5.3.3"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "BLOQUE 1 — URLconf: el router de Django (20 min)"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Superficie oscura con filas horizontales de pequeños rectángulos blancos semitransparentes alineados en columnas, degradado vertical de blanco a transparente hacia el centro. Paleta azul noche y gris oscuro. Flat design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-01",
+      "type": "diagrama",
+      "title": "El URLconf: primer componente que Django ejecuta ante una petición",
+      "subtitle": "El protocolo HTTP no determina qué código Python ejecutar — el URLconf lo hace",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Función del URLconf en la arquitectura de Django"
+        },
+        {
+          "type": "text",
+          "content": "El protocolo HTTP no dispone de mecanismo alguno para determinar qué componente Python debe ejecutarse ante una URL dada. El URLconf opera como tabla de despacho: URL → clase Python. Se implementa como un módulo Python ordinario, sin dependencia de XML, anotaciones externas ni convenciones implícitas."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tres principios del sistema de resolución"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "La lista `urlpatterns` se recorre **en orden** — el primer patrón que produce coincidencia se ejecuta",
+              "level": 0
+            },
+            {
+              "content": "Django **consume** el prefijo en `include()` y transfiere el segmento restante al URLconf de la aplicación",
+              "level": 0
+            },
+            {
+              "content": "Si ningún patrón produce coincidencia → `Http404` automático, sin intervención de la vista",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Información transferida de la URL a la vista"
+        },
+        {
+          "type": "text",
+          "content": "`path(\"posts/<int:pk>/\", ...)` extrae `pk=42` como `int` — la vista lo recibe en `self.kwargs[\"pk\"]` ya convertido al tipo destino"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Tres bloques rectangulares alineados horizontalmente unidos por flechas gruesas negras — bloque izquierdo gris claro, bloque central azul oscuro, bloque derecho verde menta. Flecha roja descendente desde el bloque central hacia un círculo rojo inferior. Flat design, bordes redondeados, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-02",
+      "type": "codigo",
+      "title": "Dos niveles de urls.py: proyecto y aplicación",
+      "subtitle": "El proyecto delega la resolución — la aplicación es responsable de sus propias rutas",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Fundamento del diseño en dos niveles"
+        },
+        {
+          "type": "text",
+          "content": "El URLconf raíz solo tiene conocimiento de que las rutas bajo `/blog/` pertenecen a la aplicación `blog`. La aplicación define su propia tabla de rutas de forma autónoma. Si en el futuro la aplicación se reubica bajo `/articulos/`, únicamente se modifica **una línea** en el proyecto raíz."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "from django.urls import path, include\nurlpatterns = [\n    path(\"admin/\", admin.site.urls),\n    path(\"blog/\", include(\"blog.urls\", namespace=\"blog\")),\n    # Django consume \"blog/\" y transfiere el resto: \"/posts/42/\" → \"posts/42/\"\n]"
+        },
+        {
+          "lang": "python",
+          "content": "from django.urls import path\nfrom .views import PostListView, PostDetailView, PostCreateView\n\napp_name = \"blog\"   # habilita el espacio de nombres → {% url 'blog:post-list' %}\n\nurlpatterns = [\n    path(\"\", PostListView.as_view(), name=\"post-list\"),\n    path(\"posts/<int:pk>/\", PostDetailView.as_view(), name=\"post-detail\"),\n    path(\"posts/crear/\", PostCreateView.as_view(), name=\"post-create\"),\n]"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-03",
+      "type": "tabla",
+      "title": "Conversores de tipo: validación en la capa de ruteo",
+      "subtitle": "La URL tipada rechaza valores inválidos antes de que alcancen el código Python",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Los conversores como mecanismo de seguridad en la frontera del sistema"
+        },
+        {
+          "type": "text",
+          "content": "En ausencia de conversores, el valor `/posts/abc/` llegaría a la vista como la cadena `\"abc\"`. Con `<int:pk>`, Django devuelve `Http404` **automáticamente** antes de ejecutar una sola línea de la vista. La validación de tipos se produce en la frontera del sistema, no en la lógica interna."
+        },
+        {
+          "type": "text",
+          "content": "**En la vista**: `self.kwargs[\"pk\"]` es ya de tipo `int` — no se requiere conversión manual mediante `int(pk)`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Conversor | Ejemplo de URL | Tipo en `self.kwargs` | Si no produce coincidencia |\n|-----------|---------------|----------------------|---------------------------|\n| `<int:pk>` | `/posts/42/` | `int` → `42` | `Http404` automático |\n| `<str:nombre>` | `/posts/mi-titulo/` | `str` | no rechaza ningún valor |\n| `<slug:slug>` | `/posts/mi-post-2026/` | `str` slug válido | caracteres inválidos → 404 |\n| `<uuid:pk>` | `/posts/a3b2-.../` | `uuid.UUID` | formato inválido → 404 |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Conversor | Ejemplo de URL | Tipo en `self.kwargs` | Si no produce coincidencia |\n|-----------|---------------|----------------------|---------------------------|\n| `<int:pk>` | `/posts/42/` | `int` → `42` | `Http404` automático |\n| `<str:nombre>` | `/posts/mi-titulo/` | `str` | no rechaza ningún valor |\n| `<slug:slug>` | `/posts/mi-post-2026/` | `str` slug válido | caracteres inválidos → 404 |\n| `<uuid:pk>` | `/posts/a3b2-.../` | `uuid.UUID` | formato inválido → 404 |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "type": "concepto-mixto",
+      "title": "Resolución inversa: el principio de indirección de URLs",
+      "subtitle": "Las URLs no deben escribirse directamente en el código fuente",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El problema del acoplamiento directo"
+        },
+        {
+          "type": "text",
+          "content": "Si la URL cambia de `/posts/42/` a `/articulos/42/`, sería necesario localizar y reemplazar todas las ocurrencias en el proyecto. La resolución inversa desacopla el código de la estructura de URLs: se referencia por nombre y el framework genera la cadena de URL correspondiente."
+        },
+        {
+          "type": "text",
+          "content": "**Convención obligatoria**: `{% url %}` en templates · `reverse_lazy()` en clases · `reverse()` en funciones"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "BLOQUE 2 — El controlador View: dispatch y vistas genéricas (35 min)"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "from django.urls import reverse, reverse_lazy\n\nreverse(\"blog:post-detail\", kwargs={\"pk\": 42})  # → \"/blog/posts/42/\"\n\nsuccess_url = reverse_lazy(\"blog:post-list\")"
+        },
+        {
+          "lang": "html",
+          "content": "<!-- templates/ — resolución en Django Template Language -->\n<a href=\"{% url 'blog:post-detail' post.pk %}\">Ver publicación</a>\n<a href=\"{% url 'blog:post-update' pk=post.pk %}\">Editar</a>"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "tabla-comparativa",
+      "title": "Django MVT: la \"Vista\" cumple el rol del controlador",
+      "subtitle": "Django redenomina las capas — las responsabilidades son equivalentes a las de MVC clásico",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Diferencia terminológica entre MVC clásico y el patrón MVT de Django"
+        },
+        {
+          "type": "text",
+          "content": "En MVC clásico, la Vista es la capa de presentación. Django denomina \"Vista\" al componente de lógica de negocio — una decisión de diseño histórica que puede generar confusión inicial. Lo relevante es comprender la responsabilidad de cada capa, con independencia de su denominación."
+        },
+        {
+          "type": "text",
+          "content": "**La Vista de Django** recibe la `HttpRequest`, consulta el ORM, construye el contexto y delega la presentación al template; actúa como coordinador del flujo de procesamiento."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Capa en MVC clásico | Equivalente Django | Archivo | Responsabilidad |\n|--------------------|-------------------|---------|----------------|\n| **Modelo** | `models.py` + ORM | `models.py` | Estado, persistencia, reglas de negocio |\n| **Controlador** | Vista — clases `View` | `views.py` | Recibe la petición, consulta el modelo, selecciona el template |\n| **Vista** | Template — DTL | `templates/` | Renderiza los datos como HTML para el navegador |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Capa en MVC clásico | Equivalente Django | Archivo | Responsabilidad |\n|--------------------|-------------------|---------|----------------|\n| **Modelo** | `models.py` + ORM | `models.py` | Estado, persistencia, reglas de negocio |\n| **Controlador** | Vista — clases `View` | `views.py` | Recibe la petición, consulta el modelo, selecciona el template |\n| **Vista** | Template — DTL | `templates/` | Renderiza los datos como HTML para el navegador |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "type": "diagrama",
+      "title": "Ciclo completo de una petición HTTP en Django",
+      "subtitle": "Seis capas transforman una URL en un documento HTML",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Función de cada capa en el ciclo de procesamiento"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Middleware**: intercepta la petición antes de su despacho y la respuesta antes de su envío — aquí reside el control CSRF y la gestión de sesiones",
+              "level": 0
+            },
+            {
+              "content": "**URL Resolver**: extrae `pk=42` como `int` e instancia la clase de vista correspondiente",
+              "level": 0
+            },
+            {
+              "content": "**dispatch()**: determina si delegar en `get()` o `post()` según `request.method`",
+              "level": 0
+            },
+            {
+              "content": "**ORM**: retorna objetos Python — el template nunca ejecuta SQL de forma directa",
+              "level": 0
+            },
+            {
+              "content": "**Template Engine**: combina el template DTL con el contexto y produce el HTML final",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Punto de extensión por capa"
+        },
+        {
+          "type": "text",
+          "content": "En cada capa existe un método que puede ser sobreescrito. En esta clase se utilizan `get_queryset()`, `get_context_data()`, `form_valid()` y `clean_<campo>()`."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Seis rectángulos apilados verticalmente conectados por flechas descendentes negras — colores distintos de arriba hacia abajo: gris claro, naranja suave, azul cielo, verde menta, lila, amarillo dorado — todos con bordes redondeados. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-07",
+      "type": "codigo",
+      "title": "`dispatch()`: el despachador interno de la Vista",
+      "subtitle": "dispatch() determina qué método ejecutar según el verbo HTTP recibido",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Relevancia de dispatch() para el diseño de vistas"
+        },
+        {
+          "type": "text",
+          "content": "Cuando se sobreescribe `get()` en una subclase de `View`, `dispatch()` lo invoca automáticamente. Sobreescribir `dispatch()` directamente permite interceptar **todos** los verbos HTTP, lo cual resulta apropiado para lógica que debe ejecutarse con anterioridad a cualquier handler específico."
+        },
+        {
+          "type": "text",
+          "content": "**Directiva de diseño**: sobreescribir `get()` / `post()` para lógica específica del verbo. Sobreescribir `dispatch()` exclusivamente para lógica transversal a todos los verbos (por ejemplo, verificación de permisos previa a cualquier acción)."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class View:\n    http_method_names = [\"get\", \"post\", \"put\", \"patch\", \"delete\"]\n\n    def dispatch(self, request, *args, **kwargs):\n        method = request.method.lower()             # \"get\" | \"post\" | ...\n        if method in self.http_method_names:\n            # Busca self.get() / self.post() en la subclase mediante MRO\n            handler = getattr(self, method, self.http_method_not_allowed)\n        else:\n            handler = self.http_method_not_allowed\n        return handler(request, *args, **kwargs)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-08",
+      "type": "codigo",
+      "title": "El objeto `request`: representación completa de la petición HTTP",
+      "subtitle": "HttpRequest encapsula toda la información de la petición entrante",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "request como fuente única de verdad sobre la petición del cliente"
+        },
+        {
+          "type": "text",
+          "content": "`HttpRequest` es una instancia que Django crea para cada petición entrante. Contiene el verbo HTTP, la ruta, los datos del formulario, el usuario autenticado y la sesión. No existe otro mecanismo para acceder a dicha información desde la vista."
+        },
+        {
+          "type": "text",
+          "content": "**`request.POST` es inmutable** — Django prohibe su modificación para evitar efectos laterales silenciosos. Para incorporar datos adicionales al formulario, se utiliza `form.instance.campo = valor` antes de `form.save()`."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class PostCreateView(CreateView):\n    def post(self, request, *args, **kwargs):\n        request.method          # \"POST\" — el verbo HTTP\n        request.path            # \"/blog/posts/crear/\"\n        request.GET             # QueryDict — parámetros de URL: ?page=2\n        request.POST            # QueryDict — cuerpo del formulario: {\"title\": \"...\"}\n        request.user            # instancia User autenticado, o AnonymousUser\n        request.session         # diccionario persistente entre peticiones (→ bloque 5)\n        request.META[\"HTTP_USER_AGENT\"]  # cabeceras HTTP sin procesar\n        return super().post(request, *args, **kwargs)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-09",
+      "type": "concepto-abstracto",
+      "title": "Jerarquía de vistas genéricas: reutilización de patrones consolidados",
+      "subtitle": "Cada vista genérica encapsula el patrón más frecuente de su operación correspondiente",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Fundamento del uso de vistas genéricas sobre la clase base View"
+        },
+        {
+          "type": "text",
+          "content": "Con la clase base `View`, toda la lógica debe implementarse manualmente: recuperar el objeto, construir el contexto, renderizar la respuesta. Las vistas genéricas encapsulan ese código repetitivo y exponen puntos de extensión bien definidos. El código resultante en la subclase expresa **qué cambia**, en lugar de describir el funcionamiento del patrón."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Las cinco vistas utilizadas en BlogApp"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**`ListView`**: `Post.objects.all()` + paginación automática mediante `paginate_by`",
+              "level": 0
+            },
+            {
+              "content": "**`DetailView`**: `Post.objects.get(pk=pk)` + `Http404` automático si el objeto no existe",
+              "level": 0
+            },
+            {
+              "content": "**`CreateView`**: formulario unbound → bound → `save()` INSERT → redirección",
+              "level": 0
+            },
+            {
+              "content": "**`UpdateView`**: idéntico a CreateView pero con `instance=objeto` → `save()` UPDATE",
+              "level": 0
+            },
+            {
+              "content": "**`DeleteView`**: GET presenta confirmación — POST ejecuta `objeto.delete()`",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Árbol jerárquico con nodos circulares — nodo raíz gris oscuro en la cima, tres nodos azul claro en el nivel intermedio, tres nodos verde oscuro en la base — líneas conectoras grises finas. Disposición simétrica vertical, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-10",
+      "type": "demo",
+      "title": "`ListView` con `get_queryset()`: integración del ORM en la vista",
+      "subtitle": "get_queryset() es el punto de extensión entre la vista y la capa de persistencia",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Motivo para sobreescribir get_queryset() en lugar de declarar model"
+        },
+        {
+          "type": "text",
+          "content": "El atributo `model = Post` produce `Post.objects.all()` — la totalidad de los registros sin filtrado. `get_queryset()` otorga control total sobre la consulta: `filter()`, `select_related()`, `order_by()`. Corresponde al mismo QuerySet construido en el Tema 04, ahora integrado en la capa de vista."
+        },
+        {
+          "type": "text",
+          "content": "**Paginación automática**: con `paginate_by=10`, el template recibe `page_obj` con métodos `has_next()`, `has_previous()` y `next_page_number()`. El parámetro de URL es `?page=2`, sin necesidad de código adicional en la vista."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "BLOQUE 3 — Templates con QuerySets reales (35 min)"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class PostListView(ListView):\n    model = Post\n    template_name = \"blog/post_list.html\"\n    context_object_name = \"posts\"   # nombre de la variable en el template (default: object_list)\n    paginate_by = 10                # Django segmenta los resultados automáticamente\n\n    def get_queryset(self):\n        # select_related previene N+1 al acceder a post.author y post.category en el template\n        return Post.objects.filter(published=True)\\\n                           .select_related(\"author\", \"category\")\\\n                           .order_by(\"-created_at\")"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "tabla",
+      "title": "Contexto automático: las vistas genéricas inyectan variables sin declaración explícita",
+      "subtitle": "Las vistas genéricas transfieren variables al template de forma implícita",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Importancia del conocimiento de las variables automáticas de contexto"
+        },
+        {
+          "type": "text",
+          "content": "Si se referencia `{{ posts }}` en el template y la variable no se resuelve, la causa más frecuente es no haber definido `context_object_name`, de modo que Django empleó `object_list` como nombre por defecto. El conocimiento de las variables automáticas permite evitar esta clase de errores."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Incorporación de variables adicionales sin pérdida del contexto automático"
+        },
+        {
+          "type": "text",
+          "content": "**Omitir `super()`** produce la pérdida del contexto automático — `page_obj`, `form`, etc. dejan de estar disponibles en el template"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "def get_context_data(self, **kwargs):\n    ctx = super().get_context_data(**kwargs)  # obligatorio: preserva las variables automáticas\n    ctx[\"categorias\"] = Category.objects.all()\n    ctx[\"total\"] = self.get_queryset().count()\n    return ctx"
+        }
+      ],
+      "tables": [
+        "| Vista | Variables automáticas en el contexto |\n|-------|--------------------------------------|\n| `ListView` | `object_list`, `page_obj`, `paginator`, `is_paginated` |\n| `DetailView` | `object` (y el alias definido en `context_object_name`) |\n| `CreateView` / `UpdateView` | `form` (instancia del formulario) |\n| `DeleteView` | `object` (el objeto candidato a eliminación) |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Vista | Variables automáticas en el contexto |\n|-------|--------------------------------------|\n| `ListView` | `object_list`, `page_obj`, `paginator`, `is_paginated` |\n| `DetailView` | `object` (y el alias definido en `context_object_name`) |\n| `CreateView` / `UpdateView` | `form` (instancia del formulario) |\n| `DeleteView` | `object` (el objeto candidato a eliminación) |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-12",
+      "type": "codigo",
+      "title": "Django Template Language sobre datos ORM: dot notation y relaciones",
+      "subtitle": "El template accede a atributos, propiedades, métodos y relaciones mediante dot notation",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Mecanismo de resolución de dot notation sobre instancias de modelo"
+        },
+        {
+          "type": "text",
+          "content": "Django resuelve `post.author.username` en tres pasos: accede al atributo `author` del objeto `Post` (ForeignKey → consulta ORM si no existe caché), luego accede al atributo `username` del objeto `User`. Si algún paso retorna `None`, el resultado es una cadena vacía, sin que se produzca excepción alguna."
+        },
+        {
+          "type": "text",
+          "content": "**Problema N+1**: `post.comments.all` dentro de un `{% for posts %}` ejecuta una consulta por cada post. Solución: `prefetch_related(\"comments\")` en `get_queryset()` — los datos se reciben precargados en el template."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "html",
+          "content": "{{ post.title|upper }}\n{{ post.created_at|date:\"d/m/Y\" }}\n{{ post.body|truncatewords:50 }}\n{{ post.author.get_full_name|default:\"Anónimo\" }}\n\n<!-- Relación FK — dot notation ejecuta la consulta si no existe select_related -->\n{{ post.category.name }}\n\n<!-- Relación inversa (reverse FK / M2M) -->\n{% for comment in post.comments.all %}\n  {{ comment.author.username }}: {{ comment.body }}\n{% endfor %}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "demo",
+      "title": "Herencia de templates: base.html y extensión con datos ORM",
+      "subtitle": "Un template base define la estructura del documento — las páginas hijas aportan el contenido específico",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La herencia de templates como mecanismo de reutilización estructural"
+        },
+        {
+          "type": "text",
+          "content": "En ausencia de herencia, cada template replicaría la estructura completa: `<head>`, `<nav>` y pie de página. Mediante `{% extends %}` y `{% block %}`, el HTML estructural reside en un único archivo. Cualquier modificación en la barra de navegación requiere editar un único archivo."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "BLOQUE 4 — Formularios Django: ciclo de enlace y validación (55 min)"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "html",
+          "content": "<!-- templates/blog/base.html — definición única para toda la aplicación -->\n<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\">\n<nav class=\"navbar navbar-dark bg-dark\">\n  <a class=\"navbar-brand\" href=\"{% url 'blog:post-list' %}\">BlogApp</a>\n  <a class=\"nav-link\" href=\"{% url 'blog:post-create' %}\">Nueva publicación</a>\n</nav>\n<div class=\"container mt-4\">\n  {% if messages %}\n    {% for m in messages %}<div class=\"alert alert-{{ m.tags }}\">{{ m }}</div>{% endfor %}\n  {% endif %}\n  {% block content %}{% endblock %}   <!-- cada template hijo proporciona este bloque -->\n</div>"
+        },
+        {
+          "lang": "html",
+          "content": "<!-- templates/blog/post_detail.html — únicamente el contenido específico -->\n{% extends \"blog/base.html\" %}\n{% block title %}{{ post.title }}{% endblock %}\n{% block content %}\n  <h1>{{ post.title }}</h1>\n  <span class=\"badge bg-secondary\">{{ post.category.name }}</span>\n  <p class=\"text-muted\">{{ post.created_at|date:\"d \\d\\e F \\d\\e Y\" }}</p>\n  {{ post.body|linebreaks }}\n{% endblock %}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-14",
+      "type": "concepto-abstracto",
+      "title": "El ciclo de enlace: estado bound vs unbound",
+      "subtitle": "Un formulario solo puede ser validado si tiene datos del usuario asociados",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El estado de enlace como fundamento del ciclo de procesamiento de formularios"
+        },
+        {
+          "type": "text",
+          "content": "`PostForm()` sin argumentos crea un formulario **unbound**: `is_bound=False`, por lo que `is_valid()` retorna `False` sin ejecutar validación alguna, independientemente de la calidad de los datos, dado que no existe información asociada al formulario. Únicamente cuando se construye con `data=request.POST` el formulario queda **bound** y la validación adquiere sentido."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Construcción | `is_bound` | `is_valid()` | Cuándo utilizarlo |\n|-------------|-----------|-------------|------------------|\n| `PostForm()` | `False` | siempre `False` | GET — presentar formulario vacío |\n| `PostForm(instance=post)` | `False` | siempre `False` | GET — pre-poblar para edición |\n| `PostForm(data=request.POST)` | `True` | ejecuta el pipeline | POST — crear nuevo registro |\n| `PostForm(data=request.POST, instance=post)` | `True` | ejecuta el pipeline | POST — actualizar registro existente |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Dos rectángulos verticales lado a lado — izquierdo en azul suave con cuadrado vacío centrado, derecho en verde claro con bifurcación interna: segmento superior con ícono de check verde y segmento inferior con ícono de cruz roja — flechas laterales de colores. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Construcción | `is_bound` | `is_valid()` | Cuándo utilizarlo |\n|-------------|-----------|-------------|------------------|\n| `PostForm()` | `False` | siempre `False` | GET — presentar formulario vacío |\n| `PostForm(instance=post)` | `False` | siempre `False` | GET — pre-poblar para edición |\n| `PostForm(data=request.POST)` | `True` | ejecuta el pipeline | POST — crear nuevo registro |\n| `PostForm(data=request.POST, instance=post)` | `True` | ejecuta el pipeline | POST — actualizar registro existente |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-15",
+      "type": "diagrama",
+      "title": "Pipeline de validación: las cinco capas de procesamiento en secuencia",
+      "subtitle": "`form.is_valid()` ejecuta esta cadena de procesamiento — si una capa falla, la ejecución se detiene",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Función de cada capa y relevancia del orden de ejecución"
+        },
+        {
+          "type": "text",
+          "content": "1. **`to_python()`** — convierte el string recibido por POST al tipo Python destino: `\"42\"` → `int(42)`. Si la conversión falla, el campo queda inválido y las capas posteriores se omiten para ese campo."
+        },
+        {
+          "type": "text",
+          "content": "2. **`validate()`** — aplica las reglas declaradas en el campo: `required`, `max_length`, `min_value`, etc."
+        },
+        {
+          "type": "text",
+          "content": "3. **`run_validators()`** — ejecuta la lista `validators=[MinLengthValidator(10), ...]` definida en el campo."
+        },
+        {
+          "type": "text",
+          "content": "4. **`clean_<campo>()`** — lógica personalizada: permite consultar el ORM, transformar el valor y lanzar `ValidationError`."
+        },
+        {
+          "type": "text",
+          "content": "5. **`clean()`** — validación cruzada entre campos; `self.cleaned_data` contiene únicamente los campos que superaron las capas 1 a 4."
+        },
+        {
+          "type": "text",
+          "content": "**`cleaned_data`** solo existe a partir de que `is_valid()` haya sido invocado — acceder con anterioridad produce `AttributeError`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Cinco rectángulos horizontales apilados verticalmente conectados por flechas descendentes, degradando de azul muy claro arriba a azul marino abajo — bifurcación final con flecha verde a la derecha y flecha roja a la izquierda. Bordes redondeados, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-16",
+      "type": "codigo",
+      "title": "`ModelForm`: generación automática de campos a partir del modelo",
+      "subtitle": "ModelForm inspecciona el modelo y genera los campos correspondientes, sin duplicar definiciones",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ventaja de ModelForm sobre la clase Form base"
+        },
+        {
+          "type": "text",
+          "content": "Con `Form` sería necesario declarar `title = forms.CharField(max_length=200)`, duplicando lo que ya está definido en el modelo. `ModelForm` inspecciona el modelo y genera el campo de forma automática. Ante modificaciones en el modelo, el formulario se actualiza sin intervención adicional."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class PostForm(forms.ModelForm):\n    class Meta:\n        model  = Post\n        fields = [\"title\", \"body\", \"category\", \"published\"]\n        widgets = {\n            \"title\":    forms.TextInput(attrs={\"class\": \"form-control\"}),\n            \"body\":     forms.Textarea(attrs={\"class\": \"form-control\", \"rows\": 8}),\n            \"category\": forms.Select(attrs={\"class\": \"form-select\"}),\n        }\n        labels  = {\"title\": \"Título\", \"body\": \"Contenido\", \"category\": \"Categoría\"}\n        error_messages = {\"title\": {\"required\": \"El título es obligatorio.\"}}"
+        }
+      ],
+      "tables": [
+        "| Campo del modelo | Campo de formulario generado |\n|-----------------|------------------------------|\n| `CharField(max_length=200)` | `CharField(max_length=200, widget=TextInput)` |\n| `ForeignKey(Category)` | `ModelChoiceField(queryset=Category.objects.all())` |\n| `DateTimeField(auto_now_add=True)` | **excluido** — no editable por el usuario |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Campo del modelo | Campo de formulario generado |\n|-----------------|------------------------------|\n| `CharField(max_length=200)` | `CharField(max_length=200, widget=TextInput)` |\n| `ForeignKey(Category)` | `ModelChoiceField(queryset=Category.objects.all())` |\n| `DateTimeField(auto_now_add=True)` | **excluido** — no editable por el usuario |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-17",
+      "type": "codigo",
+      "title": "Capa 4: `clean_<campo>()` — validación con acceso al ORM",
+      "subtitle": "Es la capa de mayor expresividad: recibe el valor ya tipado y puede consultar la base de datos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Obligatoriedad de retornar el valor en clean_<campo>()"
+        },
+        {
+          "type": "text",
+          "content": "`clean_title()` debe **retornar** el valor, posiblemente transformado. Si se omite el `return`, `cleaned_data[\"title\"]` contendrá `None` aun cuando la validación haya sido superada. Django no genera excepción alguna: el defecto es silencioso."
+        },
+        {
+          "type": "text",
+          "content": "El error se agrega a `form.errors[\"title\"]` y se presenta junto al campo en el template"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class PostForm(forms.ModelForm):\n\n    def clean_title(self):\n        # El valor ya superó las capas 1-3: es str, no None, dentro de max_length\n        title = self.cleaned_data[\"title\"].strip()\n\n        if len(title) < 10:\n            raise forms.ValidationError(\n                \"Mínimo %(min)s caracteres.\", params={\"min\": 10}\n            )\n\n        # Consulta al ORM — excluir la instancia actual en operaciones de edición\n        qs = Post.objects.filter(title__iexact=title)\n        if self.instance.pk:\n            qs = qs.exclude(pk=self.instance.pk)\n        if qs.exists():\n            raise forms.ValidationError(\"Ya existe una publicación con ese título.\")\n\n        return title   # ← obligatorio: devolver el valor (posiblemente transformado)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-18",
+      "type": "codigo",
+      "title": "Capa 5: `clean()` — validación cruzada entre campos",
+      "subtitle": "clean() tiene visibilidad simultánea sobre todos los campos — apropiado para reglas que involucran múltiples campos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Uso obligatorio de .get() sobre cleaned_data en lugar de acceso directo"
+        },
+        {
+          "type": "text",
+          "content": "Si `title` no superó la capa 4, la clave `\"title\"` estará ausente de `cleaned_data`; el acceso con `[\"title\"]` lanzará `KeyError`. El uso de `.get(\"title\", \"\")` es siempre seguro. Esta omisión constituye la causa más frecuente de errores inesperados en `clean()`."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "    def clean(self):\n        cleaned = super().clean()   # ejecuta validaciones del modelo (unique, etc.)\n\n        body      = cleaned.get(\"body\", \"\")        # .get() — nunca acceso directo con []\n        published = cleaned.get(\"published\", False)\n\n        # Regla cruzada: publicar requiere contenido mínimo sustantivo\n        if published and len(body) < 100:\n            self.add_error(           # asocia el error al campo \"body\"\n                \"body\",\n                \"Para publicar, el contenido debe tener al menos 100 caracteres.\"\n            )\n        # raise ValidationError aquí → va a form.non_field_errors()\n\n        return cleaned"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "timeline",
+      "title": "Ciclo completo: GET → POST inválido → POST válido → Redirección",
+      "subtitle": "CreateView gestiona los tres estados de la interacción con el mismo método post()",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Fundamento del patrón PRG (Post-Redirect-Get)"
+        },
+        {
+          "type": "text",
+          "content": "En un POST exitoso, si la vista renderiza directamente la respuesta y el usuario recarga la página, el navegador **reenvía el formulario**, produciendo una inserción duplicada. La redirección convierte el POST en un GET idempotente, eliminando esta condición de error. Este es el patrón **PRG (Post-Redirect-Get)**."
+        },
+        {
+          "type": "text",
+          "content": "El template es **idéntico** para ambos casos de renderizado: recibe el mismo objeto `form`, con o sin errores. El redisplay de errores no requiere lógica adicional en la vista."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Petición | Formulario construido | `is_valid()` | Acción de la vista | HTTP |\n|----------|----------------------|-------------|-------------------|----|\n| `GET /posts/crear/` | `PostForm()` — unbound | — | renderizar formulario vacío | `200` |\n| `POST` datos inválidos | `PostForm(data=POST)` | `False` | renderizar formulario con errores | `200` |\n| `POST` datos válidos | `PostForm(data=POST)` | `True` → `form.save()` INSERT | `redirect(success_url)` | `302` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-top-split",
+        "image": "none",
+        "code": "none",
+        "table": "right-half"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Petición | Formulario construido | `is_valid()` | Acción de la vista | HTTP |\n|----------|----------------------|-------------|-------------------|----|\n| `GET /posts/crear/` | `PostForm()` — unbound | — | renderizar formulario vacío | `200` |\n| `POST` datos inválidos | `PostForm(data=POST)` | `False` | renderizar formulario con errores | `200` |\n| `POST` datos válidos | `PostForm(data=POST)` | `True` → `form.save()` INSERT | `redirect(success_url)` | `302` |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-20",
+      "type": "demo",
+      "title": "`UpdateView` con `instance=`: el mismo formulario produce UPDATE",
+      "subtitle": "El parámetro instance= es el único factor que distingue la creación de la edición",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Mecanismo de pre-población de campos en UpdateView"
+        },
+        {
+          "type": "text",
+          "content": "`UpdateView` recupera el objeto, lo asigna a `self.object` y construye el formulario con `PostForm(instance=self.object)`. Django inicializa cada widget con el valor actual del atributo correspondiente en el modelo — sin código adicional."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El parámetro instance= determina INSERT vs UPDATE"
+        },
+        {
+          "type": "text",
+          "content": "Sin `instance=`, `form.save()` siempre genera un nuevo registro — el defecto más frecuente al implementar la funcionalidad de edición"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class PostUpdateView(UpdateView):\n    model = Post\n    form_class = PostForm\n    template_name = \"blog/post_form.html\"   # mismo template que CreateView\n    success_url = reverse_lazy(\"blog:post-list\")"
+        },
+        {
+          "lang": "python",
+          "content": "form = PostForm(data=request.POST)\nform.save()   # → INSERT INTO blog_post ...\n\nform = PostForm(data=request.POST, instance=self.object)\nform.save()   # → UPDATE blog_post SET title=... WHERE id=42"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-21",
+      "type": "demo",
+      "title": "Template del formulario: presentación de errores por campo",
+      "subtitle": "El mismo template sirve tanto para creación como para edición — el objeto form encapsula el estado",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Necesidad del atributo novalidate en el formulario HTML"
+        },
+        {
+          "type": "text",
+          "content": "Sin `novalidate`, el navegador ejecuta la validación HTML5 y puede impedir el envío antes de que Django procese el formulario. Con `novalidate`, el framework tiene control total sobre los mensajes de error, permitiendo su presentación en el idioma requerido con la lógica de negocio efectiva."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "html",
+          "content": "<form method=\"post\" novalidate>\n  {% csrf_token %}\n\n  {% if form.non_field_errors %}   {# errores de clean() sin campo específico asociado #}\n    <div class=\"alert alert-danger\">\n      {% for e in form.non_field_errors %}{{ e }}{% endfor %}\n    </div>\n  {% endif %}\n\n  {% for field in form %}\n    <div class=\"mb-3\">\n      <label class=\"form-label fw-semibold\">\n        {{ field.label }}{% if field.field.required %} *{% endif %}\n      </label>\n      {{ field }}   <!-- widget con class=\"form-control\" definido en Meta.widgets -->\n      {% for error in field.errors %}\n        <div class=\"text-danger small mt-1\">{{ error }}</div>\n      {% endfor %}\n    </div>\n  {% endfor %}\n\n  <button type=\"submit\" class=\"btn btn-primary\">Guardar</button>\n  <a href=\"{% url 'blog:post-list' %}\" class=\"btn btn-secondary\">Cancelar</a>\n</form>"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-22",
+      "type": "demo",
+      "title": "`DeleteView`: GET solicita confirmación, POST ejecuta la eliminación",
+      "subtitle": "La confirmación explícita es obligatoria: una petición GET sobre DeleteView no elimina datos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué las operaciones destructivas requieren POST y no GET"
+        },
+        {
+          "type": "text",
+          "content": "Un enlace `<a href=\"/posts/42/eliminar/\">` genera una petición GET. Si dicha petición eliminara el objeto, cualquier agente de indexación o usuario que acceda al enlace de forma accidental provocaría la pérdida de datos. La eliminación requiere invariablemente un POST explícito que incluya el token `{% csrf_token %}`."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "BLOQUE 5 — Sesiones HTTP: persistencia de estado en un protocolo sin estado (8 min)"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "class PostDeleteView(DeleteView):\n    model = Post\n    template_name = \"blog/post_confirm_delete.html\"\n    success_url = reverse_lazy(\"blog:post-list\")\n    # GET  → renderiza el template de confirmación (nunca elimina datos)\n    # POST → invoca objeto.delete() → redirección a success_url"
+        },
+        {
+          "lang": "html",
+          "content": "{% extends \"blog/base.html\" %}\n{% block content %}\n<div class=\"alert alert-warning\">\n  <h4>¿Eliminar \"{{ object.title }}\"?</h4>\n  <p>Esta operación no puede revertirse.</p>\n  <form method=\"post\">\n    {% csrf_token %}\n    <button type=\"submit\" class=\"btn btn-danger\">Confirmar eliminación</button>\n    <a href=\"{% url 'blog:post-list' %}\" class=\"btn btn-secondary\">Cancelar</a>\n  </form>\n</div>\n{% endblock %}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "concepto-abstracto",
+      "title": "HTTP es stateless: el protocolo no conserva estado entre peticiones",
+      "subtitle": "Cada petición HTTP es anónima por diseño — el mecanismo de sesiones resuelve la persistencia de estado",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "HTTP como protocolo sin estado y sus implicaciones para las aplicaciones web"
+        },
+        {
+          "type": "text",
+          "content": "HTTP es un protocolo sin estado (*stateless*) por razones de escalabilidad: cualquier servidor puede responder cualquier petición sin conocimiento de las anteriores. Sin embargo, las aplicaciones requieren persistir información entre peticiones: estado de autenticación, preferencias del usuario, datos de sesión de trabajo, entre otros. El mecanismo provisto por Django son las sesiones en el servidor."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Funcionamiento de la sesión de Django en tres pasos"
+        },
+        {
+          "type": "text",
+          "content": "1. Django genera un identificador de sesión UUID único y lo almacena en una cookie `sessionid`"
+        },
+        {
+          "type": "text",
+          "content": "2. El navegador envía esa cookie en **cada petición subsiguiente** — de forma automática"
+        },
+        {
+          "type": "text",
+          "content": "3. Django lee `sessionid`, recupera los datos asociados en la base de datos (o caché) y los expone como `request.session` — un diccionario Python estándar"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Alcance de esta clase"
+        },
+        {
+          "type": "text",
+          "content": "`request.session` como diccionario y el **messages framework** que lo utiliza internamente para el patrón PRG. La autenticación completa se aborda en el Módulo VI."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Dos columnas separadas por línea vertical divisoria — columna izquierda con tres rectángulos grises apilados con signo de interrogación grande en su interior — columna derecha con tres rectángulos azules con ícono de llave pequeña y check verde. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "codigo",
+      "title": "`request.session` y el messages framework: persistencia entre peticiones",
+      "subtitle": "request.session es un diccionario que persiste entre peticiones del mismo usuario",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Dos niveles de abstracción sobre el mismo mecanismo"
+        },
+        {
+          "type": "text",
+          "content": "`request.session` es el mecanismo de bajo nivel. El **messages framework** es una abstracción construida sobre sesiones para un caso específico del patrón PRG: el mensaje se persiste antes de la redirección y se descarta una vez que el template lo ha renderizado."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "CIERRE"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "request.session[\"ultimo_post_id\"] = 42         # escritura\nultimo = request.session.get(\"ultimo_post_id\")  # lectura con valor por defecto\n\nfrom django.contrib import messages\n\nclass PostCreateView(CreateView):\n    def form_valid(self, form):\n        messages.success(self.request, \"Publicación creada correctamente.\")\n        return super().form_valid(form)  # → redirección a success_url\n\n    def form_invalid(self, form):\n        messages.error(self.request, \"Se han detectado errores en el formulario.\")\n        return super().form_invalid(form)"
+        },
+        {
+          "lang": "html",
+          "content": "{# En base.html — el mensaje se presenta en la página posterior a la redirección #}\n{% for m in messages %}\n  <div class=\"alert alert-{{ m.tags }}\">{{ m }}</div>\n{% endfor %}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "cierre",
+      "title": "Síntesis del Módulo V: conexión entre la petición HTTP y la base de datos",
+      "subtitle": "Cinco bloques articulan el flujo completo desde la petición HTTP hasta la capa de persistencia",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Contenidos abordados en esta clase"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**URLconf**: `path()`, conversores de tipo, `include()`, `reverse_lazy()` — el sistema de ruteo tipado",
+              "level": 0
+            },
+            {
+              "content": "**dispatch() + request**: mecanismo de despacho de verbos HTTP a métodos Python",
+              "level": 0
+            },
+            {
+              "content": "**Vistas genéricas**: `ListView` · `DetailView` · `CreateView` · `UpdateView` · `DeleteView`",
+              "level": 0
+            },
+            {
+              "content": "**Templates + ORM**: contexto automático, dot notation, filtros DTL, herencia de templates con Bootstrap 5",
+              "level": 0
+            },
+            {
+              "content": "**Formularios**: ciclo bound/unbound · pipeline de cinco capas · `ModelForm` · `clean_<campo>()` · patrón PRG",
+              "level": 0
+            },
+            {
+              "content": "**Sesiones**: `request.session` como diccionario · messages framework",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Hilo conductor del módulo"
+        },
+        {
+          "type": "text",
+          "content": "`URL → dispatch() → ORM → Form → Template → Redirect` — cada bloque abordado constituye un componente de esta cadena de procesamiento"
+        },
+        {
+          "type": "text",
+          "content": "Próxima instancia: laboratorio práctico — implementación del CRUD completo de BlogApp con vistas genéricas basadas en clases"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Degradado suave de azul profundo a negro con brillo circular blanco difuminado en el centro, paleta oscura elegante y minimalista. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    }
+  ]
+}

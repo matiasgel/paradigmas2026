@@ -652,9 +652,101 @@ class PostDetailView(View):
         return render(request, self.template_name, {"post": post})
 ```
 
+### [F-29] ¿Cómo viajan los datos del View al Template?
+
+@tipo: diagrama
+@imagen: content
+@prompt-imagen: diagrama de flujo vertical en dos bloques conectados por una flecha etiquetada 'render()': bloque izquierdo 'View (Python)' mostrando un dict Python con claves posts, page_title, user_name; bloque derecho 'Template (HTML)' mostrando {{ posts }}, {{ page_title }}, {{ user_name }}; fondo claro técnico educativo
+
+# El contexto: el mensajero entre View y Template
+
+- La vista construye un **diccionario Python** (`context`)
+- Cada **clave** del dict se convierte en una **variable disponible** en el template
+- `render()` es la función que conecta ambas capas
+- Sin contexto el template no conoce ningún dato de la base de datos
+
 ---
 
-### [F-29] ¿Por qué View base y no genérica todavía?
+### [F-30] El diccionario de contexto: anatomía
+
+@tipo: codigo
+
+# context = las variables que el template puede usar
+
+## Cada clave en Python → `{{ variable }}` en el template
+
+```python
+class PostListView(View):
+    def get(self, request):
+        # 1. Recuperar datos del modelo
+        posts = Post.objects.filter(published=True).order_by("-created_at")
+        total = Post.objects.count()
+
+        # 2. Empaquetar en el diccionario de contexto
+        context = {
+            "posts":      posts,          # → {% for post in posts %}
+            "total":      total,          # → {{ total }}
+            "page_title": "Inicio",       # → {{ page_title }}
+        }
+
+        # 3. Pasar el contexto a render()
+        return render(request, "blog/post_list.html", context)
+```
+
+---
+
+### [F-31] render(): los tres argumentos
+
+@tipo: concepto-abstracto
+@imagen: content
+@prompt-imagen: diagrama de función Python 'render()' con tres flechas de entrada etiquetadas: 'request — pedido HTTP original', 'template_name — ruta al archivo .html', 'context — dict con datos del modelo'; y una flecha de salida etiquetada 'HttpResponse — HTML renderizado listo para el browser'; fondo neutro minimalista
+
+# render() es el puente entre el controlador y la vista
+
+- **`request`** — el pedido HTTP original; el template lo recibe como `{{ request.user }}`
+- **`template_name`** — ruta relativa al archivo `.html` dentro de `templates/`
+- **`context`** — el dict de datos; si se omite, el template no recibe ninguna variable
+
+El template recibe **una copia** del contexto — no puede modificar el estado de la vista
+
+---
+
+### [F-32] Trazando un dato de punta a punta
+
+@tipo: demo
+
+# De la base de datos al HTML: el camino completo
+
+## Sin magia — cada paso es explícito
+
+```python
+# models.py — el dato vive en la BD
+class Post(models.Model):
+    title  = models.CharField(max_length=200)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+```
+
+```python
+# views.py — la vista recupera y empaqueta
+class PostListView(View):
+    def get(self, request):
+        posts = Post.objects.select_related("author").filter(published=True)
+        return render(request, "blog/post_list.html", {"posts": posts})
+        #                                               ↑ clave "posts"
+```
+
+```html
+<!-- post_list.html — el template recibe la variable "posts" -->
+{% for post in posts %}          {# ← la clave del dict es el nombre de la variable #}
+    <h2>{{ post.title }}</h2>    {# ← atributo del objeto Post #}
+    <p>{{ post.author.username }}</p>  {# ← relación resuelta por select_related #}
+{% endfor %}
+```
+
+
+---
+
+### [F-33] ¿Por qué View base y no genérica todavía?
 
 @tipo: tabla-comparativa
 
@@ -672,7 +764,7 @@ class PostDetailView(View):
 
 ---
 
-### [F-30] Evaluación formativa §T3
+### [F-34] Evaluación formativa §T3
 
 @tipo: socratica
 @imagen: background
@@ -690,7 +782,7 @@ Si una CBV con `View` base tiene solo `def get(self, request)`:
 
 ---
 
-### [F-31] Los 4 constructos de DTL
+### [F-35] Los 4 constructos de DTL
 
 @tipo: tabla
 
@@ -707,7 +799,7 @@ Si una CBV con `View` base tiene solo `def get(self, request)`:
 
 ---
 
-### [F-32] Variables y notación de punto
+### [F-36] Variables y notación de punto
 
 @tipo: codigo
 
@@ -731,7 +823,7 @@ context = {
 
 ---
 
-### [F-33] Filtros: transformar datos al mostrar
+### [F-37] Filtros: transformar datos al mostrar
 
 @tipo: tabla
 
@@ -751,7 +843,7 @@ context = {
 
 ---
 
-### [F-34] Auto-escape: protección XSS incorporada
+### [F-38] Auto-escape: protección XSS incorporada
 
 @tipo: concepto-abstracto
 @imagen: content
@@ -766,7 +858,7 @@ context = {
 
 ---
 
-### [F-35] {% for %} y variables de forloop
+### [F-39] {% for %} y variables de forloop
 
 @tipo: codigo
 
@@ -789,7 +881,7 @@ context = {
 
 ---
 
-### [F-36] Variables de forloop: la referencia completa
+### [F-40] Variables de forloop: la referencia completa
 
 @tipo: tabla
 
@@ -806,7 +898,7 @@ context = {
 
 ---
 
-### [F-37] {% if %} con operadores completos
+### [F-41] {% if %} con operadores completos
 
 @tipo: codigo
 
@@ -836,7 +928,7 @@ context = {
 
 ---
 
-### [F-38] Trampa de precedencia en {% if %}
+### [F-42] Trampa de precedencia en {% if %}
 
 @tipo: concepto-abstracto
 @imagen: content
@@ -851,7 +943,7 @@ context = {
 
 ---
 
-### [F-39] {% with %}: alias para evitar lookups repetidos
+### [F-43] {% with %}: alias para evitar lookups repetidos
 
 @tipo: codigo
 
@@ -875,7 +967,7 @@ context = {
 
 ---
 
-### [F-40] {% load %} y {% static %}: archivos estáticos
+### [F-44] {% load %} y {% static %}: archivos estáticos
 
 @tipo: codigo
 
@@ -899,7 +991,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 ---
 
-### [F-41] {% url %}: resolver URLs por nombre
+### [F-45] {% url %}: resolver URLs por nombre
 
 @tipo: codigo
 
@@ -924,7 +1016,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 ---
 
-### [F-42] {% comment %} y {# #}: documentar templates
+### [F-46] {% comment %} y {# #}: documentar templates
 
 @tipo: codigo
 
@@ -947,7 +1039,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 ---
 
-### [F-43] Herencia de templates: el principio DRY aplicado a HTML
+### [F-47] Herencia de templates: el principio DRY aplicado a HTML
 
 @tipo: concepto-abstracto
 @imagen: content
@@ -963,7 +1055,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 ---
 
-### [F-44] Herencia en práctica: base.html y children
+### [F-48] Herencia en práctica: base.html y children
 
 @tipo: demo
 
@@ -994,7 +1086,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 ---
 
-### [F-45] block.super: extender sin reemplazar
+### [F-49] block.super: extender sin reemplazar
 
 @tipo: codigo
 
@@ -1017,7 +1109,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 ---
 
-### [F-46] {% include %}: reutilizar fragmentos (partials)
+### [F-50] {% include %}: reutilizar fragmentos (partials)
 
 @tipo: codigo
 
@@ -1045,7 +1137,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 ---
 
-### [F-47] Mini-ejercicio §T4: pizarra DTL
+### [F-51] Mini-ejercicio §T4: pizarra DTL
 
 @tipo: socratica
 @imagen: background
@@ -1063,7 +1155,7 @@ Un template que:
 
 ---
 
-### [F-48] Cierre de clase teórica
+### [F-52] Cierre de clase teórica
 
 @tipo: cierre
 @imagen: background
@@ -1075,521 +1167,4 @@ Un template que:
 - **CBV**: `View` base, `as_view()`, `dispatch()`, `get()`/`post()`
 - **DTL**: variables, filtros, `{% for %}`, `{% if %}`, `{% with %}`, `{% static %}`, herencia, partials
 
-**Práctica**: conectar todo en BlogApp — shell + primera vista + templates con herencia
-
 **Semana 9**: `ListView`/`DetailView` + formularios `ModelForm` + Parcial 1
-
----
-
-## CLASE PRÁCTICA (180 min)
-
----
-
-### [F-49] Portada — Clase Práctica
-
-@tipo: portada
-@imagen: background
-@prompt-imagen: ambiente de laboratorio de programación con laptops abiertas mostrando terminal Django y código Python, estudiantes universitarios trabajando en Codespaces, iluminación azul tecnológica
-
-# BlogApp en Codespaces
-
-## ORM avanzado + primera vista CBV + DTL completo
-
-IF009 · UNTDF · Laboratorio Semana 8
-
----
-
-### [F-50] Setup: abrir Codespace BlogApp
-
-@tipo: demo
-
-# Antes de arrancar: verificar el entorno
-
-## Todos con el mismo punto de partida
-
-```bash
-# 1. Abrir Codespace de BlogApp
-# 2. Verificar que las migraciones están aplicadas
-python manage.py migrate
-
-# 3. Crear datos de prueba si no existen
-python manage.py shell
-```
-
-```python
-from blog.models import Post, Category
-# Verificar que hay datos
-print(Post.objects.count())      # debería ser > 0
-print(Category.objects.count())  # debería ser > 0
-```
-
----
-
-### [F-51] §P1 — Ejercicio 1: adaptar lo conocido a BlogApp
-
-@tipo: demo
-
-# Lo que hiciste con Biblioteca, ahora con Post/Category
-
-## Puente: mismos conceptos, nuevo dominio
-
-```python
-# Lo que ya hacías con Libro
-from blog.models import Post, Category
-
-# get() vs filter().first() — la diferencia importa
-cat = Category.objects.get(slug="python")          # DoesNotExist si no existe
-cat = Category.objects.filter(slug="python").first() # None si no existe
-
-# Métodos nuevos: exists() y count()
-Category.objects.filter(slug="python").exists()
-Post.objects.filter(published=True).count()
-
-# values_list: solo títulos
-titulos = Post.objects.filter(published=True)\
-                      .values_list("title", flat=True)
-print(list(titulos))
-```
-
----
-
-### [F-52] §P1 — Ejercicio 2: Q objects en el shell
-
-@tipo: demo
-
-# Filtros compuestos con Q
-
-## Combinar condiciones que filter() no puede expresar
-
-```python
-from django.db.models import Q
-
-# Posts publicados O del usuario actual
-qs = Post.objects.filter(Q(published=True) | Q(author_id=1))
-print(qs.query)  # ver el SQL generado
-
-# Búsqueda dinámica con término
-term = "django"
-q_filter = Q(title__icontains=term) | Q(body__icontains=term)
-resultados = Post.objects.filter(q_filter, published=True)
-print(resultados.count())
-```
-
----
-
-### [F-53] §P1 — Ejercicio 3: aggregations
-
-@tipo: demo
-
-# Estadísticas del blog en el shell
-
-## aggregate() global + annotate() por objeto
-
-```python
-from django.db.models import Count, Avg
-
-# Total global de posts
-total = Post.objects.aggregate(total=Count("id"))
-print(total)  # {"total": N}
-
-# Categorías con su cantidad de posts
-categorias = Category.objects.annotate(
-    n_posts=Count("post")
-).order_by("-n_posts")
-
-for cat in categorias:
-    print(f"{cat.name}: {cat.n_posts} posts")
-```
-
----
-
-### [F-54] §P1 — Ejercicio 4 y 5: F expressions + N+1
-
-@tipo: demo
-
-# F expressions: contadores sin fetch + diagnóstico N+1
-
-## connection.queries como herramienta de diagnóstico
-
-```python
-from django.db.models import F
-from django.db import connection, reset_queries
-from django.conf import settings
-
-settings.DEBUG = True
-
-# F expressions: incrementar sin fetch
-Post.objects.filter(pk=1).update(views=F("views") + 1)
-
-# Diagnóstico N+1
-reset_queries()
-posts = Post.objects.all()
-for p in posts: _ = p.author.username
-print(f"Sin optimizar: {len(connection.queries)} queries")
-
-reset_queries()
-posts = Post.objects.select_related("author").all()
-for p in posts: _ = p.author.username
-print(f"Con select_related: {len(connection.queries)} queries")
-```
-
----
-
-### [F-55] §P1 — Ejercicio 6: Manager personalizado para BlogApp
-
-@tipo: demo
-
-# Transferir el patrón de Manager a BlogApp
-
-## Agregar only() y select_related — lo nuevo respecto a Biblioteca
-
-```python
-# blog/models.py
-class PublishedManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(published=True)
-
-    def recientes(self, n=10):
-        return self.get_queryset()\
-                   .select_related("author")\
-                   .only("title", "created_at", "author__username")\
-                   .order_by("-created_at")[:n]
-
-class Post(models.Model):
-    objects = models.Manager()
-    published = PublishedManager()
-```
-
-```python
-# En el shell: verificar
-Post.published.all()
-Post.published.recientes(5)
-```
-
----
-
-### [F-56] Break + transición a §P2
-
-@tipo: concepto-abstracto
-@imagen: content
-@prompt-imagen: transición visual entre terminal de shell y un navegador web mostrando una página blog, flecha que conecta ambas pantallas, representando el puente de datos a interfaz
-
-# Break 5 min — luego conectamos los datos a la interfaz
-
-## Lo que viene en §P2
-
-- Crear `PostListView` y `PostDetailView` con `View` base
-- Conectar URLs
-- Construir templates con herencia DTL completa:
-  - `base.html`, `post_list.html`, `post_detail.html`
-  - partial `post_card.html`
-  - `{% with %}`, `forloop`, `{% load static %}`
-
----
-
-### [F-57] §P2 — Estructura de archivos del proyecto
-
-@tipo: diagrama
-@imagen: content
-@prompt-imagen: árbol de carpetas de proyecto Django con blog/views.py, blog/urls.py y blog/templates/blog/ destacados en colores diferentes, estructura limpia y ordenada
-
-# La estructura que vamos a construir
-
-```
-blogapp/
-  blog/
-    models.py        ← ya existe
-    views.py         ← Paso 1 y 2
-    urls.py          ← Paso 3
-    templates/
-      blog/
-        base.html          ← Paso 4
-        post_list.html     ← Paso 4
-        post_detail.html   ← Paso 4
-        partials/
-          post_card.html   ← Paso 7
-```
-
----
-
-### [F-58] §P2 — Paso 1: PostListView
-
-@tipo: demo
-
-# Primer CBV: listar posts publicados
-
-## blog/views.py — sin magia, todo explícito
-
-```python
-from django.views import View
-from django.shortcuts import render
-from .models import Post
-
-class PostListView(View):
-    """Lista de posts publicados — ordenados por fecha descendente."""
-    template_name = "blog/post_list.html"
-
-    def get(self, request):
-        posts = Post.objects.select_related("author")\
-                            .prefetch_related("categories")\
-                            .filter(published=True)\
-                            .order_by("-created_at")
-        return render(request, self.template_name, {"posts": posts})
-```
-
----
-
-### [F-59] §P2 — Paso 2 y 3: PostDetailView + URLs
-
-@tipo: demo
-
-# Detalle + conectar URLs
-
-## urls.py usa as_view() — la clase no es callable directamente
-
-```python
-from django.shortcuts import get_object_or_404
-
-class PostDetailView(View):
-    template_name = "blog/post_detail.html"
-
-    def get(self, request, pk):
-        post = get_object_or_404(Post, pk=pk, published=True)
-        return render(request, self.template_name, {"post": post})
-```
-
-```python
-# blog/urls.py
-from django.urls import path
-from .views import PostListView, PostDetailView
-
-app_name = "blog"
-urlpatterns = [
-    path("", PostListView.as_view(), name="post-list"),
-    path("<int:pk>/", PostDetailView.as_view(), name="post-detail"),
-]
-```
-
----
-
-### [F-60] §P2 — Paso 4: base.html con herencia
-
-@tipo: demo
-
-# El esqueleto del sitio con {% block %}
-
-## Todos los templates hijos heredan de este
-
-```html
-{% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}BlogApp{% endblock %} | IF009</title>
-    <link rel="stylesheet" href="{% static 'blog/css/styles.css' %}">
-</head>
-<body>
-    <nav>
-        <a href="{% url 'blog:post-list' %}">Inicio</a>
-    </nav>
-    <main>{% block content %}{% endblock %}</main>
-    <footer>
-        <p>BlogApp — IF009 2026 — {% now "Y" %}</p>
-    </footer>
-</body>
-</html>
-```
-
----
-
-### [F-61] §P2 — Paso 4: post_list.html y post_detail.html
-
-@tipo: demo
-
-# Los children templates con {% extends %}
-
-```html
-{# post_list.html #}
-{% extends "blog/base.html" %}
-{% block title %}Listado de Posts{% endblock %}
-{% block content %}
-    <h1>Publicaciones</h1>
-    {% for post in posts %}
-        <article>
-            <h2><a href="{% url 'blog:post-detail' post.pk %}">{{ post.title }}</a></h2>
-            <p>{{ post.author.username }} — {{ post.created_at|date:"d/m/Y" }}</p>
-            <p>{{ post.body|truncatewords:30 }}</p>
-        </article>
-    {% empty %}
-        <p>No hay posts publicados todavía.</p>
-    {% endfor %}
-{% endblock %}
-```
-
----
-
-### [F-62] §P2 — Paso 5: {% with %} en la tarjeta
-
-@tipo: demo
-
-# Evitar lookups repetidos con {% with %}
-
-## Útil cuando accedés al mismo FK varias veces
-
-```html
-{% for post in posts %}
-    {% with author=post.author %}
-        <article>
-            <h2>
-                <a href="{% url 'blog:post-detail' post.pk %}">
-                    {{ post.title }}
-                </a>
-            </h2>
-            <p>Por {{ author.get_full_name|default:author.username }}</p>
-            <p>{{ post.created_at|date:"d/m/Y" }}</p>
-            <p>{{ post.body|truncatewords:30 }}</p>
-        </article>
-    {% endwith %}
-{% endfor %}
-```
-
----
-
-### [F-63] §P2 — Paso 6: forloop variables en práctica
-
-@tipo: demo
-
-# Usar forloop para destacar y numerar
-
-## forloop.first, forloop.last, forloop.counter
-
-```html
-{% for post in posts %}
-    <article {% if forloop.first %}class="featured"{% endif %}>
-        <span class="num">{{ forloop.counter }}.</span>
-        <h2>{{ post.title }}</h2>
-        {% if forloop.last %}
-            <p><em>Fin — {{ forloop.counter }} posts en total.</em></p>
-        {% endif %}
-    </article>
-{% endfor %}
-```
-
----
-
-### [F-64] §P2 — Paso 7: partial post_card.html con {% include %}
-
-@tipo: demo
-
-# Extraer la tarjeta como componente reutilizable
-
-## blog/templates/blog/partials/post_card.html
-
-```html
-{# Espera la variable 'post' pasada por el include #}
-<article class="post-card">
-    <h2>
-        <a href="{% url 'blog:post-detail' post.pk %}">{{ post.title }}</a>
-    </h2>
-    <p class="meta">
-        {{ post.author.username }} — {{ post.created_at|date:"d/m/Y" }}
-        {% if not post.published %}
-            <span class="badge">[Borrador]</span>
-        {% endif %}
-    </p>
-    <p>{{ post.body|truncatewords:25 }}</p>
-</article>
-```
-
-```html
-{# post_list.html usa el partial #}
-{% for post in posts %}
-    {% include "blog/partials/post_card.html" with post=post %}
-{% endfor %}
-```
-
----
-
-### [F-65] §P2 — Paso 8: {% load static %} y archivos estáticos
-
-@tipo: demo
-
-# CSS propio sin Bootstrap todavía
-
-## Verificar que settings.py tiene STATICFILES_DIRS
-
-```css
-/* static/blog/css/styles.css */
-body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 1rem; }
-nav { background: #333; padding: 0.5rem; }
-nav a { color: white; margin-right: 1rem; text-decoration: none; }
-.post-card { border-bottom: 1px solid #ccc; padding: 1rem 0; }
-.badge { background: orange; color: white; padding: 2px 6px;
-         border-radius: 3px; font-size: 0.8em; }
-```
-
-```python
-# settings.py
-STATICFILES_DIRS = [BASE_DIR / "static"]
-```
-
-```bash
-python manage.py runserver
-# Ctrl+U en el navegador → confirmar que {# comentarios #} no aparecen
-```
-
----
-
-### [F-66] §P2 — Paso 9: {% comment %} y verificación final
-
-@tipo: demo
-
-# Documentar templates y verificar el output
-
-## Los comentarios DTL nunca llegan al navegador
-
-```html
-{# Este comentario no aparece en el HTML renderizado #}
-
-{% comment "Sidebar para Semana 9" %}
-    <aside>
-        {# aquí irá el widget de categorías con ListView #}
-    </aside>
-{% endcomment %}
-```
-
-**Verificación**: `Ctrl+U` en el navegador → inspeccionar el HTML generado → los `{# #}` y `{% comment %}` **no deben aparecer** en el source
-
----
-
-### [F-67] Ticket de salida
-
-@tipo: socratica
-@imagen: background
-@prompt-imagen: hoja de papel con tres casillas en blanco etiquetadas 'Tag 1', 'Tag 2', 'Tag 3' con líneas para escribir, sobre escritorio de madera, luz cálida
-
-# Ticket de salida — 5 min
-
-**Nombrá 3 tags DTL usados hoy y explicá con una oración qué hace cada uno**
-
-1. `{% ___ %}` → ...
-2. `{% ___ %}` → ...
-3. `{% ___ %}` → ...
-
----
-
-### [F-68] Cierre — Clase práctica
-
-@tipo: cierre
-@imagen: background
-@prompt-imagen: pantalla de laptop mostrando el blog funcionando en el navegador con lista de posts y detalle, estudiante sonriendo satisfecho, ambiente de laboratorio universitario cálido
-
-# Lo que construiste en la práctica
-
-- **Shell**: Q objects, F expressions, aggregate/annotate, N+1 detectado y resuelto
-- **Managers**: PublishedManager con only() y select_related()
-- **CBV**: PostListView y PostDetailView con View base
-- **DTL completo**: herencia, {% with %}, forloop, partials, {% static %}
-
-**Próxima clase**: Parcial 1 + `ListView`/`DetailView` + `ModelForm` (Semana 9)

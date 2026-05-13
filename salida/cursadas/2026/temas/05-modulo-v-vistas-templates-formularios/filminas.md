@@ -375,7 +375,7 @@ En ausencia de herencia, cada template replicaría la estructura completa: `<hea
   <a class="nav-link" href="{% url 'blog:post-create' %}">Nueva publicación</a>
 </nav>
 <div class="container mt-4">
-  {% if messages %}
+  {% if messages %}BH-01	
     {% for m in messages %}<div class="alert alert-{{ m.tags }}">{{ m }}</div>{% endfor %}
   {% endif %}
   {% block content %}{% endblock %}   <!-- cada template hijo proporciona este bloque -->
@@ -567,7 +567,7 @@ El template es **idéntico** para ambos casos de renderizado: recibe el mismo ob
 
 ## Mecanismo de pre-población de campos en UpdateView
 
-`UpdateView` recupera el objeto, lo asigna a `self.object` y construye el formulario con `PostForm(instance=self.object)`. Django inicializa cada widget con el valor actual del atributo correspondiente en el modelo — sin código adicional.
+`UpdateView` recupera el objeto, lo asigna a `self.object` y construye el formulario con `PostForm(instance=self.object)`. Django inicializa cada widget con el valor actual del atributo correspondiente en BH-01	el modelo — sin código adicional.
 
 ```python
 class PostUpdateView(UpdateView):

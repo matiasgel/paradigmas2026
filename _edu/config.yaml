@@ -14,6 +14,7 @@ course_year: "2026"
 course_semester: "1ro"
 course_total_hours: "90"
 course_weeks: "17"
+knowledge_graph_enabled: true
 
 # --- Folder Structure ---
 output_folder: "{project-root}/salida"
