@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-29T13:46:32.892841+00:00",
+  "generated_at": "2026-05-13T16:50:56.291941+00:00",
   "sources": [
     {
       "name": "Python official documentation 3.14",
@@ -15,8 +15,8 @@
       "start_url": "https://docs.djangoproject.com/en/6.0/",
       "prefix": "https://docs.djangoproject.com/en/6.0/",
       "output": "_edu-knowledge\\tools\\django-official-docs-6.0.md",
-      "pages_saved": 652,
-      "pages_seen": 657,
+      "pages_saved": 700,
+      "pages_seen": 702,
       "failures": []
     },
     {
@@ -24,8 +24,8 @@
       "start_url": "https://getbootstrap.com/docs/5.3/getting-started/introduction/",
       "prefix": "https://getbootstrap.com/docs/5.3/",
       "output": "_edu-knowledge\\tools\\bootstrap-official-docs-5.3.md",
-      "pages_saved": 55,
-      "pages_seen": 65,
+      "pages_saved": 100,
+      "pages_seen": 108,
       "failures": []
     },
     {

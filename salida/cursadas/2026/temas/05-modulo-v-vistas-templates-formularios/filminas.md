@@ -29,7 +29,7 @@ Semana 9 · BlogApp · Django 5.1 · Bootstrap 5.3.3
 
 ### [F-01] El URLconf: primer componente que Django ejecuta ante una petición
 
-@tipo: tabla
+@tipo: concepto-abstracto
 
 # El protocolo HTTP no determina qué código Python ejecutar — el URLconf lo hace
 
@@ -43,9 +43,15 @@ El protocolo HTTP no dispone de mecanismo alguno para determinar qué componente
 - Django **consume** el prefijo en `include()` y transfiere el segmento restante al URLconf de la aplicación
 - Si ningún patrón produce coincidencia → `Http404` automático, sin intervención de la vista
 
-## Información transferida de la URL a la vista
+---
 
-`path("posts/<int:pk>/", ...)` extrae `pk=42` como `int` — la vista lo recibe en `self.kwargs["pk"]` ya convertido al tipo destino
+### [F-35] URLconf: referencia de elementos
+
+@tipo: tabla
+
+# Los cinco elementos del sistema de resolución de URLs en Django
+
+## Referencia rápida del URLconf
 
 | Elemento | Función |
 |----------|---------|
@@ -120,7 +126,7 @@ urlpatterns = [
 
 ### [F-04] Conversores de tipo: validación en la capa de ruteo
 
-@tipo: tabla
+@tipo: concepto-abstracto
 
 # La URL tipada rechaza valores inválidos antes de que alcancen el código Python
 
@@ -128,14 +134,24 @@ urlpatterns = [
 
 En ausencia de conversores, el valor `/posts/abc/` llegaría a la vista como la cadena `"abc"`. Con `<int:pk>`, Django devuelve `Http404` **automáticamente** antes de ejecutar una sola línea de la vista. La validación de tipos se produce en la frontera del sistema, no en la lógica interna.
 
+**En la vista**: `self.kwargs["pk"]` es ya de tipo `int` — no se requiere conversión manual mediante `int(pk)`
+
+---
+
+### [F-36] Conversores de tipo: referencia rápida
+
+@tipo: tabla
+
+# Cada conversor produce Http404 si el segmento no coincide con el tipo esperado
+
+## Conversores disponibles en Django 5.1
+
 | Conversor | Ejemplo de URL | Tipo en `self.kwargs` | Si no produce coincidencia |
 |-----------|---------------|----------------------|---------------------------|
 | `<int:pk>` | `/posts/42/` | `int` → `42` | `Http404` automático |
 | `<str:nombre>` | `/posts/mi-titulo/` | `str` | no rechaza ningún valor |
 | `<slug:slug>` | `/posts/mi-post-2026/` | `str` slug válido | caracteres inválidos → 404 |
 | `<uuid:pk>` | `/posts/a3b2-.../` | `uuid.UUID` | formato inválido → 404 |
-
-**En la vista**: `self.kwargs["pk"]` es ya de tipo `int` — no se requiere conversión manual mediante `int(pk)`
 
 ---
 
@@ -206,13 +222,25 @@ class PostCreateView(CreateView):
 
 ### [F-07] Django MVT: la "Vista" cumple el rol del controlador
 
-@tipo: tabla-comparativa
+@tipo: concepto-abstracto
 
 # Django redenomina las capas — las responsabilidades son equivalentes a las de MVC clásico
 
-## Diferencia terminológica entre MVC clásico y el patrón MVT de Django
+## MVT: denominación diferente, responsabilidades equivalentes
 
-En MVC clásico, la Vista es la capa de presentación. Django denomina "Vista" al componente de lógica de negocio — una decisión de diseño histórica que puede generar confusión inicial. Lo relevante es comprender la responsabilidad de cada capa, con independencia de su denominación.
+Django denomina "Vista" al componente de lógica de negocio (no a la presentación, como en MVC clásico). Lo relevante es la responsabilidad de cada capa, con independencia de su nombre.
+
+**La Vista de Django** recibe la `HttpRequest`, consulta el ORM, construye el contexto y delega la presentación al template.
+
+---
+
+### [F-37] MVT vs MVC: equivalencia de capas
+
+@tipo: tabla-comparativa
+
+# Django usa distintos nombres pero el patrón es equivalente al MVC clásico
+
+## Correspondencia entre las capas MVC y MVT
 
 | Capa en MVC clásico | Equivalente Django | Archivo | Responsabilidad |
 |--------------------|-------------------|---------|----------------|
@@ -220,13 +248,11 @@ En MVC clásico, la Vista es la capa de presentación. Django denomina "Vista" a
 | **Controlador** | Vista — clases `View` | `views.py` | Recibe la petición, consulta el modelo, selecciona el template |
 | **Vista** | Template — DTL | `templates/` | Renderiza los datos como HTML para el navegador |
 
-**La Vista de Django** recibe la `HttpRequest`, consulta el ORM, construye el contexto y delega la presentación al template; actúa como coordinador del flujo de procesamiento.
-
 ---
 
 ### [F-08] Ciclo completo de una petición HTTP en Django
 
-@tipo: tabla
+@tipo: concepto-abstracto
 
 # Seis capas transforman una URL en un documento HTML
 
@@ -241,6 +267,16 @@ En MVC clásico, la Vista es la capa de presentación. Django denomina "Vista" a
 ## Punto de extensión por capa
 
 En cada capa existe un método que puede ser sobreescrito. En esta clase se utilizan `get_queryset()`, `get_context_data()`, `form_valid()` y `clean_<campo>()`.
+
+---
+
+### [F-38] Ciclo HTTP en Django: las seis capas y sus métodos extensibles
+
+@tipo: tabla
+
+# Cada capa expone un punto de extensión para personalizar el comportamiento
+
+## Referencia: capa → función → método a sobreescribir
 
 | Capa | Función | Método extensible |
 |------|---------|-------------------|
@@ -311,21 +347,29 @@ class PostCreateView(CreateView):
 
 ### [F-11] Jerarquía de vistas genéricas: reutilización de patrones consolidados
 
-@tipo: tabla
+@tipo: concepto-abstracto
 
 # Cada vista genérica encapsula el patrón más frecuente de su operación correspondiente
 
-## Fundamento del uso de vistas genéricas sobre la clase base View
+## Las cinco vistas genéricas del CRUD en BlogApp
 
-Con la clase base `View`, toda la lógica debe implementarse manualmente: recuperar el objeto, construir el contexto, renderizar la respuesta. Las vistas genéricas encapsulan ese código repetitivo y exponen puntos de extensión bien definidos. El código resultante en la subclase expresa **qué cambia**, en lugar de describir el funcionamiento del patrón.
+La clase base `View` requiere implementar toda la lógica manualmente. Las vistas genéricas encapsulan el código repetitivo y exponen puntos de extensión definidos.
 
-## Las cinco vistas utilizadas en BlogApp
+- **`ListView`** — colección + paginación automática con `paginate_by`
+- **`DetailView`** — objeto por PK + `Http404` automático
+- **`CreateView`** — formulario → `save()` INSERT → redirección
+- **`UpdateView`** — como CreateView con `instance=` (UPDATE)
+- **`DeleteView`** — confirmación en GET, `delete()` en POST
 
-- **`ListView`**: `Post.objects.all()` + paginación automática mediante `paginate_by`
-- **`DetailView`**: `Post.objects.get(pk=pk)` + `Http404` automático si el objeto no existe
-- **`CreateView`**: formulario unbound → bound → `save()` INSERT → redirección
-- **`UpdateView`**: idéntico a CreateView pero con `instance=objeto` → `save()` UPDATE
-- **`DeleteView`**: GET presenta confirmación — POST ejecuta `objeto.delete()`
+---
+
+### [F-39] Vistas genéricas: operación SQL, template y método clave
+
+@tipo: tabla
+
+# Cada vista genérica establece convenciones de template y expone un método de extensión
+
+## Referencia rápida: clase → SQL → template → método
 
 | Clase | Operación SQL | Template por defecto | Método clave |
 |-------|--------------|---------------------|--------------|
@@ -347,6 +391,8 @@ Con la clase base `View`, toda la lógica debe implementarse manualmente: recupe
 
 El atributo `model = Post` produce `Post.objects.all()` — la totalidad de los registros sin filtrado. `get_queryset()` otorga control total sobre la consulta: `filter()`, `select_related()`, `order_by()`. Corresponde al mismo QuerySet construido en el Tema 04, ahora integrado en la capa de vista.
 
+**Paginación automática**: con `paginate_by=10`, el template recibe `page_obj` con métodos `has_next()`, `has_previous()` y `next_page_number()`. El parámetro de URL es `?page=2`, sin necesidad de código adicional en la vista.
+
 ```python
 class PostListView(ListView):
     model = Post
@@ -360,8 +406,6 @@ class PostListView(ListView):
                            .select_related("author", "category")\
                            .order_by("-created_at")
 ```
-
-**Paginación automática**: con `paginate_by=10`, el template recibe `page_obj` con métodos `has_next()`, `has_previous()` y `next_page_number()`. El parámetro de URL es `?page=2`, sin necesidad de código adicional en la vista.
 
 ---
 
@@ -571,13 +615,23 @@ Bootstrap, la barra de navegación, el manejo de mensajes flash: todo en un úni
 
 ### [F-19] El ciclo de enlace: estado bound vs unbound
 
-@tipo: tabla-comparativa
+@tipo: concepto-abstracto
 
 # Un formulario solo puede ser validado si tiene datos del usuario asociados
 
 ## El estado de enlace como fundamento del ciclo de procesamiento de formularios
 
 `PostForm()` sin argumentos crea un formulario **unbound**: `is_bound=False`, por lo que `is_valid()` retorna `False` sin ejecutar validación alguna, independientemente de la calidad de los datos, dado que no existe información asociada al formulario. Únicamente cuando se construye con `data=request.POST` el formulario queda **bound** y la validación adquiere sentido.
+
+---
+
+### [F-40] Bound vs unbound: las cuatro formas de construir un formulario
+
+@tipo: tabla-comparativa
+
+# La forma de construcción determina si el formulario puede ser validado
+
+## Cuándo usar cada construcción
 
 | Construcción | `is_bound` | `is_valid()` | Cuándo utilizarlo |
 |-------------|-----------|-------------|------------------|
@@ -590,19 +644,29 @@ Bootstrap, la barra de navegación, el manejo de mensajes flash: todo en un úni
 
 ### [F-20] Pipeline de validación: las cinco capas de procesamiento en secuencia
 
-@tipo: timeline
+@tipo: concepto-abstracto
 
 # `form.is_valid()` ejecuta esta cadena de procesamiento — si una capa falla, la ejecución se detiene
 
-## Función de cada capa y relevancia del orden de ejecución
+## Función de cada capa en secuencia
 
-1. **`to_python()`** — convierte el string recibido por POST al tipo Python destino: `"42"` → `int(42)`. Si la conversión falla, el campo queda inválido y las capas posteriores se omiten para ese campo.
-2. **`validate()`** — aplica las reglas declaradas en el campo: `required`, `max_length`, `min_value`, etc.
-3. **`run_validators()`** — ejecuta la lista `validators=[MinLengthValidator(10), ...]` definida en el campo.
-4. **`clean_<campo>()`** — lógica personalizada: permite consultar el ORM, transformar el valor y lanzar `ValidationError`.
-5. **`clean()`** — validación cruzada entre campos; `self.cleaned_data` contiene únicamente los campos que superaron las capas 1 a 4.
+1. **`to_python()`** — string HTTP → tipo Python destino (`"42"` → `int(42)`)
+2. **`validate()`** — aplica reglas declaradas: `required`, `max_length`, `min_value`
+3. **`run_validators()`** — ejecuta lista `validators=[]` del campo
+4. **`clean_<campo>()`** — lógica personalizada, puede consultar el ORM
+5. **`clean()`** — validación cruzada; `cleaned_data` contiene solo campos válidos
 
-**`cleaned_data`** solo existe a partir de que `is_valid()` haya sido invocado — acceder con anterioridad produce `AttributeError`
+**`cleaned_data`** solo existe después de `is_valid()` — acceder antes produce `AttributeError`
+
+---
+
+### [F-41] Pipeline de validación: resumen de los cinco pasos
+
+@tipo: tabla
+
+# Cada paso tiene un método único y una función específica en la cadena
+
+## Los cinco pasos del pipeline en formato de referencia
 
 | Paso | Método | Función |
 |------|--------|---------|
@@ -733,7 +797,7 @@ Si `title` no superó la capa 4, la clave `"title"` estará ausente de `cleaned_
 
 ### [F-25] Ciclo completo: GET → POST inválido → POST válido → Redirección
 
-@tipo: timeline
+@tipo: concepto-abstracto
 
 # CreateView gestiona los tres estados de la interacción con el mismo método post()
 
@@ -741,13 +805,23 @@ Si `title` no superó la capa 4, la clave `"title"` estará ausente de `cleaned_
 
 En un POST exitoso, si la vista renderiza directamente la respuesta y el usuario recarga la página, el navegador **reenvía el formulario**, produciendo una inserción duplicada. La redirección convierte el POST en un GET idempotente, eliminando esta condición de error. Este es el patrón **PRG (Post-Redirect-Get)**.
 
+El template es **idéntico** para ambos casos de renderizado: recibe el mismo objeto `form`, con o sin errores. El redisplay de errores no requiere lógica adicional en la vista.
+
+---
+
+### [F-42] Ciclo PRG: los tres estados de CreateView
+
+@tipo: tabla
+
+# Las tres peticiones posibles y la respuesta correspondiente de CreateView
+
+## Referencia del ciclo completo GET → POST inválido → POST válido
+
 | Petición | Formulario construido | `is_valid()` | Acción de la vista | HTTP |
 |----------|----------------------|-------------|-------------------|----|
 | `GET /posts/crear/` | `PostForm()` — unbound | — | renderizar formulario vacío | `200` |
 | `POST` datos inválidos | `PostForm(data=POST)` | `False` | renderizar formulario con errores | `200` |
 | `POST` datos válidos | `PostForm(data=POST)` | `True` → `form.save()` INSERT | `redirect(success_url)` | `302` |
-
-El template es **idéntico** para ambos casos de renderizado: recibe el mismo objeto `form`, con o sin errores. El redisplay de errores no requiere lógica adicional en la vista.
 
 ---
 
@@ -920,23 +994,29 @@ El template recibe `object` (el objeto a eliminar) del contexto automático de `
 
 ### [F-31] HTTP es stateless: el protocolo no conserva estado entre peticiones
 
-@tipo: tabla
+@tipo: concepto-abstracto
 
 # Cada petición HTTP es anónima por diseño — el mecanismo de sesiones resuelve la persistencia de estado
 
-## HTTP como protocolo sin estado y sus implicaciones para las aplicaciones web
+## HTTP stateless y persistencia de estado en Django
 
-HTTP es un protocolo sin estado (*stateless*) por razones de escalabilidad: cualquier servidor puede responder cualquier petición sin conocimiento de las anteriores. Sin embargo, las aplicaciones requieren persistir información entre peticiones: estado de autenticación, preferencias del usuario, datos de sesión de trabajo, entre otros. El mecanismo provisto por Django son las sesiones en el servidor.
+HTTP no conserva estado entre peticiones por razones de escalabilidad. Django resuelve esto con el **mecanismo de sesiones** del lado del servidor.
 
-## Funcionamiento de la sesión de Django en tres pasos
+## Funcionamiento en tres pasos
 
-1. Django genera un identificador de sesión UUID único y lo almacena en una cookie `sessionid`
-2. El navegador envía esa cookie en **cada petición subsiguiente** — de forma automática
-3. Django lee `sessionid`, recupera los datos asociados en la base de datos (o caché) y los expone como `request.session` — un diccionario Python estándar
+1. Django genera un UUID de sesión y lo envía como cookie `sessionid`
+2. El navegador envía esa cookie en cada petición subsiguiente automáticamente
+3. Django recupera los datos asociados y los expone como `request.session` (diccionario Python)
 
-## Alcance de esta clase
+---
 
-`request.session` como diccionario y el **messages framework** que lo utiliza internamente para el patrón PRG. La autenticación completa se aborda en el Módulo VI.
+### [F-43] Mecanismo de sesiones en Django: los cinco componentes
+
+@tipo: tabla
+
+# El sistema de sesiones agrega estado sobre un protocolo sin estado
+
+## Los cinco componentes del sistema de sesiones de Django
 
 | Mecanismo | Descripción |
 |-----------|-------------|

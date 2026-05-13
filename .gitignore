@@ -48,6 +48,8 @@ _edu-knowledge/chroma_db/
 # Sprint 11 — Knowledge Graph artifacts
 _edu-knowledge/universal-kg.json
 
+# (blog/ se versiona — tiene su propio .gitignore interno)
+
 # Sprint 13 — Student state
 salida/cursadas/*/students/
 

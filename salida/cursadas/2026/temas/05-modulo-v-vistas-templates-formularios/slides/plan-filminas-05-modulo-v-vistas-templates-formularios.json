@@ -4,7 +4,7 @@
     "topic_id": "05-modulo-v-vistas-templates-formularios",
     "title": "Módulo V — Vistas, Templates y Formularios",
     "source": "filminas.md",
-    "generated_at": "2026-05-13T11:57:59",
+    "generated_at": "2026-05-13T13:12:37",
     "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
     "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
     "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\05-modulo-v-vistas-templates-formularios",
@@ -13,20 +13,20 @@
     "schema_registry_path": "_edu/schemas/schema-registry.json"
   },
   "summary": {
-    "total_slides": 35,
-    "images_planned": 0,
+    "total_slides": 44,
+    "images_planned": 11,
     "tables_planned": 11,
     "code_slides": 22,
-    "status": "READY_FOR_VALIDATION",
+    "status": "DRAFT",
     "pending_types": 0,
-    "pending_prompts": 0,
+    "pending_prompts": 9,
     "type_distribution": {
       "portada": 1,
-      "tabla": 7,
+      "concepto-abstracto": 9,
+      "tabla": 9,
       "codigo": 20,
       "tabla-comparativa": 2,
       "demo": 2,
-      "timeline": 2,
       "cierre": 1
     }
   },
@@ -65,7 +65,7 @@
     },
     {
       "id": "F-01",
-      "type": "tabla",
+      "type": "concepto-abstracto",
       "title": "El URLconf: primer componente que Django ejecuta ante una petición",
       "subtitle": "El protocolo HTTP no determina qué código Python ejecutar — el URLconf lo hace",
       "body_blocks": [
@@ -100,15 +100,35 @@
               "level": 0
             }
           ]
-        },
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-35",
+      "type": "tabla",
+      "title": "URLconf: referencia de elementos",
+      "subtitle": "Los cinco elementos del sistema de resolución de URLs en Django",
+      "body_blocks": [
         {
           "type": "heading",
           "level": 2,
-          "content": "Información transferida de la URL a la vista"
-        },
-        {
-          "type": "text",
-          "content": "`path(\"posts/<int:pk>/\", ...)` extrae `pk=42` como `int` — la vista lo recibe en `self.kwargs[\"pk\"]` ya convertido al tipo destino"
+          "content": "Referencia rápida del URLconf"
         }
       ],
       "code_blocks": [],
@@ -132,8 +152,8 @@
         {
           "index": 0,
           "table_markdown": "| Elemento | Función |\n|----------|---------|\n| `urlpatterns` | Lista de rutas; se recorre en orden, primer match gana |\n| `path()` / `re_path()` | Define patrón URL → clase de vista |\n| `include()` | Delega segmento restante a otro URLconf de app |\n| `<int:pk>` | Conversor de tipo: extrae y convierte a `int` automáticamente |\n| Sin match | Lanza `Http404` automáticamente, sin intervención de la vista |",
-          "local_asset": "slides/assets/F-01-table-1.png",
-          "drive_id": "12Ubk7HTQvtVGhWnkxBKJtE1-ESr5QkmY"
+          "local_asset": "slides/assets/F-35-table-1.png",
+          "drive_id": "1N5HPaFTHNlEtTmZfj338keqjf4zMGqmt"
         }
       ]
     },
@@ -243,7 +263,7 @@
     },
     {
       "id": "F-04",
-      "type": "tabla",
+      "type": "concepto-abstracto",
       "title": "Conversores de tipo: validación en la capa de ruteo",
       "subtitle": "La URL tipada rechaza valores inválidos antes de que alcancen el código Python",
       "body_blocks": [
@@ -268,6 +288,35 @@
         }
       ],
       "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-36",
+      "type": "tabla",
+      "title": "Conversores de tipo: referencia rápida",
+      "subtitle": "Cada conversor produce Http404 si el segmento no coincide con el tipo esperado",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Conversores disponibles en Django 5.1"
+        }
+      ],
+      "code_blocks": [],
       "tables": [
         "| Conversor | Ejemplo de URL | Tipo en `self.kwargs` | Si no produce coincidencia |\n|-----------|---------------|----------------------|---------------------------|\n| `<int:pk>` | `/posts/42/` | `int` → `42` | `Http404` automático |\n| `<str:nombre>` | `/posts/mi-titulo/` | `str` | no rechaza ningún valor |\n| `<slug:slug>` | `/posts/mi-post-2026/` | `str` slug válido | caracteres inválidos → 404 |\n| `<uuid:pk>` | `/posts/a3b2-.../` | `uuid.UUID` | formato inválido → 404 |"
       ],
@@ -288,8 +337,8 @@
         {
           "index": 0,
           "table_markdown": "| Conversor | Ejemplo de URL | Tipo en `self.kwargs` | Si no produce coincidencia |\n|-----------|---------------|----------------------|---------------------------|\n| `<int:pk>` | `/posts/42/` | `int` → `42` | `Http404` automático |\n| `<str:nombre>` | `/posts/mi-titulo/` | `str` | no rechaza ningún valor |\n| `<slug:slug>` | `/posts/mi-post-2026/` | `str` slug válido | caracteres inválidos → 404 |\n| `<uuid:pk>` | `/posts/a3b2-.../` | `uuid.UUID` | formato inválido → 404 |",
-          "local_asset": "slides/assets/F-04-table-1.png",
-          "drive_id": "1BLGwsLYjFhO8wF8o2Z7VCIiuiGrDCrUi"
+          "local_asset": "slides/assets/F-36-table-1.png",
+          "drive_id": "14CEu6Ihm_1tLFtFVjl3Wq2PBkb6kFnrj"
         }
       ]
     },
@@ -395,28 +444,57 @@
     },
     {
       "id": "F-07",
-      "type": "tabla-comparativa",
+      "type": "concepto-abstracto",
       "title": "Django MVT: la \"Vista\" cumple el rol del controlador",
       "subtitle": "Django redenomina las capas — las responsabilidades son equivalentes a las de MVC clásico",
       "body_blocks": [
         {
           "type": "heading",
           "level": 2,
-          "content": "Diferencia terminológica entre MVC clásico y el patrón MVT de Django"
+          "content": "MVT: denominación diferente, responsabilidades equivalentes"
         },
         {
           "type": "text",
-          "content": "En MVC clásico, la Vista es la capa de presentación. Django denomina \"Vista\" al componente de lógica de negocio — una decisión de diseño histórica que puede generar confusión inicial. Lo relevante es comprender la responsabilidad de cada capa, con independencia de su denominación."
+          "content": "Django denomina \"Vista\" al componente de lógica de negocio (no a la presentación, como en MVC clásico). Lo relevante es la responsabilidad de cada capa, con independencia de su nombre."
         },
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "**La Vista de Django** recibe la `HttpRequest`, consulta el ORM, construye el contexto y delega la presentación al template; actúa como coordinador del flujo de procesamiento.",
+              "content": "**La Vista de Django** recibe la `HttpRequest`, consulta el ORM, construye el contexto y delega la presentación al template.",
               "level": 0
             }
           ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-37",
+      "type": "tabla-comparativa",
+      "title": "MVT vs MVC: equivalencia de capas",
+      "subtitle": "Django usa distintos nombres pero el patrón es equivalente al MVC clásico",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Correspondencia entre las capas MVC y MVT"
         }
       ],
       "code_blocks": [],
@@ -440,14 +518,14 @@
         {
           "index": 0,
           "table_markdown": "| Capa en MVC clásico | Equivalente Django | Archivo | Responsabilidad |\n|--------------------|-------------------|---------|----------------|\n| **Modelo** | `models.py` + ORM | `models.py` | Estado, persistencia, reglas de negocio |\n| **Controlador** | Vista — clases `View` | `views.py` | Recibe la petición, consulta el modelo, selecciona el template |\n| **Vista** | Template — DTL | `templates/` | Renderiza los datos como HTML para el navegador |",
-          "local_asset": "slides/assets/F-07-table-1.png",
-          "drive_id": "1yCYR6bBVlG-rB4r-7tdgeVe-As2EX5vW"
+          "local_asset": "slides/assets/F-37-table-1.png",
+          "drive_id": "1cEMo3VHqQgIDFe1mUEh0-7sw3SDb1mgi"
         }
       ]
     },
     {
       "id": "F-08",
-      "type": "tabla",
+      "type": "concepto-abstracto",
       "title": "Ciclo completo de una petición HTTP en Django",
       "subtitle": "Seis capas transforman una URL en un documento HTML",
       "body_blocks": [
@@ -493,6 +571,35 @@
         }
       ],
       "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-38",
+      "type": "tabla",
+      "title": "Ciclo HTTP en Django: las seis capas y sus métodos extensibles",
+      "subtitle": "Cada capa expone un punto de extensión para personalizar el comportamiento",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Referencia: capa → función → método a sobreescribir"
+        }
+      ],
+      "code_blocks": [],
       "tables": [
         "| Capa | Función | Método extensible |\n|------|---------|-------------------|\n| Middleware | CSRF, Session — intercepta antes y después de la vista | `process_request()` |\n| URL Resolver | Extrae `pk=42` como `int`, instancia la vista | `resolve()` |\n| `dispatch()` | Elige `get()` o `post()` según `request.method` | `dispatch()` |\n| ORM | `Post.objects.get(pk=42)` → objeto Python | `get_queryset()` |\n| Template Engine | Combina template DTL + contexto → HTML | `get_context_data()` |\n| HttpResponse | Retorna la respuesta al cliente | `render_to_response()` |"
       ],
@@ -513,8 +620,8 @@
         {
           "index": 0,
           "table_markdown": "| Capa | Función | Método extensible |\n|------|---------|-------------------|\n| Middleware | CSRF, Session — intercepta antes y después de la vista | `process_request()` |\n| URL Resolver | Extrae `pk=42` como `int`, instancia la vista | `resolve()` |\n| `dispatch()` | Elige `get()` o `post()` según `request.method` | `dispatch()` |\n| ORM | `Post.objects.get(pk=42)` → objeto Python | `get_queryset()` |\n| Template Engine | Combina template DTL + contexto → HTML | `get_context_data()` |\n| HttpResponse | Retorna la respuesta al cliente | `render_to_response()` |",
-          "local_asset": "slides/assets/F-08-table-1.png",
-          "drive_id": "1VTITOaSff-bYVyQUnTOH2LiVkjmLKNDd"
+          "local_asset": "slides/assets/F-38-table-1.png",
+          "drive_id": "1wwcrLNGvwlIyMV9kEubNzr9H_06GvJsF"
         }
       ]
     },
@@ -616,49 +723,73 @@
     },
     {
       "id": "F-11",
-      "type": "tabla",
+      "type": "concepto-abstracto",
       "title": "Jerarquía de vistas genéricas: reutilización de patrones consolidados",
       "subtitle": "Cada vista genérica encapsula el patrón más frecuente de su operación correspondiente",
       "body_blocks": [
         {
           "type": "heading",
           "level": 2,
-          "content": "Fundamento del uso de vistas genéricas sobre la clase base View"
+          "content": "Las cinco vistas genéricas del CRUD en BlogApp"
         },
         {
           "type": "text",
-          "content": "Con la clase base `View`, toda la lógica debe implementarse manualmente: recuperar el objeto, construir el contexto, renderizar la respuesta. Las vistas genéricas encapsulan ese código repetitivo y exponen puntos de extensión bien definidos. El código resultante en la subclase expresa **qué cambia**, en lugar de describir el funcionamiento del patrón."
-        },
-        {
-          "type": "heading",
-          "level": 2,
-          "content": "Las cinco vistas utilizadas en BlogApp"
+          "content": "La clase base `View` requiere implementar toda la lógica manualmente. Las vistas genéricas encapsulan el código repetitivo y exponen puntos de extensión definidos."
         },
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "**`ListView`**: `Post.objects.all()` + paginación automática mediante `paginate_by`",
+              "content": "**`ListView`** — colección + paginación automática con `paginate_by`",
               "level": 0
             },
             {
-              "content": "**`DetailView`**: `Post.objects.get(pk=pk)` + `Http404` automático si el objeto no existe",
+              "content": "**`DetailView`** — objeto por PK + `Http404` automático",
               "level": 0
             },
             {
-              "content": "**`CreateView`**: formulario unbound → bound → `save()` INSERT → redirección",
+              "content": "**`CreateView`** — formulario → `save()` INSERT → redirección",
               "level": 0
             },
             {
-              "content": "**`UpdateView`**: idéntico a CreateView pero con `instance=objeto` → `save()` UPDATE",
+              "content": "**`UpdateView`** — como CreateView con `instance=` (UPDATE)",
               "level": 0
             },
             {
-              "content": "**`DeleteView`**: GET presenta confirmación — POST ejecuta `objeto.delete()`",
+              "content": "**`DeleteView`** — confirmación en GET, `delete()` en POST",
               "level": 0
             }
           ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-39",
+      "type": "tabla",
+      "title": "Vistas genéricas: operación SQL, template y método clave",
+      "subtitle": "Cada vista genérica establece convenciones de template y expone un método de extensión",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Referencia rápida: clase → SQL → template → método"
         }
       ],
       "code_blocks": [],
@@ -682,8 +813,8 @@
         {
           "index": 0,
           "table_markdown": "| Clase | Operación SQL | Template por defecto | Método clave |\n|-------|--------------|---------------------|--------------|\n| `ListView` | SELECT all | `post_list.html` | `get_queryset()` |\n| `DetailView` | SELECT by pk | `post_detail.html` | `get_object()` |\n| `CreateView` | INSERT | `post_form.html` | `form_valid()` |\n| `UpdateView` | UPDATE | `post_form.html` | `form_valid()` |\n| `DeleteView` | DELETE | `post_confirm_delete.html` | `delete()` |",
-          "local_asset": "slides/assets/F-11-table-1.png",
-          "drive_id": "1X7VuEG6KmJ_Qi0GSO7zhWSBYNeKNoOFV"
+          "local_asset": "slides/assets/F-39-table-1.png",
+          "drive_id": "1ROcmQSAOociXOZxiADskgNdko7OOD2zF"
         }
       ]
     },
@@ -787,7 +918,7 @@
           "index": 0,
           "table_markdown": "| Vista | Variables automáticas en el contexto |\n|-------|--------------------------------------|\n| `ListView` | `object_list`, `page_obj`, `paginator`, `is_paginated` |\n| `DetailView` | `object` (y el alias de `context_object_name`) |\n| `CreateView` / `UpdateView` | `form` (instancia del formulario) |\n| `DeleteView` | `object` (el objeto candidato a eliminación) |",
           "local_asset": "slides/assets/F-13-table-1.png",
-          "drive_id": "1J6b8PCfR4hyt1roMXn8U1e442U5uQP9D"
+          "drive_id": "1gTeSbAwC-7VmiKUOPgic0iMQ497b5Tis"
         }
       ]
     },
@@ -1051,7 +1182,7 @@
     },
     {
       "id": "F-19",
-      "type": "tabla-comparativa",
+      "type": "concepto-abstracto",
       "title": "El ciclo de enlace: estado bound vs unbound",
       "subtitle": "Un formulario solo puede ser validado si tiene datos del usuario asociados",
       "body_blocks": [
@@ -1063,6 +1194,35 @@
         {
           "type": "text",
           "content": "`PostForm()` sin argumentos crea un formulario **unbound**: `is_bound=False`, por lo que `is_valid()` retorna `False` sin ejecutar validación alguna, independientemente de la calidad de los datos, dado que no existe información asociada al formulario. Únicamente cuando se construye con `data=request.POST` el formulario queda **bound** y la validación adquiere sentido."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-40",
+      "type": "tabla-comparativa",
+      "title": "Bound vs unbound: las cuatro formas de construir un formulario",
+      "subtitle": "La forma de construcción determina si el formulario puede ser validado",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Cuándo usar cada construcción"
         }
       ],
       "code_blocks": [],
@@ -1086,44 +1246,44 @@
         {
           "index": 0,
           "table_markdown": "| Construcción | `is_bound` | `is_valid()` | Cuándo utilizarlo |\n|-------------|-----------|-------------|------------------|\n| `PostForm()` | `False` | siempre `False` | GET — presentar formulario vacío |\n| `PostForm(instance=post)` | `False` | siempre `False` | GET — pre-poblar para edición |\n| `PostForm(data=request.POST)` | `True` | ejecuta el pipeline | POST — crear nuevo registro |\n| `PostForm(data=request.POST, instance=post)` | `True` | ejecuta el pipeline | POST — actualizar registro existente |",
-          "local_asset": "slides/assets/F-19-table-1.png",
-          "drive_id": "10wKjrKunwbKjygWBaWNiPvVmsNbmsr8a"
+          "local_asset": "slides/assets/F-40-table-1.png",
+          "drive_id": "1z9j-Cnfd9T_fgYR34_kN0RdmTkqaap6V"
         }
       ]
     },
     {
       "id": "F-20",
-      "type": "timeline",
+      "type": "concepto-abstracto",
       "title": "Pipeline de validación: las cinco capas de procesamiento en secuencia",
       "subtitle": "`form.is_valid()` ejecuta esta cadena de procesamiento — si una capa falla, la ejecución se detiene",
       "body_blocks": [
         {
           "type": "heading",
           "level": 2,
-          "content": "Función de cada capa y relevancia del orden de ejecución"
+          "content": "Función de cada capa en secuencia"
         },
         {
           "type": "list",
           "ordered": true,
           "items": [
             {
-              "content": "**`to_python()`** — convierte el string recibido por POST al tipo Python destino: `\"42\"` → `int(42)`. Si la conversión falla, el campo queda inválido y las capas posteriores se omiten para ese campo.",
+              "content": "**`to_python()`** — string HTTP → tipo Python destino (`\"42\"` → `int(42)`)",
               "level": 0
             },
             {
-              "content": "**`validate()`** — aplica las reglas declaradas en el campo: `required`, `max_length`, `min_value`, etc.",
+              "content": "**`validate()`** — aplica reglas declaradas: `required`, `max_length`, `min_value`",
               "level": 0
             },
             {
-              "content": "**`run_validators()`** — ejecuta la lista `validators=[MinLengthValidator(10), ...]` definida en el campo.",
+              "content": "**`run_validators()`** — ejecuta lista `validators=[]` del campo",
               "level": 0
             },
             {
-              "content": "**`clean_<campo>()`** — lógica personalizada: permite consultar el ORM, transformar el valor y lanzar `ValidationError`.",
+              "content": "**`clean_<campo>()`** — lógica personalizada, puede consultar el ORM",
               "level": 0
             },
             {
-              "content": "**`clean()`** — validación cruzada entre campos; `self.cleaned_data` contiene únicamente los campos que superaron las capas 1 a 4.",
+              "content": "**`clean()`** — validación cruzada; `cleaned_data` contiene solo campos válidos",
               "level": 0
             }
           ]
@@ -1133,10 +1293,39 @@
           "ordered": false,
           "items": [
             {
-              "content": "**`cleaned_data`** solo existe a partir de que `is_valid()` haya sido invocado — acceder con anterioridad produce `AttributeError`",
+              "content": "**`cleaned_data`** solo existe después de `is_valid()` — acceder antes produce `AttributeError`",
               "level": 0
             }
           ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-41",
+      "type": "tabla",
+      "title": "Pipeline de validación: resumen de los cinco pasos",
+      "subtitle": "Cada paso tiene un método único y una función específica en la cadena",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Los cinco pasos del pipeline en formato de referencia"
         }
       ],
       "code_blocks": [],
@@ -1145,10 +1334,10 @@
       ],
       "layout": {
         "title": "full-title",
-        "body": "left-top-split",
+        "body": "table-intro",
         "image": "none",
         "code": "none",
-        "table": "right-half"
+        "table": "table-main"
       },
       "image": {
         "layer": "none",
@@ -1160,8 +1349,8 @@
         {
           "index": 0,
           "table_markdown": "| Paso | Método | Función |\n|------|--------|---------|\n| 1 | `to_python()` | String HTTP → tipo Python destino |\n| 2 | `validate()` | Aplica `required`, `max_length`, `min_value` |\n| 3 | `run_validators()` | Ejecuta lista `validators=[]` del campo |\n| 4 | `clean_<campo>()` | Lógica custom + ORM, puede lanzar `ValidationError` |\n| 5 | `clean()` | Validación cruzada entre campos |",
-          "local_asset": "slides/assets/F-20-table-1.png",
-          "drive_id": "1s2-7lKo6yMeLaA7q8VcrAv3IL9y3d6vB"
+          "local_asset": "slides/assets/F-41-table-1.png",
+          "drive_id": "17CJanJzByZifBqL6LWhCLNUcXDuzEvER"
         }
       ]
     },
@@ -1241,7 +1430,7 @@
           "index": 0,
           "table_markdown": "| Campo del modelo | Campo de formulario generado | Widget por defecto |\n|-----------------|------------------------------|--------------------|\n| `CharField(max_length=200)` | `CharField(max_length=200)` | `TextInput` |\n| `TextField()` | `CharField()` | `Textarea` |\n| `BooleanField()` | `BooleanField()` | `CheckboxInput` |\n| `ForeignKey(Category)` | `ModelChoiceField(queryset=Category.objects.all())` | `Select` |\n| `ManyToManyField(Tag)` | `ModelMultipleChoiceField(...)` | `SelectMultiple` |\n| `DateTimeField(auto_now_add=True)` | **excluido automáticamente** | — |",
           "local_asset": "slides/assets/F-22-table-1.png",
-          "drive_id": "1k42ijjAD0ON5DMmYzB1WVLCN6_chVCUv"
+          "drive_id": "1AF2K6Fy87w69gR-OvaElM9qFf3vEAAnO"
         }
       ]
     },
@@ -1327,7 +1516,7 @@
     },
     {
       "id": "F-25",
-      "type": "timeline",
+      "type": "concepto-abstracto",
       "title": "Ciclo completo: GET → POST inválido → POST válido → Redirección",
       "subtitle": "CreateView gestiona los tres estados de la interacción con el mismo método post()",
       "body_blocks": [
@@ -1346,15 +1535,44 @@
         }
       ],
       "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-42",
+      "type": "tabla",
+      "title": "Ciclo PRG: los tres estados de CreateView",
+      "subtitle": "Las tres peticiones posibles y la respuesta correspondiente de CreateView",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Referencia del ciclo completo GET → POST inválido → POST válido"
+        }
+      ],
+      "code_blocks": [],
       "tables": [
         "| Petición | Formulario construido | `is_valid()` | Acción de la vista | HTTP |\n|----------|----------------------|-------------|-------------------|----|\n| `GET /posts/crear/` | `PostForm()` — unbound | — | renderizar formulario vacío | `200` |\n| `POST` datos inválidos | `PostForm(data=POST)` | `False` | renderizar formulario con errores | `200` |\n| `POST` datos válidos | `PostForm(data=POST)` | `True` → `form.save()` INSERT | `redirect(success_url)` | `302` |"
       ],
       "layout": {
         "title": "full-title",
-        "body": "left-top-split",
+        "body": "table-intro",
         "image": "none",
         "code": "none",
-        "table": "right-half"
+        "table": "table-main"
       },
       "image": {
         "layer": "none",
@@ -1366,8 +1584,8 @@
         {
           "index": 0,
           "table_markdown": "| Petición | Formulario construido | `is_valid()` | Acción de la vista | HTTP |\n|----------|----------------------|-------------|-------------------|----|\n| `GET /posts/crear/` | `PostForm()` — unbound | — | renderizar formulario vacío | `200` |\n| `POST` datos inválidos | `PostForm(data=POST)` | `False` | renderizar formulario con errores | `200` |\n| `POST` datos válidos | `PostForm(data=POST)` | `True` → `form.save()` INSERT | `redirect(success_url)` | `302` |",
-          "local_asset": "slides/assets/F-25-table-1.png",
-          "drive_id": "1MvSsTb0RLTchXY68sCKJu-NiUmaa9hTz"
+          "local_asset": "slides/assets/F-42-table-1.png",
+          "drive_id": "1pri-2LecJ6ahR4vvApHxFUlkaVbAE1GE"
         }
       ]
     },
@@ -1613,50 +1831,70 @@
     },
     {
       "id": "F-31",
-      "type": "tabla",
+      "type": "concepto-abstracto",
       "title": "HTTP es stateless: el protocolo no conserva estado entre peticiones",
       "subtitle": "Cada petición HTTP es anónima por diseño — el mecanismo de sesiones resuelve la persistencia de estado",
       "body_blocks": [
         {
           "type": "heading",
           "level": 2,
-          "content": "HTTP como protocolo sin estado y sus implicaciones para las aplicaciones web"
+          "content": "HTTP stateless y persistencia de estado en Django"
         },
         {
           "type": "text",
-          "content": "HTTP es un protocolo sin estado (*stateless*) por razones de escalabilidad: cualquier servidor puede responder cualquier petición sin conocimiento de las anteriores. Sin embargo, las aplicaciones requieren persistir información entre peticiones: estado de autenticación, preferencias del usuario, datos de sesión de trabajo, entre otros. El mecanismo provisto por Django son las sesiones en el servidor."
+          "content": "HTTP no conserva estado entre peticiones por razones de escalabilidad. Django resuelve esto con el **mecanismo de sesiones** del lado del servidor."
         },
         {
           "type": "heading",
           "level": 2,
-          "content": "Funcionamiento de la sesión de Django en tres pasos"
+          "content": "Funcionamiento en tres pasos"
         },
         {
           "type": "list",
           "ordered": true,
           "items": [
             {
-              "content": "Django genera un identificador de sesión UUID único y lo almacena en una cookie `sessionid`",
+              "content": "Django genera un UUID de sesión y lo envía como cookie `sessionid`",
               "level": 0
             },
             {
-              "content": "El navegador envía esa cookie en **cada petición subsiguiente** — de forma automática",
+              "content": "El navegador envía esa cookie en cada petición subsiguiente automáticamente",
               "level": 0
             },
             {
-              "content": "Django lee `sessionid`, recupera los datos asociados en la base de datos (o caché) y los expone como `request.session` — un diccionario Python estándar",
+              "content": "Django recupera los datos asociados y los expone como `request.session` (diccionario Python)",
               "level": 0
             }
           ]
-        },
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-43",
+      "type": "tabla",
+      "title": "Mecanismo de sesiones en Django: los cinco componentes",
+      "subtitle": "El sistema de sesiones agrega estado sobre un protocolo sin estado",
+      "body_blocks": [
         {
           "type": "heading",
           "level": 2,
-          "content": "Alcance de esta clase"
-        },
-        {
-          "type": "text",
-          "content": "`request.session` como diccionario y el **messages framework** que lo utiliza internamente para el patrón PRG. La autenticación completa se aborda en el Módulo VI."
+          "content": "Los cinco componentes del sistema de sesiones de Django"
         }
       ],
       "code_blocks": [],
@@ -1680,8 +1918,8 @@
         {
           "index": 0,
           "table_markdown": "| Mecanismo | Descripción |\n|-----------|-------------|\n| Sin sesión | Cada petición HTTP es anónima — el servidor no reconoce al usuario |\n| Cookie `sessionid` | UUID generado por Django; viaja en cada petición automáticamente |\n| Store servidor | Datos del usuario asociados al `sessionid` en BD o caché |\n| `request.session` | Diccionario Python para leer/escribir datos de sesión |\n| Messages framework | Usa sesión internamente para el patrón POST-Redirect-GET |",
-          "local_asset": "slides/assets/F-31-table-1.png",
-          "drive_id": "1yoGqLecWZdXxPnVOK5YhmWLPiHOenMng"
+          "local_asset": "slides/assets/F-43-table-1.png",
+          "drive_id": "1Nsjk7XgJY_QyJ8AASFZ3hJGGEIprdgRf"
         }
       ]
     },
@@ -1884,5 +2122,47 @@
       },
       "table_assets": []
     }
-  ]
+  ],
+  "_draft_instructions": {
+    "pending_type_ids": [],
+    "pending_prompt_ids": [
+      "F-01",
+      "F-04",
+      "F-07",
+      "F-08",
+      "F-11",
+      "F-19",
+      "F-20",
+      "F-25",
+      "F-31"
+    ],
+    "canonical_types": [
+      "portada",
+      "concepto-abstracto",
+      "concepto-mixto",
+      "codigo",
+      "tabla",
+      "tabla-comparativa",
+      "tabla-mixta",
+      "diagrama",
+      "socratica",
+      "demo",
+      "cierre",
+      "timeline"
+    ],
+    "next_steps": [
+      "1. Leer schema-registry.json ANTES de cualquier edición",
+      "2. Asignar type explícito desde canonical_types a cada slide en pending_type_ids",
+      "3. Copiar layout EXACTO del type_layout_map para cada tipo asignado",
+      "4. Para slides con image.layer!='none': escribir prompt VISUAL PURO (ver prompt-imagen-guide.md)",
+      "5. Actualizar summary: total_slides, images_planned, tables_planned, code_slides, type_distribution",
+      "6. Cambiar summary.status a 'READY_FOR_VALIDATION'",
+      "7. Eliminar esta clave '_draft_instructions'",
+      "8. Renombrar a: slides/plan-filminas-05-modulo-v-vistas-templates-formularios.json",
+      "9. Validar: python scripts/repair_plan.py <topic_folder> --attempt 1",
+      "10. Publicar: python scripts/slides_pipeline.py <topic_folder>"
+    ]
+  },
+  "images_planned": 0,
+  "status": "READY_FOR_VALIDATION"
 }
