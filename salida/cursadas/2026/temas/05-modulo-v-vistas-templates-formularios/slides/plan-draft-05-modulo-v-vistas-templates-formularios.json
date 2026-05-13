@@ -14,10 +14,10 @@
   },
   "summary": {
     "total_slides": 35,
-    "images_planned": 0,
+    "images_planned": 2,
     "tables_planned": 11,
     "code_slides": 22,
-    "status": "READY_FOR_VALIDATION",
+    "status": "DRAFT",
     "pending_types": 0,
     "pending_prompts": 0,
     "type_distribution": {
@@ -51,14 +51,14 @@
       "layout": {
         "title": "full-title",
         "body": "center-bottom",
-        "image": "none",
+        "image": "background",
         "code": "none",
         "table": "none"
       },
       "image": {
-        "layer": "none",
-        "prompt": "",
-        "local_asset": "",
+        "layer": "background",
+        "prompt": "dark background with faint Python code lines in transparency — keywords class def return — blurred IDE dark mode style, deep blue palette, no text labels",
+        "local_asset": "slides/assets/F-00-bg.png",
         "drive_id": null
       },
       "table_assets": []
@@ -133,7 +133,7 @@
           "index": 0,
           "table_markdown": "| Elemento | Función |\n|----------|---------|\n| `urlpatterns` | Lista de rutas; se recorre en orden, primer match gana |\n| `path()` / `re_path()` | Define patrón URL → clase de vista |\n| `include()` | Delega segmento restante a otro URLconf de app |\n| `<int:pk>` | Conversor de tipo: extrae y convierte a `int` automáticamente |\n| Sin match | Lanza `Http404` automáticamente, sin intervención de la vista |",
           "local_asset": "slides/assets/F-01-table-1.png",
-          "drive_id": "12Ubk7HTQvtVGhWnkxBKJtE1-ESr5QkmY"
+          "drive_id": null
         }
       ]
     },
@@ -289,7 +289,7 @@
           "index": 0,
           "table_markdown": "| Conversor | Ejemplo de URL | Tipo en `self.kwargs` | Si no produce coincidencia |\n|-----------|---------------|----------------------|---------------------------|\n| `<int:pk>` | `/posts/42/` | `int` → `42` | `Http404` automático |\n| `<str:nombre>` | `/posts/mi-titulo/` | `str` | no rechaza ningún valor |\n| `<slug:slug>` | `/posts/mi-post-2026/` | `str` slug válido | caracteres inválidos → 404 |\n| `<uuid:pk>` | `/posts/a3b2-.../` | `uuid.UUID` | formato inválido → 404 |",
           "local_asset": "slides/assets/F-04-table-1.png",
-          "drive_id": "1BLGwsLYjFhO8wF8o2Z7VCIiuiGrDCrUi"
+          "drive_id": null
         }
       ]
     },
@@ -441,7 +441,7 @@
           "index": 0,
           "table_markdown": "| Capa en MVC clásico | Equivalente Django | Archivo | Responsabilidad |\n|--------------------|-------------------|---------|----------------|\n| **Modelo** | `models.py` + ORM | `models.py` | Estado, persistencia, reglas de negocio |\n| **Controlador** | Vista — clases `View` | `views.py` | Recibe la petición, consulta el modelo, selecciona el template |\n| **Vista** | Template — DTL | `templates/` | Renderiza los datos como HTML para el navegador |",
           "local_asset": "slides/assets/F-07-table-1.png",
-          "drive_id": "1yCYR6bBVlG-rB4r-7tdgeVe-As2EX5vW"
+          "drive_id": null
         }
       ]
     },
@@ -514,7 +514,7 @@
           "index": 0,
           "table_markdown": "| Capa | Función | Método extensible |\n|------|---------|-------------------|\n| Middleware | CSRF, Session — intercepta antes y después de la vista | `process_request()` |\n| URL Resolver | Extrae `pk=42` como `int`, instancia la vista | `resolve()` |\n| `dispatch()` | Elige `get()` o `post()` según `request.method` | `dispatch()` |\n| ORM | `Post.objects.get(pk=42)` → objeto Python | `get_queryset()` |\n| Template Engine | Combina template DTL + contexto → HTML | `get_context_data()` |\n| HttpResponse | Retorna la respuesta al cliente | `render_to_response()` |",
           "local_asset": "slides/assets/F-08-table-1.png",
-          "drive_id": "1VTITOaSff-bYVyQUnTOH2LiVkjmLKNDd"
+          "drive_id": null
         }
       ]
     },
@@ -683,7 +683,7 @@
           "index": 0,
           "table_markdown": "| Clase | Operación SQL | Template por defecto | Método clave |\n|-------|--------------|---------------------|--------------|\n| `ListView` | SELECT all | `post_list.html` | `get_queryset()` |\n| `DetailView` | SELECT by pk | `post_detail.html` | `get_object()` |\n| `CreateView` | INSERT | `post_form.html` | `form_valid()` |\n| `UpdateView` | UPDATE | `post_form.html` | `form_valid()` |\n| `DeleteView` | DELETE | `post_confirm_delete.html` | `delete()` |",
           "local_asset": "slides/assets/F-11-table-1.png",
-          "drive_id": "1X7VuEG6KmJ_Qi0GSO7zhWSBYNeKNoOFV"
+          "drive_id": null
         }
       ]
     },
@@ -787,7 +787,7 @@
           "index": 0,
           "table_markdown": "| Vista | Variables automáticas en el contexto |\n|-------|--------------------------------------|\n| `ListView` | `object_list`, `page_obj`, `paginator`, `is_paginated` |\n| `DetailView` | `object` (y el alias de `context_object_name`) |\n| `CreateView` / `UpdateView` | `form` (instancia del formulario) |\n| `DeleteView` | `object` (el objeto candidato a eliminación) |",
           "local_asset": "slides/assets/F-13-table-1.png",
-          "drive_id": "1J6b8PCfR4hyt1roMXn8U1e442U5uQP9D"
+          "drive_id": null
         }
       ]
     },
@@ -1087,7 +1087,7 @@
           "index": 0,
           "table_markdown": "| Construcción | `is_bound` | `is_valid()` | Cuándo utilizarlo |\n|-------------|-----------|-------------|------------------|\n| `PostForm()` | `False` | siempre `False` | GET — presentar formulario vacío |\n| `PostForm(instance=post)` | `False` | siempre `False` | GET — pre-poblar para edición |\n| `PostForm(data=request.POST)` | `True` | ejecuta el pipeline | POST — crear nuevo registro |\n| `PostForm(data=request.POST, instance=post)` | `True` | ejecuta el pipeline | POST — actualizar registro existente |",
           "local_asset": "slides/assets/F-19-table-1.png",
-          "drive_id": "10wKjrKunwbKjygWBaWNiPvVmsNbmsr8a"
+          "drive_id": null
         }
       ]
     },
@@ -1161,7 +1161,7 @@
           "index": 0,
           "table_markdown": "| Paso | Método | Función |\n|------|--------|---------|\n| 1 | `to_python()` | String HTTP → tipo Python destino |\n| 2 | `validate()` | Aplica `required`, `max_length`, `min_value` |\n| 3 | `run_validators()` | Ejecuta lista `validators=[]` del campo |\n| 4 | `clean_<campo>()` | Lógica custom + ORM, puede lanzar `ValidationError` |\n| 5 | `clean()` | Validación cruzada entre campos |",
           "local_asset": "slides/assets/F-20-table-1.png",
-          "drive_id": "1s2-7lKo6yMeLaA7q8VcrAv3IL9y3d6vB"
+          "drive_id": null
         }
       ]
     },
@@ -1241,7 +1241,7 @@
           "index": 0,
           "table_markdown": "| Campo del modelo | Campo de formulario generado | Widget por defecto |\n|-----------------|------------------------------|--------------------|\n| `CharField(max_length=200)` | `CharField(max_length=200)` | `TextInput` |\n| `TextField()` | `CharField()` | `Textarea` |\n| `BooleanField()` | `BooleanField()` | `CheckboxInput` |\n| `ForeignKey(Category)` | `ModelChoiceField(queryset=Category.objects.all())` | `Select` |\n| `ManyToManyField(Tag)` | `ModelMultipleChoiceField(...)` | `SelectMultiple` |\n| `DateTimeField(auto_now_add=True)` | **excluido automáticamente** | — |",
           "local_asset": "slides/assets/F-22-table-1.png",
-          "drive_id": "1k42ijjAD0ON5DMmYzB1WVLCN6_chVCUv"
+          "drive_id": null
         }
       ]
     },
@@ -1367,7 +1367,7 @@
           "index": 0,
           "table_markdown": "| Petición | Formulario construido | `is_valid()` | Acción de la vista | HTTP |\n|----------|----------------------|-------------|-------------------|----|\n| `GET /posts/crear/` | `PostForm()` — unbound | — | renderizar formulario vacío | `200` |\n| `POST` datos inválidos | `PostForm(data=POST)` | `False` | renderizar formulario con errores | `200` |\n| `POST` datos válidos | `PostForm(data=POST)` | `True` → `form.save()` INSERT | `redirect(success_url)` | `302` |",
           "local_asset": "slides/assets/F-25-table-1.png",
-          "drive_id": "1MvSsTb0RLTchXY68sCKJu-NiUmaa9hTz"
+          "drive_id": null
         }
       ]
     },
@@ -1681,7 +1681,7 @@
           "index": 0,
           "table_markdown": "| Mecanismo | Descripción |\n|-----------|-------------|\n| Sin sesión | Cada petición HTTP es anónima — el servidor no reconoce al usuario |\n| Cookie `sessionid` | UUID generado por Django; viaja en cada petición automáticamente |\n| Store servidor | Datos del usuario asociados al `sessionid` en BD o caché |\n| `request.session` | Diccionario Python para leer/escribir datos de sesión |\n| Messages framework | Usa sesión internamente para el patrón POST-Redirect-GET |",
           "local_asset": "slides/assets/F-31-table-1.png",
-          "drive_id": "1yoGqLecWZdXxPnVOK5YhmWLPiHOenMng"
+          "drive_id": null
         }
       ]
     },
@@ -1872,17 +1872,47 @@
       "layout": {
         "title": "center-middle",
         "body": "center-bottom",
-        "image": "none",
+        "image": "background",
         "code": "none",
         "table": "none"
       },
       "image": {
-        "layer": "none",
-        "prompt": "",
-        "local_asset": "",
+        "layer": "background",
+        "prompt": "fondo oscuro degradado azul profundo a negro — texto blanco centrado — estilo minimalista de cierre de clase universitaria",
+        "local_asset": "slides/assets/F-34-bg.png",
         "drive_id": null
       },
       "table_assets": []
     }
-  ]
+  ],
+  "_draft_instructions": {
+    "pending_type_ids": [],
+    "pending_prompt_ids": [],
+    "canonical_types": [
+      "portada",
+      "concepto-abstracto",
+      "concepto-mixto",
+      "codigo",
+      "tabla",
+      "tabla-comparativa",
+      "tabla-mixta",
+      "diagrama",
+      "socratica",
+      "demo",
+      "cierre",
+      "timeline"
+    ],
+    "next_steps": [
+      "1. Leer schema-registry.json ANTES de cualquier edición",
+      "2. Asignar type explícito desde canonical_types a cada slide en pending_type_ids",
+      "3. Copiar layout EXACTO del type_layout_map para cada tipo asignado",
+      "4. Para slides con image.layer!='none': escribir prompt VISUAL PURO (ver prompt-imagen-guide.md)",
+      "5. Actualizar summary: total_slides, images_planned, tables_planned, code_slides, type_distribution",
+      "6. Cambiar summary.status a 'READY_FOR_VALIDATION'",
+      "7. Eliminar esta clave '_draft_instructions'",
+      "8. Renombrar a: slides/plan-filminas-05-modulo-v-vistas-templates-formularios.json",
+      "9. Validar: python scripts/repair_plan.py <topic_folder> --attempt 1",
+      "10. Publicar: python scripts/slides_pipeline.py <topic_folder>"
+    ]
+  }
 }

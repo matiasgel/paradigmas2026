@@ -12,7 +12,7 @@
 
 @tipo: portada
 @imagen: background
-@prompt-imagen: fondo oscuro con código Python en transparencia — class, def, return — líneas difuminadas estilo IDE en modo oscuro, paleta azul profundo
+@prompt-imagen: dark background with faint Python code lines in transparency — keywords class def return — blurred IDE dark mode style, deep blue palette, no text labels
 
 # Módulo V — Vistas, Templates y Formularios
 
@@ -29,9 +29,7 @@ Semana 9 · BlogApp · Django 5.1 · Bootstrap 5.3.3
 
 ### [F-01] El URLconf: primer componente que Django ejecuta ante una petición
 
-@tipo: diagrama
-@imagen: content
-@prompt-imagen: diagrama horizontal con tres bloques — "Browser: GET /posts/42/" → caja "URLconf: recorre urlpatterns en orden, primer match gana" → "PostDetailView(pk=42)" — etiqueta inferior "si ningún patrón hace match → Http404 automático" — fondo blanco, bordes redondeados, flechas gruesas
+@tipo: tabla
 
 # El protocolo HTTP no determina qué código Python ejecutar — el URLconf lo hace
 
@@ -49,45 +47,78 @@ El protocolo HTTP no dispone de mecanismo alguno para determinar qué componente
 
 `path("posts/<int:pk>/", ...)` extrae `pk=42` como `int` — la vista lo recibe en `self.kwargs["pk"]` ya convertido al tipo destino
 
+| Elemento | Función |
+|----------|---------|
+| `urlpatterns` | Lista de rutas; se recorre en orden, primer match gana |
+| `path()` / `re_path()` | Define patrón URL → clase de vista |
+| `include()` | Delega segmento restante a otro URLconf de app |
+| `<int:pk>` | Conversor de tipo: extrae y convierte a `int` automáticamente |
+| Sin match | Lanza `Http404` automáticamente, sin intervención de la vista |
+
 ---
 
-### [F-02] Dos niveles de urls.py: proyecto y aplicación
+### [F-02] urls.py del proyecto: delegación con include()
 
 @tipo: codigo
 
-# El proyecto delega la resolución — la aplicación es responsable de sus propias rutas
+# El proyecto solo sabe que las rutas bajo /blog/ pertenecen a la app blog — nada más
 
-## Fundamento del diseño en dos niveles
+## Una línea de delegación hace la aplicación reubicable
 
-El URLconf raíz solo tiene conocimiento de que las rutas bajo `/blog/` pertenecen a la aplicación `blog`. La aplicación define su propia tabla de rutas de forma autónoma. Si en el futuro la aplicación se reubica bajo `/articulos/`, únicamente se modifica **una línea** en el proyecto raíz.
+Si BlogApp se mueve de `/blog/` a `/articulos/`, se cambia **solo esta línea**. El URLconf de la aplicación no necesita saber dónde está montado.
 
 ```python
-# blog_project/urls.py  ← URLconf raíz
+# blog_project/urls.py  ← URLconf raíz del proyecto
 from django.urls import path, include
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+
+    # include() consume el prefijo "blog/" y transfiere lo que queda:
+    # petición "/blog/posts/42/" → URLconf de blog recibe "posts/42/"
     path("blog/", include("blog.urls", namespace="blog")),
-    # Django consume "blog/" y transfiere el resto: "/posts/42/" → "posts/42/"
 ]
 ```
 
+- `include()` delega — el proyecto **no conoce** los detalles de rutas de la app
+- `namespace="blog"` permite `{% url 'blog:post-list' %}` en templates
+
+---
+
+### [F-03] urls.py de la aplicación: namespace y nombres de rutas
+
+@tipo: codigo
+
+# La aplicación define sus propias rutas — autónoma del proyecto que la contiene
+
+## app_name habilita el espacio de nombres para resolución inversa
+
+Sin `app_name`, dos aplicaciones con una ruta `"post-list"` producirían colisión de nombres. Con `app_name = "blog"` todas las rutas se acceden como `blog:post-list`.
+
 ```python
-# blog/urls.py  ← URLconf de la aplicación
+# blog/urls.py  ← URLconf de la aplicación (autónomo)
 from django.urls import path
 from .views import PostListView, PostDetailView, PostCreateView
 
-app_name = "blog"   # habilita el espacio de nombres → {% url 'blog:post-list' %}
+app_name = "blog"   # → habilita namespace: {% url 'blog:nombre' %}
 
 urlpatterns = [
+    # "" coincide con /blog/ (después de que include consumió "blog/")
     path("", PostListView.as_view(), name="post-list"),
+
+    # <int:pk> convierte el segmento a int — si es "abc" → Http404 automático
     path("posts/<int:pk>/", PostDetailView.as_view(), name="post-detail"),
+
     path("posts/crear/", PostCreateView.as_view(), name="post-create"),
 ]
 ```
 
+- El orden en `urlpatterns` importa: Django elige el **primer match**
+- Cada `name=` es el identificador para resolución inversa
+
 ---
 
-### [F-03] Conversores de tipo: validación en la capa de ruteo
+### [F-04] Conversores de tipo: validación en la capa de ruteo
 
 @tipo: tabla
 
@@ -108,44 +139,72 @@ En ausencia de conversores, el valor `/posts/abc/` llegaría a la vista como la 
 
 ---
 
-### [F-04] Resolución inversa: el principio de indirección de URLs
+### [F-05] Resolución inversa en Python: reverse() y reverse_lazy()
 
-@tipo: concepto-mixto
-@imagen: none
+@tipo: codigo
 
-# Las URLs no deben escribirse directamente en el código fuente
+# Nunca escribir "/blog/posts/42/" en el código — usar el nombre de la ruta
 
-## El problema del acoplamiento directo
+## reverse_lazy() es obligatorio en atributos de clase
 
-Si la URL cambia de `/posts/42/` a `/articulos/42/`, sería necesario localizar y reemplazar todas las ocurrencias en el proyecto. La resolución inversa desacopla el código de la estructura de URLs: se referencia por nombre y el framework genera la cadena de URL correspondiente.
+Los atributos de clase se evalúan en tiempo de importación, antes de que el sistema de URLs esté completamente cargado. `reverse()` en ese momento lanzaría error — `reverse_lazy()` difiere la evaluación hasta el primer acceso.
 
 ```python
-# views.py / models.py — resolución en Python
+# views.py — resolución inversa en código Python
 from django.urls import reverse, reverse_lazy
 
-reverse("blog:post-detail", kwargs={"pk": 42})  # → "/blog/posts/42/"
+# reverse() en tiempo de ejecución (dentro de un método):
+url = reverse("blog:post-detail", kwargs={"pk": 42})
+# → devuelve "/blog/posts/42/"
 
-# reverse_lazy(): versión diferida — obligatoria en atributos de clase,
-# ya que los atributos se evalúan en tiempo de importación, antes de que
-# el sistema de URLs esté completamente inicializado
-success_url = reverse_lazy("blog:post-list")
+# reverse_lazy() en atributo de clase (tiempo de importación):
+class PostCreateView(CreateView):
+    success_url = reverse_lazy("blog:post-list")
+    # ← si se usara reverse() aquí, fallaría al importar el módulo
 ```
+
+- `reverse()` → dentro de funciones o métodos
+- `reverse_lazy()` → en atributos de clase (`success_url`, `login_url`, etc.)
+
+---
+
+### [F-06] Resolución inversa en templates: la etiqueta {% url %}
+
+@tipo: codigo
+
+# En templates se usa {% url %} — nunca strings literales de URL
+
+## La misma ruta puede pasarse argumentos posicionales o con nombre
 
 ```html
-<!-- templates/ — resolución en Django Template Language -->
-<a href="{% url 'blog:post-detail' post.pk %}">Ver publicación</a>
-<a href="{% url 'blog:post-update' pk=post.pk %}">Editar</a>
+<!-- templates/blog/post_list.html -->
+
+<!-- argumento posicional -->
+<a href="{% url 'blog:post-detail' post.pk %}">
+  Ver publicación
+</a>
+
+<!-- argumento con nombre (más explícito) -->
+<a href="{% url 'blog:post-update' pk=post.pk %}">
+  Editar
+</a>
+
+<!-- sin argumentos -->
+<a href="{% url 'blog:post-create' %}">
+  Nueva publicación
+</a>
 ```
 
-**Convención obligatoria**: `{% url %}` en templates · `reverse_lazy()` en clases · `reverse()` en funciones
+- Si la URL no existe, Django lanza `NoReverseMatch` en tiempo de render — visible de inmediato
+- Si el proyecto cambia el prefijo de `/blog/` a `/articulos/`, **ningún template necesita modificarse**
 
 ---
 
-## BLOQUE 2 — El controlador View: dispatch y vistas genéricas (35 min)
+## BLOQUE 2 — El controlador View: dispatch y vistas genéricas
 
 ---
 
-### [F-05] Django MVT: la "Vista" cumple el rol del controlador
+### [F-07] Django MVT: la "Vista" cumple el rol del controlador
 
 @tipo: tabla-comparativa
 
@@ -165,11 +224,9 @@ En MVC clásico, la Vista es la capa de presentación. Django denomina "Vista" a
 
 ---
 
-### [F-06] Ciclo completo de una petición HTTP en Django
+### [F-08] Ciclo completo de una petición HTTP en Django
 
-@tipo: diagrama
-@imagen: content
-@prompt-imagen: diagrama vertical de flujo con 6 cajas apiladas — "Browser GET /posts/42/" → "Middleware Stack (CSRF, Session)" → "URL Resolver → pk=42" → "View.dispatch() → get()" → "ORM: Post.objects.get(pk=42)" → "Template Engine → HTML" → "HttpResponse 200" — colores distintos por capa, fondo blanco
+@tipo: tabla
 
 # Seis capas transforman una URL en un documento HTML
 
@@ -185,9 +242,18 @@ En MVC clásico, la Vista es la capa de presentación. Django denomina "Vista" a
 
 En cada capa existe un método que puede ser sobreescrito. En esta clase se utilizan `get_queryset()`, `get_context_data()`, `form_valid()` y `clean_<campo>()`.
 
+| Capa | Función | Método extensible |
+|------|---------|-------------------|
+| Middleware | CSRF, Session — intercepta antes y después de la vista | `process_request()` |
+| URL Resolver | Extrae `pk=42` como `int`, instancia la vista | `resolve()` |
+| `dispatch()` | Elige `get()` o `post()` según `request.method` | `dispatch()` |
+| ORM | `Post.objects.get(pk=42)` → objeto Python | `get_queryset()` |
+| Template Engine | Combina template DTL + contexto → HTML | `get_context_data()` |
+| HttpResponse | Retorna la respuesta al cliente | `render_to_response()` |
+
 ---
 
-### [F-07] `dispatch()`: el despachador interno de la Vista
+### [F-09] `dispatch()`: el despachador interno de la Vista
 
 @tipo: codigo
 
@@ -216,7 +282,7 @@ class View:
 
 ---
 
-### [F-08] El objeto `request`: representación completa de la petición HTTP
+### [F-10] El objeto `request`: representación completa de la petición HTTP
 
 @tipo: codigo
 
@@ -243,11 +309,9 @@ class PostCreateView(CreateView):
 
 ---
 
-### [F-09] Jerarquía de vistas genéricas: reutilización de patrones consolidados
+### [F-11] Jerarquía de vistas genéricas: reutilización de patrones consolidados
 
-@tipo: concepto-abstracto
-@imagen: right-half
-@prompt-imagen: árbol de herencia con cajas — raíz "View" en gris, segundo nivel "TemplateView / ListView / DetailView" en azul, tercer nivel "CreateView / UpdateView / DeleteView" en verde — etiquetas cortas: "dispatch manual", "lista + pagina", "un objeto", "INSERT", "UPDATE", "DELETE" — fondo blanco, tipografía monospace
+@tipo: tabla
 
 # Cada vista genérica encapsula el patrón más frecuente de su operación correspondiente
 
@@ -263,9 +327,17 @@ Con la clase base `View`, toda la lógica debe implementarse manualmente: recupe
 - **`UpdateView`**: idéntico a CreateView pero con `instance=objeto` → `save()` UPDATE
 - **`DeleteView`**: GET presenta confirmación — POST ejecuta `objeto.delete()`
 
+| Clase | Operación SQL | Template por defecto | Método clave |
+|-------|--------------|---------------------|--------------|
+| `ListView` | SELECT all | `post_list.html` | `get_queryset()` |
+| `DetailView` | SELECT by pk | `post_detail.html` | `get_object()` |
+| `CreateView` | INSERT | `post_form.html` | `form_valid()` |
+| `UpdateView` | UPDATE | `post_form.html` | `form_valid()` |
+| `DeleteView` | DELETE | `post_confirm_delete.html` | `delete()` |
+
 ---
 
-### [F-10] `ListView` con `get_queryset()`: integración del ORM en la vista
+### [F-12] `ListView` con `get_queryset()`: integración del ORM en la vista
 
 @tipo: demo
 
@@ -297,114 +369,209 @@ class PostListView(ListView):
 
 ---
 
-### [F-11] Contexto automático: las vistas genéricas inyectan variables sin declaración explícita
+### [F-13] Contexto automático: variables inyectadas por cada vista genérica
 
 @tipo: tabla
 
 # Las vistas genéricas transfieren variables al template de forma implícita
 
-## Importancia del conocimiento de las variables automáticas de contexto
+## Si {{ posts }} no se resuelve en el template, la causa más frecuente es esta tabla
 
-Si se referencia `{{ posts }}` en el template y la variable no se resuelve, la causa más frecuente es no haber definido `context_object_name`, de modo que Django empleó `object_list` como nombre por defecto. El conocimiento de las variables automáticas permite evitar esta clase de errores.
+`context_object_name` no definido → Django usa `object_list` como nombre por defecto. Conocer las variables automáticas evita buscar bugs donde no los hay.
 
 | Vista | Variables automáticas en el contexto |
 |-------|--------------------------------------|
 | `ListView` | `object_list`, `page_obj`, `paginator`, `is_paginated` |
-| `DetailView` | `object` (y el alias definido en `context_object_name`) |
+| `DetailView` | `object` (y el alias de `context_object_name`) |
 | `CreateView` / `UpdateView` | `form` (instancia del formulario) |
 | `DeleteView` | `object` (el objeto candidato a eliminación) |
 
-## Incorporación de variables adicionales sin pérdida del contexto automático
-
-```python
-def get_context_data(self, **kwargs):
-    ctx = super().get_context_data(**kwargs)  # obligatorio: preserva las variables automáticas
-    ctx["categorias"] = Category.objects.all()
-    ctx["total"] = self.get_queryset().count()
-    return ctx
-```
-
-**Omitir `super()`** produce la pérdida del contexto automático — `page_obj`, `form`, etc. dejan de estar disponibles en el template
+- `context_object_name = "posts"` agrega `posts` como alias de `object_list`
+- Ambos nombres coexisten en el contexto — no se reemplaza, se agrega
 
 ---
 
-### [F-12] Django Template Language sobre datos ORM: dot notation y relaciones
+### [F-14] get_context_data(): agregar variables al contexto sin perder las automáticas
 
 @tipo: codigo
 
-# El template accede a atributos, propiedades, métodos y relaciones mediante dot notation
+# super().get_context_data() es obligatorio — omitirlo elimina todas las variables automáticas
 
-## Mecanismo de resolución de dot notation sobre instancias de modelo
+## El defecto silencioso más frecuente con las vistas genéricas
 
-Django resuelve `post.author.username` en tres pasos: accede al atributo `author` del objeto `Post` (ForeignKey → consulta ORM si no existe caché), luego accede al atributo `username` del objeto `User`. Si algún paso retorna `None`, el resultado es una cadena vacía, sin que se produzca excepción alguna.
+Sin `super()`, `page_obj`, `form` y demás variables de la vista genérica desaparecen del template. El template no lanza error — simplemente no renderiza datos. El bug parece estar en el template pero está en la vista.
 
-```html
-{{ post.title|upper }}
-{{ post.created_at|date:"d/m/Y" }}
-{{ post.body|truncatewords:50 }}
-{{ post.author.get_full_name|default:"Anónimo" }}
+```python
+class PostListView(ListView):
+    model = Post
+    context_object_name = "posts"
+    paginate_by = 10
 
-<!-- Relación FK — dot notation ejecuta la consulta si no existe select_related -->
-{{ post.category.name }}
+    def get_context_data(self, **kwargs):
+        # OBLIGATORIO: preserva todas las variables automáticas (page_obj, paginator, etc.)
+        ctx = super().get_context_data(**kwargs)
 
-<!-- Relación inversa (reverse FK / M2M) -->
-{% for comment in post.comments.all %}
-  {{ comment.author.username }}: {{ comment.body }}
-{% endfor %}
+        # Agregar variables propias al mismo diccionario:
+        ctx["categorias"] = Category.objects.all()   # para un filtro por categoría
+        ctx["total_publicados"] = self.get_queryset().count()
+
+        return ctx  # ← siempre retornar el contexto completo
 ```
 
-**Problema N+1**: `post.comments.all` dentro de un `{% for posts %}` ejecuta una consulta por cada post. Solución: `prefetch_related("comments")` en `get_queryset()` — los datos se reciben precargados en el template.
+- `ctx` es un dict estándar — se pueden agregar cualquier clave/valor
+- El template accede a `{{ categorias }}` y `{{ total_publicados }}` directamente
 
 ---
 
-### [F-13] Herencia de templates: base.html y extensión con datos ORM
+### [F-15] DTL: dot notation sobre atributos, filtros y propiedades
 
-@tipo: demo
+@tipo: codigo
 
-# Un template base define la estructura del documento — las páginas hijas aportan el contenido específico
+# Django resuelve post.author.username navegando atributo por atributo — si alguno es None, retorna cadena vacía
 
-## La herencia de templates como mecanismo de reutilización estructural
+## Dot notation: cómo Django evalúa cada expresión
 
-En ausencia de herencia, cada template replicaría la estructura completa: `<head>`, `<nav>` y pie de página. Mediante `{% extends %}` y `{% block %}`, el HTML estructural reside en un único archivo. Cualquier modificación en la barra de navegación requiere editar un único archivo.
+Para `post.author.username`: accede a `post.author` (ForeignKey → ORM), luego `.username` del objeto `User`. Sin excepción si algún paso es `None` — silencio controlado.
 
 ```html
-<!-- templates/blog/base.html — definición única para toda la aplicación -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-<nav class="navbar navbar-dark bg-dark">
-  <a class="navbar-brand" href="{% url 'blog:post-list' %}">BlogApp</a>
-  <a class="nav-link" href="{% url 'blog:post-create' %}">Nueva publicación</a>
-</nav>
-<div class="container mt-4">
-  {% if messages %}BH-01	
-    {% for m in messages %}<div class="alert alert-{{ m.tags }}">{{ m }}</div>{% endfor %}
-  {% endif %}
-  {% block content %}{% endblock %}   <!-- cada template hijo proporciona este bloque -->
-</div>
+<!-- Acceso a atributos simples con filtros -->
+{{ post.title|upper }}                         {# filtro: convierte a mayúsculas #}
+{{ post.created_at|date:"d/m/Y" }}             {# filtro: formatea fecha #}
+{{ post.body|truncatewords:50 }}               {# filtro: recorta a 50 palabras #}
+
+<!-- Acceso a método del modelo (sin paréntesis) -->
+{{ post.author.get_full_name|default:"Anónimo" }}
+
+<!-- Acceso a ForeignKey: navega al objeto relacionado -->
+{{ post.category.name }}
 ```
 
+- Los filtros se encadenan con `|`
+- El método se llama sin `()` — Django lo invoca automáticamente
+- `|default:"valor"` cubre el caso `None` o cadena vacía
+
+---
+
+### [F-16] DTL: relaciones inversas y el problema N+1
+
+@tipo: codigo
+
+# post.comments.all dentro de un for ejecuta una consulta SQL por cada post — prefetch_related lo resuelve
+
+## El problema N+1 en templates: invisible pero costoso
+
+Un template inocente puede generar decenas de consultas SQL. `{% for comment in post.comments.all %}` parece inofensivo, pero dentro de un `{% for posts %}` ejecuta 1 consulta por cada post. Con 100 posts → 101 consultas.
+
 ```html
-<!-- templates/blog/post_detail.html — únicamente el contenido específico -->
+<!-- templates/blog/post_list.html -->
+{% for post in posts %}
+
+  <!-- FK simple: 1 consulta por post si no hay select_related en get_queryset() -->
+  {{ post.category.name }}
+
+  <!-- Relación inversa (reverse FK): 1 consulta por post si no hay prefetch_related -->
+  {% for comment in post.comments.all %}
+    {{ comment.author.username }}: {{ comment.body }}
+  {% endfor %}
+
+{% endfor %}
+```
+
+```python
+# Solución en get_queryset() — los datos llegan precargados al template:
+def get_queryset(self):
+    return Post.objects.filter(published=True)\
+                       .select_related("author", "category")  # FK → JOIN en SQL
+                       .prefetch_related("comments__author")  # reverseFK → 2 queries total
+```
+
+- `select_related` → hace JOIN en la consulta principal (para FK)
+- `prefetch_related` → hace consulta separada y cachea (para reverse FK y M2M)
+
+---
+
+### [F-17] Herencia de templates: base.html — la estructura compartida
+
+@tipo: codigo
+
+# base.html define nav, head y layout — todas las páginas heredan de aquí
+
+## Un cambio en base.html afecta toda la aplicación
+
+Bootstrap, la barra de navegación, el manejo de mensajes flash: todo en un único lugar. Los templates hijos solo necesitan definir el contenido específico de cada página.
+
+```html
+<!-- templates/blog/base.html — se define UNA vez, se hereda en TODOS los templates -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}BlogApp{% endblock %}</title>
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand" href="{% url 'blog:post-list' %}">BlogApp</a>
+  <a class="nav-link text-white" href="{% url 'blog:post-create' %}">Nueva publicación</a>
+</nav>
+<div class="container mt-4">
+  {% if messages %}
+    {% for m in messages %}
+      <div class="alert alert-{{ m.tags }}">{{ m }}</div>
+    {% endfor %}
+  {% endif %}
+
+  {% block content %}{% endblock %}  <!-- cada template hijo rellena este bloque -->
+</div>
+</body>
+</html>
+```
+
+---
+
+### [F-18] Herencia de templates: el template hijo — solo el contenido específico
+
+@tipo: codigo
+
+# {% extends %} hace que el template hijo solo declare qué cambia respecto a base.html
+
+## El template hijo no repite HTML estructural
+
+`{% extends "blog/base.html" %}` indica que este template es un "relleno" para los `{% block %}` de base. Todo lo que no esté en un bloque se ignora.
+
+```html
+<!-- templates/blog/post_detail.html — solo el contenido de esta página -->
 {% extends "blog/base.html" %}
+
 {% block title %}{{ post.title }}{% endblock %}
+
 {% block content %}
-  <h1>{{ post.title }}</h1>
+  <h1 class="mb-3">{{ post.title }}</h1>
+
+  <!-- Acceso a FK con dot notation — post.category usa select_related del queryset -->
   <span class="badge bg-secondary">{{ post.category.name }}</span>
+
+  <!-- Filtro de fecha con escape de caracteres especiales -->
   <p class="text-muted">{{ post.created_at|date:"d \d\e F \d\e Y" }}</p>
+
+  <!-- linebreaks convierte \n en <br> y párrafos -->
   {{ post.body|linebreaks }}
 {% endblock %}
 ```
 
+- `{% block title %}` sobreescribe el título en `<head>` de base.html
+- `{% block content %}` proporciona el cuerpo de la página
+- `post` llega del contexto automático de `DetailView` (`context_object_name`)
+
 ---
 
-## BLOQUE 4 — Formularios Django: ciclo de enlace y validación (55 min)
+## BLOQUE 4 — Formularios Django: ciclo de enlace y validación
 
 ---
 
-### [F-14] El ciclo de enlace: estado bound vs unbound
+### [F-19] El ciclo de enlace: estado bound vs unbound
 
-@tipo: concepto-abstracto
-@imagen: right-half
-@prompt-imagen: dos cajas lado a lado — izquierda "UNBOUND: GET /crear/ → campos vacíos → render" — derecha "BOUND: POST /crear/ → is_valid()=True → save() → redirect" y "is_valid()=False → redisplay con errores" — bifurcación con flechas verde y roja — fondo blanco
+@tipo: tabla-comparativa
 
 # Un formulario solo puede ser validado si tiene datos del usuario asociados
 
@@ -421,11 +588,9 @@ En ausencia de herencia, cada template replicaría la estructura completa: `<hea
 
 ---
 
-### [F-15] Pipeline de validación: las cinco capas de procesamiento en secuencia
+### [F-20] Pipeline de validación: las cinco capas de procesamiento en secuencia
 
-@tipo: diagrama
-@imagen: content
-@prompt-imagen: diagrama vertical con 5 rectángulos apilados por flechas — "1 to_python(): string HTTP → tipo Python" → "2 validate(): required, max_length" → "3 run_validators(): lista validators=[]" → "4 clean_campo(): lógica custom + ORM" → "5 clean(): validación cruzada" — bifurcación final verde "cleaned_data" y roja "form.errors"
+@tipo: timeline
 
 # `form.is_valid()` ejecuta esta cadena de procesamiento — si una capa falla, la ejecución se detiene
 
@@ -439,9 +604,17 @@ En ausencia de herencia, cada template replicaría la estructura completa: `<hea
 
 **`cleaned_data`** solo existe a partir de que `is_valid()` haya sido invocado — acceder con anterioridad produce `AttributeError`
 
+| Paso | Método | Función |
+|------|--------|---------|
+| 1 | `to_python()` | String HTTP → tipo Python destino |
+| 2 | `validate()` | Aplica `required`, `max_length`, `min_value` |
+| 3 | `run_validators()` | Ejecuta lista `validators=[]` del campo |
+| 4 | `clean_<campo>()` | Lógica custom + ORM, puede lanzar `ValidationError` |
+| 5 | `clean()` | Validación cruzada entre campos |
+
 ---
 
-### [F-16] `ModelForm`: generación automática de campos a partir del modelo
+### [F-21] ``ModelForm``: generación automática de campos a partir del modelo
 
 @tipo: codigo
 
@@ -452,28 +625,47 @@ En ausencia de herencia, cada template replicaría la estructura completa: `<hea
 Con `Form` sería necesario declarar `title = forms.CharField(max_length=200)`, duplicando lo que ya está definido en el modelo. `ModelForm` inspecciona el modelo y genera el campo de forma automática. Ante modificaciones en el modelo, el formulario se actualiza sin intervención adicional.
 
 ```python
+# forms.py
 class PostForm(forms.ModelForm):
     class Meta:
         model  = Post
+        # Solo los campos que el usuario puede editar — auto_now y pk quedan fuera
         fields = ["title", "body", "category", "published"]
+
         widgets = {
+            # attrs agrega clases CSS de Bootstrap al widget HTML generado
             "title":    forms.TextInput(attrs={"class": "form-control"}),
             "body":     forms.Textarea(attrs={"class": "form-control", "rows": 8}),
             "category": forms.Select(attrs={"class": "form-select"}),
         }
-        labels  = {"title": "Título", "body": "Contenido", "category": "Categoría"}
+        labels        = {"title": "Título", "body": "Contenido", "category": "Categoría"}
         error_messages = {"title": {"required": "El título es obligatorio."}}
 ```
 
-| Campo del modelo | Campo de formulario generado |
-|-----------------|------------------------------|
-| `CharField(max_length=200)` | `CharField(max_length=200, widget=TextInput)` |
-| `ForeignKey(Category)` | `ModelChoiceField(queryset=Category.objects.all())` |
-| `DateTimeField(auto_now_add=True)` | **excluido** — no editable por el usuario |
+---
+
+### [F-22] ModelForm: campos generados automáticamente por tipo de modelo
+
+@tipo: tabla
+
+# ModelForm lee el modelo y elige el campo de formulario más apropiado para cada tipo
+
+## Los campos auto_now y auto_now_add quedan automáticamente excluidos
+
+Django los marca internamente como `editable=False` — si se incluyen en `fields`, se lanza `FieldError` en tiempo de ejecución.
+
+| Campo del modelo | Campo de formulario generado | Widget por defecto |
+|-----------------|------------------------------|--------------------|
+| `CharField(max_length=200)` | `CharField(max_length=200)` | `TextInput` |
+| `TextField()` | `CharField()` | `Textarea` |
+| `BooleanField()` | `BooleanField()` | `CheckboxInput` |
+| `ForeignKey(Category)` | `ModelChoiceField(queryset=Category.objects.all())` | `Select` |
+| `ManyToManyField(Tag)` | `ModelMultipleChoiceField(...)` | `SelectMultiple` |
+| `DateTimeField(auto_now_add=True)` | **excluido automáticamente** | — |
 
 ---
 
-### [F-17] Capa 4: `clean_<campo>()` — validación con acceso al ORM
+### [F-23] Capa 4: `clean_<campo>()` — validación con acceso al ORM
 
 @tipo: codigo
 
@@ -509,7 +701,7 @@ El error se agrega a `form.errors["title"]` y se presenta junto al campo en el t
 
 ---
 
-### [F-18] Capa 5: `clean()` — validación cruzada entre campos
+### [F-24] Capa 5: `clean()` — validación cruzada entre campos
 
 @tipo: codigo
 
@@ -539,7 +731,7 @@ Si `title` no superó la capa 4, la clave `"title"` estará ausente de `cleaned_
 
 ---
 
-### [F-19] Ciclo completo: GET → POST inválido → POST válido → Redirección
+### [F-25] Ciclo completo: GET → POST inválido → POST válido → Redirección
 
 @tipo: timeline
 
@@ -559,41 +751,67 @@ El template es **idéntico** para ambos casos de renderizado: recibe el mismo ob
 
 ---
 
-### [F-20] `UpdateView` con `instance=`: el mismo formulario produce UPDATE
+### [F-27] `UpdateView`: la clase y sus atributos
 
-@tipo: demo
+@tipo: codigo
 
-# El parámetro instance= es el único factor que distingue la creación de la edición
+# UpdateView reutiliza exactamente el mismo template y formulario que CreateView
 
-## Mecanismo de pre-población de campos en UpdateView
+## La única diferencia visible en la clase es el nombre — el comportamiento lo determina instance=
 
-`UpdateView` recupera el objeto, lo asigna a `self.object` y construye el formulario con `PostForm(instance=self.object)`. Django inicializa cada widget con el valor actual del atributo correspondiente en BH-01	el modelo — sin código adicional.
+`UpdateView` recupera automáticamente el objeto de la BD usando `pk` de la URL, lo asigna a `self.object` y construye el formulario pre-poblado. Sin código extra.
 
 ```python
+# views.py
 class PostUpdateView(UpdateView):
-    model = Post
+    model      = Post
     form_class = PostForm
-    template_name = "blog/post_form.html"   # mismo template que CreateView
-    success_url = reverse_lazy("blog:post-list")
+    # Mismo template que CreateView — el form ya viene con los datos pre-cargados
+    template_name = "blog/post_form.html"
+    success_url   = reverse_lazy("blog:post-list")
+
+# urls.py — la URL entrega pk a UpdateView
+# path("posts/<int:pk>/editar/", PostUpdateView.as_view(), name="post-update")
 ```
 
-## El parámetro instance= determina INSERT vs UPDATE
-
-```python
-# CreateView: formulario sin instancia asociada
-form = PostForm(data=request.POST)
-form.save()   # → INSERT INTO blog_post ...
-
-# UpdateView: formulario con instancia asociada (pk existente)
-form = PostForm(data=request.POST, instance=self.object)
-form.save()   # → UPDATE blog_post SET title=... WHERE id=42
-```
-
-Sin `instance=`, `form.save()` siempre genera un nuevo registro — el defecto más frecuente al implementar la funcionalidad de edición
+- `UpdateView` hereda de `BaseUpdateView` → llama a `get_object()` con `pk` de la URL
+- `get_object()` hace `Post.objects.get(pk=pk)` → `Http404` si no existe
+- El formulario se construye internamente como `PostForm(instance=self.object)` — campos pre-llenados
 
 ---
 
-### [F-21] Template del formulario: presentación de errores por campo
+### [F-26] `instance=`: la diferencia entre INSERT y UPDATE
+
+@tipo: codigo
+
+# El parámetro instance= es el único factor que convierte un formulario de creación en uno de edición
+
+## Sin instance=, form.save() siempre hace INSERT — nunca UPDATE
+
+Este es el error más frecuente al implementar edición: olvidar `instance=` o construir el formulario a mano sin ella.
+
+```python
+# ¿Qué hace Django internamente en CreateView?
+form = PostForm(data=request.POST)
+# is_bound=True, instance=None
+form.save()   # → INSERT INTO blog_post (title, body, ...) VALUES (...)
+              # siempre crea un registro nuevo
+
+# ¿Qué hace Django internamente en UpdateView?
+post = Post.objects.get(pk=42)          # recupera el objeto existente
+form = PostForm(data=request.POST, instance=post)
+# is_bound=True, instance.pk=42
+form.save()   # → UPDATE blog_post SET title=... WHERE id=42
+              # actualiza el registro cuyo pk coincide con instance.pk
+```
+
+- `instance=None` → el `form.save()` hace **INSERT**
+- `instance=objeto_con_pk` → el `form.save()` hace **UPDATE**
+- El template HTML es **idéntico** en ambos casos — `{{ form }}` renderiza el formulario igual
+
+---
+
+### [F-28] Template del formulario: presentación de errores por campo
 
 @tipo: demo
 
@@ -632,36 +850,64 @@ Sin `novalidate`, el navegador ejecuta la validación HTML5 y puede impedir el e
 
 ---
 
-### [F-22] `DeleteView`: GET solicita confirmación, POST ejecuta la eliminación
+### [F-29] ``DeleteView``: la clase Python — GET muestra, POST elimina
 
-@tipo: demo
+@tipo: codigo
 
-# La confirmación explícita es obligatoria: una petición GET sobre DeleteView no elimina datos
+# GET sobre DeleteView nunca elimina datos — solo renderiza la confirmación
 
 ## Por qué las operaciones destructivas requieren POST y no GET
 
-Un enlace `<a href="/posts/42/eliminar/">` genera una petición GET. Si dicha petición eliminara el objeto, cualquier agente de indexación o usuario que acceda al enlace de forma accidental provocaría la pérdida de datos. La eliminación requiere invariablemente un POST explícito que incluya el token `{% csrf_token %}`.
+Un `<a href="/posts/42/eliminar/">` genera un GET. Si ese GET eliminara, cualquier bot de indexación o clic accidental destruiría datos. La eliminación requiere un POST explícito con `{% csrf_token %}`.
 
 ```python
+# views.py
 class PostDeleteView(DeleteView):
-    model = Post
+    model         = Post
     template_name = "blog/post_confirm_delete.html"
-    success_url = reverse_lazy("blog:post-list")
-    # GET  → renderiza el template de confirmación (nunca elimina datos)
-    # POST → invoca objeto.delete() → redirección a success_url
+    success_url   = reverse_lazy("blog:post-list")
+    # GET  → llama a get()  → renderiza template de confirmación (NO toca la BD)
+    # POST → llama a post() → ejecuta self.object.delete() → redirect a success_url
+
+# urls.py
+# path("posts/<int:pk>/eliminar/", PostDeleteView.as_view(), name="post-delete")
 ```
 
+- `DeleteView` hereda de `BaseDeleteView` — el método `delete()` ejecuta `self.object.delete()`
+- Solo el POST activa la eliminación — el GET es siempre seguro de llamar
+
+---
+
+### [F-30] `DeleteView`: el template de confirmación
+
+@tipo: codigo
+
+# El template solo presenta la pregunta — el formulario POST es el que elimina
+
+## El botón de confirmación es un formulario POST sin campos, solo csrf_token
+
+El template recibe `object` (el objeto a eliminar) del contexto automático de `DeleteView`.
+
 ```html
+<!-- templates/blog/post_confirm_delete.html -->
 {% extends "blog/base.html" %}
+
 {% block content %}
-<div class="alert alert-warning">
-  <h4>¿Eliminar "{{ object.title }}"?</h4>
-  <p>Esta operación no puede revertirse.</p>
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Confirmar eliminación</button>
-    <a href="{% url 'blog:post-list' %}" class="btn btn-secondary">Cancelar</a>
-  </form>
+<div class="card border-danger">
+  <div class="card-body">
+    <h4 class="card-title text-danger">Confirmar eliminación</h4>
+
+    <!-- object = instancia de Post, inyectada por DeleteView -->
+    <p>¿Eliminar la publicación <strong>"{{ object.title }}"</strong>?</p>
+    <p class="text-muted">Esta operación no puede revertirse.</p>
+
+    <!-- Este formulario POST es el que dispara objeto.delete() en la vista -->
+    <form method="post">
+      {% csrf_token %}   {# obligatorio: sin este token Django rechaza el POST #}
+      <button type="submit" class="btn btn-danger">Eliminar</button>
+      <a href="{% url 'blog:post-list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div>
 </div>
 {% endblock %}
 ```
@@ -672,11 +918,9 @@ class PostDeleteView(DeleteView):
 
 ---
 
-### [F-23] HTTP es stateless: el protocolo no conserva estado entre peticiones
+### [F-31] HTTP es stateless: el protocolo no conserva estado entre peticiones
 
-@tipo: concepto-abstracto
-@imagen: right-half
-@prompt-imagen: dos columnas — izquierda con tres peticiones HTTP idénticas apiladas con signo de interrogación "¿quién sos?" en cada una — derecha con cookie "sessionid=abc123" en cada petición y check verde "mismo usuario identificado" — fondo blanco, paleta azul y verde
+@tipo: tabla
 
 # Cada petición HTTP es anónima por diseño — el mecanismo de sesiones resuelve la persistencia de estado
 
@@ -694,42 +938,83 @@ HTTP es un protocolo sin estado (*stateless*) por razones de escalabilidad: cual
 
 `request.session` como diccionario y el **messages framework** que lo utiliza internamente para el patrón PRG. La autenticación completa se aborda en el Módulo VI.
 
+| Mecanismo | Descripción |
+|-----------|-------------|
+| Sin sesión | Cada petición HTTP es anónima — el servidor no reconoce al usuario |
+| Cookie `sessionid` | UUID generado por Django; viaja en cada petición automáticamente |
+| Store servidor | Datos del usuario asociados al `sessionid` en BD o caché |
+| `request.session` | Diccionario Python para leer/escribir datos de sesión |
+| Messages framework | Usa sesión internamente para el patrón POST-Redirect-GET |
+
 ---
 
-### [F-24] `request.session` y el messages framework: persistencia entre peticiones
+### [F-32] ``request.session``: el diccionario que persiste entre peticiones
 
 @tipo: codigo
 
-# request.session es un diccionario que persiste entre peticiones del mismo usuario
+# request.session es un dict estándar de Python — Django lo persiste en la BD entre peticiones
 
-## Dos niveles de abstracción sobre el mismo mecanismo
+## El mecanismo: cookie → servidor → diccionario Python
 
-`request.session` es el mecanismo de bajo nivel. El **messages framework** es una abstracción construida sobre sesiones para un caso específico del patrón PRG: el mensaje se persiste antes de la redirección y se descarta una vez que el template lo ha renderizado.
+1. Django genera un UUID de sesión y lo envía como cookie `sessionid` al navegador
+2. El navegador envía esa cookie en cada petición siguiente
+3. Django lee la cookie, busca en la BD y expone los datos como `request.session`
 
 ```python
-# Nivel de acceso directo: session como diccionario
-request.session["ultimo_post_id"] = 42         # escritura
-ultimo = request.session.get("ultimo_post_id")  # lectura con valor por defecto
+# views.py — acceso directo a la sesión como diccionario
+class PostDetailView(DetailView):
+    def get(self, request, *args, **kwargs):
+        # Escritura: guardar estado entre peticiones
+        request.session["ultimo_post_visto"] = self.kwargs["pk"]
 
-# Nivel de abstracción: messages framework — para el patrón PRG
+        # Lectura con valor por defecto (seguro si la clave no existe aún)
+        historial = request.session.get("historial", [])
+        historial.append(self.kwargs["pk"])
+        request.session["historial"] = historial
+
+        return super().get(request, *args, **kwargs)
+```
+
+- La sesión se guarda automáticamente al final de cada petición si fue modificada
+- `request.session` dura hasta que el navegador cierra o la sesión expira (configurable)
+- La autenticación completa (`request.user`) se aborda en el Módulo VI
+
+---
+
+### [F-33] Messages framework: el patrón PRG con mensajes flash
+
+@tipo: codigo
+
+# messages.success() persiste el mensaje en la sesión — aparece en la página siguiente a la redirección
+
+## Por qué no mostrar el mensaje directamente en el POST
+
+El POST exitoso redirige (PRG). Si se muestra el mensaje en el POST, desaparece en el redirect. `messages` los guarda en la sesión → aparecen en el GET siguiente → se auto-descartan al renderizar.
+
+```python
+# views.py — messages se agrega ANTES de la redirección
 from django.contrib import messages
 
 class PostCreateView(CreateView):
     def form_valid(self, form):
+        # El mensaje queda guardado en request.session
         messages.success(self.request, "Publicación creada correctamente.")
-        return super().form_valid(form)  # → redirección a success_url
+        return super().form_valid(form)  # → redirect a success_url (HTTP 302)
 
     def form_invalid(self, form):
-        messages.error(self.request, "Se han detectado errores en el formulario.")
-        return super().form_invalid(form)
+        messages.error(self.request, "Revisá los errores en el formulario.")
+        return super().form_invalid(form)  # → re-render del formulario (HTTP 200)
 ```
 
 ```html
-{# En base.html — el mensaje se presenta en la página posterior a la redirección #}
+{# base.html — se muestra en CUALQUIER página después del redirect #}
 {% for m in messages %}
   <div class="alert alert-{{ m.tags }}">{{ m }}</div>
 {% endfor %}
+{# Django elimina el mensaje de la sesión después de renderizarlo #}
 ```
+
+- `m.tags` es `"success"`, `"error"`, `"warning"`, `"info"` — coincide con clases de Bootstrap
 
 ---
 
@@ -737,7 +1022,7 @@ class PostCreateView(CreateView):
 
 ---
 
-### [F-25] Síntesis del Módulo V: conexión entre la petición HTTP y la base de datos
+### [F-34] Síntesis del Módulo V: conexión entre la petición HTTP y la base de datos
 
 @tipo: cierre
 @imagen: background
