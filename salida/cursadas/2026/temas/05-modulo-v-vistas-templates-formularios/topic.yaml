@@ -1,0 +1,31 @@
+topic_number: "05"
+topic_name: "Módulo V — Vistas OOP, Templates y Formularios con datos ORM"
+topic_slug: "modulo-v-vistas-templates-formularios"
+topic_folder: "salida/cursadas/2026/temas/05-modulo-v-vistas-templates-formularios"
+class_duration: "360"   # 360 min = 6 h = 1 clase teórica de 180 min + 1 clase práctica de 180 min
+class_structure:
+  - {n: 1, type: "teorica", duration: 180, title: "Vistas OOP genéricas + Templates con datos ORM + Formularios Django"}
+  - {n: 2, type: "practica", duration: 180, title: "BlogApp: refactor a vistas genéricas + Bootstrap + ModelForm CRUD completo"}
+git_branch: "tema-05-modulo-v-vistas-templates-formularios"
+created_at: "2026-05-12"
+status: "design"
+semana_plan: "9"
+replan_ref: "salida/cursadas/2026/plan-actualizado.md"
+plan_mapping:
+  modulo_v: "completo — vistas genéricas OOP (TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView), Django Template Language aplicado con datos ORM, ModelForm con validaciones"
+design_constraints:
+  paradigm: "Django orientado a objetos — SIEMPRE class-based views y clases. PROHIBIDO function-based views."
+  prerequisite: "ORM avanzado, QuerySet API, Q objects, select_related/prefetch_related, View base, as_view(), DTL completo ya vistos en Tema 04."
+  audience: "Estudiantes de 3er año UNTDF, niveles heterogéneos — presupone Tema 04 aprobado."
+  coherence: "Clase de consolidación Módulo V: las vistas genéricas se muestran con QuerySets reales del ORM (BlogApp). Los formularios son la conexión entre vista y persistencia."
+  domain: "BlogApp (Post, Category, Comment) — dominio unificador de semanas 8 y 9."
+  tp_coverage: "TP-5: modelos + admin + vistas genéricas + templates + ModelForm. Entrega semana 10."
+  base_material: "django-5.1-docs (class-based-views, forms, templates), edu_knowledge, plan-actualizado.md §9"
+artifacts:
+  diseno: "diseno.md"
+  minuta: "minuta.md"
+  filminas: "filminas.md"
+  tp: "tp.md"
+  score: "score-pedagogico.md"
+  faq: "faq-anticipado.md"
+  slides_url: "slides/slides-url.txt"
