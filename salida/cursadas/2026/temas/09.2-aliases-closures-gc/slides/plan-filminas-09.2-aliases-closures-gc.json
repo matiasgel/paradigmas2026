@@ -1,0 +1,2892 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "09-2-aliases-closures-gc",
+    "title": "Aliases, Closures, GC y Tipos",
+    "source": "filminas.md",
+    "generated_at": "2026-05-14T15:00:00",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "salida/cursadas/2026/temas",
+    "topic_folder": "salida/cursadas/2026/temas/09.2-aliases-closures-gc",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/slides-pipeline.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 60,
+    "images_planned": 12,
+    "tables_planned": 7,
+    "code_slides": 33,
+    "status": "READY_FOR_VALIDATION",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "portada": 1,
+      "concepto-abstracto": 19,
+      "codigo": 29,
+      "concepto-mixto": 2,
+      "tabla-mixta": 2,
+      "tabla-comparativa": 5,
+      "socratica": 1,
+      "cierre": 1
+    }
+  },
+  "slides": [
+    {
+      "id": "F-00",
+      "type": "portada",
+      "title": "Aliases, Closures, GC y Tipos",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Paradigmas y Lenguajes de Programación — Clase 09.2\nUniversidad Nacional de Tierra del Fuego — Instituto IDEI · 2026"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Large bold rectangle in deep red at center-bottom of frame. Above it, multiple thin horizontal lines in light gray arranged in evenly spaced rows, fading toward the top. Small white circle accent at lower-right corner. Dark charcoal gradient background. Flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-01",
+      "type": "concepto-abstracto",
+      "title": "Un alias: dos nombres vinculados a la misma celda de memoria",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición — Sebesta §5.3.3, Louden §7.7"
+        },
+        {
+          "type": "text",
+          "content": "Un alias ocurre cuando dos o más nombres distintos están vinculados a la misma celda de memoria en el mismo momento de la ejecución."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La diferencia con una copia"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Una copia crea una celda nueva con el mismo contenido — dos L-values distintos",
+              "level": 0
+            },
+            {
+              "content": "Un alias no crea nada nuevo — solo agrega un segundo nombre que apunta al mismo L-value",
+              "level": 0
+            },
+            {
+              "content": "Cambiar el objeto a través de cualquiera de los nombres afecta a todos los demás",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Fuentes principales de aliases"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Asignación de referencias (obj2 = obj1 en TypeScript, Python, Kotlin)",
+              "level": 0
+            },
+            {
+              "content": "Parámetros pasados por referencia (punteros en Go, referencias en C++)",
+              "level": 0
+            },
+            {
+              "content": "Variables de un mismo union type que comparten representación interna",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Two separate thin arrows in dark gray on the left side, converging from opposite directions to a single filled bordo circle at center-right. The arrows meet at one point. White background, flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-02",
+      "type": "codigo",
+      "title": "La asignación de objetos no copia — crea un segundo nombre para el mismo objeto",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Asignación de un objeto: obj2 es un ALIAS de obj1 — mismo L-value, mismo heap-object\nconst obj1 = { valor: 42, nombre: \"config\" };\nconst obj2 = obj1;          // NO se crea una copia — obj2 apunta a la misma celda\n\n// Modificar a través del alias modifica el original:\nobj2.valor = 99;\nconsole.log(obj1.valor);    // 99 — obj1 fue modificado sin tocarlo directamente\n\n// Comprobación: son la misma referencia (mismo L-value)\nconsole.log(obj1 === obj2); // true — misma identidad de objeto\n\n// Con primitivos, la asignación sí copia el valor:\nlet x = 42;\nlet y = x;    // y es una COPIA — x y y son L-values independientes\ny = 99;\nconsole.log(x);  // 42 — x no cambió\n// Los primitivos no tienen alias por asignación — los objetos sí"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-03",
+      "type": "codigo",
+      "title": "Cuando pasamos un objeto a una función, el parámetro es un alias del argumento original",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "kotlin",
+          "content": "// Kotlin — el parámetro 'p' recibe la misma referencia que 'origen'\ndata class Punto(var x: Int, var y: Int)\n\nfun desplazar(p: Punto, dx: Int) {\n    p.x += dx   // modifica el objeto ORIGINAL a través del alias p\n}\n\nval origen = Punto(0, 0)\ndesplazar(origen, 5)\nprintln(origen.x)  // 5 — origen fue modificado dentro de desplazar"
+        },
+        {
+          "lang": "go",
+          "content": "// Go — punteros explícitos: el alias es visible en la firma\nfunc duplicar(p *int) {\n    *p *= 2  // desreferencia y modifica la variable original del caller\n}\n\nx := 10\nduplicar(&x)     // &x: se pasa la dirección — p es alias de x\nfmt.Println(x)   // 20 — x fue modificado a través del puntero"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-04",
+      "type": "concepto-abstracto",
+      "title": "Los aliases introducen dependencias invisibles entre partes del programa",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El problema de razonabilidad local"
+        },
+        {
+          "type": "text",
+          "content": "Si dos parámetros de una función son aliases del mismo objeto, el supuesto de independencia falla silenciosamente. Ejemplo: f(a, b) donde a y b son aliases — modificar b modifica a, produciendo resultados inesperados."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Impacto en verificación formal"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Las precondiciones de la lógica de Hoare no se pueden establecer correctamente con aliases",
+              "level": 0
+            },
+            {
+              "content": "El análisis estático no puede probar ausencia de efectos laterales",
+              "level": 0
+            },
+            {
+              "content": "El compilador pierde oportunidades de optimización",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Impacto en concurrencia"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Dos threads con aliases al mismo objeto necesitan sincronización explícita",
+              "level": 0
+            },
+            {
+              "content": "Sin ella: race condition — resultado no determinístico",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Regla de diseño defensivo"
+        },
+        {
+          "type": "text",
+          "content": "Las funciones puras no deberían modificar sus parámetros. Usar readonly en TypeScript / val en Kotlin para comunicar esa intención."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "concepto-mixto",
+      "title": "Sebesta §9.5: tres categorías de alias involuntarios por paso por referencia",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Escenario 1 — Colisión entre parámetros actuales"
+        },
+        {
+          "type": "text",
+          "content": "Si dos posiciones de parámetro recibidas por referencia se invocan con el mismo argumento, ambos nombres internos son aliases del mismo objeto. Resultado: comportamiento indefinido en C++."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Escenario 2 — Parámetro y variable global"
+        },
+        {
+          "type": "text",
+          "content": "El argumento pasado por referencia coincide con una variable global accesible dentro de la función — dos caminos al mismo dato."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Escenario 3 — Elemento de array y array completo"
+        },
+        {
+          "type": "text",
+          "content": "fun1(list[i], list) — el primer parámetro es un alias de list[i], el segundo da acceso completo al array incluyendo list[i]."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Diagnóstico de Sebesta §9.5"
+        },
+        {
+          "type": "text",
+          "content": "'Los problemas con estos tipos de aliasing son los mismos que en otras situaciones de aliasing: hacen que los programas sean difíciles de leer y mantener.' Sebesta §9.5.2.4 propone pass-by-value-result como alternativa que elimina los tres escenarios."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "cpp",
+          "content": "// Escenario 1: fun(a, a) — x e y apuntan al mismo int en memoria\nvoid fun(int& x, int& y) {\n    x = 10;\n    y = 20;    // si x e y son el mismo objeto: leer x devuelve 20, no 10\n}\nint a = 5;\nfun(a, a);   // comportamiento dependiente de implementación — no definido en C++\n\n// Escenario 2: parámetro + variable global\nint i = 3;              // variable global\nvoid fun2(int& a) {\n    i = 99;             // modifica i a través del nombre global — a también cambió\n}\nfun2(i);                // a es alias de i"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-06",
+      "type": "codigo",
+      "title": "TypeScript detecta en compilación mutaciones involuntarias a través de aliases",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Sin readonly — el parámetro es un alias del argumento y puede mutarlo\nfunction procesarMal(data: number[]): number[] {\n    data.push(99);   // muta el array ORIGINAL del caller — efecto lateral invisible\n    return data;\n}\n\n// Con readonly — el compilador impide cualquier mutación del objeto recibido\nfunction procesarBien(data: readonly number[]): number[] {\n    // data.push(99);\n    // ❌ Error: Property 'push' does not exist on type 'readonly number[]'\n    return [...data, 99];   // crea un nuevo array — el original queda intacto\n}\n\n// Readonly<T> para objetos — protege todas las propiedades de primer nivel\ntype Config = Readonly<{ host: string; port: number }>;\n\nfunction conectar(cfg: Config): void {\n    // cfg.host = \"otro\";\n    // ❌ Error: Cannot assign to 'host' because it is a read-only property\n    console.log(`Conectando a ${cfg.host}:${cfg.port}`);\n}\n// readonly no impide la existencia del alias — impide la mutación a través de él"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-07",
+      "type": "codigo",
+      "title": "El spread operator {…obj} copia solo el primer nivel — los anidados siguen siendo aliases",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const original = {\n    nombre: \"Ana\",\n    config: { debug: true, retries: 3 },  // objeto anidado\n    tags: [\"admin\", \"user\"]               // array anidado\n};\n\n// Shallow copy con spread: copia los valores del primer nivel\nconst copia = { ...original };\n\n// Nivel 0: independiente ✅\ncopia.nombre = \"Carlos\";\nconsole.log(original.nombre);          // \"Ana\" — sin cambios ✅\n\n// Nivel 1 (objetos anidados): ALIAS ⚠️\ncopia.config.debug = false;\nconsole.log(original.config.debug);   // false — original modificado ⚠️\n\n// Nivel 1 (arrays anidados): ALIAS ⚠️\ncopia.tags.push(\"guest\");\nconsole.log(original.tags);           // [\"admin\", \"user\", \"guest\"] ⚠️\n\n// Comprobación: el config anidado es el mismo objeto\nconsole.log(original.config === copia.config);  // true — mismo L-value ⚠️"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-08",
+      "type": "codigo",
+      "title": "structuredClone() es la única forma estándar de obtener una copia completa en ES2022",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const original = {\n    nombre: \"Ana\",\n    config: { debug: true, retries: 3 },\n    tags: [\"admin\", \"user\"]\n};\n\n// Deep copy — ES2022 — copia completa en todos los niveles\nconst copia = structuredClone(original);\n\n// Nivel 0: independiente ✅\ncopia.nombre = \"Carlos\";\nconsole.log(original.nombre);          // \"Ana\" ✅\n\n// Nivel 1 (objetos): independiente ✅\ncopia.config.debug = false;\nconsole.log(original.config.debug);   // true ✅ — sin alias\n\n// Nivel 1 (arrays): independiente ✅\ncopia.tags.push(\"guest\");\nconsole.log(original.tags);           // [\"admin\", \"user\"] ✅\n\n// Comprobación: objetos distintos en todos los niveles\nconsole.log(original.config === copia.config);  // false ✅ — L-values distintos\nconsole.log(original.tags === copia.tags);      // false ✅\n\n// Nota: structuredClone no copia funciones, símbolos ni prototipos"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-09",
+      "type": "concepto-abstracto",
+      "title": "Closure = función + entorno léxico capturado en el momento de su creación",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición — Sebesta §10, Gabbrielli §7.4"
+        },
+        {
+          "type": "text",
+          "content": "Una closure es la combinación de: (1) una función (su código ejecutable) y (2) el entorno léxico en el que fue definida — el conjunto de nombres y sus valores visibles en ese punto del código fuente."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El ciclo de vida extendido"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Variables locales ordinarias viven en el stack — se destruyen cuando la función retorna",
+              "level": 0
+            },
+            {
+              "content": "Variables capturadas por una closure no pueden vivir en el stack: deben migrar al heap",
+              "level": 0
+            },
+            {
+              "content": "Viven mientras al menos una closure mantenga una referencia a ellas",
+              "level": 0
+            },
+            {
+              "content": "El GC las libera cuando ninguna closure las alcanza — Categoría 3 del Tema 09.1",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La conexión con Tema 09.1"
+        },
+        {
+          "type": "text",
+          "content": "Las closures aplican deep binding: el entorno se captura al crear la closure, no al llamarla. Las variables capturadas son exactamente las variables heap-dynamic implícitas (Categoría 3)."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "One large rounded rectangle in bordo on the left side. Inside it, a small white square. A curved dark gray bracket arcs around the rectangle and extends to the right, enclosing a second small gray square. Both elements are bounded together by the bracket. White background, flat design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-10",
+      "type": "codigo",
+      "title": "El activation record de crearContador se destruye, pero cuenta sigue viva en el heap",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function crearContador(inicio: number) {\n    let cuenta = inicio;  // candidata a migrar al heap — capturada por funciones anidadas\n\n    return {\n        incrementar: () => ++cuenta,  // closure 1: captura `cuenta` — lectura y escritura\n        decrementar: () => --cuenta,  // closure 2: captura la MISMA `cuenta`\n        valor:       () => cuenta     // closure 3: captura `cuenta` — solo lectura\n    };\n}\n\nconst c = crearContador(10);\n// crearContador() ya retornó — su activation record fue destruido del stack\n// pero `cuenta` sigue viva en el heap porque `c` la referencia\n\nconsole.log(c.incrementar());  // 11\nconsole.log(c.incrementar());  // 12\nconsole.log(c.decrementar());  // 11\nconsole.log(c.valor());        // 11\n\n// Las tres closures COMPARTEN la misma celda heap de `cuenta`\n// Son aliases de la misma variable — pero aliases controlados y encapsulados"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "concepto-abstracto",
+      "title": "La variable capturada migra del stack al heap y vive mientras exista la closure",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Variables locales ordinarias — tiempo de vida de stack"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Se crean cuando se llama a la función (activation record apilado)",
+              "level": 0
+            },
+            {
+              "content": "Se destruyen automáticamente cuando la función retorna (frame desapilado)",
+              "level": 0
+            },
+            {
+              "content": "Sin costo de GC — la liberación es inmediata e implícita",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Variables capturadas por closure — tiempo de vida de heap"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El compilador o runtime detecta que la variable 'escapa' al scope de la función",
+              "level": 0
+            },
+            {
+              "content": "La variable migra al heap para sobrevivir más allá del activation record",
+              "level": 0
+            },
+            {
+              "content": "Vive mientras al menos una closure activa tenga una referencia a ella",
+              "level": 0
+            },
+            {
+              "content": "El GC la libera cuando ninguna closure la referencia",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué significa 'escapar' al heap?"
+        },
+        {
+          "type": "text",
+          "content": "Una variable escapa cuando su lifetime debe ser mayor que el del activation record que la contiene: cuando una función anidada la captura, cuando se retorna una referencia a ella, o cuando se almacena en una estructura con mayor lifetime."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Left zone: a vertical stack of three gray rectangles, the topmost one has a dashed border and is fading. A curved bold bordo arrow points from the dashed rectangle rightward. Right zone: a single isolated solid bordo rectangle floating on white. White background, flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-12",
+      "type": "concepto-abstracto",
+      "title": "La closure como solución al problema del dangling reference — Gabbrielli §7.4",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La pregunta de Gabbrielli §7.4"
+        },
+        {
+          "type": "text",
+          "content": "Cuando una función F retorna una función interna gg que captura la variable local x, surge un conflicto con el ciclo de vida del stack: el entorno de F será destruido al terminar su ejecución. ¿Cómo invocar gg sin producir una referencia colgante a x?"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La solución: migración al heap garantizada por el runtime"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "El compilador detecta que x escapa del scope de F (es capturada por gg)"
+            },
+            {
+              "content": "x se aloja en el heap desde el inicio — no en el stack frame de F"
+            },
+            {
+              "content": "El closure object gg contiene una referencia directa a esa celda heap"
+            },
+            {
+              "content": "Cuando F retorna y su stack frame se destruye, x en heap sigue viva"
+            },
+            {
+              "content": "El GC libera x solo cuando ninguna closure la referencie"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La definición formal de Gabbrielli §7.4"
+        },
+        {
+          "type": "text",
+          "content": "'Clausuras: estructuras de datos compuestas por un fragmento de código y un entorno de evaluación. El modelo canónico para implementar la llamada por nombre y todas las situaciones en que una función debe pasarse como parámetro o retornarse como resultado.'"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "codigo",
+      "title": "Python requiere declarar nonlocal explícitamente para escribir en la variable capturada",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "def crear_acumulador(inicio: int):\n    total = inicio   # variable del scope externo — candidata a ser capturada\n\n    def agregar(n: int) -> int:\n        nonlocal total    # REQUERIDO para ESCRIBIR en total\n                          # sin nonlocal: Python crea una variable LOCAL `total` nueva\n                          # y al leerla antes de asignarle → UnboundLocalError\n        total += n\n        return total\n\n    def obtener() -> int:\n        return total      # LECTURA: no necesita nonlocal\n\n    return agregar, obtener\n\nagregar, obtener = crear_acumulador(0)\nprint(agregar(5))   # 5  — total: 0 + 5\nprint(agregar(3))   # 8  — total: 5 + 3\nprint(agregar(2))   # 10 — total: 8 + 2\nprint(obtener())    # 10 — el estado persiste entre llamadas"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-14",
+      "type": "codigo",
+      "title": "Go y Kotlin soportan closures de primera clase — misma semántica de captura que TypeScript",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "go",
+          "content": "// Go — closure que captura una variable del scope de crearContador\nfunc crearContador(inicio int) func() int {\n    cuenta := inicio   // variable local — migra al heap por la closure\n\n    return func() int {\n        cuenta++       // captura y modifica cuenta — closure de lectura/escritura\n        return cuenta\n    }\n}\n\nc := crearContador(10)\nfmt.Println(c())  // 11\nfmt.Println(c())  // 12"
+        },
+        {
+          "lang": "kotlin",
+          "content": "// Kotlin — lambda que captura una variable del scope externo\nfun crearContador(inicio: Int): () -> Int {\n    var cuenta = inicio  // var (mutable) porque la lambda necesita modificarla\n\n    return { ++cuenta }  // closure: captura y modifica cuenta en cada llamada\n}\n\nval contar = crearContador(10)\nprintln(contar())  // 11\nprintln(contar())  // 12"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-15",
+      "type": "concepto-abstracto",
+      "title": "En C los function pointers no capturan entorno — toda variable no-local debe ser global",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La limitación de C — Gabbrielli §7.4"
+        },
+        {
+          "type": "text",
+          "content": "C permite pasar punteros a funciones, pero esos punteros solo contienen la dirección de inicio del código. No existe ninguna estructura de datos para guardar el entorno en el que se definió la función."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Consecuencias de no tener closures"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Si una función necesita acceder a estado entre llamadas → debe usar variable global o estructura pasada manualmente como parámetro extra (void* genérico)",
+              "level": 0
+            },
+            {
+              "content": "El programador debe gestionar manualmente el ciclo de vida de ese estado",
+              "level": 0
+            },
+            {
+              "content": "La composición funcional es posible solo por convención — no hay soporte del lenguaje",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lo que hace el runtime de lenguajes modernos"
+        },
+        {
+          "type": "text",
+          "content": "En TypeScript, Python, Go y Kotlin, el runtime detecta automáticamente: (1) qué variables escapan, (2) las mueve al heap, (3) les aplica GC cuando ya no son alcanzables. En C, todo ese trabajo recae en el programador."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-16",
+      "type": "concepto-abstracto",
+      "title": "El momento en que se captura el entorno define completamente el comportamiento de la closure",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Deep binding — la norma en todos los lenguajes modernos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El entorno se captura en el momento de crear la closure",
+              "level": 0
+            },
+            {
+              "content": "Los nombres y sus valores 'se congelan' en ese instante",
+              "level": 0
+            },
+            {
+              "content": "Comportamiento: predecible e intuitivo — la closure siempre ve el entorno de su creación",
+              "level": 0
+            },
+            {
+              "content": "Todos los lenguajes modernos usan deep binding: TypeScript, Python, Go, Kotlin, Haskell, Rust",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Shallow binding — ámbito dinámico (histórico)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El entorno se resuelve en el momento de llamar a la función, no al crearla",
+              "level": 0
+            },
+            {
+              "content": "Los nombres se buscan en la pila de llamadas activa en ese momento",
+              "level": 0
+            },
+            {
+              "content": "LISP clásico (pre-Scheme) usaba shallow binding — prácticamente abandonado",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La implicación práctica"
+        },
+        {
+          "type": "text",
+          "content": "Con deep binding, el comportamiento de una closure es local y cerrado: depende solo de dónde fue definida en el código fuente, no de cómo llegó la ejecución hasta ella."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-17",
+      "type": "tabla-mixta",
+      "title": "makeAdder — el ejemplo canónico de Sebesta §10.6.4",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Contraste con crearContador (F-10)"
+        },
+        {
+          "type": "text",
+          "content": "Cada llamada a makeAdder crea su propio activation record con su propio x. Las dos closures son completamente independientes — no son aliases entre sí."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const makeAdder = (x: number) => (n: number): number => x + n;\n// La función retornada captura `x` del scope de makeAdder\n// makeAdder se llama dos veces → dos ejecuciones → dos celdas heap para `x`\n\nconst add10 = makeAdder(10);   // closure 1: x = 10 en heap — celda A\nconst add5  = makeAdder(5);    // closure 2: x = 5  en heap — celda B (independiente)\n\nconsole.log(add10(1));    // 11 — celda A: x=10, n=1\nconsole.log(add5(7));     // 12 — celda B: x=5,  n=7\nconsole.log(add10(10));   // 20 — celda A sigue siendo x=10"
+        }
+      ],
+      "tables": [
+        "| | makeAdder | crearContador |\n|---|---|---|\n| Fuente del valor capturado | Parámetro de la función | Variable local de la función |\n| ¿Compartido entre closures? | No — celda nueva por llamada | Sí — las tres closures comparten `cuenta` |\n| Mutabilidad del capturado | Inmutable (solo lectura) | Mutable (lectura y escritura) |\n| Uso típico | Currificación, partial application | Estado encapsulado, módulo con estado |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-top-split",
+        "image": "none",
+        "code": "left-bottom-split",
+        "table": "right-half"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| | makeAdder | crearContador |\n|---|---|---|\n| Fuente del valor capturado | Parámetro de la función | Variable local de la función |\n| ¿Compartido entre closures? | No — celda nueva por llamada | Sí — las tres closures comparten `cuenta` |\n| Mutabilidad del capturado | Inmutable (solo lectura) | Mutable (lectura y escritura) |\n| Uso típico | Currificación, partial application | Estado encapsulado, módulo con estado |",
+          "local_asset": "slides/assets/F-17-table-1.png",
+          "drive_id": "1TT30Wy0uupR_dyhSgU5Sx5oBSyNYUbSv"
+        }
+      ]
+    },
+    {
+      "id": "F-18",
+      "type": "codigo",
+      "title": "var es función-scope: existe UNA SOLA variable para todo el loop — todas las closures la comparten",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// var declara una variable en el scope de la FUNCIÓN CONTENEDORA, no del bloque\n// Hay exactamente UNA variable `i` para todo el loop\nconst funcs: (() => number)[] = [];\n\nfor (var i = 0; i < 3; i++) {\n    funcs.push(() => i);   // TODAS las closures apuntan a la MISMA `i` (deep binding)\n                           // pero `i` es una sola celda de memoria — son aliases de ella\n}\n\n// En este punto: i === 3 (el loop terminó — i llegó a 3)\n// Todas las closures leen la misma celda que ahora contiene 3:\nconsole.log(funcs[0]());   // 3 — esperábamos 0\nconsole.log(funcs[1]());   // 3 — esperábamos 1\nconsole.log(funcs[2]());   // 3 — esperábamos 2\n\n// El deep binding no es el bug — la captura es correcta\n// El bug es que var comparte la MISMA celda entre todas las iteraciones"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "codigo",
+      "title": "let es block-scope: cada iteración del bloque crea una variable nueva e independiente",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// let crea una nueva variable `j` en CADA iteración del bloque for\nconst funcs2: (() => number)[] = [];\n\nfor (let j = 0; j < 3; j++) {\n    funcs2.push(() => j);   // cada closure captura su PROPIA `j` — celda distinta en heap\n}\n\n// Tres variables `j` distintas en el heap — tres closures, tres celdas independientes:\nconsole.log(funcs2[0]());   // 0 ✅ — la j de la iteración 0\nconsole.log(funcs2[1]());   // 1 ✅ — la j de la iteración 1\nconsole.log(funcs2[2]());   // 2 ✅ — la j de la iteración 2\n\n// Alternativa funcional — evita el problema por diseño:\nconst funcs3 = Array.from({ length: 3 }, (_, k) => () => k);\nconsole.log(funcs3[0]());   // 0 ✅\nconsole.log(funcs3[1]());   // 1 ✅\nconsole.log(funcs3[2]());   // 2 ✅\n\n// Regla práctica: en TypeScript moderno, nunca usar var.\n// let y const tienen semántica de scope predecible."
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-20",
+      "type": "concepto-abstracto",
+      "title": "El heap no tiene un mecanismo automático de liberación como el stack",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Revisión: categorías de variables y liberación (Tema 09.1)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Categoría 1 — static: el compilador calcula el espacio en compilación, nunca se libera",
+              "level": 0
+            },
+            {
+              "content": "Categoría 2 — stack-dynamic: el runtime libera automáticamente al desapilar el activation record",
+              "level": 0
+            },
+            {
+              "content": "Categorías 3 y 4 — heap-dynamic: alguien debe decidir explícitamente cuándo liberar",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El dilema fundamental"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Liberar demasiado pronto → dangling pointer: referencia a memoria ya liberada — crash o corrupción silenciosa",
+              "level": 0
+            },
+            {
+              "content": "Liberar demasiado tarde → memory leak: la memoria nunca se recupera, el proceso crece",
+              "level": 0
+            },
+            {
+              "content": "No liberar manualmente → necesitamos un mecanismo automático: el Garbage Collector",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La pregunta que todo GC debe responder"
+        },
+        {
+          "type": "text",
+          "content": "¿Cuándo se puede liberar una celda del heap de forma segura? Respuesta: cuando no existe ninguna referencia viva a ella — es inaccesible desde el programa. El desafío es detectar esa condición de forma eficiente y correcta."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "A 4x4 grid of small squares on white background. Several squares filled bordo (occupied), others empty white with thin borders (free). One square has a bold dark-gray X mark. A thin dashed arrow from a filled square points to an empty area far from it. Flat design, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-21",
+      "type": "tabla-comparativa",
+      "title": "Estrategias de gestión de memoria — comparación de enfoques",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Cuatro estrategias principales para gestionar la memoria heap, cada una con distintos trade-offs entre determinismo, seguridad y rendimiento."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Estrategia | Quién libera | Cuándo libera | Ejemplos | Problema principal |\n|---|---|---|---|---|\n| **Manual** | El programador (`free`, `delete`) | Cuando el programador lo decide | C, C++ | Dangling pointers, double-free, memory leaks |\n| **Reference Counting** | El runtime (contador por celda) | Cuando el contador cae a 0 | Python, Swift, PHP | No resuelve ciclos de referencia |\n| **Mark-and-Sweep** | El GC | Cuando el allocator necesita espacio | Java, JavaScript/V8, Go | Pausa el programa (stop-the-world) |\n| **Ownership + Drop** | El compilador (análisis estático) | Al salir del scope — garantía en compilación | Rust | Modelo de programación más restrictivo |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Estrategia | Quién libera | Cuándo libera | Ejemplos | Problema principal |\n|---|---|---|---|---|\n| **Manual** | El programador (`free`, `delete`) | Cuando el programador lo decide | C, C++ | Dangling pointers, double-free, memory leaks |\n| **Reference Counting** | El runtime (contador por celda) | Cuando el contador cae a 0 | Python, Swift, PHP | No resuelve ciclos de referencia |\n| **Mark-and-Sweep** | El GC | Cuando el allocator necesita espacio | Java, JavaScript/V8, Go | Pausa el programa (stop-the-world) |\n| **Ownership + Drop** | El compilador (análisis estático) | Al salir del scope — garantía en compilación | Rust | Modelo de programación más restrictivo |",
+          "local_asset": "slides/assets/F-21-table-1.png",
+          "drive_id": "1857P4C60mUbrACuYuPD5nn_I2LOJGVhU"
+        }
+      ]
+    },
+    {
+      "id": "F-22",
+      "type": "concepto-abstracto",
+      "title": "Cada celda del heap lleva un contador de cuántas referencias activas la apuntan",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El invariante del algoritmo"
+        },
+        {
+          "type": "text",
+          "content": "ref_count(celda) = cantidad de variables/campos que apuntan a esa celda en este momento. Cuando ref_count == 0 → la celda es inaccesible → liberar inmediatamente."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ventajas del Reference Counting"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Determinístico: la liberación ocurre en el instante exacto en que el contador llega a 0",
+              "level": 0
+            },
+            {
+              "content": "Sin stop-the-world: no hay que pausar el programa para recoger basura",
+              "level": 0
+            },
+            {
+              "content": "Predecible: en Python, del x libera la celda de forma inmediata si no hay otras referencias",
+              "level": 0
+            },
+            {
+              "content": "Localizado: el costo de GC se distribuye a lo largo del tiempo",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La limitación fundamental"
+        },
+        {
+          "type": "text",
+          "content": "Si dos objetos se apuntan mutuamente, sus contadores nunca llegan a 0 aunque el programa no pueda alcanzarlos — son inaccesibles pero el RC no los libera. Es una fuga de memoria estructural del algoritmo."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Five small squares in a horizontal row. Each square has a small circle badge in the upper-right corner. First two badges are filled bordo (count 2), third badge is half-filled (count 1), fourth badge is empty and square appears faded. Two bold dark-gray arrows point downward into the first and second squares from above. White background, flat design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "tabla-comparativa",
+      "title": "RC y mark-sweep son procesos opuestos — Sebesta §6.11 + Louden §10.5",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Sebesta y Louden coinciden en el diagnóstico: RC y mark-sweep son procesos opuestos, cada uno resuelve lo que el otro no puede. Los GC modernos (Python, Swift, V8) combinan ambos o hibridan técnicas."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Algoritmo | Fortaleza | Debilidad |\n|---|---|---|\n| Reference Counting | Incremental, determinístico, sin stop-the-world | No resuelve ciclos; overhead por operación |\n| Mark-and-Sweep | Resuelve ciclos; sin overhead por operación | Stop-the-world; no incremental (clásico) |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Algoritmo | Fortaleza | Debilidad |\n|---|---|---|\n| Reference Counting | Incremental, determinístico, sin stop-the-world | No resuelve ciclos; overhead por operación |\n| Mark-and-Sweep | Resuelve ciclos; sin overhead por operación | Stop-the-world; no incremental (clásico) |",
+          "local_asset": "slides/assets/F-23-table-1.png",
+          "drive_id": "1aaFUXu2D9eETKMyXny_-JBJSdv7Miubr"
+        }
+      ]
+    },
+    {
+      "id": "F-24",
+      "type": "codigo",
+      "title": "Python usa RC internamente — sys.getrefcount permite observar el contador en tiempo real",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "import sys\n\n# Crear el objeto: ref_count = 1 (la variable `lista` lo referencia)\nlista = [1, 2, 3]\nprint(sys.getrefcount(lista))   # 2 — getrefcount mismo crea una referencia temporal\n\n# Agregar segunda referencia: ref_count = 2\nalias = lista\nprint(sys.getrefcount(lista))   # 3\n\n# Agregar referencia en una estructura:\ncontenedor = [lista]\nprint(sys.getrefcount(lista))   # 4\n\n# Eliminar referencias una a una:\ndel contenedor           # ref_count → 3\ndel alias                # ref_count → 2\n# Solo `lista` referencia el objeto → ref_count = 1\n\ndel lista\n# ref_count → 0 → el runtime libera [1, 2, 3] INMEDIATAMENTE\n# No hay que esperar ningún ciclo de GC"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "concepto-abstracto",
+      "title": "Cuando dos objetos se apuntan mutuamente, ningún contador llega a 0 aunque sean inaccesibles",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El escenario del ciclo"
+        },
+        {
+          "type": "text",
+          "content": "Al eliminar las variables externas del ciclo A→B→A: ref_count(A) = 1 (B apunta a A) y ref_count(B) = 1 (A apunta a B). Ambos son inaccesibles desde el programa, pero sus contadores nunca llegan a cero. Con RC puro: NUNCA se liberan → MEMORY LEAK permanente."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué es un problema real y frecuente"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Listas doblemente enlazadas (siguiente y previo)",
+              "level": 0
+            },
+            {
+              "content": "Árboles con punteros al nodo padre",
+              "level": 0
+            },
+            {
+              "content": "Grafos generales con ciclos",
+              "level": 0
+            },
+            {
+              "content": "Objetos de UI con referencias bidireccionales (parent/child)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Soluciones en los lenguajes reales"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Python: RC + cycle detector separado en el módulo gc",
+              "level": 0
+            },
+            {
+              "content": "Swift: ARC + el programador declara referencias weak para romper ciclos manualmente",
+              "level": 0
+            },
+            {
+              "content": "Rust: el borrow checker prohíbe los ciclos mutables en compilación",
+              "level": 0
+            },
+            {
+              "content": "JavaScript/V8: usa Mark-and-Sweep que detecta ciclos correctamente por diseño",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-26",
+      "type": "codigo",
+      "title": "Dos nodos que se apuntan mutuamente — ciclo que RC puro no podría liberar",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "class Nodo {\n    nombre: string;\n    siguiente: Nodo | null = null;\n    previo:    Nodo | null = null;\n\n    constructor(nombre: string) { this.nombre = nombre; }\n}\n\n// Crear dos nodos con referencias mutuas — ciclo de referencia:\nconst a = new Nodo(\"A\");\nconst b = new Nodo(\"B\");\n\na.siguiente = b;   // A → B   (si usáramos RC: ref_count(B) sube a 2)\nb.previo    = a;   // B → A   (si usáramos RC: ref_count(A) sube a 2)\n\n// Si TypeScript/V8 usara RC puro y elimináramos las referencias externas:\n//   a = null → ref_count(A) = 1 (B.previo lo apunta)  → no se libera\n//   b = null → ref_count(B) = 1 (A.siguiente lo apunta) → no se libera\n//   Ambos son inaccesibles pero el RC nunca los liberaría — MEMORY LEAK\n\n// V8 usa Mark-and-Sweep — los detecta como inaccesibles y los libera correctamente ✅"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-27",
+      "type": "concepto-abstracto",
+      "title": "Marcar todo lo alcanzable desde el programa, liberar todo lo que no se marcó",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Las raíces del grafo de objetos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Variables activas en todos los activation records del stack",
+              "level": 0
+            },
+            {
+              "content": "Variables globales del programa",
+              "level": 0
+            },
+            {
+              "content": "Registros de la CPU con referencias",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Fase 1 — Mark (Marcar)"
+        },
+        {
+          "type": "text",
+          "content": "A partir de cada raíz, el GC realiza un traversal transitivo del grafo de referencias. Si puede llegar a un objeto directa o transitivamente desde una raíz → lo marca como alcanzable. Si no → queda sin marcar."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Fase 2 — Sweep (Barrer)"
+        },
+        {
+          "type": "text",
+          "content": "Recorre TODO el heap. Celda marcada → sigue viva → desmarcarla para el próximo ciclo. Celda no marcada → es inaccesible → liberar."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La ventaja clave sobre RC y el costo"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Ventaja: un ciclo entre A y B que no sea alcanzable queda sin marcar → ambos se liberan en el sweep",
+              "level": 0
+            },
+            {
+              "content": "Costo: durante mark y sweep, el programa se pausa (stop-the-world). Los GC modernos minimizan esta pausa con técnicas incrementales y concurrentes.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "A graph of six circles connected by thin lines. Three circles at the top are filled solid bordo (reachable), connected by lines to two small squares at the very top representing roots. Three circles at the bottom have dashed outlines (unreachable), with no connecting lines reaching the root squares. White background, flat design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-28",
+      "type": "concepto-mixto",
+      "title": "Gabbrielli §8.11: tres defectos del mark-and-sweep y la compactación como solución",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Defecto 1 — Fragmentación externa"
+        },
+        {
+          "type": "text",
+          "content": "Los objetos vivos y los inaccesibles quedan entremezclados en memoria. La suma de huecos puede ser suficiente para una nueva alocación, pero no hay ningún bloque contiguo disponible."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Defecto 2 — Stop-the-world"
+        },
+        {
+          "type": "text",
+          "content": "A diferencia del RC (incremental), el mark-and-sweep acumula trabajo y lo ejecuta todo junto. En heaps grandes: pausas de cientos de milisegundos inaceptables para aplicaciones interactivas."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Defecto 3 — Actualización de punteros tras compactación"
+        },
+        {
+          "type": "text",
+          "content": "Si se añade compactación, todos los punteros a objetos movidos deben actualizarse. El costo es proporcional al número de referencias en el grafo."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La solución: compactación y V8 semi-space copying"
+        },
+        {
+          "type": "text",
+          "content": "V8 usa semi-space copying en el New Space: los objetos vivos se copian al semi-space vacío ('to'), y al terminar los roles se intercambian. El semi-space 'from' queda completamente libre en un solo paso."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "ANTES (heap fragmentado tras varios ciclos de GC):\n  [Obj1][ libre ][ Obj2 ][ libre ][Obj3][ libre ][ libre ]\n\nDESPUÉS DE COMPACTACIÓN (objetos vivos movidos a posiciones contiguas):\n  [Obj1][ Obj2 ][Obj3][          LIBRE CONTIGUO          ]\n\nCOSTO: actualizar todos los punteros a Obj1, Obj2, Obj3 con sus nuevas direcciones\nBENEFICIO: una única zona libre contigua — toda alocación nueva es trivial"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-29",
+      "type": "codigo",
+      "title": "Seguimiento paso a paso de mark y sweep sobre un heap con ciclo inaccesible",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "Estado inicial del heap — antes del GC:\n\n  Raíces activas:   x → Obj1,   y → Obj3\n\n  Obj1 ─── referencia ──► Obj2\n  Obj3                              (sin referencias entre sí)\n  Obj4 ─── referencia ──► Obj5\n  Obj5 ─── referencia ──► Obj4     ← ciclo: Obj4 ↔ Obj5\n\n  (Obj4 y Obj5 no son alcanzables desde ninguna raíz)\n\n──────────────────────────────────────────────────────────────\nFASE MARK — trazado desde las raíces:\n\n  Desde x → Obj1 ✓   (marcado)\n    Obj1.ref → Obj2 ✓ (marcado transitivamente)\n  Desde y → Obj3 ✓   (marcado)\n  Obj4, Obj5: no alcanzables → sin marcar\n\n──────────────────────────────────────────────────────────────\nFASE SWEEP — recorrido del heap completo:\n\n  Obj1 ✓ → vivo, desmarcar\n  Obj2 ✓ → vivo, desmarcar\n  Obj3 ✓ → vivo, desmarcar\n  Obj4   → LIBERAR  (inaccesible — aunque forma ciclo con Obj5)\n  Obj5   → LIBERAR  (inaccesible — aunque forma ciclo con Obj4)\n\nEstado final del heap: Obj1, Obj2, Obj3 — compactados\nEl ciclo Obj4 ↔ Obj5 fue liberado correctamente ✅"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-30",
+      "type": "concepto-abstracto",
+      "title": "La mayoría de los objetos mueren jóvenes — el GC puede explotar ese patrón",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La hipótesis generacional"
+        },
+        {
+          "type": "text",
+          "content": "Evidencia empírica en lenguajes con GC: la gran mayoría de los objetos tienen un ciclo de vida muy corto — resultados de map/filter, objetos temporales de request, closures de un solo uso. Pocos objetos sobreviven mucho tiempo."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La estrategia: dividir el heap en generaciones"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Generación joven (Young Gen / Nursery): objetos recién creados → GC muy frecuente, espacio pequeño → muy rápido",
+              "level": 0
+            },
+            {
+              "content": "Generación vieja (Old Gen / Tenured): objetos que sobrevivieron varios ciclos → GC infrecuente → más costoso pero ocurre raramente",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Promoción y resultado práctico"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Un objeto que sobrevive un número configurable de ciclos se promueve a la generación vieja",
+              "level": 0
+            },
+            {
+              "content": "El 90% de los ciclos de GC solo barren la generación joven (unos pocos megabytes) y duran menos de 1 ms",
+              "level": 0
+            },
+            {
+              "content": "Los ciclos sobre la generación vieja son raros y se pueden ejecutar de forma incremental o concurrente",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-31",
+      "type": "codigo",
+      "title": "Layout interno del heap de V8 (Node.js / Chrome / TypeScript compilado a JS)",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "Heap de V8:\n┌────────────────────────────────────────────────────────────────┐\n│  New Space (Generación joven)                                  │\n│  ┌─────────────────────┬─────────────────────┐                 │\n│  │  Semi-space \"from\"  │  Semi-space \"to\"    │  Scavenger GC   │\n│  │  (objetos activos)  │  (espacio libre)    │  frecuente,     │\n│  │                     │                     │  muy rápido     │\n│  └─────────────────────┴─────────────────────┘                 │\n│  Capacidad: ~1-8 MB según configuración                        │\n├────────────────────────────────────────────────────────────────┤\n│  Old Space (Generación vieja)                                  │\n│  ┌───────────────────────────────────────────────────────┐     │\n│  │  objetos promovidos — sobrevivieron en New Space      │     │\n│  │  Mark-Compact incremental + concurrent               │     │\n│  │  Capacidad: cientos de MB — GC infrecuente           │     │\n│  └───────────────────────────────────────────────────────┘     │\n├────────────────────────────────────────────────────────────────┤\n│  Code Space (código JIT compilado)                             │\n│  Large Object Space (objetos > 512KB — no se compactan)        │\n│  Map Space (descriptores de forma de objetos)                  │\n└────────────────────────────────────────────────────────────────┘\n\nMinor GC (Scavenger): evacúa New Space — semi-space copying, muy rápido\nMajor GC (Mark-Compact): mark + sweep + compact en Old Space — concurrent"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-32",
+      "type": "concepto-abstracto",
+      "title": "El tipado no es una dicotomía binaria — existe un espectro continuo entre estático y dinámico",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tipado estático puro"
+        },
+        {
+          "type": "text",
+          "content": "Los tipos se verifican en compilación. Si hay un error de tipos → el programa no compila. El programador debe anotar los tipos explícitamente (o el compilador los infiere). Ejemplos: Java, C, Haskell, Rust."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tipado dinámico puro"
+        },
+        {
+          "type": "text",
+          "content": "Los tipos se verifican en ejecución. El programa compila siempre — los errores de tipos son excepciones en runtime. Ejemplos: Python (sin mypy), Ruby, Scheme, JavaScript puro."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tipado gradual — la tercera vía"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Permite mezclar: algunas partes tienen tipos estáticos, otras usan any (tipo dinámico)",
+              "level": 0
+            },
+            {
+              "content": "El programador elige la cobertura según la criticidad de cada módulo o función",
+              "level": 0
+            },
+            {
+              "content": "Formalizado por Jeremy Siek y Walid Taha en 2006",
+              "level": 0
+            },
+            {
+              "content": "TypeScript lo implementó de forma práctica y a escala industrial",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "A long horizontal rectangle divided into three equal vertical segments. Leftmost segment light gray, middle segment medium gray, rightmost segment deep bordo. Below each segment, a small flat icon: a gear icon (left), a combined gear-and-document (center), a document with a checkmark (right). White background, flat design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-33",
+      "type": "concepto-abstracto",
+      "title": "El gradual typing no es solo una característica de TypeScript — tiene base teórica rigurosa",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La motivación histórica — Gabbrielli §16.9"
+        },
+        {
+          "type": "text",
+          "content": "'A medida que el número de proyectos de software de gran escala desarrollados con lenguajes de tipado dinámico creció con el tiempo, los usuarios advirtieron que sacrificar las verificaciones estáticas en favor de la rapidez de prototipado era un trato desfavorable.' — Gabbrielli §16.9"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La base formal — Siek & Taha (2006)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Tipo especial ? (tipo dinámico) — compatible con cualquier tipo en compilación",
+              "level": 0
+            },
+            {
+              "content": "Relación de consistencia de tipos (~): T ~ ? para cualquier T — más débil que igualdad",
+              "level": 0
+            },
+            {
+              "content": "Cast implícito automático: el compilador inserta verificaciones en los límites entre código tipado y no tipado",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "TypeScript y la corrección formal — Gabbrielli §16.9"
+        },
+        {
+          "type": "text",
+          "content": "Gabbrielli distingue el tipado gradual formalmente correcto del enfoque de TypeScript, deliberadamente incompleto: acepta ciertos programas con potenciales errores de tipo por razones de usabilidad y compatibilidad con JavaScript. Esta decisión está documentada en la especificación oficial."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-34",
+      "type": "tabla-comparativa",
+      "title": "Los tres enfoques de tipado — características clave",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Comparación de tipado estático, dinámico y gradual (TypeScript) según características clave de diseño y uso práctico."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Característica | Estático puro | Dinámico puro | Gradual (TypeScript) |\n|---|---|---|---|\n| Verificación de tipos | Compilación | Ejecución | Compilación donde hay tipos |\n| Error de tipos | No compila | Excepción en runtime | Error de compilación (si hay tipo) |\n| Anotaciones | Obligatorias (o inferidas) | No existen | Opcionales — elección del programador |\n| Escape hatch | No existe | Todo es dinámico | `any` — explícito y auditable |\n| Detección de null | En compilación | Runtime crash | Con `strictNullChecks` activado |\n| Migración desde JS | No aplica | No aplica | Incremental, archivo por archivo ✅ |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Característica | Estático puro | Dinámico puro | Gradual (TypeScript) |\n|---|---|---|---|\n| Verificación de tipos | Compilación | Ejecución | Compilación donde hay tipos |\n| Error de tipos | No compila | Excepción en runtime | Error de compilación (si hay tipo) |\n| Anotaciones | Obligatorias (o inferidas) | No existen | Opcionales — elección del programador |\n| Escape hatch | No existe | Todo es dinámico | `any` — explícito y auditable |\n| Detección de null | En compilación | Runtime crash | Con `strictNullChecks` activado |\n| Migración desde JS | No aplica | No aplica | Incremental, archivo por archivo ✅ |",
+          "local_asset": "slides/assets/F-34-table-1.png",
+          "drive_id": "1HvwGtULh0SqZLL2VfwoGffpHooo6TW-5"
+        }
+      ]
+    },
+    {
+      "id": "F-35",
+      "type": "codigo",
+      "title": "Sin tipos explícitos: TypeScript es compatible con JavaScript puro — sin ninguna garantía",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Sin strict mode: TypeScript infiere `any` para parámetros sin anotación\nfunction sumar(a, b) {\n    // TypeScript informa: Parameter 'a' implicitly has an 'any' type.\n    // (solo con noImplicitAny o strict: true — de lo contrario, silencioso)\n    return a + b;\n}\n\nsumar(1, 2);         // 3   — comportamiento esperado\nsumar(\"1\", 2);       // \"12\" — concatenación de strings — sin error en compilación\nsumar({}, []);       // \"[object Object]\" — TypeScript no objeta\n\n// Con strict: true en tsconfig.json →\n// Error: Parameter 'a' implicitly has an 'any' type.\n// Ese error es la señal de que el código necesita anotaciones\n\n// Nivel 0 es el punto de entrada de toda migración JS → TS:\n// Renombrar .js → .ts ya es válido en nivel 0, sin cambiar ninguna línea"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-36",
+      "type": "codigo",
+      "title": "De cobertura parcial a cobertura total — la migración incremental en acción",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Nivel 1: tipos en la interfaz pública\nfunction sumarSeguro(a: number, b: number): number {\n    return a + b;\n}\n\nsumarSeguro(1, 2);      // ✅ 3\n// sumarSeguro(\"1\", 2); // ❌ Error: Argument of type 'string' is not assignable to type 'number'\n\n// Nivel 2: strict mode — cobertura total\n// tsconfig.json: { \"compilerOptions\": { \"strict\": true } }\n// Activa: noImplicitAny, strictNullChecks, strictFunctionTypes, ...\n\nfunction buscarUsuario(id: number): string | null {\n    if (id === 1) return \"Ana\";\n    return null;\n}\n\nconst nombre = buscarUsuario(2);\n// Sin strictNullChecks: nombre.toUpperCase() — compila, crash en runtime\n// Con strictNullChecks: nombre.toUpperCase()\n// ❌ Error: 'nombre' is possibly 'null'\nconsole.log(nombre?.toUpperCase() ?? \"no encontrado\");  // ✅ manejo explícito de null"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-37",
+      "type": "tabla-mixta",
+      "title": "any desactiva el sistema de tipos; unknown lo preserva — dos escape hatches con semánticas opuestas",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La diferencia conceptual"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "any: TypeScript suspende completamente la verificación. El programador puede hacer cualquier cosa sin que el compilador objete.",
+              "level": 0
+            },
+            {
+              "content": "unknown: TypeScript sabe que el valor existe pero no conoce su tipo. Obliga al programador a hacer narrowing antes de cualquier operación.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// `any` — el compilador no objeta nada — crash en runtime posible\nfunction procesarAny(valor: any): string {\n    return valor.toUpperCase();    // ✅ para TypeScript — TypeError en runtime si valor es number\n}\n\n// `unknown` — requiere narrowing antes de cualquier operación\nfunction procesarUnknown(valor: unknown): string {\n    // return valor.toUpperCase(); // ❌ Error: Object is of type 'unknown'\n    if (typeof valor === \"string\") return valor.toUpperCase();  // ✅ narrowed a string\n    if (typeof valor === \"number\") return valor.toFixed(2);     // ✅ narrowed a number\n    return String(valor);\n}\n\n// Uso canónico de `unknown`: datos externos y catch blocks\ntry {\n    JSON.parse(\"datos-invalidos\");\n} catch (e: unknown) {\n    // e.message;          // ❌ Error: Object is of type 'unknown'\n    if (e instanceof Error) console.log(e.message);  // ✅ narrowed a Error\n}"
+        }
+      ],
+      "tables": [
+        "| Situación | Tipo recomendado | Motivo |\n|---|---|---|\n| Migración gradual desde JS | `any` (transitorio) | Compatibilidad — marcar con TODO |\n| Datos de red / JSON.parse / catch | `unknown` | Fuerza verificación antes de uso |\n| Interop con librerías sin types | `any` con cast documentado | No hay alternativa |\n| Cualquier otro caso | Tipo concreto o union type | Sin escape hatch |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-top-split",
+        "image": "none",
+        "code": "left-bottom-split",
+        "table": "right-half"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Situación | Tipo recomendado | Motivo |\n|---|---|---|\n| Migración gradual desde JS | `any` (transitorio) | Compatibilidad — marcar con TODO |\n| Datos de red / JSON.parse / catch | `unknown` | Fuerza verificación antes de uso |\n| Interop con librerías sin types | `any` con cast documentado | No hay alternativa |\n| Cualquier otro caso | Tipo concreto o union type | Sin escape hatch |",
+          "local_asset": "slides/assets/F-37-table-1.png",
+          "drive_id": "1tN23MJhFh0OoKThprUfch6zSnayYbzcE"
+        }
+      ]
+    },
+    {
+      "id": "F-38",
+      "type": "concepto-abstracto",
+      "title": "TypeScript refina el tipo de una variable en cada rama del control de flujo",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El problema que resuelve"
+        },
+        {
+          "type": "text",
+          "content": "Un union type como string | number | null permite que una variable sea cualquiera de esos tipos. Para usar toUpperCase() necesitamos saber que es string. Sin verificar, el compilador (con strict) rechaza el código."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué es el type narrowing?"
+        },
+        {
+          "type": "text",
+          "content": "El proceso por el cual TypeScript estrecha (narrows) el tipo de una variable dentro de cada rama de control de flujo, basándose en las condiciones verificadas en las ramas anteriores."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Los guardas de tipo más comunes"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "typeof x === 'string' → en esa rama, TypeScript sabe que x es string",
+              "level": 0
+            },
+            {
+              "content": "x === null → en esa rama, TypeScript sabe que x es null",
+              "level": 0
+            },
+            {
+              "content": "x instanceof Clase → en esa rama, TypeScript sabe que x es Clase",
+              "level": 0
+            },
+            {
+              "content": "Narrowing exhaustivo con switch + default: never → el compilador detecta casos faltantes",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La garantía formal"
+        },
+        {
+          "type": "text",
+          "content": "Dentro de cada rama del narrowing, TypeScript garantiza estáticamente que el tipo es el esperado. Si se agrega un nuevo caso al union type y no se actualiza el código, el compilador lo detecta."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "One wide bordo-filled rectangle at the top. Three separate narrow downward-pointing arrows branch from it, each ending at a smaller distinct bordo square at the bottom. The three bottom squares are clearly separated and smaller than the top rectangle, visually narrowing. White background, flat design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-39",
+      "type": "codigo",
+      "title": "TypeScript restringe el tipo en cada rama — los métodos disponibles cambian según la rama",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Resultado = string | number | null;\n\nfunction formatear(r: Resultado): string {\n    if (r === null) {\n        return \"—\";             // aquí TypeScript sabe: r es null — ✅\n    }\n    if (typeof r === \"number\") {\n        return r.toFixed(2);    // aquí TypeScript sabe: r es number — ✅\n    }\n    return r.toUpperCase();     // aquí TypeScript sabe: r es string — ✅\n}\n\n// instanceof — para clases con herencia\nclass Perro { ladrar()  { return \"Guau\"; } }\nclass Gato  { maullar() { return \"Miau\"; } }\n\nfunction hacerSonido(animal: Perro | Gato): string {\n    if (animal instanceof Perro) {\n        return animal.ladrar();  // Perro en esta rama ✅\n    }\n    return animal.maullar();     // Gato: único tipo restante ✅\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-40",
+      "type": "codigo",
+      "title": "El compilador detecta en compilación si falta un caso al agregar un nuevo tipo al union",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Forma = \"círculo\" | \"cuadrado\" | \"triángulo\";\n\nfunction área(f: Forma, lado: number): number {\n    switch (f) {\n        case \"círculo\":\n            return Math.PI * lado ** 2;\n        case \"cuadrado\":\n            return lado ** 2;\n        case \"triángulo\":\n            return (Math.sqrt(3) / 4) * lado ** 2;\n        default:\n            // Si el tipo Forma creciera: \"círculo\" | \"cuadrado\" | \"triángulo\" | \"rectángulo\"\n            // y olvidáramos agregar el case \"rectángulo\":\n            // TypeScript llega aquí con f: \"rectángulo\" — NO es never\n            // El cast a never fuerza el error de compilación:\n            const _exhaustive: never = f;\n            //    ^^^^^^^^^^^^^^^^^^^^^^^^^\n            // Error: Type '\"rectángulo\"' is not assignable to type 'never'\n            throw new Error(`Forma no manejada: ${String(_exhaustive)}`);\n    }\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-41",
+      "type": "tabla-comparativa",
+      "title": "TypeScript en producción — qué cambia en cada nivel de cobertura",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Comparación del impacto real del sistema de tipos en proyectos de distintas escalas y niveles de cobertura de tipos."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Aspecto | JavaScript puro | TypeScript gradual | TypeScript strict |\n|---|---|---|---|\n| Detección de errores de tipo | Solo en runtime | En compilación (partes tipadas) | En compilación (todo) |\n| Refactoring seguro | Muy difícil — puede romper silencioso | Parcialmente seguro | Seguro — el compilador verifica |\n| Migración desde JS | No aplica | Incremental — archivo por archivo ✅ | Requiere cobertura total previa |\n| Null crashes | Muy frecuentes | Reducidos donde hay tipos | Eliminados con strictNullChecks |\n| Tiempo de detección | Runtime en producción | Build en CI | IDE en tiempo real |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | JavaScript puro | TypeScript gradual | TypeScript strict |\n|---|---|---|---|\n| Detección de errores de tipo | Solo en runtime | En compilación (partes tipadas) | En compilación (todo) |\n| Refactoring seguro | Muy difícil — puede romper silencioso | Parcialmente seguro | Seguro — el compilador verifica |\n| Migración desde JS | No aplica | Incremental — archivo por archivo ✅ | Requiere cobertura total previa |\n| Null crashes | Muy frecuentes | Reducidos donde hay tipos | Eliminados con strictNullChecks |\n| Tiempo de detección | Runtime en producción | Build en CI | IDE en tiempo real |",
+          "local_asset": "slides/assets/F-41-table-1.png",
+          "drive_id": "1-Jnk8VMqEkVCni9AiporG812UesZGMvm"
+        }
+      ]
+    },
+    {
+      "id": "F-42",
+      "type": "concepto-abstracto",
+      "title": "En el paradigma funcional puro no existen variables mutables — solo bindings definitivos",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El contraste fundamental — Sebesta §5.8, Gabbrielli §11"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "En LP imperativos: las variables son celdas de memoria mutables — la asignación x = 5 es una operación destructiva que sobreescribe el R-value",
+              "level": 0
+            },
+            {
+              "content": "En LP funcionales puros: no existen variables mutables — existen bindings. Un binding es una asociación nombre → valor, definitiva dentro de su scope",
+              "level": 0
+            },
+            {
+              "content": "En FP: x = 5 no asigna a una celda, declara que x ES 5 en ese scope",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La computación como reescritura de expresiones"
+        },
+        {
+          "type": "text",
+          "content": "En FP puro, computar no significa modificar el estado de celdas de memoria. Significa reescribir expresiones hasta obtener un valor. El resultado es idéntico sin importar cuántas veces se evalúe — transparencia referencial."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué esto importa"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Sin estado mutable → sin efectos laterales → sin aliases peligrosos por definición",
+              "level": 0
+            },
+            {
+              "content": "El razonamiento ecuacional funciona: si f(x) = 10, entonces cualquier f(x) puede reemplazarse por 10",
+              "level": 0
+            },
+            {
+              "content": "Las funciones son predecibles: su resultado depende solo de sus argumentos",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-43",
+      "type": "concepto-abstracto",
+      "title": "Transparencia referencial — Sebesta §7.4 y Louden §9.1",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición de Sebesta §7.4"
+        },
+        {
+          "type": "text",
+          "content": "'Un programa tiene la propiedad de transparencia referencial si dos expresiones cualesquiera con el mismo valor pueden sustituirse mutuamente en cualquier punto del programa sin afectar su comportamiento.' — Sebesta §7.4"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Las consecuencias formales"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Razonamiento ecuacional: si f(x) = 10, entonces f(x) puede sustituirse por 10 en cualquier parte",
+              "level": 0
+            },
+            {
+              "content": "Memoización válida: el compilador puede cachear f(5) = 25 y no recalcularlo",
+              "level": 0
+            },
+            {
+              "content": "Reordenamiento seguro: el compilador puede evaluar f(a) y g(b) en cualquier orden si ambas son puras",
+              "level": 0
+            },
+            {
+              "content": "Pruebas aisladas: una función pura se prueba completamente con sus argumentos — sin setup de estado global",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La conexión con aliases (Bloque 1)"
+        },
+        {
+          "type": "text",
+          "content": "Los aliases sobre objetos mutables rompen la transparencia referencial. La inmutabilidad (Bloque 5) elimina esta categoría de problemas por diseño: si los objetos no se pueden mutar, los aliases son inofensivos."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-44",
+      "type": "codigo",
+      "title": "En Haskell no existe reasignar — la computación es declaración de relaciones",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "haskell",
+          "content": "-- En Haskell, `let x = 5` declara que x ES 5 en este scope — no que x TIENE el valor 5\nlet x = 5       -- x está vinculado a 5 para siempre en este scope\n-- x = 6        -- ILEGAL: no existe el concepto de reasignación\n\n-- La \"iteración\" en FP no usa un contador mutable — usa recursión con binding fresh:\nsumaLista :: [Int] -> Int\nsumaLista []     = 0                     -- caso base: lista vacía → 0\nsumaLista (x:xs) = x + sumaLista xs     -- x es un binding nuevo en cada llamada recursiva\n                                         -- no es la misma celda modificada — es un binding diferente\n\n-- Versión con fold — sin ninguna variable mutable explícita:\nsuma = foldl (+) 0 [1, 2, 3, 4, 5]     -- suma = 15\n\n-- Para \"cambiar\" el valor de x se necesita un binding nuevo:\nlet y = x + 1  -- y está vinculado a 6 — x sigue siendo 5"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-45",
+      "type": "codigo",
+      "title": "Scala y Kotlin distinguen explícitamente entre binding inmutable y variable mutable",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "scala",
+          "content": "// Scala — dos palabras clave, dos semánticas completamente distintas\nval y = 5    // val: binding inmutable — como const en TypeScript\nvar x = 5    // var: variable mutable — como let en TypeScript\n\nx = 10       // ✅ válido — x es var\n// y = 10   // ❌ Error: reassignment to val — el compilador rechaza esto\n\n// En estilo funcional en Scala: siempre val, salvo que la mutación sea necesaria"
+        },
+        {
+          "lang": "kotlin",
+          "content": "// Kotlin — misma distinción, misma semántica\nval inmutable = 42    // binding definitivo — no puede reasignarse\nvar mutable   = 42    // variable mutable — puede reasignarse\n\nmutable = 100         // ✅\n// inmutable = 100    // ❌ Val cannot be reassigned\n\n// Para colecciones: la inmutabilidad también existe en el tipo\nval lista     = listOf(1, 2, 3)        // lista inmutable — no se puede agregar ni quitar\nval listaMut  = mutableListOf(1, 2, 3) // lista mutable"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-46",
+      "type": "codigo",
+      "title": "El estilo funcional evita la mutación explícita usando transformaciones de datos en cadena",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const numeros = [1, 2, 3, 4, 5];\n\n// Estilo imperativo — muta el acumulador en cada iteración\nlet suma = 0;\nfor (const x of numeros) {\n    suma += x;   // suma cambia su valor (R-value) en cada iteración\n}\nconsole.log(suma);   // 15\n\n// Estilo funcional — solo bindings nuevos, sin mutación visible\nconst sumaFuncional = numeros.reduce((acc, x) => acc + x, 0);\n// En cada llamada al callback: acc y x son parámetros nuevos (bindings fresh)\nconsole.log(sumaFuncional);   // 15\n\n// Transformación completa en cadena — sin estado mutable en ningún paso:\nconst resultado = [1, 2, 3, 4, 5]\n    .filter(x => x % 2 === 0)    // [2, 4] — nuevo array, el original no cambia\n    .map(x => x * 10)             // [20, 40] — nuevo array\n    .reduce((a, b) => a + b, 0);  // 60 — binding final"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-47",
+      "type": "codigo",
+      "title": "TypeScript provee herramientas de compilación para garantizar inmutabilidad en objetos",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Readonly<T> — el compilador impide cualquier mutación de las propiedades\ntype ConfigApp = Readonly<{ host: string; port: number; debug: boolean; }>;\n\nconst cfg: ConfigApp = { host: \"localhost\", port: 3000, debug: false };\n// cfg.debug = true;\n// ❌ Error: Cannot assign to 'debug' because it is a read-only property\n\n// ReadonlyArray<T> — array inmutable\nconst COLORES: ReadonlyArray<string> = [\"rojo\", \"verde\", \"azul\"];\n// COLORES.push(\"amarillo\");  // ❌ Property 'push' does not exist on type 'readonly string[]'\n// COLORES[0] = \"naranja\";    // ❌ Index signature only permits reading\n\n// as const — convierte literales en tipos inmutables ultra-estrictos\nconst LIMITES = { min: 0, max: 100 } as const;\n// LIMITES.min = -1;\n// ❌ Cannot assign to 'min' because it is a read-only property\n// Tipo inferido: { readonly min: 0; readonly max: 100 }\n\n// Object.freeze() — inmutabilidad en runtime\nconst frozen = Object.freeze({ retries: 3 });\n// frozen.retries = 5;  // TypeError en runtime en modo strict del motor JS"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-48",
+      "type": "concepto-abstracto",
+      "title": "La inmutabilidad elimina la categoría más común de bugs de estado en programas grandes",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El origen del problema con el estado mutable compartido"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Una función puede modificar un objeto que otras partes del código asumen estable",
+              "level": 0
+            },
+            {
+              "content": "El bug puede aparecer lejos del lugar donde ocurrió la modificación — difícil de rastrear",
+              "level": 0
+            },
+            {
+              "content": "En pruebas: las pruebas que pasan en aislamiento pueden fallar cuando se ejecutan en conjunto",
+              "level": 0
+            },
+            {
+              "content": "En concurrencia: dos threads que mutan el mismo objeto sin sincronización producen resultados no determinísticos",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La garantía que aporta la inmutabilidad"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Si un objeto es inmutable, no puede haber aliases peligrosos: cualquier referencia siempre ve el mismo valor",
+              "level": 0
+            },
+            {
+              "content": "No es necesario sincronizar accesos concurrentes — los datos nunca cambian",
+              "level": 0
+            },
+            {
+              "content": "Las funciones puras son aisladas: su resultado depende solo de sus argumentos",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "FP en TypeScript — el espectro práctico"
+        },
+        {
+          "type": "text",
+          "content": "TypeScript no es un LP puramente funcional. Pero permite adoptar un estilo funcional donde tiene sentido: const + Readonly<T> + ReadonlyArray + reduce/map/filter en lugar de loops con mutación."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-49",
+      "type": "tabla-comparativa",
+      "title": "Estado del arte en gestión de memoria — comparación 2026",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Comparación de estrategias de memoria, aliasing y comportamiento del GC en TypeScript/V8, Python, Go y Rust."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Aspecto | TypeScript / V8 | Python | Go | Rust |\n|---|---|---|---|---|\n| Estrategia de GC | GC generacional (Scavenger + Mark-Compact concurrent) | RC + cycle detector | GC concurrent tricolor incremental | Ownership + Drop — sin GC en runtime |\n| Dangling pointer | Imposible (GC gestiona todo) | Imposible (GC gestiona todo) | Imposible (GC gestiona todo) | Imposible — borrow checker en compilación |\n| Variable no inicializada | Error en compilación (strict) | NameError en runtime | Zero value automático | Error en compilación |\n| Alias de objeto | Referencia implícita — invisible | Referencia implícita — invisible | Puntero explícito con * y & | Borrow controlado por el compilador |\n| Ciclos de referencia | V8 Mark-Sweep los resuelve | Módulo gc cycle detector | GC concurrente los resuelve | Imposibles (mutables) — borrow checker |\n| Pausa del programa | Minor GC <1ms / Major GC incremental | RC incremental — impacto bajo | GC concurrent <1ms objetivo | Sin GC → sin pausa |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | TypeScript / V8 | Python | Go | Rust |\n|---|---|---|---|---|\n| Estrategia de GC | GC generacional (Scavenger + Mark-Compact concurrent) | RC + cycle detector | GC concurrent tricolor incremental | Ownership + Drop — sin GC en runtime |\n| Dangling pointer | Imposible (GC gestiona todo) | Imposible (GC gestiona todo) | Imposible (GC gestiona todo) | Imposible — borrow checker en compilación |\n| Variable no inicializada | Error en compilación (strict) | NameError en runtime | Zero value automático | Error en compilación |\n| Alias de objeto | Referencia implícita — invisible | Referencia implícita — invisible | Puntero explícito con * y & | Borrow controlado por el compilador |\n| Ciclos de referencia | V8 Mark-Sweep los resuelve | Módulo gc cycle detector | GC concurrente los resuelve | Imposibles (mutables) — borrow checker |\n| Pausa del programa | Minor GC <1ms / Major GC incremental | RC incremental — impacto bajo | GC concurrent <1ms objetivo | Sin GC → sin pausa |",
+          "local_asset": "slides/assets/F-49-table-1.png",
+          "drive_id": "1X6-XYNYVo7pye4D1zALM1o-pyz5meo66"
+        }
+      ]
+    },
+    {
+      "id": "F-50",
+      "type": "concepto-abstracto",
+      "title": "Rust garantiza seguridad de memoria sin GC en runtime mediante análisis estático en compilación",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El sistema de ownership"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Cada valor tiene un único dueño (owner) en cada momento de la ejecución",
+              "level": 0
+            },
+            {
+              "content": "Cuando el dueño sale del scope, el valor se destruye automáticamente (Drop trait — destructores determinísticos)",
+              "level": 0
+            },
+            {
+              "content": "La propiedad puede transferirse (move): el dueño anterior ya no puede usar el valor",
+              "level": 0
+            },
+            {
+              "content": "La propiedad puede prestarse (borrow): referencias temporales verificadas por el compilador",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Las reglas del borrow checker — garantías en compilación"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Puede haber cualquier cantidad de referencias inmutables (&T) al mismo tiempo"
+            },
+            {
+              "content": "O puede haber exactamente una referencia mutable (&mut T) — pero no simultáneamente con referencias inmutables"
+            },
+            {
+              "content": "Las referencias no pueden vivir más tiempo que el valor al que apuntan (no hay dangling references)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El resultado"
+        },
+        {
+          "type": "text",
+          "content": "Sin GC en runtime → sin pausas → rendimiento predecible. Sin dangling pointers → verificado por el compilador, no por pruebas en runtime."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "One large bordo-filled circle on the left connected by a thick solid arrow to a dark gray rectangle at center. On the right, two smaller gray circles connected by thin dashed lines pointing back to the rectangle, indicating temporary connections. White background, flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-51",
+      "type": "codigo",
+      "title": "El compilador detecta errores de memoria que en C serían bugs silenciosos o crashes",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "rust",
+          "content": "// Drop automático — el compilador inserta la destrucción al salir del scope\nfn nueva_sesion(id: u32) -> Vec<String> {\n    let datos: Vec<String> = Vec::new();\n    datos   // move: ownership transferido al caller — datos NO se destruye aquí\n}\n\n// Dangling reference — error de compilación (en C sería un crash):\nfn referencia_invalida() {\n    let referencia: &String;\n    {\n        let s = String::from(\"hola\");\n        referencia = &s;      // borrow de s — referencia vive mientras viva s\n    }                         // s sale de scope → Drop → s destruida\n    // println!(\"{}\", referencia);\n    // ❌ Error: `s` does not live long enough\n}\n\n// Move semantics — el compilador rastrea dónde está cada valor:\nlet v1 = vec![1, 2, 3];\nlet v2 = v1;              // ownership de v1 transferido a v2 (move)\n// println!(\"{:?}\", v1);  // ❌ Error: value borrowed here after move\nprintln!(\"{:?}\", v2);     // ✅ v2 es el único dueño"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-52",
+      "type": "codigo",
+      "title": "Prompt: 'guardá una copia de config antes de modificarla' — la IA usa asignación simple",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// ❌ Código generado por IA — INCORRECTO:\n// La IA asigna directamente: el \"backup\" es un alias, no una copia\n\nconst configBackup = config;    // NO es copia — es alias del mismo objeto heap\nconfigBackup.debug = true;      // modifica config también — el backup es inútil\n\nconsole.log(config.debug);      // true — el \"original\" fue modificado\n\n// Por qué la IA comete este error:\n// El LLM fue entrenado con mucho código JavaScript donde\n// la asignación de objetos es común y la distinción copia/alias\n// no siempre está explícita en el nombre de la variable"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-53",
+      "type": "codigo",
+      "title": "Tres señales de alerta en código IA y las dos correcciones según la profundidad del objeto",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Señales de que el código IA podría generar un alias no deseado:\n// 1. const backup = objeto                   → alias (sin duda)\n// 2. const copia = { ...objeto }             → alias en sub-objetos anidados\n// 3. const arr = Array.from(originalArr)     → alias en cada elemento objeto\n\n// Corrección 1 — Shallow copy: cuando no hay propiedades de tipo objeto anidadas\nconst configBackup1 = { ...config };   // nivel 0 independiente — nivel 1+ alias ⚠️\n\n// Corrección 2 — Deep copy: cuando hay objetos o arrays anidados (ES2022)\nconst configBackup2 = structuredClone(config);  // todos los niveles son independientes ✅\n\n// Verificación rápida de independencia:\nconsole.log(config === configBackup1);                   // false ✅ — nivel 0 distinto\nconsole.log(config.nested === configBackup1.nested);     // true ⚠️  — nivel 1 sigue siendo alias\nconsole.log(config === configBackup2);                   // false ✅\nconsole.log(config.nested === configBackup2.nested);     // false ✅ — deep copy real"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-54",
+      "type": "codigo",
+      "title": "Prompt: 'generá 5 funciones que retornen su índice' — la IA usa var y el resultado es siempre 5",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// ❌ Código generado por IA — INCORRECTO:\n// Patrón frecuente en código LLM entrenado con JavaScript pre-ES6 o código legacy\n\nconst funcs = [];\nfor (var i = 0; i < 5; i++) {\n    funcs.push(() => i);   // TODAS las closures capturan la MISMA celda de memoria\n                           // var es función-scope: i vive en el scope de la función contenedora\n                           // no se crea una `i` nueva en cada iteración — hay una sola\n}\n\n// En este punto i === 5 (el loop terminó)\n// Todas las closures leen la misma celda que ahora contiene 5:\nconsole.log(funcs[0]());  // 5 — esperábamos 0\nconsole.log(funcs[1]());  // 5 — esperábamos 1\nconsole.log(funcs[4]());  // 5 — esperábamos 4"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-55",
+      "type": "codigo",
+      "title": "let block-scope y Array.from funcional son las dos soluciones correctas",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Corrección 1: let — crea una variable j nueva en cada bloque de iteración\nconst funcs2: (() => number)[] = [];\nfor (let j = 0; j < 5; j++) {\n    funcs2.push(() => j);   // cada closure captura su propia j — celda distinta en heap\n}\nconsole.log(funcs2[0]());  // 0 ✅\nconsole.log(funcs2[4]());  // 4 ✅\n\n// Corrección 2: estilo funcional — el problema nunca existe con parámetros\n// Array.from llama al callback con un parámetro `k` nuevo en cada invocación\nconst funcs3 = Array.from({ length: 5 }, (_, k) => () => k);\nconsole.log(funcs3[0]());  // 0 ✅\nconsole.log(funcs3[4]());  // 4 ✅\n\n// Alternativa con map sobre un array de índices:\nconst funcs4 = [0, 1, 2, 3, 4].map(k => () => k);\nconsole.log(funcs4[0]());  // 0 ✅"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-56",
+      "type": "codigo",
+      "title": "Prompt: 'función que formatee un string o number' — la IA aplica métodos sin verificar el tipo",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// ❌ Código generado por IA — INCORRECTO:\n// El LLM asume que el argumento siempre será string aunque el tipo diga string | number\n\nfunction formatear(valor: string | number): string {\n    return valor.toUpperCase();\n    //           ^^^^^^^^^^^^\n    // ❌ TypeScript strict: Property 'toUpperCase' does not exist on type 'string | number'.\n    //                       Property 'toUpperCase' does not exist on type 'number'.\n}\n\n// Por qué es peligroso en producción:\n// - Sin strict mode: el código compila sin advertencia\n// - En runtime: TypeError: valor.toUpperCase is not a function\n//   cuando se pasa un número — crash en producción"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-57",
+      "type": "codigo",
+      "title": "TypeScript verifica en compilación que todos los tipos del union están cubiertos correctamente",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// ✅ Con narrowing — el compilador verifica cada rama:\nfunction formatear(valor: string | number): string {\n    if (typeof valor === \"string\") {\n        return valor.toUpperCase();  // aquí: valor es string ✅\n    }\n    return valor.toFixed(2);         // aquí: valor es number ✅\n}\n\n// Switch exhaustivo con never — atrapa tipos agregados al union que se olvidan:\ntype Color = \"rojo\" | \"verde\" | \"azul\";\n\nfunction codigoHex(c: Color): string {\n    switch (c) {\n        case \"rojo\":  return \"#FF0000\";\n        case \"verde\": return \"#00FF00\";\n        case \"azul\":  return \"#0000FF\";\n        default:\n            // Si se agrega \"amarillo\" al tipo Color y se olvida en el switch:\n            // → Error: Type '\"amarillo\"' is not assignable to type 'never'\n            // → El IDE lo marca en rojo de inmediato, antes de correr cualquier test\n            const _never: never = c;\n            throw new Error(`Color no manejado: ${String(_never)}`);\n    }\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-58",
+      "type": "socratica",
+      "title": "¿Esta closure es un diseño correcto o una fuga de memoria encubierta?",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "function registrarEventos(nombre: string) {\n    const historial: string[] = [];\n    return (evento: string) => {\n        historial.push(evento);\n        console.log(`[${nombre}] ${historial.length} eventos registrados`);\n    };\n}\nconst logApp = registrarEventos(\"App\");"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Para discutir en clase"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿En qué condiciones este diseño es correcto y útil?",
+              "level": 0
+            },
+            {
+              "content": "El GC puede liberar historial... ¿en qué condición exacta?",
+              "level": 0
+            },
+            {
+              "content": "Si logApp = null, ¿qué pasa con historial y con el string nombre?",
+              "level": 0
+            },
+            {
+              "content": "¿Cómo refactorizar para limitar el crecimiento del historial (ej: solo últimos 100 eventos)?",
+              "level": 0
+            },
+            {
+              "content": "¿Es esto un bug o es intencional? ¿Cómo saberlo sin ver el código que crea logApp?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "A large question mark shape in deep bordo at the exact center of the frame. Four small dark gray filled circles positioned at equal distance in the four cardinal directions around the question mark, radiating outward. Clean white background, flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-59",
+      "type": "cierre",
+      "title": "Aliases · Closures · GC · Gradual Typing · Bindings FP",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lo que vimos hoy"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Aliases: dos nombres, una celda. Fuentes: asignación, parámetros por referencia (Sebesta §9.5), union types. readonly como guardrail. Shallow copy con spread, deep copy con structuredClone.",
+              "level": 0
+            },
+            {
+              "content": "Closures: función + entorno léxico (Gabbrielli §7.4). Solución al dangling reference: migración al heap. Deep binding. makeAdder (Sebesta §10.6.4). let vs var.",
+              "level": 0
+            },
+            {
+              "content": "GC: Reference Counting (incremental; falla con ciclos — Louden §10.5). Mark-and-Sweep (resuelve ciclos; tres defectos — Gabbrielli §8.11). V8 generacional: Scavenger + Mark-Compact. Rust: ownership sin GC.",
+              "level": 0
+            },
+            {
+              "content": "Gradual Typing: base formal Siek & Taha 2006 (Gabbrielli §16.9). any vs unknown. Type narrowing. TypeScript: intencionalmente unsound.",
+              "level": 0
+            },
+            {
+              "content": "FP: bindings inmutables. Transparencia referencial (Sebesta §7.4 + Louden §9.1). La inmutabilidad elimina aliases peligrosos por diseño.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Conexiones hacia adelante"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Tema 10 — Tipos de Datos: union types y discriminated unions — construyen sobre type narrowing",
+              "level": 0
+            },
+            {
+              "content": "Tema 11 — FP: los bindings inmutables y la transparencia referencial son el fundamento del paradigma funcional puro",
+              "level": 0
+            },
+            {
+              "content": "Tema 14 — Sistemas de Tipos: TypeScript como gradual typing, inferencia de tipos, strict mode en profundidad",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Five horizontal bordo bars of decreasing width stacked vertically in the center of frame, widest at top narrowing toward bottom. Below the bars, a thin dark gray horizontal line. At very bottom center, a small filled dark gray circle with a white checkmark inside. Subtle dark navy gradient background. Flat design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    }
+  ]
+}
