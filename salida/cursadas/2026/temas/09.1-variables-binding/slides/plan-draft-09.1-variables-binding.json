@@ -1,0 +1,3021 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "09.1-variables-binding",
+    "title": "Variables, Binding y Ámbito",
+    "source": "filminas.md",
+    "generated_at": "2026-05-14T01:54:50",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas",
+    "topic_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas/09.1-variables-binding",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/slides-pipeline.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 49,
+    "images_planned": 19,
+    "tables_planned": 11,
+    "code_slides": 26,
+    "status": "DRAFT",
+    "pending_types": 0,
+    "pending_prompts": 19,
+    "type_distribution": {
+      "portada": 1,
+      "concepto-abstracto": 15,
+      "tabla": 4,
+      "codigo": 22,
+      "tabla-comparativa": 4,
+      "socratica": 2,
+      "cierre": 1
+    }
+  },
+  "slides": [
+    {
+      "id": "F-00",
+      "type": "portada",
+      "title": "Portada",
+      "subtitle": "Variables, Binding y Ámbito",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Paradigmas y Lenguajes de Programación — Clase 09.1\nUniversidad Nacional de Tierra del Fuego — Instituto IDEI · 2026"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "",
+        "local_asset": "slides/assets/F-00-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-01",
+      "type": "concepto-abstracto",
+      "title": "Von Neumann: el origen de la variable",
+      "subtitle": "La arquitectura Von Neumann es la base de toda variable",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Dos componentes fundamentales"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Memoria:** colección de celdas numeradas — cada celda tiene una **dirección** (su posición física) y un **contenido** (el valor almacenado)",
+              "level": 0
+            },
+            {
+              "content": "**Procesador:** lee y escribe celdas usando instrucciones de máquina; opera siempre sobre direcciones numéricas",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El problema que resuelven los lenguajes de programación"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "En lenguaje máquina el programador trabaja con **direcciones numéricas** como `0x7fff5b20`",
+              "level": 0
+            },
+            {
+              "content": "Esto es propenso a errores, ilegible y dependiente del hardware específico",
+              "level": 0
+            },
+            {
+              "content": "Los lenguajes introducen una capa de **abstracción**: reemplazan las direcciones físicas por **nombres simbólicos**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La variable como abstracción de celda"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Una variable **nombra** una dirección de memoria — el programador escribe `x` en lugar de `0x7fff5b20`",
+              "level": 0
+            },
+            {
+              "content": "El compilador o runtime decide qué celda real usar — el programador no necesita saberlo",
+              "level": 0
+            },
+            {
+              "content": "La **sentencia de asignación** (`x = 42`) corresponde a la operación de escritura destructiva del procesador",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Por qué \"destructiva\"?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Escribir en una celda **destruye** el valor anterior — no hay historial automático",
+              "level": 0
+            },
+            {
+              "content": "La inmutabilidad (`const`, `val`, `let` en Rust) es una restricción artificial del **lenguaje**, no del hardware",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-01-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-02",
+      "type": "tabla",
+      "title": "La abstracción en capas",
+      "subtitle": "Los lenguajes ocultan la celda de memoria detrás de la variable",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Correspondencia entre el hardware y el lenguaje"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lo que el compilador/runtime hace por nosotros"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Asignar y liberar celdas de memoria (gestión del binding de almacenamiento)",
+              "level": 0
+            },
+            {
+              "content": "Traducir el nombre simbólico a la dirección real en cada acceso",
+              "level": 0
+            },
+            {
+              "content": "Verificar que el uso del nombre es consistente con el tipo declarado",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Elemento concreto (hardware) | Abstracción en el lenguaje |\n|---|---|\n| Celda de memoria física | Variable |\n| Dirección numérica de la celda | Nombre / identificador (`x`, `contador`, `limite`) |\n| Escritura destructiva de la celda | Sentencia de asignación (`x = 42`) |\n| Múltiples celdas contiguas | Variable de tipo compuesto (array, struct, objeto) |\n| Celda de solo-lectura | Variable constante (`const`, `val`) |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Elemento concreto (hardware) | Abstracción en el lenguaje |\n|---|---|\n| Celda de memoria física | Variable |\n| Dirección numérica de la celda | Nombre / identificador (`x`, `contador`, `limite`) |\n| Escritura destructiva de la celda | Sentencia de asignación (`x = 42`) |\n| Múltiples celdas contiguas | Variable de tipo compuesto (array, struct, objeto) |\n| Celda de solo-lectura | Variable constante (`const`, `val`) |",
+          "local_asset": "slides/assets/F-02-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "type": "tabla",
+      "title": "Los seis atributos de una variable",
+      "subtitle": "Una variable no es solo un nombre — tiene seis atributos interdependientes",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Sebesta §5.3 — formalización en 5-tupla extendida"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La 5-tupla canónica (condensada)"
+        },
+        {
+          "type": "text",
+          "content": "Algunos textos agrupan tiempo de vida con ámbito y lo expresan como:\n`Variable = <nombre, dirección, tipo, L-valor, R-valor>`"
+        },
+        {
+          "type": "text",
+          "content": "Cada atributo se **vincula** en un momento distinto — eso es el **binding**."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Atributo | Notación | Descripción |\n|---|---|---|\n| **Nombre** | — | Identificador simbólico; puede no existir (variable anónima como `_` en Python) |\n| **Dirección** | L-value | Celda(s) de memoria asociada(s); puede cambiar en recursión (múltiples frames) |\n| **Tipo** | — | Rango de valores + operaciones legales + representación binaria en memoria |\n| **Valor** | R-value | Contenido codificado almacenado según el tipo; puede ser indefinido |\n| **Tiempo de vida** | lifetime | Período durante el que la variable está vinculada a una dirección de memoria |\n| **Ámbito** | scope | Rango de instrucciones donde el nombre es visible y puede ser referenciado |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Atributo | Notación | Descripción |\n|---|---|---|\n| **Nombre** | — | Identificador simbólico; puede no existir (variable anónima como `_` en Python) |\n| **Dirección** | L-value | Celda(s) de memoria asociada(s); puede cambiar en recursión (múltiples frames) |\n| **Tipo** | — | Rango de valores + operaciones legales + representación binaria en memoria |\n| **Valor** | R-value | Contenido codificado almacenado según el tipo; puede ser indefinido |\n| **Tiempo de vida** | lifetime | Período durante el que la variable está vinculada a una dirección de memoria |\n| **Ámbito** | scope | Rango de instrucciones donde el nombre es visible y puede ser referenciado |",
+          "local_asset": "slides/assets/F-03-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "type": "concepto-abstracto",
+      "title": "L-value y R-value — el doble rol de una variable",
+      "subtitle": "Una variable puede aparecer como destino o como fuente de datos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Los dos roles en una sentencia de asignación"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**L-value** (Left value): la variable aparece como **destino** de la asignación",
+              "level": 0
+            },
+            {
+              "content": "Representa la **dirección de memoria** donde se almacenará el resultado",
+              "level": 0
+            },
+            {
+              "content": "El compilador necesita saber *dónde* escribir",
+              "level": 0
+            },
+            {
+              "content": "Ejemplo: `x` en `x = y + 1` — necesitamos la dirección de x",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**R-value** (Right value): la variable aparece como **fuente** de datos",
+              "level": 0
+            },
+            {
+              "content": "Representa el **contenido** almacenado en la celda",
+              "level": 0
+            },
+            {
+              "content": "El compilador necesita saber *qué valor* leer",
+              "level": 0
+            },
+            {
+              "content": "Ejemplo: `y` en `x = y + 1` — necesitamos el valor de y",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Regla general"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "En el **lado izquierdo** de `=`: la variable actúa como L-value (dirección)",
+              "level": 0
+            },
+            {
+              "content": "En el **lado derecho** de `=`: la variable actúa como R-value (contenido)",
+              "level": 0
+            },
+            {
+              "content": "Una variable **siempre tiene L-value** mientras exista en memoria",
+              "level": 0
+            },
+            {
+              "content": "Una variable **tiene R-value válido** solo si fue inicializada",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué pasa con las constantes?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`const PI = 3.14` tiene L-value (la celda donde está almacenado el 3.14)",
+              "level": 0
+            },
+            {
+              "content": "Pero el lenguaje **prohíbe usarla como L-value** en una nueva asignación",
+              "level": 0
+            },
+            {
+              "content": "`PI = 2.71` → error de compilación, no error de hardware",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-04-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "codigo",
+      "title": "L-value y R-value — código TypeScript",
+      "subtitle": "En `x = y`: x denota dirección (L-value), y denota contenido (R-value)",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "let contador: number = 42;\n//  ↑ nombre   ↑ tipo    ↑ R-value inicial (contenido: 42)\n//  dirección (L-value) asignada por el runtime — invisible al programador\n//  ámbito: el bloque donde está declarado\n\nlet resultado: number;\n\nresultado = contador + 1;\n//  ↑ L-value: dirección de resultado (destino de escritura)\n//              ↑ R-value: contenido de contador (fuente de lectura)\n\n// Lo que hace el runtime paso a paso:\n//   1. Leer contenido de la celda contador  → 42\n//   2. Sumarle 1                              → 43\n//   3. Escribir 43 en la celda resultado"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-06",
+      "type": "codigo",
+      "title": "L-value y R-value — código Python",
+      "subtitle": "Python expone el L-value con id() — muestra la dirección real del objeto",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "contador = 42\n\n# id() devuelve la dirección del objeto en el heap de Python\nprint(id(contador))     # ej: 140234567890  ← L-value (dirección)\nprint(type(contador))   # <class 'int'>      ← tipo vinculado en runtime\nprint(contador)         # 42                 ← R-value (contenido)\n\n# Reasignación: Python crea un NUEVO objeto, no modifica el existente\ncontador = 43\nprint(id(contador))     # ← DIFERENTE al anterior: nueva celda, nueva dirección\n# El objeto 42 sigue existiendo hasta que el GC lo recolecte\n\n# Comparar con un objeto mutable:\nlista = [1, 2, 3]\nid_original = id(lista)\nlista.append(4)\nprint(id(lista) == id_original)  # True — misma dirección, contenido modificado"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-07",
+      "type": "codigo",
+      "title": "La 5-tupla — TypeScript y Kotlin",
+      "subtitle": "Los mismos atributos, distintas políticas de mutabilidad",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// TypeScript — tipo estático, dirección gestionada por el runtime\nlet x: number = 42;\n//  nombre: x\n//  tipo:   number (vinculado en compilación)\n//  valor:  42 (R-value inicial)\n//  dirección: asignada por V8 en tiempo de carga (no visible)\n//  ámbito: bloque donde está declarado\n\nconst limite: number = 100;\n//  binding de VALOR inmutable: el lenguaje prohíbe re-asignar limite\n//  pero la celda de memoria sigue existiendo (tiene L-value)"
+        },
+        {
+          "lang": "kotlin",
+          "content": "// Kotlin — var (mutable) vs val (inmutable de valor)\nvar contador: Int = 42\n//  var → el binding de valor puede cambiar: se puede re-asignar\n\nval limite: Int = 100\n//  val → binding de valor inmutable desde la creación\n//  equivalente a TypeScript const para tipos primitivos"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-08",
+      "type": "codigo",
+      "title": "La 5-tupla — Rust y Go",
+      "subtitle": "Rust expone el L-value; Go asigna zero-values automáticamente",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "rust",
+          "content": "// Rust — el L-value (dirección) es visible con punteros raw\nlet x = 42i32;\n//  tipo inferido: i32\n//  binding de almacenamiento: stack, liberado al salir del scope\n\nlet addr = &x as *const i32;\n//  addr contiene la dirección física de x en el stack\n//  esto es el L-value de x expuesto como dato del programa\n\n// La inmutabilidad en Rust es la regla por defecto:\n// let x = 42;      ← inmutable (por defecto)\n// let mut y = 42;  ← mutable (requiere declaración explícita)"
+        },
+        {
+          "lang": "go",
+          "content": "// Go — zero values: toda variable tiene un valor inicial seguro\nvar n int       // n = 0  (nunca hay basura, nunca hay undefined)\nvar s string    // s = \"\"\nvar b bool      // b = false\nvar p *int      // p = nil\n\n// Go NUNCA deja una variable con valor \"basura\"\n// Esto elimina una clase entera de bugs de C/C++"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-09",
+      "type": "concepto-abstracto",
+      "title": "¿Qué es el Binding?",
+      "subtitle": "Binding: la asociación entre una entidad y uno de sus atributos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Sebesta §5.4 — definición formal"
+        },
+        {
+          "type": "text",
+          "content": "Un **binding** es la asociación entre una entidad del programa (variable, operador, identificador, etc.) y uno de sus atributos (tipo, valor, dirección, significado), establecida en un **momento determinado**."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tres preguntas clave sobre cualquier binding"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**¿Qué** se está vinculando? (el atributo — tipo, valor, dirección...)",
+              "level": 0
+            },
+            {
+              "content": "**¿Cuándo** ocurre la vinculación? (el momento — compilación, ejecución...)",
+              "level": 0
+            },
+            {
+              "content": "**¿Es permanente o puede cambiar?** (inmutable vs. reasignable)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Por qué importa el momento del binding?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Binding temprano** (en compilación): más eficiente en ejecución, el compilador detecta errores antes de correr el programa; menos flexible para ciertos patrones",
+              "level": 0
+            },
+            {
+              "content": "**Binding tardío** (en ejecución): más flexible, permite duck typing y estructuras genéricas; costo en overhead y errores silenciosos en runtime",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El momento determina dónde se detectan los errores"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Un error de tipo con binding en compilación → **falla antes de ejecutar** (el compilador avisa)",
+              "level": 0
+            },
+            {
+              "content": "Un error de tipo con binding en ejecución → **falla mientras el usuario usa la app**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-09-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-10",
+      "type": "tabla",
+      "title": "Los 6 tiempos de binding",
+      "subtitle": "El binding puede ocurrir en 6 momentos distintos del ciclo de vida del programa",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Sebesta §5.4 — tabla de tiempos de vinculación"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lo que importa recordar"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Los tres primeros momentos son **pre-ejecución**: errores detectables antes de correr",
+              "level": 0
+            },
+            {
+              "content": "Linkeo y carga son **preparación del entorno de ejecución**",
+              "level": 0
+            },
+            {
+              "content": "Solo el último momento ocurre **dentro del programa en marcha**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Momento | ¿Qué se vincula? | Ejemplo concreto |\n|---|---|---|\n| **Diseño del lenguaje** | Significados posibles para símbolos y estructuras | `*` = multiplicación (no concatenación) |\n| **Implementación del compilador** | Rango de valores de tipos primitivos | `number` en TS = IEEE 754 float64, 64 bits |\n| **Compilación** | Variable → tipo; operador → semántica concreta | `let n: number` → n es float64 |\n| **Linkeo** | Llamada a subprograma externo → código real | `console.log` → función de V8 runtime |\n| **Carga del módulo** | Variables globales/estáticas → celdas de memoria | Variables de módulo al importar |\n| **Ejecución** | Variable → valor concreto | `n = n + 5` (el valor cambia en runtime) |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Momento | ¿Qué se vincula? | Ejemplo concreto |\n|---|---|---|\n| **Diseño del lenguaje** | Significados posibles para símbolos y estructuras | `*` = multiplicación (no concatenación) |\n| **Implementación del compilador** | Rango de valores de tipos primitivos | `number` en TS = IEEE 754 float64, 64 bits |\n| **Compilación** | Variable → tipo; operador → semántica concreta | `let n: number` → n es float64 |\n| **Linkeo** | Llamada a subprograma externo → código real | `console.log` → función de V8 runtime |\n| **Carga del módulo** | Variables globales/estáticas → celdas de memoria | Variables de módulo al importar |\n| **Ejecución** | Variable → valor concreto | `n = n + 5` (el valor cambia en runtime) |",
+          "local_asset": "slides/assets/F-10-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-11",
+      "type": "codigo",
+      "title": "Los 6 tiempos — análisis de un fragmento TypeScript",
+      "subtitle": "Dos líneas de código activan cinco momentos de binding simultáneos",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "let count: number;   // declaración — binding de tipo en compilación\ncount = count + 5;   // asignación — binding de valor en ejecución"
+        },
+        {
+          "lang": "text",
+          "content": "Análisis de bindings en el fragmento:\n\nTipos posibles para variables     → DISEÑO DEL LENGUAJE (TypeScript spec)\n  El lenguaje define qué tipos existen y qué operaciones son válidas.\n\nTipo de count (number)            → COMPILACIÓN\n  El compilador vincula el identificador count con el tipo number.\n\nRango de valores de number        → IMPLEMENTACIÓN DEL COMPILADOR\n  IEEE 754 float64: ±5×10⁻³²⁴ a ±1.8×10³⁰⁸ (64 bits).\n\nSignificado del operador +        → COMPILACIÓN\n  Se resuelve la sobrecarga: number + number = suma numérica.\n\nRepresentación del literal 5      → DISEÑO DEL COMPILADOR\n  El compilador decide cómo representar el literal 5 en bytecode.\n\nValor de count                    → EJECUCIÓN (runtime)\n  Solo cuando la línea se ejecuta, count toma el valor calculado."
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-12",
+      "type": "tabla-comparativa",
+      "title": "Binding de tipos — estático vs. dinámico",
+      "subtitle": "¿Cuándo se vincula el tipo de una variable?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Dimensión 1: el momento del binding de tipo"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Nota sobre TypeScript"
+        },
+        {
+          "type": "text",
+          "content": "TypeScript tiene binding estático (tipo fijo en compilación), pero compila a JavaScript (binding dinámico). El tipado de TS **desaparece en runtime** — solo existe en el código fuente y en el compilador."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Característica | **Binding estático** | **Binding dinámico** |\n|---|---|---|\n| **Momento de vinculación** | Compilación (o declaración) | Ejecución — en cada asignación |\n| **¿Puede cambiar el tipo?** | No — el tipo queda fijo para esa variable | Sí — puede ser `int`, luego `str` |\n| **Detección de errores de tipo** | En compilación — antes de ejecutar | En runtime — cuando el programa corre |\n| **Rendimiento** | Alto — sin costo extra en ejecución | Menor — el runtime verifica tipos en cada op |\n| **Flexibilidad** | Menor — el tipo debe conocerse antes | Mayor — útil para scripting y DSLs |\n| **Ejemplos de lenguajes** | TypeScript, Kotlin, Go, Rust, Java | Python, JavaScript, Ruby, Lua |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Característica | **Binding estático** | **Binding dinámico** |\n|---|---|---|\n| **Momento de vinculación** | Compilación (o declaración) | Ejecución — en cada asignación |\n| **¿Puede cambiar el tipo?** | No — el tipo queda fijo para esa variable | Sí — puede ser `int`, luego `str` |\n| **Detección de errores de tipo** | En compilación — antes de ejecutar | En runtime — cuando el programa corre |\n| **Rendimiento** | Alto — sin costo extra en ejecución | Menor — el runtime verifica tipos en cada op |\n| **Flexibilidad** | Menor — el tipo debe conocerse antes | Mayor — útil para scripting y DSLs |\n| **Ejemplos de lenguajes** | TypeScript, Kotlin, Go, Rust, Java | Python, JavaScript, Ruby, Lua |",
+          "local_asset": "slides/assets/F-12-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-13",
+      "type": "tabla-comparativa",
+      "title": "Binding de tipos — fuerte vs. débil",
+      "subtitle": "¿Qué tan estricto es el sistema al mezclar tipos incompatibles?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Dimensión 2: la fuerza del tipado (ortogonal al momento)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Las dos dimensiones son ortogonales — se combinan en cuatro formas"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Característica | **Tipado fuerte** | **Tipado débil** |\n|---|---|---|\n| **Conversiones implícitas** | No — o solo conversiones \"seguras\" y predecibles | Sí — coerciones arbitrarias en cualquier operación |\n| **Comportamiento ante mezcla** | Error explícito (compilación o excepción en runtime) | Resultado silencioso posiblemente incorrecto |\n| **Trazabilidad de bugs** | Alta — el error aparece cerca de la causa real | Baja — el error aparece lejos de donde está el problema |\n| **Ejemplos de lenguajes** | Haskell, Rust, Python, TypeScript strict | C (muchas coerciones), JavaScript, PHP |",
+        "| | Fuerte | Débil |\n|---|---|---|\n| **Estático** | TypeScript, Java, Kotlin, Rust | C (tipos fijos, muchas coerciones) |\n| **Dinámico** | Python (tipo cambia, sin coerciones silenciosas) | JavaScript (tipo cambia Y hay coerciones) |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Característica | **Tipado fuerte** | **Tipado débil** |\n|---|---|---|\n| **Conversiones implícitas** | No — o solo conversiones \"seguras\" y predecibles | Sí — coerciones arbitrarias en cualquier operación |\n| **Comportamiento ante mezcla** | Error explícito (compilación o excepción en runtime) | Resultado silencioso posiblemente incorrecto |\n| **Trazabilidad de bugs** | Alta — el error aparece cerca de la causa real | Baja — el error aparece lejos de donde está el problema |\n| **Ejemplos de lenguajes** | Haskell, Rust, Python, TypeScript strict | C (muchas coerciones), JavaScript, PHP |",
+          "local_asset": "slides/assets/F-13-table-1.png",
+          "drive_id": null
+        },
+        {
+          "index": 1,
+          "table_markdown": "| | Fuerte | Débil |\n|---|---|---|\n| **Estático** | TypeScript, Java, Kotlin, Rust | C (tipos fijos, muchas coerciones) |\n| **Dinámico** | Python (tipo cambia, sin coerciones silenciosas) | JavaScript (tipo cambia Y hay coerciones) |",
+          "local_asset": "slides/assets/F-13-table-2.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-14",
+      "type": "concepto-abstracto",
+      "title": "Inferencia de tipos — concepto",
+      "subtitle": "El compilador deduce el tipo sin que el programador lo declare explícitamente",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué es la inferencia de tipos?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Es la capacidad del compilador de **deducir el tipo de una expresión** a partir de su contexto",
+              "level": 0
+            },
+            {
+              "content": "El programador no declara el tipo — el compilador lo determina en compilación",
+              "level": 0
+            },
+            {
+              "content": "El binding de tipo sigue ocurriendo en compilación (tipado **estático**) — solo cambia quién lo declara",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Dos formas de inferencia"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Unidireccional (flujo hacia adelante):** el tipo se deduce del valor asignado",
+              "level": 0
+            },
+            {
+              "content": "`const items = [1, 2, 3]` → el compilador infiere `number[]`",
+              "level": 0
+            },
+            {
+              "content": "**Bidireccional (contextual):** el tipo se deduce del contexto donde se usa el valor",
+              "level": 0
+            },
+            {
+              "content": "`items.forEach(x => x.toFixed(2))` → `x` se infiere como `number` por el tipo de `items`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ventajas e implicaciones"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Menos verbosidad** sin perder los beneficios del tipado estático",
+              "level": 0
+            },
+            {
+              "content": "El compilador puede **rechazar código incorrecto** aunque no haya anotaciones de tipo",
+              "level": 0
+            },
+            {
+              "content": "Si la inferencia falla por ambigüedad, el compilador pide una anotación explícita",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Diferencia fundamental con tipado dinámico"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "La inferencia es **en compilación** — no hay overhead en runtime",
+              "level": 0
+            },
+            {
+              "content": "El tipo **no cambia** durante la ejecución una vez inferido",
+              "level": 0
+            },
+            {
+              "content": "En tipado dinámico el tipo se determina en runtime y puede cambiar libremente",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-14-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-15",
+      "type": "codigo",
+      "title": "Inferencia de tipos — TypeScript",
+      "subtitle": "TypeScript infiere tipos en compilación — no requiere declaraciones explícitas",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Inferencia simple: el tipo se deduce del valor inicial\nconst items = [1, 2, 3];\n//    ↑ inferido: number[]  (el compilador analiza el array literal)\n\nconst first = items[0];\n//    ↑ inferido: number  (acceso indexado a number[] devuelve number)\n\nconst total = items.reduce((acc, x) => acc + x, 0);\n//    ↑ inferido: number  (el acumulador inicial 0 determina el tipo)\n\n// Inferencia bidireccional (contextual):\nitems.forEach(x => {\n//            ↑ x: number — inferido por el tipo de items (number[])\n    console.log(x.toFixed(2));   // ✅ toFixed existe en number\n    // console.log(x.length);    // ❌ Error: number no tiene .length\n    //   el compilador detecta el error sin anotación explícita\n});"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-16",
+      "type": "codigo",
+      "title": "Binding dinámico de tipo — Python",
+      "subtitle": "En Python el tipo se vincula en cada asignación — puede cambiar completamente",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# Python: binding dinámico — el tipo se determina en runtime\n\nx = [2, 3, 4]\nprint(type(x))          # <class 'list'>\nprint(id(x))            # ej: 140234567890\n\n# Reasignación: x pasa a ser str — el tipo cambió completamente\nx = \"uno, dos, tres\"\nprint(type(x))          # <class 'str'>\nprint(id(x))            # ← DIFERENTE: nuevo objeto en heap\n\n# Python ES fuertemente tipado: no permite operaciones incompatibles sin conversión\nx + 42          # TypeError: can only concatenate str (not \"int\") to str\n                # el error aparece en runtime, no en compilación\n\n# Para mezclar, se requiere conversión explícita:\nx + str(42)     # ✅  → \"uno, dos, tres42\"\nint(\"5\") + 42   # ✅  → 47"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-17",
+      "type": "codigo",
+      "title": "Coerciones — JavaScript (tipado débil)",
+      "subtitle": "JavaScript convierte tipos automáticamente — los resultados son contraintuitivos",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "javascript",
+          "content": "// JavaScript realiza coerciones implícitas sin avisar\n\n// + con string: el número se convierte a string (concatenación)\n\"5\" + 3      // → \"53\"   (number 3 → string \"3\" → concatenación)\n\"5\" + true   // → \"5true\"\n\n// - siempre es aritmético: el string se convierte a number\n\"5\" - 3      // → 2      (string \"5\" → number 5 → resta)\n\"5\" * 2      // → 10\n\n// == hace coerciones, === no\n0 == false   // → true   (false se convierte a 0)\n0 === false  // → false  (sin coerción, tipos diferentes)\n\"\" == false  // → true\nnull == undefined   // → true   (caso especial del estándar)\nnull === undefined  // → false\n\n// Los casos más famosos:\n[] + []      // → \"\"\n[] + {}      // → \"[object Object]\"\n{} + []      // → 0  (en algunos contextos de evaluación)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-18",
+      "type": "codigo",
+      "title": "Coerciones — TypeScript strict y Python",
+      "subtitle": "TypeScript strict y Python rechazan la mezcla de tipos incompatibles",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// TypeScript strict — error de compilación al mezclar tipos\nconst a: string = \"5\";\nconst b: number = 3;\n\na + b;\n// Error TS2365: Operator '+' cannot be applied to types 'string' and 'number'\n// El error aparece en el editor, antes de ejecutar cualquier código\n\n// Si queremos concatenar, la conversión debe ser explícita:\na + b.toString();   // ✅  → \"53\"  (conversión explícita, intención clara)\nString(b) + a;      // ✅  → \"35\""
+        },
+        {
+          "lang": "python",
+          "content": "# Python (dinámico + fuerte) — excepción explícita en runtime\n\"5\" + 3\n# TypeError: can only concatenate str (not \"int\") to str\n# Python no silencia el error — lo convierte en excepción inmediata\n\n# La conversión debe ser explícita (igual que TypeScript):\n\"5\" + str(3)    # ✅  → \"53\"\nint(\"5\") + 3    # ✅  → 8"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "tabla",
+      "title": "Las 4 categorías de variables",
+      "subtitle": "El tiempo de vida y el mecanismo de almacenamiento definen cuatro categorías",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Sebesta §5.4.3 — cuatro categorías según binding de almacenamiento"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Por qué las estáticas no permiten recursión efectiva?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "En Cat. 1, todas las llamadas a la misma función **comparten la misma celda de memoria**",
+              "level": 0
+            },
+            {
+              "content": "Si una función se llama a sí misma, la segunda llamada sobreescribe los valores de la primera",
+              "level": 0
+            },
+            {
+              "content": "Las invocaciones no pueden coexistir con variables independientes — no hay frames separados",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Categoría | ¿Cuándo se vincula la dirección? | ¿Cuándo se libera? | Zona de memoria | ¿Permite recursión? |\n|---|---|---|---|---|\n| **1 — Estáticas** | Antes de ejecutar el programa | Al terminar el programa | Segmento estático | ❌ |\n| **2 — Stack-dynamic** | Al activar el subprograma | Al retornar del subprograma | Pila de llamadas | ✅ |\n| **3 — Heap explícitas** | Al ejecutar `new` / `Box::new` | Al ejecutar GC / `drop` | Heap | ✅ |\n| **4 — Heap implícitas** | En cualquier sentencia de asignación | Al ejecutar GC | Heap | ✅ |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Categoría | ¿Cuándo se vincula la dirección? | ¿Cuándo se libera? | Zona de memoria | ¿Permite recursión? |\n|---|---|---|---|---|\n| **1 — Estáticas** | Antes de ejecutar el programa | Al terminar el programa | Segmento estático | ❌ |\n| **2 — Stack-dynamic** | Al activar el subprograma | Al retornar del subprograma | Pila de llamadas | ✅ |\n| **3 — Heap explícitas** | Al ejecutar `new` / `Box::new` | Al ejecutar GC / `drop` | Heap | ✅ |\n| **4 — Heap implícitas** | En cualquier sentencia de asignación | Al ejecutar GC | Heap | ✅ |",
+          "local_asset": "slides/assets/F-19-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-20",
+      "type": "concepto-abstracto",
+      "title": "Categoría 1 — Variables estáticas — concepto",
+      "subtitle": "Las variables estáticas existen desde el inicio del programa hasta el final",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Características"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Su dirección de memoria es **conocida en tiempo de compilación**",
+              "level": 0
+            },
+            {
+              "content": "La celda se reserva **antes de que el programa empiece** y no se libera hasta que termina",
+              "level": 0
+            },
+            {
+              "content": "No hay overhead de allocate/deallocate en cada llamada a función",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Cuándo usar variables estáticas"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Constantes del módulo**: valores que no cambian durante toda la ejecución",
+              "level": 0
+            },
+            {
+              "content": "**Configuración**: parámetros cargados al inicio que aplican a todo el módulo",
+              "level": 0
+            },
+            {
+              "content": "**Cache / estado compartido**: valores que deben persistir entre llamadas a la misma función",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La restricción de recursión"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "En C, FORTRAN y otros lenguajes con asignación estática para locales, la función no puede llamarse a sí misma de forma útil",
+              "level": 0
+            },
+            {
+              "content": "Cada llamada trabaja con **la misma celda** de memoria para sus variables locales",
+              "level": 0
+            },
+            {
+              "content": "FORTRAN 77 prohíbe la recursión directamente por esta razón",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En lenguajes modernos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "TypeScript, Python, Java, Go y Kotlin usan Cat. 2 (stack-dynamic) para las variables locales",
+              "level": 0
+            },
+            {
+              "content": "La estática existe para variables de módulo, constantes globales y `companion object` en Kotlin",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-20-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-21",
+      "type": "codigo",
+      "title": "Categoría 1 — Variables estáticas — TypeScript",
+      "subtitle": "En TypeScript, las variables de módulo tienen binding de almacenamiento estático",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Variables de módulo: binding de almacenamiento antes de ejecución\nconst VERSION = \"1.0.0\";      // constante estática — dirección fija desde carga\nlet sesionesActivas = 0;       // variable estática mutable — existe todo el tiempo de vida\n\n// Patrón de inicialización lazy (una sola vez en toda la vida del módulo):\nlet _cache: Map<string, string> | null = null;\n\nexport function getCache(): Map<string, string> {\n    // _cache se inicializa la primera vez que se llama a getCache()\n    // Las llamadas siguientes reutilizan la misma instancia (misma celda)\n    _cache ??= new Map();\n    return _cache;\n}\n\n// Traza de ejecución:\n//   1ra llamada: _cache === null → se crea el Map → _cache apunta al Map\n//   2da+ llamada: _cache !== null → se devuelve el mismo Map\n//\n// Si getCache() fuera recursiva, _cache podría verse en estado parcial\n// desde las invocaciones intermedias — ese es el problema de Cat. 1 + recursión"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-22",
+      "type": "codigo",
+      "title": "Categoría 1 — Kotlin companion object",
+      "subtitle": "En Kotlin, el companion object es el espacio estático de la clase",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "kotlin",
+          "content": "class Sesion private constructor(val id: Int) {\n\n    companion object {\n        // companion object = espacio estático de la clase Sesion\n        // Sus propiedades y funciones existen desde que la clase se carga\n\n        private var contadorGlobal = 0   // estática — un binding por toda la JVM\n\n        fun nueva(): Sesion {\n            contadorGlobal++             // modifica la celda compartida por todos\n            return Sesion(contadorGlobal)\n        }\n\n        fun totalSesiones(): Int = contadorGlobal\n    }\n}\n\n// Uso:\nval s1 = Sesion.nueva()           // id = 1, contadorGlobal = 1\nval s2 = Sesion.nueva()           // id = 2, contadorGlobal = 2\nprintln(Sesion.totalSesiones())   // 2 — contadorGlobal es la misma celda para todos"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "concepto-abstracto",
+      "title": "Categoría 2 — Stack-dynamic — concepto",
+      "subtitle": "Las variables stack-dynamic se crean al entrar al subprograma y se destruyen al salir",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Características"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El **binding de almacenamiento** ocurre cuando el subprograma es llamado (no antes)",
+              "level": 0
+            },
+            {
+              "content": "Una nueva celda de memoria se reserva en la **pila de llamadas** (call stack)",
+              "level": 0
+            },
+            {
+              "content": "Al retornar del subprograma, la celda se **libera automáticamente**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué son la norma en lenguajes modernos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Sin gestión manual de memoria**: el sistema controla el ciclo de vida",
+              "level": 0
+            },
+            {
+              "content": "**Sin basura**: la celda se libera exactamente cuando ya no se necesita",
+              "level": 0
+            },
+            {
+              "content": "**Sin interferencia entre llamadas**: cada llamada tiene sus propias celdas",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La pila de llamadas (call stack)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Estructura LIFO (Last In, First Out): la última función en llamarse es la primera en retornar",
+              "level": 0
+            },
+            {
+              "content": "Cada llamada agrega un **frame** (registro de activación) con las variables locales",
+              "level": 0
+            },
+            {
+              "content": "Los frames no se comparten — cada invocación tiene los suyos propios",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Por qué permiten recursión?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Cada llamada recursiva genera un **frame nuevo** en la pila",
+              "level": 0
+            },
+            {
+              "content": "Las variables de diferentes invocaciones coexisten en frames distintos, sin interferencia",
+              "level": 0
+            },
+            {
+              "content": "No importa que sea la misma función — si hay frame propio, hay variables propias",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-23-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "codigo",
+      "title": "Categoría 2 — Stack-dynamic — código TypeScript",
+      "subtitle": "Cada llamada a calcular() crea sus propias variables locales en la pila",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function calcular(n: number): number {\n    // Al entrar a calcular(): se reservan dos celdas en la pila\n    let resultado = 0;   // celda propia de ESTA llamada\n    let temp = n * 2;    // celda propia de ESTA llamada\n\n    console.log(`temp = ${temp}`);\n    return resultado + temp;\n    // Al retornar: las celdas de resultado y temp son DESTRUIDAS\n    // Si se llama calcular() otra vez, se crean nuevas celdas (nuevas direcciones)\n}\n\n// Estas dos llamadas son completamente independientes:\ncalcular(5);   // crea sus propias celdas: resultado=0, temp=10\ncalcular(7);   // crea sus propias celdas: resultado=0, temp=14\n\n// No hay interferencia entre las dos invocaciones:\n// la temp de calcular(5) y la temp de calcular(7) son celdas diferentes"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "concepto-abstracto",
+      "title": "Categoría 2 — por qué la recursión es posible",
+      "subtitle": "La pila de llamadas apila frames independientes — esa es la clave",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lo que ocurre en factorial(3)"
+        },
+        {
+          "type": "text",
+          "content": "Cuando el programa llama `factorial(3)`, la pila crece así:"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El proceso paso a paso"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "`factorial(3)` se llama → **push** del frame con `n = 3`",
+              "level": 0
+            },
+            {
+              "content": "Llama a `factorial(2)` → **push** del frame con `n = 2`",
+              "level": 0
+            },
+            {
+              "content": "Llama a `factorial(1)` → **push** del frame con `n = 1`",
+              "level": 0
+            },
+            {
+              "content": "`factorial(1)` retorna 1 → **pop** del frame de `factorial(1)`",
+              "level": 0
+            },
+            {
+              "content": "`factorial(2)` recibe 1, calcula `2 * 1 = 2`, retorna 2 → **pop**",
+              "level": 0
+            },
+            {
+              "content": "`factorial(3)` recibe 2, calcula `3 * 2 = 6`, retorna 6 → **pop**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Para Tema 13"
+        },
+        {
+          "type": "text",
+          "content": "Los detalles internos del frame — static link, dynamic link, dirección de retorno — se estudian en Abstracción Procedural."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "PILA DE LLAMADAS:\n  ┌─────────────────────┐  ← tope (más reciente)\n  │ factorial(1)        │    n = 1  (su propia celda)\n  ├─────────────────────┤\n  │ factorial(2)        │    n = 2  (su propia celda)\n  ├─────────────────────┤\n  │ factorial(3)        │    n = 3  (su propia celda)\n  ├─────────────────────┤\n  │ main / llamador     │\n  └─────────────────────┘  ← base"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-25-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-26",
+      "type": "codigo",
+      "title": "Categoría 2 — factorial recursivo — código",
+      "subtitle": "Cada llamada tiene su propia copia de n en su propio frame",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function factorial(n: number): number {\n    // CADA llamada a factorial() tiene su propia celda para n\n    // La n de factorial(3) y la n de factorial(2) son celdas distintas\n\n    if (n <= 1) return 1;   // caso base: retorna, libera el frame\n\n    return n * factorial(n - 1);\n    //     ↑ usa la n de ESTE frame\n    //         ↑ crea un NUEVO frame para n-1\n}\n\nconsole.log(factorial(3));  // 6\n\n// Traza de ejecución:\n//   factorial(3): espera a factorial(2)\n//     factorial(2): espera a factorial(1)\n//       factorial(1): n <= 1 → retorna 1 (sin llamada recursiva más)\n//     factorial(2): recibe 1, calcula 2*1=2, retorna 2\n//   factorial(3): recibe 2, calcula 3*2=6, retorna 6"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-27",
+      "type": "concepto-abstracto",
+      "title": "Categorías 3 y 4 — Heap — concepto",
+      "subtitle": "El heap almacena objetos de ciclo de vida controlado, no ligado al flujo del programa",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué es el heap?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Región de memoria donde los objetos pueden **sobrevivir más allá del subprograma** que los creó",
+              "level": 0
+            },
+            {
+              "content": "A diferencia de la pila, el ciclo de vida del objeto no está ligado al flujo de llamadas",
+              "level": 0
+            },
+            {
+              "content": "El programador o el runtime decide cuándo liberar la memoria",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Categoría 3 — Heap explícita"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El programador solicita la memoria explícitamente (`new`, `Box::new`, `malloc`)",
+              "level": 0
+            },
+            {
+              "content": "La liberación puede ser:",
+              "level": 0
+            },
+            {
+              "content": "**Automática (GC):** Java, TypeScript, Python, Go → el runtime detecta cuando no hay referencias",
+              "level": 0
+            },
+            {
+              "content": "**Manual:** C → `free()` explícito — riesgo de memory leaks y use-after-free",
+              "level": 0
+            },
+            {
+              "content": "**Ownership:** Rust → el compilador determina cuándo liberar, sin GC y sin errores",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Categoría 4 — Heap implícita"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Toda** asignación puede cambiar el tipo, el valor Y la dirección del objeto",
+              "level": 0
+            },
+            {
+              "content": "El binding de almacenamiento ocurre en cada asignación, sin que el programador lo solicite",
+              "level": 0
+            },
+            {
+              "content": "Ejemplo canónico: Python — cualquier reasignación crea un nuevo objeto en el heap",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Trade-offs"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| | Heap explícita | Heap implícita |\n|---|---|---|\n| **Control del programador** | Alto | Bajo |\n| **Riesgo de error** | Memory leaks (sin GC) | Menor |\n| **Flexibilidad del tipo** | Moderada | Máxima |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-27-content.png",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| | Heap explícita | Heap implícita |\n|---|---|---|\n| **Control del programador** | Alto | Bajo |\n| **Riesgo de error** | Memory leaks (sin GC) | Menor |\n| **Flexibilidad del tipo** | Moderada | Máxima |",
+          "local_asset": "slides/assets/F-27-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-28",
+      "type": "codigo",
+      "title": "Categoría 3 — Heap explícita — TypeScript y Rust",
+      "subtitle": "TypeScript usa GC; Rust usa ownership — ambos son heap explícita",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// TypeScript: new crea el objeto en el heap; el GC lo libera automáticamente\nclass Nodo {\n    constructor(\n        public valor: number,\n        public siguiente: Nodo | null = null\n    ) {}\n}\n\nlet cabeza = new Nodo(42);\n// cabeza → Nodo(42) en el heap  (nueva dirección)\n\ncabeza = new Nodo(99);\n// cabeza → Nodo(99) en el heap  (nueva dirección)\n// Nodo(42) ya no tiene referencias → el GC lo recolectará\n// El programador no necesita liberar memoria manualmente"
+        },
+        {
+          "lang": "rust",
+          "content": "// Rust: drop() automático al salir del scope — sin GC, determinístico\nfn main() {\n    let elemento = Box::new(42i32);\n    // elemento → valor 42 en el heap (Box gestiona la dirección)\n\n    println!(\"{}\", elemento);  // 42\n\n}  // fin del scope → destructor de Box se llama automáticamente\n   // la memoria se libera AQUÍ, sin GC, sin memory leak posible"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-29",
+      "type": "codigo",
+      "title": "Categoría 4 — Heap implícita — Python",
+      "subtitle": "En Python, toda asignación puede cambiar tipo, valor y dirección simultáneamente",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "python",
+          "content": "# Python: heap implícita — cada asignación puede cambiar todos los atributos\n\nx = [1, 2, 3]\nprint(type(x), id(x))     # <class 'list'>  140234567890\n\nx = \"uno, dos, tres\"\nprint(type(x), id(x))     # <class 'str'>   140234567999  ← todo cambió\n#  ↑ tipo cambió:   list → str\n#  ↑ dirección cambió: nueva celda en el heap\n#  ↑ valor cambió:  [1,2,3] → \"uno, dos, tres\"\n\nx = 42\nprint(type(x), id(x))     # <class 'int'>   140234568100\n\n# El objeto [1,2,3] anterior quedó sin referencias\n# El GC de Python lo recolecta eventualmente\n\n# Comparar con Cat. 1 o Cat. 2:\n# En Cat. 1/2 el tipo es fijo y la dirección no cambia durante la vida de la variable"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-30",
+      "type": "concepto-abstracto",
+      "title": "Ámbito estático — concepto y algoritmo",
+      "subtitle": "El ámbito estático se resuelve en compilación usando la estructura léxica del código",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué es el ámbito (scope)?"
+        },
+        {
+          "type": "text",
+          "content": "El **ámbito** de una variable es el rango de instrucciones del programa donde el nombre de esa variable es **visible y puede ser usado**."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Un nombre es \"visible\" si puede aparecer en una expresión sin causar error de nombre no definido",
+              "level": 0
+            },
+            {
+              "content": "El ámbito **estático** (o **léxico**) usa la estructura del código fuente para determinar la visibilidad",
+              "level": 0
+            },
+            {
+              "content": "Es el modelo de todos los lenguajes modernos: TypeScript, Python, Java, Go, Rust",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Algoritmo de resolución de ámbito estático"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Buscar el nombre en el **ámbito local** (el bloque `{}` actual)",
+              "level": 0
+            },
+            {
+              "content": "Si no se encuentra → subir al **bloque padre estático** (el bloque que lo contiene en el código)",
+              "level": 0
+            },
+            {
+              "content": "Continuar hacia afuera, nivel por nivel, hasta el **ámbito global del módulo**",
+              "level": 0
+            },
+            {
+              "content": "Si no se encuentra en ningún nivel → **error de compilación** (nombre no declarado)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Origen histórico"
+        },
+        {
+          "type": "text",
+          "content": "Introducido por **ALGOL 60** en 1960 — fue una revolución: por primera vez el significado de un nombre podía determinarse sin ejecutar el programa."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Por qué \"estático\"?"
+        },
+        {
+          "type": "text",
+          "content": "Porque la resolución ocurre en **tiempo de compilación** — el analizador semántico puede determinar a qué declaración corresponde cada uso de un nombre, sin correr el código."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-30-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-31",
+      "type": "codigo",
+      "title": "Ámbito estático — TypeScript",
+      "subtitle": "La estructura de bloques determina qué nombres son visibles en cada punto",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "let x = 10;  // ámbito: módulo (nivel 0)\n\nfunction externa() {\n    let y = 20;  // ámbito: función externa (nivel 1)\n\n    function interna() {\n        let z = 30;          // ámbito: función interna (nivel 2)\n\n        // Resolución de cada nombre (algoritmo de búsqueda hacia afuera):\n        console.log(x);  // 1. ¿x en nivel 2?  No\n                         // 2. ¿x en nivel 1?  No\n                         // 3. ¿x en nivel 0?  Sí → x = 10 ✅\n\n        console.log(y);  // 1. ¿y en nivel 2?  No\n                         // 2. ¿y en nivel 1?  Sí → y = 20 ✅\n\n        console.log(z);  // 1. ¿z en nivel 2?  Sí → z = 30 ✅\n    }\n\n    // console.log(z); // ❌ z no existe en nivel 1 ni arriba — error de compilación\n}\n\n// console.log(y);     // ❌ y no existe en nivel 0 — error de compilación"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-32",
+      "type": "tabla-comparativa",
+      "title": "Ámbito dinámico — comparativa",
+      "subtitle": "En el ámbito dinámico, la cadena de llamadas activas define la visibilidad",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Diferencia fundamental con el ámbito estático"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Por qué el ámbito dinámico existe?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "En los primeros lenguajes (LISP original, SNOBOL) era la única opción — más fácil de implementar",
+              "level": 0
+            },
+            {
+              "content": "Útil para \"inyectar\" variables en funciones sin cambiar su firma (contexto implícito)",
+              "level": 0
+            },
+            {
+              "content": "Hoy es considerado una práctica problemática por dificultar el razonamiento sobre el código",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "JavaScript: `this` tiene semántica dinámica en funciones regulares"
+        },
+        {
+          "type": "text",
+          "content": "El valor de `this` en una función regular depende de **cómo** se llama la función, no de dónde está escrita. Las arrow functions capturan `this` léxicamente."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Característica | **Ámbito estático (léxico)** | **Ámbito dinámico** |\n|---|---|---|\n| **Momento de resolución** | Compilación | Ejecución |\n| **¿Qué determina la visibilidad?** | Estructura léxica del código fuente | Cadena de llamadas activas en ese instante |\n| **¿Verificable en compilación?** | ✅ Sí — el compilador valida todos los usos | ❌ No — depende del flujo de ejecución |\n| **Legibilidad** | Alta — la visibilidad se ve en el código | Baja — hay que rastrear quién llamó a quién |\n| **Lenguajes** | TypeScript, Python, Go, Rust, Java | Emacs Lisp (original), Perl `local`, shells POSIX |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Característica | **Ámbito estático (léxico)** | **Ámbito dinámico** |\n|---|---|---|\n| **Momento de resolución** | Compilación | Ejecución |\n| **¿Qué determina la visibilidad?** | Estructura léxica del código fuente | Cadena de llamadas activas en ese instante |\n| **¿Verificable en compilación?** | ✅ Sí — el compilador valida todos los usos | ❌ No — depende del flujo de ejecución |\n| **Legibilidad** | Alta — la visibilidad se ve en el código | Baja — hay que rastrear quién llamó a quién |\n| **Lenguajes** | TypeScript, Python, Go, Rust, Java | Emacs Lisp (original), Perl `local`, shells POSIX |",
+          "local_asset": "slides/assets/F-32-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-33",
+      "type": "codigo",
+      "title": "Ámbito dinámico — `this` en JavaScript",
+      "subtitle": "`this` en funciones regulares es dinámico — la arrow function lo captura léxicamente",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "class Timer {\n    delay = 1000;\n\n    // ❌ Función regular: this es DINÁMICO — depende del contexto de llamada\n    startConFunctionRegular() {\n        setTimeout(function() {\n            // this NO es la instancia Timer — lo perdió setTimeout\n            // En strict mode: this === undefined\n            console.log(this?.delay);   // undefined\n        }, this.delay);\n    }\n\n    // ✅ Arrow function: this es LÉXICO — capturado en compilación\n    startConArrow() {\n        setTimeout(() => {\n            // this ES la instancia Timer — garantizado por el ámbito léxico\n            // El compilador sabe en compilación qué es this dentro de la arrow\n            console.log(this.delay);    // 1000\n        }, this.delay);\n    }\n}\n\nconst t = new Timer();\nt.startConFunctionRegular();  // → undefined  (this dinámico, perdido en setTimeout)\nt.startConArrow();            // → 1000       (this léxico, capturado en startConArrow)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-34",
+      "type": "concepto-abstracto",
+      "title": "Scope holes — shadowing — concepto",
+      "subtitle": "Una declaración local puede ocultar (\"sombrear\") una variable del bloque exterior",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué es el shadowing?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El **shadowing** ocurre cuando una declaración en un bloque interno usa el **mismo nombre** que una variable ya existente en un bloque exterior",
+              "level": 0
+            },
+            {
+              "content": "La variable interior **\"oculta\"** a la exterior dentro de su bloque",
+              "level": 0
+            },
+            {
+              "content": "La variable exterior cae en un **\"scope hole\"**: sigue existiendo, pero no es accesible dentro del bloque interno",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El mecanismo"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El algoritmo de resolución de ámbito **siempre prefiere** el binding más local",
+              "level": 0
+            },
+            {
+              "content": "Si encuentra el nombre en el bloque actual, **no continúa buscando** en los padres",
+              "level": 0
+            },
+            {
+              "content": "La variable exterior es inaccesible hasta que se sale del bloque interior donde fue sombreada",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué es problemático"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El código parece estar usando la variable exterior pero en realidad usa la interior",
+              "level": 0
+            },
+            {
+              "content": "Los linters alertan sobre shadowing porque es fuente frecuente de bugs sutiles",
+              "level": 0
+            },
+            {
+              "content": "Los errores suelen detectarse en testing o en producción, no en compilación",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Herramientas para detectarlo"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**TypeScript + ESLint**: regla `@typescript-eslint/no-shadow` produce advertencia",
+              "level": 0
+            },
+            {
+              "content": "TypeScript por sí solo no bloquea el shadowing — requiere configuración explícita de ESLint",
+              "level": 0
+            },
+            {
+              "content": "Python: el shadow silencioso puede causar `UnboundLocalError` en casos extremos",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-34-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-35",
+      "type": "codigo",
+      "title": "Scope holes — shadowing — código",
+      "subtitle": "Dos variables con el mismo nombre coexisten en scopes distintos sin interferir",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "let x = 10;  // x del módulo (nivel 0)\n\nfunction procesarLista(items: number[]): void {\n\n    for (const item of items) {\n        const x = item * 2;\n        //    ↑ x LOCAL al bloque del for (nivel 2)\n        //    ← SHADOW: oculta al x del módulo dentro de este bloque\n\n        // \"scope hole\" de x exterior: comienza aquí ↑\n        console.log(x);   // usa x LOCAL: 20, 40, 60, ...\n    }\n    // Aquí termina el scope hole\n\n    console.log(x);   // x del módulo nuevamente visible: 10\n}\n\nprocesarLista([10, 20, 30]);\n// Salida:\n//   20\n//   40\n//   60\n//   10   ← x del módulo, nunca fue modificado\n\n// ESLint con @typescript-eslint/no-shadow reportaría:\n//   warning: 'x' is already declared in the upper scope (no-shadow)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-36",
+      "type": "concepto-abstracto",
+      "title": "Entorno de referencia",
+      "subtitle": "El entorno de referencia es la \"foto\" de todos los nombres visibles en un punto del programa",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición (Sebesta §5.6)"
+        },
+        {
+          "type": "text",
+          "content": "El **entorno de referencia** en una sentencia dada es la **colección de todos los identificadores visibles** en ese punto: variables propias del bloque actual más todas las variables heredadas de los bloques padre."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Variación a lo largo del programa"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El entorno de referencia **no es fijo** — cambia cada vez que se entra o sale de un bloque",
+              "level": 0
+            },
+            {
+              "content": "Al entrar a una función: se agrega su scope local al entorno",
+              "level": 0
+            },
+            {
+              "content": "Al salir de la función: ese scope se elimina del entorno",
+              "level": 0
+            },
+            {
+              "content": "Al entrar a un bloque `if`, `for`, etc.: se agrega el scope del bloque",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Componentes del entorno en TypeScript"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Variables locales** del bloque actual",
+              "level": 0
+            },
+            {
+              "content": "**Parámetros** de la función actual",
+              "level": 0
+            },
+            {
+              "content": "**Variables de funciones externas** (capturadas por closure)",
+              "level": 0
+            },
+            {
+              "content": "**Variables del módulo** (top-level)",
+              "level": 0
+            },
+            {
+              "content": "**Identificadores globales** del runtime (`console`, `Math`, `undefined`, etc.)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Relación con closures"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Una **closure** \"congela\" el entorno de referencia en el momento en que se crea la función",
+              "level": 0
+            },
+            {
+              "content": "El entorno capturado puede incluir variables que ya salieron del stack pero siguen vivas por la closure",
+              "level": 0
+            },
+            {
+              "content": "Esto se estudia en detalle en **Tema 09.2**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-36-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-37",
+      "type": "concepto-abstracto",
+      "title": "Constantes — concepto",
+      "subtitle": "Una constante es una variable cuyo binding de valor es inmutable",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición"
+        },
+        {
+          "type": "text",
+          "content": "Una **constante** es un identificador cuyo valor se fija en un momento determinado y el lenguaje **prohíbe modificarlo** después."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Cuándo se fija el binding de valor"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**En compilación / declaración:** `const PI = 3.14159` — el valor es parte del código fuente",
+              "level": 0
+            },
+            {
+              "content": "**En tiempo de carga:** `const VERSION = pkg.version` — se determina al iniciar el módulo",
+              "level": 0
+            },
+            {
+              "content": "**En ejecución (primera asignación):** `val limite = calcularLimite()` en Kotlin — inmutable desde el momento de la asignación",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "const en TypeScript: la referencia, no necesariamente el objeto"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Para **tipos primitivos** (`number`, `string`, `boolean`): `const` hace inmutable el valor",
+              "level": 0
+            },
+            {
+              "content": "Para **objetos y arrays**: `const` hace inmutable la **referencia** — el objeto interno puede mutar",
+              "level": 0
+            },
+            {
+              "content": "Para inmutabilidad profunda se necesita `Object.freeze()` o tipos `readonly` en TypeScript",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué las constantes importan en binding"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Representan un **binding de R-value que no puede reasignarse**",
+              "level": 0
+            },
+            {
+              "content": "El L-value (dirección) sigue existiendo — la celda está ocupada durante toda la vida del módulo",
+              "level": 0
+            },
+            {
+              "content": "El compilador puede optimizar accesos a constantes porque su valor es conocido en compilación",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-37-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-38",
+      "type": "codigo",
+      "title": "Constantes — código TypeScript",
+      "subtitle": "const inmutabiliza la referencia, no necesariamente el objeto",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Caso 1: tipo primitivo — const hace inmutable el VALOR\nconst PI = 3.14159;\n// PI = 2.71;  // ❌ Error: Assignment to constant variable\n\n// Caso 2: objeto — const hace inmutable la REFERENCIA (dirección)\nconst CONFIG = { debug: false, maxRetries: 3 };\nCONFIG.debug = true;    // ✅ válido: el objeto es mutable, solo la referencia es const\nCONFIG.maxRetries = 5;  // ✅ válido\n// CONFIG = { debug: true };  // ❌ Error: Cannot assign to 'CONFIG'\n\n// Caso 3: inmutabilidad profunda con Object.freeze\nconst FROZEN = Object.freeze({ debug: false });\nFROZEN.debug = true;\n// En JavaScript: silencioso (el cambio se ignora sin error)\n// En TypeScript strict: Error de tipo — readonly property\n\n// Patrón recomendado para objetos de configuración inmutables:\nconst SETTINGS = Object.freeze({\n    timeout: 5000,\n    retries: 3,\n} as const);\n// 'as const' asegura que TypeScript trate todos los campos como literales de tipo"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-39",
+      "type": "tabla-comparativa",
+      "title": "Inicialización — comparativa de lenguajes",
+      "subtitle": "¿Qué pasa si se usa una variable antes de inicializarla?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Sebesta §5.4.3 — comportamientos por lenguaje"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "TypeScript strict mode — análisis de flujo de tipos"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "let n: number;\nconsole.log(n);  // Error TS2454: Variable 'n' used before being assigned\n// El compilador analiza el flujo y detecta que n puede no estar inicializada"
+        }
+      ],
+      "tables": [
+        "| Lenguaje | Variable no inicializada | Momento de detección |\n|---|---|---|\n| **C** | Estáticas → 0 automático; locales → **basura** (contenido previo de la celda) | Ejecución (undefined behavior) |\n| **C++** | Igual que C para primitivos; constructores para objetos | Ejecución |\n| **Java** | Campos → valores por defecto (0, false, null); locales → error de compilación | Variables locales: compilación |\n| **TypeScript strict** | **Error de compilación** — análisis de flujo detecta el camino sin inicialización | Compilación |\n| **Python** | `NameError` — el intérprete lanza excepción al acceder | Runtime |\n| **Go** | **Zero values automáticos**: 0, false, `\"\"`, nil — nunca hay basura | Siempre seguro |\n| **Rust** | Error de compilación — el compilador exige inicialización antes del primer uso | Compilación |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Lenguaje | Variable no inicializada | Momento de detección |\n|---|---|---|\n| **C** | Estáticas → 0 automático; locales → **basura** (contenido previo de la celda) | Ejecución (undefined behavior) |\n| **C++** | Igual que C para primitivos; constructores para objetos | Ejecución |\n| **Java** | Campos → valores por defecto (0, false, null); locales → error de compilación | Variables locales: compilación |\n| **TypeScript strict** | **Error de compilación** — análisis de flujo detecta el camino sin inicialización | Compilación |\n| **Python** | `NameError` — el intérprete lanza excepción al acceder | Runtime |\n| **Go** | **Zero values automáticos**: 0, false, `\"\"`, nil — nunca hay basura | Siempre seguro |\n| **Rust** | Error de compilación — el compilador exige inicialización antes del primer uso | Compilación |",
+          "local_asset": "slides/assets/F-39-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-40",
+      "type": "socratica",
+      "title": "La IA comete errores de scope",
+      "subtitle": "¿Por qué la IA genera código con errores de scope?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La raíz del problema"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Los modelos de lenguaje aprenden de corpus de código extraído de la web",
+              "level": 0
+            },
+            {
+              "content": "El corpus incluye **millones de archivos pre-ES6** con `var`, variables globales y shadowing silencioso",
+              "level": 0
+            },
+            {
+              "content": "En JavaScript no-strict, muchos de estos errores **no generan excepciones** — el código \"funciona\" aunque sea incorrecto",
+              "level": 0
+            },
+            {
+              "content": "El modelo aprende que estos patrones son válidos porque el corpus los usa sin marcarlos como error",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tres patrones concretos a reconocer"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**`var` hoisting:** `var` se \"iza\" al inicio de la función — da `undefined` en lugar de `ReferenceError`",
+              "level": 0
+            },
+            {
+              "content": "**Variable global silenciosa:** dependencias ocultas no declaradas como parámetro",
+              "level": 0
+            },
+            {
+              "content": "**Shadowing inesperado:** ¿a qué variable se refiere realmente el código generado?",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lo que veremos en las próximas filminas"
+        },
+        {
+          "type": "text",
+          "content": "Cada patrón tiene:\n- Una explicación del **mecanismo** (por qué ocurre)\n- Un ejemplo de **código incorrecto** que la IA suele generar\n- La **versión correcta** y cómo pedirle a la IA que la genere"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "",
+        "local_asset": "slides/assets/F-40-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-41",
+      "type": "concepto-abstracto",
+      "title": "Patrón 1 — `var` hoisting — concepto",
+      "subtitle": "`var` tiene ámbito de función, no de bloque — y se \"iza\" al inicio",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué es el hoisting?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "En JavaScript/TypeScript, las declaraciones `var` son **izadas** (*hoisted*) al inicio de la función",
+              "level": 0
+            },
+            {
+              "content": "El compilador mueve la declaración (no la inicialización) al principio del scope de función",
+              "level": 0
+            },
+            {
+              "content": "Esto significa que la variable **existe** desde el inicio de la función, aunque su valor sea `undefined`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La diferencia entre `var`, `let` y `const`"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Temporal Dead Zone (TDZ)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Con `let`/`const`, la variable existe en el scope pero **no puede usarse** hasta que se alcanza su declaración",
+              "level": 0
+            },
+            {
+              "content": "Usar la variable antes de su declaración lanza `ReferenceError` — un error explícito y localizable",
+              "level": 0
+            },
+            {
+              "content": "Con `var` no hay TDZ: cualquier uso antes de la asignación da `undefined` en silencio",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| | **`var`** | **`let` y `const`** |\n|---|---|---|\n| **Ámbito** | Función (no respeta bloques `{}`) | Bloque (`{}`) |\n| **Hoisting** | Sí — sube al inicio de la función | Sí — pero entra en Temporal Dead Zone |\n| **Temporal Dead Zone** | No hay TDZ — da `undefined` antes de asignar | Hay TDZ — da `ReferenceError` antes de declarar |\n| **Uso antes de declarar** | `undefined` (silencioso, difícil de rastrear) | `ReferenceError` (explícito, fácil de diagnosticar) |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-41-content.png",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| | **`var`** | **`let` y `const`** |\n|---|---|---|\n| **Ámbito** | Función (no respeta bloques `{}`) | Bloque (`{}`) |\n| **Hoisting** | Sí — sube al inicio de la función | Sí — pero entra en Temporal Dead Zone |\n| **Temporal Dead Zone** | No hay TDZ — da `undefined` antes de asignar | Hay TDZ — da `ReferenceError` antes de declarar |\n| **Uso antes de declarar** | `undefined` (silencioso, difícil de rastrear) | `ReferenceError` (explícito, fácil de diagnosticar) |",
+          "local_asset": "slides/assets/F-41-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-42",
+      "type": "codigo",
+      "title": "Patrón 1 — `var` hoisting — código",
+      "subtitle": "`var resultado` existe en toda la función — `let resultado` lanzaría error explícito",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// ❌ Código típico de IA entrenada en corpus pre-ES6:\nfunction procesar(activo: boolean) {\n    if (activo) {\n        var resultado = \"ok\";   // ← var: scope de FUNCIÓN, no de bloque\n    }\n    // \"var resultado\" fue izada al inicio de procesar():\n    // equivale a:\n    //   var resultado;             // undefined\n    //   if (activo) { resultado = \"ok\"; }\n\n    console.log(resultado);   // undefined si activo = false — NO lanza error\n    // El error silencioso puede ocurrir lejos de la causa real\n}\n\n// ✅ Con let: error explícito y localizable\nfunction procesar2(activo: boolean) {\n    if (activo) {\n        let resultado = \"ok\";   // ← let: scope del BLOQUE if\n    }\n    // console.log(resultado); // ❌ ReferenceError: resultado is not defined\n    //   El error aparece exactamente donde está el problema\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-43",
+      "type": "concepto-abstracto",
+      "title": "Patrón 2 — Variable global silenciosa — concepto",
+      "subtitle": "Una función que modifica variables fuera de sus parámetros tiene efectos secundarios ocultos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El problema de las dependencias implícitas"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Una **función pura** depende solo de sus parámetros y produce un resultado sin modificar el entorno externo",
+              "level": 0
+            },
+            {
+              "content": "Cuando una función accede a una variable declarada **fuera de su firma**, crea una **dependencia implícita**",
+              "level": 0
+            },
+            {
+              "content": "La IA tiende a generar este patrón porque en el corpus de entrenamiento es frecuente (código imperativo legacy)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué es problemático"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "La **firma de la función** no refleja todas sus dependencias — el lector no puede entender qué hace sin leer el cuerpo",
+              "level": 0
+            },
+            {
+              "content": "El resultado de la función puede cambiar según el **orden de las llamadas anteriores** — no es predecible desde sus parámetros",
+              "level": 0
+            },
+            {
+              "content": "Las **pruebas unitarias** se complican: hay que inicializar el estado global antes de cada test",
+              "level": 0
+            },
+            {
+              "content": "Los **efectos secundarios** son invisibles para el compilador — no hay error de compilación",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Señales de alerta en código generado por IA"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Función que **modifica una variable declarada fuera** de su scope inmediato",
+              "level": 0
+            },
+            {
+              "content": "Función cuyo **resultado varía** según qué otras funciones se llamaron antes",
+              "level": 0
+            },
+            {
+              "content": "Variable `total`, `contador`, `estado` declarada en el módulo y modificada dentro de funciones",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La solución: parámetros explícitos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Convertir la variable externa en parámetro hace la dependencia **visible en la firma**",
+              "level": 0
+            },
+            {
+              "content": "La función se vuelve predecible: mismos parámetros → mismo resultado",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-43-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-44",
+      "type": "codigo",
+      "title": "Patrón 2 — Variable global silenciosa — código",
+      "subtitle": "La función oculta su dependencia en `total` — la firma no lo refleja",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// ❌ Código con efecto secundario implícito (generado por IA):\nlet total = 0;  // variable global oculta — no aparece en la firma\n\nfunction acumular(n: number) {\n    total += n;   // ← modifica estado externo sin declararlo en la firma\n    return total; // ← el resultado depende de todas las llamadas anteriores\n}\n\nacumular(5);   // total = 5\nacumular(3);   // total = 8\nacumular(5);   // total = 13  (mismo argumento, resultado diferente)"
+        },
+        {
+          "lang": "typescript",
+          "content": "// ✅ Correcto — todas las dependencias son parámetros explícitos:\nfunction acumularPuro(total: number, n: number): number {\n    return total + n;   // mismos argumentos → siempre el mismo resultado\n}\n\nconst r1 = acumularPuro(0, 5);    // → 5\nconst r2 = acumularPuro(r1, 3);   // → 8\nconst r3 = acumularPuro(r2, 5);   // → 13\n// Predecible, testeable de forma aislada, sin estado oculto"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-45",
+      "type": "codigo",
+      "title": "Patrón 3 — Shadowing inesperado — código",
+      "subtitle": "¿A qué `limite` se refiere el filter? — la IA no siempre lo elige correctamente",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const limite = 100;  // limite del módulo (nivel 0)\n\n// ❌ Código generado por IA con shadowing inesperado:\nfunction validar(items: number[]) {\n    const limite = items.length;   // ← SHADOW: nueva variable con el mismo nombre\n    //                               oculta al limite = 100 del módulo\n\n    return items.filter(x => x < limite);\n    //                           ↑ ¿qué limite? → el LOCAL (items.length), NO el 100\n    // Si items = [50, 120, 80] y items.length = 3:\n    //   items.filter(x => x < 3)  → []  ← vacío (ningún elemento < 3)\n    //   El comportamiento correcto sería filtrar los que son < 100\n}\n\n// ✅ Correcto — sin shadowing, intención explícita:\nfunction validarSinShadow(items: number[], valorLimite: number): number[] {\n    const cantidadItems = items.length;    // nombre diferente — sin shadow\n    return items.filter(x => x < valorLimite);  // sin ambigüedad\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-46",
+      "type": "socratica",
+      "title": "Actividad — tres patrones mezclados",
+      "subtitle": "¿Cuántos errores ves? ¿A qué patrón pertenece cada uno?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Consigna"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**2 minutos — identificar en silencio:**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "¿Cuántos errores o problemas hay en este fragmento?",
+              "level": 0
+            },
+            {
+              "content": "¿A qué patrón corresponde cada uno?",
+              "level": 0
+            },
+            {
+              "content": "¿Cuál daría `undefined` sin error visible?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "let limite = 100;\nvar total = 0;\n\nfunction procesar(items: number[]) {\n    if (items.length > 0) {\n        var resultado = items[0] * 2;\n    }\n    for (const item of items) {\n        const limite = item;\n        total += limite;\n    }\n    console.log(resultado);\n    return items.filter(x => x < limite);\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "",
+        "local_asset": "slides/assets/F-46-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-47",
+      "type": "concepto-abstracto",
+      "title": "Prompt seguro para variables en TypeScript",
+      "subtitle": "Instrucciones explícitas al modelo producen código con buenas prácticas de scope",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El prompt"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué funciona cada restricción"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**`strict mode`**: activa detección de variables usadas antes de asignación (análisis de flujo de tipos)",
+              "level": 0
+            },
+            {
+              "content": "**`let/const` (nunca `var`)**: elimina el hoisting problemático — cualquier uso fuera de scope da `ReferenceError`",
+              "level": 0
+            },
+            {
+              "content": "**Parámetros explícitos**: el modelo entiende que no puede usar variables de fuera de la función",
+              "level": 0
+            },
+            {
+              "content": "**Tipos en firma**: el compilador puede verificar la corrección antes de ejecutar",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué es necesario ser explícito"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Sin estas instrucciones, el modelo aplica el patrón estadísticamente más frecuente en su corpus",
+              "level": 0
+            },
+            {
+              "content": "Con estas restricciones, el modelo ve el contexto de uso y produce código más preciso",
+              "level": 0
+            },
+            {
+              "content": "Las restricciones también actúan como **documentación técnica del proyecto** para cualquier colaborador",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "CIERRE"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "\"TypeScript strict mode.\nDeclara todo con let/const (nunca var).\nSin variables globales — todas las dependencias\nson parámetros explícitos con sus tipos declarados.\nDeclara el tipo de cada parámetro y el tipo de retorno.\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-47-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-48",
+      "type": "cierre",
+      "title": "Cierre — tres ideas para llevarse",
+      "subtitle": "Variables, Binding y Ámbito",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tres ideas para llevarse"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**La variable es una 5-tupla** — nombre, dirección, tipo, L-value, R-value — cada atributo tiene su propio binding y su propio momento",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Binding ocurre en 6 momentos** — cuanto antes ocurre, más eficiente y más verificable; cuanto más tarde, más flexible pero más riesgoso",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**El ámbito estático es predecible** — se resuelve en compilación: cualquier error de visibilidad aparece antes de ejecutar el programa",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Próxima clase — Tema 09.2"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Aliases, Closures, GC y Tipos**",
+              "level": 0
+            },
+            {
+              "content": "Las variables son entidades que se comparten, capturan y liberan.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "TP"
+        },
+        {
+          "type": "text",
+          "content": "Disponible en el aula virtual — ver consignas en `tp.md`."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "",
+        "local_asset": "slides/assets/F-48-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    }
+  ],
+  "_draft_instructions": {
+    "pending_type_ids": [],
+    "pending_prompt_ids": [
+      "F-00",
+      "F-01",
+      "F-04",
+      "F-09",
+      "F-14",
+      "F-20",
+      "F-23",
+      "F-25",
+      "F-27",
+      "F-30",
+      "F-34",
+      "F-36",
+      "F-37",
+      "F-40",
+      "F-41",
+      "F-43",
+      "F-46",
+      "F-47",
+      "F-48"
+    ],
+    "canonical_types": [
+      "portada",
+      "concepto-abstracto",
+      "concepto-mixto",
+      "codigo",
+      "tabla",
+      "tabla-comparativa",
+      "tabla-mixta",
+      "diagrama",
+      "socratica",
+      "demo",
+      "cierre",
+      "timeline"
+    ],
+    "next_steps": [
+      "1. Leer schema-registry.json ANTES de cualquier edición",
+      "2. Asignar type explícito desde canonical_types a cada slide en pending_type_ids",
+      "3. Copiar layout EXACTO del type_layout_map para cada tipo asignado",
+      "4. Para slides con image.layer!='none': escribir prompt VISUAL PURO (ver prompt-imagen-guide.md)",
+      "5. Actualizar summary: total_slides, images_planned, tables_planned, code_slides, type_distribution",
+      "6. Cambiar summary.status a 'READY_FOR_VALIDATION'",
+      "7. Eliminar esta clave '_draft_instructions'",
+      "8. Renombrar a: slides/plan-filminas-09.1-variables-binding.json",
+      "9. Validar: python scripts/repair_plan.py <topic_folder> --attempt 1",
+      "10. Publicar: python scripts/slides_pipeline.py <topic_folder>"
+    ]
+  }
+}
