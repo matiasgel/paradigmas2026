@@ -1,0 +1,152 @@
+{
+  "presentation_id": "15nrSaEHafkZEt6ThR4MbYA1IwEQI9gIalqfTAX5KR1Q",
+  "url": "https://docs.google.com/presentation/d/15nrSaEHafkZEt6ThR4MbYA1IwEQI9gIalqfTAX5KR1Q/edit",
+  "adjustments": [
+    {
+      "slide": "F-03",
+      "object": "slide_F_03_e1_tbl",
+      "kind": "table",
+      "font_pt": 6.8,
+      "cells": 21
+    },
+    {
+      "slide": "F-03",
+      "object": "slide_F_03_e3_rich",
+      "kind": "body",
+      "font_pt": 8.5
+    },
+    {
+      "slide": "F-04",
+      "object": "slide_F_04_e2_rich",
+      "kind": "body",
+      "font_pt": 8.7
+    },
+    {
+      "slide": "F-11",
+      "object": "slide_F_11_e1_tbl",
+      "kind": "table",
+      "font_pt": 7.0,
+      "cells": 21
+    },
+    {
+      "slide": "F-11",
+      "object": "slide_F_11_e3_rich",
+      "kind": "body",
+      "font_pt": 9.0
+    },
+    {
+      "slide": "F-14",
+      "object": "slide_F_14_e1_tbl",
+      "kind": "table",
+      "font_pt": 6.8,
+      "cells": 21
+    },
+    {
+      "slide": "F-14",
+      "object": "slide_F_14_e3_rich",
+      "kind": "body",
+      "font_pt": 8.4
+    },
+    {
+      "slide": "F-15",
+      "object": "slide_F_15_e1_tbl",
+      "kind": "table",
+      "font_pt": 6.8,
+      "cells": 15
+    },
+    {
+      "slide": "F-15",
+      "object": "slide_F_15_e3_rich",
+      "kind": "body",
+      "font_pt": 8.6
+    },
+    {
+      "slide": "F-22",
+      "object": "slide_F_22_e1_tbl",
+      "kind": "table",
+      "font_pt": 6.2,
+      "cells": 25
+    },
+    {
+      "slide": "F-22",
+      "object": "slide_F_22_e3_rich",
+      "kind": "body",
+      "font_pt": 8.4
+    },
+    {
+      "slide": "F-23",
+      "object": "slide_F_23_e2_rich",
+      "kind": "body",
+      "font_pt": 8.8
+    },
+    {
+      "slide": "F-26",
+      "object": "slide_F_26_e2_rich",
+      "kind": "body",
+      "font_pt": 8.8
+    },
+    {
+      "slide": "F-30",
+      "object": "slide_F_30_e1_tbl",
+      "kind": "table",
+      "font_pt": 6.8,
+      "cells": 11
+    },
+    {
+      "slide": "F-30",
+      "object": "slide_F_30_e3_rich",
+      "kind": "body",
+      "font_pt": 8.6
+    },
+    {
+      "slide": "F-35",
+      "object": "slide_F_35_e1_tbl",
+      "kind": "table",
+      "font_pt": 6.5,
+      "cells": 18
+    },
+    {
+      "slide": "F-35",
+      "object": "slide_F_35_e3_rich",
+      "kind": "body",
+      "font_pt": 8.4
+    },
+    {
+      "slide": "F-39",
+      "object": "slide_F_39_e2_rich",
+      "kind": "body",
+      "font_pt": 8.7
+    },
+    {
+      "slide": "F-40",
+      "object": "slide_F_40_e2_rich",
+      "kind": "body",
+      "font_pt": 8.7
+    },
+    {
+      "slide": "F-51",
+      "object": "slide_F_51_e1_tbl",
+      "kind": "table",
+      "font_pt": 6.5,
+      "cells": 14
+    },
+    {
+      "slide": "F-51",
+      "object": "slide_F_51_e3_rich",
+      "kind": "body",
+      "font_pt": 8.3
+    },
+    {
+      "slide": "F-53",
+      "object": "slide_F_53_e2_rich",
+      "kind": "body",
+      "font_pt": 8.8
+    },
+    {
+      "slide": "F-58",
+      "object": "slide_F_58_e2_rich",
+      "kind": "body",
+      "font_pt": 9.0
+    }
+  ]
+}

@@ -62,3 +62,5 @@ salida/cursadas/*/temas/*/slides/thumbnails/
 salida/cursadas/*/temas/*/slides/thumbnails/**/*
 salida/cursadas/*/temas/*/slides/**/*.jpg
 salida/cursadas/*/temas/*/slides/template-example.png
+salida/cursadas/*/temas/*/slides/review-png/
+salida/cursadas/*/temas/*/slides/review-png/**/*
