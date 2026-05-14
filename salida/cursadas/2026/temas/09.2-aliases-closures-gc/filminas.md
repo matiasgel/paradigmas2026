@@ -2,13 +2,13 @@
 
 > **Agente:** Dr. Roberto ✍️ — Class Writer
 > **Fecha:** 2026-05-14
-> **Revisado:** 2026-05-14 — separación total teoría/código, sin imágenes generadas, tablas solo en slides dedicadas
+> **Revisado:** 2026-05-14 — enriquecido con bibliografía oficial vía ChromaDB (Sebesta, Gabbrielli-Martini, Louden-Lambert) — 8 filminas nuevas
 > **Tema:** 09.2 — Aliases, Closures, GC y Tipos
 > **Duración:** 120 min (1 clase)
 > **Lenguaje principal:** TypeScript
-> **Fuente:** diseno.md — Lic. Marcos 🗂️
+> **Fuente:** diseno.md + ChromaDB (Sebesta §5.3.3, §6.11, §9.5, §10.6, §15; Gabbrielli §7.4, §8.11, §11, §16.9; Louden §7.7, §9.1, §10.3, §10.5)
 > **Prerequisito:** Tema 09.1 — Variables, Binding y Ámbito (5-tupla, categorías, ámbito estático)
-> **Estado:** 🔁 Reparado — pendiente de revisión docente
+> **Estado:** ✅ Enriquecido con bibliografía oficial — pendiente de revisión docente
 
 ---
 
@@ -158,6 +158,57 @@ Resultado: 40 en lugar del 30 esperado. Sin ninguna advertencia.
 
 - Las funciones puras no deberían modificar sus parámetros: reciben referencias pero no mutan el objeto
 - Usar `readonly` en TypeScript / `val` en Kotlin para comunicar al compilador y al lector esa intención
+
+---
+
+### [F-04b] Alias por colisión en paso por referencia — tres escenarios de Sebesta §9.5
+
+@tipo: concepto-abstracto
+
+# Sebesta §9.5: el paso por referencia genera tres categorías de alias involuntarios, todas peligrosas
+
+## Escenario 1 — Colisión entre parámetros actuales
+
+Si dos posiciones de parámetro recibidas por referencia se invocan con el **mismo argumento**, ambos nombres internos son aliases del mismo objeto:
+
+```cpp
+// C++ — fun(a, a): x e y apuntan al mismo int en memoria
+void fun(int& x, int& y) {
+    x = 10;
+    y = 20;    // si x e y son el mismo objeto: leer x devuelve 20, no 10
+               // ¿cuánto vale x + y? 40 si son alias, 30 si son distintos
+}
+int a = 5;
+fun(a, a);   // comportamiento dependiente de implementación — no definido en C++
+```
+
+## Escenario 2 — Parámetro y variable global
+
+Si el argumento pasado por referencia coincide con una variable global accesible dentro de la función, hay dos caminos al mismo dato:
+
+```cpp
+int i = 3;              // variable global
+void fun(int& a) {
+    i = 99;             // modifica i a través del nombre global
+                        // a también cambió — son aliases del mismo objeto
+}
+fun(i);                 // a es alias de i
+```
+
+## Escenario 3 — Elemento de array y array completo por referencia
+
+```cpp
+fun1(list[i], list);    // el primer parámetro es un alias de list[i]
+                        // el segundo da acceso a todo el array — incluyendo list[i]
+                        // si fun1 modifica list a través del segundo parámetro,
+                        // el primer parámetro verá ese cambio en la siguiente lectura
+```
+
+## El diagnóstico de Sebesta §9.5
+
+> "Another problem of pass-by-reference is that aliases can be created. [...] The problems with these kinds of aliasing are the same as in other aliasing situations: they make programs difficult to read and maintain."
+
+Sebesta §9.5.2.4 propone **pass-by-value-result** como alternativa que elimina estos tres escenarios: el parámetro recibe una copia al inicio y la escribe de vuelta al final — sin alias en ningún momento de la ejecución de la función.
 
 ---
 
@@ -372,6 +423,44 @@ Si una closure se mantiene viva indefinidamente, **todas las variables que captu
 
 ---
 
+### [F-10b] La closure como solución al problema del dangling reference — Gabbrielli §7.4
+
+@tipo: concepto-abstracto
+
+# ¿Por qué las variables capturadas no pueden vivir en el stack? — la justificación formal de Gabbrielli
+
+## La pregunta que Gabbrielli plantea en §7.4
+
+Cuando una función `F` retorna una función interna `gg` que captura la variable local `x`, surge un conflicto con el ciclo de vida del stack:
+
+> "When the result of F() is assigned to gg, the closure which forms its value points to an environment containing the name x. But this environment is local to F and will therefore be destroyed on its termination. How is it possible, then, to call gg later, without producing a dangling reference to x?"
+
+En C, retornar un puntero a una variable local produce exactamente eso: un **dangling reference** — apunta a stack memory ya reciclada. Es un bug.
+
+## La solución: migración al heap garantizada por el runtime
+
+1. En tiempo de compilación, el compilador detecta que `x` **escapa** del scope de `F` (es capturada por `gg`).
+2. `x` se aloja en el **heap** desde el inicio — no en el stack frame de `F`.
+3. El closure object `gg` contiene una referencia directa a esa celda heap.
+4. Cuando `F` retorna y su stack frame se destruye, `x` en heap **sigue viva**.
+5. El GC libera `x` solo cuando ninguna closure la referencie.
+
+## La definición formal de Gabbrielli §7.4
+
+> "Closures: Data structures composed of a piece of code and an evaluation environment, called closures, are a canonical model for implementing call by name and all those situations in which a function must be passed as a parameter or returned as a result."
+
+Una closure es un par **(código, entorno)**: el código es el cuerpo de la función; el entorno es la representación del contexto léxico en que fue definida, incluyendo las celdas heap de las variables capturadas.
+
+## La diferencia con C: bug vs. garantía estructural
+
+| | C (sin closures) | TypeScript/Python/Go/Kotlin |
+|---|---|---|
+| Variable local retornada por referencia | Dangling reference — bug | Imposible — el runtime garantiza heap |
+| Detección | Runtime (crash/corrupción silenciosa) | Compile-time (Rust) o runtime-safe (resto) |
+| Responsabilidad | El programador | El runtime/compilador |
+
+---
+
 ### [F-11] Closure en Python — `nonlocal` para escritura
 
 @tipo: codigo
@@ -499,6 +588,49 @@ Si ves código C que simula closures con `static` dentro de una función, tiene 
 ## La implicación práctica para el alumno
 
 Con deep binding, el comportamiento de una closure es **local y cerrado**: depende solo de dónde fue definida en el código fuente, no de cómo llegó la ejecución hasta ella. Eso es exactamente lo que permite razonar sobre el código sin seguir toda la cadena de llamadas.
+
+---
+
+### [F-14b] `makeAdder` — el ejemplo canónico de Sebesta §10.6.4
+
+@tipo: codigo
+
+# Sebesta §10.6.4: dos closures sobre el mismo parámetro — dos celdas heap completamente independientes
+
+```typescript
+// Sebesta §10.6.4 — adaptado a TypeScript
+// makeAdder captura su parámetro `x` — cada llamada crea una celda heap distinta
+
+const makeAdder = (x: number) => (n: number): number => x + n;
+// La función retornada es una closure que captura `x` del scope de makeAdder
+// makeAdder se llama dos veces → dos ejecuciones → dos celdas heap para `x`
+
+const add10 = makeAdder(10);   // closure 1: x = 10 en heap — celda A
+const add5  = makeAdder(5);    // closure 2: x = 5  en heap — celda B (independiente)
+
+// Cada closure lee su propia celda — sin interferencia:
+console.log(add10(1));    // 11 — celda A: x=10, n=1
+console.log(add5(7));     // 12 — celda B: x=5,  n=7
+console.log(add10(10));   // 20 — celda A sigue siendo x=10
+console.log(add5(5));     // 10 — celda B sigue siendo x=5
+```
+
+## El análisis de Sebesta
+
+> "The variable x referenced in the closure function is bound to the parameter that was sent to makeAdder. The makeAdder function is called twice, once with a parameter of 10 and once with a parameter of 5, producing two different closures."
+
+- Cada llamada a `makeAdder` crea su propio activation record con su propio `x`
+- `x` es un **parámetro** — cada invocación genera una celda nueva en heap (binding fresco)
+- Las dos closures son **completamente independientes** — no son aliases entre sí
+
+## Contraste con `crearContador` (F-09)
+
+| | `makeAdder` | `crearContador` |
+|---|---|---|
+| Fuente del valor capturado | Parámetro de la función | Variable local de la función |
+| ¿Compartido entre closures? | No — celda nueva por llamada | Sí — las tres closures comparten `cuenta` |
+| Mutabilidad del capturado | Inmutable (solo lectura) | Mutable (lectura y escritura) |
+| Uso típico | Currificación, partial application | Estado encapsulado, módulo con estado |
 
 ---
 
@@ -641,6 +773,47 @@ ref_count(celda) = cantidad de variables/campos que apuntan a esa celda en este 
 El algoritmo asume que `ref_count == 0` equivale a "inaccesible". Esa equivalencia es verdadera **en ausencia de ciclos**.
 
 Si dos objetos se apuntan mutuamente, sus contadores nunca llegan a 0 aunque el programa no pueda alcanzarlos — son inaccesibles pero el RC no los libera. Es una **fuga de memoria estructural** del algoritmo.
+
+---
+
+### [F-19b] Las ventajas y los dos problemas fundamentales del RC — Sebesta §6.11 + Louden §10.5
+
+@tipo: concepto-abstracto
+
+# Sebesta y Louden coinciden en el diagnóstico: RC y mark-sweep son procesos opuestos, cada uno resuelve lo que el otro no puede
+
+## Las ventajas del RC — Sebesta §6.11.7.1
+
+Sebesta describe el RC como **incremental**: la reclamación ocurre en el instante exacto en que una celda se vuelve inaccesible.
+
+1. **Sin stop-the-world**: no hay ciclo de GC que pause el programa — la liberación se intercala con la ejecución normal.
+2. **Determinístico**: el momento de liberación es predecible — útil para recursos con destructores (archivos, sockets, conexiones de red).
+3. **Local**: la decisión de liberar la toma cada celda por su propio contador — no se requiere trazar el grafo completo.
+
+## El primer problema: overhead de mantenimiento — Louden §10.5
+
+> "However, the overhead to maintain reference counts is not the worst flaw of this scheme."
+
+Cada asignación de referencia requiere dos operaciones: incrementar el contador del nuevo destino y decrementar el del anterior. En bucles tight o estructuras de datos funcionales con muchas copias, este overhead puede ser considerable.
+
+## El segundo problema: ciclos de referencia — Louden §10.5 (el peor defecto)
+
+> "Even more serious is that circular references can cause unreferenced memory to never be deallocated."
+
+Louden ilustra con una lista circular: si el último nodo apunta al primero, al eliminar la referencia externa cada nodo sigue teniendo `ref_count ≥ 1`. Ningún contador llega a cero. La memoria **nunca se libera**.
+
+## El diagnóstico de Sebesta §6.11.7
+
+Sebesta clasifica los problemas como dos polês opuestos:
+
+| Algoritmo | Fortaleza | Debilidad |
+|---|---|---|
+| Reference Counting | Incremental, determinístico, sin stop-the-world | No resuelve ciclos; overhead por operación |
+| Mark-and-Sweep | Resuelve ciclos; sin overhead por operación | Stop-the-world; no incremental (clásico) |
+
+> "These two approaches to garbage collection, in many ways, are opposite processes."
+
+Los GC modernos (Python, Swift, V8) combinan ambos o hibridan técnicas para capturar las fortalezas de cada uno.
 
 ---
 
@@ -794,6 +967,47 @@ Durante las fases mark y sweep, el programa se pausa. Si el heap es grande, la p
 
 ---
 
+### [F-23b] Los tres defectos del mark-and-sweep y la compactación como solución — Gabbrielli §8.11
+
+@tipo: concepto-abstracto
+
+# Gabbrielli §8.11 identifica tres defectos estructurales del mark-and-sweep clásico y describe cómo la compactación resuelve uno de ellos
+
+## Defecto 1 — Fragmentación externa (compartido con RC)
+
+> "The mark and sweep technique suffers from three main defects. In the first place, and this is also true for reference counting, it is asymptotically the cause of external fragmentation: live and no longer live objects are arbitrarily mixed in the heap which can make allocating a large block impossible even if the total free space is sufficient."
+
+Los objetos vivos y los inaccesibles quedan entremezclados en memoria. La suma de huecos puede ser suficiente para una nueva alocación, pero no hay ningún bloque contiguo disponible.
+
+## Defecto 2 — Stop-the-world (a diferencia de RC)
+
+El algoritmo clásico pausa el programa durante las dos fases. A diferencia del RC (incremental), el mark-and-sweep acumula trabajo y lo ejecuta todo junto. En heaps grandes: pausas de cientos de milisegundos inaceptables para aplicaciones interactivas.
+
+## Defecto 3 — Actualización de punteros tras compactación
+
+Si se añade compactación para resolver la fragmentación, todos los punteros a objetos movidos deben actualizarse. El costo es proporcional al número de referencias en el grafo — potencialmente muy alto.
+
+## La solución a la fragmentación: compactación (Gabbrielli §8.11)
+
+> "To avoid the fragmentation caused by the mark and sweep technique, we can modify the sweep phase and convert it into a compaction phase. Live objects are moved so that they are contiguous and thereby leave a contiguous block of free memory."
+
+```
+ANTES (heap fragmentado tras varios ciclos de GC):
+  [Obj1][ libre ][ Obj2 ][ libre ][Obj3][ libre ][ libre ]
+
+DESPUÉS DE COMPACTACIÓN (objetos vivos movidos a posiciones contiguas):
+  [Obj1][ Obj2 ][Obj3][          LIBRE CONTIGUO          ]
+
+COSTO: actualizar todos los punteros a Obj1, Obj2, Obj3 con sus nuevas direcciones
+BENEFICIO: una única zona libre contigua — toda alocación nueva es trivial
+```
+
+## Cómo lo resuelve V8 en la práctica
+
+V8 usa **semi-space copying** en el New Space: los objetos vivos se copian al semi-space vacío (“to”), y al terminar los roles se intercambian. El semi-space “from” queda completamente libre en un solo paso. Es compactación sin actualizaciones in-place — a costa de que la mitad del New Space siempre esté reservada como zona de copia.
+
+---
+
 ### [F-24] Mark-and-Sweep — trazado del algoritmo sobre un heap de ejemplo
 
 @tipo: codigo
@@ -937,6 +1151,37 @@ El tipado gradual fue formalizado por Jeremy Siek y Walid Taha en 2006. TypeScri
 
 ---
 
+### [F-27b] El origen académico del gradual typing — Gabbrielli §16.9 y Siek & Taha (2006)
+
+@tipo: concepto-abstracto
+
+# El gradual typing no es solo una característica de TypeScript — es un campo de investigación formal con base teórica rigorosa
+
+## La motivación histórica — Gabbrielli §16.9
+
+> "As the number of large software projects developed with dynamically-typed languages grew over time, users realised that trading rapid prototyping off static checks was an unfavourable deal. Indeed, in static typing, we can see a type as a contract that both the provider and the user of the code have to maintain."
+
+El problema práctico: proyectos en JavaScript o Python crecían hasta cientos de miles de líneas y los beneficios del tipado dinámico quedaban eclipsados por la dificultad de mantener código sin contratos de tipos explícitos.
+
+## La definición formal de Gabbrielli §16.9
+
+> "In gradual typing, users can modulate the amount of typing information they provide in their programs, indicating what elements of their programs the interpreter/compiler should check statically and which should be checked at run time."
+
+La palabra clave es **modular**: el programador decide qué partes del código tienen garantías estáticas y qué partes quedan dinámicas.
+
+## La base formal — Siek & Taha (2006)
+
+El artículo "Gradual Typing for Functional Languages" (Scheme Workshop, 2006) introdujo:
+- Un tipo especial `?` (dynamic type) — compatible con cualquier tipo en compilación
+- La relación de **consistencia de tipos** (`∼`): `T ∼ ?` para cualquier `T` — más débil que la igualdad de tipos
+- **Cast implícito automático**: el compilador inserta verificaciones en los límites entre código tipado y no tipado — si el cast falla en runtime, se lanza excepción
+
+## Soundness y TypeScript — Gabbrielli §16.9
+
+Gabbrielli distingue gradual typing **sound** (las garantías formales se preservan completamente) del enfoque de TypeScript, que es **intencionalmente unsound**: acepta ciertos programas con potenciales errores de tipo por razones de usabilidad y compatibilidad con JavaScript. Esta decisión está documentada en el spec de TypeScript: "TypeScript does not guarantee complete type soundness." El tipo `unknown` (F-30b) es la herramienta más cercana al gradual typing sound que TypeScript ofrece.
+
+---
+
 ### [F-28] Tipado estático, dinámico y gradual — comparación
 
 @tipo: tabla-comparativa
@@ -1019,6 +1264,71 @@ const nombre = buscarUsuario(2);
 // Con strictNullChecks: nombre.toUpperCase() — ❌ Error: 'nombre' is possibly 'null'
 console.log(nombre?.toUpperCase() ?? "no encontrado");  // ✅ manejo explícito de null
 ```
+
+---
+
+### [F-30b] `unknown` vs `any` — el tipo gradual seguro en TypeScript
+
+@tipo: codigo
+
+# `any` desactiva el sistema de tipos; `unknown` lo preserva — dos escape hatches con semánticas opuestas
+
+## La diferencia conceptual
+
+- **`any`**: TypeScript suspende completamente la verificación de tipos. El programador puede hacer cualquier cosa con el valor sin que el compilador objete. Corresponde al tipo dinámico `?` de Siek & Taha pero sin garantías de runtime.
+- **`unknown`**: TypeScript sabe que el valor existe pero no conoce su tipo. **Obliga al programador a hacer narrowing antes de cualquier operación** — si no, el compilador rechaza el código.
+
+```typescript
+// ─────────────────────────────────────────────────────────────────
+// `any` — el compilador no objeta nada — crash en runtime posible
+// ─────────────────────────────────────────────────────────────────
+function procesarAny(valor: any): string {
+    return valor.toUpperCase();    // ✅ para TypeScript — TypeError en runtime si valor es number
+    // `any` anula TODAS las garantías del sistema de tipos
+}
+
+// ─────────────────────────────────────────────────────────────────
+// `unknown` — requiere narrowing antes de cualquier operación
+// ─────────────────────────────────────────────────────────────────
+function procesarUnknown(valor: unknown): string {
+    // return valor.toUpperCase(); // ❌ Error: Object is of type 'unknown'
+    if (typeof valor === "string") {
+        return valor.toUpperCase();  // ✅ — narrowed a string
+    }
+    if (typeof valor === "number") {
+        return valor.toFixed(2);     // ✅ — narrowed a number
+    }
+    return String(valor);            // ✅ — String() funciona con cualquier tipo
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Uso canónico de `unknown`: datos externos y catch blocks
+// ─────────────────────────────────────────────────────────────────
+async function fetchJSON(url: string): Promise<unknown> {
+    const r = await fetch(url);
+    return r.json();   // unknown: no sabemos qué estructura retorna el servidor
+    // El caller DEBE hacer narrowing — correcto por diseño del sistema de tipos
+}
+
+// Desde TypeScript 4.0: catch usa unknown por defecto (useUnknownInCatchVariables)
+try {
+    JSON.parse("datos-invalidos");
+} catch (e: unknown) {
+    // e.message;          // ❌ Error: Object is of type 'unknown'
+    if (e instanceof Error) {
+        console.log(e.message);  // ✅ — narrowed a Error
+    }
+}
+```
+
+## La regla práctica en proyectos con `strict: true`
+
+| Situación | Tipo recomendado | Motivo |
+|---|---|---|
+| Migración gradual desde JS | `any` (transitorio) | Compatibilidad — marcar con TODO |
+| Datos de red / JSON.parse / catch | `unknown` | Fuerza verificación antes de uso |
+| Interop con librerías sin types | `any` con cast documentado | No hay alternativa |
+| Cualquier otro caso | Tipo concreto o union type | Sin escape hatch |
 
 ---
 
@@ -1171,6 +1481,46 @@ En FP puro, computar no significa "modificar el estado de celdas de memoria". Si
 - Sin estado mutable → sin efectos laterales → sin aliases peligrosos por definición
 - El razonamiento ecuacional funciona: si `f(x) = 10`, entonces cualquier `f(x)` en el programa puede reemplazarse por `10` sin cambiar el comportamiento
 - Las funciones son predecibles: su resultado depende **solo** de sus argumentos, nunca del estado externo
+
+---
+
+### [F-35b] Transparencia referencial — la definición formal y sus consecuencias
+
+@tipo: concepto-abstracto
+
+# Sebesta §7.4 y Louden §9.1 definen la propiedad formal que hace razonable el código funcional
+
+## La definición de Sebesta §7.4
+
+> "A program has the property of referential transparency if any two expressions in the program that have the same value can be substituted for one another anywhere in the program, without affecting the action of the program."
+
+## La definición equivalente de Louden §9.1 — la regla de sustitución
+
+> "Any two expressions in a program that have the same value can be replaced by each other anywhere in the program without changing the result."
+
+Ambas dicen lo mismo: el valor de una expresión depende **solo de sus partes**, nunca de cuándo ni cuántas veces se evalúe.
+
+## La conexión con los efectos laterales — Sebesta §7.4
+
+> "Because they do not have variables, programs written in pure functional languages are referentially transparent. Functions in a pure functional language cannot have state, which would be stored in local variables."
+
+Un **efecto lateral** es toda modificación que una función realiza sobre algo fuera de su entorno local: variables globales, parámetros mutables, archivos, I/O. La transparencia referencial **implica** la ausencia de efectos laterales y viceversa.
+
+## Las consecuencias formales
+
+1. **Razonamiento ecuacional**: si `f(x) = 10`, entonces `f(x)` puede sustituirse por `10` en cualquier parte del programa — sin sorpresas por estado externo.
+2. **Memoización válida**: el compilador puede cachear `f(5) = 25` y no recalcularlo. Solo es válido si `f` es referencialmente transparente.
+3. **Reordenamiento seguro**: el compilador puede evaluar `f(a)` y `g(b)` en cualquier orden si ambas son puras. Habilita optimizaciones y paralelismo.
+4. **Pruebas aisladas**: una función pura se prueba completamente con sus argumentos — sin setup de estado global, sin teardown.
+
+## La conexión con aliases (Bloque 1 de esta clase)
+
+Los aliases sobre objetos mutables rompen la transparencia referencial:
+- Si `a` y `b` son aliases del mismo objeto mutable y `f(a)` modifica ese objeto,
+- entonces `f(b)` después de `f(a)` produce un resultado diferente aunque `a === b`.
+- `f` ya no es función de su argumento — es función del estado del heap.
+
+La inmutabilidad (Bloque 5) elimina esta categoría de problemas **por diseño**: si los objetos no se pueden mutar, los aliases son inofensivos.
 
 ---
 
@@ -1669,11 +2019,11 @@ const logApp = registrarEventos("App");
 
 ## Lo que vimos hoy
 
-- **Aliases:** dos nombres, una celda de memoria. Modificar uno modifica todos silenciosamente. `readonly` como guardrail de compilación. Shallow copy con spread, deep copy con `structuredClone`.
-- **Closures:** función + entorno léxico capturado. Las variables capturadas migran del stack al heap. Deep binding: el entorno se congela al crear la closure. `let` crea una celda nueva por iteración — `var` comparte una sola.
-- **GC:** Reference Counting — determinístico pero falla con ciclos. Mark-and-Sweep — detecta ciclos pero pausa el programa. V8 usa GC generacional para minimizar las pausas. Rust elimina el GC con ownership en compilación.
-- **Gradual Typing:** TypeScript como espectro continuo de `any` a `strict`. Type narrowing: TypeScript estrecha el tipo en cada rama del control de flujo — transforma crashes de runtime en errores de compilación.
-- **FP:** bindings inmutables — no existe la asignación destructiva. `val`/`const`/`Readonly<T>` como herramientas prácticas. La inmutabilidad elimina los aliases peligrosos por diseño.
+- **Aliases:** dos nombres, una celda de memoria. Fuentes: asignación de referencia, parámetros por referencia (tres escenarios de Sebesta §9.5), union types. Consecuencias en verificación formal y concurrencia. `readonly` como guardrail. Shallow copy con spread, deep copy con `structuredClone`.
+- **Closures:** función + entorno léxico capturado (Gabbrielli §7.4: “pair code/environment”). Solución al dangling reference: migración al heap garantizada por el runtime. Deep binding: el entorno se congela al crear la closure. Ejemplo canónico de Sebesta: `makeAdder` (Sebesta §10.6.4). `let` crea celda nueva por iteración — `var` comparte una sola.
+- **GC:** Reference Counting (incremental, determinístico; falla con ciclos — Louden §10.5). Mark-and-Sweep (resuelve ciclos; tres defectos de Gabbrielli §8.11: fragmentación, stop-the-world, actualización de punteros). Compactación como solución. V8 generacional: Scavenger + Mark-Compact. Rust: ownership sin GC.
+- **Gradual Typing:** motivación histórica (Gabbrielli §16.9). Base formal: Siek & Taha 2006. `any` vs `unknown`: el tipo gradual seguro. Type narrowing: TypeScript estrecha el tipo en cada rama del control de flujo. TypeScript: intencionalmente unsound.
+- **FP:** bindings inmutables. Transparencia referencial: definición formal Sebesta §7.4 + Louden §9.1. La inmutabilidad elimina los aliases peligrosos por diseño.
 
 ## Conexiones hacia adelante
 
