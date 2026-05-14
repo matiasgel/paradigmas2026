@@ -206,7 +206,8 @@ fun1(list[i], list);    // el primer parámetro es un alias de list[i]
 
 ## El diagnóstico de Sebesta §9.5
 
-> "Another problem of pass-by-reference is that aliases can be created. [...] The problems with these kinds of aliasing are the same as in other aliasing situations: they make programs difficult to read and maintain."
+> "Otro problema del pasaje por referencia es que pueden crearse aliases. [...] Los problemas con estos tipos de aliasing son los mismos que en otras situaciones de aliasing: hacen que los programas sean difíciles de leer y mantener."
+> — Sebesta §9.5
 
 Sebesta §9.5.2.4 propone **pass-by-value-result** como alternativa que elimina estos tres escenarios: el parámetro recibe una copia al inicio y la escribe de vuelta al final — sin alias en ningún momento de la ejecución de la función.
 
@@ -433,7 +434,8 @@ Si una closure se mantiene viva indefinidamente, **todas las variables que captu
 
 Cuando una función `F` retorna una función interna `gg` que captura la variable local `x`, surge un conflicto con el ciclo de vida del stack:
 
-> "When the result of F() is assigned to gg, the closure which forms its value points to an environment containing the name x. But this environment is local to F and will therefore be destroyed on its termination. How is it possible, then, to call gg later, without producing a dangling reference to x?"
+> "Cuando el resultado de F() se asigna a gg, la clausura que forma su valor apunta a un entorno que contiene el nombre x. Pero este entorno es local a F y será destruido al terminar su ejecución. ¿Cómo es posible, entonces, invocar gg posteriormente sin producir una referencia colgante a x?"
+> — Gabbrielli & Martini §7.4
 
 En C, retornar un puntero a una variable local produce exactamente eso: un **dangling reference** — apunta a stack memory ya reciclada. Es un bug.
 
@@ -447,7 +449,8 @@ En C, retornar un puntero a una variable local produce exactamente eso: un **dan
 
 ## La definición formal de Gabbrielli §7.4
 
-> "Closures: Data structures composed of a piece of code and an evaluation environment, called closures, are a canonical model for implementing call by name and all those situations in which a function must be passed as a parameter or returned as a result."
+> "Clausuras: las estructuras de datos compuestas por un fragmento de código y un entorno de evaluación, denominadas clausuras, constituyen el modelo canónico para implementar la llamada por nombre y todas aquellas situaciones en que una función debe pasarse como parámetro o retornarse como resultado."
+> — Gabbrielli & Martini §7.4
 
 Una closure es un par **(código, entorno)**: el código es el cuerpo de la función; el entorno es la representación del contexto léxico en que fue definida, incluyendo las celdas heap de las variables capturadas.
 
@@ -617,7 +620,8 @@ console.log(add5(5));     // 10 — celda B sigue siendo x=5
 
 ## El análisis de Sebesta
 
-> "The variable x referenced in the closure function is bound to the parameter that was sent to makeAdder. The makeAdder function is called twice, once with a parameter of 10 and once with a parameter of 5, producing two different closures."
+> "La variable x referenciada en la función clausura está ligada al parámetro enviado a makeAdder. La función makeAdder se invoca dos veces: una con el parámetro 10 y otra con el parámetro 5, produciendo dos clausuras diferentes."
+> — Sebesta §10.6.4
 
 - Cada llamada a `makeAdder` crea su propio activation record con su propio `x`
 - `x` es un **parámetro** — cada invocación genera una celda nueva en heap (binding fresco)
@@ -792,13 +796,15 @@ Sebesta describe el RC como **incremental**: la reclamación ocurre en el instan
 
 ## El primer problema: overhead de mantenimiento — Louden §10.5
 
-> "However, the overhead to maintain reference counts is not the worst flaw of this scheme."
+> "Sin embargo, el costo de mantener los contadores de referencia no es el peor defecto de este esquema."
+> — Louden & Lambert §10.5
 
 Cada asignación de referencia requiere dos operaciones: incrementar el contador del nuevo destino y decrementar el del anterior. En bucles tight o estructuras de datos funcionales con muchas copias, este overhead puede ser considerable.
 
 ## El segundo problema: ciclos de referencia — Louden §10.5 (el peor defecto)
 
-> "Even more serious is that circular references can cause unreferenced memory to never be deallocated."
+> "Aún más grave es que las referencias circulares pueden provocar que la memoria sin referencias nunca sea liberada."
+> — Louden & Lambert §10.5
 
 Louden ilustra con una lista circular: si el último nodo apunta al primero, al eliminar la referencia externa cada nodo sigue teniendo `ref_count ≥ 1`. Ningún contador llega a cero. La memoria **nunca se libera**.
 
@@ -811,7 +817,8 @@ Sebesta clasifica los problemas como dos polês opuestos:
 | Reference Counting | Incremental, determinístico, sin stop-the-world | No resuelve ciclos; overhead por operación |
 | Mark-and-Sweep | Resuelve ciclos; sin overhead por operación | Stop-the-world; no incremental (clásico) |
 
-> "These two approaches to garbage collection, in many ways, are opposite processes."
+> "Estos dos enfoques de recolección de basura son, en muchos aspectos, procesos opuestos."
+> — Sebesta §6.11.7
 
 Los GC modernos (Python, Swift, V8) combinan ambos o hibridan técnicas para capturar las fortalezas de cada uno.
 
@@ -975,7 +982,8 @@ Durante las fases mark y sweep, el programa se pausa. Si el heap es grande, la p
 
 ## Defecto 1 — Fragmentación externa (compartido con RC)
 
-> "The mark and sweep technique suffers from three main defects. In the first place, and this is also true for reference counting, it is asymptotically the cause of external fragmentation: live and no longer live objects are arbitrarily mixed in the heap which can make allocating a large block impossible even if the total free space is sufficient."
+> "La técnica de mark-and-sweep padece tres defectos principales. En primer lugar, y esto también es válido para el conteo de referencias, es causa asintótica de fragmentación externa: los objetos vivos y los que ya no lo son se mezclan arbitrariamente en el heap, lo que puede hacer imposible alojar un bloque grande aunque el espacio libre total sea suficiente."
+> — Gabbrielli & Martini §8.11
 
 Los objetos vivos y los inaccesibles quedan entremezclados en memoria. La suma de huecos puede ser suficiente para una nueva alocación, pero no hay ningún bloque contiguo disponible.
 
@@ -989,7 +997,8 @@ Si se añade compactación para resolver la fragmentación, todos los punteros a
 
 ## La solución a la fragmentación: compactación (Gabbrielli §8.11)
 
-> "To avoid the fragmentation caused by the mark and sweep technique, we can modify the sweep phase and convert it into a compaction phase. Live objects are moved so that they are contiguous and thereby leave a contiguous block of free memory."
+> "Para evitar la fragmentación causada por la técnica mark-and-sweep, se puede modificar la fase de barrido convirtiéndola en una fase de compactación. Los objetos vivos se mueven de modo que queden contiguos, dejando así un bloque contiguo de memoria libre."
+> — Gabbrielli & Martini §8.11
 
 ```
 ANTES (heap fragmentado tras varios ciclos de GC):
@@ -1159,26 +1168,28 @@ El tipado gradual fue formalizado por Jeremy Siek y Walid Taha en 2006. TypeScri
 
 ## La motivación histórica — Gabbrielli §16.9
 
-> "As the number of large software projects developed with dynamically-typed languages grew over time, users realised that trading rapid prototyping off static checks was an unfavourable deal. Indeed, in static typing, we can see a type as a contract that both the provider and the user of the code have to maintain."
+> "A medida que el número de proyectos de software de gran escala desarrollados con lenguajes de tipado dinámico creció con el tiempo, los usuarios advirtieron que sacrificar las verificaciones estáticas en favor de la rapidez de prototipado era un trato desfavorable. En el tipado estático, un tipo puede verse como un contrato que tanto el proveedor como el usuario del código deben respetar."
+> — Gabbrielli & Martini §16.9
 
 El problema práctico: proyectos en JavaScript o Python crecían hasta cientos de miles de líneas y los beneficios del tipado dinámico quedaban eclipsados por la dificultad de mantener código sin contratos de tipos explícitos.
 
 ## La definición formal de Gabbrielli §16.9
 
-> "In gradual typing, users can modulate the amount of typing information they provide in their programs, indicating what elements of their programs the interpreter/compiler should check statically and which should be checked at run time."
+> "En el tipado gradual, los usuarios pueden modular la cantidad de información de tipos que proporcionan en sus programas, indicando qué elementos deben verificarse estáticamente y cuáles en tiempo de ejecución."
+> — Gabbrielli & Martini §16.9
 
 La palabra clave es **modular**: el programador decide qué partes del código tienen garantías estáticas y qué partes quedan dinámicas.
 
 ## La base formal — Siek & Taha (2006)
 
-El artículo "Gradual Typing for Functional Languages" (Scheme Workshop, 2006) introdujo:
-- Un tipo especial `?` (dynamic type) — compatible con cualquier tipo en compilación
+El artículo "Tipado gradual para lenguajes funcionales" (Siek & Taha, Scheme Workshop, 2006) introdujo:
+- Un tipo especial `?` (tipo dinámico) — compatible con cualquier tipo en compilación
 - La relación de **consistencia de tipos** (`∼`): `T ∼ ?` para cualquier `T` — más débil que la igualdad de tipos
-- **Cast implícito automático**: el compilador inserta verificaciones en los límites entre código tipado y no tipado — si el cast falla en runtime, se lanza excepción
+- **Cast implícito automático**: el compilador inserta verificaciones en los límites entre código tipado y no tipado — si el cast falla en tiempo de ejecución, se lanza una excepción
 
-## Soundness y TypeScript — Gabbrielli §16.9
+## Corrección formal del sistema de tipos y TypeScript — Gabbrielli §16.9
 
-Gabbrielli distingue gradual typing **sound** (las garantías formales se preservan completamente) del enfoque de TypeScript, que es **intencionalmente unsound**: acepta ciertos programas con potenciales errores de tipo por razones de usabilidad y compatibilidad con JavaScript. Esta decisión está documentada en el spec de TypeScript: "TypeScript does not guarantee complete type soundness." El tipo `unknown` (F-30b) es la herramienta más cercana al gradual typing sound que TypeScript ofrece.
+Gabbrielli distingue el tipado gradual **formalmente correcto** (las garantías de tipos se preservan completamente en tiempo de ejecución) del enfoque de TypeScript, que es **deliberadamente incompleto**: acepta ciertos programas con potenciales errores de tipo por razones de usabilidad y compatibilidad con JavaScript. Esta decisión de diseño está documentada en la especificación oficial: TypeScript no garantiza la corrección completa del sistema de tipos. El tipo `unknown` (F-30b) es la herramienta más cercana al tipado gradual formalmente correcto que TypeScript ofrece.
 
 ---
 
@@ -1310,7 +1321,7 @@ async function fetchJSON(url: string): Promise<unknown> {
     // El caller DEBE hacer narrowing — correcto por diseño del sistema de tipos
 }
 
-// Desde TypeScript 4.0: catch usa unknown por defecto (useUnknownInCatchVariables)
+// Desde TypeScript 4.0: el bloque catch usa `unknown` por defecto (opción de compilador: useUnknownInCatchVariables)
 try {
     JSON.parse("datos-invalidos");
 } catch (e: unknown) {
@@ -1492,17 +1503,20 @@ En FP puro, computar no significa "modificar el estado de celdas de memoria". Si
 
 ## La definición de Sebesta §7.4
 
-> "A program has the property of referential transparency if any two expressions in the program that have the same value can be substituted for one another anywhere in the program, without affecting the action of the program."
+> "Un programa tiene la propiedad de transparencia referencial si dos expresiones cualesquiera con el mismo valor pueden sustituirse mutuamente en cualquier punto del programa sin afectar su comportamiento."
+> — Sebesta §7.4
 
 ## La definición equivalente de Louden §9.1 — la regla de sustitución
 
-> "Any two expressions in a program that have the same value can be replaced by each other anywhere in the program without changing the result."
+> "Dos expresiones cualesquiera en un programa que tengan el mismo valor pueden reemplazarse mutuamente en cualquier lugar del programa sin alterar el resultado."
+> — Louden & Lambert §9.1
 
 Ambas dicen lo mismo: el valor de una expresión depende **solo de sus partes**, nunca de cuándo ni cuántas veces se evalúe.
 
 ## La conexión con los efectos laterales — Sebesta §7.4
 
-> "Because they do not have variables, programs written in pure functional languages are referentially transparent. Functions in a pure functional language cannot have state, which would be stored in local variables."
+> "Como los lenguajes funcionales puros no tienen variables, los programas escritos en ellos son referencialmente transparentes. Las funciones en un lenguaje funcional puro no pueden tener estado, que de otro modo estaría almacenado en variables locales."
+> — Sebesta §7.4
 
 Un **efecto lateral** es toda modificación que una función realiza sobre algo fuera de su entorno local: variables globales, parámetros mutables, archivos, I/O. La transparencia referencial **implica** la ausencia de efectos laterales y viceversa.
 
