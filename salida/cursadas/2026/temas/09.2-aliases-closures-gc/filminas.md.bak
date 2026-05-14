@@ -1,0 +1,892 @@
+# Filminas — Tema 09.2: Aliases, Closures, GC y Tipos
+
+> **Agente:** Dr. Roberto ✍️ — Class Writer
+> **Fecha:** 2026-05-14
+> **Tema:** 09.2 — Aliases, Closures, GC y Tipos
+> **Duración:** 120 min (1 clase)
+> **Lenguaje principal:** TypeScript
+> **Fuente:** diseno.md — Lic. Marcos 🗂️
+> **Prerequisito:** Tema 09.1 — Variables, Binding y Ámbito (5-tupla, categorías, ámbito estático)
+> **Estado:** 🔲 Borrador — pendiente de revisión docente
+
+---
+
+## PORTADA
+
+---
+
+### [F-00] Portada
+
+@tipo: portada
+@imagen: background
+@prompt-imagen: Two overlapping rounded rectangles in dark bordo on white background. Left rectangle connected to right with a curved bold arrow. Inside each rectangle: one small circle (left) and two small circles (right), arranged symmetrically. Below both rectangles: three flat horizontal bars decreasing in size, stacked. Flat design, minimal. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
+
+# Aliases, Closures, GC y Tipos
+
+Paradigmas y Lenguajes de Programación — Clase 09.2
+Universidad Nacional de Tierra del Fuego — Instituto IDEI · 2026
+
+---
+
+## BLOQUE 1 — Aliases: Dos Nombres, Un Objeto
+
+---
+
+### [F-01] ¿Qué es un alias?
+
+@tipo: concepto-abstracto
+@imagen: content
+@prompt-imagen: Two flat rectangles on the left side (labeled with no text), both connected by thin arrows pointing to a single larger rectangle on the right. The two left rectangles are dark gray, the right one is bordo. Arrows are thin and straight. White background, flat design, minimal. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
+
+# Un alias: dos nombres vinculados al mismo objeto
+
+## Definición — Sebesta §5.3.3, Louden §7.7
+
+Un **alias** ocurre cuando **dos nombres distintos** están vinculados a la **misma celda de memoria** en el mismo momento.
+
+## Por qué importa
+
+- Cambiar el objeto a través de un nombre **afecta todos sus aliases**
+- Dificulta la verificación formal y el análisis estático
+- El compilador no puede optimizar bien código con aliases potenciales
+
+---
+
+### [F-02] Fuentes de aliases — referencias de objeto
+
+@tipo: codigo
+
+# La fuente más común en TypeScript: referencias de objeto
+
+## Alias involuntario por asignación de referencia
+
+```typescript
+const obj1 = { valor: 42 };
+const obj2 = obj1;     // obj1 y obj2 son aliases del mismo heap-object
+
+obj2.valor = 99;
+console.log(obj1.valor);  // 99 — modificado a través del alias
+// No hay copia — ambos apuntan a la misma celda
+```
+
+## Alias a través de parámetros — Go y Kotlin
+
+```kotlin
+data class Punto(var x: Int, var y: Int)
+fun desplazar(p: Punto, dx: Int) { p.x += dx }  // p es alias del argumento
+val origen = Punto(0, 0)
+desplazar(origen, 5)
+println(origen.x)  // 5 — el objeto original fue modificado
+```
+
+---
+
+### [F-03] Consecuencias y detección con `readonly`
+
+@tipo: concepto-mixto
+
+# Aliases: cuándo son peligrosos y cómo detectarlos
+
+## Consecuencias
+
+- Hace difícil razonar: cambiar un nombre afecta otros **silenciosamente**
+- Dificulta la verificación formal y el análisis estático
+- Fuente de bugs sutiles en concurrencia (race conditions)
+
+## TypeScript: `readonly` como guardrail
+
+```typescript
+function procesarPuro(data: readonly number[]): number[] {
+    // El compilador impide modificar data
+    // Sin aliases peligrosos desde dentro de la función
+    return data.map(x => x * 2);
+}
+```
+
+---
+
+### [F-04] Shallow copy vs. deep copy
+
+@tipo: codigo
+
+# Evitar aliases accidentales: cuándo copiar en profundidad
+
+## Shallow copy — el alias sigue vivo en el nivel anidado
+
+```typescript
+const original = { nombre: "Ana", config: { debug: true } };
+
+const copia1 = { ...original };     // spread: shallow copy
+copia1.config.debug = false;        // ← modifica original.config también
+console.log(original.config.debug); // false — alias del objeto anidado
+```
+
+## Deep copy — sin aliases en ningún nivel
+
+```typescript
+const copia2 = structuredClone(original);  // ES2022 — deep copy completa
+copia2.config.debug = false;
+console.log(original.config.debug);  // true — original intacto ✅
+```
+
+## Regla práctica
+
+- `{ ...obj }` y `Array.from()` → shallow (alias en niveles anidados)
+- `structuredClone()` → deep (ningún nivel comparte celda)
+
+---
+
+## BLOQUE 2 — Closures: el Entorno que Viaja con la Función
+
+---
+
+### [F-05] ¿Qué es una closure?
+
+@tipo: concepto-abstracto
+@imagen: content
+@prompt-imagen: A large bordo rounded rectangle on the right. Inside it: a small dark gray rectangle (top-left) connected by a thin dotted curved line to a small circle (center-right). Outside the bordo rectangle, on the left: a simple house-shaped polygon in light gray. A thin arrow from the house polygon points into the bordo rectangle. White background, flat design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
+
+# Closure = función + entorno léxico capturado
+
+## Sebesta §10, Gabbrielli §7.4
+
+Una **closure** es la combinación de una **función** y el **entorno léxico** en el que fue definida.
+
+## Por qué existen
+
+- Las variables de ámbito externo no pueden vivir solo en el activation record (se destruye al retornar)
+- Las variables capturadas se almacenan en el **heap con duración extendida**
+- La closure "lleva consigo" su entorno aunque el ámbito original haya cerrado
+
+---
+
+### [F-06] Closure en TypeScript — contador
+
+@tipo: codigo
+
+# Ciclo de vida extendido: la variable vive en heap
+
+## `crearContador`: activation record destruido, variable viva
+
+```typescript
+function crearContador(inicio: number) {
+    let cuenta = inicio;  // ← capturada: vivirá en heap
+
+    return {
+        incrementar: () => ++cuenta,  // closure sobre cuenta
+        valor:       () => cuenta     // closure sobre cuenta
+    };
+}
+
+const c = crearContador(10);
+console.log(c.incrementar());  // 11
+console.log(c.incrementar());  // 12
+// crearContador() retornó hace rato — pero cuenta sigue viva
+```
+
+## Por qué `cuenta` no se destruye
+
+- El activation record de `crearContador` fue destruido al retornar
+- `cuenta` escapó al heap porque la closure mantiene una referencia viva
+- El GC no la libera mientras exista `c`
+
+---
+
+### [F-07] Closures en Python, Go y Kotlin
+
+@tipo: demo
+
+# El mismo patrón en tres lenguajes
+
+## Python — `nonlocal` para escribir en la variable capturada
+
+```python
+def crear_contador(inicio: int):
+    cuenta = inicio
+    def incrementar():
+        nonlocal cuenta   # sin esto, cuenta sería local a incrementar
+        cuenta += 1
+        return cuenta
+    return incrementar
+
+contar = crear_contador(10)
+print(contar())  # 11
+```
+
+## Go — closures de primera clase
+
+```go
+func crearContador(inicio int) func() int {
+    cuenta := inicio
+    return func() int { cuenta++; return cuenta }
+}
+```
+
+## Kotlin — lambda con captura
+
+```kotlin
+fun crearContador(inicio: Int): () -> Int {
+    var cuenta = inicio
+    return { ++cuenta }
+}
+```
+
+> **C no tiene closures** (Gabbrielli §7.4): los function pointers no capturan entorno. Toda variable no-local debe ser global — la limitación queda expuesta por contraste.
+
+---
+
+### [F-08] Ciclo de vida extendido y el heap
+
+@tipo: diagrama
+@imagen: content
+@prompt-imagen: Two vertical columns. Left column: three stacked gray rectangles labeled with nothing, connected by downward arrows — the bottom one is crossed out with an X (representing stack frame destroyed). Right column: a single bordo rounded rectangle with a small circle inside (representing heap object), connected from the left column's middle rectangle by a curved thin arrow. The right column has no arrows out. White background, flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
+
+# La closure extiende el tiempo de vida más allá del stack
+
+## Sin closure: tiempo de vida = duración del activation record
+
+- Variables locales viven en el stack (Categoría 2)
+- Al retornar la función → frame destruido → variables liberadas
+
+## Con closure: tiempo de vida extendido al heap
+
+- La variable capturada **migra al heap** (Categoría 3)
+- Vive mientras alguna closure la referencie
+- El GC la libera cuando ninguna closure la alcanza
+
+## Consecuencia de diseño
+
+Las variables capturadas por closures tienen **tiempo de vida de heap**, no de stack — conectando directamente con la Categoría 3 y el Garbage Collector.
+
+---
+
+### [F-09] Deep binding vs. Shallow binding — el bug de `var`
+
+@tipo: codigo
+
+# Deep binding: la closure captura el entorno en su creación
+
+## Bug clásico de `var` en loops — binding profundo mal aplicado
+
+```typescript
+// var — una sola i compartida en todo el loop (función-scope)
+const funcs: (() => number)[] = [];
+for (var i = 0; i < 3; i++) {
+    funcs.push(() => i);    // todas capturan la REFERENCIA a i
+}
+console.log(funcs[0]());   // 3, no 0 — i ya llegó a 3
+console.log(funcs[1]());   // 3
+```
+
+## Corrección con `let` — binding por bloque
+
+```typescript
+// let — una j nueva por iteración (block-scope)
+const funcs2: (() => number)[] = [];
+for (let j = 0; j < 3; j++) {
+    funcs2.push(() => j);   // cada closure captura su propia j
+}
+console.log(funcs2[0]());  // 0 ✅
+console.log(funcs2[1]());  // 1 ✅
+```
+
+## Deep vs. Shallow binding (Gabbrielli §7.4)
+
+| Estrategia | Momento de captura | Ejemplos |
+|---|---|---|
+| **Deep binding** | Al crear la closure | TypeScript (`let`), Python, Haskell |
+| **Shallow binding** | Al llamar la función | Ámbito dinámico (LISP clásico) |
+
+---
+
+## BLOQUE 3 — Garbage Collection: Memoria Automática
+
+---
+
+### [F-10] El problema de la memoria en heap
+
+@tipo: concepto-abstracto
+@imagen: content
+@prompt-imagen: A grid of small squares (5x4) on the right side, some filled in bordo, some in light gray, two crossed out in dark gray. A thin arrow from outside the grid points to one bordo square. A dashed thin curved arrow from one crossed-out square loops back to the left margin (representing reclamation). White background, flat design, minimal. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
+
+# ¿Quién libera la memoria del heap?
+
+## Categorías 3 y 4 — variables de heap (Sebesta §6.11, Louden §10.5)
+
+- Stack: liberado automáticamente al destruir el frame
+- **Heap:** sin frame — ¿quién decide cuándo liberar una celda?
+
+## Tres estrategias
+
+| Estrategia | Quién libera | Cuándo |
+|---|---|---|
+| **Manual** | El programador (`free`, `delete`) | Cuando el programador lo decide |
+| **Reference Counting** | El runtime | Cuando el conteo llega a 0 |
+| **Mark-and-Sweep** | El GC | Cuando el allocator se queda sin espacio |
+| **Ownership** | El compilador (Rust) | Al salir del scope — garantía en tiempo de compilación |
+
+---
+
+### [F-11] Reference Counting — conteo de referencias
+
+@tipo: diagrama
+@imagen: content
+@prompt-imagen: One large bordo rounded rectangle on the right with a small counter badge (no numbers, just a small dark circle) in its top-right corner. Two thin arrows from two small dark gray rectangles on the left both point to the bordo rectangle. Below: same diagram but with one arrow removed and the badge smaller. White background, flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
+
+# Cada celda mantiene un contador de referencias activas
+
+## Algoritmo — enfoque *eager* (inmediato)
+
+```
+Objeto A: ref_count = 2  (x e y apuntan a A)
+
+del x → ref_count = 1
+del y → ref_count = 0 → LIBERAR inmediatamente
+```
+
+## Ventajas
+
+- Liberación determinista e inmediata
+- No requiere pausar el programa (no hay stop-the-world)
+- Predecible: `del x` en Python libera de inmediato si no hay más refs
+
+## Desventaja crítica
+
+- **No resuelve referencias circulares** → fuga de memoria inevitable
+
+---
+
+### [F-12] El talón de Aquiles: referencias circulares
+
+@tipo: codigo
+
+# Reference counting falla con ciclos de referencia
+
+## Ciclo — ningún contador llega a 0
+
+```typescript
+class Nodo {
+    siguiente: Nodo | null = null;
+}
+
+const a = new Nodo();
+const b = new Nodo();
+a.siguiente = b;   // a apunta a b — ref_count(b) = 1
+b.siguiente = a;   // b apunta a a — ref_count(a) = 1
+
+// Al eliminar las referencias externas:
+// ref_count(a) = 1 (b lo apunta aún)
+// ref_count(b) = 1 (a lo apunta aún)
+// Ninguno llega a 0 → MEMORY LEAK con RC puro
+```
+
+## Soluciones reales
+
+- **Python:** reference counting + **cycle detector** (módulo `gc`)
+- **Swift:** ARC + `weak` references para romper ciclos manualmente
+- **Rust:** problema inexistente — el borrow checker prohíbe ciclos mutables en compilación
+
+---
+
+### [F-13] Mark-and-Sweep
+
+@tipo: diagrama
+@imagen: content
+@prompt-imagen: Two-phase diagram. Left side: five circles arranged loosely — two connected by thin lines to a small star icon (representing roots), two disconnected floating. A check mark shape overlaid on the two connected circles. Right side: same five circles — the two disconnected ones are replaced by empty outlines (reclaimed), two remain filled bordo. White background, flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
+
+# Mark-and-Sweep — dos fases, un heap limpio
+
+## Fase 1: Marcar (Mark)
+
+A partir de todas las **raíces** (stack, variables globales), trazar transitivamente todos los objetos alcanzables y marcarlos.
+
+## Fase 2: Barrer (Sweep)
+
+Recorrer todo el heap: las celdas **no marcadas** son inaccesibles → liberar.
+
+```
+Roots: [x → Obj1,  y → Obj3]
+
+Heap:
+  Obj1 ✓  (alcanzable desde x)
+  Obj2    (inaccesible → LIBERAR)
+  Obj3 ✓  (alcanzable desde y)
+  Obj4    (inaccesible → LIBERAR)
+```
+
+## Ventaja y costo
+
+- ✅ Resuelve referencias circulares correctamente
+- ⚠️ Pausa el programa durante la fase sweep (stop-the-world)
+- ⚠️ Fragmentación del heap (requiere compactación)
+
+---
+
+### [F-14] GC en V8 — TypeScript/JavaScript
+
+@tipo: concepto-mixto
+
+# GC generacional: combina lo mejor de ambos enfoques
+
+## V8 divide el heap en dos generaciones
+
+```
+Heap V8:
+  ┌──────────────────────────────────────┐
+  │  Generación joven (Young Gen)        │ ← objetos nuevos
+  │  Minor GC frecuente — muy barato     │
+  ├──────────────────────────────────────┤
+  │  Generación vieja (Old Gen)          │ ← objetos que sobreviven
+  │  Major GC infrecuente — costoso      │
+  └──────────────────────────────────────┘
+```
+
+## La hipótesis generacional
+
+La mayoría de los objetos mueren jóvenes (closures temporales, objetos intermedios).
+Pocos objetos "sobreviven" y migran a la generación vieja.
+
+## Compactación
+
+Después del sweep, V8 compacta la generación joven para eliminar fragmentación — los objetos vivos se reubican en posiciones contiguas.
+
+---
+
+## BLOQUE 4 — Gradual Typing: TypeScript como Caso Paradigmático
+
+---
+
+### [F-15] El espectro del tipado
+
+@tipo: tabla-comparativa
+
+# Tipado estático, dinámico y gradual — tres posiciones
+
+## Gabbrielli §16.9 — la dicotomía no es binaria
+
+| Posición | Cuándo se verifican los tipos | Ejemplos |
+|---|---|---|
+| **Estático puro** | En compilación — antes de ejecutar | Java, C, Haskell, Rust |
+| **Dinámico puro** | En ejecución — cuando se ejecuta la operación | Python, Ruby, Scheme |
+| **Gradual** | Elegís dónde: anotaciones opcionales + `any` | TypeScript, Groovy, Dart |
+
+## El gradual typing permite
+
+- Migrar código JavaScript existente a TypeScript **incrementalmente**
+- Elegir strictness **por módulo** o **por función**
+- Habilitar `strict: true` para máxima cobertura estática
+
+---
+
+### [F-16] TypeScript como caso canónico de gradual typing
+
+@tipo: codigo
+
+# De `any` a `strict` — tres niveles de cobertura
+
+## Nivel 0: sin tipos (any implícito — compatible con JS)
+
+```typescript
+function sumar(a: any, b: any): any {
+    return a + b;   // sin garantías — como JavaScript puro
+}
+```
+
+## Nivel 1: tipos parciales
+
+```typescript
+function sumarSeguro(a: number, b: number): number {
+    return a + b;   // args tipados, return tipado
+}
+```
+
+## Nivel 2: strict mode — máxima cobertura estática
+
+```json
+// tsconfig.json
+{ "strict": true }
+// Habilita: noImplicitAny, strictNullChecks, strictFunctionTypes…
+```
+
+## Migración incremental de JS a TS
+
+1. Renombrar `.js` → `.ts` → compila con `any` implícito
+2. Agregar tipos donde sea más crítico (APIs públicas, lógica central)
+3. Activar `strict: true` cuando el coverage sea suficiente
+
+---
+
+### [F-17] Type Narrowing — binding de tipo en runtime
+
+@tipo: codigo
+
+# El compilador razona sobre qué tipo puede tener una variable en cada rama
+
+## Union type + narrowing exhaustivo
+
+```typescript
+type Resultado = string | number | null;
+
+function formatear(r: Resultado): string {
+    if (r === null)              return "—";           // r: null
+    if (typeof r === "number")   return r.toFixed(2);  // r: number
+    return r.toUpperCase();     // r: string — único tipo restante
+}
+// TypeScript verifica estáticamente que todos los casos están cubiertos
+// Si falta una rama → error de compilación
+```
+
+## El narrowing como contrato formal
+
+```typescript
+function procesarElemento(elemento: unknown): string {
+    if (typeof elemento === "string") {
+        return elemento.toUpperCase();  // aquí: elemento es string
+    }
+    return String(elemento);            // aquí: elemento es unknown
+}
+```
+
+---
+
+### [F-18] ¿Por qué gradual typing importa en la práctica?
+
+@tipo: tabla-comparativa
+
+# Gradual typing: ganancia real en proyectos grandes
+
+## Comparación — impacto en detección de errores
+
+| Aspecto | JavaScript | TypeScript gradual | TypeScript strict |
+|---|---|---|---|
+| Errores de tipo | En runtime | En compilación (donde hay tipos) | En compilación (todo) |
+| Migración desde JS | N/A | Incremental ✅ | Requiere cobertura total |
+| Flexibilidad `any` | Total | Sí (escape hatch) | Solo con `as unknown as T` |
+| Detección de `null` | Runtime crash | Parcial | Completa (strictNullChecks) |
+| Tamaño del equipo | Pequeño | Mediano | Grande / crítico |
+
+## La conclusión de Gabbrielli §16.9
+
+TypeScript demuestra que **gradual typing es prácticamente viable**: una codebase puede migrar de dinámico a estático sin reescritura total.
+
+---
+
+## BLOQUE 5 — Variables en Programación Funcional
+
+---
+
+### [F-19] Bindings inmutables — no hay variables en FP puro
+
+@tipo: concepto-abstracto
+@imagen: content
+@prompt-imagen: Two side-by-side columns. Left column: a rounded dark gray rectangle with a small two-headed horizontal arrow inside it (representing mutability). Right column: a rounded bordo rectangle with a single downward arrow and a lock icon (small padlock shape, no text) below it. Both columns separated by a thin vertical dashed line. White background, flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
+
+# En FP puro: no existen variables mutables — solo bindings
+
+## El contraste fundamental — Sebesta §5.8, Gabbrielli §11
+
+En los **LP imperativos**, las variables son celdas de memoria mutables:
+- Tienen L-value (dirección) y R-value (contenido modificable)
+- La asignación es una operación **destructiva**
+
+En los **LP funcionales puros**, no existen variables mutables:
+- Solo existen **bindings** (asociaciones nombre → valor, definitivas)
+- La computación es **reescritura de expresiones**, no modificación de estado
+
+## Haskell — el binding es definitivo
+
+```haskell
+let x = 5       -- x se vincula a 5 para siempre en este scope
+-- x = 6        -- ILEGAL: el binding no puede cambiar
+```
+
+---
+
+### [F-20] val vs. var — Scala y TypeScript funcional
+
+@tipo: demo
+
+# La distinción entre binding inmutable y variable mutable
+
+## Scala — dos palabras clave, dos semánticas
+
+```scala
+var x = 5    // var: nombre reasignable (variable imperativa)
+val y = 5    // val: binding inmutable (como const en TypeScript)
+x = 10       // ✅ válido
+// y = 10   // ❌ Error: reassignment to val
+```
+
+## TypeScript funcional — sin mutación
+
+```typescript
+// Imperativo: muta estado acumulado
+let suma = 0;
+for (const x of [1, 2, 3]) suma += x;  // suma se muta en cada iteración
+
+// Funcional: solo bindings nuevos
+const suma = [1, 2, 3].reduce((acc, x) => acc + x, 0);
+
+// Objetos inmutables con Readonly<T>
+type Config = Readonly<{ host: string; port: number }>;
+const cfg: Config = { host: "localhost", port: 8080 };
+// cfg.host = "otro";  // ❌ Error: Cannot assign to 'host' because it is read-only
+```
+
+---
+
+### [F-21] ¿Por qué la inmutabilidad reduce bugs?
+
+@tipo: concepto-mixto
+
+# Inmutabilidad: sin aliases peligrosos, sin estado compartido sorpresivo
+
+## El problema de la mutabilidad compartida
+
+```typescript
+// Mutable compartido → bug silencioso
+const config = { retries: 3 };
+function ejecutar(cfg: typeof config) {
+    cfg.retries = 0;      // muta el objeto compartido sin advertencia
+}
+ejecutar(config);
+console.log(config.retries);  // 0 — modificado sin querer
+```
+
+## La solución funcional
+
+```typescript
+// Inmutable → sin sorpresas
+function ejecutarPuro(cfg: Readonly<typeof config>): void {
+    const cfgLocal = { ...cfg, retries: 0 };  // nuevo binding, no muta el original
+}
+```
+
+## Conexión con aliases y closures
+
+- La inmutabilidad **elimina la fuente más común de aliases peligrosos**
+- Una closure sobre un binding inmutable es **segura**: no puede mutar el estado capturado
+- En FP puro, el GC libera bindings sin riesgo de efectos secundarios ocultos
+
+---
+
+## BLOQUE 6 — Contraste Multilenguaje: Gestión de Memoria Moderna
+
+---
+
+### [F-22] Cuatro lenguajes, cuatro estrategias
+
+@tipo: tabla-comparativa
+
+# La gestión de memoria en la práctica — 2026
+
+| Aspecto | TypeScript / V8 | Python | Go | Rust |
+|---|---|---|---|---|
+| Estrategia | GC generacional | RC + cycle GC | GC + escape analysis | Ownership + Drop |
+| Dangling pointer | Imposible (GC) | Imposible (GC) | Imposible (GC) | Imposible (borrow checker) |
+| Variables sin init. | Error compilación (strict) | NameError runtime | Zero values | Error compilación |
+| Aliases explícitos | Referencias de objeto | Referencias de objeto | Punteros + interfaces | Borrows (inmutables o uno mutable) |
+| Ciclos de referencia | V8 los resuelve | cycle detector | GC los resuelve | Prohíbe ciclos mutables |
+| Pausa del GC | Minor GC ms / Major GC ms | Incremental RC | Concurrent GC <1ms | Sin GC — sin pausa |
+
+---
+
+### [F-23] Rust: ownership como garantía en compilación
+
+@tipo: codigo
+
+# Rust elimina el GC sin perder seguridad
+
+## El borrow checker en acción
+
+```rust
+struct Sesion { id: u32, datos: Vec<String> }
+
+fn nueva_sesion(id: u32) -> Sesion {
+    let s = Sesion { id, datos: vec![] };
+    s  // ownership transferido al llamador
+}   // s destruido aquí si no se transfiere → Drop automático
+
+// El compilador detecta dangling references:
+// let ref1 = &s;
+// drop(s);
+// println!("{}", ref1.id);  // ❌ Error: s ya no vive
+```
+
+## Por qué importa el contraste
+
+- **C:** gestión manual → bugs de memoria frecuentes
+- **Java/TypeScript:** GC → seguro pero con overhead y pausas
+- **Rust:** sin GC, sin bugs → el compilador hace el trabajo del GC en tiempo de compilación
+
+---
+
+## BLOQUE 7 — Bloque IA: Aliases, Closures y Type Narrowing
+
+---
+
+### [F-24] IA Pattern 1 — Alias de objeto sin advertencia
+
+@tipo: codigo
+
+# La IA genera copias que no son copias
+
+## El patrón problemático — frecuente en código LLM
+
+```typescript
+// Prompt al LLM: "Guardá una copia de config antes de modificarla"
+// IA genera (INCORRECTO):
+const configBackup = config;   // alias, no copia
+configBackup.debug = true;     // ← modifica config también
+```
+
+## Cómo detectarlo
+
+- ¿La IA usó `=` sobre un objeto?  → probablemente es alias
+- ¿Usó `{ ...obj }`? → shallow copy (anidados siguen siendo aliases)
+- ¿Usó `structuredClone()`? → ✅ deep copy real
+
+## Correcciones
+
+```typescript
+// Shallow copy — suficiente si no hay objetos anidados:
+const configBackup = { ...config };
+
+// Deep copy — cuando hay niveles anidados:
+const configBackup = structuredClone(config);  // ES2022
+```
+
+---
+
+### [F-25] IA Pattern 2 — Closures con `var` (bug de binding)
+
+@tipo: codigo
+
+# El LLM usa `var` en loops — todas las closures capturan la misma variable
+
+## Código generado por IA (INCORRECTO)
+
+```typescript
+// Prompt: "Generá un array de 5 funciones que retornen su índice"
+const funcs = [];
+for (var i = 0; i < 5; i++) {
+    funcs.push(() => i);       // todas capturan la MISMA i (var es función-scope)
+}
+// Resultado: funcs[0]() === 5, funcs[1]() === 5, etc.
+```
+
+## Explicación (desde el binding)
+
+Con `var`, existe **una sola variable `i`** en el scope de la función — todas las closures capturan la **referencia** a esa misma variable. Cuando se ejecutan, `i` ya vale 5.
+
+## Corrección — `let` crea una `j` nueva por iteración
+
+```typescript
+const funcs2: (() => number)[] = [];
+for (let j = 0; j < 5; j++) {
+    funcs2.push(() => j);   // cada closure captura su propia j
+}
+// funcs2[0]() === 0, funcs2[1]() === 1 ✅
+```
+
+---
+
+### [F-26] IA Pattern 3 — Type narrowing como guardrail
+
+@tipo: codigo
+
+# El type checker de TypeScript detecta código IA incompleto
+
+## Código IA sin narrowing — puede crashear en runtime
+
+```typescript
+// IA genera:
+function procesar(valor: string | number) {
+    return valor.toUpperCase();   // ❌ Error si valor es number
+}
+// TypeScript strict: "Property 'toUpperCase' does not exist on type 'number'"
+```
+
+## Con narrowing — TypeScript obliga a manejar todos los casos
+
+```typescript
+function procesarSeguro(valor: string | number): string {
+    if (typeof valor === "string") return valor.toUpperCase();
+    return valor.toString();  // aquí valor: number — ✅
+}
+// TypeScript verifica exhaustividad estáticamente
+```
+
+## Narrowing con `switch` exhaustivo
+
+```typescript
+type Forma = "círculo" | "cuadrado" | "triángulo";
+function área(f: Forma, lado: number): number {
+    switch (f) {
+        case "círculo":    return Math.PI * lado ** 2;
+        case "cuadrado":   return lado ** 2;
+        case "triángulo":  return (Math.sqrt(3) / 4) * lado ** 2;
+        // TypeScript detecta si falta un case: error de compilación
+    }
+}
+```
+
+---
+
+## PREGUNTAS Y CIERRE
+
+---
+
+### [F-27] Pregunta socrática — ¿cierre o fuga?
+
+@tipo: socratica
+@imagen: background
+@prompt-imagen: A large question mark shape in bordo centered on a white background. Below it: two small branching arrows diverging left and right, both ending in small squares — one bordo filled, one dark gray outline only. Flat design, minimal. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
+
+# ¿Esta closure es deseable o es una fuga de memoria?
+
+```typescript
+function registrar(nombre: string) {
+    const log: string[] = [];
+    return (evento: string) => {
+        log.push(evento);
+        console.log(`[${nombre}] ${log.length} eventos`);
+    };
+}
+const logApp = registrar("App");
+// logApp nunca se libera — log crece indefinidamente
+```
+
+## Para discutir
+
+- ¿En qué condiciones esta closure es correcta?
+- ¿Cuándo se convierte en fuga de memoria?
+- ¿El GC puede ayudar? ¿En qué caso no puede?
+
+---
+
+### [F-28] Cierre — síntesis de la clase
+
+@tipo: cierre
+@imagen: background
+@prompt-imagen: Five small flat icons arranged in a horizontal arc on white background. From left to right: two overlapping circles (bordo), a house-shaped polygon with a small circle inside (dark gray), a grid of dots with two crossed out (bordo), a graduated horizontal bar (dark gray), a padlock outline (bordo). All connected by a thin dotted curved line below them. Flat design, minimal. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
+
+# Aliases · Closures · GC · Gradual Typing · FP
+
+## Lo que vimos hoy
+
+- **Aliases:** dos nombres, un objeto — fuente silenciosa de bugs; `structuredClone()` como solución
+- **Closures:** función + entorno léxico capturado — ciclo de vida extendido al heap; `let` vs. `var`
+- **GC:** reference counting (inmediato, falla con ciclos) vs. mark-and-sweep (completo, stop-the-world)
+- **Gradual typing:** TypeScript como espectro de `any` → `strict`; type narrowing como contrato formal
+- **FP:** bindings inmutables como herramienta — reduce aliases, simplifica razonamiento
+
+## Conexiones hacia adelante
+
+- **Tema 10 — Tipos de Datos:** union types y discriminated unions construyen sobre type narrowing
+- **Tema 11 — FP:** la inmutabilidad y los bindings son el fundamento del paradigma funcional
+- **Tema 14 — Sistemas de Tipos:** TypeScript como gradual typing, inferencia, strict mode en profundidad
+
+## Próxima clase
+
+Tema 10 — Tipos de Datos: escalares, estructurados, uniones y sistemas de tipos formales.
