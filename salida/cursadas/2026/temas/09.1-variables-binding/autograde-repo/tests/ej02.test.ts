@@ -1,88 +1,96 @@
 import { describe, it, expect } from "vitest";
-import {
-  classifyTypeBinding,
-  classifyTypeStrength,
-  classifyBoth,
-  strictAdd,
-  filterStaticTyped,
-} from "../src/ej02";
+import { parseAndAdd, onlyNumbers, groupByType, applyTwice } from "../src/ej02";
 
-describe("Ej02 — Binding de tipos: dimensiones ortogonales", () => {
+describe("Ej02 — Binding de tipos en TypeScript: tipado estático y coerciones", () => {
 
-  describe("classifyTypeBinding", () => {
-    it("TypeScript es estático", () => expect(classifyTypeBinding("TypeScript")).toBe("static"));
-    it("Haskell es estático", () => expect(classifyTypeBinding("Haskell")).toBe("static"));
-    it("C es estático", () => expect(classifyTypeBinding("C")).toBe("static"));
-    it("Python es dinámico", () => expect(classifyTypeBinding("Python")).toBe("dynamic"));
-    it("JavaScript es dinámico", () => expect(classifyTypeBinding("JavaScript")).toBe("dynamic"));
-    it("Prolog es dinámico", () => expect(classifyTypeBinding("Prolog")).toBe("dynamic"));
-
-    it("lenguaje desconocido lanza Error('unknown language')", () => {
-      expect(() => classifyTypeBinding("COBOL")).toThrow("unknown language");
+  // --- parseAndAdd ---
+  describe("parseAndAdd", () => {
+    it('"3" + "4" = 7', () => expect(parseAndAdd("3", "4")).toBe(7));
+    it("con cero: \"0\" + \"5\" = 5", () => expect(parseAndAdd("0", "5")).toBe(5));
+    it("decimales: \"1.5\" + \"2.5\" = 4", () => expect(parseAndAdd("1.5", "2.5")).toBe(4));
+    it('"100" + "200" = 300', () => expect(parseAndAdd("100", "200")).toBe(300));
+    it("lanza error si 'a' no es un número válido", () => {
+      expect(() => parseAndAdd("abc", "4")).toThrow("invalid number");
     });
-
-    it("lenguaje desconocido (Java) lanza error", () => {
-      expect(() => classifyTypeBinding("Java")).toThrow("unknown language");
+    it("lanza error si 'b' no es un número válido", () => {
+      expect(() => parseAndAdd("3", "xyz")).toThrow("invalid number");
+    });
+    it("retorna un number, no un string", () => {
+      expect(typeof parseAndAdd("1", "2")).toBe("number");
     });
   });
 
-  describe("classifyTypeStrength", () => {
-    it("TypeScript es fuerte", () => expect(classifyTypeStrength("TypeScript")).toBe("strong"));
-    it("Haskell es fuerte", () => expect(classifyTypeStrength("Haskell")).toBe("strong"));
-    it("Python es fuerte", () => expect(classifyTypeStrength("Python")).toBe("strong"));
-    it("Prolog es fuerte", () => expect(classifyTypeStrength("Prolog")).toBe("strong"));
-    it("JavaScript es débil", () => expect(classifyTypeStrength("JavaScript")).toBe("weak"));
-    it("C es débil", () => expect(classifyTypeStrength("C")).toBe("weak"));
-  });
-
-  describe("classifyBoth", () => {
-    it("TypeScript: static + strong", () => {
-      expect(classifyBoth("TypeScript")).toEqual({ binding: "static", strength: "strong" });
+  // --- onlyNumbers ---
+  describe("onlyNumbers", () => {
+    it("filtra solo los numbers de una lista mixta", () => {
+      expect(onlyNumbers([1, "hola", 2, true, 3.5])).toEqual([1, 2, 3.5]);
     });
-    it("JavaScript: dynamic + weak", () => {
-      expect(classifyBoth("JavaScript")).toEqual({ binding: "dynamic", strength: "weak" });
+    it("lista con solo strings retorna vacío", () => {
+      expect(onlyNumbers(["a", "b"])).toEqual([]);
     });
-    it("Python: dynamic + strong", () => {
-      expect(classifyBoth("Python")).toEqual({ binding: "dynamic", strength: "strong" });
+    it("lista con solo numbers retorna todos", () => {
+      expect(onlyNumbers([1, 2, 3])).toEqual([1, 2, 3]);
     });
-    it("C: static + weak", () => {
-      expect(classifyBoth("C")).toEqual({ binding: "static", strength: "weak" });
-    });
-    it("Haskell: static + strong", () => {
-      expect(classifyBoth("Haskell")).toEqual({ binding: "static", strength: "strong" });
-    });
-  });
-
-  describe("strictAdd", () => {
-    it("suma básica: '3' + '4' = 7", () => expect(strictAdd("3", "4")).toBe(7));
-    it("suma con cero: '0' + '5' = 5", () => expect(strictAdd("0", "5")).toBe(5));
-    it("suma doble dígito: '10' + '20' = 30", () => expect(strictAdd("10", "20")).toBe(30));
-    it("retorna un number (no string)", () => expect(typeof strictAdd("1", "2")).toBe("number"));
-    it("'100' + '200' = 300", () => expect(strictAdd("100", "200")).toBe(300));
-  });
-
-  describe("filterStaticTyped", () => {
-    it("filtra TypeScript y C de una lista mixta", () => {
-      expect(filterStaticTyped(["TypeScript", "Python", "JavaScript", "C"])).toEqual([
-        "TypeScript",
-        "C",
-      ]);
-    });
-
-    it("Haskell es estático", () => {
-      expect(filterStaticTyped(["Haskell", "Python"])).toEqual(["Haskell"]);
-    });
-
     it("lista vacía retorna vacía", () => {
-      expect(filterStaticTyped([])).toEqual([]);
+      expect(onlyNumbers([])).toEqual([]);
     });
-
-    it("solo dinámicos retorna vacío", () => {
-      expect(filterStaticTyped(["Python", "JavaScript", "Prolog"])).toEqual([]);
+    it("booleans NO son numbers", () => {
+      expect(onlyNumbers([true, false, 0, 1])).toEqual([0, 1]);
     });
+    it("conserva el orden", () => {
+      expect(onlyNumbers([3, "x", 1, true, 2])).toEqual([3, 1, 2]);
+    });
+  });
 
-    it("conserva el orden original", () => {
-      expect(filterStaticTyped(["C", "Haskell", "TypeScript"])).toEqual(["C", "Haskell", "TypeScript"]);
+  // --- groupByType ---
+  describe("groupByType", () => {
+    it("agrupa los tres tipos correctamente", () => {
+      expect(groupByType(["a", 1, true, "b", 2])).toEqual({
+        strings: ["a", "b"],
+        numbers: [1, 2],
+        booleans: [true],
+      });
+    });
+    it("lista vacía retorna tres listas vacías", () => {
+      expect(groupByType([])).toEqual({ strings: [], numbers: [], booleans: [] });
+    });
+    it("solo strings", () => {
+      expect(groupByType(["x", "y"])).toEqual({
+        strings: ["x", "y"], numbers: [], booleans: [],
+      });
+    });
+    it("solo booleans", () => {
+      expect(groupByType([true, false])).toEqual({
+        strings: [], numbers: [], booleans: [true, false],
+      });
+    });
+    it("conserva el orden dentro de cada grupo", () => {
+      const r = groupByType([3, "z", 1, false, "a", true]);
+      expect(r.numbers).toEqual([3, 1]);
+      expect(r.strings).toEqual(["z", "a"]);
+      expect(r.booleans).toEqual([false, true]);
+    });
+  });
+
+  // --- applyTwice ---
+  describe("applyTwice", () => {
+    it("número: fn(fn(3)) con fn = *2 → 12", () => {
+      expect(applyTwice((x: number) => x * 2, 3)).toBe(12);
+    });
+    it("suma 1 dos veces a 0 → 2", () => {
+      expect(applyTwice((x: number) => x + 1, 0)).toBe(2);
+    });
+    it("string: agrega '!' dos veces → 'hola!!'", () => {
+      expect(applyTwice((x: string) => x + "!", "hola")).toBe("hola!!");
+    });
+    it("función identidad: retorna el mismo valor", () => {
+      expect(applyTwice((x: number) => x, 42)).toBe(42);
+    });
+    it("fn se invoca exactamente 2 veces", () => {
+      let count = 0;
+      applyTwice((x: number) => { count++; return x + 1; }, 0);
+      expect(count).toBe(2);
     });
   });
 });
+

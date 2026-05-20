@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { factorial, makeCounter, makeAdder, makeAccumulator } from "../src/ej03";
+import { factorial, makeCounter, makeAdder, makeAccumulator, memoize } from "../src/ej03";
 
 describe("Ej03 — Binding de almacenamiento: closures y recursión", () => {
 
@@ -89,21 +89,18 @@ describe("Ej03 — Binding de almacenamiento: closures y recursión", () => {
       const { total } = makeAccumulator();
       expect(total()).toBe(0);
     });
-
     it("add() suma al acumulado", () => {
       const { add, total } = makeAccumulator();
       add(5);
       add(3);
       expect(total()).toBe(8);
     });
-
     it("total() es idempotente (no modifica el acumulado)", () => {
       const { add, total } = makeAccumulator();
       add(10);
       expect(total()).toBe(10);
       expect(total()).toBe(10);
     });
-
     it("dos acumuladores son independientes", () => {
       const a1 = makeAccumulator();
       const a2 = makeAccumulator();
@@ -112,12 +109,46 @@ describe("Ej03 — Binding de almacenamiento: closures y recursión", () => {
       expect(a1.total()).toBe(10);
       expect(a2.total()).toBe(20);
     });
-
     it("suma negativa funciona", () => {
       const { add, total } = makeAccumulator();
       add(5);
       add(-3);
       expect(total()).toBe(2);
+    });
+  });
+
+  // --- memoize ---
+  describe("memoize (caché en Map — heap-dynamic-implicit)", () => {
+    it("retorna el mismo resultado que fn", () => {
+      const double = memoize((n: number) => n * 2);
+      expect(double(5)).toBe(10);
+      expect(double(3)).toBe(6);
+    });
+    it("fn se llama solo una vez por valor (caché)", () => {
+      let calls = 0;
+      const fn = memoize((n: number) => { calls++; return n * n; });
+      fn(4); fn(4); fn(4);
+      expect(calls).toBe(1);
+    });
+    it("fn se llama para cada valor diferente", () => {
+      let calls = 0;
+      const fn = memoize((n: number) => { calls++; return n + 1; });
+      fn(1); fn(2); fn(3);
+      expect(calls).toBe(3);
+    });
+    it("dos instancias de memoize son independientes (heaps separados)", () => {
+      let c1 = 0, c2 = 0;
+      const fn1 = memoize((n: number) => { c1++; return n; });
+      const fn2 = memoize((n: number) => { c2++; return n; });
+      fn1(5); fn2(5); fn1(5); fn2(5);
+      expect(c1).toBe(1);
+      expect(c2).toBe(1);
+    });
+    it("retorna valores correctos después del caché", () => {
+      const fn = memoize((n: number) => n * 3);
+      expect(fn(10)).toBe(30);
+      expect(fn(10)).toBe(30); // desde caché
+      expect(fn(20)).toBe(60);
     });
   });
 });

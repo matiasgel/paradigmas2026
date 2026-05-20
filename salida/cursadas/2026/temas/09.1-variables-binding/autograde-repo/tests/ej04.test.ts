@@ -3,7 +3,7 @@ import {
   scopeChainLookup,
   makeMultiplier,
   makeFunctions,
-  computeConditional,
+  makeLogger,
 } from "../src/ej04";
 
 describe("Ej04 — Ámbito estático y algoritmo de resolución de nombres", () => {
@@ -102,14 +102,30 @@ describe("Ej04 — Ámbito estático y algoritmo de resolución de nombres", () 
     });
   });
 
-  // --- computeConditional ---
-  describe("computeConditional", () => {
-    it("cond true retorna x + y", () => expect(computeConditional(3, 4, true)).toBe(7));
-    it("cond false retorna solo x", () => expect(computeConditional(3, 4, false)).toBe(3));
-    it("x=0, cond true retorna y", () => expect(computeConditional(0, 5, true)).toBe(5));
-    it("y=0, cond true retorna x", () => expect(computeConditional(7, 0, true)).toBe(7));
-    it("cond false no usa y (retorna x aunque y sea negativo)", () => {
-      expect(computeConditional(10, -99, false)).toBe(10);
+  // --- makeLogger ---
+  describe("makeLogger (\u00e1mbito l\u00e9xico: prefix capturado en la closure)", () => {
+    it("antepone el prefijo con ': '", () => {
+      const log = makeLogger("[INFO]");
+      expect(log("servidor iniciado")).toBe("[INFO]: servidor iniciado");
+    });
+    it("funciona con prefijos distintos", () => {
+      const warn = makeLogger("[WARN]");
+      expect(warn("memoria alta")).toBe("[WARN]: memoria alta");
+    });
+    it("el prefijo queda fijo en la closure (no cambia entre llamadas)", () => {
+      const err = makeLogger("[ERROR]");
+      expect(err("timeout")).toBe("[ERROR]: timeout");
+      expect(err("conexi\u00f3n perd\u00edda")).toBe("[ERROR]: conexi\u00f3n perd\u00edda");
+    });
+    it("dos loggers son independientes (cada uno captura su propio prefix)", () => {
+      const info = makeLogger("[INFO]");
+      const debug = makeLogger("[DEBUG]");
+      expect(info("ok")).toBe("[INFO]: ok");
+      expect(debug("ok")).toBe("[DEBUG]: ok");
+    });
+    it("prefijo vac\u00edo produce ': msg'", () => {
+      const log = makeLogger("");
+      expect(log("test")).toBe(": test");
     });
   });
 });

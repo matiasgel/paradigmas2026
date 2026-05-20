@@ -1,51 +1,34 @@
-// Ejercicio 1 — L-value, R-value y la 5-tupla (20 pts)
+// Ejercicio 1 — L-value y R-value: variables como contenedores (20 pts)
 // Trazabilidad: OA1 — F-01, F-02, F-03
+//
+// Un L-value es una posición de memoria que puede RECIBIR una asignación.
+// Un R-value es el CONTENIDO leído desde esa posición.
+// Todas las funciones de este ejercicio modifican el array original (in-place).
 
-export type BindingTime =
-  | "design"
-  | "implementation"
-  | "compile"
-  | "link"
-  | "load"
-  | "execution";
-
-export type StorageCategory =
-  | "static"
-  | "stack-dynamic"
-  | "heap-dynamic-explicit"
-  | "heap-dynamic-implicit";
-
-export interface VariableAttributes {
-  name: string;
-  type: string;
-  storageCategory: StorageCategory;
-  rvalue: unknown;
-  typeBindingTime: BindingTime;
-}
-
-// 1a. Swap in-place: intercambia arr[i] y arr[j] usando la posición como L-value.
-// Demuestra que el L-value es la dirección (posición en el array) que se escribe.
+// 1a. Intercambia arr[i] y arr[j] en el array (in-place, 5 pts).
+// Las posiciones arr[i] y arr[j] actúan como L-values al recibir la asignación.
 // No retorna nada — modifica el array original.
 export function swap<T>(arr: T[], i: number, j: number): void {
   throw new Error("TODO: implementar");
 }
 
-// 1b. Dado el nombre y valor de una variable local TypeScript (scope de función),
-// devuelve sus atributos según el modelo de la 5-tupla.
-// Ejemplo: getAttributes("count", 42) →
-//   { name: "count", type: "number", storageCategory: "stack-dynamic",
-//     rvalue: 42, typeBindingTime: "compile" }
-export function getAttributes(name: string, value: unknown): VariableAttributes {
+// 1b. Rota el array una posición hacia la izquierda (in-place, 5 pts).
+// El primer elemento pasa al final: [1, 2, 3, 4] → [2, 3, 4, 1]
+// Si el array tiene 0 o 1 elementos, no hace nada.
+export function rotateLeft<T>(arr: T[]): void {
   throw new Error("TODO: implementar");
 }
 
-// 1c. Dado un identificador TypeScript, determina si puede ser L-value.
-// Regla: retorna false si el nombre está en SCREAMING_SNAKE_CASE
-//        (sólo mayúsculas, dígitos y guiones bajos, con al menos un _).
-// Para cualquier otro identificador retorna true.
-// Ejemplos: canBeLValue("myVar") → true
-//           canBeLValue("MAX_VALUE") → false
-//           canBeLValue("counter") → true
-export function canBeLValue(identifier: string): boolean {
+// 1c. Duplica cada elemento del array numérico (in-place, 5 pts).
+// Lee el valor (R-value), lo duplica y lo escribe de vuelta en la misma posición (L-value).
+// [1, 2, 3] → [2, 4, 6]
+export function doubleAll(arr: number[]): void {
+  throw new Error("TODO: implementar");
+}
+
+// 1d. Reemplaza todas las ocurrencias de oldVal por newVal en el array (in-place, 5 pts).
+// Retorna la cantidad de reemplazos realizados.
+// findAndReplace([1,2,1,3,1], 1, 9) → modifica a [9,2,9,3,9] y retorna 3
+export function findAndReplace<T>(arr: T[], oldVal: T, newVal: T): number {
   throw new Error("TODO: implementar");
 }

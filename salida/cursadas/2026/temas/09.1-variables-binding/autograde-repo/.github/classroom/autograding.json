@@ -1,7 +1,7 @@
 {
   "tests": [
     {
-      "name": "Ej01 — L-value, R-value y la 5-tupla",
+      "name": "Ej01 — L-value y R-value: variables como contenedores",
       "setup": "npm install",
       "run": "npx vitest run tests/ej01.test.ts",
       "input": "",
@@ -11,7 +11,7 @@
       "points": 20
     },
     {
-      "name": "Ej02 — Binding de tipos: dimensiones ortogonales",
+      "name": "Ej02 — Binding de tipos: tipado estático y coerciones",
       "setup": "npm install",
       "run": "npx vitest run tests/ej02.test.ts",
       "input": "",

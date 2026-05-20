@@ -33,8 +33,14 @@ export function makeFunctions(n: number): Array<() => number> {
   throw new Error("TODO: implementar");
 }
 
-// 4d. computeConditional: si cond es true retorna x + y, si es false retorna x.
-// Implementar sin var ni scope holes.
-export function computeConditional(x: number, y: number, cond: boolean): number {
+// 4d. makeLogger: retorna una función que antepone el prefijo a cada mensaje (5 pts).
+// El prefix queda capturado en el ámbito léxico externo (heap-dynamic-implicit).
+// Esto es útil para distinguir logs de distintos módulos sin pasar el prefijo cada vez.
+// const log = makeLogger("[INFO]");
+// log("servidor iniciado") → "[INFO]: servidor iniciado"
+// log("request recibido")  → "[INFO]: request recibido"
+// const warn = makeLogger("[WARN]");
+// warn("memoria alta")     → "[WARN]: memoria alta"
+export function makeLogger(prefix: string): (msg: string) => string {
   throw new Error("TODO: implementar");
 }

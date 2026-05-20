@@ -39,3 +39,14 @@ export function makeAdder(n: number): (x: number) => number {
 export function makeAccumulator(): { add: (n: number) => void; total: () => number } {
   throw new Error("TODO: implementar");
 }
+
+// 3e. Retorna una versión memorizada de fn: la primera llamada con n computa y almacena
+// fn(n) en una Map (heap-dynamic-implicit). Llamadas siguientes con el mismo n retornan
+// el valor del caché sin invocar fn de nuevo. Útil para funciones costosas.
+// Ejemplo:
+//   let calls = 0;
+//   const fn = memoize((n) => { calls++; return n * n; });
+//   fn(4); fn(4); fn(4);  → calls === 1  (fn real se invoca una sola vez)
+export function memoize(fn: (n: number) => number): (n: number) => number {
+  throw new Error("TODO: implementar");
+}

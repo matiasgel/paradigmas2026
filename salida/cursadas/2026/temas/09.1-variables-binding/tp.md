@@ -14,10 +14,10 @@
 
 | Ejercicio | Filminas | Objetivos (OA) | Nivel Bloom |
 |-----------|----------|----------------|-------------|
-| Ej01 — L-value, R-value y la 5-tupla | F-01, F-02, F-03 | OA1 | Aplicar |
-| Ej02 — Binding de tipos: dimensiones ortogonales | F-05, F-08, F-09, F-10 | OA2, OA5 | Comprender / Analizar |
+| Ej01 — L-value y R-value: variables como contenedores | F-01, F-02, F-03 | OA1 | Aplicar |
+| Ej02 — Binding de tipos: tipado estático y coerciones | F-05, F-08, F-09, F-10 | OA2, OA5 | Aplicar |
 | Ej03 — Binding de almacenamiento: closures y recursión | F-11, F-13, F-14, F-15 | OA3 | Aplicar |
-| Ej04 — Ámbito estático y algoritmo de resolución | F-16, F-17, F-19 | OA4, OA6 | Aplicar / Analizar |
+| Ej04 — Ámbito estático y resolución de nombres | F-16, F-17, F-19 | OA4, OA6 | Aplicar / Analizar |
 | Ej05 — Detectar y corregir errores de binding y ámbito | F-06, F-17, F-19 | OA7 | Evaluar |
 
 ---
@@ -42,21 +42,20 @@ npx vitest run tests/ej01.test.ts   # un solo ejercicio
 
 ---
 
-## Ejercicio 1 — L-value, R-value y la 5-tupla (20 pts)
+## Ejercicio 1 — L-value y R-value: variables como contenedores (20 pts)
 
 **Archivo:** `src/ej01.ts`
 
-La variable es una abstracción de la celda de memoria Von Neumann. Tiene 6 atributos
-(nombre, tipo, L-value, R-value, tiempo de vida, ámbito). En este ejercicio trabajamos
-con las tres funciones que explotan esa abstracción.
+Una variable es una abstracción de la celda de memoria Von Neumann. Cuando aparece a la
+izquierda de una asignación actúa como **L-value** (posición/dirección que recibe el valor);
+cuando aparece a la derecha actúa como **R-value** (contenido que se lee).
 
-### 1a. `swap<T>(arr: T[], i: number, j: number): void` — 8 pts
+Todas las funciones de este ejercicio operan **in-place**: modifican el array original
+sin crear uno nuevo. Esto demuestra directamente que cada posición del array es un L-value.
 
-Intercambia `arr[i]` y `arr[j]` en el array **in-place** (modifica el array original).
+### 1a. `swap<T>(arr: T[], i: number, j: number): void` — 5 pts
 
-- `arr[i]` y `arr[j]` actúan como **L-values** cuando aparecen a la izquierda de la asignación.
-- La variable temporal actúa como **R-value** cuando se lee su contenido.
-- No retorna nada — la modificación es en el array original.
+Intercambia `arr[i]` y `arr[j]` in-place usando una variable temporal.
 
 ```typescript
 const nums = [1, 2, 3, 4];
@@ -64,32 +63,37 @@ swap(nums, 0, 3);
 // nums → [4, 2, 3, 1]
 ```
 
-### 1b. `getAttributes(name: string, value: unknown): VariableAttributes` — 8 pts
+### 1b. `rotateLeft<T>(arr: T[]): void` — 5 pts
 
-Dado el nombre y valor de una **variable local TypeScript** (declarada con `let` en el cuerpo
-de una función), devuelve un objeto con sus atributos según el modelo de la 5-tupla.
-
-El tipo `VariableAttributes` ya está definido en el archivo — completar los campos correctamente:
-
-- `name` → el nombre tal como se pasó
-- `type` → `typeof value` (el tipo JavaScript del valor)
-- `storageCategory` → `"stack-dynamic"` (variables locales de función en TypeScript)
-- `rvalue` → el valor pasado
-- `typeBindingTime` → `"compile"` (TypeScript bindea el tipo en compilación)
-
-### 1c. `canBeLValue(identifier: string): boolean` — 4 pts
-
-Retorna `true` si el identificador **podría ser un L-value** (puede recibir asignación).
-
-Regla: los identificadores en `SCREAMING_SNAKE_CASE` (todas mayúsculas con guiones bajos,
-ej. `MAX_VALUE`, `PI_VALUE`) representan constantes de módulo por convención — **no pueden**
-ser L-values. Cualquier otro identificador retorna `true`.
+Rota el array una posición hacia la izquierda: el primer elemento pasa al final.
+Si el array tiene 0 o 1 elementos, no hace nada.
 
 ```typescript
-canBeLValue("myVar")    // → true
-canBeLValue("MAX_VALUE") // → false
-canBeLValue("counter")  // → true
-canBeLValue("PI_VALUE") // → false
+const nums = [1, 2, 3, 4];
+rotateLeft(nums);
+// nums → [2, 3, 4, 1]
+```
+
+### 1c. `doubleAll(arr: number[]): void` — 5 pts
+
+Duplica cada elemento del array in-place: lee el valor (R-value), lo duplica y lo
+escribe de vuelta en la misma posición (L-value).
+
+```typescript
+const nums = [1, 2, 3];
+doubleAll(nums);
+// nums → [2, 4, 6]
+```
+
+### 1d. `findAndReplace<T>(arr: T[], oldVal: T, newVal: T): number` — 5 pts
+
+Reemplaza todas las ocurrencias de `oldVal` por `newVal` in-place.
+Retorna la cantidad de reemplazos realizados.
+
+```typescript
+const arr = [1, 2, 1, 3, 1];
+findAndReplace(arr, 1, 9);
+// arr → [9, 2, 9, 3, 9], retorna 3
 ```
 
 ---
@@ -153,7 +157,7 @@ Las variables tienen 4 categorías de tiempo de vida según cómo se vinculan al
 3. **Heap-dynamic-explicit** — `malloc`/`new`, gestionadas manualmente
 4. **Heap-dynamic-implicit** — gestionadas automáticamente (closures, GC)
 
-### 3a. `factorial(n: number): number` — 6 pts
+### 3a. `factorial(n: number): number` — 5 pts
 
 Implementar factorial de forma **recursiva**. Cada llamada crea su propio frame de stack
 (stack-dynamic binding): `n` en cada invocación es una variable distinta.
@@ -163,7 +167,7 @@ factorial(0) = 1
 factorial(n) = n * factorial(n - 1)   para n > 0
 ```
 
-### 3b. `makeCounter(initial: number): Counter` — 8 pts
+### 3b. `makeCounter(initial: number): Counter` — 5 pts
 
 Crea un contador con estado encapsulado en un **closure** (heap-dynamic-implicit).
 El estado vive en el heap — no en el stack.
@@ -191,9 +195,10 @@ add3(10) // → 13
 makeAdder(0)(99) // → 99
 ```
 
-### 3d. `makeAccumulator(): { add: (n: number) => void; total: () => number }` — 6 pts
+### 3d. `makeAccumulator(): { add: (n: number) => void; total: () => number }` — 5 pts
 
-Crea un acumulador que inicia en 0. `add(n)` suma `n` al acumulado. `total()` retorna el total.
+Crea un acumulador que inicia en 0. `add(n)` suma `n` al acumulado. `total()` retorna el total
+sin modificarlo.
 
 ```typescript
 const { add, total } = makeAccumulator();
@@ -201,9 +206,24 @@ add(5); add(3);
 total() // → 8
 ```
 
+### 3e. `memoize(fn: (n: number) => number): (n: number) => number` — 5 pts
+
+Retorna una versión memorizada de `fn`: la primera llamada con un `n` dado computa y guarda
+`fn(n)` en una `Map` (heap-dynamic-implicit). Llamadas siguientes con el mismo `n` retornan
+el valor del caché sin llamar a `fn` de nuevo.
+
+```typescript
+let calls = 0;
+const fn = memoize((n) => { calls++; return n * n; });
+fn(4); fn(4); fn(4);
+calls // → 1  (fn original invocada una sola vez)
+fn(5); fn(5);
+calls // → 2  (nueva clave, nueva llamada a fn)
+```
+
 ---
 
-## Ejercicio 4 — Ámbito estático y algoritmo de resolución (20 pts)
+## Ejercicio 4 — Ámbito estático y resolución de nombres (20 pts)
 
 **Archivo:** `src/ej04.ts`
 
@@ -211,7 +231,7 @@ El **ámbito estático** (léxico) determina la visibilidad de un nombre en base
 estructura textual del programa. El algoritmo de resolución sube por la cadena de entornos
 desde el más interno al más externo.
 
-### 4a. `scopeChainLookup(scopes: Record<string, number>[], name: string): number | undefined` — 8 pts
+### 4a. `scopeChainLookup(scopes: Record<string, number>[], name: string): number | undefined` — 5 pts
 
 Implementar el algoritmo de resolución de ámbito estático:
 
@@ -248,12 +268,20 @@ fns[1]() // → 1
 fns[2]() // → 2
 ```
 
-### 4d. `computeConditional(x: number, y: number, cond: boolean): number` — 4 pts
+### 4d. `makeLogger(prefix: string): (msg: string) => string` — 4 pts
 
-- Si `cond` es `true`: retorna `x + y` (suma del ámbito externo `x` con `y` del bloque `if`).
-- Si `cond` es `false`: retorna `x`.
+Retorna una función que antepone `prefix` a cada mensaje con el formato `"${prefix}: ${msg}"`.
+El `prefix` queda capturado en el ámbito léxico del closure (heap-dynamic-implicit) y no
+cambia entre llamadas.
 
-Implementar sin `var` y sin scope holes.
+```typescript
+const log = makeLogger("[INFO]");
+log("servidor iniciado") // → "[INFO]: servidor iniciado"
+log("request recibido")  // → "[INFO]: request recibido"
+
+const warn = makeLogger("[WARN]");
+warn("memoria alta")     // → "[WARN]: memoria alta"
+```
 
 ---
 
