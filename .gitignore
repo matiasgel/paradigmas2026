@@ -56,3 +56,4 @@ salida/cursadas/*/students/
 # IDE
 .vscode/settings.json
 .idea/
+salida/cursadas/2026/temas/09.1-variables-binding/**
