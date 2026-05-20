@@ -19,6 +19,7 @@ jobs:
   autograding:
     name: Autograding
     runs-on: ubuntu-latest
+    if: ${{ !github.event.repository.is_template }}
 
     steps:
       - name: Checkout code
