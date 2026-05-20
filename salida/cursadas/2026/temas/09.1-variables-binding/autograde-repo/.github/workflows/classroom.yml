@@ -33,22 +33,22 @@ jobs:
         run: npm install
 
       # --- Ejercicio 1 ---
-      - name: Ej01 - L-value y R-value: variables como contenedores
+      - name: "Ej01 - L-value y R-value: variables como contenedores"
         id: ej01
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ej01 — L-value y R-value: variables como contenedores
+          test-name: "Ej01 - L-value y R-value: variables como contenedores"
           setup-command: npm install
           command: npx vitest run tests/ej01.test.ts
           timeout: 10
           max-score: 20
 
       # --- Ejercicio 2 ---
-      - name: Ej02 - Binding de tipos: tipado estático y coerciones
+      - name: "Ej02 - Binding de tipos: tipado estático y coerciones"
         id: ej02
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ej02 — Binding de tipos: tipado estático y coerciones
+          test-name: "Ej02 - Binding de tipos: tipado estático y coerciones"
           setup-command: npm install
           command: npx vitest run tests/ej02.test.ts
           timeout: 10
