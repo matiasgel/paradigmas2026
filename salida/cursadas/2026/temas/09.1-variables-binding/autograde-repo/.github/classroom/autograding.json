@@ -1,0 +1,54 @@
+{
+  "tests": [
+    {
+      "name": "Ej01 — L-value, R-value y la 5-tupla",
+      "setup": "npm install",
+      "run": "npx vitest run tests/ej01.test.ts",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 20
+    },
+    {
+      "name": "Ej02 — Binding de tipos: dimensiones ortogonales",
+      "setup": "npm install",
+      "run": "npx vitest run tests/ej02.test.ts",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 20
+    },
+    {
+      "name": "Ej03 — Binding de almacenamiento: closures y recursion",
+      "setup": "npm install",
+      "run": "npx vitest run tests/ej03.test.ts",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 25
+    },
+    {
+      "name": "Ej04 — Ambito estatico y algoritmo de resolucion",
+      "setup": "npm install",
+      "run": "npx vitest run tests/ej04.test.ts",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 20
+    },
+    {
+      "name": "Ej05 — Detectar y corregir errores de binding y ambito",
+      "setup": "npm install",
+      "run": "npx vitest run tests/ej05.test.ts",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 15
+    }
+  ]
+}

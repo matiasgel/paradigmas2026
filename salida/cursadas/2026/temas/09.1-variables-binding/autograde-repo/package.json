@@ -1,0 +1,14 @@
+{
+  "name": "tp09-1-variables-binding",
+  "description": "TP 09.1 — Variables, Binding y Ámbito — Paradigmas 2026",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}
