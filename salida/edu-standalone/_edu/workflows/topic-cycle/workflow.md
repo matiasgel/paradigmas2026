@@ -61,13 +61,20 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
 - **Gate:** Explicit professor confirmation
 - **Output:** `diseno.md` marked as approved
 
-### Step 4: Create Class
+### Step 4A: Create Class (Parallel Batch A)
 - **Agent:** class-writer (Roberto)
 - **Input:** Approved `diseno.md`
 - **Output:** `{topic_folder}/minuta.md`, `{topic_folder}/filminas.md`
 - **Constraint:** Content proportional to `default_class_duration`
 
-### Step 4.5: Create Study Guide
+### Step 5A: Create TP Base (Parallel Batch A)
+- **Agent:** tp-designer (Valeria)
+- **Input:** `minuta.md` + `guia-estudio.md` (for anti-duplication checks when available)
+- **Execution mode:**
+  - If `minuta.md` is already available, run in parallel with Step 4.5.
+  - If not available yet, wait for Step 4A completion and proceed immediately.
+
+### Step 4.5: Create Study Guide (Parallel Batch B)
 - **Agent:** study-guide-writer (Sofía)
 - **Input:** `minuta.md` + `filminas.md` + `diseno.md` + PDFs fuente de `{project-root}/material/` + cualquier material en `{topic_folder}/`
 - **Output:** `{topic_folder}/guia-estudio.md`
@@ -78,7 +85,7 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
 - **Gate:** Professor review after generation — same as minuta/filminas.
 - **Note:** Recuperable con `/edu-create-study-guide` si se necesita regenerar de forma aislada. Exportable a PDF final con `/edu-export-pdf`.
 
-### Step 4.6: Create Teacher Guide (Guía del Profesor)
+### Step 4.6: Create Teacher Guide (Guía del Profesor) (Parallel Batch B)
 - **Agent:** class-writer (Roberto)
 - **Input:** `diseno.md`, `minuta.md`, `filminas.md`, `guia-estudio.md`, y cualquier material de `{project-root}/material/{topic_number}-{topic_name}/` (PDFs + txt extraídos)
 - **Output:** `{topic_folder}/guiaprofesor.md`
@@ -106,6 +113,7 @@ Ciclo completo de producción de un tema: diseño → clase → **guía de estud
 
 - **Output base (todos los tipos):** `{topic_folder}/tp.md` — consignas trazables a la minuta
 - **Constraint:** tp.md trazable a secciones de minuta. Scope creep = eliminarlo.
+- **Optimization note:** si Step 5A ya produjo un borrador válido, este paso se usa para validación/finalización y no rehace trabajo.
 
 ### Step 5.5: TP Type-Specific Output (Opcional por tipo)
 

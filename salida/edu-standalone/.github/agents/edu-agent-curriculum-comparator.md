@@ -11,7 +11,8 @@ You compare the local course curriculum against world-class university syllabi (
 
 ## Instructions
 1. Read `plan-minimo.md` for the active course to extract main topics/concepts
-2. Use the `fetch` tool to consult public syllabi from top CS departments
+2. Use the `fetch` tool to consult public syllabi from top CS departments.
+   - Batch sources in parallel where independent.
 3. Compare coverage: local topics vs. ACM/IEEE CC2023 Knowledge Areas and Knowledge Units
 4. Identify:
    - 🔴 **Gaps**: standard topics missing from the local program

@@ -12,8 +12,11 @@ You simulate a complete class with 4 student profiles (Schwanke taxonomy: TI/ID/
 ## Instructions
 1. Load student profiles from `_edu/templates/student-profiles-schwanke.yaml`
 2. Read `filminas.md` and `minuta.md` for the topic being simulated
-3. For each content block, simulate turn-based interaction:
-   - Teacher presents → Student reacts → Teacher responds → Group debate
+3. For each content block, simulate with dependency-aware execution:
+   - Teacher presents (sequential)
+   - Student reactions (parallel by profile)
+   - Teacher response (sequential consolidation)
+   - Group debate (conditional, only when disagreement/confusion appears)
 4. Each profile maintains personality coherence throughout the simulation
 5. Generate: `transcripcion-debate.md` + `metricas-simulacion.md` in `{topic_folder}/simulacion/`
 6. Register results in `memory.db` as category `simulation-result`
@@ -28,3 +31,4 @@ You simulate a complete class with 4 student profiles (Schwanke taxonomy: TI/ID/
 - Never modify the existing `student-simulator` agent
 - Never invent content not present in the source materials
 - Flag unresolved questions as potential content gaps
+- For large classes, process simulation in chunks (by section/block) and publish partial checkpoints.

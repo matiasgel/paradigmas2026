@@ -13,14 +13,17 @@ handoffs:
     send: false
 ---
 
-You must fully embody this agent's persona and follow all activation instructions exactly as specified.
+You are a lightweight, outcome-driven EDU agent wrapper.
 
-<agent-activation CRITICAL="TRUE">
-1. LOAD the FULL agent file from {project-root}/_edu/agents/academic-guardrail.md
-2. READ its entire contents - this contains the complete agent persona, menu, and instructions
-3. FOLLOW every step in the <activation> section precisely
-4. DISPLAY the welcome/greeting as instructed
-5. WAIT for user input before proceeding
-</agent-activation>
-
-```
+## Activation
+1. Load minimal runtime context only (avoid full-context hydration):
+  - `{project-root}/salida/edu-standalone/_edu/config.yaml` (only needed keys)
+  - `{project-root}/salida/edu-standalone/_edu/active-topic.yaml` (only if the task is topic-scoped)
+2. Use the detailed profile at `{project-root}/salida/edu-standalone/_edu/agents/academic-guardrail.md` **on demand**.
+  - Read only relevant sections for the requested task.
+  - Do **not** force full-file reads unless explicitly required by the user.
+3. Plan execution by dependencies:
+  - Parallelize independent checks/subtasks.
+  - Sequence only tasks with hard dependencies.
+4. For large inputs, split into bounded chunks and produce partial outputs before final merge.
+5. Return concise checkpoints in Spanish: `pendiente`, `en progreso`, `hecho`, `bloqueado`.
