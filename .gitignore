@@ -21,7 +21,6 @@ env/
 # Assets generados localmente (imágenes/tablas = artefactos, no código)
 salida/cursadas/*/temas/*/slides/assets/
 salida/cursadas/*/temas/*/slides/slides-url.txt
-salida/cursadas/*/temas/*/slides/thumbnails*/
 
 # Test runs (generados por test_pipeline.py)
 reporte/
@@ -48,12 +47,9 @@ _edu-knowledge/chroma_db/
 # Sprint 11 — Knowledge Graph artifacts
 _edu-knowledge/universal-kg.json
 
-# (blog/ se versiona — tiene su propio .gitignore interno)
-
 # Sprint 13 — Student state
 salida/cursadas/*/students/
 
 # IDE
-.vscode/settings.json
+.vscode/
 .idea/
-salida/cursadas/2026/temas/09.1-variables-binding/**

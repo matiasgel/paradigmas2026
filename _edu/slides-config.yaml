@@ -1,9 +1,6 @@
 # Sistema de diseño para la exportación de filminas (Google Slides)
 # Generado por /edu_slides_designer
 
-# --- Knowledge Graph ---
-knowledge_graph_enabled: true
-
 # --- Template Google Slides ---
 # 0 = "Simple Light" (default). Cambiar por el ID de un template propio si tenés.
 template_id: "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI"
@@ -122,11 +119,60 @@ layouts:
       align: left
       color: text
 
+# --- Tipos de filmina — Tabla canónica inmutable ---
+# Esta tabla es la ÚNICA fuente de verdad para tipos, layouts e imagen.
+# El script solo lee de aquí. Los agentes asignan tipos explícitos desde esta tabla.
+slide_types:
+  portada:
+    layout: {title: center-middle, body: center-bottom, image: background, code: none, table: none}
+    image_layer: background
+  concepto-abstracto:
+    layout: {title: full-title, body: left-middle, image: right-half, code: none, table: none}
+    image_layer: content
+  concepto-mixto:
+    layout: {title: full-title, body: left-middle, image: none, code: right-half, table: none}
+    image_layer: none
+    note: "Texto izquierda + código derecha. Añadido v2 post-Bug 1."
+  tabla-mixta:
+    layout: {title: full-title, body: left-top-split, image: none, code: left-bottom-split, table: right-half}
+    image_layer: none
+    note: "Texto/código a la izquierda y tabla a la derecha. Añadido para evitar pérdida de tablas en slides mixtas."
+  codigo:
+    layout: {title: full-title, body: subtitle-only, image: none, code: full-bottom, table: none}
+    image_layer: none
+  tabla:
+    layout: {title: full-title, body: table-intro, image: none, code: none, table: table-main}
+    image_layer: none
+  tabla-comparativa:
+    layout: {title: full-title, body: table-intro, image: none, code: none, table: table-main}
+    image_layer: none
+  diagrama:
+    layout: {title: full-title, body: left-middle, image: right-half, code: none, table: none}
+    image_layer: content
+  socratica:
+    layout: {title: center-top, body: center-middle, image: background, code: none, table: none}
+    image_layer: background
+  cierre:
+    layout: {title: center-middle, body: center-bottom, image: background, code: none, table: none}
+    image_layer: background
+  timeline:
+    layout: {title: full-title, body: full-center, image: none, code: none, table: none}
+    image_layer: none
+  demo:
+    layout: {title: full-title, body: left-middle, image: none, code: right-half, table: none}
+    image_layer: none
+
 # --- Estrategia de imágenes (Gemini) ---
 gemini_image_strategy:
-  default: "diagram"
-  max_images_per_presentation: 4
+  default: "content"
+  max_per_presentation: 12
+  max_images_per_presentation: 12  # alias de compatibilidad
   fallback: "none"
+  safety_rules: "Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico."
+  prompt_guide: |
+    REGLA: describir SOLO geometría (formas, colores, posiciones, tamaños).
+    NUNCA nombrar conceptos técnicos — Gemini los convierte en etiquetas de texto.
+    Template: [Elemento]: [forma] [color] [posición]. [Relación posicional]. [Estilo flat]. Sin texto, sin letras.
 
 # --- Render semántico de Markdown en Google Slides ---
 markdown_rendering:
@@ -134,5 +180,5 @@ markdown_rendering:
   ordered_bullet_preset: "NUMBERED_DIGIT_ALPHA_ROMAN"
   inline_code_font: "Roboto Mono"
   inline_code_color: "#8B0000"
-  lead_scale: 1.08
+  lead_scale: 1.0
   heading_scale: 1.12

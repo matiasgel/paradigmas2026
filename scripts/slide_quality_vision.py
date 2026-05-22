@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from pipeline_common import ensure_git_ignored_path, find_plan, find_project_root, load_json, load_yaml
+from pipeline_common import find_project_root, load_json, load_yaml
 
 
 def _load_clip_model(models_dir: Path):
@@ -150,13 +150,15 @@ def main():
         sys.exit(0)
 
     # Load plan JSON
+    plan_file = topic_dir / "slides" / "plan-filminas.json"
     plan_data = {}
-    plan_result = find_plan(topic_dir)
-    if plan_result.is_ok:
-        plan_data = load_json(plan_result.unwrap())
+    if plan_file.exists():
+        result = load_json(plan_file)
+        if result.ok:
+            plan_data = result.value
 
     # CLIP analysis
-    thumbnails_dir = ensure_git_ignored_path(topic_dir, Path("slides") / "thumbnails")
+    thumbnails_dir = topic_dir / "slides" / "thumbnails"
     clip_results = []
 
     model, preprocess, tokenizer = _load_clip_model(root / "_edu-knowledge" / "models")

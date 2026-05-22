@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 """
 Captura thumbnails de una presentación Google Slides publicada.
-Uso:
-    python scripts/capture_thumbnails.py <presentation_id> <output_dir>
-    python scripts/capture_thumbnails.py --topic 08-paradigma-oo-ts --course 2026
+Uso: python scripts/capture_thumbnails.py <presentation_id> <output_dir>
 
 Requiere credenciales OAuth2 en _edu/token_slides.json (ya autenticado).
 """
 from __future__ import annotations
 
-import argparse
-import re
 import sys
 from pathlib import Path
 
@@ -20,13 +16,23 @@ import yaml
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
-from pipeline_common import ensure_git_ignored_dir, ensure_git_ignored_path, find_project_root
 
 
 SCOPES = [
     "https://www.googleapis.com/auth/presentations.readonly",
     "https://www.googleapis.com/auth/drive.readonly",
 ]
+
+
+def find_project_root(start: Path) -> Path:
+    cur = start.resolve()
+    while True:
+        if (cur / ".git").exists() or (cur / "_edu").exists():
+            return cur
+        if cur == cur.parent:
+            break
+        cur = cur.parent
+    raise FileNotFoundError("No se pudo encontrar la raíz del proyecto.")
 
 
 def get_credentials(project_root: Path) -> Credentials:
@@ -49,44 +55,6 @@ def get_credentials(project_root: Path) -> Credentials:
         with token_path.open("w") as f:
             f.write(creds.to_json())
     return creds
-
-
-def _extract_presentation_id(slides_url: str) -> str:
-    match = re.search(r"/d/([^/]+)", slides_url)
-    if not match:
-        raise ValueError(f"No se pudo extraer presentation_id desde {slides_url}")
-    return match.group(1)
-
-
-def _resolve_topic_output(project_root: Path, topic: str, course: str) -> tuple[str, Path]:
-    topic_folder = project_root / "salida" / "cursadas" / course / "temas" / topic
-    url_path = ensure_git_ignored_path(topic_folder, Path("slides") / "slides-url.txt")
-    if not url_path.exists():
-        raise FileNotFoundError(f"No se encontró slides-url.txt para {topic_folder}")
-
-    presentation_id = _extract_presentation_id(url_path.read_text(encoding="utf-8").strip())
-    output_dir = ensure_git_ignored_dir(topic_folder, Path("slides") / "thumbnails")
-    return presentation_id, output_dir
-
-
-def _remap_output_dir(project_root: Path, output_dir: Path) -> Path:
-    resolved = output_dir if output_dir.is_absolute() else (project_root / output_dir)
-    resolved = resolved.resolve()
-
-    try:
-        relative = resolved.relative_to(project_root)
-    except ValueError:
-        return resolved
-
-    parts = relative.parts
-    if len(parts) < 6:
-        return resolved
-    if parts[0] != "salida" or parts[1] != "cursadas" or parts[3] != "temas":
-        return resolved
-
-    topic_folder = project_root.joinpath(*parts[:5])
-    logical_dir = Path(*parts[5:])
-    return ensure_git_ignored_dir(topic_folder, logical_dir)
 
 
 def capture_thumbnails(presentation_id: str, output_dir: Path) -> None:
@@ -151,21 +119,7 @@ def capture_thumbnails(presentation_id: str, output_dir: Path) -> None:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Captura thumbnails de Google Slides")
-    parser.add_argument("presentation_id", nargs="?", help="ID de la presentación")
-    parser.add_argument("output_dir", nargs="?", help="Directorio de salida")
-    parser.add_argument("--topic", help="ID del tema")
-    parser.add_argument("--course", help="ID del curso")
-    args = parser.parse_args()
-
-    root = find_project_root(Path(__file__))
-
-    if args.topic and args.course:
-        pres_id, output_dir = _resolve_topic_output(root, args.topic, args.course)
-        capture_thumbnails(pres_id, output_dir)
-        sys.exit(0)
-
-    if not args.presentation_id or not args.output_dir:
-        parser.error("usar <presentation_id> <output_dir> o bien --topic <tema> --course <curso>")
-
-    capture_thumbnails(args.presentation_id, _remap_output_dir(root, Path(args.output_dir)))
+    if len(sys.argv) < 3:
+        print("Uso: python capture_thumbnails.py <presentation_id> <output_dir>")
+        sys.exit(1)
+    capture_thumbnails(sys.argv[1], Path(sys.argv[2]))

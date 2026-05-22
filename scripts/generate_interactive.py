@@ -27,7 +27,7 @@ import json
 import sys
 from pathlib import Path
 
-from pipeline_common import ensure_git_ignored_dir, find_project_root, load_json, load_yaml
+from pipeline_common import find_project_root, load_json, load_yaml
 
 
 SUPPORTED_TYPES = {
@@ -270,7 +270,8 @@ def main() -> int:
         print(f"⚠️  HTML generado ({size_kb:.0f}KB) excede el límite ({max_kb}KB)")
 
     topic_folder = root / "salida" / "cursadas" / args.course / "temas" / args.topic
-    output_dir = ensure_git_ignored_dir(topic_folder, "interactivos")
+    output_dir = topic_folder / "interactivos"
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     name = spec.get("title", sim_type).lower().replace(" ", "-")
     output_path = output_dir / f"simulacion-{name}.html"

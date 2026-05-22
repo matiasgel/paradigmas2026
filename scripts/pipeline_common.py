@@ -16,8 +16,6 @@ como fuente única de verdad — los scripts importan desde este módulo.
 from __future__ import annotations
 
 import json
-import re
-import shutil
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Generic, TypeVar
@@ -112,88 +110,6 @@ def find_project_root(start: Path) -> Path:
             break
         cur = cur.parent
     raise FileNotFoundError(f"No se encontró la raíz del proyecto desde {start}.")
-
-
-def find_git_dir(project_root: Path) -> Path:
-    git_entry = project_root / ".git"
-    if git_entry.is_dir():
-        return git_entry
-
-    if git_entry.is_file():
-        content = git_entry.read_text(encoding="utf-8").strip()
-        prefix = "gitdir:"
-        if content.lower().startswith(prefix):
-            raw_path = content[len(prefix):].strip()
-            git_dir = Path(raw_path)
-            if not git_dir.is_absolute():
-                git_dir = (project_root / git_dir).resolve()
-            return git_dir
-
-    raise FileNotFoundError(f"No se encontró el directorio .git desde {project_root}.")
-
-
-def current_git_branch(project_root: Path) -> str:
-    git_dir = find_git_dir(project_root)
-    head_path = git_dir / "HEAD"
-    if not head_path.exists():
-        return "detached-head"
-
-    head = head_path.read_text(encoding="utf-8").strip()
-    if head.startswith("ref:"):
-        ref = head.removeprefix("ref:").strip()
-        if ref.startswith("refs/heads/"):
-            return ref.removeprefix("refs/heads/")
-        return ref.replace("/", "_")
-
-    short_sha = head[:12] if head else "unknown"
-    return f"detached-{short_sha}"
-
-
-def _runtime_key(value: str) -> str:
-    cleaned = re.sub(r"[^A-Za-z0-9._-]+", "_", value).strip("._")
-    return cleaned or "detached-head"
-
-
-def branch_runtime_root(project_root: Path) -> Path:
-    git_dir = find_git_dir(project_root)
-    branch = _runtime_key(current_git_branch(project_root))
-    return git_dir / "edu-runtime" / branch
-
-
-def topic_runtime_root(topic_folder: Path) -> Path:
-    project_root = find_project_root(topic_folder)
-    relative_topic = topic_folder.resolve().relative_to(project_root)
-    return branch_runtime_root(project_root) / relative_topic
-
-
-def resolve_git_ignored_path(topic_folder: Path, logical_path: str | Path) -> Path:
-    logical = Path(logical_path)
-    if logical.is_absolute():
-        raise ValueError("logical_path debe ser relativa al tema")
-    return topic_runtime_root(topic_folder) / logical
-
-
-def ensure_git_ignored_path(topic_folder: Path, logical_path: str | Path) -> Path:
-    logical = Path(logical_path)
-    runtime_path = resolve_git_ignored_path(topic_folder, logical)
-    legacy_path = topic_folder / logical
-
-    if runtime_path.exists() or not legacy_path.exists():
-        return runtime_path
-
-    runtime_path.parent.mkdir(parents=True, exist_ok=True)
-    if legacy_path.is_dir():
-        shutil.copytree(legacy_path, runtime_path, dirs_exist_ok=True)
-    else:
-        shutil.copy2(legacy_path, runtime_path)
-
-    return runtime_path
-
-
-def ensure_git_ignored_dir(topic_folder: Path, logical_dir: str | Path) -> Path:
-    runtime_dir = ensure_git_ignored_path(topic_folder, logical_dir)
-    runtime_dir.mkdir(parents=True, exist_ok=True)
-    return runtime_dir
 
 
 def load_json(path: Path) -> dict:
