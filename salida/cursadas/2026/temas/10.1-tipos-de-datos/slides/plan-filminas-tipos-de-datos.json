@@ -1,0 +1,2007 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "10-tipos-de-datos",
+    "title": "Tipos de Datos y Sistemas de Tipos",
+    "source": "salida/cursadas/2026/temas/10.1-tipos-de-datos/filminas.md",
+    "generated_at": "2026-05-22T00:00:00Z",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "salida/cursadas/2026/temas",
+    "topic_folder": "salida/cursadas/2026/temas/10.1-tipos-de-datos",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/schemas/pipeline-runtime.schema.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 35,
+    "images_planned": 12,
+    "tables_planned": 5,
+    "code_slides": 19,
+    "status": "READY_FOR_VALIDATION",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "portada": 1,
+      "concepto-abstracto": 2,
+      "concepto-mixto": 1,
+      "codigo": 17,
+      "tabla": 1,
+      "tabla-comparativa": 4,
+      "diagrama": 7,
+      "socratica": 1,
+      "cierre": 1
+    }
+  },
+  "slides": [
+    {
+      "id": "F-00",
+      "type": "portada",
+      "title": "Tipos de Datos y Sistemas de Tipos",
+      "subtitle": "Paradigmas y Lenguajes de Programación · Semana 11",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "\"Un tipo es una colección de valores homogéneos con un conjunto uniforme de operaciones.\" — Gabbrielli & Martini"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Network of interconnected circles and rectangles in bordo and dark gray, connected by thin arrows radiating outward from a central circle. Some rectangles contain smaller rectangles. Flat design, bordo #8B0000 and dark gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-01",
+      "type": "concepto-abstracto",
+      "title": "El tipo como contrato formal",
+      "subtitle": "Tipo = conjunto de valores + operaciones válidas",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición (Gabbrielli §8.1)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Un tipo es un par (D, O) donde:",
+              "level": 0
+            },
+            {
+              "content": "D = dominio de valores admisibles",
+              "level": 1
+            },
+            {
+              "content": "O = operaciones válidas sobre esos valores",
+              "level": 1
+            },
+            {
+              "content": "Sin tipo, el procesador opera sobre patrones de bits sin semántica",
+              "level": 0
+            },
+            {
+              "content": "El tipo da significado a los bits",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ejemplo concreto"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "number en TypeScript: IEEE 754 double — D = ℝ (con límites de precisión), O = {+, -, *, /, %, **}",
+              "level": 0
+            },
+            {
+              "content": "string: D = secuencias Unicode, O = concatenación, slice, search — NO suma aritmética",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const n: number = 42;       // valor en D\nconst r: number = n + 1;    // operación en O: + es válida\n// const s: string = n;     // ERROR: asignación fuera del dominio"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Square box divided horizontally by a line into two sections. Top section contains three small circles in a row. Bottom section contains two rectangles side by side. To the right, another square box with two vertical columns of small circles. Thin arrows connect left box to right box. Flat minimal, bordo #8B0000 and gray, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-02",
+      "type": "tabla-comparativa",
+      "title": "Type safety y soundness",
+      "subtitle": "¿Cuándo un sistema de tipos es seguro?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Type safety"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Garantía de que ninguna operación se aplica a un valor fuera de su dominio",
+              "level": 0
+            },
+            {
+              "content": "Si el sistema dice que el programa es bien tipado → no ocurrirán errores de tipo en ejecución",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Implicación de diseño"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Sistema más restrictivo: detecta más errores en compilación — mayor seguridad, menor flexibilidad",
+              "level": 0
+            },
+            {
+              "content": "Sistema más permisivo: permite más programas — mayor flexibilidad, más errores en runtime",
+              "level": 0
+            },
+            {
+              "content": "TypeScript elige deliberadamente no ser fully sound: prioriza practicidad",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Lenguaje | ¿Sound? | Por qué |\n|----------|---------|--------|\n| Haskell | ✅ Sí | Sin casts inseguros; compilador rechaza todo programa potencialmente inseguro |\n| Kotlin (sin !!) | ✅ Sí | Null safety en el sistema de tipos |\n| TypeScript (strict) | ⚠️ Parcial | Soundness deliberadamente sacrificada en algunos casos para usabilidad |\n| C | ❌ No | Casts arbitrarios: (float*) &intVar — reinterpreta bits sin verificación |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Lenguaje | ¿Sound? | Por qué |\n|----------|---------|--------|\n| Haskell | ✅ Sí | Sin casts inseguros; compilador rechaza todo programa potencialmente inseguro |\n| Kotlin (sin !!) | ✅ Sí | Null safety en el sistema de tipos |\n| TypeScript (strict) | ⚠️ Parcial | Soundness deliberadamente sacrificada en algunos casos para usabilidad |\n| C | ❌ No | Casts arbitrarios: (float*) &intVar — reinterpreta bits sin verificación |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "type": "diagrama",
+      "title": "Taxonomía de tipos",
+      "subtitle": "Mapa completo del tema",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Eje estructural (Gabbrielli §8.2)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Primitivos: unidades atómicas — number, boolean, string, symbol",
+              "level": 0
+            },
+            {
+              "content": "Producto (AND): combinan múltiples valores simultáneamente — Array<T>, interface, tuplas",
+              "level": 0
+            },
+            {
+              "content": "Suma (OR): uno entre varios tipos posibles — uniones discriminadas",
+              "level": 0
+            },
+            {
+              "content": "Recursivos: se definen en términos de sí mismos — listas, árboles",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Eje de polimorfismo (Gabbrielli §8.6)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Monomórficos: una función — un tipo de dominio y codominio",
+              "level": 0
+            },
+            {
+              "content": "Polimórficos: una implementación — múltiples tipos posibles",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Branching tree structure: root bordo circle at top, two diagonal lines to two bordo circles on second level. Left second-level circle branches to two gray rectangles below. Right second-level circle branches to three gray rectangles below. One gray rectangle on right branches further to two smaller circles. Thin connecting lines. Flat design, bordo #8B0000 and gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-04",
+      "type": "codigo",
+      "title": "Enteros: representación en complemento a 2",
+      "subtitle": "¿Por qué los enteros tienen un límite?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Complemento a 2 (n bits)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Rango: [−2^(n−1), 2^(n−1)−1]",
+              "level": 0
+            },
+            {
+              "content": "Para 32 bits: [−2.147.483.648, 2.147.483.647]",
+              "level": 0
+            },
+            {
+              "content": "Para 64 bits: [−9.223.372.036.854.775.808, 9.223.372.036.854.775.807]",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tipos enteros por lenguaje"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "TypeScript: number (64 bits IEEE 754), bigint (ilimitado)",
+              "level": 0
+            },
+            {
+              "content": "Kotlin: Byte (8), Short (16), Int (32), Long (64)",
+              "level": 0
+            },
+            {
+              "content": "C: int (32 típico), long (64 típico)",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// TypeScript: number es IEEE 754 double — enteros exactos solo hasta 2^53\nconst MAX_SAFE = Number.MAX_SAFE_INTEGER; // 9.007.199.254.740.991\nconsole.log(MAX_SAFE + 1 === MAX_SAFE + 2); // true ← overflow de precisión!\n\n// Solución: BigInt para enteros arbitrarios\nconst big: bigint = 9007199254740993n;\nconsole.log(big + 1n); // 9007199254740994n — correcto"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "diagrama",
+      "title": "Punto flotante: IEEE 754",
+      "subtitle": "El estándar que usa TypeScript",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Estructura IEEE 754 de 64 bits"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Signo: 1 bit",
+              "level": 0
+            },
+            {
+              "content": "Exponente: 11 bits (rango ~10^−308 a 10^308)",
+              "level": 0
+            },
+            {
+              "content": "Mantisa: 52 bits (~15 dígitos significativos)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El problema de la precisión"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "0.1 + 0.2 ≠ 0.3 — representación binaria periódica",
+              "level": 0
+            },
+            {
+              "content": "NaN === NaN → false — valor especial del estándar IEEE 754",
+              "level": 0
+            },
+            {
+              "content": "Cálculos monetarios: usar enteros en centavos o biblioteca Decimal",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Wide horizontal rectangle divided into three contiguous vertical sections. Left section: narrow bordo strip (about 1/12 of total width). Middle section: medium-width gray strip (about 2/12 of total width). Right section: wide light gray strip (about 9/12 of total width). All sections share the same height and are clearly outlined with thin dark borders. Flat minimal design, bordo #8B0000 and gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-06",
+      "type": "codigo",
+      "title": "Boolean, Char y Unicode",
+      "subtitle": "Tipos simples con implicaciones no triviales",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Boolean"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "TypeScript: boolean es un tipo primitivo real (no alias de número como en C)",
+              "level": 0
+            },
+            {
+              "content": "C: _Bool / int — 0 = false, ≠0 = true — no hay type safety real",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Char y Unicode — implicación clave"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "TypeScript: strings son UTF-16",
+              "level": 0
+            },
+            {
+              "content": "string.length cuenta code units, NO caracteres visibles",
+              "level": 0
+            },
+            {
+              "content": "\"😀\".length === 2 — dos code units (surrogate pair)",
+              "level": 0
+            },
+            {
+              "content": "[...\"😀\"].length === 1 — correcto con spread iterator",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const emoji: string = \"😀\";\nconsole.log(emoji.length);         // 2 ← dos code units, no un carácter!\nconsole.log([...emoji].length);    // 1 ← correcto con spread iterator\n\n// Code point vs code unit\nconst char = \"A\";\nconsole.log(char.charCodeAt(0));   // 65 (code unit UTF-16)\nconsole.log(char.codePointAt(0));  // 65 (code point Unicode)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-07",
+      "type": "tabla-comparativa",
+      "title": "String: inmutabilidad y diseño",
+      "subtitle": "Strings: decisión fundamental de diseño",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Inmutabilidad"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "TypeScript/JavaScript: strings son inmutables — cada operación crea una nueva instancia",
+              "level": 0
+            },
+            {
+              "content": "Concatenación en loop → O(n²) copias → usar Array.join o template literals",
+              "level": 0
+            },
+            {
+              "content": "Template literals: interpolación type-safe con ${expresion}",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Lenguaje | ¿Mutable? | Tipo |\n|----------|-----------|------|\n| TypeScript | ❌ Inmutable | primitivo |\n| Java | ❌ Inmutable | objeto |\n| C | ✅ Mutable | array de char |\n| Kotlin | ❌ Inmutable | clase |\n| Python | ❌ Inmutable | secuencia |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Lenguaje | ¿Mutable? | Tipo |\n|----------|-----------|------|\n| TypeScript | ❌ Inmutable | primitivo |\n| Java | ❌ Inmutable | objeto |\n| C | ✅ Mutable | array de char |\n| Kotlin | ❌ Inmutable | clase |\n| Python | ❌ Inmutable | secuencia |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-08",
+      "type": "codigo",
+      "title": "Enumeraciones y tipos ordinales",
+      "subtitle": "Tipos con valores discretos ordenados",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Tipo ordinal: valores discretos con orden total y operaciones pred/succ (Sebesta §6.4)",
+              "level": 0
+            },
+            {
+              "content": "Ventaja: legibilidad + type safety + exhaustividad en switch",
+              "level": 0
+            },
+            {
+              "content": "Jerarquía: C enum (alias) < TS enum < Kotlin enum class < Haskell newtype",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// TypeScript enum — compila a objeto JS\nenum Direccion {\n    Norte = \"NORTE\",\n    Sur   = \"SUR\",\n    Este  = \"ESTE\",\n    Oeste = \"OESTE\"\n}\nfunction mover(dir: Direccion): void {\n    console.log(`Moviendo hacia ${dir}`);\n}\nmover(Direccion.Norte); // ✅\n// mover(\"NORTE\");       // ❌ Error en strict mode"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-09",
+      "type": "tabla",
+      "title": "Arrays: las 5 variantes de binding time",
+      "subtitle": "El array no es uno solo — son cinco tipos distintos",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Sebesta §6.5.2 — clasificación por cuándo se fija el tamaño"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Variante | ¿Cuándo se fija el tamaño? | ¿Dónde vive? | Ejemplo |\n|----------|---------------------------|--------------|--------|\n| 1. Estático | Tiempo de compilación | Área estática | static int a[10] en C |\n| 2. Stack-dynamic fijo | Elaboración (entrada a función) | Stack | int a[10] local en C |\n| 3. Stack-dynamic variable (VLA) | Runtime (valor calculado) | Stack | int a[n] en C99 |\n| 4. Heap-dynamic fijo | Al crear (new/alloc) | Heap | new int[n] en Java/Kotlin |\n| 5. Heap-dynamic variable | Crece/achica en runtime | Heap | ArrayList, MutableList |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Variante | ¿Cuándo se fija el tamaño? | ¿Dónde vive? | Ejemplo |\n|----------|---------------------------|--------------|--------|\n| 1. Estático | Tiempo de compilación | Área estática | static int a[10] en C |\n| 2. Stack-dynamic fijo | Elaboración (entrada a función) | Stack | int a[10] local en C |\n| 3. Stack-dynamic variable (VLA) | Runtime (valor calculado) | Stack | int a[n] en C99 |\n| 4. Heap-dynamic fijo | Al crear (new/alloc) | Heap | new int[n] en Java/Kotlin |\n| 5. Heap-dynamic variable | Crece/achica en runtime | Heap | ArrayList, MutableList |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-10",
+      "type": "codigo",
+      "title": "Arrays: multidimensionales, slices y asociativos",
+      "subtitle": "Más allá del array simple",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Row-major (TypeScript/C/Java) vs. column-major (Fortran): impacto en cache locality",
+              "level": 0
+            },
+            {
+              "content": "slice() en TypeScript: crea COPIA — cambiar original no afecta el slice",
+              "level": 0
+            },
+            {
+              "content": "Record<K,V>: tipo estático, object literal. Map<K,V>: dinámico, cualquier tipo de clave",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Arrays asociativos\nconst capitales: Record<string, string> = {\n    argentina: \"Buenos Aires\",\n    chile:     \"Santiago\"\n};\ncapitales[\"uruguay\"] = \"Montevideo\"; // O(1) amortizado\n\n// Map<K,V>: permite claves de cualquier tipo\nconst edades = new Map<string, number>();\nedades.set(\"Ana\", 30);\nconsole.log(edades.get(\"Ana\")); // 30"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "diagrama",
+      "title": "Records: alineamiento de memoria",
+      "subtitle": "El compilador no siempre hace lo que parece",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "C struct y el problema del padding"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "struct { char c; int i; } → 8 bytes, no 5 — padding de 3 bytes por alineamiento a 4 bytes",
+              "level": 0
+            },
+            {
+              "content": "El procesador requiere que int esté alineado a múltiplos de 4 bytes",
+              "level": 0
+            },
+            {
+              "content": "Optimización: ordenar campos de mayor a menor tamaño — minimiza padding",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Producto cartesiano formal (Gabbrielli §8.3)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Record Persona = String × Int × Boolean",
+              "level": 0
+            },
+            {
+              "content": "Un valor de Persona es una 3-tupla (nombre, edad, activo)",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Horizontal sequence of eight equal-width squares arranged in a row. First square is bordo colored. Next three squares are gray with slight top margins (lifted slightly). Fourth to eighth squares are same-size gray squares flush with baseline. Below the first group of four, a thin horizontal bracket connector. Below the second group of four, another thin bracket. Flat minimal design, bordo #8B0000 and gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-12",
+      "type": "codigo",
+      "title": "TypeScript interfaces y objetos como records",
+      "subtitle": "El record en TypeScript — tipado estructural",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "interface: define la forma del objeto — sin generación de código en runtime",
+              "level": 0
+            },
+            {
+              "content": "Readonly<T>: hace todos los campos inmutables — compilador rechaza asignaciones",
+              "level": 0
+            },
+            {
+              "content": "Spread {...ana, edad: 31}: crea nuevo objeto — sin aliases con el original",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "interface Persona {\n    nombre: string;\n    edad:   number;\n    activo: boolean;\n}\n\nfunction saludar(p: Persona): string {\n    return `Hola ${p.nombre}, edad: ${p.edad}`;\n}\n\nconst ana: Persona = { nombre: \"Ana\", edad: 30, activo: true };\n\n// Inmutable\nconst anaFija: Readonly<Persona> = ana;\n// anaFija.edad = 31; // ❌ Error de tipo\n\n// Copia-con-modificación (sin alias)\nconst anaEdited: Persona = { ...ana, edad: 31 };"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "codigo",
+      "title": "Tuplas como producto cartesiano formal",
+      "subtitle": "Producto cartesiano con campos posicionales",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Tipo T1 × T2 × … × Tn: el componente i es de tipo Ti (Gabbrielli §8.3)",
+              "level": 0
+            },
+            {
+              "content": "TypeScript 4.0+: named tuples [x: number, y: number] — legibilidad mejorada",
+              "level": 0
+            },
+            {
+              "content": "Cuándo usar tupla: múltiples valores anónimos temporales o retorno de función",
+              "level": 0
+            },
+            {
+              "content": "Cuándo usar record: datos con semántica nombrada y mantenibilidad a largo plazo",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Par = [string, number];\ntype Coordenada = [x: number, y: number, z: number];\n\nconst punto: Par = [\"Ana\", 30];    // ✅\n// const mal: Par = [30, \"Ana\"];   // ❌ tipo incorrecto\n\n// Desestructuración posicional\nconst [nombre, edad] = punto;\nconsole.log(nombre); // \"Ana\" — tipo inferido: string\n\nconst pos: Coordenada = [1, 2, 3];"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-14",
+      "type": "codigo",
+      "title": "Uniones libres en C: el problema de type safety",
+      "subtitle": "Cuando el tipo es inseguro por diseño",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "C union: todos los campos comparten la misma memoria — tamaño = max de todos los campos",
+              "level": 0
+            },
+            {
+              "content": "El compilador no rastrea qué campo fue escrito último → leer el incorrecto = undefined behavior",
+              "level": 0
+            },
+            {
+              "content": "Uso legítimo: serialización de bajo nivel, instrucciones SIMD — con conocimiento del layout",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "c",
+          "content": "union Dato {\n    int   i;     // 4 bytes\n    float f;     // 4 bytes\n    char  c[4];  // 4 bytes\n}; // tamaño = 4 bytes (max de todos)\n\nunion Dato d;\nd.i = 65;             // escribimos un int\nprintf(\"%f\\n\", d.f);  // leemos como float → UNDEFINED BEHAVIOR\nprintf(\"%c\\n\", d.c[0]); // puede dar 'A' o basura"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-15",
+      "type": "codigo",
+      "title": "Tipo suma: uniones discriminadas",
+      "subtitle": "La solución al problema de las uniones libres",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tipo suma formal (Gabbrielli §8.3)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "T1 + T2 + … + Tn — un valor es o bien T1, o bien T2, nunca dos simultáneamente",
+              "level": 0
+            },
+            {
+              "content": "Incluye etiqueta discriminadora que identifica el tipo activo",
+              "level": 0
+            },
+            {
+              "content": "Contraste: tipo producto T1 × T2 combina todos simultáneamente",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// TypeScript discriminated unions\ntype Forma =\n    | { kind: \"circulo\";    radio: number }\n    | { kind: \"rectangulo\"; ancho: number; alto: number }\n    | { kind: \"triangulo\";  base: number;  altura: number };\n\nfunction area(f: Forma): number {\n    switch (f.kind) {\n        case \"circulo\":    return Math.PI * f.radio ** 2;\n        case \"rectangulo\": return f.ancho * f.alto;\n        case \"triangulo\":  return (f.base * f.altura) / 2;\n    }\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-16",
+      "type": "codigo",
+      "title": "Haskell ADT y Kotlin sealed classes",
+      "subtitle": "Tipos suma en lenguajes de paradigma mixto",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Haskell ADT: pattern matching con verificación de exhaustividad en compilación",
+              "level": 0
+            },
+            {
+              "content": "Kotlin sealed: subclases en mismo archivo — compilador conoce todos los subtipos",
+              "level": 0
+            },
+            {
+              "content": "TypeScript never: default: const _: never = f → error de tipo si hay casos no cubiertos",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "haskell",
+          "content": "data Forma = Circulo Double | Rectangulo Double Double\n\narea :: Forma -> Double\narea (Circulo r)      = pi * r * r\narea (Rectangulo a b) = a * b\n-- Compilador verifica exhaustividad automáticamente"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-17",
+      "type": "diagrama",
+      "title": "Tipos recursivos: listas y árboles",
+      "subtitle": "Tipos que se definen en términos de sí mismos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición inductiva (Gabbrielli §8.4)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Lista(A) = Vacía | Nodo(A, Lista(A)) — caso base + caso inductivo",
+              "level": 0
+            },
+            {
+              "content": "Árbol(A) = Hoja(A) | Nodo(Árbol(A), A, Árbol(A))",
+              "level": 0
+            },
+            {
+              "content": "Requiere indirección: sin puntero/referencia el tipo tendría tamaño infinito",
+              "level": 0
+            },
+            {
+              "content": "TypeScript: type Lista<A> = {tipo: 'vacia'} | {tipo: 'nodo'; valor: A; siguiente: Lista<A>}",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Binary tree: one bordo circle at top center, connected by two diagonal lines to two bordo circles on second level. Left second-level circle connected by two diagonal lines to two gray circles on third level. Right second-level circle connected by two diagonal lines to two gray circles on third level. Bottom gray circles have no children. All connections are thin straight lines. Flat design, bordo #8B0000 and gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-18",
+      "type": "socratica",
+      "title": "Checkpoint — Bloques A-D",
+      "subtitle": "Pausa activa: consolidación de tipos primitivos y compuestos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué acabamos de ver?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "A: Tipo = (D, O) — contrato formal, type safety",
+              "level": 0
+            },
+            {
+              "content": "B: Primitivos: number, bigint, string, boolean, enum",
+              "level": 0
+            },
+            {
+              "content": "C — Producto: arrays (5 variantes), records, tuplas",
+              "level": 0
+            },
+            {
+              "content": "D — Suma: uniones discriminadas, tipos recursivos",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Pregunta de comprensión"
+        },
+        {
+          "type": "text",
+          "content": "¿Cuál es la diferencia fundamental entre tipo producto y tipo suma?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Tipo producto T1 × T2: un valor tiene AMBOS — un T1 Y un T2",
+              "level": 0
+            },
+            {
+              "content": "Tipo suma T1 + T2: un valor tiene UNO — un T1 O un T2",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Actividad rápida (5 min)"
+        },
+        {
+          "type": "text",
+          "content": "type Resultado<T> = { ok: true; valor: T } | { ok: false; error: string } → ¿tipo suma o producto? ¿Por qué?"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Soft overlapping translucent circles arranged in a gentle grid pattern. Colors alternate between light bordo tint and light gray, all very low opacity. Small bordo dots scattered across the composition. Calm, abstract, minimal texture. Flat design, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "diagrama",
+      "title": "El tipo puntero en C",
+      "subtitle": "El tipo más peligroso del zoo",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Operaciones fundamentales (Sebesta §6.11.2)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "& (address-of): obtiene la dirección de memoria de una variable",
+              "level": 0
+            },
+            {
+              "content": "* (dereference): accede al valor almacenado en la dirección apuntada",
+              "level": 0
+            },
+            {
+              "content": "Aritmética: p + 1 avanza sizeof(*p) bytes — fuente principal de inseguridad en C",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Dangling pointer (Sebesta §6.11.3.1)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Causa 1: free(p) sin hacer p = NULL — dirección todavía válida para el compilador",
+              "level": 0
+            },
+            {
+              "content": "Causa 2: retornar &local — variable en stack se destruye al retornar",
+              "level": 0
+            },
+            {
+              "content": "Consecuencia: lectura → valores aleatorios; escritura → corrupción de memoria",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Two rows of squares. Top row: one bordo square on the left, three gray squares to the right. A thin arrow exits the bordo square and points to the first gray square in a second row below. One gray square in the second row has a dashed border outline. Another gray square has a small X mark overlaid in the corner. Flat minimal design, bordo #8B0000 and gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-20",
+      "type": "tabla-comparativa",
+      "title": "Memory leak y referencias vs. punteros",
+      "subtitle": "Dos problemas opuestos del tipo puntero",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lost heap-dynamic variable / Memory leak"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Reasignar p sin hacer free primero → celda inaccesible en heap",
+              "level": 0
+            },
+            {
+              "content": "GC automático (TypeScript/Java/Kotlin) previene el problema — precio: pauses de colección",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Característica | Puntero (C) | Referencia (TypeScript/Java/Kotlin) |\n|----------------|-------------|-------------------------------------|\n| Aritmética | ✅ p + 1, p - 1 | ❌ No permitida |\n| Puede ser null | ✅ int *p = NULL | Depende del lenguaje |\n| Acceso a dirección | ✅ printf(\"%p\", p) | ❌ No accesible |\n| Memory management | Manual (malloc/free) | GC automático |\n| Dangling pointer | ✅ Posible | ❌ Imposible (GC mantiene referencias) |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Característica | Puntero (C) | Referencia (TypeScript/Java/Kotlin) |\n|----------------|-------------|-------------------------------------|\n| Aritmética | ✅ p + 1, p - 1 | ❌ No permitida |\n| Puede ser null | ✅ int *p = NULL | Depende del lenguaje |\n| Acceso a dirección | ✅ printf(\"%p\", p) | ❌ No accesible |\n| Memory management | Manual (malloc/free) | GC automático |\n| Dangling pointer | ✅ Posible | ❌ Imposible (GC mantiene referencias) |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-21",
+      "type": "concepto-abstracto",
+      "title": "Null safety: el problema de los mil millones",
+      "subtitle": "El \"billion-dollar mistake\" de Tony Hoare",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "\"I call it my billion-dollar mistake. It was the invention of the null reference in 1965.\" — Tony Hoare"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Kotlin resuelve esto en el sistema de tipos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "String → NUNCA null — el compilador lo garantiza",
+              "level": 0
+            },
+            {
+              "content": "String? → puede ser null — requiere verificación explícita antes de usar",
+              "level": 0
+            },
+            {
+              "content": "En Java legacy: cualquier referencia puede ser null — NullPointerException es la excepción #1 en producción",
+              "level": 0
+            },
+            {
+              "content": "Por qué usamos Kotlin: null/undefined en TypeScript fue cubierto en T09.2 (F-29 a F-33)",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Two vertical rectangles side by side. Left rectangle: solid bordo fill, fully opaque. Right rectangle: same dimensions but with dashed border outline and gray fill at low opacity, with a small red X mark in top-right corner. Below both rectangles, a thin upward arrow in bordo pointing to the gap between them. Flat minimal design, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-22",
+      "type": "codigo",
+      "title": "Null safety: operadores Kotlin",
+      "subtitle": "Cuatro operadores para vivir sin NullPointerException",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "?. (safe call): retorna null si cualquier eslabón es null — sin excepción",
+              "level": 0
+            },
+            {
+              "content": "?: (Elvis): valor por defecto si el resultado es null",
+              "level": 0
+            },
+            {
+              "content": "!! (non-null assertion): lanza excepción si null — uso excepcional con certeza absoluta",
+              "level": 0
+            },
+            {
+              "content": "?.let {}: ejecuta bloque solo si no es null",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "kotlin",
+          "content": "val persona: Persona? = obtenerPersona()\n\n// Safe call — retorna null si persona es null\nval ciudad: String? = persona?.direccion?.ciudad\n\n// Elvis — valor por defecto\nval ciudadODefault: String = persona?.direccion?.ciudad ?: \"Desconocida\"\n\n// Non-null assertion — peligroso, usar con certeza\nval ciudadForzada: String = persona!!.direccion!!.ciudad\n\n// let — bloque solo si no es null\npersona?.let { p -> println(\"Encontrado: ${p.nombre}\") }"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "codigo",
+      "title": "Equivalencia de nombres",
+      "subtitle": "¿Cuándo dos tipos son el mismo?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Name equivalence (Sebesta §6.12.1)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Dos tipos son equivalentes SOLO si tienen el mismo nombre en el mismo scope",
+              "level": 0
+            },
+            {
+              "content": "Cada declaración de tipo crea un tipo distinto — aunque tenga la misma estructura",
+              "level": 0
+            },
+            {
+              "content": "Ejemplo real: errores de unidades de medida (Mars Climate Orbiter, 1999)",
+              "level": 0
+            },
+            {
+              "content": "Usado en: Java (clases), Kotlin (clases), Ada, Pascal",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "kotlin",
+          "content": "// Kotlin: name equivalence para tipos de referencia\ndata class Metros(val valor: Double)\ndata class Kilos(val valor: Double)\n\nfun calcularFuerza(m: Metros): Double = m.valor * 9.8\n\n// calcularFuerza(Kilos(70.0)) // ❌ Error: Kilos no es Metros\n// Previene bugs reales de unidades de medida"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "codigo",
+      "title": "Equivalencia estructural — TypeScript",
+      "subtitle": "TypeScript y el sistema de tipos estructural",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Structural equivalence (Sebesta §6.12.2)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Dos tipos son equivalentes si tienen la misma estructura — el nombre es irrelevante",
+              "level": 0
+            },
+            {
+              "content": "TypeScript es el ejemplo canónico de sistema estructuralmente tipado",
+              "level": 0
+            },
+            {
+              "content": "Un objeto puede tener más campos de los requeridos (subtype compatibility)",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "interface Punto2D { x: number; y: number; }\n\nfunction distancia(p: Punto2D): number {\n    return Math.sqrt(p.x ** 2 + p.y ** 2);\n}\n\nconst p1 = { x: 3, y: 4 };                          // anónimo — ✅\nconst p2: { x: number; y: number } = { x: 1, y: 1}; // ✅\nconst p3 = { x: 5, y: 12, etiqueta: \"origen\" };     // ✅ — tiene lo requerido + extra\n\ndistancia(p1); // ✅\ndistancia(p3); // ✅ — compatible estructuralmente"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "tabla-comparativa",
+      "title": "Name vs. structural — comparación y tradeoffs",
+      "subtitle": "Dos filosofías de compatibilidad de tipos",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Si A y B tienen exactamente los mismos campos con los mismos tipos, ¿son compatibles?"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Criterio | Name Equivalence | Structural Equivalence |\n|----------|-----------------|----------------------|\n| Seguridad | ✅ Mayor — tipos semánticamente distintos no se mezclan | ⚠️ Menor — tipos accidentalmente iguales son compatibles |\n| Flexibilidad | ⚠️ Menor — requiere implements o cast explícito | ✅ Mayor — composición sin herencia formal |\n| Refactoring | Fácil — renombrar tipo cambia todo | Difícil — cambiar estructura rompe compatibilidades ocultas |\n| Lenguajes | Java, Kotlin, Ada, Pascal | TypeScript, OCaml, Go |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Criterio | Name Equivalence | Structural Equivalence |\n|----------|-----------------|----------------------|\n| Seguridad | ✅ Mayor — tipos semánticamente distintos no se mezclan | ⚠️ Menor — tipos accidentalmente iguales son compatibles |\n| Flexibilidad | ⚠️ Menor — requiere implements o cast explícito | ✅ Mayor — composición sin herencia formal |\n| Refactoring | Fácil — renombrar tipo cambia todo | Difícil — cambiar estructura rompe compatibilidades ocultas |\n| Lenguajes | Java, Kotlin, Ada, Pascal | TypeScript, OCaml, Go |",
+          "local_asset": "",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-26",
+      "type": "codigo",
+      "title": "Coerción, conversión y mixed mode",
+      "subtitle": "Cómo los lenguajes manejan el cambio de tipo",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Widening (ensanchamiento): Int → Long → Double — siempre seguro, sin pérdida",
+              "level": 0
+            },
+            {
+              "content": "Narrowing (achicamiento): Double → Int — puede perder información, truncamiento",
+              "level": 0
+            },
+            {
+              "content": "Kotlin: no hace ninguna coerción implícita — todas las conversiones son explícitas",
+              "level": 0
+            },
+            {
+              "content": "Bug clásico C: int 5 / int 2 = 2, no 2.5 — división entera silenciosa",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Coerción implícita con +\nconsole.log(1 + 2);     // 3   (number + number)\nconsole.log(\"1\" + 2);   // \"12\" (string + number → concatenación)\nconsole.log(1 + \"2\");   // \"12\" (number + string → concatenación)\n\n// Conversión explícita\nconst n = 42;\nconst s = String(n);       // \"42\"\nconst n2 = Number(\"42\");   // 42\nconst n3 = Number(\"42px\"); // NaN — falla silenciosamente"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-27",
+      "type": "concepto-mixto",
+      "title": "Sistemas monomórficos vs. polimórficos",
+      "subtitle": "Una función para un tipo o para muchos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Taxonomía del polimorfismo (Gabbrielli §8.6)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Universal — Paramétrico (generics, templates)",
+              "level": 0
+            },
+            {
+              "content": "Universal — Inclusión / Subtipo (herencia)",
+              "level": 0
+            },
+            {
+              "content": "Ad-hoc — Sobrecarga (overloading)",
+              "level": 0
+            },
+            {
+              "content": "Ad-hoc — Coerción (conversión implícita)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Sistema monomórfico (Gabbrielli §8.6)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Cada expresión tiene exactamente un tipo de dominio y codominio",
+              "level": 0
+            },
+            {
+              "content": "C sin templates: monomórfico — genericidad con void* pierde type safety",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Sistema polimórfico: una implementación — todos los tipos\nfunction identidad<T>(x: T): T { return x; }\n\nidentidad<number>(42);      // T = number\nidentidad<string>(\"hola\");  // T = string\nidentidad<boolean>(true);   // T = boolean\n// Una SOLA implementación — cero código duplicado"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-28",
+      "type": "codigo",
+      "title": "Polimorfismo ad-hoc: sobrecarga",
+      "subtitle": "Mismo nombre, distintos tipos — dispatch en compilación",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Dispatch estático: compilador decide qué función llamar según tipos en compilación — costo cero en runtime",
+              "level": 0
+            },
+            {
+              "content": "Dispatch dinámico: en herencia y subtipo — decisión en runtime vía vtable",
+              "level": 0
+            },
+            {
+              "content": "Límite: hay que enumerar todos los tipos manualmente — no es genérico",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// TypeScript: firmas de sobrecarga\nfunction formatear(x: number): string;\nfunction formatear(x: string): string;\nfunction formatear(x: boolean): string;\nfunction formatear(x: number | string | boolean): string {\n    if (typeof x === \"number\")  return x.toFixed(2);\n    if (typeof x === \"string\")  return x.toUpperCase();\n    return x ? \"SÍ\" : \"NO\";\n}\n\nformatear(3.14);   // \"3.14\"\nformatear(\"hola\"); // \"HOLA\"\nformatear(true);   // \"SÍ\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-29",
+      "type": "codigo",
+      "title": "Polimorfismo paramétrico: generics",
+      "subtitle": "Una implementación — todos los tipos",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El parámetro de tipo <T> es una variable de tipo — se instancia en cada llamada",
+              "level": 0
+            },
+            {
+              "content": "Gabbrielli §8.6: es el polimorfismo verdadero — una implementación para todos los tipos",
+              "level": 0
+            },
+            {
+              "content": "Maybe<T>: tipo genérico canónico que encapsula ausencia de valor sin usar null",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function primero<T>(lista: T[]): T | undefined {\n    return lista.length > 0 ? lista[0] : undefined;\n}\n\nprimero([1, 2, 3]);    // T = number → retorna 1\nprimero([\"a\", \"b\"]);   // T = string → retorna \"a\"\n\n// Tipo genérico canónico: Maybe<T>\ntype Maybe<T> =\n    | { tipo: \"nada\" }\n    | { tipo: \"justo\"; valor: T };\n\nfunction mapMaybe<A, B>(m: Maybe<A>, f: (x: A) => B): Maybe<B> {\n    if (m.tipo === \"nada\") return { tipo: \"nada\" };\n    return { tipo: \"justo\", valor: f(m.valor) };\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-30",
+      "type": "codigo",
+      "title": "Generics con constraints",
+      "subtitle": "No todos los tipos son iguales — bounded quantification",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Bounded quantification: polimorfismo paramétrico con restricción de tipo",
+              "level": 0
+            },
+            {
+              "content": "TypeScript: extends como constraint — T extends { valueOf(): number }",
+              "level": 0
+            },
+            {
+              "content": "Haskell: Ord a => — typeclass como constraint — más expresivo, permite retroactive conformance",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Sin constraint — no compila\n// function max<T>(a: T, b: T): T { return a > b ? a : b; }\n// Error: el operador '>' no existe para T genérico\n\n// Con constraint\nfunction max<T extends { valueOf(): number }>(a: T, b: T): T {\n    return a.valueOf() > b.valueOf() ? a : b;\n}\n\n// Kotlin: upper bound\n// fun <T : Comparable<T>> max(a: T, b: T): T = if (a >= b) a else b\n// max(3, 5)           // 5\n// max(\"Ana\", \"Bruno\") // \"Bruno\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-31",
+      "type": "diagrama",
+      "title": "Polimorfismo por subtipo y el principio de Liskov",
+      "subtitle": "Cuando el tipo de una subclase puede reemplazar a su supertipo",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Si S es un subtipo de T, cualquier programa que use T puede ser sustituido por S sin alterar las propiedades correctas. — Barbara Liskov, 1987"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "TypeScript: Perro <: Animal si tiene todos los métodos de Animal con tipos compatibles (estructural)",
+              "level": 0
+            },
+            {
+              "content": "Kotlin: Perro <: Animal requiere declaración extends (nominal)",
+              "level": 0
+            },
+            {
+              "content": "El dispatch es dinámico: la decisión de qué método llamar es en runtime",
+              "level": 0
+            },
+            {
+              "content": "Violación clásica LSP: Cuadrado extends Rectangulo — mathematicamente correcto, conceptualmente erróneo",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Triangular hierarchy of circles. Single large bordo circle at top center. Two medium bordo circles on second level connected to top circle by diagonal lines. Four small gray circles on third level, two below each second-level circle, connected by diagonal lines. All connecting lines are thin and straight. Flat design, bordo #8B0000 and gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-32",
+      "type": "diagrama",
+      "title": "Varianza: covarianza y contravarianza",
+      "subtitle": "¿Cómo se propaga el subtipado a través de tipos genéricos?",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Covarianza (out T — solo lectura): List<Perro> <: List<Animal> — TypeScript lo permite (unsound)",
+              "level": 0
+            },
+            {
+              "content": "Contravarianza (in T — solo escritura): Consumer<Animal> <: Consumer<Perro>",
+              "level": 0
+            },
+            {
+              "content": "Invarianza: MutableList<Perro> NO es subtipo de MutableList<Animal>",
+              "level": 0
+            },
+            {
+              "content": "Kotlin: out = produce (covariante), in = consume (contravariante)",
+              "level": 0
+            },
+            {
+              "content": "Ejemplo canónico contravariante: Comparable<in T> — si comparo animales, puedo comparar perros",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Three horizontal rows of paired shapes. Row 1: bordo circle on left, downward arrow pointing to gray circle below it, with a green checkmark to the right of the arrow. Row 2: bordo rectangle on left, upward-left arrow pointing to another bordo rectangle on the upper right, with a blue tint. Row 3: bordo rectangle on left, downward arrow blocked by a red X mark, gray rectangle below does not receive the arrow. Flat minimal design, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-33",
+      "type": "codigo",
+      "title": "Inferencia de tipos: Hindley-Milner",
+      "subtitle": "El compilador puede deducir los tipos — sin magia",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Hindley-Milner (1969/1978): algoritmo W — infiere el tipo más general (principal) de cada expresión",
+              "level": 0
+            },
+            {
+              "content": "Haskell: la mayoría del código no necesita anotaciones — inferencia completa",
+              "level": 0
+            },
+            {
+              "content": "TypeScript: inferencia local excelente; anotaciones requeridas en firmas de APIs públicas",
+              "level": 0
+            },
+            {
+              "content": "La inferencia no es magia — es resolución de un sistema de ecuaciones de tipos",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "haskell",
+          "content": "-- Haskell: sin ninguna anotación, el compilador infiere\nidentidad x = x           -- inferido: a -> a\nsumar x y   = x + y       -- inferido: Num a => a -> a -> a\nlista       = [1, 2, 3]   -- inferido: Num a => [a]"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-34",
+      "type": "cierre",
+      "title": "Síntesis y conexiones curriculares",
+      "subtitle": "Lo que construimos hoy",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "A — Tipo = (D, O): contrato formal, type safety, soundness",
+              "level": 0
+            },
+            {
+              "content": "B — Primitivos: number, bigint, string, boolean, enum (IEEE 754, Unicode)",
+              "level": 0
+            },
+            {
+              "content": "C — Tipos producto: arrays (5 variantes), records, tuplas (producto cartesiano)",
+              "level": 0
+            },
+            {
+              "content": "D — Tipos suma: discriminated unions, never exhaustivo, tipos recursivos",
+              "level": 0
+            },
+            {
+              "content": "E — Punteros (C): dangling, memory leak, null safety Kotlin",
+              "level": 0
+            },
+            {
+              "content": "F — Equivalencia: name vs. structural (TypeScript canonical), coerción, mixed mode",
+              "level": 0
+            },
+            {
+              "content": "G — Polimorfismo: ad-hoc, paramétrico, subtipo (LSP), varianza, inferencia HM",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "← T09.1/T09.2: binding → ahora sabemos qué son esos tipos",
+              "level": 0
+            },
+            {
+              "content": "→ T11: tipos de retorno en estructuras de control",
+              "level": 0
+            },
+            {
+              "content": "→ T14: inferencia HM formal, teoría de subtipos, effect systems",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Abstract geometric pattern of overlapping translucent rectangles and circles in bordo and gray tones arranged in a soft grid. Rectangles vary in size from small to medium, circles mostly small, all at low opacity. Composition is balanced and calm. Flat design, bordo #8B0000 and gray #1A1A1A, white background. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    }
+  ]
+}

@@ -6,7 +6,7 @@ class_duration: "360"
 classes_count: 1
 git_branch: "tema-10.1-tipos-de-datos"
 created_at: "2026-05-22"
-status: "design"
+status: "slides-published"
 tp_type: "repo"
 parent_topic: "10-tipos-de-datos"
 sibling_topic: "absorbido-en-10.1"
