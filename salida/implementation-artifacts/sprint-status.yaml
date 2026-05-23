@@ -1,0 +1,168 @@
+project: paradigmas2026
+project_key: NOKEY
+generated: '2026-05-23'
+workflow: topic-cycle-v3
+
+implementation_order:
+  - epic: 1
+    name: "Pipeline base v3"
+    rationale: "Fundación del workflow — crea el andamiaje de 7 pasos, el agente topic-designer-v3 y el mecanismo de estado. Prerequisito para todos los demás epics."
+  - epic: 2
+    name: "Bibliographic-first"
+    rationale: "Integra ChromaDB como paso obligatorio (Pasos 1a/1b/1c) y genera topic-extract.md. Prerequisito de E3 (coherencia), E4 (densidad en topic-extract) y E5 (renovación usa topic-extract aprobado)."
+  - epic: 6
+    name: "Agentes downstream"
+    rationale: "Modifica class-writer, study-guide-writer y create-teacher-guide antes de que E4 agregue los modificadores de densidad. Reduce riesgo de edición conflictiva sobre los mismos archivos."
+  - epic: 4
+    name: "Niveles de densidad"
+    rationale: "Parametrización de densidad sobre agentes ya preparados con lógica condicional v3 (E6). E4 solo agrega los modificadores de prompt en archivos ya refactorizados."
+  - epic: 3
+    name: "Coherencia curricular"
+    rationale: "Implementa el Paso 0 (escaneo de temas previos). Funcionalidad independiente de E4; puede ejecutarse en paralelo conceptual pero se deja aquí para mantener E4 continuo."
+  - epic: 5
+    name: "Renovación de año anterior"
+    rationale: "Depende de topic-extract.md funcional (E2) y de que CP1/CP2 estén implementados (E1). Es el epic más independiente y se deja al final para no bloquear el flujo principal."
+
+current_sprint:
+  sprint_number: 1
+  focus: "E1 — Pipeline base v3"
+  start: '2026-05-23'
+
+epics:
+  - id: "E1"
+    name: "Pipeline base v3"
+    status: not-started
+    sprint: 1
+    stories:
+      - id: "1.1"
+        title: "Crear workflow topic-cycle-v3 con estructura de 7 pasos"
+        status: not-started
+        priority: critical
+      - id: "1.2"
+        title: "Crear agente topic-designer-v3"
+        status: not-started
+        priority: critical
+      - id: "1.3"
+        title: "Implementar persistencia de estado del pipeline"
+        status: not-started
+        priority: critical
+      - id: "1.4"
+        title: "Implementar Checkpoint 1 — aprobación de topic-extract.md"
+        status: not-started
+        priority: critical
+      - id: "1.5"
+        title: "Implementar Checkpoint 2 — aprobación del plan de generación"
+        status: not-started
+        priority: critical
+
+  - id: "E2"
+    name: "Bibliographic-first"
+    status: not-started
+    sprint: 2
+    stories:
+      - id: "2.1"
+        title: "Crear esquema formal topic-extract-schema.yaml"
+        status: not-started
+        priority: high
+      - id: "2.2"
+        title: "Implementar Paso 1a — extracción ChromaDB libro principal con fail-fast"
+        status: not-started
+        priority: high
+      - id: "2.3"
+        title: "Implementar Paso 1b — enriquecimiento con libros secundarios"
+        status: not-started
+        priority: high
+      - id: "2.4"
+        title: "Implementar Paso 1c — web research de tendencias académicas"
+        status: not-started
+        priority: high
+      - id: "2.5"
+        title: "Implementar generación completa de topic-extract.md con validaciones"
+        status: not-started
+        priority: high
+
+  - id: "E6"
+    name: "Agentes downstream"
+    status: not-started
+    sprint: 3
+    stories:
+      - id: "6.1"
+        title: "Agregar lógica condicional v3 a class-writer.md"
+        status: not-started
+        priority: high
+      - id: "6.2"
+        title: "Agregar lógica condicional v3 a study-guide-writer.md"
+        status: not-started
+        priority: high
+      - id: "6.3"
+        title: "Agregar lógica condicional v3 a create-teacher-guide.md"
+        status: not-started
+        priority: high
+      - id: "6.4"
+        title: "Implementar mecanismo de backup de artefactos v2 en todos los agentes downstream"
+        status: not-started
+        priority: medium
+
+  - id: "E4"
+    name: "Niveles de densidad"
+    status: not-started
+    sprint: 4
+    stories:
+      - id: "4.1"
+        title: "Implementar parámetro --nivel y propagación al estado del pipeline"
+        status: not-started
+        priority: high
+      - id: "4.2"
+        title: "Implementar modificadores de densidad en class-writer (niveles 1, 2 y 3)"
+        status: not-started
+        priority: high
+      - id: "4.3"
+        title: "Implementar propagación de nivel en study-guide-writer"
+        status: not-started
+        priority: medium
+
+  - id: "E3"
+    name: "Coherencia curricular"
+    status: not-started
+    sprint: 5
+    stories:
+      - id: "3.1"
+        title: "Implementar Paso 0 — escaneo del registro de temas dados"
+        status: not-started
+        priority: medium
+      - id: "3.2"
+        title: "Implementar reporte de coherencia curricular con formato estándar"
+        status: not-started
+        priority: medium
+      - id: "3.3"
+        title: "Capturar estrategia de superposición y propagarla al topic-extract.md"
+        status: not-started
+        priority: medium
+
+  - id: "E5"
+    name: "Renovación de año anterior"
+    status: not-started
+    sprint: 6
+    stories:
+      - id: "5.1"
+        title: "Implementar procesamiento del parámetro --base"
+        status: not-started
+        priority: medium
+      - id: "5.2"
+        title: "Implementar análisis comparativo filminas previas vs topic-extract.md"
+        status: not-started
+        priority: medium
+      - id: "5.3"
+        title: "Implementar reporte de renovación y priorización en generación"
+        status: not-started
+        priority: medium
+
+summary:
+  total_epics: 6
+  total_stories: 23
+  stories_not_started: 23
+  stories_in_progress: 0
+  stories_completed: 0
+  estimated_sprints: 6
+  next_story: "1.1"
+  next_story_title: "Crear workflow topic-cycle-v3 con estructura de 7 pasos"
