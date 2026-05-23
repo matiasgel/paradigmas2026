@@ -24,35 +24,35 @@ implementation_order:
     rationale: "Depende de topic-extract.md funcional (E2) y de que CP1/CP2 estén implementados (E1). Es el epic más independiente y se deja al final para no bloquear el flujo principal."
 
 current_sprint:
-  sprint_number: 1
-  focus: "E1 — Pipeline base v3"
+  sprint_number: 2
+  focus: "E2 — Bibliographic-first"
   start: '2026-05-23'
 
 epics:
   - id: "E1"
     name: "Pipeline base v3"
-    status: not-started
+    status: completed
     sprint: 1
     stories:
       - id: "1.1"
         title: "Crear workflow topic-cycle-v3 con estructura de 7 pasos"
-        status: not-started
+        status: completed
         priority: critical
       - id: "1.2"
         title: "Crear agente topic-designer-v3"
-        status: not-started
+        status: completed
         priority: critical
       - id: "1.3"
         title: "Implementar persistencia de estado del pipeline"
-        status: not-started
+        status: completed
         priority: critical
       - id: "1.4"
         title: "Implementar Checkpoint 1 — aprobación de topic-extract.md"
-        status: not-started
+        status: completed
         priority: critical
       - id: "1.5"
         title: "Implementar Checkpoint 2 — aprobación del plan de generación"
-        status: not-started
+        status: completed
         priority: critical
 
   - id: "E2"
