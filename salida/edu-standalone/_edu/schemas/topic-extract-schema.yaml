@@ -88,6 +88,13 @@ secciones:
         type: string
         required: true
         enum: ["recordar", "comprender", "aplicar", "analizar", "evaluar"]
+      nivel_minimo:
+        type: integer
+        required: false
+        nullable: true
+        enum: [1, 2, 3]
+        default: 1
+        description: "Nivel mínimo en el que incluir este concepto. null/1=todos los niveles, 2=solo N2+, 3=solo N3"
 
   ejemplos-bibliograficos:
     required: true

@@ -96,6 +96,12 @@ status: "in-progress"               # "in-progress" | "completed" | "failed"
    - Si existe → leer y reanudar (saltar al primer paso no completado)
    - Si no existe → crear con valores iniciales (ver esquema arriba)
 5. Mostrar mensaje de bienvenida con tópico, libro, nivel y estado
+6. **Escaneo de coherencia curricular** (ver `tasks/coherencia-curricular.md`):
+   - Escanear carpetas hermanas en `{topics_folder}/` que tengan `topic-extract.md` ya aprobado
+   - Identificar conceptos solapados mediante comparación de `## conceptos-clave` con el tópico actual
+   - Construir lista preliminar de superposiciones detectadas
+   - Si se detectan solapamientos de nivel "alto" → informar al docente con el reporte de coherencia
+   - Guardar lista en contexto de sesión `{superposiciones_previas}` para usar en Paso 1c y CP1
 
 **Output:** `.pipeline-v3-state.yaml` creado o leído. Variables de sesión: `{topic}`, `{libro}`, `{nivel}`, `{topic_folder}`
 **Al completar:** Agregar `"paso-0"` a `pasos_completados` y actualizar `ultimo_paso_en`
@@ -212,8 +218,11 @@ status: "in-progress"               # "in-progress" | "completed" | "failed"
 
 **Acciones:**
 1. Leer `topic-extract.md` → extraer lista de conceptos a cubrir
-2. Si `--base` fue especificado → ejecutar análisis comparativo filminas previas vs topic-extract.md:
-   - Categorizar filminas previas: `conservar` | `actualizar` | `eliminar` | `nueva`
+2. Si `--base` fue especificado → ejecutar análisis comparativo filminas previas vs topic-extract.md (ver `tasks/renovacion-anio-anterior.md`):
+   - Leer filminas previas del path especificado
+   - Categorizar cada filmina: `conservar` | `actualizar` | `eliminar` | `nueva`
+   - Presentar reporte de renovación al docente (antes del plan)
+   - Generar `{topic_folder}/filminas-base-acciones.yaml` con acciones por filmina
    - Incluir análisis en el plan
 3. Generar lista numerada de filminas con:
    - Número, título descriptivo
