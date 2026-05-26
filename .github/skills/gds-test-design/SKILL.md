@@ -1,6 +1,7 @@
 ---
 name: gds-test-design
 description: 'Create comprehensive game test scenarios. Use when the user says "test design" or "design tests"'
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 ---
 
 # Game Test Design

@@ -1,6 +1,7 @@
 ---
 name: bmad-testarch-trace
 description: 'Generate traceability matrix and quality gate decision. Use when the user says "lets create traceability matrix" or "I want to analyze test coverage"'
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 ---
 
 # Coverage Traceability & Quality Gate

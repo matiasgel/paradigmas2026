@@ -1,6 +1,7 @@
 ---
 name: gds-create-epics-and-stories
 description: 'Create Epics and Stories from GDD requirements for development. Use when the user says "create epics" or "create stories"'
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 ---
 
 # Create Epics and Stories

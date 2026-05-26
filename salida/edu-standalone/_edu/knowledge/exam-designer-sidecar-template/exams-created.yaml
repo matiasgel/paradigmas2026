@@ -1,0 +1,23 @@
+# Registro de Exámenes — Exam Designer Sidecar
+# Cursada: {course_id}
+# Generado automáticamente por el agente exam-designer (Lic. Santiago)
+
+exams: []
+
+# Estructura de cada entrada:
+# - exam_type: "parcial-1"        # parcial-1 | parcial-2 | parcial-3 | final
+#   exam_number: 1
+#   course_id: "leng-2026"
+#   topics: ["01-intro", "02-tipos"]
+#   total_questions: 20
+#   total_points: 100
+#   duration_minutes: 120
+#   bloom_profile: "default"
+#   status: "exported"            # started | blueprint-pending | blueprint-approved | questions-generated | assembled | approved | exported
+#   exported_at: "2026-04-10"
+#   files:
+#     blueprint: "evaluaciones/parcial-1/blueprint.md"
+#     gift: "evaluaciones/parcial-1/examen.gift"
+#     forms: "evaluaciones/parcial-1/examen-forms.md"
+#     pdf: "evaluaciones/parcial-1/examen.pdf"
+#     markdown: "evaluaciones/parcial-1/examen-completo.md"

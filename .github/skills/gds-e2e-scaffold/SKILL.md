@@ -1,6 +1,7 @@
 ---
 name: gds-e2e-scaffold
 description: 'Scaffold end-to-end testing infrastructure. Use when the user says "e2e scaffold" or "set up e2e testing"'
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 ---
 
 # E2E Test Infrastructure Scaffold Workflow

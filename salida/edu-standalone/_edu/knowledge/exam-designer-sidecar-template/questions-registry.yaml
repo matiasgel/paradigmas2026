@@ -1,0 +1,15 @@
+# Registro de Preguntas — Anti-Repetición Cross-Exam
+# Cursada: {course_id}
+# Generado automáticamente por el agente exam-designer (Lic. Santiago)
+# Propósito: prevenir reutilización de preguntas entre parciales y final
+
+questions: []
+
+# Estructura de cada entrada:
+# - id: "q-01-intro-comprender-001"   # q-{topic_id}-{bloom_level}-{NNN}
+#   topic: "01-intro"
+#   bloom: "comprender"               # recordar | comprender | aplicar | analizar | evaluar | crear
+#   text_preview: "Primeros 80 caracteres del enunciado de la pregunta..."
+#   exam_type: "parcial-1"
+#   course_id: "leng-2026"
+#   created_at: "2026-04-10"
