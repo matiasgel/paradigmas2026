@@ -2,6 +2,7 @@
 ## Tipos de Datos y Sistemas de Tipos
 
 > **Estado:** APROBADO — filminas.md y minuta.md generados 2026-05-25
+> **Revisión:** 2026-05-26 — Ajuste de autocontenido post-publicación (ver sección al final)
 > **Creado:** 2026-05-25
 > **Agente:** Lic. Marcos 🗂️ (Topic Designer)
 > **Fuente principal:** Sebesta, *Concepts of Programming Languages* 12ª ed., Cap. 6 "Data Types" (pp. 259–324)
@@ -658,3 +659,49 @@ inline fun <reified T> esInstanciaDe(obj: Any): Boolean = obj is T
 > **Lenguaje principal:** TypeScript es el hilo conductor de todos los ejemplos. Los contrastes con C, Haskell, Kotlin y Python se hacen en comparaciones puntuales, no como narrativas paralelas. Kotlin aparece como contraste cuando aporta construcciones sin equivalente directo en TypeScript (sealed class, reified, data class copy()).
 
 > **Estado:** BORRADOR. Requiere revisión y aprobación del docente antes de avanzar a generación de clase.
+
+---
+
+## Revisi�n Post-publicaci�n � 2026-05-26
+
+### Feedback del docente
+Las filminas tienen demasiado c�digo sin explicaci�n profunda de qu� significan las construcciones.
+Ejemplo concreto: Int32Array no explicaba que los datos se almacenan en binario puro.
+**Principio aplicado:** Las filminas deben ser **autocontenidas** � el alumno no necesita recursos externos para entender el c�digo mostrado.
+
+### Cambios aplicados en filminas.md
+
+| Slide | Cambio |
+|-------|--------|
+| **[F-05]** Enteros | Agregado bloque visual de complemento a 2 � muestra patr�n de bits para +42, -1, -42 con explicaci�n del bit de signo y el rango asim�trico |
+| **[F-06]** IEEE 754 | Agregado diagrama ASCII de la estructura de 64 bits (signo/exponente/mantisa) + explicaci�n de por qu� 0.1 no tiene representaci�n exacta en base 2 |
+| **[F-20]** Arrays TS | Comentario de Int32Array expandido para indicar almacenamiento binario, bytes exactos y uso de ArrayBuffer |
+| **[F-20b]** *(nuevo)* | Slide dedicado a TypedArrays: contraste boxing vs. binario, tabla completa de tipos con bits y rangos, ejemplo con ArrayBuffer expl�cito y casos de uso |
+| **[F-25]** C union | Agregado bloque que explica qu� es un "bit pattern" � muestra los 4 bytes de 42 como int32 y qu� pasa al releerlos como float IEEE 754 |
+
+### Total slides despu�s de revisi�n
+- Antes: 58 slides (F-00 a F-57 + portada)
+- Despu�s: 59 slides (F-00 a F-58 + portada, con F-20b nuevo)
+
+---
+
+## Revisi�n Post-publicaci�n � 2026-05-26
+
+### Feedback del docente
+Las filminas tienen demasiado c�digo sin explicaci�n profunda de qu� significan las construcciones.
+Ejemplo concreto: Int32Array no explicaba que los datos se almacenan en binario puro.
+**Principio aplicado:** Las filminas deben ser **autocontenidas** � el alumno no necesita recursos externos para entender el c�digo mostrado.
+
+### Cambios aplicados en filminas.md
+
+| Slide | Cambio |
+|-------|--------|
+| **[F-05]** Enteros | Agregado bloque visual de complemento a 2 � muestra patr�n de bits para +42, -1, -42 con explicaci�n del bit de signo y el rango asim�trico |
+| **[F-06]** IEEE 754 | Agregado diagrama ASCII de la estructura de 64 bits (signo/exponente/mantisa) + explicaci�n de por qu� 0.1 no tiene representaci�n exacta en base 2 |
+| **[F-20]** Arrays TS | Comentario de Int32Array expandido para indicar almacenamiento binario, bytes exactos y uso de ArrayBuffer |
+| **[F-20b]** *(nuevo)* | Slide dedicado a TypedArrays: contraste boxing vs. binario, tabla completa de tipos con bits y rangos, ejemplo con ArrayBuffer expl�cito y casos de uso |
+| **[F-25]** C union | Agregado bloque que explica qu� es un "bit pattern" � muestra los 4 bytes de 42 como int32 y qu� pasa al releerlos como float IEEE 754 |
+
+### Total slides despu�s de revisi�n
+- Antes: 58 slides (F-00 a F-57 + portada)
+- Despu�s: 59 slides (F-00 a F-58 + portada, con F-20b nuevo)

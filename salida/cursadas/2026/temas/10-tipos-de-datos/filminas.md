@@ -140,6 +140,23 @@ x = 1          -- Haskell: Num a => a (polimórfico, determinado en uso)
 - Para enteros grandes: `bigint` con literales `n` — `const x = 2n ** 53n`
 - `Number.MAX_SAFE_INTEGER` = 2⁵³ − 1
 
+## Representación binaria — complemento a 2
+
+Los enteros se almacenan como patrones de bits. Ejemplo con 32 bits:
+
+```
+Valor │ Binario (32 bits, complemento a 2)
+──────┼───────────────────────────────────────────
+  +1  │ 0000 0000 0000 0000 0000 0000 0000 0001
+ +42  │ 0000 0000 0000 0000 0000 0000 0010 1010
+  -1  │ 1111 1111 1111 1111 1111 1111 1111 1111
+ -42  │ 1111 1111 1111 1111 1111 1111 1101 0110
+```
+
+> El bit más significativo (bit 31) es el **signo**: `0` = positivo, `1` = negativo.  
+> Por esto el rango no es simétrico: de **−2.147.483.648** a **+2.147.483.647** (2³¹ negativos, 2³¹−1 positivos).  
+> En C: desbordamiento de `int` es **undefined behavior** — el compilador puede hacer cualquier cosa.
+
 ---
 
 ### [F-06] Tipos numéricos — Floating Point
@@ -166,6 +183,24 @@ console.log(Math.abs(0.1 + 0.2 - 0.3) < Number.EPSILON)  // true ✓
 - TypeScript: **no tiene** decimal nativo → usar `decimal.js` para finanzas
 - Contraste: `BigDecimal` en Java/Kotlin; `decimal` en C#
 - **Python:** `from decimal import Decimal` — disponible pero no default
+
+## Estructura de bits de `double` (IEEE 754, 64 bits)
+
+```
+ Bit 63     Bits 62–52       Bits 51–0
+┌────────┬─────────────┬──────────────────────────────────────┐
+│ Signo  │  Exponente  │          Mantisa (fracción)          │
+│ 1 bit  │   11 bits   │              52 bits                 │
+└────────┴─────────────┴──────────────────────────────────────┘
+```
+
+- **Signo:** `0` = positivo, `1` = negativo
+- **Exponente:** desplazado en 1023 — permite representar potencias de 2 muy grandes o pequeñas
+- **Mantisa:** la parte fraccional — `1.mantisa × 2^(exponente−1023)`
+
+> Ejemplo: `0.1` en decimal no tiene representación exacta en base 2 (como `1/3` en decimal).  
+> El número más cercano es `0.1000000000000000055511151231257827021181583404541015625`.  
+> **Esta imprecisión inherente** explica por qué `0.1 + 0.2 ≠ 0.3` en cualquier lenguaje que use IEEE 754.
 
 ---
 
@@ -551,8 +586,11 @@ lista.push(4)                             // [1, 2, 3, 4]
 const fijo: number[] = new Array(5).fill(0).map((_, i) => i * 2)
 // [0, 2, 4, 6, 8]
 
-// 3. Typed Array — sin overhead de boxing (para rendimiento)
+// 3. Typed Array — Int32Array: almacena enteros de 32 bits en BINARIO PURO
+//    Sin boxing: cada elemento ocupa exactamente 4 bytes (no un objeto JS)
+//    Internamente usa un ArrayBuffer — bloque de bytes crudos en memoria
 const binario: Int32Array = new Int32Array([10, 20, 30])
+// En memoria: [0x0000000A, 0x00000014, 0x0000001E] — 12 bytes totales
 
 // 4. Readonly — inmutable (contraste con lista)
 const constante: ReadonlyArray<number> = [1, 2, 3]
@@ -567,6 +605,55 @@ val lista = mutableListOf(1, 2, 3)
 lista.add(4)
 val inmutable: List<Int> = listOf(1, 2, 3)
 ```
+
+---
+
+### [F-20b] TypedArrays — almacenamiento binario directo
+
+@tipo: concepto-mixto
+
+# ¿Por qué `Int32Array` no es lo mismo que `number[]`?
+
+## El problema con `number[]`
+En JavaScript/TypeScript, cada `number` es siempre un `double` IEEE 754 de 64 bits,
+envuelto en un objeto del motor V8 (*boxed*). Esto tiene un costo:
+
+```typescript
+const arr: number[] = [10, 20, 30]
+// Internamente: 3 objetos JS en el heap — cada elemento ~32 bytes + overhead
+```
+
+## TypedArray: memoria binaria contigua
+
+```typescript
+const binario: Int32Array = new Int32Array([10, 20, 30])
+// Internamente: un ArrayBuffer de 12 bytes (3 × 4 bytes), sin boxing
+// Los bytes en memoria: [0A 00 00 00 | 14 00 00 00 | 1E 00 00 00] (little-endian)
+
+// También se puede crear desde un ArrayBuffer explícito:
+const buffer = new ArrayBuffer(12)   // 12 bytes de memoria cruda
+const view   = new Int32Array(buffer)
+view[0] = 10   // escribe 0x0000000A en los bytes 0–3
+view[1] = 20   // escribe 0x00000014 en los bytes 4–7
+```
+
+## Familia de TypedArrays
+
+| Tipo | Bits | Rango | Equivalente C |
+|------|------|-------|---------------|
+| `Int8Array` | 8 | −128 a +127 | `int8_t` |
+| `Uint8Array` | 8 | 0 a 255 | `uint8_t` |
+| `Int16Array` | 16 | −32.768 a +32.767 | `int16_t` |
+| `Int32Array` | 32 | −2.147.483.648 a +2.147.483.647 | `int32_t` |
+| `Uint32Array` | 32 | 0 a 4.294.967.295 | `uint32_t` |
+| `Float32Array` | 32 | ±3.4 × 10³⁸ (precisión simple) | `float` |
+| `Float64Array` | 64 | ±1.8 × 10³⁰⁸ — igual que `number` | `double` |
+
+## ¿Cuándo usar TypedArrays?
+- Procesamiento de imagen (`Uint8ClampedArray` para píxeles en Canvas)
+- WebGL / shaders — datos de GPU requieren tipos binarios exactos
+- Comunicación binaria: WebSocket, FileReader, protocolos de red
+- Algoritmos numéricos de alto rendimiento (memoria contigua = menos cache misses)
 
 ---
 
@@ -723,6 +810,25 @@ printf("%f\n", d.f);  // ← Lee basura — interpretación incorrecta del bit p
 - El programador debe recordar qué campo fue escrito
 - No hay verificación en compilación ni en runtime
 - Fuente de bugs difíciles de detectar
+
+## ¿Qué es un "bit pattern"?
+
+Cuando se escribe `d.i = 42`, los 4 bytes de la unión toman el patrón binario del entero 42:
+
+```
+42 como int32 (complemento a 2):
+┌────────┬────────┬────────┬────────┐
+│00000000│00000000│00000000│00101010│   ← d.i = 42
+└────────┴────────┴────────┴────────┘
+```
+
+Al leer `d.f`, esos mismos 4 bytes se **reinterpretan** como un float IEEE 754:
+- No se convierte el valor — se leen los mismos bits con otra semántica
+- El patrón `00000000 00000000 00000000 00101010` es un float denormalizado ≈ `5.88 × 10⁻³⁹`
+- El resultado es **basura aritmética** — el programa continúa sin lanzar ningún error
+
+> Este es el peligro de las uniones en C: el compilador no sabe qué campo está "activo".
+> Las uniones discriminadas (TypeScript `kind`, Kotlin `sealed`) resuelven esto al nivel del sistema de tipos.
 
 ---
 
