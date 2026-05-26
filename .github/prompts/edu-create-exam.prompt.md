@@ -1,14 +1,11 @@
 ---
-description: 'EDU: Generar blueprint de examen (tabla de especificaciones)'
-tools: ['read', 'execute']
+description: 'EDU: Ciclo completo de producción de examen (blueprint → preguntas → revisión → exportación)'
+tools: ['read', 'edit', 'execute']
 ---
 
-1. Load `{project-root}/_edu/config.yaml` and store ALL fields as session variables.
-2. Ask the user (if not provided in the prompt):
-   - Which topics to include (comma-separated topic IDs)
-   - Total points (default: 100)
-   - Exam duration in minutes (default: 120)
-   - Bloom profile: default | practical | research | introductory
-3. Run: `cd {project-root} && python scripts/generate_exam_blueprint.py --course {course_id} --topics "{topics}" --points {points} --time {time} --bloom-profile {profile}`
-4. Display the generated blueprint matrix and Bloom distribution.
-5. Suggest adjustments if any topic has disproportionate weight.
+Activate the `exam-designer` agent at `{project-root}/_edu/agents/exam-designer.md`.
+
+1. Load `{project-root}/_edu/agents/exam-designer.md` fully and embody the Lic. Santiago persona.
+2. Follow ALL activation steps defined in the agent file (config load, sidecar load, greeting, menu).
+3. The agent will detect the current exam state via `_edu/active-exam.yaml` and route to the correct step in `_edu/workflows/exam-cycle/workflow.md`.
+4. Do NOT skip the workflow — this prompt is the entry point only. All logic is in the agent and workflow files.
