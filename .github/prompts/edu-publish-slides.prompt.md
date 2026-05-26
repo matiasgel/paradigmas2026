@@ -69,35 +69,46 @@ Procedimiento DETERMINISTA:
 > ⚠️ **NUNCA** nombrar conceptos técnicos en prompts de imagen. Usar solo geometría, colores y posiciones.
 > Ver guía anti-Bug 3 en `_edu/templates/prompt-imagen-guide.md`.
 
-### Validación obligatoria pre-ejecución
+### Ejecución del pipeline (publish_loop obligatorio)
 
-Después de generar el plan JSON y **antes** de ejecutar el pipeline:
+> ⚠️ **NUNCA llamar `slides_pipeline.py` directamente.** Usar siempre `publish_loop.py`.
 
+Después de generar el plan JSON, ejecutar en terminal **sin preguntas**:
+
+```bash
+python {project-root}/salida/edu-standalone/scripts/publish_loop.py {topic_folder} --course {course_id}
+```
+
+`publish_loop.py` orquesta automáticamente:
+
+| Fase | Descripción | Salida |
+|------|-------------|--------|
+| FASE 1 | Reparación schema (hasta 3 intentos con repair_plan.py) | Plan válido |
+| FASE 2 | Coherencia: validate_plan + WCAG + cognitiva + composición + facts + drift semántico | Informe de coherencia |
+| FASE 3 | Publicación: slides_pipeline.py | `slides/slides-url.txt` |
+| FASE 4 | Post-publicación: thumbnails + memory.db | `publish-report.json` |
+
+**Exit codes:**
+- `0` → publicación exitosa
+- `1` → errores de validación (ver reporte)
+- `2` → max intentos de reparación → revisión humana
+- `3` → FASE 2 falló: coherencia bloqueada (revisar `publish-report.json`)
+
+**Opciones útiles:**
+```bash
+python publish_loop.py {topic_folder} --course {course_id} --dry-run      # validar sin publicar
+python publish_loop.py {topic_folder} --course {course_id} --skip-phase2  # solo schema + publicar
+python publish_loop.py {topic_folder} --course {course_id} --skip-facts   # omitir fact_verifier
+```
+
+**Solo para re-validar el plan sin publicar:**
 ```bash
 python {project-root}/salida/edu-standalone/scripts/validate_plan.py {topic_folder}
 ```
 
-- Exit code `0` → plan válido, continuar.
-- Exit code `1` → errores listados por campo (ej: `F-12.image.prompt vacío`). Corregir **solo** los campos reportados. Máximo 3 intentos.
-
-Una vez validado, ejecutar en terminal **sin preguntas**:
-
+**Solo para regenerar plan desde filminas.md preservando imágenes ya subidas a Drive:**
 ```bash
-python {project-root}/salida/edu-standalone/scripts/slides_pipeline.py {topic_folder}
-```
-
-| Fase | Descripción | Salida |
-|------|-------------|--------|
-| 1. Load plan | Lee `slides/plan-filminas-{tema}.json` | Plan cargado |
-| 2. Assets | Genera imágenes con Gemini API, renderiza tablas como PNG, sube a Drive | `slides/assets/` + Drive IDs |
-| 3. Publish | Crea presentación con layout, imágenes, tablas, código y formato semántico | `slides/slides-url.txt` |
-
-### Opciones de ejecución parcial
-
-```bash
-python slides_pipeline.py {topic_folder} --assets-only
-python slides_pipeline.py {topic_folder} --publish-only
-python slides_pipeline.py {topic_folder}
+python {project-root}/salida/edu-standalone/scripts/refresh_plan.py {topic_folder}
 ```
 
 ### Output final
