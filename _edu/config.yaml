@@ -45,6 +45,10 @@ cognitive_validation_enabled: true
 topics_folder: "salida/cursadas/2026/temas"    # carpeta donde viven los temas de la cursada activa
 plan_folder: "salida/cursadas/2026"            # carpeta donde viven plan-minimo.md y plan-borrador.md
 
+# --- Gemini Image Strategy ---
+gemini_image_strategy:
+  max_per_presentation: 30   # T10 tiene 25 slides con imagen (concepto-abstracto x13, diagrama x5, socratica x5, portada x1, cierre x1)
+
 # --- Professor Profiles ---
 # Available: profesor-teorico, profesor-practico, profesor-socratico, profesor-flipped, profesor-investigador
 # Each profile affects cognitive density metrics used by academic-guardrail agent

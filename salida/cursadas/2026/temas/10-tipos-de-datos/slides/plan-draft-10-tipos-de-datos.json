@@ -4,10 +4,10 @@
     "topic_id": "10-tipos-de-datos",
     "title": "Tipos de Datos y Sistemas de Tipos",
     "source": "filminas.md",
-    "generated_at": "2026-05-25T23:04:44",
+    "generated_at": "2026-05-26T13:14:04",
     "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
-    "topics_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas",
-    "topic_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas/10-tipos-de-datos",
+    "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
+    "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\10-tipos-de-datos",
     "design_system_path": "_edu/slides-config.yaml",
     "pipeline_runtime_path": "_edu/slides-pipeline.json",
     "schema_registry_path": "_edu/schemas/schema-registry.json"
@@ -15,8 +15,8 @@
   "summary": {
     "total_slides": 59,
     "images_planned": 27,
-    "tables_planned": 24,
-    "code_slides": 32,
+    "tables_planned": 25,
+    "code_slides": 33,
     "status": "DRAFT",
     "pending_types": 0,
     "pending_prompts": 16,
@@ -26,8 +26,8 @@
       "diagrama": 5,
       "concepto-abstracto": 13,
       "tabla-comparativa": 16,
-      "concepto-mixto": 4,
-      "codigo": 13,
+      "concepto-mixto": 5,
+      "codigo": 12,
       "timeline": 1,
       "cierre": 1
     }
@@ -344,9 +344,27 @@
               "level": 0
             }
           ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Representación binaria — complemento a 2"
+        },
+        {
+          "type": "text",
+          "content": "Los enteros se almacenan como patrones de bits. Ejemplo con 32 bits:"
+        },
+        {
+          "type": "text",
+          "content": "> El bit más significativo (bit 31) es el **signo**: `0` = positivo, `1` = negativo.  \n> Por esto el rango no es simétrico: de **−2.147.483.648** a **+2.147.483.647** (2³¹ negativos, 2³¹−1 positivos).  \n> En C: desbordamiento de `int` es **undefined behavior** — el compilador puede hacer cualquier cosa."
         }
       ],
-      "code_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "Valor │ Binario (32 bits, complemento a 2)\n──────┼───────────────────────────────────────────\n  +1  │ 0000 0000 0000 0000 0000 0000 0000 0001\n +42  │ 0000 0000 0000 0000 0000 0000 0010 1010\n  -1  │ 1111 1111 1111 1111 1111 1111 1111 1111\n -42  │ 1111 1111 1111 1111 1111 1111 1101 0110"
+        }
+      ],
       "tables": [
         "| Lenguaje | Tipo | Tamaño | Nota |\n|----------|------|--------|------|\n| C | `int` / `long` | 32/64 bits | No hay GC; overflow silencioso |\n| Java/Kotlin | `Int` / `Long` | 32/64 bits | JVM; checked exceptions |\n| TypeScript | `number` | 64-bit IEEE 754 | **No distingue entero/float** |\n| TypeScript | `bigint` | Ilimitado | `9007199254740991n` |\n| Python | `int` | Ilimitado | Objeto; GC |"
       ],
@@ -432,12 +450,43 @@
               "level": 0
             }
           ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Estructura de bits de `double` (IEEE 754, 64 bits)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Signo:** `0` = positivo, `1` = negativo",
+              "level": 0
+            },
+            {
+              "content": "**Exponente:** desplazado en 1023 — permite representar potencias de 2 muy grandes o pequeñas",
+              "level": 0
+            },
+            {
+              "content": "**Mantisa:** la parte fraccional — `1.mantisa × 2^(exponente−1023)`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "> Ejemplo: `0.1` en decimal no tiene representación exacta en base 2 (como `1/3` en decimal).  \n> El número más cercano es `0.1000000000000000055511151231257827021181583404541015625`.  \n> **Esta imprecisión inherente** explica por qué `0.1 + 0.2 ≠ 0.3` en cualquier lenguaje que use IEEE 754."
         }
       ],
       "code_blocks": [
         {
           "lang": "typescript",
           "content": "console.log(0.1 + 0.2)          // 0.30000000000000004\nconsole.log(0.1 + 0.2 === 0.3)  // false ← ¡No usar == con floats!\nconsole.log(Math.abs(0.1 + 0.2 - 0.3) < Number.EPSILON)  // true ✓"
+        },
+        {
+          "lang": "text",
+          "content": " Bit 63     Bits 62–52       Bits 51–0\n┌────────┬─────────────┬──────────────────────────────────────┐\n│ Signo  │  Exponente  │          Mantisa (fracción)          │\n│ 1 bit  │   11 bits   │              52 bits                 │\n└────────┴─────────────┴──────────────────────────────────────┘"
         }
       ],
       "tables": [],
@@ -1175,7 +1224,7 @@
     },
     {
       "id": "F-20",
-      "type": "codigo",
+      "type": "concepto-mixto",
       "title": "Código completo — Arrays en TypeScript",
       "subtitle": "Arrays en TypeScript — cuatro formas",
       "body_blocks": [
@@ -1183,24 +1232,90 @@
           "type": "heading",
           "level": 2,
           "content": "Contraste Kotlin"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "content": "[F-20b] TypedArrays — almacenamiento binario directo"
+        },
+        {
+          "type": "heading",
+          "level": 1,
+          "content": "¿Por qué `Int32Array` no es lo mismo que `number[]`?"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El problema con `number[]`"
+        },
+        {
+          "type": "text",
+          "content": "En JavaScript/TypeScript, cada `number` es siempre un `double` IEEE 754 de 64 bits,\nenvuelto en un objeto del motor V8 (*boxed*). Esto tiene un costo:"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "TypedArray: memoria binaria contigua"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Familia de TypedArrays"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Cuándo usar TypedArrays?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Procesamiento de imagen (`Uint8ClampedArray` para píxeles en Canvas)",
+              "level": 0
+            },
+            {
+              "content": "WebGL / shaders — datos de GPU requieren tipos binarios exactos",
+              "level": 0
+            },
+            {
+              "content": "Comunicación binaria: WebSocket, FileReader, protocolos de red",
+              "level": 0
+            },
+            {
+              "content": "Algoritmos numéricos de alto rendimiento (memoria contigua = menos cache misses)",
+              "level": 0
+            }
+          ]
         }
       ],
       "code_blocks": [
         {
           "lang": "typescript",
-          "content": "// 1. Array dinámico (heap flexible)\nconst lista: number[] = [1, 2, 3]\nlista.push(4)                             // [1, 2, 3, 4]\n\n// 2. Array de tamaño conocido (heap fijo tipado)\nconst fijo: number[] = new Array(5).fill(0).map((_, i) => i * 2)\n// [0, 2, 4, 6, 8]\n\n// 3. Typed Array — sin overhead de boxing (para rendimiento)\nconst binario: Int32Array = new Int32Array([10, 20, 30])\n\n// 4. Readonly — inmutable (contraste con lista)\nconst constante: ReadonlyArray<number> = [1, 2, 3]\n// constante.push(4) ← ERROR de compilación ✓"
+          "content": "// 1. Array dinámico (heap flexible)\nconst lista: number[] = [1, 2, 3]\nlista.push(4)                             // [1, 2, 3, 4]\n\n// 2. Array de tamaño conocido (heap fijo tipado)\nconst fijo: number[] = new Array(5).fill(0).map((_, i) => i * 2)\n// [0, 2, 4, 6, 8]\n\n// 3. Typed Array — Int32Array: almacena enteros de 32 bits en BINARIO PURO\n//    Sin boxing: cada elemento ocupa exactamente 4 bytes (no un objeto JS)\n//    Internamente usa un ArrayBuffer — bloque de bytes crudos en memoria\nconst binario: Int32Array = new Int32Array([10, 20, 30])\n// En memoria: [0x0000000A, 0x00000014, 0x0000001E] — 12 bytes totales\n\n// 4. Readonly — inmutable (contraste con lista)\nconst constante: ReadonlyArray<number> = [1, 2, 3]\n// constante.push(4) ← ERROR de compilación ✓"
         },
         {
           "lang": "kotlin",
           "content": "val fijo = IntArray(5) { it * 2 }        // [0, 2, 4, 6, 8]\nval lista = mutableListOf(1, 2, 3)\nlista.add(4)\nval inmutable: List<Int> = listOf(1, 2, 3)"
+        },
+        {
+          "lang": "typescript",
+          "content": "const arr: number[] = [10, 20, 30]\n// Internamente: 3 objetos JS en el heap — cada elemento ~32 bytes + overhead"
+        },
+        {
+          "lang": "typescript",
+          "content": "const binario: Int32Array = new Int32Array([10, 20, 30])\n// Internamente: un ArrayBuffer de 12 bytes (3 × 4 bytes), sin boxing\n// Los bytes en memoria: [0A 00 00 00 | 14 00 00 00 | 1E 00 00 00] (little-endian)\n\n// También se puede crear desde un ArrayBuffer explícito:\nconst buffer = new ArrayBuffer(12)   // 12 bytes de memoria cruda\nconst view   = new Int32Array(buffer)\nview[0] = 10   // escribe 0x0000000A en los bytes 0–3\nview[1] = 20   // escribe 0x00000014 en los bytes 4–7"
         }
       ],
-      "tables": [],
+      "tables": [
+        "| Tipo | Bits | Rango | Equivalente C |\n|------|------|-------|---------------|\n| `Int8Array` | 8 | −128 a +127 | `int8_t` |\n| `Uint8Array` | 8 | 0 a 255 | `uint8_t` |\n| `Int16Array` | 16 | −32.768 a +32.767 | `int16_t` |\n| `Int32Array` | 32 | −2.147.483.648 a +2.147.483.647 | `int32_t` |\n| `Uint32Array` | 32 | 0 a 4.294.967.295 | `uint32_t` |\n| `Float32Array` | 32 | ±3.4 × 10³⁸ (precisión simple) | `float` |\n| `Float64Array` | 64 | ±1.8 × 10³⁰⁸ — igual que `number` | `double` |"
+      ],
       "layout": {
         "title": "full-title",
-        "body": "subtitle-only",
+        "body": "left-middle",
         "image": "none",
-        "code": "full-bottom",
+        "code": "right-half",
         "table": "none"
       },
       "image": {
@@ -1209,7 +1324,14 @@
         "local_asset": "",
         "drive_id": null
       },
-      "table_assets": []
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Tipo | Bits | Rango | Equivalente C |\n|------|------|-------|---------------|\n| `Int8Array` | 8 | −128 a +127 | `int8_t` |\n| `Uint8Array` | 8 | 0 a 255 | `uint8_t` |\n| `Int16Array` | 16 | −32.768 a +32.767 | `int16_t` |\n| `Int32Array` | 32 | −2.147.483.648 a +2.147.483.647 | `int32_t` |\n| `Uint32Array` | 32 | 0 a 4.294.967.295 | `uint32_t` |\n| `Float32Array` | 32 | ±3.4 × 10³⁸ (precisión simple) | `float` |\n| `Float64Array` | 64 | ±1.8 × 10³⁰⁸ — igual que `number` | `double` |",
+          "local_asset": "slides/assets/F-20-table-1.png",
+          "drive_id": null
+        }
+      ]
     },
     {
       "id": "F-21",
@@ -1484,12 +1606,33 @@
               "level": 0
             }
           ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Qué es un \"bit pattern\"?"
+        },
+        {
+          "type": "text",
+          "content": "Cuando se escribe `d.i = 42`, los 4 bytes de la unión toman el patrón binario del entero 42:"
+        },
+        {
+          "type": "text",
+          "content": "Al leer `d.f`, esos mismos 4 bytes se **reinterpretan** como un float IEEE 754:\n- No se convierte el valor — se leen los mismos bits con otra semántica\n- El patrón `00000000 00000000 00000000 00101010` es un float denormalizado ≈ `5.88 × 10⁻³⁹`\n- El resultado es **basura aritmética** — el programa continúa sin lanzar ningún error"
+        },
+        {
+          "type": "text",
+          "content": "> Este es el peligro de las uniones en C: el compilador no sabe qué campo está \"activo\".\n> Las uniones discriminadas (TypeScript `kind`, Kotlin `sealed`) resuelven esto al nivel del sistema de tipos."
         }
       ],
       "code_blocks": [
         {
           "lang": "c",
           "content": "union Data {\n  int   i;\n  float f;\n  char  c;\n};\n\nunion Data d;\nd.i = 42;\nprintf(\"%f\\n\", d.f);  // ← Lee basura — interpretación incorrecta del bit pattern"
+        },
+        {
+          "lang": "text",
+          "content": "42 como int32 (complemento a 2):\n┌────────┬────────┬────────┬────────┐\n│00000000│00000000│00000000│00101010│   ← d.i = 42\n└────────┴────────┴────────┴────────┘"
         }
       ],
       "tables": [],

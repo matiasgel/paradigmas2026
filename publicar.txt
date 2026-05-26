@@ -1,0 +1,1 @@
+/edu-publish-slides tema: 10-tipos-de-datos, course_id: para-2026. El plan JSON ya existe y está validado. NO generar imágenes con Gemini. Ejecutar solo --publish-only (publicar en Google Slides usando el plan-filminas existente, sin fase de assets).
