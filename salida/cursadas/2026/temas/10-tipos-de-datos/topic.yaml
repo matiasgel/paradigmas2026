@@ -1,0 +1,37 @@
+topic_number: "10"
+topic_name: "Tipos de Datos y Sistemas de Tipos"
+topic_slug: "tipos-de-datos"
+topic_folder: "salida/cursadas/2026/temas/10-tipos-de-datos"
+class_duration: "360"
+classes_count: 1
+git_branch: "tema-10-tipos-de-datos"
+created_at: "2026-05-25"
+status: "published"
+slides_url: "https://docs.google.com/presentation/d/1z4W1bgnI8MQLZ19k-eJtx3feT67Fbr1D0RYRJAlrpls/edit"
+published_at: "2026-05-25"
+tp_type: "repo"
+module: "VII"
+week: 11
+language_primary: "TypeScript"
+languages_contrast:
+  - Kotlin
+  - Haskell
+  - C
+  - Python
+main_reference: "Sebesta Cap. 6 (Data Types)"
+secondary_references:
+  - "Louden Cap. 8 (Data Types and Type Information)"
+  - "Gabbrielli & Martini Cap. 8 (Composite Types y Type Safety)"
+plan_minimo_topics:
+  - "Tipos built-in y primitivos"
+  - "Tipos ordinales definidos por el usuario"
+  - "Tipos de agregación: producto cartesiano, uniones, uniones discriminadas, mapeos finitos"
+  - "Arrays: estáticos, de pila dinámica, dinámicos de heap"
+  - "Tipos secuencia, strings, conjunto potencia, tipos recursivos"
+  - "Tipo puntero: inseguridad, punteros colgantes, recolección de basura"
+  - "Sistemas de tipos: monomórficos vs. polimórficos"
+  - "Tipos que aceptan null y sus operadores"
+  - "Lenguajes fuertemente tipados; clases"
+  - "Ejemplos en Kotlin y otros lenguajes"
+artifacts:
+  diseno: "diseno.md"

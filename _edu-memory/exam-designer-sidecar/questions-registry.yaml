@@ -1,0 +1,219 @@
+questions:
+- bloom: recordar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-02-recordar-001
+  text_preview: ¿Cuál afirmación describe correctamente la diferencia entre sintaxis
+    y semántica
+  topic: 02-sintaxis-semantica
+- bloom: comprender
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-02-comprender-001
+  text_preview: 'Considerá el siguiente programa TypeScript: suma(10, ''hola''). ¿En
+    qué nivel es inco'
+  topic: 02-sintaxis-semantica
+- bloom: recordar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-03-recordar-001
+  text_preview: ¿Cuáles son los tres pilares del paradigma de programación funcional?
+  topic: 03-intro-funcional-ts
+- bloom: comprender
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-03-comprender-001
+  text_preview: 'El λ-cálculo de Church y la Máquina de Turing: diferencia fundamental
+    entre ambos mod'
+  topic: 03-intro-funcional-ts
+- bloom: comprender
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-03-comprender-002
+  text_preview: ¿Qué significa que una función tiene 'transparencia referencial'?
+  topic: 03-intro-funcional-ts
+- bloom: aplicar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-03-aplicar-001
+  text_preview: 'Código TS: numeros.filter(n => n % 2 === 0).map(n => n * n) — ¿qué
+    contiene resultado?'
+  topic: 03-intro-funcional-ts
+- bloom: analizar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-03-analizar-001
+  text_preview: 'Dos funciones: incrementarA (con contador++) vs incrementarB — ¿cuál
+    es pura?'
+  topic: 03-intro-funcional-ts
+- bloom: recordar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-04-recordar-001
+  text_preview: ¿Qué es una función de orden superior (Higher Order Function — HOF)?
+  topic: 04-funcional-avanzado
+- bloom: comprender
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-04-comprender-001
+  text_preview: Diferencia fundamental entre partial application y currying
+  topic: 04-funcional-avanzado
+- bloom: comprender
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-04-comprender-002
+  text_preview: 'compose(f,g)(x) y pipe(f,g)(x): ¿cuál aplica primero?'
+  topic: 04-funcional-avanzado
+- bloom: aplicar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-04-aplicar-001
+  text_preview: 'Código TS: pipe(trim, toLower, addDomain)("  MATIAS  ") — ¿qué imprime?'
+  topic: 04-funcional-avanzado
+- bloom: analizar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-04-analizar-001
+  text_preview: factorialA (recursión simple) vs factorialB (tail recursion con acumulador)
+  topic: 04-funcional-avanzado
+- bloom: recordar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-06-recordar-001
+  text_preview: '¿Cuáles son los tres tipos de enunciados en Prolog: hechos, reglas,
+    consultas?'
+  topic: 06-paradigma-logico-prolog
+- bloom: comprender
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-06-comprender-001
+  text_preview: Diferencia entre paradigma imperativo (algoritmo) y lógico (conocimiento
+    + motor)
+  topic: 06-paradigma-logico-prolog
+- bloom: comprender
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-06-comprender-002
+  text_preview: 'Variables vs constantes en Prolog: mayúscula vs minúscula'
+  topic: 06-paradigma-logico-prolog
+- bloom: aplicar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-06-aplicar-001
+  text_preview: 'Base padre/abuelo: ¿qué responde ?- abuelo(tomas, Z)?'
+  topic: 06-paradigma-logico-prolog
+- bloom: analizar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-06-analizar-001
+  text_preview: Regla hermano(X,Y):- padre(P,X), padre(P,Y), X\=Y — ¿qué hace?
+  topic: 06-paradigma-logico-prolog
+- bloom: recordar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-07-recordar-001
+  text_preview: ¿Qué es la unificación en Prolog?
+  topic: 07-paradigma-logico-avanzado
+- bloom: comprender
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-07-comprender-001
+  text_preview: ?- X = 2+3 da X = 2+3 sin evaluar — ¿por qué? Diferencia = vs is
+  topic: 07-paradigma-logico-avanzado
+- bloom: comprender
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-07-comprender-002
+  text_preview: ¿Qué es un choice point en el backtracking de Prolog?
+  topic: 07-paradigma-logico-avanzado
+- bloom: comprender
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-07-comprender-003
+  text_preview: Diferencia entre = (unificación) y == (identidad estructural) en Prolog
+  topic: 07-paradigma-logico-avanzado
+- bloom: aplicar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-07-aplicar-001
+  text_preview: ¿Cuál de estas unificaciones tiene éxito? f(X,b)=f(a,Y) vs otros
+  topic: 07-paradigma-logico-avanzado
+- bloom: aplicar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-07-aplicar-002
+  text_preview: miembro(X,[a,b,c]) — todas las respuestas via backtracking
+  topic: 07-paradigma-logico-avanzado
+- bloom: analizar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-07-analizar-001
+  text_preview: 'fail-driven loop: color(X), write(X), nl, fail — ¿qué imprime?'
+  topic: 07-paradigma-logico-avanzado
+- bloom: analizar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-07-analizar-002
+  text_preview: 'maximo/3: Versión A (sin corte) vs Versión B (con corte) — diferencia'
+  topic: 07-paradigma-logico-avanzado
+- bloom: evaluar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-07-evaluar-001
+  text_preview: Corte verde vs. corte rojo — navaja de doble filo
+  topic: 07-paradigma-logico-avanzado
+- bloom: recordar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-08-recordar-001
+  text_preview: ¿Cuáles son los cuatro pilares del paradigma orientado a objetos?
+  topic: 08-paradigma-oo-ts
+- bloom: comprender
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-08-comprender-001
+  text_preview: 'Smalltalk ''todo es un objeto'' vs TypeScript: tipos primitivos no
+    son objetos'
+  topic: 08-paradigma-oo-ts
+- bloom: aplicar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-08-aplicar-001
+  text_preview: 'CuentaBancaria con saldo private: ¿qué pilar OO aplica principalmente?'
+  topic: 08-paradigma-oo-ts
+- bloom: analizar
+  course_id: '2026'
+  created_at: '2026-05-25'
+  exam_type: parcial-1
+  id: q-08-analizar-001
+  text_preview: 'Comparar estado mutable: funcional (inmutabilidad) vs OO (encapsulamiento)'
+  topic: 08-paradigma-oo-ts

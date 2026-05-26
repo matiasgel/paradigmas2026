@@ -1,0 +1,43 @@
+bloom_profile: default
+blueprint_path: salida/cursadas/2026/evaluaciones/parcial-1/blueprint-parcial-1.json
+created_at: '2026-05-25'
+duration_minutes: 60
+exam_number: 1
+exam_type: parcial-1
+export_files:
+  clave_docente: salida/cursadas/2026/evaluaciones/parcial-1/clave-respuestas-docente.md
+  completo: salida/cursadas/2026/evaluaciones/parcial-1/examen-completo.md
+  gift_moodle: salida/cursadas/2026/evaluaciones/parcial-1/parcial-1-moodle.gift
+  indice: salida/cursadas/2026/evaluaciones/parcial-1/examen-indice.md
+  md_alumnos: salida/cursadas/2026/evaluaciones/parcial-1/parcial-1-alumnos.md
+  pdf_alumnos: salida/cursadas/2026/evaluaciones/parcial-1/parcial-1-alumnos.pdf
+notes: Quiz en clase, 60 min max. 30 preguntas MC (20 conceptuales x3pts + 10 con
+  código x4pts). Conceptuales sin engaños. 4to año UNTDF.
+output_folder: salida/cursadas/2026/evaluaciones/parcial-1
+points: 100
+question_types:
+  codigo_4pts: 10
+  conceptual_3pts: 20
+questions_files:
+- salida/cursadas/2026/evaluaciones/parcial-1/preguntas-02-sintaxis-semantica.md
+- salida/cursadas/2026/evaluaciones/parcial-1/preguntas-03-intro-funcional-ts.md
+- salida/cursadas/2026/evaluaciones/parcial-1/preguntas-04-funcional-avanzado.md
+- salida/cursadas/2026/evaluaciones/parcial-1/preguntas-06-paradigma-logico-prolog.md
+- salida/cursadas/2026/evaluaciones/parcial-1/preguntas-07-paradigma-logico-avanzado.md
+- salida/cursadas/2026/evaluaciones/parcial-1/preguntas-08-paradigma-oo-ts.md
+questions_progress:
+  02-sintaxis-semantica: done
+  03-intro-funcional-ts: done
+  04-funcional-avanzado: done
+  06-paradigma-logico-prolog: done
+  07-paradigma-logico-avanzado: done
+  08-paradigma-oo-ts: done
+status: exported
+topics:
+- 02-sintaxis-semantica
+- 03-intro-funcional-ts
+- 04-funcional-avanzado
+- 06-paradigma-logico-prolog
+- 07-paradigma-logico-avanzado
+- 08-paradigma-oo-ts
+total_questions: 30

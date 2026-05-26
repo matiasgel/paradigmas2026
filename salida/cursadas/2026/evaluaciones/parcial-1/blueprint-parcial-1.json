@@ -1,0 +1,147 @@
+{
+  "exam_blueprint_version": "1.0",
+  "course_id": "2026",
+  "generated_at": "2026-05-25",
+  "parameters": {
+    "total_points": 100,
+    "total_questions": 30,
+    "exam_time_minutes": 60,
+    "bloom_profile": "default",
+    "topic_count": 6,
+    "question_types": {
+      "conceptual_pts": 3,
+      "codigo_pts": 4
+    },
+    "notes": "Quiz en clase. MC conceptual + MC con codigo. 4to anio UNTDF. Sin enganios."
+  },
+  "bloom_profile_used": {
+    "recordar": 0.2,
+    "comprender": 0.3,
+    "aplicar": 0.25,
+    "analizar": 0.2,
+    "evaluar": 0.05
+  },
+  "matrix": [
+    {
+      "topic_id": "02-sintaxis-semantica",
+      "points": 6,
+      "time_minutes": 4,
+      "question_count": 2,
+      "question_breakdown": {
+        "conceptual_3pts": 2,
+        "codigo_4pts": 0
+      },
+      "bloom_distribution": {
+        "recordar": 3,
+        "comprender": 3,
+        "aplicar": 0,
+        "analizar": 0,
+        "evaluar": 0
+      },
+      "weight_pct": 6.0
+    },
+    {
+      "topic_id": "03-intro-funcional-ts",
+      "points": 17,
+      "time_minutes": 10,
+      "question_count": 5,
+      "question_breakdown": {
+        "conceptual_3pts": 3,
+        "codigo_4pts": 2
+      },
+      "bloom_distribution": {
+        "recordar": 3,
+        "comprender": 6,
+        "aplicar": 4,
+        "analizar": 4,
+        "evaluar": 0
+      },
+      "weight_pct": 17.0
+    },
+    {
+      "topic_id": "04-funcional-avanzado",
+      "points": 17,
+      "time_minutes": 10,
+      "question_count": 5,
+      "question_breakdown": {
+        "conceptual_3pts": 3,
+        "codigo_4pts": 2
+      },
+      "bloom_distribution": {
+        "recordar": 3,
+        "comprender": 6,
+        "aplicar": 4,
+        "analizar": 4,
+        "evaluar": 0
+      },
+      "weight_pct": 17.0
+    },
+    {
+      "topic_id": "06-paradigma-logico-prolog",
+      "points": 17,
+      "time_minutes": 10,
+      "question_count": 5,
+      "question_breakdown": {
+        "conceptual_3pts": 3,
+        "codigo_4pts": 2
+      },
+      "bloom_distribution": {
+        "recordar": 3,
+        "comprender": 6,
+        "aplicar": 4,
+        "analizar": 4,
+        "evaluar": 0
+      },
+      "weight_pct": 17.0
+    },
+    {
+      "topic_id": "07-paradigma-logico-avanzado",
+      "points": 31,
+      "time_minutes": 18,
+      "question_count": 9,
+      "question_breakdown": {
+        "conceptual_3pts": 5,
+        "codigo_4pts": 4
+      },
+      "bloom_distribution": {
+        "recordar": 3,
+        "comprender": 9,
+        "aplicar": 8,
+        "analizar": 8,
+        "evaluar": 3
+      },
+      "weight_pct": 31.0
+    },
+    {
+      "topic_id": "08-paradigma-oo-ts",
+      "points": 12,
+      "time_minutes": 8,
+      "question_count": 4,
+      "question_breakdown": {
+        "conceptual_3pts": 4,
+        "codigo_4pts": 0
+      },
+      "bloom_distribution": {
+        "recordar": 3,
+        "comprender": 3,
+        "aplicar": 3,
+        "analizar": 3,
+        "evaluar": 0
+      },
+      "weight_pct": 12.0
+    }
+  ],
+  "totals": {
+    "points": 100,
+    "questions": 30,
+    "conceptual_questions": 20,
+    "codigo_questions": 10,
+    "bloom_totals": {
+      "recordar": 18,
+      "comprender": 33,
+      "aplicar": 23,
+      "analizar": 23,
+      "evaluar": 3
+    }
+  }
+}
