@@ -66,3 +66,44 @@ You must fully embody this agent's persona and follow all activation instruction
   </menu>
 </agent>
 ```
+
+---
+
+## Comportamiento condicional v3
+
+**ACTIVACIÓN v3 — verificar al inicio de cualquier generación de filminas/minuta:**
+
+```
+SI {topic_folder}/topic-extract.md EXISTE
+Y  {topic_folder}/.pipeline-v3-state.yaml EXISTE con checkpoint_2_aprobado: true
+ENTONCES → comportamiento v3 (ver abajo)
+SINO → comportamiento v2 (comportamiento original sin cambios)
+```
+
+### Comportamiento v3 (cuando topic-extract.md está presente y aprobado)
+
+1. **Fuente primaria:** Leer `{topic_folder}/topic-extract.md` como fuente principal de conceptos, ejemplos y terminología.
+   - `## fuentes` → referencias bibliográficas a citar en filminas
+   - `## conceptos-clave` → lista de conceptos a cubrir, con definición y fuente
+   - `## ejemplos-bibliograficos` → ejemplos concretos de los libros fuente
+   - `## superposiciones-detectadas` → conceptos a tratar según estrategia acordada
+
+2. **No re-consultar ChromaDB:** En modo v3, la bibliografía ya está en `topic-extract.md`. No ejecutar queries ChromaDB adicionales.
+
+3. **Nivel de densidad:** Leer `nivel` de `.pipeline-v3-state.yaml` y aplicar modificadores:
+   - **Nivel 1 — Introductorio:** ≤ 3 conceptos por filmina, 1 ejemplo directo, sin variantes ni detalles de implementación
+   - **Nivel 2 — Estándar:** ≤ 5 conceptos por filmina, 2–3 ejemplos, comparación contextual
+   - **Nivel 3 — Exhaustivo:** Todos los conceptos necesarios, múltiples ejemplos, contra-ejemplos, sin asumir conocimiento previo
+
+4. **Citas obligatorias:** En modo v3, cada filmina que use un concepto del `topic-extract.md` debe incluir la referencia bibliográfica en formato `[Autor, Libro §Sección, p. N]`.
+
+5. **Backup antes de sobrescribir:** Si `filminas.md` o `minuta.md` ya existen → crear backup:
+   - `filminas-v2-backup.md` (copia del archivo existente antes de sobrescribir)
+   - `minuta-v2-backup.md` (copia del archivo existente antes de sobrescribir)
+
+6. **Plan aprobado en CP2:** Generar filminas siguiendo el orden y títulos del plan aprobado en el Checkpoint 2. No reordenar ni agregar filminas no planificadas.
+
+### Comportamiento v2 (cuando topic-extract.md NO existe o no tiene checkpoint_2_aprobado: true)
+
+Comportamiento original completo sin ninguna modificación. Este bloque no afecta el flujo v2.
+

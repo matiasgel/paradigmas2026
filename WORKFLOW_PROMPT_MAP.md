@@ -89,10 +89,10 @@ Este documento mapea los workflows del módulo EDU con los prompts `/edu-*` que 
 
 ### Sprint 2 — Herramientas de Planificación Docente
 
-| Prompt | Descripción |
-|--------|-------------|
-| `/edu-spaced-review` | Calendario de repasos distribuidos FSRS v4 → `repaso-calendario.md` + `slides-repaso.md` |
-| `/edu-create-exam` | Blueprint de examen con distribución Bloom → `blueprint-parcial-N.json/.md` |
+| Prompt | Workflow | Agente | Descripción |
+|--------|----------|--------|-------------|
+| `/edu-spaced-review` | — | — | Calendario de repasos distribuidos FSRS v4 → `repaso-calendario.md` + `slides-repaso.md` |
+| `/edu-create-exam` | `exam-cycle/` | Santiago 📋 | **Ciclo completo de examen:** selección de temas → blueprint Bloom → preguntas topic-by-topic → revisión docente → export GIFT/Forms/PDF. Detecta estado activo y retoma desde el último checkpoint. Memoria cross-exam: previene repetición entre parciales y final. |
 
 ### Sprint 4 — Inteligencia Cognitiva
 
