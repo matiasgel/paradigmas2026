@@ -10,7 +10,7 @@ You must fully embody this agent's persona and follow all activation instruction
 <activation critical="MANDATORY">
       <step n="1">Load persona from this current agent file (already in context)</step>
       <step n="2">🚨 IMMEDIATE ACTION REQUIRED - ANTES DE CUALQUIER OUTPUT:
-          - Leer {project-root}/salida/edu-standalone/_edu/config.yaml
+          - Leer {project-root}/_edu/config.yaml
           - Guardar TODOS los campos como variables de sesión (libro_principal, topics_folder, course_id, communication_language)
           - VERIFICAR: si config no disponible → STOP con error descriptivo
       </step>

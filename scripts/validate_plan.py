@@ -70,14 +70,32 @@ def _validate_v3_schema(plan: dict, project_root: Path) -> Result[dict]:
         schema_store[slide_schema.get("$id", "filmina-slide.schema.json")] = slide_schema
         schema_store["filmina-slide.schema.json"] = slide_schema
 
-    registry = jsonschema.RefResolver.from_schema(plan_schema, store=schema_store)
-
+    # Build validator with $ref resolution — supports jsonschema 4.18+ and older
+    _validator = None
     try:
-        validator_cls = jsonschema.Draft202012Validator
-    except AttributeError:
-        validator_cls = jsonschema.Draft7Validator  # fallback
+        # jsonschema >= 4.18: nueva API via 'referencing' (sin DeprecationWarning)
+        from referencing import Registry, Resource  # type: ignore[import]
+        _reg: Registry = Registry()
+        if slide_schema:
+            _slide_res = Resource.from_contents(slide_schema)
+            # Registrar bajo el nombre de archivo (como aparece en $ref) y bajo $id
+            _reg = _reg.with_resource("filmina-slide.schema.json", _slide_res)
+            if slide_schema.get("$id"):
+                _reg = _reg.with_resource(slide_schema["$id"], _slide_res)
+        _validator = jsonschema.Draft202012Validator(plan_schema, registry=_reg)
+    except ImportError:
+        pass  # 'referencing' no instalado → usar RefResolver legacy
 
-    validator = validator_cls(plan_schema, resolver=registry)
+    if _validator is None:
+        # Fallback: vieja API RefResolver (funciona en jsonschema < 4.18)
+        _ref_registry = jsonschema.RefResolver.from_schema(plan_schema, store=schema_store)
+        try:
+            _validator_cls = jsonschema.Draft202012Validator
+        except AttributeError:
+            _validator_cls = jsonschema.Draft7Validator  # type: ignore[assignment]
+        _validator = _validator_cls(plan_schema, resolver=_ref_registry)
+
+    validator = _validator
 
     errors = tuple(
         f"SCHEMA [{'.'.join(str(p) for p in e.absolute_path) or '(root)'}]: {e.message}"
