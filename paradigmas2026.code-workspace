@@ -1,0 +1,13 @@
+{
+  "folders": [
+    {
+      "path": ".",
+      "name": "BMAD Planning"
+    },
+    {
+      "path": "salida/edu-standalone",
+      "name": "EDU Standalone"
+    }
+  ],
+  "settings": {}
+}
