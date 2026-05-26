@@ -18,9 +18,9 @@ Desde la ingesta del programa oficial hasta el cierre de cursada con validación
 ## Estructura
 
 - **Configuración**: `_edu/config.yaml`
-- **Agentes**: `_edu/agents/` (17 agentes — 7 persona + 5 calidad + 2 testing + 3 internos)
-- **Workflows**: `_edu/workflows/` (15 workflows organizados por fase)
-- **Comandos**: `_edu/module-help.csv` (28 comandos en 4 fases + anytime)
+- **Agentes**: `_edu/agents/` (26 agentes — 13 persona + 5 calidad + 3 testing + 4 internos + 1 legacy)
+- **Workflows**: `_edu/workflows/` (25 workflows organizados por fase)
+- **Comandos**: `_edu/module-help.csv` (55+ comandos en 4 fases + anytime)
 - **Memoria**: `_edu-memory/` (persistente entre sesiones)
 
 ## Fases del Cursado
@@ -38,12 +38,18 @@ Desde la ingesta del programa oficial hasta el cierre de cursada con validación
 | Agente | Persona | Rol |
 |--------|---------|-----|
 | course-planner | Prof. Elena 🎓 | Planificadora y orquestadora del cursado |
-| topic-designer | Lic. Marcos 🗂️ | Diseñador de contenidos por tema |
+| topic-designer → **v3** | Lic. Marcos 🗂️📚 | Diseñador de contenidos con grounding bibliográfico |
 | class-writer | Dr. Roberto ✍️ | Escritor de minutas y filminas |
 | study-guide-writer | Dra. Sofía 📖 | Escritora de guías de estudio completas para alumnos |
 | tp-designer | Aux. Valeria 📝 | Diseñadora de trabajos prácticos |
 | curriculum-reviewer | Prof. Ana 🔍 | Revisora curricular con evidencia académica |
 | academic-researcher | Bib. Carlos 📚 | Investigador bibliográfico |
+| slides-designer | Vera 🎨 | Define sistema de diseño visual del cursado |
+| slides-publisher | Diego 🚀 | Publica filminas en Google Slides |
+| exam-designer | Lic. Santiago 📊 | Ciclo completo de producción de exámenes |
+| classroom-designer | Rodrigo 💻 | Genera repos GitHub Classroom con autograding |
+| pbl-designer | — 🗣️ | Diseña proyectos PBL multi-clase |
+| topic-director | — 🎬 | Orquesta producción completa de un tema |
 
 ### Capa 2 — Calidad (motores automáticos)
 | Agente | Rol |
@@ -57,8 +63,9 @@ Desde la ingesta del programa oficial hasta el cierre de cursada con validación
 ### Capa 3 — Testing
 | Agente | Rol |
 |--------|-----|
-| student-simulator 🎓 | Simula alumnos con perfiles empíricos |
+| student-simulator 🎓 | Simula alumnos con perfiles empíricos (individual) |
 | plan-coverage-checker 📊 | Verifica cobertura del plan mínimo |
+| classroom-simulator 🎭 | Simula clase grupal con 4 arquetipos Schwanke |
 
 ### Capa 4 — Internos (no invocables directamente)
 | Agente | Rol |
@@ -66,6 +73,12 @@ Desde la ingesta del programa oficial hasta el cierre de cursada con validación
 | material-ingester 📥 | Convierte PDFs/PPTX/DOCX a Markdown |
 | plan-extractor 📋 | Extrae tópicos del programa institucional |
 | test-runner 🧪 | Ejecuta baterías de simulación y genera scores |
+| curriculum-comparator 🔍 | Compara currícula contra estándares ACM/IEEE |
+
+### Legacy
+| Agente | Nota |
+|--------|------|
+| topic-designer.md (v1) | Conservado como referencia; el shim `@edu-agent-topic-designer` apunta a v3 |
 
 ## Slash Commands
 
