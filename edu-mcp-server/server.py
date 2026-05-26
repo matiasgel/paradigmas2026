@@ -168,7 +168,7 @@ def _search_memory(query: str, limit: int) -> list[TextContent]:
 
 
 def _validate_plan(topic: str, course: str) -> list[TextContent]:
-    script = PROJECT_ROOT / "scripts" / "validate_plan.py"
+    script = EDU_ROOT / "scripts" / "validate_plan.py"
     if not script.exists():
         return [TextContent(type="text", text="validate_plan.py no encontrado.")]
     result = subprocess.run(
@@ -196,15 +196,14 @@ def _get_slide_template(slide_type: str) -> list[TextContent]:
 
 
 def _search_knowledge(query: str, n_results: int, doc_type: str) -> list[TextContent]:
-    script = PROJECT_ROOT / "scripts" / "knowledge_base.py"
+    script = EDU_ROOT / "scripts" / "knowledge_base.py"
     if not script.exists():
         return [TextContent(type="text", text="knowledge_base.py no encontrado.")]
     args = [sys.executable, str(script), "search", query, "--n", str(n_results)]
     if doc_type != "all":
         args.extend(["--type", doc_type])
     result = subprocess.run(
-        args, capture_output=True, text=True, cwd=str(PROJECT_ROOT), timeout=60,
-        env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+        args, capture_output=True, text=True, cwd=str(PROJECT_ROOT), timeout=60
     )
     output = result.stdout or result.stderr or "Sin resultados"
     return [TextContent(type="text", text=output[:3000])]

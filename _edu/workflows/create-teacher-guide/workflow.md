@@ -53,3 +53,38 @@ El objetivo es ofrecer un único punto de repaso para el docente, con todo lo ne
 ```
 
 (Opción alternativa: ejecutar el workflow directo con `/edu-topic` y luego seleccionar la etapa correspondiente.)
+
+---
+
+## Comportamiento condicional v3
+
+**ACTIVACIÓN v3 — verificar al inicio del workflow:**
+
+```
+SI {topic_folder}/topic-extract.md EXISTE
+Y  {topic_folder}/.pipeline-v3-state.yaml EXISTE con checkpoint_2_aprobado: true
+ENTONCES → comportamiento v3 (ver abajo)
+SINO → comportamiento v2 (comportamiento original sin cambios)
+```
+
+### Comportamiento v3 (cuando topic-extract.md está presente y aprobado)
+
+Agregar a la estructura canónica de `guiaprofesor.md` estas **secciones adicionales v3**:
+
+1. **Sección 0.5 — Fundamentos bibliográficos (NUEVA en v3):**
+   Derivada de `topic-extract.md ## fuentes`. Para cada fuente con `relevancia: alta`:
+   - Libro, autor, sección, página, fragmento clave
+   - Relevancia pedagógica para este tema
+
+2. **Sección 2.5 — Variantes por nivel de densidad (NUEVA en v3):**
+   Tabla con 3 columnas (Nivel 1 / Nivel 2 / Nivel 3) mostrando qué conceptos se incluyen en cada nivel, según `## conceptos-clave` del `topic-extract.md`. Permite al docente conocer cómo el mismo tema se enseña en distintos contextos.
+
+3. **Sección 7.5 — Tendencias académicas (NUEVA en v3):**
+   Derivada de `topic-extract.md ## tendencias`. Incluir solo tendencias con `relevancia: alta`. Si hay conflictos con bibliografía, señalar explícitamente qué sección del libro podría estar desactualizada.
+
+**Backup antes de sobrescribir:** Si `guiaprofesor.md` ya existe → crear `guiaprofesor-v2-backup.md` antes de sobrescribir.
+
+### Comportamiento v2 (cuando topic-extract.md NO existe o no tiene checkpoint_2_aprobado: true)
+
+Comportamiento original completo sin ninguna modificación.
+

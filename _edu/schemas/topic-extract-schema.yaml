@@ -1,0 +1,226 @@
+# Schema: topic-extract.md
+# Versión: 1.0
+# Descripción: Contrato de interfaz entre topic-designer-v3 y agentes downstream
+# Compatible con: class-writer v3, study-guide-writer v3, create-teacher-guide v3
+
+schema_version: "1.0"
+generated_by: "topic-designer-v3"
+formato_archivo: "topic-extract.md"
+
+# Frontmatter obligatorio
+frontmatter:
+  tema:
+    type: string
+    required: true
+    description: "Nombre del tópico"
+  libro_principal:
+    type: string
+    required: true
+    description: "Libro principal usado en extracción ChromaDB"
+  nivel:
+    type: integer
+    required: true
+    enum: [1, 2, 3]
+    description: "Nivel de densidad: 1=Introductorio, 2=Estándar, 3=Exhaustivo"
+  generado_en:
+    type: string
+    format: "ISO 8601"
+    required: true
+  aprobado_en:
+    type: string
+    format: "ISO 8601"
+    nullable: true
+    description: "null hasta Checkpoint 1; se actualiza al aprobar"
+  version:
+    type: string
+    default: "1"
+
+# Secciones del cuerpo (obligatorias)
+secciones:
+
+  fuentes:
+    required: true
+    min_items: 1
+    description: "Referencias bibliográficas extraídas de ChromaDB"
+    validacion_critica: "Al menos 1 ítem debe tener pagina no nulo (NFR05)"
+    campos:
+      libro:
+        type: string
+        required: true
+      autor:
+        type: string
+        required: true
+      seccion:
+        type: string
+        required: true
+        description: "Capítulo o sección específica"
+      pagina:
+        type: string
+        nullable: true
+        description: "Número de página o rango. null → agregar '⚠️ referencia incompleta'"
+      relevancia:
+        type: string
+        required: true
+        enum: ["alta", "media"]
+      fragmento:
+        type: string
+        required: true
+        description: "Cita textual breve o paráfrasis"
+
+  conceptos-clave:
+    required: true
+    min_items: 3
+    description: "Conceptos centrales del tópico extraídos de bibliografía"
+    campos:
+      concepto:
+        type: string
+        required: true
+      definicion:
+        type: string
+        required: true
+        description: "1–2 oraciones precisas"
+      fuente_seccion:
+        type: string
+        required: true
+        format: "[libro §sección]"
+        example: "SICP §1.3"
+      nivel_bloom:
+        type: string
+        required: true
+        enum: ["recordar", "comprender", "aplicar", "analizar", "evaluar"]
+      nivel_minimo:
+        type: integer
+        required: false
+        nullable: true
+        enum: [1, 2, 3]
+        default: 1
+        description: "Nivel mínimo en el que incluir este concepto. null/1=todos los niveles, 2=solo N2+, 3=solo N3"
+
+  ejemplos-bibliograficos:
+    required: true
+    min_items: 1
+    description: "Ejemplos concretos extraídos directamente de libros fuente"
+    campos:
+      titulo:
+        type: string
+        required: true
+        description: "Nombre descriptivo del ejemplo"
+      descripcion:
+        type: string
+        required: true
+        description: "Qué ilustra el ejemplo"
+      codigo_o_texto:
+        type: string
+        required: true
+        format: "multiline"
+        description: "Código, pseudocódigo o párrafo textual"
+      fuente_libro:
+        type: string
+        required: true
+      fuente_pagina:
+        type: string
+        nullable: true
+        description: "Número de página. null → '⚠️ referencia incompleta'"
+
+  tendencias:
+    required: false
+    min_items: 0
+    description: "Investigación académica reciente (Paso 1c — web research)"
+    campos:
+      tendencia:
+        type: string
+        required: true
+      relevancia:
+        type: string
+        required: true
+        enum: ["alta", "media", "baja"]
+      conflicto_con_bibliografía:
+        type: string
+        required: true
+        enum: ["sí", "no"]
+      nota:
+        type: string
+        nullable: true
+        description: "Si conflicto=sí: qué sección del libro podría estar desactualizada"
+      fuente_url:
+        type: string
+        nullable: true
+
+  superposiciones-detectadas:
+    required: false
+    min_items: 0
+    description: "Temas previos con solapamiento de conceptos (Paso 0)"
+    campos:
+      tema_previo:
+        type: string
+        required: true
+        format: "NN-nombre-tema"
+        example: "03-paradigma-imperativo"
+      conceptos_solapados:
+        type: string
+        required: true
+        description: "Lista de conceptos solapados, separados por coma"
+      nivel_solapamiento:
+        type: string
+        required: true
+        enum: ["alto", "medio", "bajo"]
+      estrategia:
+        type: string
+        required: true
+        enum: ["asumir-conocido", "resumir", "referenciar"]
+        description: "Estrategia de tratamiento acordada con el docente en Paso 0"
+
+# Reglas de validación
+validaciones:
+  - id: V01
+    nivel: "error"
+    regla: "fuentes debe tener al menos 1 ítem con pagina no nulo"
+    mensaje_falla: "ERROR: topic-extract.md no tiene ninguna fuente con página verificada. Agregar al menos una cita con número de página antes de aprobar CP1."
+
+  - id: V02
+    nivel: "error"
+    regla: "conceptos-clave debe tener al menos 3 ítems"
+    mensaje_falla: "ERROR: topic-extract.md tiene menos de 3 conceptos-clave. Agregar más conceptos antes de aprobar CP1."
+
+  - id: V03
+    nivel: "warning"
+    regla: "Ítems con pagina null deben incluir '⚠️ referencia incompleta' en el fragmento"
+    mensaje_falla: "ADVERTENCIA: {N} referencias sin página. Marcar como '⚠️ referencia incompleta'."
+
+  - id: V04
+    nivel: "warning"
+    regla: "Libros con fecha de publicación > 5 años atrás deben marcarse 'a verificar'"
+    mensaje_falla: "ADVERTENCIA: {N} libros con antigüedad > 5 años. Revisar vigencia."
+
+  - id: V05
+    nivel: "info"
+    regla: "aprobado_en debe ser no-nulo antes de que agentes downstream lean el archivo"
+    mensaje_falla: "INFO: topic-extract.md no ha sido aprobado en CP1. Agentes downstream no deben usarlo."
+
+# Formato de referencia bibliográfica (AD §7.2)
+formato_referencia:
+  patron: "[Autor, Libro §Sección, p. N]"
+  ejemplo: "[Abelson & Sussman, SICP §1.3, p. 58]"
+  sin_pagina: "[Autor, Libro §Sección, p. ⚠️ referencia incompleta]"
+
+# Nivel de densidad — mapa taxonómico (AD-04)
+niveles_densidad:
+  1:
+    nombre: "Introductorio"
+    bloom: "Recordar / Comprender"
+    filminas_max_conceptos: 3
+    ejemplos_por_filmina: 1
+    variantes: false
+  2:
+    nombre: "Estándar"
+    bloom: "Aplicar / Analizar"
+    filminas_max_conceptos: 5
+    ejemplos_por_filmina: "2-3"
+    comparacion_contextual: true
+  3:
+    nombre: "Exhaustivo"
+    bloom: "Analizar / Evaluar"
+    filminas_max_conceptos: "todos los necesarios"
+    ejemplos_por_filmina: "múltiples"
+    contra_ejemplos: true
+    sin_asumir_conocimiento_previo: true
