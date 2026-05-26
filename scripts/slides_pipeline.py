@@ -83,6 +83,8 @@ TITLE_SAFE_X = 1_520_000
 BOTTOM_CLEAR = 760_000
 TABLE_BOTTOM_CLEAR = 1_520_000
 EMU_PER_PT = 12_700
+MIN_READABLE_CODE_PT = 9   # font size mínimo legible para código — si quedaría menor, se divide en nueva slide
+SLIDES_PER_PRESENTATION = 60  # máximo slides por presentación — si supera, se divide en 2 partes iguales
 
 # Directrices de layout por tipo — fuente canónica: schema-registry.json
 # En runtime se sobreescriben desde el registry via _override_maps_from_registry().
@@ -1002,34 +1004,16 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str, registry:
             else:
                 image_layer_map[stype] = "none"
 
-    # Budget de imágenes: máximo 12 por presentación
-    max_images  = _max_images_per_presentation(config)
-    if max_images < 12:
-        max_images = 12
-    img_count   = 0
-    priority    = ["portada", "cierre", "concepto-abstracto", "diagrama", "socratica", "timeline"]
-
-    assigned: dict[str, str] = {}
-    for stype in priority:
-        for s in slides:
-            if s["id"] in assigned:
-                continue
-            layer = image_layer_map.get(s["type"], "none")
-            if s["type"] == stype and layer != "none":
-                assigned[s["id"]] = layer if img_count < max_images else "none"
-                if layer != "none" and img_count < max_images:
-                    img_count += 1
-    for s in slides:
-        assigned.setdefault(s["id"], "none")
+    # Imágenes Gemini DESHABILITADAS — solo texto y tablas nativas
+    img_count = 0
+    assigned: dict[str, str] = {s["id"]: "none" for s in slides}
 
     plan_slides = []
     for slide in slides:
         directives = slide.get("directives") or {}
         layout_key = directives.get("layout") or slide["type"]
         layout   = LAYOUT_MAP.get(layout_key, LAYOUT_MAP.get(slide["type"], {}))
-        layer    = directives.get("image") or assigned[slide["id"]]
-
-        img_prompt = _image_prompt(slide, config) if layer != "none" else ""
+        layer    = "none"
 
         table_assets = [
             {
@@ -1056,9 +1040,9 @@ def generate_plan(filminas_path: Path, config: dict, template_id: str, registry:
             "layout": layout,
             # Imagen (v3 unificado)
             "image": {
-                "layer":       layer,
-                "prompt":      img_prompt,
-                "local_asset": f"slides/assets/{slide['id']}-img.png" if layer != "none" else "",
+                "layer":       "none",
+                "prompt":      "",
+                "local_asset": "",
                 "drive_id":    None,
             },
             "table_assets": table_assets,
@@ -1269,17 +1253,7 @@ def generate_assets(
     for slide in plan["slides"]:
         s = dict(slide)
 
-        # ── Imagen (v3 unificado) ──────────────────────────────────────
-        img = _get_slide_image(slide)
-        layer = img.get("layer", "none")
-        if layer != "none" and img.get("prompt") and img.get("local_asset"):
-            lp = topic_folder / img["local_asset"]
-            if not lp.exists():
-                print(f"  🖼️  Generando imagen ({layer}) para {slide['id']} …")
-                _gemini_image(img["prompt"], lp, gemini_api_key)
-            if lp.exists() and not img.get("drive_id"):
-                img["drive_id"] = _upload_drive(drive_svc, lp, folder_id)
-            s["image"] = img
+        # Imágenes Gemini DESHABILITADAS — se omite generación de imágenes
 
         # ── Tablas como PNG ─────────────────────────────────────────────
         updated_ta = []
@@ -1341,7 +1315,7 @@ def _drive_url(drive_id: str) -> str:
     return f"https://drive.google.com/uc?export=view&id={drive_id}"
 
 
-def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: int) -> list:
+def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: int, page_w: int = SLIDE_W, page_h: int = SLIDE_H) -> list:
     """Construye todos los requests de la API para una filmina."""
     reqs:    list[dict] = []
     palette  = config.get("palette", {})
@@ -1351,6 +1325,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     bg_color = palette.get("background", "#FFFFFF")
     stype    = slide.get("type", "concepto-abstracto")
     layout   = slide.get("layout") or LAYOUT_MAP.get(stype, LAYOUT_MAP["concepto-abstracto"])
+    zones    = _zones(page_w, page_h)
 
     counter  = [0]
 
@@ -1589,7 +1564,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     })
 
     def add_image(url: str, zone: str) -> None:
-        geo = ZONES.get(zone)
+        geo = zones.get(zone)
         if not geo:
             return
         x, y, w, h = geo
@@ -1607,7 +1582,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
 
     def add_bg_overlay(zone: str, opacity: float = 0.6) -> None:
         """Rectángulo blanco semitransparente encima de la imagen de fondo."""
-        geo = ZONES.get(zone)
+        geo = zones.get(zone)
         if not geo:
             return
         x, y, w, h = geo
@@ -1649,13 +1624,13 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         font:    str   = "Roboto",
         align:   str   = "LEFT",
     ) -> None:
-        geo = ZONES.get(zone)
+        geo = zones.get(zone)
         if not geo:
             return
         add_textbox_geo(text, geo, size, bold=bold, italic=italic, color=color, font=font, align=align)
 
     def add_native_table(table_md: str, zone: str) -> None:
-        geo = ZONES.get(zone)
+        geo = zones.get(zone)
         if not geo:
             return
         rows = []
@@ -1793,7 +1768,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         t_size = min(t_size, 32)
     if len(title) > 60:
         t_size = min(t_size, 28)
-    title_geo = ZONES.get(title_zone)
+    title_geo = zones.get(title_zone)
     if title_geo and title:
         min_title_size = 24 if stype == "portada" else 20
         t_size = _fit_text_font_size(title, title_geo, t_size, min_size=min_title_size)
@@ -1818,7 +1793,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
             b_size = min(b_size, 13)
         if body_zone == "left-top-split":
             b_size = min(b_size, 15)
-        body_geo = ZONES.get(body_zone)
+        body_geo = zones.get(body_zone)
         if body_geo and body_txt:
             b_size = _fit_text_font_size(body_txt, body_geo, b_size, min_size=10)
         if body_geo:
@@ -1831,7 +1806,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
     code_zone  = layout.get("code", "none")
     code_blocks = slide.get("code_blocks") or []
     if code_zone != "none" and code_blocks:
-        code_geo = ZONES.get(code_zone)
+        code_geo = zones.get(code_zone)
         code_text = "\n\n".join(cb['content'] for cb in code_blocks)
         c_size = typo.get("code", {}).get("size", 14)
         if code_geo and _looks_like_ascii_diagram(code_text):
@@ -1871,26 +1846,133 @@ def _blocks_to_text(blocks: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: Path) -> str:
-    """Fase 3: Crea presentación en Google Slides desde el plan. Devuelve la URL."""
-    print("\n🚀 Fase 3 — Publicando en Google Slides …")
+def _get_presentation_page_size(slides_svc, pres_id: str) -> tuple[int, int]:
+    """Obtiene dimensiones reales de la presentación (EMU) para calibrar geometría.
 
-    drive_svc  = build("drive", "v3", credentials=creds)
-    slides_svc = build("slides", "v1", credentials=creds)
+    Descarga los metadatos del template copiado para verificar si usa dimensiones
+    no estándar. Fallback a las constantes globales si falla.
+    """
+    try:
+        pres = slides_svc.presentations().get(presentationId=pres_id).execute()
+        size = pres.get("pageSize") or {}
+        w_mag = (size.get("width") or {}).get("magnitude")
+        h_mag = (size.get("height") or {}).get("magnitude")
+        if w_mag and h_mag:
+            page_w, page_h = int(w_mag), int(h_mag)
+            if (page_w, page_h) != (SLIDE_W, SLIDE_H):
+                print(f"  📐 Template con dimensiones personalizadas: {page_w}×{page_h} EMU "
+                      f"(estándar 16:9: {SLIDE_W}×{SLIDE_H})")
+            return page_w, page_h
+    except Exception as exc:
+        print(f"  ⚠️  No se pudieron leer dimensiones del template: {exc}")
+    return SLIDE_W, SLIDE_H
 
-    template_id = plan["meta"]["template_id"]
-    title       = plan["meta"]["title"]
 
-    print(f"  Copiando plantilla {template_id} …")
+def _split_oversized_code_slides(
+    slides: list[dict],
+    config: dict,
+    page_w: int = SLIDE_W,
+    page_h: int = SLIDE_H,
+) -> list[dict]:
+    """Pre-procesa slides cuyo código quedaría con font < MIN_READABLE_CODE_PT.
+
+    Cuando un slide tiene múltiples code_blocks que no caben a tamaño legible,
+    los divide en slides adicionales de tipo 'codigo', uno por bloque.
+    Si hay un solo bloque ilegible, se mantiene como está (no se puede dividir más).
+    """
+    typo = config.get("typography", {})
+    c_size_default = float(typo.get("code", {}).get("size", 14))
+    zones = _zones(page_w, page_h)
+    result: list[dict] = []
+
+    for slide in slides:
+        code_blocks = slide.get("code_blocks") or []
+        stype = slide.get("type", "concepto-abstracto")
+        layout = slide.get("layout") or LAYOUT_MAP.get(stype, LAYOUT_MAP.get("concepto-abstracto", {}))
+        code_zone = layout.get("code", "none")
+
+        if not code_blocks or code_zone == "none":
+            result.append(slide)
+            continue
+
+        code_geo = zones.get(code_zone)
+        if not code_geo:
+            result.append(slide)
+            continue
+
+        inner_geo = _inset_geometry(code_geo, 170_000, 130_000)
+        combined = "\n\n".join(cb["content"] for cb in code_blocks)
+        fitted_size, _ = _fit_code_font_size(combined, inner_geo, c_size_default, min_size=MIN_READABLE_CODE_PT)
+
+        if fitted_size >= MIN_READABLE_CODE_PT:
+            result.append(slide)
+            continue
+
+        # Código ilegible: si hay un solo bloque no se puede dividir más
+        if len(code_blocks) <= 1:
+            result.append(slide)
+            continue
+
+        # Múltiples bloques: primera slide mantiene cuerpo + primer bloque
+        first = dict(slide)
+        first = {k: (list(v) if isinstance(v, list) else v) for k, v in slide.items()}
+        first["code_blocks"] = [code_blocks[0]]
+        result.append(first)
+
+        # Slides adicionales: solo código continuado
+        codigo_layout = LAYOUT_MAP.get("codigo", layout)
+        for i, cb in enumerate(code_blocks[1:], start=2):
+            extra: dict = {
+                "id":          f"{slide['id']}-ext{i}",
+                "type":        "codigo",
+                "title":       slide.get("title", ""),
+                "subtitle":    "(continuación)",
+                "body_blocks": [],
+                "code_blocks": [cb],
+                "tables":      [],
+                "directives":  {},
+                "asset_hints": [],
+                "layout":      codigo_layout,
+                "image":       {"layer": "none", "prompt": "", "local_asset": "", "drive_id": None},
+                "table_assets": [],
+            }
+            result.append(extra)
+
+    return result
+
+
+def _publish_part(
+    drive_svc,
+    slides_svc,
+    template_id: str,
+    title: str,
+    slides: list[dict],
+    config: dict,
+    topic_folder: Path,
+    url_suffix: str = "",
+) -> str:
+    """Crea una presentación de Google Slides para un subconjunto de slides.
+
+    Descarga las dimensiones reales del template, pre-procesa código ilegible,
+    construye y envía todos los requests en lotes, limpia textos residuales del
+    template y guarda la URL en slides-url{url_suffix}.txt.
+    """
+    print(f"  Copiando plantilla {template_id} → '{title}' …")
     pres_id = _copy_template(drive_svc, template_id, title)
     print(f"  Presentación creada: {pres_id}")
 
+    # Calibrar geometría con las dimensiones reales del template
+    page_w, page_h = _get_presentation_page_size(slides_svc, pres_id)
+
     _clear_slides(slides_svc, pres_id)
 
+    # Pre-procesar: dividir slides con código ilegible en slides adicionales
+    slides = _split_oversized_code_slides(slides, config, page_w, page_h)
+
     all_reqs: list[dict] = []
-    for idx, slide in enumerate(plan["slides"]):
-        page_id  = f"slide_{slide['id'].replace('-', '_')}"
-        reqs     = _build_slide_requests(slide, config, page_id, idx)
+    for idx, slide in enumerate(slides):
+        page_id = f"slide_{slide['id'].replace('-', '_')}"
+        reqs = _build_slide_requests(slide, config, page_id, idx, page_w, page_h)
         all_reqs.extend(reqs)
 
     BATCH = 50
@@ -1915,7 +1997,7 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
             print(f"     • {msg}")
         raise RuntimeError("Publish incompleto: uno o más lotes de Google Slides fallaron")
 
-    # ── Limpieza: elimina textos del template que quedaron en los slides ─
+    # Limpieza: elimina textos del template que quedaron en los slides
     _TEMPLATE_TEXTS = {
         "portada", "the uncomfortable question",
         "the uncomfistable question", "what is a paradigmm?",
@@ -1942,13 +2024,58 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
     except Exception as exc:
         print(f"  ⚠️  No se pudo limpiar textos del template: {exc}")
 
-    url      = f"https://docs.google.com/presentation/d/{pres_id}/edit"
-    url_path = topic_folder / "slides" / "slides-url.txt"
+    url = f"https://docs.google.com/presentation/d/{pres_id}/edit"
+    url_fname = f"slides-url{url_suffix}.txt"
+    url_path = topic_folder / "slides" / url_fname
     url_path.parent.mkdir(parents=True, exist_ok=True)
     url_path.write_text(url, encoding="utf-8")
-
-    print(f"  ✅ URL: {url}")
+    print(f"  ✅ '{title}': {url}")
     return url
+
+
+def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: Path) -> str:
+    """Fase 3: Crea presentación(es) en Google Slides desde el plan.
+
+    Si hay más de SLIDES_PER_PRESENTATION slides, divide en 2 partes con nombres
+    '{título} 1' y '{título} 2', y guarda slides-url-1.txt y slides-url-2.txt.
+    Siempre escribe slides-url.txt apuntando a la primera parte.
+    Devuelve la URL principal (o ambas separadas por newline si son 2 partes).
+    """
+    print("\n🚀 Fase 3 — Publicando en Google Slides …")
+
+    drive_svc  = build("drive", "v3", credentials=creds)
+    slides_svc = build("slides", "v1", credentials=creds)
+
+    template_id = plan["meta"]["template_id"]
+    base_title  = plan["meta"]["title"]
+    all_slides  = plan["slides"]
+
+    # Dividir en partes si supera el límite por presentación
+    if len(all_slides) > SLIDES_PER_PRESENTATION:
+        half = (len(all_slides) + 1) // 2  # parte 1 recibe la mitad superior
+        parts: list[tuple[str, list[dict], str]] = [
+            (f"{base_title} 1", all_slides[:half],        "-1"),
+            (f"{base_title} 2", all_slides[half:],        "-2"),
+        ]
+        print(f"  ⚡ {len(all_slides)} slides → dividiendo en 2 partes "
+              f"({half} + {len(all_slides) - half} slides)")
+    else:
+        parts = [(base_title, all_slides, "")]
+
+    urls: list[str] = []
+    for part_title, part_slides, url_suffix in parts:
+        url = _publish_part(
+            drive_svc, slides_svc, template_id, part_title,
+            part_slides, config, topic_folder, url_suffix,
+        )
+        urls.append(url)
+
+    # slides-url.txt apunta siempre a la primera parte (o única presentación)
+    url_path = topic_folder / "slides" / "slides-url.txt"
+    url_path.parent.mkdir(parents=True, exist_ok=True)
+    url_path.write_text(urls[0], encoding="utf-8")
+
+    return "\n".join(urls)
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -2061,17 +2188,22 @@ def main(argv: list[str] | None = None) -> None:
             return
 
     # ── Fase 3: Publicar ─────────────────────────────────────────────────
-    url = publish_slides(plan, config, creds, topic_folder)
+    url_result = publish_slides(plan, config, creds, topic_folder)
+    urls = url_result.split("\n")
 
     total = plan.get("meta", {}).get("total_slides", len(plan.get("slides", [])))
     title = plan.get("meta", {}).get("title", topic_folder.name)
+    url_lines = "\n".join(
+        f"   URL{f' parte {i + 1}' if len(urls) > 1 else ''}:    {u}"
+        for i, u in enumerate(urls)
+    )
 
     print(f"""
 🎉 Pipeline completado!
    Tema:    {title}
    Slides:  {total}
    Plan:    {plan_path.relative_to(project_root)}
-   URL:     {url}
+{url_lines}
 """)
 
 
