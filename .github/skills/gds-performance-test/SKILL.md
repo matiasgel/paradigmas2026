@@ -1,6 +1,7 @@
 ---
 name: gds-performance-test
 description: 'Design game performance testing strategy. Use when the user says "performance test" or "benchmark"'
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 ---
 
 # Performance Testing Strategy Workflow

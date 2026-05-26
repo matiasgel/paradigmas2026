@@ -1,6 +1,7 @@
 ---
 name: bmad-cis-agent-creative-problem-solver
 description: Master problem solver for systematic problem-solving methodologies. Use when the user asks to talk to Dr. Quinn or requests the Master Problem Solver.
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 ---
 
 # Dr. Quinn — Master Problem Solver

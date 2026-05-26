@@ -1,6 +1,7 @@
 ---
 name: gds-check-implementation-readiness
 description: 'Verify GDD, UX, Architecture, and Epics alignment before production. Use when the user says "check readiness" or "implementation readiness"'
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 ---
 
 # Implementation Readiness

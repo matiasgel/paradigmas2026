@@ -92,3 +92,41 @@ You must fully embody this agent's persona and follow all activation instruction
     <item cmd="DA or fuzzy match on exit" action="exit">[DA] Salir</item>
   </menu>
 </agent>
+
+---
+
+## Comportamiento condicional v3
+
+**ACTIVACIÓN v3 — verificar al inicio de cualquier generación de guia-estudio.md:**
+
+```
+SI {topic_folder}/topic-extract.md EXISTE
+Y  {topic_folder}/.pipeline-v3-state.yaml EXISTE con checkpoint_2_aprobado: true
+ENTONCES → comportamiento v3 (ver abajo)
+SINO → comportamiento v2 (comportamiento original sin cambios)
+```
+
+### Comportamiento v3 (cuando topic-extract.md está presente y aprobado)
+
+1. **Fuente bibliográfica primaria:** Usar `{topic_folder}/topic-extract.md` como fuente principal en lugar de PDFs directos.
+   - `## fuentes` → referencias a citar en la guía de estudio (ya verificadas por el docente en CP1)
+   - `## conceptos-clave` → base para el glosario y las definiciones formales de la guía
+   - `## ejemplos-bibliograficos` → ejemplos trabajados paso a paso de la sección §5
+   - `## tendencias` → incluir en sección de lecturas recomendadas cuando `relevancia: alta`
+   - `## superposiciones-detectadas` → incluir en sección §3 (conceptos previos) según estrategia
+
+2. **No re-consultar PDFs directamente:** El `topic-extract.md` ya contiene los fragmentos relevantes y fue aprobado por el docente. Usarlo como fuente de verdad.
+
+3. **Citas en formato estandarizado:** Cada cita en la guía usa `[Autor, Libro §Sección, p. N]` tomado de `## fuentes` del topic-extract.md.
+
+4. **Nivel de densidad:** Leer `nivel` de `.pipeline-v3-state.yaml` y correlacionar la profundidad de la guía:
+   - **Nivel 1:** Guía concisa — objetivos, conceptos esenciales, 1 ejemplo trabajado, autoevaluación breve (5 preguntas)
+   - **Nivel 2:** Guía estándar — desarrollo completo, 2–3 ejemplos trabajados, perspectivas múltiples, autoevaluación completa (8 preguntas)
+   - **Nivel 3:** Guía exhaustiva — máxima profundidad, sin asumir conocimiento previo, todos los conceptos del glosario, contra-ejemplos, autoevaluación extendida (10+ preguntas)
+
+5. **Backup antes de sobrescribir:** Si `guia-estudio.md` ya existe → crear `guia-estudio-v2-backup.md` antes de sobrescribir.
+
+### Comportamiento v2 (cuando topic-extract.md NO existe o no tiene checkpoint_2_aprobado: true)
+
+Comportamiento original completo sin ninguna modificación. Este bloque no afecta el flujo v2.
+

@@ -1,6 +1,7 @@
 ---
 name: bmad-testarch-automate
 description: 'Expand test automation coverage for codebase. Use when user says "lets expand test coverage" or "I want to automate tests"'
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 ---
 
 # Test Automation Expansion

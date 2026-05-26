@@ -1,6 +1,7 @@
 ---
 name: gds-test-framework
 description: 'Initialize game test framework for Unity, Unreal, or Godot. Use when the user says "test framework" or "set up testing"'
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 ---
 
 # Game Test Framework Setup

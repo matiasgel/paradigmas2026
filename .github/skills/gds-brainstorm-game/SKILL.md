@@ -1,6 +1,7 @@
 ---
 name: gds-brainstorm-game
 description: 'Facilitate game brainstorming sessions with game-specific techniques. Use when the user says "brainstorm game" or "game ideas"'
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 ---
 
 # Brainstorm Game Workflow

@@ -1,6 +1,7 @@
 ---
 name: gds-playtest-plan
 description: 'Create structured playtesting plans for user feedback. Use when the user says "playtest plan" or "playtesting"'
+tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
 ---
 
 # Playtest Planning
