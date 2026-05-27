@@ -1,16 +1,10 @@
-# Filminas — Módulo VI: Autenticación, Autorización y Django Admin
+﻿# Filminas — Módulo VI: Autenticación, Autorización y Django Admin
 # Tema 06 | Laboratorio de Programación y Lenguajes 2026
-# 2 Clases teóricas — 180 min c/u | Django 5.1 · Python 3.13 · Bootstrap 5.3.3
+# 2 Clases teóricas — 120 min c/u | Django 6.0 · Python 3.12+ · Bootstrap 5.3.3
 
 ---
 
-# ═══════════════════════════════════════════════════════
-# CLASE 1 — Autenticación Django (180 min)
-# ═══════════════════════════════════════════════════════
-
----
-
-## PORTADA
+# CLASE 1 — Autenticación Django (120 min)
 
 ---
 
@@ -22,40 +16,56 @@
 
 # Módulo VI — Autenticación Django
 
-Quién sos y cómo lo demuestra tu aplicación web.
+¿Quién sos? ¿Cómo lo prueba tu aplicación?
 
-Semana 12 · BlogApp · `django.contrib.auth` · Django 5.1
-
----
-
-## BLOQUE T1 — Sesiones Django (25 min)
+Semana 12 · BlogApp · `django.contrib.auth` · Django 6.0
 
 ---
 
-### [F1-01] HTTP es stateless — las sesiones son el puente
+## BLOQUE T1 — HTTP y Sesiones (15 min)
+
+---
+
+### [F1-01] HTTP no recuerda al cliente — el problema fundamental
 
 @tipo: concepto-abstracto
 
-# HTTP no recuerda al cliente — Django resuelve esto con sesiones del lado del servidor
+# HTTP es un protocolo sin memoria. Cada request viaja sola y el servidor olvida todo.
 
-## El problema fundamental
+## Por qué necesitamos sesiones
 
 El protocolo HTTP procesa cada request de forma completamente independiente.
-El servidor no tiene memoria de la request anterior. Pero las aplicaciones necesitan saber **"este browser ya se autenticó"**.
+El servidor recibe un GET, responde, y no tiene ningún registro de quién era ese cliente.
+Cualquier aplicación real necesita saber: **¿este browser ya se autenticó?**
 
-## La solución: sesiones
+Hay tres enfoques históricos para resolver esto:
+
+| Enfoque | Mecanismo | Problema |
+|---------|-----------|----------|
+| Cookies con datos | guardar user_id en la cookie | La cookie es manipulable por el usuario |
+| JWT en cookie | token firmado en cookie | Revocación compleja, tamaño grande |
+| **Sesiones del servidor** (Django) | cookie con ID opaco, datos en servidor | El estándar — datos seguros en BD |
+
+## Lo que hace Django
 
 ```
-Browser                         Django Server
-─────────────────────────────────────────────────────────
-Cookie: sessionid=a1b2c3d4   →  Busca en BD:
-                                  session_data para "a1b2c3d4"
-                                  → request.session = {"_auth_user_id": "42"}
+Browser                              Django Server
+───────────────────────────────────────────────────────────────
+GET /dashboard/   (sin cookie)  →   AnonymousUser → redirige /login/
+
+POST /login/  {user, pass}      →   verifica credenciales
+                                →   crea fila en django_session (BD)
+                                ←   Set-Cookie: sessionid=a1b2c3d4  ← UUID opaco
+
+GET /dashboard/
+Cookie: sessionid=a1b2c3d4     →   AuthenticationMiddleware:
+                                    busca "a1b2c3d4" en django_session
+                                →   request.user = User(id=42) ok
 ```
 
-- `sessionid` — string opaco (UUID4). **No contiene datos del usuario**
-- Los datos viven en el servidor, no en el browser
-- El atacante no puede fabricar una `sessionid` válida — es criptográficamente aleatoria
+- `sessionid` es un UUID opaco — **no contiene datos del usuario**
+- Los datos viven en el **servidor**, no en el browser
+- El atacante no puede fabricar un sessionid válido
 
 ---
 
@@ -63,139 +73,187 @@ Cookie: sessionid=a1b2c3d4   →  Busca en BD:
 
 @tipo: tabla
 
-# Django tiene 4 backends de sesión — el default es BD, el de producción es cached_db
+# Django tiene 4 backends de sesión — el default es BD, el de producción es cached_db.
 
-## Backends disponibles
+## Los cuatro backends
 
-| Backend | Almacenamiento | Uso recomendado |
-|---------|---------------|-----------------|
+| Backend | Almacenamiento | Cuándo usar |
+|---------|---------------|-------------|
 | `db` (default) | tabla `django_session` | Desarrollo y apps de baja carga |
-| `cache` | Redis / Memcached | Alta performance, sin persistencia |
-| `cached_db` | Redis + BD | **Producción recomendada** |
-| `file` | archivos del servidor | No distribuido — evitar |
+| `cache` | Redis / Memcached | Alta performance, acepta pérdida de sesiones |
+| `cached_db` | Redis + BD fallback | **Producción recomendada** |
+| `file` | archivos en el servidor | No distribuido — no usar en producción |
 
 ## Settings críticos de seguridad
 
 ```python
-SESSION_COOKIE_HTTPONLY = True   # JS no puede leer sessionid → anti-XSS
-SESSION_COOKIE_SECURE   = True   # Solo HTTPS → producción obligatorio
+# settings.py
+SESSION_COOKIE_HTTPONLY = True    # JS NO puede leer sessionid → anti-XSS
+SESSION_COOKIE_SECURE   = True    # solo por HTTPS (obligatorio en producción)
 SESSION_COOKIE_AGE      = 1209600  # 2 semanas en segundos (default)
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 ```
 
+**Por qué HTTPONLY es crítico:**
+Si JavaScript pudiera leer `sessionid`, un ataque XSS podría robar la cookie
+y suplantar al usuario. Con HTTPONLY, solo el browser la maneja.
+
 ---
 
-### [F1-03] Ciclo de vida completo de una sesión Django
+### [F1-03] Ciclo de vida completo de una sesión
 
 @tipo: diagrama-flujo
 
-# Desde el GET /login/ hasta el POST /logout/ — 5 momentos clave
+# Cinco momentos definen el ciclo: generación, autenticación, uso, destrucción.
 
-## Secuencia de eventos
+## La secuencia con lo que Django hace internamente
 
 ```
 1. GET /login/
-   → Django genera session_key UUID4 (sesión anónima, no autenticada)
+   → Django genera session_key UUID4 (sesión anónima)
 
-2. POST /login/ credenciales
+2. POST /login/ {username: "juan", password: "secreto"}
    → authenticate(request, username, password)
+      → ModelBackend: busca User, llama check_password()
+      → retorna User si válido | None si inválido | None si is_active=False
    → login(request, user)
-      → INSERT django_session con session_data = {"_auth_user_id": "42"}
-      → Set-Cookie: sessionid=<nueva_key>  ← rotación anti-fixation
+      → session["_auth_user_id"] = str(user.pk)
+      → INSERT en django_session
+      → ROTA el sessionid (nuevo UUID) — previene session fixation attack
 
-3. Requests subsiguientes
-   → Cookie sessionid → Django carga session_data
-   → request.user = User(id=42)  ← AuthenticationMiddleware
+3. Requests subsiguientes: Cookie sessionid=<nuevo_uuid>
+   → AuthenticationMiddleware.process_request()
+   → SELECT en django_session WHERE session_key = <uuid>
+   → request.user = User(id=42) — disponible en TODA vista y template
 
-4. request.user disponible en toda vista y template
-   → user.is_authenticated == True
+4. request.user.is_authenticated → True
+   request.user.username → "juan"
+   request.user.has_perm("blog.add_post") → True/False
 
 5. POST /logout/
-   → session.flush()  → DELETE django_session
-   → Cookie sessionid nueva vacía
+   → session.flush() → DELETE en django_session
+   → nueva sessionid vacía
    → request.user = AnonymousUser
 ```
 
-## Error frecuente
+## El error más común
 
-`authenticate()` verifica credenciales pero **NO crea sesión**.
-`login()` es obligatorio para que la sesión persista entre requests.
-
----
-
-## BLOQUE T2 — django.contrib.auth (40 min)
+`authenticate()` verifica credenciales pero **NO crea la sesión**.
+Olvidar `login()` → la próxima request ve `request.user = AnonymousUser`.
 
 ---
 
-### [F1-04] Mapa de componentes de django.contrib.auth
+## BLOQUE T2 — django.contrib.auth (35 min)
+
+---
+
+### [F1-04] django.contrib.auth: un sistema de 7 componentes
 
 @tipo: concepto-abstracto
 
-# django.contrib.auth no es un modelo — es un sistema completo de 7 componentes
+# django.contrib.auth no es solo un modelo de usuario — es un sistema completo de identidad.
 
-## Arquitectura del paquete
+## Qué incluye el paquete
+
+Django viene con autenticación completa preinstalada.
+No hay que instalar librerías externas para login, logout,
+cambio y reset de contraseña, grupos y permisos.
 
 ```
 django.contrib.auth
-│
-├── models.py      User · Group · Permission · AbstractUser · AbstractBaseUser
-├── backends.py    ModelBackend (verifica credenciales contra BD)
-├── middleware.py  AuthenticationMiddleware → request.user en TODA vista
-├── views.py       LoginView · LogoutView · PasswordChangeView · PasswordResetView
+|
+├── models.py      User · Group · Permission
+|                  AbstractUser · AbstractBaseUser
+|
+├── backends.py    ModelBackend       — verifica credenciales contra la BD
+|                  RemoteUserBackend  — para LDAP / SSO corporativo
+|
+├── middleware.py  AuthenticationMiddleware
+|                  → convierte sessionid en User | AnonymousUser en CADA request
+|                  → popula request.user ANTES de llegar a la vista
+|
+├── views.py       LoginView · LogoutView
+|                  PasswordChangeView · PasswordResetView (flujo de 4 vistas)
+|
 ├── forms.py       AuthenticationForm · UserCreationForm · UserChangeForm
+|
 ├── decorators.py  @login_required · @permission_required · @user_passes_test
-└── mixins.py      LoginRequiredMixin · PermissionRequiredMixin
+|
+└── mixins.py      LoginRequiredMixin · PermissionRequiredMixin · UserPassesTestMixin
 ```
 
-## AuthenticationMiddleware
+## Activación (ya viene en proyectos nuevos)
 
-Sin este middleware en `MIDDLEWARE`, `request.user` no existe.
-Convierte `sessionid` → `User | AnonymousUser` en cada request, antes de que llegue a la vista.
+```python
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",           # el sistema de auth
+    "django.contrib.contenttypes",   # base del sistema de permisos
+    "django.contrib.sessions",
+    "django.contrib.messages",       # requerido para el admin
+]
+MIDDLEWARE = [
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+]
+```
 
 ---
 
-### [F1-05] El modelo User — campos organizados por propósito
+### [F1-05] El modelo User — tres categorías de campos
 
 @tipo: tabla
 
-# User tiene 3 tipos de campos — identidad, seguridad y flags de autorización
+# User tiene campos de identidad, seguridad y flags de autorización — cada uno con semántica precisa.
 
 ## Campos de identidad
 
 | Campo | Tipo | Nota |
 |-------|------|------|
 | `username` | CharField(150) | Único, obligatorio |
-| `email` | EmailField | **No único por defecto** — trampa frecuente |
-| `first_name` | CharField | Opcional |
-| `last_name` | CharField | Opcional |
+| `email` | EmailField | **No único por defecto** — trampa clásica |
+| `first_name` / `last_name` | CharField | Opcionales |
+
+## Campos de seguridad
+
+| Campo | Nota |
+|-------|------|
+| `password` | `pbkdf2_sha256$1200000$<salt>$<hash>` — siempre hasheado |
+| `last_login` | Actualizado automáticamente por `login()` |
 
 ## Flags de autorización
 
-| Campo | Significado |
-|-------|-------------|
-| `is_active` | `False` = cuenta desactivada, no eliminada (soft delete) |
-| `is_staff` | `True` = puede entrar al `/admin/` |
-| `is_superuser` | `True` = bypasses TODAS las verificaciones de permisos |
+| Campo | Semántica operativa |
+|-------|---------------------|
+| `is_active` | False = desactivada (soft delete). `login()` falla si es False. |
+| `is_staff` | True = puede entrar a /admin/. No implica permisos específicos. |
+| `is_superuser` | True = `has_perm()` siempre True. Solo administradores técnicos. |
 
-## Regla crítica
+## Regla de oro con passwords
 
 ```python
-# ❌ NUNCA — guarda texto plano
+# MAL — texto plano en la BD
 user.password = "secreto123"
 
-# ✅ SIEMPRE — hashea con PBKDF2+SHA256
+# BIEN — PBKDF2+SHA256 (1.200.000 iteraciones en Django 6.0)
 user.set_password("secreto123")
+# Django 6.0: iteraciones subieron de 1.000.000 a 1.200.000
+# Contraseñas existentes se re-hashean al próximo login automáticamente
 ```
 
 ---
 
-### [F1-06] AbstractUser — extensión del modelo de usuario
+### [F1-06] AbstractUser — extender sin perder el sistema de auth
 
 @tipo: codigo
 
-# Extender AbstractUser es la forma recomendada de agregar campos personalizados
+# AbstractUser hereda toda la funcionalidad de User y permite agregar campos propios.
 
-## Implementación
+## La regla: definir AUTH_USER_MODEL antes de la primera migración
+
+Si queremos agregar bio, teléfono o avatar después de migrar,
+es imposible sin borrar las tablas. `AbstractUser` nos da flexibilidad desde el inicio.
 
 ```python
 # blog/models.py
@@ -205,334 +263,194 @@ from django.db import models
 class BlogUser(AbstractUser):
     bio    = models.TextField(blank=True)
     avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
-    # Hereda TODOS los campos de User:
-    # username, email, password, is_active, is_staff, is_superuser, groups...
+    # Hereda: username, email, password, is_active, is_staff,
+    #         is_superuser, groups, user_permissions, last_login, date_joined
 ```
 
-## Registro en settings.py
-
 ```python
-# settings.py  ← DEBE estar ANTES de la primera migración
+# settings.py — ANTES de la primera migración
 AUTH_USER_MODEL = "blog.BlogUser"
 ```
 
 ## Importar User de forma genérica
 
 ```python
-# En lugar de: from django.contrib.auth.models import User
+# MAL — acoplado al modelo concreto:
+from django.contrib.auth.models import User
+
+# BIEN — funciona con cualquier AUTH_USER_MODEL:
 from django.contrib.auth import get_user_model
-User = get_user_model()  # retorna BlogUser si AUTH_USER_MODEL está configurado
+User = get_user_model()
+
+# Para ForeignKey — usar settings, no importar el modelo directamente:
+from django.conf import settings
+author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 ```
-
-## Advertencia
-
-Si `AUTH_USER_MODEL` se define **después** de ejecutar `migrate` → errores de migración inconsistentes → solución: borrar BD y reconstruir.
 
 ---
 
-### [F1-07] authenticate() vs login() — la distinción crítica
+### [F1-07] authenticate() vs login() — la distinción que más confunde
 
 @tipo: codigo
 
-# authenticate() verifica. login() crea la sesión. Ambas son obligatorias.
+# authenticate() verifica identidad. login() crea la sesión. Ambas son necesarias y hacen cosas distintas.
 
-## El flujo correcto
+## Por qué son funciones separadas
+
+La separación permite autenticar desde múltiples backends (BD, OAuth, LDAP)
+sin cambiar cómo se crea la sesión.
+`authenticate()` normaliza la identidad; `login()` la persiste.
 
 ```python
 from django.contrib.auth import authenticate, login
 
 user = authenticate(request, username="juan", password="secreto")
-# ┌─ authenticate() hace:
-# │   → ModelBackend.authenticate()
-# │   → User.check_password(raw_password)
-# │   → retorna User si válido | None si inválido
-# └─ NO crea sesión
+# → recorre AUTHENTICATION_BACKENDS en orden
+# → ModelBackend: busca User, llama check_password()
+# → retorna User si válido | None si inválido | None si is_active=False
 
 if user is not None:
     login(request, user)
-    # ┌─ login() hace:
-    # │   → Crea fila en django_session
-    # │   → Rota sessionid (previene session fixation)
-    # └─  → request.user = user
+    # → session["_auth_user_id"] = str(user.pk)
+    # → INSERT en django_session
+    # → ROTA el sessionid (previene session fixation attack)
     return redirect("blog:post-list")
+else:
+    # No revelar cuál campo es incorrecto — esa info ayuda a atacantes
+    messages.error(request, "Usuario o contraseña incorrectos.")
 ```
 
-## La confusión más común
-
-```python
-user = authenticate(request, username="juan", password="secreto")
-# Sin login() → próxima request: request.user = AnonymousUser
-# El usuario "se logueó" solo en esa función — la sesión no existe
-```
-
----
-
-### [F1-08] logout() — tres acciones de seguridad en una llamada
-
-@tipo: codigo
-
-# logout() no es solo limpiar la sesión — rota la cookie y borra los datos
-
-## Lo que hace logout()
+## logout() — tres acciones en una llamada
 
 ```python
 from django.contrib.auth import logout
 
-def cerrar_sesion(request):
-    logout(request)
-    # 1. session.flush() → DELETE django_session
-    # 2. Genera nueva sessionid vacía → cookie actualizada
-    # 3. request.user = AnonymousUser
-    return redirect("blog:post-list")
+logout(request)
+# 1. session.flush() → DELETE en django_session
+# 2. genera nueva sessionid vacía en cookie
+# 3. request.user = AnonymousUser
 ```
 
-## Django 5.x — LogoutView solo acepta POST
+---
+
+### [F1-08] Vistas genéricas de auth y novedades Django 6.0
+
+@tipo: codigo
+
+# Una línea en urls.py registra todo el ciclo de autenticación. Django 6.0 agrega login_not_required().
+
+## Por qué usar las vistas de Django y no implementar las propias
+
+Las vistas de `django.contrib.auth.views` manejan correctamente:
+rotación de sessionid, parámetro `?next=`, CSRF en logout,
+invalidación de sesión al cambiar contraseña.
+Implementar esto desde cero es un camino conocido a vulnerabilidades.
+
+```python
+# urls.py
+urlpatterns = [
+    path("admin/",    admin.site.urls),
+    path("accounts/", include("django.contrib.auth.urls")),
+    # Registra: login/ · logout/ · password_change/ · password_change/done/
+    #           password_reset/ · password_reset/done/
+    #           reset/<uidb64>/<token>/ · reset/done/
+    path("accounts/register/", RegisterView.as_view(), name="register"),
+    path("blog/",     include("blog.urls", namespace="blog")),
+]
+```
+
+```python
+# settings.py
+LOGIN_URL           = "/accounts/login/"
+LOGIN_REDIRECT_URL  = "/blog/"
+LOGOUT_REDIRECT_URL = "/blog/"
+```
+
+## LogoutView — solo POST desde Django 5.x (y 6.0)
 
 ```html
-<!-- ❌ GET rechazado en Django 5 — vulnerable a CSRF logout forzado -->
+<!-- MAL — GET en logout rechazado por protección CSRF -->
 <a href="{% url 'logout' %}">Salir</a>
 
-<!-- ✅ POST con csrf_token — único método válido -->
+<!-- BIEN — POST con csrf_token -->
 <form method="post" action="{% url 'logout' %}">
     {% csrf_token %}
     <button type="submit" class="btn btn-outline-secondary btn-sm">Salir</button>
 </form>
 ```
 
----
+**Por qué GET es peligroso:** `<img src="https://mi-app.com/accounts/logout/">` en
+una página de terceros provocaría logout involuntario sin consentimiento del usuario.
 
-## BLOQUE T3 — Vistas genéricas de auth (40 min)
-
----
-
-### [F1-09] include("django.contrib.auth.urls") — 8 vistas con una línea
-
-@tipo: codigo
-
-# Una línea de URLconf registra todo el ciclo de autenticación de Django
-
-## Configuración
+## Django 6.0 — login_not_required() y API async
 
 ```python
-# blog_project/urls.py
-from django.urls import path, include
+# Para proyectos con LoginRequiredMiddleware (todo requiere auth por defecto):
+from django.contrib.auth.decorators import login_not_required
 
-urlpatterns = [
-    path("admin/",    admin.site.urls),
-    path("accounts/", include("django.contrib.auth.urls")),
-    path("blog/",     include("blog.urls", namespace="blog")),
-]
+@login_not_required          # exime esta vista del middleware global
+def login_view(request): ...
+
+@login_not_required
+def register_view(request): ...
 ```
-
-## Rutas registradas automáticamente
-
-```
-accounts/login/                   → LoginView          name="login"
-accounts/logout/                  → LogoutView         name="logout"
-accounts/password_change/         → PasswordChangeView
-accounts/password_change/done/    → PasswordChangeDoneView
-accounts/password_reset/          → PasswordResetView
-accounts/password_reset/done/     → PasswordResetDoneView
-accounts/reset/<uidb64>/<token>/  → PasswordResetConfirmView
-accounts/reset/done/              → PasswordResetCompleteView
-```
-
-`/accounts/register/` **no está incluido** — hay que implementarlo manualmente.
-
----
-
-### [F1-10] LoginView — flow y configuración
-
-@tipo: codigo
-
-# LoginView encapsula authenticate() + login() — solo necesita template y redirect
-
-## Flow interno
-
-```
-GET  /accounts/login/  →  render AuthenticationForm vacío
-POST /accounts/login/  →  form.is_valid()
-                            → authenticate()
-                            → login()
-                            → redirect a LOGIN_REDIRECT_URL (o ?next=)
-                          form inválido → render con errores
-```
-
-## Configuración personalizada
 
 ```python
-# urls.py — override de defaults
-from django.contrib.auth import views as auth_views
+# API async para vistas ASGI / Django Channels:
+from django.contrib.auth import aauthenticate, alogin, alogout
 
-urlpatterns += [
-    path("login/",
-         auth_views.LoginView.as_view(
-             template_name="registration/login.html",
-             redirect_authenticated_user=True,  # ya logueado → redirect directo
-         ),
-         name="login"),
-]
-```
+async def mi_login(request):
+    user = await aauthenticate(request, username=..., password=...)
+    if user:
+        await alogin(request, user)
 
-## settings.py
-
-```python
-LOGIN_URL           = "/accounts/login/"  # destino de @login_required
-LOGIN_REDIRECT_URL  = "/blog/"            # después de login exitoso
-```
-
-## El parámetro ?next=
-
-Si la URL tiene `?next=/posts/crear/`, LoginView redirige ahí en lugar de `LOGIN_REDIRECT_URL`.
-Siempre incluir en el template: `<input type="hidden" name="next" value="{{ next }}">`
-
----
-
-### [F1-11] LogoutView y Django 5.x
-
-@tipo: codigo
-
-# LogoutView rechaza GET en Django 5 — requiere POST con csrf_token
-
-## Cambio de comportamiento en Django 5
-
-```python
-# settings.py
-LOGOUT_REDIRECT_URL = "/blog/"   # dónde va el usuario después del logout
-```
-
-```html
-<!-- ❌ ROTO en Django 5 -->
-<a href="/accounts/logout/">Salir</a>
-
-<!-- ✅ CORRECTO — siempre POST -->
-<form method="post" action="{% url 'logout' %}">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-outline-danger btn-sm">Salir</button>
-</form>
-```
-
-## ¿Por qué GET es peligroso para logout?
-
-Una imagen en una página de terceros:
-`<img src="https://mi-app.com/logout/">` haría logout involuntario del usuario sin su consentimiento.
-
----
-
-### [F1-12] PasswordChangeView — cambio con sesión activa
-
-@tipo: codigo
-
-# PasswordChangeView requiere usuario logueado — verifica contraseña actual antes de cambiar
-
-## Flow del cambio de contraseña
-
-```python
-# PasswordChangeView hace automáticamente:
-# 1. Verifica old_password con check_password()
-# 2. Valida new_password1 == new_password2
-# 3. Ejecuta AUTH_PASSWORD_VALIDATORS sobre la nueva contraseña
-# 4. user.set_password(new_password1)  ← hashea
-# 5. update_session_auth_hash(request, user)  ← mantiene al usuario logueado
-# 6. redirect a /accounts/password_change/done/
-```
-
-## Validators de contraseña
-
-```python
-AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "...UserAttributeSimilarityValidator"},
-    {"NAME": "...MinimumLengthValidator", "OPTIONS": {"min_length": 8}},
-    {"NAME": "...CommonPasswordValidator"},
-    {"NAME": "...NumericPasswordValidator"},
-]
-```
-
-Si se omite `update_session_auth_hash()` → el usuario queda deslogueado después de cambiar la contraseña.
-
----
-
-### [F1-13] PasswordResetView — flujo de 4 vistas encadenadas
-
-@tipo: diagrama-flujo
-
-# El reset de contraseña usa un token de un solo uso — 4 vistas en cadena
-
-## Flujo completo
-
-```
-1. /accounts/password_reset/
-   PasswordResetView → form con email
-   → genera token HMAC firmado (expira según PASSWORD_RESET_TIMEOUT)
-   → envía email con /reset/<uidb64>/<token>/
-
-2. /accounts/password_reset/done/
-   PasswordResetDoneView → "Revisá tu email"
-
-3. /accounts/reset/<uidb64>/<token>/
-   PasswordResetConfirmView → form nueva contraseña
-   → verifica token (one-time use — se invalida al usarse)
-   → user.set_password()
-
-4. /accounts/reset/done/
-   PasswordResetCompleteView → "Contraseña cambiada exitosamente"
-```
-
-## Config para desarrollo
-
-```python
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-# Imprime el email en la consola — sin servidor SMTP
+user = await request.auser()   # obtener usuario en vista async
 ```
 
 ---
 
-## BLOQUE T4 — Templates de autenticación (25 min)
+## BLOQUE T3 — Templates y Registro (30 min)
 
 ---
 
-### [F1-14] Naming convention registration/ — estructura obligatoria
+### [F1-09] Templates de auth: naming convention y variables de contexto
 
 @tipo: tabla
 
-# Django busca templates de auth en registration/ — el nombre del archivo es el contrato
+# Django busca templates de auth en registration/ — el nombre del archivo es el contrato.
 
-## Estructura de directorios
+## Estructura obligatoria
 
 ```
 templates/
   registration/
-    login.html                    ← LoginView
-    password_change_form.html     ← PasswordChangeView
-    password_change_done.html     ← PasswordChangeDoneView
-    password_reset_form.html      ← PasswordResetView
-    password_reset_done.html      ← PasswordResetDoneView
-    password_reset_email.html     ← email con el link de reset
-    password_reset_confirm.html   ← PasswordResetConfirmView
-    password_reset_complete.html  ← PasswordResetCompleteView
+    login.html                  ← LoginView
+    password_change_form.html   ← PasswordChangeView
+    password_change_done.html
+    password_reset_form.html    ← PasswordResetView (inicio del flujo)
+    password_reset_done.html    ← "revisá tu email"
+    password_reset_email.html   ← email con el link de reset
+    password_reset_confirm.html ← nueva contraseña (valida el token)
+    password_reset_complete.html
   blog/
-    register.html                 ← vista custom de registro
+    register.html               ← nuestra vista custom
 ```
-
-## settings.py — templates en raíz del proyecto
 
 ```python
-TEMPLATES = [{
-    "DIRS": [BASE_DIR / "templates"],  # ← busca aquí antes que en las apps
-    "APP_DIRS": True,
-    ...
-}]
+TEMPLATES = [{"DIRS": [BASE_DIR / "templates"], "APP_DIRS": True, ...}]
 ```
 
----
+## Variables de contexto en todos los templates (automáticas)
 
-### [F1-15] Template login.html con Bootstrap — los 3 elementos críticos
+| Variable | Descripción |
+|----------|-------------|
+| `user` | User o AnonymousUser |
+| `user.is_authenticated` | True si hay sesión activa |
+| `user.username` | vacío si es anónimo |
+| `user.is_staff` | puede acceder al admin |
+| `perms` | PermWrapper — verificador lazy de permisos |
 
-@tipo: codigo
-
-# Un template de login tiene 3 elementos sin los cuales algo se rompe
-
-## Los 3 elementos críticos
+## Template login.html — los 3 elementos críticos
 
 ```html
 {% extends "base.html" %}
@@ -547,13 +465,10 @@ TEMPLATES = [{
           <div class="alert alert-danger">Usuario o contraseña incorrectos.</div>
           {% endif %}
           <form method="post">
-            {% csrf_token %}                   {# 1. Sin esto → 403 Forbidden #}
+            {% csrf_token %}
             {{ form.as_p }}
-            <input type="hidden"
-                   name="next"
-                   value="{{ next }}">         {# 2. Sin esto → ?next= ignorado #}
-            <button type="submit"
-                    class="btn btn-primary w-100">Entrar</button>
+            <input type="hidden" name="next" value="{{ next }}">
+            <button type="submit" class="btn btn-primary w-100">Entrar</button>
           </form>
           <p class="mt-3 text-center">
             ¿No tenés cuenta? <a href="{% url 'register' %}">Registrate</a>
@@ -564,83 +479,27 @@ TEMPLATES = [{
   </div>
 </div>
 {% endblock %}
-{# 3. Sin form.errors → el usuario no sabe por qué falló el login #}
 ```
 
----
-
-### [F1-16] Variables de auth en templates y settings de redirect
-
-@tipo: tabla
-
-# El context processor auth inyecta user y perms en TODOS los templates automáticamente
-
-## Variables disponibles sin importar nada
-
-| Variable | Tipo | Descripción |
-|----------|------|-------------|
-| `{{ user }}` | `User` o `AnonymousUser` | Usuario actual |
-| `{{ user.is_authenticated }}` | bool | `True` si logueado |
-| `{{ user.username }}` | str | `""` si anónimo |
-| `{{ user.is_staff }}` | bool | `True` si puede usar el admin |
-| `{{ perms }}` | `PermWrapper` | Verificador de permisos (Clase 2) |
-
-## Settings de redirección
-
-```python
-LOGIN_URL           = "/accounts/login/"   # destino de @login_required
-LOGIN_REDIRECT_URL  = "/blog/"             # después de login exitoso
-LOGOUT_REDIRECT_URL = "/blog/"             # después de logout
-```
-
-## Navbar condicional mínimo
-
-```html
-{% if user.is_authenticated %}
-    {{ user.username }}
-    <form method="post" action="{% url 'logout' %}">{% csrf_token %}
-        <button type="submit">Salir</button>
-    </form>
-{% else %}
-    <a href="{% url 'login' %}">Iniciar sesión</a>
-{% endif %}
-```
+- Sin `{% csrf_token %}` → 403 Forbidden en el POST
+- Sin `name="next"` → `?next=` es ignorado, redirige siempre a `LOGIN_REDIRECT_URL`
+- Sin `{% if form.errors %}` → el usuario no sabe qué salió mal
 
 ---
 
-## BLOQUE T5 — Registro de usuario (30 min)
-
----
-
-### [F1-17] Por qué el registro no está en auth.urls
-
-@tipo: concepto-abstracto
-
-# Django no incluye registro porque cada aplicación define sus propios campos
-
-## Lo que provee Django
-
-- `UserCreationForm` — username + password1 + password2
-- Validación de unicidad de `username` automática
-- Validación de contraseña contra `AUTH_PASSWORD_VALIDATORS`
-
-## Lo que implementamos nosotros
-
-- Agregar `email` como campo **obligatorio y único**
-- `CreateView` CBV para manejar el formulario
-- Auto-login después del registro exitoso
-
-## ¿Por qué email no es único por defecto?
-
-El modelo `User` es genérico. Muchas aplicaciones usan `username` como identificador principal y el email como campo opcional. Django no impone una política — nosotros la aplicamos.
-
----
-
-### [F1-18] RegisterForm — UserCreationForm con email único
+### [F1-10] Registro: RegisterForm y RegisterView
 
 @tipo: codigo
 
-# Extender UserCreationForm para agregar email obligatorio con validación de unicidad
+# El registro no viene en auth.urls. UserCreationForm es la base que extendemos.
+
+## Por qué Django no incluye el registro
+
+El sistema de auth es genérico. Algunas apps requieren solo username,
+otras email obligatorio, otras campos de perfil adicionales.
+`UserCreationForm` es la base — la extendemos según necesidades.
+
+## RegisterForm con email único
 
 ```python
 # blog/forms.py
@@ -651,17 +510,14 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField(
-        required=True,
-        help_text="Requerido. Ingresá una dirección de email válida."
-    )
+    email = forms.EmailField(required=True)
 
     class Meta:
         model  = User
         fields = ("username", "email", "password1", "password2")
 
     def clean_email(self):
-        """Valida unicidad de email — User.email no tiene unique=True por defecto."""
+        # User.email no tiene unique=True — validamos unicidad manualmente
         email = self.cleaned_data["email"]
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("Este email ya está registrado.")
@@ -675,13 +531,7 @@ class RegisterForm(UserCreationForm):
         return user
 ```
 
----
-
-### [F1-19] RegisterView — CreateView con auto-login
-
-@tipo: codigo
-
-# CreateView para registro + auto-login + redirección si ya está logueado
+## RegisterView con auto-login y grupo por defecto
 
 ```python
 # blog/views.py
@@ -689,8 +539,6 @@ from django.contrib.auth import login
 from django.contrib.auth.models import Group
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
-from django.shortcuts import redirect
-from .forms import RegisterForm
 
 class RegisterView(CreateView):
     form_class    = RegisterForm
@@ -698,121 +546,53 @@ class RegisterView(CreateView):
     success_url   = reverse_lazy("blog:post-list")
 
     def dispatch(self, request, *args, **kwargs):
-        # Si ya está logueado → no tiene sentido registrarse
         if request.user.is_authenticated:
             return redirect(self.success_url)
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        # Asignar grupo reader por defecto
         try:
             reader_group = Group.objects.get(name="reader")
-            self.object.groups.add(reader_group)
+            self.object.groups.add(reader_group)   # nuevo usuario = lector por defecto
         except Group.DoesNotExist:
             pass
-        # Auto-login inmediatamente después del registro
-        login(self.request, self.object)
+        login(self.request, self.object)           # auto-login post-registro
         return response
 ```
 
-## URL
+---
 
-```python
-path("register/", RegisterView.as_view(), name="register"),
+### [F1-11] Cierre Clase 1
+
+@tipo: portada
+@imagen: none
+
+# Al terminar la Clase 1: BlogApp autentica usuarios. La Clase 2 controla qué pueden hacer.
+
+## Lo que construimos en la Clase 1
+
+```
+OK  BlogUser (AbstractUser con bio + avatar)
+OK  Registro con RegisterForm (email único) + auto-login + grupo reader
+OK  Login con LoginView + templates Bootstrap en registration/
+OK  Logout con form POST (Django 6.0 compatible)
+OK  PasswordChangeView y PasswordResetView configuradas
+OK  Variables user / perms disponibles en todos los templates
+OK  login_not_required() para vistas públicas con LoginRequiredMiddleware
+```
+
+## El problema que resuelve la Clase 2
+
+```
+FALTA  Juan puede editar el post de María sin ninguna restricción
+FALTA  Todos los usuarios logueados tienen el mismo nivel de acceso
+FALTA  No hay interfaz para que el staff administre el contenido
 ```
 
 ---
 
-### [F1-20] Template register.html — renderizado campo por campo
-
-@tipo: codigo
-
-# Renderizar form campo por campo permite agregar clases Bootstrap por field
-
-```html
-{% extends "base.html" %}
-{% block content %}
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-body p-4">
-          <h3 class="mb-4">Crear cuenta</h3>
-          <form method="post">
-            {% csrf_token %}
-            {% for field in form %}
-            <div class="mb-3">
-              <label for="{{ field.id_for_label }}" class="form-label">
-                {{ field.label }}{% if field.field.required %} *{% endif %}
-              </label>
-              {{ field }}
-              {% if field.errors %}
-              <div class="invalid-feedback d-block">
-                {{ field.errors|join:", " }}
-              </div>
-              {% endif %}
-              {% if field.help_text %}
-              <div class="form-text">{{ field.help_text }}</div>
-              {% endif %}
-            </div>
-            {% endfor %}
-            <button type="submit" class="btn btn-success w-100">Crear cuenta</button>
-          </form>
-          <hr>
-          <p class="text-center mb-0">
-            ¿Ya tenés cuenta? <a href="{% url 'login' %}">Iniciar sesión</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
-```
-
----
-
-### [F1-21] Cierre Clase 1 — estado de BlogApp + anticipo
-
-@tipo: concepto-abstracto
-
-# Al final de la Clase 1: BlogApp tiene autenticación completa
-
-## Lo que tenemos
-
-```
-✅ AbstractUser extendido con bio y avatar
-✅ Registro con RegisterForm (email único) + auto-login
-✅ Login con LoginView + templates Bootstrap en registration/
-✅ Logout con POST form (Django 5.x compatible)
-✅ PasswordChangeView y PasswordResetView configuradas
-✅ Variables user/perms disponibles en todos los templates
-```
-
-## Lo que FALTA — anticipo Clase 2
-
-```
-❌ Cualquier usuario logueado puede editar el post de otro
-❌ No hay diferencia entre roles (autor vs lector)
-❌ No hay interfaz de administración configurada
-```
-
-## La pregunta que resuelve la Clase 2
-
-> "Juan está logueado. ¿Puede editar el post de María?"
-> Respuesta actual: **sí, cualquiera puede**.
-> Respuesta después de la Clase 2: **solo si tiene permiso o es el autor**.
-
----
-
-# ═══════════════════════════════════════════════════════
-# CLASE 2 — Autorización y Django Admin (180 min)
-# ═══════════════════════════════════════════════════════
-
----
-
-## PORTADA
+# CLASE 2 — Autorización y Django Admin (120 min)
 
 ---
 
@@ -824,357 +604,180 @@ path("register/", RegisterView.as_view(), name="register"),
 
 # Módulo VI — Autorización y Django Admin
 
-Qué puede hacer cada usuario — y cómo administrar el sistema.
+¿Qué puede hacer cada usuario? ¿Quién administra el sistema?
 
 Semana 13 · Permisos · Grupos · Mixins CBV · `django.contrib.admin`
 
 ---
 
-## BLOQUE T1 — Sistema de permisos (30 min)
+## BLOQUE T1 — Autorización: capas y conceptos (40 min)
 
 ---
 
-### [F2-01] Los 4 permisos automáticos de Django por modelo
+### [F2-01] auth ≠ authz — la distinción más importante del módulo
 
-@tipo: tabla
+@tipo: concepto-abstracto
 
-# Django crea 4 permisos automáticamente para cada modelo después de migrate
+# Autenticación y autorización son problemas distintos con soluciones distintas en Django.
 
-## Naming convention
+## La diferencia conceptual
+
+**Autenticación** responde: *¿Quién sos?*
+Sesiones + credenciales → `request.user = User("juan")`
+
+**Autorización** responde: *¿Qué podés hacer?*
+Permisos + grupos → `has_perm()`, mixins, `get_queryset()`
+
+Un usuario puede estar autenticado pero sin autorización para una acción específica.
+Las dos capas son independientes y se complementan.
+
+## Las tres capas de autorización en Django
 
 ```
-<app_label>.<accion>_<model_name>
-
-blog.add_post       puede crear instancias de Post
-blog.change_post    puede modificar instancias de Post
-blog.delete_post    puede eliminar instancias de Post
-blog.view_post      puede ver instancias de Post (read-only)
+Capa 1 — ¿Está logueado?
+         LoginRequiredMixin / @login_required
+         |
+         sí
+         v
+Capa 2 — ¿Tiene el permiso de modelo?
+         PermissionRequiredMixin / @permission_required / has_perm()
+         |
+         sí
+         v
+Capa 3 — ¿Es el dueño del objeto?
+         get_queryset() → Http404 si no es el autor
+         |
+         sí
+         v
+         ejecutar la vista
 ```
 
-## Verificación en Python
+## En BlogApp
 
-```python
-user.has_perm("blog.add_post")       # True | False
-user.has_module_perms("blog")        # True si tiene algún perm de la app
-user.get_all_permissions()           # set de todos sus permisos
-
-# Superuser: has_perm() siempre retorna True (bypasses)
-# AnonymousUser: has_perm() siempre retorna False
-```
-
-## Creación
-
-Los permisos se crean automáticamente en la señal `post_migrate`.
-Sin `migrate` → no existen en la BD.
+| Acción | Capas requeridas |
+|--------|-----------------|
+| Ver posts | Sin restricción |
+| Crear post | Capa 1 + Capa 2 (blog.add_post) |
+| Editar mi propio post | Capa 1 + Capa 3 (author == request.user) |
+| Publicar cualquier post | Capa 1 + Capa 2 (blog.publish_post) |
+| Acceder al admin | is_staff = True |
 
 ---
 
-### [F2-02] Permisos personalizados en class Meta
+### [F2-02] Permisos por defecto y permisos personalizados
 
 @tipo: codigo
 
-# Permisos de dominio que van más allá de add/change/delete/view
+# Django crea 4 permisos por modelo automáticamente. Meta.permissions agrega los propios.
+
+## Los 4 permisos automáticos
+
+Para cada modelo Django crea en la señal `post_migrate`:
+
+```
+blog.add_post       → puede crear Post
+blog.change_post    → puede modificar Post
+blog.delete_post    → puede eliminar Post
+blog.view_post      → puede ver Post (solo lectura)
+```
 
 ```python
-# blog/models.py
-class Post(models.Model):
-    title        = models.CharField(max_length=200)
-    author       = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
-    )
-    is_published = models.BooleanField(default=False)
+user.has_perm("blog.add_post")        # True | False
+user.has_module_perms("blog")         # True si tiene algún permiso de la app
+user.get_all_permissions()            # set de todos los permisos (propios + grupos)
+# Superuser → siempre True | AnonymousUser → siempre False
+```
 
+## Permisos personalizados
+
+```python
+class Post(models.Model):
+    # ... campos ...
     class Meta:
         permissions = [
-            ("publish_post",  "Puede publicar posts (is_published=True)"),
+            ("publish_post",  "Puede marcar posts como publicados"),
             ("feature_post",  "Puede destacar posts en la portada"),
-            ("moderate_post", "Puede moderar/ocultar posts de otros"),
+            ("moderate_post", "Puede moderar posts de otros"),
         ]
         # Genera codenames: blog.publish_post · blog.feature_post · blog.moderate_post
 ```
 
-## Flujo obligatorio
-
 ```bash
-python manage.py makemigrations   # genera migración con los permisos
-python manage.py migrate          # INSERT en auth_permission via post_migrate
-```
-
-## Asignar a un usuario
-
-```python
-from django.contrib.auth.models import Permission
-perm = Permission.objects.get(codename="publish_post")
-user.user_permissions.add(perm)
+# Obligatorio después de agregar permisos en Meta:
+python manage.py makemigrations
+python manage.py migrate   # INSERT en auth_permission via señal post_migrate
 ```
 
 ---
 
-### [F2-03] Cache de permisos — trampa en la misma request
+### [F2-03] LoginRequiredMixin y PermissionRequiredMixin
 
 @tipo: codigo
 
-# Django cachea permisos en el objeto User — asignar y verificar en la misma request puede fallar
+# Los mixins son la forma idiomática de proteger CBV. El orden en la declaración importa.
 
-## El problema
-
-```python
-def mi_vista(request):
-    from django.contrib.auth.models import Permission
-    perm = Permission.objects.get(codename="publish_post")
-    request.user.user_permissions.add(perm)
-
-    # ❌ FALLA — _perm_cache fue creado ANTES de agregar el permiso
-    request.user.has_perm("blog.publish_post")  # → False
-```
-
-## La solución
+## Regla de la cátedra: en CBV, siempre mixins. El mixin va PRIMERO en la MRO.
 
 ```python
-# Opción A: refetch del usuario desde BD
-from django.contrib.auth import get_user_model
-User = get_user_model()
-fresh_user = User.objects.get(pk=request.user.pk)
-fresh_user.has_perm("blog.publish_post")  # → True
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.views.generic import CreateView, UpdateView
 
-# Opción B: limpiar cache manualmente
-for attr in ("_perm_cache", "_user_perm_cache", "_group_perm_cache"):
-    if hasattr(request.user, attr):
-        delattr(request.user, attr)
-request.user.has_perm("blog.publish_post")  # → True
-```
-
----
-
-## BLOQUE T2 — Grupos (20 min)
-
----
-
-### [F2-04] Group model — asignación masiva de permisos
-
-@tipo: codigo
-
-# Los grupos escalan la asignación de permisos — un grupo puede tener N usuarios
-
-```python
-from django.contrib.auth.models import Group, Permission
-
-def crear_roles():
-    """Crear grupos con permisos — idempotente con get_or_create."""
-
-    # Rol author — puede crear, editar, publicar sus posts
-    author_group, _ = Group.objects.get_or_create(name="author")
-    author_perms = Permission.objects.filter(
-        content_type__app_label="blog",
-        codename__in=[
-            "add_post", "change_post", "delete_post", "view_post",
-            "add_comment", "publish_post"
-        ]
-    )
-    author_group.permissions.set(author_perms)
-
-    # Rol reader — solo puede ver y comentar
-    reader_group, _ = Group.objects.get_or_create(name="reader")
-    reader_perms = Permission.objects.filter(
-        content_type__app_label="blog",
-        codename__in=["view_post", "add_comment"]
-    )
-    reader_group.permissions.set(reader_perms)
-```
-
----
-
-### [F2-05] Asignar grupo al registrar usuario
-
-@tipo: codigo
-
-# El momento natural para asignar un grupo es el registro — en form_valid de RegisterView
-
-```python
-# blog/views.py — RegisterView (Clase 1) ampliado con asignación de grupo
-class RegisterView(CreateView):
-    # ...
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        # Por defecto, los nuevos usuarios son readers
-        try:
-            reader_group = Group.objects.get(name="reader")
-            self.object.groups.add(reader_group)
-        except Group.DoesNotExist:
-            pass  # grupo no creado aún — no es bloqueante
-        login(self.request, self.object)
-        return response
-```
-
-## Verificar membresía
-
-```python
-user.groups.filter(name="author").exists()     # True | False
-user.groups.values_list("name", flat=True)     # <QuerySet ["reader"]>
-
-# Para promover a author desde el admin (o un panel de moderación):
-author_group = Group.objects.get(name="author")
-user.groups.add(author_group)
-user.groups.remove(reader_group)
-```
-
----
-
-## BLOQUE T3a — Decoradores (15 min)
-
----
-
-### [F2-06] @login_required y @permission_required
-
-@tipo: codigo
-
-# Decoradores de autorización para FBV — en CBV usamos mixins (T3b)
-
-```python
-from django.contrib.auth.decorators import (
-    login_required, permission_required, user_passes_test
-)
-
-# @login_required — redirige a LOGIN_URL si el usuario no está autenticado
-@login_required
-def create_post(request): ...
-
-# Con URL personalizada
-@login_required(login_url="/mi-login/")
-def create_post(request): ...
-
-# @permission_required — requiere permiso específico
-@permission_required("blog.add_post")
-def create_post(request):
-    # sin permiso → redirect a LOGIN_URL (aunque esté logueado)
-    ...
-
-# raise_exception=True → 403 en lugar de redirect al login
-# Usar cuando el usuario YA está logueado pero le falta el permiso
-@permission_required("blog.add_post", raise_exception=True)
-def create_post(request): ...
-```
-
----
-
-### [F2-07] @user_passes_test y method_decorator
-
-@tipo: codigo
-
-# @user_passes_test para condiciones arbitrarias — method_decorator para aplicar a CBV
-
-```python
-# @user_passes_test — condición customizada
-def es_autor(user):
-    return user.groups.filter(name="author").exists()
-
-@user_passes_test(es_autor, login_url="/registro/")
-def publicar_post(request, pk): ...
-
-# Aplicar @login_required a CBV con method_decorator
-# (alternativa a LoginRequiredMixin — no es preferida)
-from django.utils.decorators import method_decorator
-
-@method_decorator(login_required, name="dispatch")
-class PostCreateView(CreateView):
-    ...
-# → equivalente a LoginRequiredMixin — preferir el mixin
-```
-
----
-
-## BLOQUE T3b — Mixins CBV (25 min)
-
----
-
-### [F2-08] LoginRequiredMixin — protección básica de CBV
-
-@tipo: codigo
-
-# Regla de la cátedra: en CBV, siempre mixins. El orden importa.
-
-```python
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-
-# ✅ Orden correcto: mixin ANTES de la vista genérica (MRO)
+# Orden correcto: mixin ANTES de la vista genérica
 class PostCreateView(LoginRequiredMixin, CreateView):
     model         = Post
     form_class    = PostForm
     template_name = "blog/post_form.html"
     success_url   = reverse_lazy("blog:post-list")
-    login_url     = "/accounts/login/"  # override de LOGIN_URL settings
+    login_url     = "/accounts/login/"
 
-# ❌ Orden incorrecto — LoginRequiredMixin no intercepta
-class PostCreateView(CreateView, LoginRequiredMixin):  # WRONG
-    ...
-```
-
-## ¿Qué hace LoginRequiredMixin.dispatch()?
-
-```python
-# Simplificado:
-def dispatch(self, request, *args, **kwargs):
-    if not request.user.is_authenticated:
-        return self.handle_no_permission()
-        # → redirect a login_url?next=<URL actual>
-    return super().dispatch(request, *args, **kwargs)
-```
-
----
-
-### [F2-09] PermissionRequiredMixin — verificación de permisos en CBV
-
-@tipo: codigo
-
-# PermissionRequiredMixin verifica permisos específicos — más granular que LoginRequiredMixin
-
-```python
-from django.contrib.auth.mixins import PermissionRequiredMixin
-
+# PermissionRequiredMixin — requiere permiso específico
 class PostPublishView(PermissionRequiredMixin, UpdateView):
-    model              = Post
-    permission_required = "blog.publish_post"   # string o tupla (AND lógico)
-    raise_exception    = True   # usuario logueado sin permiso → 403 (no redirect)
-    template_name      = "blog/post_publish.html"
-    fields             = ["is_published"]
-
-# Múltiples permisos — requiere TODOS (AND)
-class PostAdminView(PermissionRequiredMixin, UpdateView):
-    permission_required = ("blog.change_post", "blog.publish_post")
+    model               = Post
+    permission_required = "blog.publish_post"   # string o tupla para AND lógico
+    raise_exception     = True   # logueado sin permiso → 403 (no redirect al login)
+    template_name       = "blog/post_publish.html"
+    fields              = ["is_published"]
 ```
 
-## Comportamiento por estado del usuario
+## Comportamiento según estado del usuario
 
 | Usuario | raise_exception | Resultado |
 |---------|----------------|-----------|
-| No logueado | False | redirect a `login?next=...` |
-| No logueado | True | redirect a `login?next=...` |
-| Logueado sin permiso | False | redirect a `login?next=...` (confuso) |
-| Logueado sin permiso | True | **403 Forbidden** (correcto) |
-| Logueado con permiso | cualquiera | ejecuta la vista |
+| No logueado | cualquiera | redirect a login?next=url |
+| Logueado, sin permiso | False | redirect al login (confuso) |
+| Logueado, sin permiso | **True** | **403 Forbidden** (correcto) |
+| Logueado, con permiso | cualquiera | ejecuta la vista |
+
+## Por qué mixins en lugar de @decoradores para CBV
+
+`@login_required` sobre una clase solo protege el método decorado.
+El mixin se integra al `dispatch()` y protege **todos** los métodos HTTP
+(GET, POST, DELETE, PATCH) de forma consistente.
 
 ---
 
-### [F2-10] Protección a nivel de objeto — get_queryset() override
+### [F2-04] Protección de objeto con get_queryset() y grupos
 
 @tipo: codigo
 
-# Django no tiene permisos de objeto nativos — filtrar por author es el patrón estándar
+# Filtrar el queryset por autor es el patrón estándar para ownership en Django.
+
+## Por qué Http404 es mejor que 403 para ownership
+
+Con `get_queryset()` filtrado: si el objeto no es del usuario,
+`get_object()` lanza Http404 automáticamente.
+El atacante no puede saber si el objeto existe pero no puede acceder,
+o si directamente no existe.
+**Para ownership: 404 es más privado que 403.**
 
 ```python
-# Patrón recomendado: filtrar queryset por autor
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model         = Post
     form_class    = PostForm
-    template_name = "blog/post_form.html"
     success_url   = reverse_lazy("blog:post-list")
 
     def get_queryset(self):
-        # Solo el autor puede editar sus propios posts
-        # Si el pk no pertenece al usuario → get_object() → Http404 automático
+        # pk=5 no pertenece a request.user → get_object() → Http404 automático
         return Post.objects.filter(author=self.request.user)
 
 class PostDeleteView(LoginRequiredMixin, DeleteView):
@@ -1185,42 +788,49 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
         return Post.objects.filter(author=self.request.user)
 ```
 
-## Alternativa explícita con PermissionDenied
+## Grupos: asignación masiva de permisos a roles
 
 ```python
-from django.core.exceptions import PermissionDenied
+from django.contrib.auth.models import Group, Permission
 
-def get_object(self):
-    obj = super().get_object()
-    if obj.author != self.request.user:
-        raise PermissionDenied   # → 403 Forbidden
-    return obj
+def crear_roles():
+    author_group, _ = Group.objects.get_or_create(name="author")
+    author_group.permissions.set(Permission.objects.filter(
+        content_type__app_label="blog",
+        codename__in=["add_post", "change_post", "delete_post",
+                      "view_post", "add_comment", "publish_post"]
+    ))
+    reader_group, _ = Group.objects.get_or_create(name="reader")
+    reader_group.permissions.set(Permission.objects.filter(
+        content_type__app_label="blog",
+        codename__in=["view_post", "add_comment"]
+    ))
+
+# Verificar membresía desde el código:
+user.groups.filter(name="author").exists()   # True | False
 ```
 
 ---
 
-## BLOQUE T4 — Autorización en templates (15 min)
-
----
-
-### [F2-11] {% if perms %} — verificación en templates
+### [F2-05] Permisos en templates: navbar y botones condicionales
 
 @tipo: codigo
 
-# El objeto perms verifica has_perm() de forma lazy — disponible en todos los templates
+# El objeto perms evalúa has_perm() de forma lazy — sin queries extras si no se referencia.
+
+## Cómo funciona `{{ perms }}`
+
+`perms` es un `PermWrapper` que envuelve `request.user.has_perm()` de forma lazy.
+`perms.blog.add_post` evalúa `request.user.has_perm("blog.add_post")` solo cuando se accede.
+No genera queries si no se usa en el template.
 
 ```html
-<!-- Botón condicional por permiso -->
+<!-- Botones condicionales por permiso de modelo -->
 {% if perms.blog.add_post %}
     <a href="{% url 'blog:post-create' %}" class="btn btn-primary">Nuevo post</a>
 {% endif %}
 
-<!-- Combinación de condiciones -->
-{% if user.is_authenticated and perms.blog.publish_post %}
-    <button class="btn btn-warning btn-sm">Publicar</button>
-{% endif %}
-
-<!-- Acciones por objeto — el autor edita/borra sus propios posts -->
+<!-- Ownership del objeto: mostrar solo al autor o staff -->
 {% if user == post.author or user.is_staff %}
     <a href="{% url 'blog:post-update' pk=post.pk %}">Editar</a>
     <form method="post" action="{% url 'blog:post-delete' pk=post.pk %}">
@@ -1228,157 +838,244 @@ def get_object(self):
         <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
     </form>
 {% endif %}
+
+<!-- Navbar completo en base.html -->
+{% if user.is_authenticated %}
+    {% if perms.blog.add_post %}
+    <a class="nav-link" href="{% url 'blog:post-create' %}">Nuevo Post</a>
+    {% endif %}
+    <span class="navbar-text me-2">{{ user.username }}</span>
+    <form method="post" action="{% url 'logout' %}" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-light btn-sm">Salir</button>
+    </form>
+{% else %}
+    <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
+    <a class="nav-link" href="{% url 'register' %}">Registrarse</a>
+{% endif %}
 ```
 
 ---
 
-### [F2-12] Navbar completo con auth y permisos — base.html
+## BLOQUE T5-T10 — Django Admin (75 min)
 
-@tipo: codigo
+---
 
-# base.html integra autenticación + autorización en la navbar
+### [F2-06] Qué es el Django Admin y para qué sirve
 
-```html
-<!-- templates/base.html — navbar completo -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="{% url 'blog:post-list' %}">BlogApp</a>
-    <div class="navbar-nav ms-auto align-items-center">
+@tipo: concepto-abstracto
 
-      {% if user.is_authenticated %}
-        {% if perms.blog.add_post %}
-        <a class="nav-link" href="{% url 'blog:post-create' %}">Nuevo Post</a>
-        {% endif %}
+# El admin es una interfaz de gestión automática — no es un panel público, es una herramienta de producción.
 
-        <span class="navbar-text me-3">
-          Hola, {{ user.username }}
-          {% if user.is_staff %}<small class="text-warning">(staff)</small>{% endif %}
-        </span>
+## La filosofía del admin de Django
 
-        <form method="post" action="{% url 'logout' %}" class="d-inline">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-outline-light btn-sm">Salir</button>
-        </form>
+El admin de Django es uno de los rasgos más distintivos del framework.
+Lee los metadatos de los modelos (campos, tipos, relaciones) y genera
+una interfaz CRUD completa sin escribir HTML ni JavaScript.
 
-      {% else %}
-        <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
-        <a class="nav-link" href="{% url 'register' %}">Registrarse</a>
-      {% endif %}
+**Para qué está pensado:**
+- Gestión interna: editores de contenido, moderadores, soporte técnico
+- Inspección y debug de datos en desarrollo y producción
+- Operaciones administrativas que no justifican una vista custom
 
-    </div>
-  </div>
-</nav>
+**Para qué NO está pensado:**
+- Interfaz pública para usuarios finales
+- Reemplazar un panel de control diseñado para el negocio
+- Operaciones masivas en millones de filas (usar management commands)
+
+## Lo que genera al registrar un modelo
+
+```
+/admin/                          → index — listado de apps y modelos registrados
+/admin/blog/post/                → changelist — lista paginada con filtros y búsqueda
+/admin/blog/post/add/            → add_view — formulario de alta
+/admin/blog/post/5/change/       → change_view — formulario de edición
+/admin/blog/post/5/delete/       → delete_view — confirmación de borrado
+/admin/blog/post/5/history/      → history_view — LOG AUTOMATICO de todos los cambios
+```
+
+## El log automático de cambios (LogEntry)
+
+El admin registra CADA operación (alta, edición, borrado) en `django_admin_log`.
+Funciona sin configurar nada. Desde `/admin/blog/post/5/history/`
+se ve quién cambió qué campo y cuándo.
+
+```python
+# Acceder al log programáticamente:
+from django.contrib.admin.models import LogEntry
+LogEntry.objects.filter(user=request.user).order_by("-action_time")[:10]
+```
+
+## Prerequisitos
+
+```python
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",  # requerido para el feedback visual del admin
+]
+urlpatterns = [path("admin/", admin.site.urls)]  # una línea registra todo
 ```
 
 ---
 
-## BLOQUE T5-T6 — Django Admin (30 min)
-
----
-
-### [F2-13] Admin setup — register() vs @admin.register
+### [F2-07] Registrar modelos: @admin.register y ModelAdmin
 
 @tipo: codigo
 
-# @admin.register es el decorador preferido — más legible y organizado para ModelAdmin complejo
+# @admin.register es el decorador preferido. ModelAdmin vacío es el punto de partida.
+
+## Las dos formas de registrar
 
 ```python
 # blog/admin.py
 from django.contrib import admin
 from .models import Post, Category, Comment
 
-# Forma 1: admin.site.register() — simple, sin personalización
+# Forma 1: register() directo — simple, sin personalización
 admin.site.register(Category)
-# → muestra "Category object (N)" — poco útil
+# → lista mostrando "Category object (1)" — sin más información
 
-# Forma 2: @admin.register — decorador para personalización completa
+# Forma 2: @admin.register — preferido para personalizar
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    pass   # ModelAdmin vacío = mismo resultado que register()
-
-# Prerequisitos en INSTALLED_APPS (ya están por defecto):
-# "django.contrib.admin"
-# "django.contrib.contenttypes"  ← base del sistema de permisos
-# "django.contrib.sessions"      ← sesiones para el admin
-# "django.contrib.messages"      ← requerido por admin para feedback
+    pass   # punto de partida — equivale a register() pero expandible
 ```
+
+## Por qué ModelAdmin vacío es mejor que register() simple
+
+`@admin.register` + clase permite agregar atributos progresivamente
+sin cambiar la línea de registro. Es la convención estándar del ecosistema Django.
+
+## Quién puede usar el admin
+
+- `is_staff = True` → puede entrar a /admin/
+- `is_superuser = True` → acceso completo (bypassa todos los permisos)
+- Staff sin superuser → solo los permisos asignados explícitamente
+
+La sesión del admin usa las mismas sesiones Django que la app — un solo login.
 
 ---
 
-### [F2-14] ModelAdmin — list view: list_display, list_filter, search_fields
+### [F2-08] List view: list_display, list_filter y search_fields
 
 @tipo: codigo
 
-# list_display, list_filter y search_fields transforman la list view del admin
+# Tres atributos transforman una lista plana en una herramienta de búsqueda y gestión real.
+
+## Qué hace cada atributo
+
+**`list_display`**: columnas de la tabla. Sin esto, solo aparece `str(objeto)`.
+**`list_filter`**: sidebar derecho con checkboxes. Django genera las opciones automáticamente.
+**`search_fields`**: barra de búsqueda arriba. Usa ILIKE. Con `__` cruza relaciones con JOIN.
 
 ```python
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    # ─── List view ──────────────────────────────────────────
-    list_display   = ["title", "author", "is_published", "created_at"]
-    # Puede incluir nombres de campo, métodos del modelo o callables del admin
 
+    # Columnas de la tabla
+    list_display   = ["title", "author", "is_published", "created_at", "comment_count"]
+
+    # Sidebar de filtros (derecha)
     list_filter    = ["is_published", "author", "created_at"]
-    # Sidebar derecho con filtros de un click
 
+    # Barra de búsqueda (arriba)
     search_fields  = ["title", "body", "author__username"]
-    # search_fields usa ILIKE — author__username hace JOIN automático
 
+    # Opciones de navegación
     ordering       = ["-created_at"]
-    date_hierarchy = "created_at"     # barra drill-down por fecha
+    date_hierarchy = "created_at"   # drill-down: año → mes → día en la parte superior
     list_per_page  = 20
+    list_display_links = ["title"]  # columnas que son links al objeto
 
-    # Columna personalizada con ícono booleano
-    @admin.display(description="Publicado", boolean=True)
-    def publicado(self, obj):
-        return obj.is_published
-    # list_display = [..., "publicado"]  → muestra ✓/✗ en lugar de True/False
+    # Columna calculada (no es un campo del modelo)
+    @admin.display(description="Comentarios")
+    def comment_count(self, obj):
+        return obj.comments.count()
+
+    # Columna con icono booleano
+    @admin.display(description="Publicado", boolean=True, ordering="is_published")
+    def publicado_icon(self, obj):
+        return obj.is_published   # muestra checkmark o X en lugar de True/False
+```
+
+## Búsqueda con search_fields — sintaxis de lookups
+
+```python
+search_fields = [
+    "title",             # ILIKE '%query%'  (default)
+    "^title",            # ^ starts with — más eficiente con índice
+    "=title",            # = exact match
+    "@body",             # @ full text search — solo PostgreSQL
+    "author__username",  # JOIN automático a User
+    "category__name",    # JOIN automático a Category
+]
 ```
 
 ---
 
-### [F2-15] ModelAdmin — detail view: fieldsets y readonly_fields
+### [F2-09] Detail view: fieldsets, readonly_fields y save_model()
 
 @tipo: codigo
 
-# fieldsets organiza el formulario de edición en secciones colapsables
+# fieldsets organiza el formulario en secciones. save_model() intercepta el guardado.
+
+## Por qué usar fieldsets
+
+Sin `fieldsets`, todos los campos en una lista plana.
+Con `fieldsets`: grupos lógicos, secciones colapsables, orden controlado.
 
 ```python
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    # ─── Detail view ────────────────────────────────────────
+
     fieldsets = [
-        ("Contenido", {
-            "fields": ["title", "slug", "body", "category"]
+        ("Contenido principal", {
+            "fields": ["title", "slug", "body", "category"],
         }),
-        ("Estado y autoría", {
-            "fields":   ["author", "is_published"],
-            "classes": ["collapse"]   # sección colapsable por defecto
+        ("Estado y publicacion", {
+            "fields":      ["author", "is_published"],
+            "classes":    ["collapse"],     # colapsable (cerrada por defecto)
+            "description": "Configurar antes de publicar.",
         }),
-        ("Timestamps", {
-            "fields":   ["created_at", "updated_at"],
-            "classes": ["collapse"]
+        ("Timestamps (solo lectura)", {
+            "fields":  ["created_at", "updated_at"],
+            "classes": ["collapse"],
         }),
     ]
 
-    readonly_fields     = ["created_at", "updated_at", "slug"]
-    prepopulated_fields = {"slug": ("title",)}   # auto-genera slug desde title
-    raw_id_fields       = ["author"]
-    # raw_id_fields: reemplaza <select> con miles de opciones
-    # por un campo de búsqueda con popup — esencial para FKs con muchos registros
+    readonly_fields     = ["created_at", "updated_at"]
+    prepopulated_fields = {"slug": ("title",)}   # auto-genera slug con JS
+    raw_id_fields       = ["author"]             # reemplaza select con busqueda + popup
+
+    def save_model(self, request, obj, form, change):
+        # change=False → creacion | change=True → edicion
+        if not change:
+            obj.author = request.user   # asignar usuario del admin como autor
+        super().save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(author=request.user)   # staff solo ve sus propios posts
 ```
 
 ---
 
-## BLOQUE T7 — Acciones en masa (10 min)
-
----
-
-### [F2-16] @admin.action — acciones personalizadas sobre QuerySet
+### [F2-10] Acciones en masa: @admin.action y message_user()
 
 @tipo: codigo
 
-# Las acciones operan sobre el queryset de los registros seleccionados
+# Las acciones operan sobre el queryset de los registros seleccionados con los checkboxes.
+
+## Cómo funcionan las acciones
+
+El usuario selecciona registros con los checkboxes de la list view,
+elige una acción del dropdown "Action" y hace clic en "Go".
+Django llama a la función con el queryset de todos los seleccionados.
 
 ```python
 from django.contrib import admin, messages
@@ -1387,82 +1084,115 @@ from django.contrib import admin, messages
 class PostAdmin(admin.ModelAdmin):
     actions = ["publish_selected", "unpublish_selected"]
 
-    @admin.action(description="✅ Publicar posts seleccionados")
+    @admin.action(description="Publicar posts seleccionados")
     def publish_selected(self, request, queryset):
         # queryset.update() → UNA sola query SQL para todos los seleccionados
+        # No llama a save() ni dispara señales post_save
         updated = queryset.update(is_published=True)
         self.message_user(
             request,
             f"{updated} post(s) publicado(s) exitosamente.",
-            messages.SUCCESS
+            messages.SUCCESS   # pasar SUCCESS explicitamente para icono verde
         )
 
-    @admin.action(description="❌ Despublicar posts seleccionados")
+    @admin.action(description="Despublicar posts seleccionados")
     def unpublish_selected(self, request, queryset):
         updated = queryset.update(is_published=False)
         self.message_user(request, f"{updated} despublicado(s).", messages.WARNING)
 ```
 
-## queryset.update() vs loop con save()
+## Django 6.0: message_user() con Font Awesome 6.7.2 — iconos diferenciados
 
-| Método | Queries | Signals `post_save` |
-|--------|---------|---------------------|
-| `queryset.update()` | 1 (eficiente) | NO se disparan |
-| loop + `obj.save()` | N (uno por objeto) | Sí se disparan |
-
----
-
-## BLOQUE T8 — InlineModelAdmin (15 min)
-
----
-
-### [F2-17] TabularInline vs StackedInline en PostAdmin
-
-@tipo: codigo
-
-# Inlines permiten editar modelos relacionados directamente desde el admin del padre
+En Django 6.0, `messages.INFO` y `messages.SUCCESS` tienen iconos **distintos**.
+Antes ambos mostraban el mismo icono verde. Ahora son visualmente diferenciables.
 
 ```python
-# TabularInline — filas horizontales, compacto (muchos items, pocos campos)
-class CommentInline(admin.TabularInline):
-    model           = Comment
-    extra           = 1        # forms vacíos extra
-    max_num         = 20
-    fields          = ["author", "body", "created_at"]
-    readonly_fields = ["created_at"]
-    # select_related previene N+1 al cargar la lista de comentarios
-    def get_queryset(self, request):
-        return super().get_queryset(request).select_related("author")
+self.message_user(request, "Exito.",  messages.SUCCESS)  # icono verde (explicito)
+self.message_user(request, "Info.",   messages.INFO)     # icono info (nuevo en 6.0)
+self.message_user(request, "Aviso.",  messages.WARNING)  # icono de advertencia
+self.message_user(request, "Error.",  messages.ERROR)    # icono rojo
 
-# StackedInline — campos apilados, expandido (pocos items, muchos campos)
-class PostMetaInline(admin.StackedInline):
-    model  = PostMeta    # hipotético modelo de metadata SEO
-    extra  = 0
-    fields = ["og_title", "og_description", "canonical_url"]
-
-@admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
-    inlines = [CommentInline]
+# message_user() default = messages.INFO → icono distinto en 6.0
+# Para icono verde de exito: siempre pasar messages.SUCCESS explicitamente
 ```
 
-## Cuándo usar cada uno
+## queryset.update() vs loop con save()
 
-| Inline | Cuándo usar |
-|--------|-------------|
-| `TabularInline` | Muchos items con pocos campos (Comment: author + body) |
-| `StackedInline` | Pocos items con muchos campos (metadata, configuración) |
-
----
-
-## BLOQUE T9-T10 — Control de acceso y AdminSite (10 min)
+| Metodo | Queries | Llama save() | Senales post_save | Cuando usar |
+|--------|---------|-------------|-------------------|-------------|
+| queryset.update() | 1 | No | No | Actualizar campos simples masivamente |
+| loop + obj.save() | N | Si | Si | Cuando la logica en save() o senales importan |
 
 ---
 
-### [F2-18] has_*_permission() — control granular en ModelAdmin
+### [F2-11] InlineModelAdmin: TabularInline y StackedInline
 
 @tipo: codigo
 
-# has_change_permission(request, obj) permite lógica de ownership en el admin
+# Los inlines permiten editar modelos relacionados directamente desde el formulario del padre.
+
+## Para qué sirven los inlines
+
+Sin inlines, para gestionar comentarios de un post hay que ir a
+`/admin/blog/comment/` y filtrar por post manualmente.
+Con inlines, los comentarios aparecen en la misma pagina de edicion del post.
+Es la forma mas eficiente de gestionar relaciones OneToMany en el admin.
+
+## TabularInline — filas horizontales (muchos items, pocos campos)
+
+```python
+class CommentInline(admin.TabularInline):
+    model            = Comment
+    extra            = 1            # forms vacios para agregar nuevos
+    max_num          = 20
+    can_delete       = True
+    fields           = ["author", "body", "approved", "created_at"]
+    readonly_fields  = ["created_at"]
+    show_change_link = True         # link para abrir el comentario en su propia pagina
+
+    def get_queryset(self, request):
+        # select_related previene N+1 queries al cargar author de cada comentario
+        return super().get_queryset(request).select_related("author")
+```
+
+## StackedInline — campos apilados (pocos items, muchos campos)
+
+```python
+class PostMetaInline(admin.StackedInline):
+    model  = PostMeta     # metadata SEO del post (OneToOne)
+    extra  = 0            # sin forms vacios — solo aparece si ya existe
+    fields = ["og_title", "og_description", "canonical_url", "structured_data"]
+```
+
+## Registro con inlines
+
+```python
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    inlines = [CommentInline, PostMetaInline]  # debajo del form, en orden declarado
+```
+
+## Cuando usar cada uno
+
+| Tipo | Cuando | Ejemplo en BlogApp |
+|------|--------|-------------------|
+| TabularInline | Muchos items, pocos campos | Comment: author + body + approved |
+| StackedInline | Pocos items, muchos campos | Metadata SEO: og_title, og_description... |
+
+---
+
+### [F2-12] Control de acceso: has_*_permission()
+
+@tipo: codigo
+
+# Django llama a estos metodos antes de cada operacion. Permiten ownership dentro del admin.
+
+## Por qué has_*_permission() va mas alla de is_staff
+
+`is_staff = True` controla el acceso al admin en general.
+`has_change_permission(request, obj)` permite granularidad por objeto:
+- `obj=None` → decision para la list view completa (mostrar botones de edicion?)
+- `obj=Post` → decision para ese objeto especifico (puede editar ESTE post?)
 
 ```python
 @admin.register(Post)
@@ -1474,11 +1204,11 @@ class PostAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         if obj is None:
             return True   # puede ver la list view
-        # Solo el autor o superuser puede editar el objeto específico
+        # Solo el autor o superuser puede editar el objeto especifico
         return obj.author == request.user or request.user.is_superuser
 
     def has_delete_permission(self, request, obj=None):
-        return request.user.is_superuser   # solo superuser borra
+        return request.user.is_superuser   # solo superuser puede borrar
 
     def has_view_permission(self, request, obj=None):
         return True   # cualquier staff puede ver
@@ -1486,78 +1216,270 @@ class PostAdmin(admin.ModelAdmin):
 
 ## Nota sobre obj=None
 
-Django llama `has_change_permission(request, obj=None)` para la list view.
-Si retorna `False` para `obj=None` → el botón "Editar" no aparece en la lista completa.
+Django llama `has_change_permission(request, obj=None)` para decidir si mostrar
+el boton "Editar" en la list view.
+Si retorna `False` para `obj=None` → no aparece el boton en ninguna fila.
+Separar la decision `obj=None` de `obj=instancia` es el patron correcto.
 
 ---
 
-### [F2-19] AdminSite — branding personalizado
+### [F2-13] AdminSite: branding y password_change_form (Django 6.0)
 
 @tipo: codigo
 
-# Cambiar el título del admin es una línea — AdminSite custom es para proyectos con múltiples admins
+# AdminSite personaliza el admin globalmente. Django 6.0 agrega password_change_form.
+
+## Branding basico — tres atributos, impacto visual inmediato
 
 ```python
-# blog/admin.py — branding simple
+# blog/admin.py
 from django.contrib import admin
 
-admin.site.site_header = "BlogApp — Administración"
-admin.site.site_title  = "BlogApp"
-admin.site.index_title = "Panel de administración"
+admin.site.site_header = "BlogApp — Administracion"   # barra superior de cada pagina
+admin.site.site_title  = "BlogApp"                    # sufijo en el <title> del browser
+admin.site.index_title = "Panel de administracion"    # heading de la pagina index
 ```
 
-## AdminSite custom (para múltiples sitios en un proyecto)
+## Django 6.0 — AdminSite.password_change_form (NUEVO)
+
+Permite usar un formulario personalizado para el cambio de contrasena del admin.
+Antes no habia forma de sobreescribir este formulario sin crear un AdminSite custom.
+
+```python
+# forms.py
+from django.contrib.auth.forms import AdminPasswordChangeForm
+from django import forms
+
+class SecurePasswordChangeForm(AdminPasswordChangeForm):
+    def clean_password2(self):
+        password = super().clean_password2()
+        if len(password) < 12:
+            raise forms.ValidationError("Staff: minimo 12 caracteres.")
+        return password
+
+# admin.py — nueva forma de registrar el formulario en Django 6.0
+admin.site.password_change_form = SecurePasswordChangeForm
+```
+
+## AdminSite custom — para multiples admins en un mismo proyecto
 
 ```python
 class BlogAdminSite(admin.AdminSite):
-    site_header = "BlogApp — Admin personalizado"
-    site_title  = "BlogApp Admin"
-    index_title = "Gestión de contenido"
+    site_header          = "BlogApp — Admin Interno"
+    site_title           = "BlogApp Admin"
+    password_change_form = SecurePasswordChangeForm   # Django 6.0
 
 blog_admin = BlogAdminSite(name="blog_admin")
 blog_admin.register(Post, PostAdmin)
 blog_admin.register(Comment)
 
 # urls.py
-path("blog-admin/", blog_admin.urls),
+urlpatterns = [
+    path("admin/",      admin.site.urls),
+    path("blog-admin/", blog_admin.urls),   # segundo admin separado
+]
 ```
 
 ---
 
-## CIERRE CLASE 2
+### [F2-14] APIs removidas en Django 6.0 y DEFAULT_AUTO_FIELD
+
+@tipo: concepto-abstracto
+
+# Tres cambios de Django 6.0 que afectan el admin y los modelos — hay que conocerlos para el TP.
+
+## 1. log_deletion() y log_addition() del ModelAdmin — REMOVIDAS
+
+```python
+# REMOVIDAS en Django 6.0 (deprecadas desde 5.1):
+#   ModelAdmin.log_deletion(request, object, object_repr)
+#   ModelAdmin.log_addition(request, object, message)
+
+# Alternativa: sobreescribir delete_model() — el log ocurre en super()
+def delete_model(self, request, obj):
+    super().delete_model(request, obj)  # super() registra el log automaticamente
+```
+
+## 2. lookup_allowed() requiere request como tercer parametro
+
+Si el proyecto sobreescribe `lookup_allowed()` en algun ModelAdmin:
+
+```python
+# BIEN — firma correcta en Django 6.0:
+def lookup_allowed(self, lookup, value, request):
+    return super().lookup_allowed(lookup, value, request)
+
+# MAL — firma de Django 5.x — rompe con TypeError en 6.0:
+# def lookup_allowed(self, lookup, value): ...
+```
+
+## 3. DEFAULT_AUTO_FIELD — BigAutoField es el nuevo default
+
+```python
+# Django 6.0: el tipo de PK automatica cambia a BigAutoField (entero 64-bit).
+# Sin declararlo explicita → warning en las migraciones.
+
+# settings.py — declarar para evitar warnings:
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"  # nuevo default — recomendado
+# o para compatibilidad con modelos existentes de 32-bit:
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+```
 
 ---
 
-### [F2-20] Cierre — BlogApp completa y TP 4
+### [F2-15] PostAdmin completo integrado — BlogApp
+
+@tipo: codigo
+
+# Todos los conceptos del admin integrados en un archivo admin.py de produccion.
+
+```python
+# blog/admin.py
+
+from django.contrib import admin, messages
+from .models import Post, Comment, Category
+
+
+class CommentInline(admin.TabularInline):
+    model           = Comment
+    extra           = 0
+    fields          = ["author", "body", "approved", "created_at"]
+    readonly_fields = ["created_at"]
+    can_delete      = True
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("author")
+
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+
+    # ── List view ──────────────────────────────────────────────
+    list_display   = ["title", "author", "is_published", "created_at", "comment_count"]
+    list_filter    = ["is_published", "author", "created_at"]
+    search_fields  = ["title", "body", "author__username"]
+    ordering       = ["-created_at"]
+    date_hierarchy = "created_at"
+    list_per_page  = 20
+
+    @admin.display(description="Comentarios")
+    def comment_count(self, obj):
+        return obj.comments.count()
+
+    # ── Detail view ────────────────────────────────────────────
+    fieldsets = [
+        ("Contenido", {
+            "fields": ["title", "slug", "body", "category"]
+        }),
+        ("Publicacion", {
+            "fields": ["author", "is_published"],
+            "classes": ["collapse"]
+        }),
+        ("Timestamps", {
+            "fields": ["created_at", "updated_at"],
+            "classes": ["collapse"]
+        }),
+    ]
+    readonly_fields     = ["created_at", "updated_at"]
+    prepopulated_fields = {"slug": ("title",)}
+    raw_id_fields       = ["author"]
+    inlines             = [CommentInline]
+
+    # ── Acciones ───────────────────────────────────────────────
+    actions = ["publish_selected", "unpublish_selected"]
+
+    @admin.action(description="Publicar posts seleccionados")
+    def publish_selected(self, request, queryset):
+        n = queryset.update(is_published=True)
+        self.message_user(request, f"{n} post(s) publicado(s).", messages.SUCCESS)
+
+    @admin.action(description="Despublicar posts seleccionados")
+    def unpublish_selected(self, request, queryset):
+        n = queryset.update(is_published=False)
+        self.message_user(request, f"{n} despublicado(s).", messages.WARNING)
+
+    # ── Control de acceso ──────────────────────────────────────
+    def has_change_permission(self, request, obj=None):
+        if obj is None:
+            return True
+        return obj.author == request.user or request.user.is_superuser
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.author = request.user
+        super().save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(author=request.user)
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display        = ["name", "slug"]
+    prepopulated_fields = {"slug": ("name",)}
+    search_fields       = ["name"]
+
+
+# ── Branding global ────────────────────────────────────────────
+admin.site.site_header = "BlogApp — Administracion"
+admin.site.site_title  = "BlogApp"
+admin.site.index_title = "Panel de administracion"
+```
+
+---
+
+### [F2-16] Cierre — BlogApp completa y errores frecuentes
 
 @tipo: portada
 @imagen: none
 
-# Módulo VI completo — BlogApp tiene auth + authz + admin de producción
+# Modulo VI completo: auth + authz + admin de produccion para BlogApp.
 
-## Estado final de BlogApp
+## Estado final de BlogApp (Clase 1 + Clase 2)
 
 ```
-Clase 1 + Clase 2:
-✅ Registro, login, logout — templates Bootstrap, Django 5.x compatible
-✅ AbstractUser extendido (bio, avatar)
-✅ Roles: author (CRUD propio) / reader (solo ver + comentar)
-✅ LoginRequiredMixin en todas las vistas de escritura
-✅ get_queryset() protege edición/borrado por propietario → Http404
-✅ {% if perms %} y {% if user.is_authenticated %} en base.html
-✅ PostAdmin: list_display · fieldsets · search · acciones · CommentInline
-✅ has_change_permission() protege ownership en el admin
+OK  BlogUser (AbstractUser con bio + avatar)
+OK  Registro con email unico + auto-login + grupo reader
+OK  Login / logout con vistas genericas + templates Bootstrap
+OK  Roles: author (CRUD propio) / reader (ver + comentar)
+OK  LoginRequiredMixin en todas las vistas de escritura
+OK  get_queryset() protege edicion/borrado por propietario (Http404)
+OK  perms y user.is_authenticated en base.html
+OK  PostAdmin: list_display + fieldsets + search + date_hierarchy + acciones + CommentInline
+OK  has_change_permission() con ownership en el admin
+OK  CategoryAdmin registrado
+OK  Branding del admin configurado
+OK  Django 6.0: PBKDF2 1.2M · login_not_required · password_change_form · Font Awesome 6.7.2
 ```
 
-## TP 4 — Auth + Admin completo (entrega semana 14)
+## Errores frecuentes
 
-- Login / logout / registro funcionando
-- Roles `author` / `reader` con permisos correctos
-- `LoginRequiredMixin` + `get_queryset()` para ownership
-- `PostAdmin` con `CommentInline` y acción `publish_selected`
+| Error | Causa | Prevencion |
+|-------|-------|------------|
+| AUTH_USER_MODEL cambiado post-migrate | BD ya tiene tablas auth | Definir ANTES de la primera migrate |
+| Login no redirige a ?next= | Falta input name="next" en template | Incluir siempre el campo hidden next |
+| PermissionRequiredMixin hace loop | raise_exception=False para logueado | Setear raise_exception = True |
+| LogoutView con GET | Django 5.x+ rechaza GET | form method="post" con csrf_token |
+| log_deletion() no existe | Removida en Django 6.0 | Usar delete_model() override |
+| lookup_allowed() sin request | Firma incorrecta en Django 6.0 | Agregar request como tercer parametro |
+| Admin muestra "Post object" | Sin list_display ni __str__ | Definir __str__ en modelo O list_display |
+| TabularInline N+1 | FK sin prefetch | select_related en get_queryset() del inline |
+
+## TP 4 — Auth + Admin completo (semana 14)
+
+- Login / logout / registro + grupos author / reader
+- LoginRequiredMixin + get_queryset() para ownership
+- PostAdmin con CommentInline + accion publish_selected
 - Tests: login redirect · 403 sin permiso · autor edita propio · reader no puede
-- Coverage ≥ 80%
+- Coverage >= 80%
 
-## Próximo módulo: REST API con Django REST Framework
+## Proximo modulo
 
-Semana 15 — Tema 07: `Serializer`, `ViewSet`, `Router`, `TokenAuthentication`
+Semana 15 — Tema 07: REST API con Django REST Framework
+`Serializer` · `ViewSet` · `Router` · `TokenAuthentication`

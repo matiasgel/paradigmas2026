@@ -1,0 +1,33 @@
+# Pipeline v3 State — Tema 06
+topic: "06-autorizacion-admin-django"
+course_id: "leng-2026"
+django_version: "6.0"
+python_requirement: ">=3.12"
+
+steps_completed:
+  - step: knowledge_base_ingested
+    timestamp: "2026-05-27"
+    detail: "Ingested 3 Django 6.0 docs: django60-release-notes.md (17 chunks), django60-auth.md (30 chunks), django60-admin.md (22 chunks). Total collection: 6918 chunks."
+  
+  - step: diseno_updated_django60
+    timestamp: "2026-05-27"
+    detail: |
+      Updated diseno.md to Django 6.0:
+      - Header: django-5.1-docs → django-6.0-docs
+      - Stack: Django 6.0 · Python 3.12+
+      - §T2: Added PBKDF2 1,200,000 iterations note + async API (alogin/alogout/aauthenticate/auser)
+      - §T3: Added login_not_required() decorator note (Django 6.0 new)
+      - §T7: Added message_user() INFO vs SUCCESS icon change note
+      - §T9-T10: Added AdminSite.password_change_form attribute (Django 6.0 new)
+      - Errors table: Added log_deletion/log_action removed, lookup_allowed signature, DEFAULT_AUTO_FIELD change
+
+  - step: topic_yaml_updated
+    timestamp: "2026-05-27"
+    detail: "topic.yaml base_material updated: django-5.1-docs → django-6.0-docs"
+
+steps_pending:
+  - minuta
+  - filminas
+  - tp
+  - guia-estudio
+  - slides-publish

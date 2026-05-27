@@ -20,7 +20,7 @@ design_constraints:
   coherence: "Dominio continuado BlogApp — agregar User como autor de Post, restringir create/update/delete a autor propietario, admin para moderación de contenido."
   domain: "BlogApp (Post, Category, Comment) + User (AbstractUser extendido, roles author/reader)"
   tp_coverage: "TP-4: auth funcional, permisos por rol (author/reader/admin), tests de permisos ≥80% coverage. Entrega semana 14."
-  base_material: "django-5.1-docs (auth, admin), plan-minimo.md Módulo VI, plan-borrador.md §Semanas 12-14"
+  base_material: "django-6.0-docs (auth, admin), plan-minimo.md Módulo VI, plan-borrador.md §Semanas 12-14"
 artifacts:
   diseno: "diseno.md"
   minuta: "minuta.md"

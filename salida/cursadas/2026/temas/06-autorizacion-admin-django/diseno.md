@@ -5,7 +5,7 @@
 > **Semanas del plan**: 12–13 (ver `salida/cursadas/2026/plan-borrador.md` §Módulo VI)
 > **Estado**: DESIGN — pendiente aprobación docente
 > **Prerequisito confirmado**: Vistas genéricas OOP (CBV), ModelForm, templates con herencia completa, Bootstrap integrado, sesiones HTTP (`request.session`) introducidas en Tema 05 §T5.
-> **Fuentes base**: django-5.1-docs (auth, admin) · plan-minimo.md Módulo VI · plan-borrador.md §Semanas 12-14
+> **Fuentes base**: django-6.0-docs (auth, admin) · plan-minimo.md Módulo VI · plan-borrador.md §Semanas 12-14
 
 ---
 
@@ -219,6 +219,8 @@ user.is_superuser      # Bool — True = bypasses ALL permission checks
 
 **Error frecuente**: `user.password = "texto"` — NUNCA. Siempre `user.set_password("texto")`.
 
+> 🆕 **Django 6.0**: El hasher PBKDF2 aumentó de 1.000.000 a **1.200.000 iteraciones** (mayor seguridad, contraseñas existentes se actualizan al próximo login).
+
 #### `AbstractUser` — extensión recomendada
 
 ```python
@@ -250,6 +252,14 @@ if user is not None:
     # Rotación de sessionid previene session fixation attacks
 ```
 
+> 🆕 **Django 6.0 — API asíncrona** (para vistas async con `async def`):
+> ```python
+> user = await aauthenticate(request, username=username, password=password)
+> await alogin(request, user)    # async login
+> await alogout(request)         # async logout
+> user = await request.auser()   # obtener usuario actual async
+> ```
+
 **Pregunta anticipada**: *"¿Qué pasa si llamo authenticate() pero no login()?"*  
 **Respuesta**: El usuario queda autenticado solo en esa función — la próxima request tendrá `request.user = AnonymousUser`. La sesión no se creó.
 
@@ -264,6 +274,14 @@ def my_logout(request):
     # 2. Regenera la cookie sessionid (previene session reuse)
     # 3. Pone request.user = AnonymousUser
 ```
+
+> 🆕 **Django 6.0 — `login_not_required()`**: Cuando se usa `LoginRequiredMiddleware` (todas las vistas requieren auth por defecto), este decorador exime vistas específicas:
+> ```python
+> from django.contrib.auth.decorators import login_not_required
+> 
+> @login_not_required
+> def login_view(request): ...  # no requiere auth aunque el middleware esté activo
+> ```
 
 ---
 
@@ -803,6 +821,15 @@ class PostAdmin(admin.ModelAdmin):
         self.message_user(request, f"{updated} post(s) despublicado(s).", messages.WARNING)
 ```
 
+> 🆕 **Django 6.0 — cambio de iconos en mensajes admin**: `messages.DEBUG` e `messages.INFO` ahora tienen iconos DISTINTOS de `messages.SUCCESS`.
+> `message_user()` usa `messages.INFO` por defecto — para el ícono verde de éxito usar `messages.SUCCESS` explícitamente.
+
+```python
+# ✅ Correcto en Django 6.0: pasar SUCCESS para ícono verde
+self.message_user(request, "Publicado.", messages.SUCCESS)
+# ℹ️  INFO ahora tiene su propio ícono distinto (antes igual a SUCCESS)
+```
+
 ---
 
 ### §T8 — InlineModelAdmin (15 min)
@@ -865,6 +892,11 @@ from django.contrib import admin
 admin.site.site_header = "BlogApp — Administración"
 admin.site.site_title = "BlogApp Admin"
 admin.site.index_title = "Panel de administración"
+
+# 🆕 Django 6.0 — AdminSite.password_change_form
+# Permite personalizar el formulario de cambio de contraseña en el admin
+from myapp.forms import MyPasswordChangeForm
+admin.site.password_change_form = MyPasswordChangeForm  # nuevo atributo en 6.0
 ```
 
 ---
@@ -877,9 +909,12 @@ admin.site.index_title = "Panel de administración"
 | Login no redirige después del POST | Falta `next` en template o `LOGIN_REDIRECT_URL` no configurado | Siempre agregar `<input type="hidden" name="next" value="{{ next }}">`  |
 | `PermissionRequiredMixin` hace loop de login | `raise_exception = False` (default) para usuario logueado sin perm | Setear `raise_exception = True` para usuarios autenticados |
 | Cache de permisos stale | Permisos asignados en misma request donde se verifican | Usar nuevo request o `user = User.objects.get(pk=user.pk)` |
-| `LogoutView` con GET (Django 5.x) | Django 5 rechaza GET en logout por CSRF | Cambiar a `<form method="post">{% csrf_token %}` |
+| `LogoutView` con GET (Django 5.x+) | Django 5+ rechaza GET en logout por CSRF | Cambiar a `<form method="post">{% csrf_token %}` |
 | Admin sin `list_display` → columna "Post object (1)" | ModelAdmin sin personalizar | Siempre definir `__str__` en modelo O `list_display` en admin |
 | `TabularInline` N+1 | `Comment.author` se consulta por fila | Agregar `select_related = ("author",)` en el Inline |
+| `log_deletion()` o `log_action()` no existe | Removidos en **Django 6.0** (deprecated 5.1) | Usar `delete_model()` override o `LogEntry` directamente |
+| `lookup_allowed()` override sin `request` param | Firma incorrecta en Django 6.0 (`request` ahora requerido) | Definir `def lookup_allowed(self, lookup, value, request):` |
+| `DEFAULT_AUTO_FIELD` no declarado en Django 6.0 | 6.0 usa `BigAutoField` por defecto (antes `AutoField`) | Agregar `DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'` si se necesita int estándar |
 
 ---
 
@@ -908,7 +943,9 @@ django.contrib.messages    → ya en INSTALLED_APPS por defecto (requerido por a
 django.contrib.contenttypes → ya en INSTALLED_APPS por defecto (base de permisos)
 ```
 
-Stack sin cambios: Django 5.1 · Python 3.13 · Bootstrap 5.3.3
+Stack: **Django 6.0** (lanzado 3 dic 2025) · **Python 3.12+** (mínimo requerido) · Bootstrap 5.3.3
+
+> ⚠️ **Django 6.0 requiere Python 3.12 o superior.** Python 3.10 y 3.11 ya no son compatibles.
 
 ---
 
