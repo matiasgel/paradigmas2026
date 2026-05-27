@@ -4,10 +4,10 @@
     "topic_id": "10-tipos-de-datos",
     "title": "Tipos de Datos y Sistemas de Tipos",
     "source": "filminas.md",
-    "generated_at": "2026-05-26T13:14:04",
+    "generated_at": "2026-05-26T15:17:56",
     "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
-    "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
-    "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\10-tipos-de-datos",
+    "topics_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas",
+    "topic_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas/10-tipos-de-datos",
     "design_system_path": "_edu/slides-config.yaml",
     "pipeline_runtime_path": "_edu/slides-pipeline.json",
     "schema_registry_path": "_edu/schemas/schema-registry.json"
@@ -56,7 +56,7 @@
       "image": {
         "layer": "background",
         "prompt": "fondo abstracto de red de nodos de tipos conectados con flechas de herencia y composición, paleta azul oscuro y cyan, estilo minimalista académico",
-        "local_asset": "",
+        "local_asset": "slides/assets/F-00-bg.png",
         "drive_id": null
       },
       "table_assets": []
@@ -124,8 +124,8 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "Tres rectángulos de colores distintos (azul, verde, naranja) dispuestos en fila horizontal con anchos levemente distintos, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Fondo abstracto con formas circulares interconectadas sobre gradiente oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-01-bg.png",
         "drive_id": null
       },
       "table_assets": []
@@ -195,7 +195,7 @@
       "image": {
         "layer": "content",
         "prompt": "diagrama de dos columnas: izquierda muestra binding de variables con flechas de tiempo (estático, dinámico), derecha muestra árbol de clasificación de tipos de datos con ramas primitivos, compuestos, sistemas",
-        "local_asset": "",
+        "local_asset": "slides/assets/F-02-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -225,15 +225,15 @@
       "image": {
         "layer": "content",
         "prompt": "mapa de ruta horizontal con 5 paradas etiquetadas: Primitivos y Ordinales, Agregación y Colecciones, Punteros y Null Safety, Sistemas de Tipos, Síntesis",
-        "local_asset": "",
+        "local_asset": "slides/assets/F-03-content.png",
         "drive_id": null
       },
       "table_assets": [
         {
           "index": 0,
           "table_markdown": "| Bloque | Contenido | Tiempo |\n|--------|-----------|--------|\n| 1 | Tipos Primitivos y Ordinales | 70 min |\n| 2 | Tipos de Agregación y Colecciones | 90 min |\n| 3 | Punteros, Null Safety, Tipos Recursivos | 75 min |\n| 4 | Sistemas de Tipos — Polimorfismo | 80 min |\n| 5 | Síntesis, Discusión y Cierre | 30 min |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-03-table-1.png",
+          "drive_id": "1dFF81oESu7btkj2DOHGw81XMsaV7Bg_0"
         }
       ]
     },
@@ -311,7 +311,7 @@
       "image": {
         "layer": "content",
         "prompt": "diagrama de dos círculos superpuestos: uno etiquetado \"conjunto de valores\" y otro \"operaciones admisibles\", con una flecha que apunta al resultado \"tipo de dato\"",
-        "local_asset": "",
+        "local_asset": "slides/assets/F-04-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -385,8 +385,8 @@
         {
           "index": 0,
           "table_markdown": "| Lenguaje | Tipo | Tamaño | Nota |\n|----------|------|--------|------|\n| C | `int` / `long` | 32/64 bits | No hay GC; overflow silencioso |\n| Java/Kotlin | `Int` / `Long` | 32/64 bits | JVM; checked exceptions |\n| TypeScript | `number` | 64-bit IEEE 754 | **No distingue entero/float** |\n| TypeScript | `bigint` | Ilimitado | `9007199254740991n` |\n| Python | `int` | Ilimitado | Objeto; GC |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-05-table-1.png",
+          "drive_id": "1rpFi8yjB9zkNocsxI6fuO2LJJRiPZoPP"
         }
       ]
     },
@@ -542,8 +542,8 @@
         {
           "index": 0,
           "table_markdown": "| Tipo | Lenguaje | Soporte | Comentario |\n|------|----------|---------|------------|\n| Complejo | Python | `complex` nativo (`3+4j`) | Primer ciudadano |\n| Complejo | Fortran | Nativo | Orientado a cómputo científico |\n| Complejo | Java/TS | Solo librería | Decisión: tipo vs. librería |\n| Decimal | Python | `decimal.Decimal` | Módulo estándar |\n| Decimal | Kotlin/Java | `BigDecimal` | En JDK |\n| Decimal | TypeScript | `decimal.js` | Librería externa |\n| Boolean | TypeScript | `boolean` (tipo real) | `true` / `false` literales |\n| Boolean | C (pre-C99) | `0` / no-cero | Sin tipo propio |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-07-table-1.png",
+          "drive_id": "1-deLb8jTpRwA0c890qwmRhYM_W1CU3dA"
         }
       ]
     },
@@ -590,14 +590,14 @@
         {
           "index": 0,
           "table_markdown": "| Lenguaje | Tipo | Observación |\n|----------|------|-------------|\n| TypeScript | `boolean` | Tipo real: `true` / `false` |\n| C (clásico) | No existe | `0` = false, cualquier otro valor = true |\n| Python | `bool` | Subtipo de `int`! `True == 1` |\n| Kotlin | `Boolean` | Tipo real, no JVM-int |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-08-table-1.png",
+          "drive_id": "1ooZShW-Nb39K4wzlLl78NaIt5vMSnkU1"
         },
         {
           "index": 1,
           "table_markdown": "| Lenguaje | Tipo | Observación |\n|----------|------|-------------|\n| TypeScript | **No existe** | Solo `string`; `\"a\"` es string de longitud 1 |\n| Kotlin | `Char` | UTF-16, tipo real |\n| C | `char` | Byte (8 bits) — ni Unicode, ni propio |\n| Java | `char` | UTF-16; `'a'` es char literal |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-08-table-2.png",
+          "drive_id": "1_0Mo6XpsKB7VWHngqu7Ag7ZxgVwkTKJY"
         }
       ]
     },
@@ -689,8 +689,8 @@
         {
           "index": 0,
           "table_markdown": "| Aspecto | C `enum` | TypeScript `enum` | Kotlin `enum class` | Haskell `data` |\n|---------|---------|-------------------|---------------------|----------------|\n| Tipo propio | ❌ | ✅ | ✅ | ✅ |\n| Type-safe | ❌ (es un `int`) | ✅ | ✅ | ✅ |\n| Propiedades | ❌ | Limitado | ✅ | ❌ (ADT) |\n| Métodos | ❌ | ❌ | ✅ | ❌ (funciones) |\n| Exhaustividad | No | Con `never` | `when` garantiza | Pattern matching |\n| Ejemplo | `enum Dir { UP }` | `enum Dir { Up }` | `enum class Dir { UP }` | `data Dir = Up` |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-10-table-1.png",
+          "drive_id": "1jr8q5nKcwFJRHNtnfuUUezf6trOD_mMw"
         }
       ]
     },
@@ -751,16 +751,16 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Rectángulo grande azul marino con un rectángulo gris más pequeño centrado en su interior, separados por un borde delgado, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Segmento horizontal con dos puntos extremos destacados en rojo sobre fondo blanco, gradiente de color entre límites. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-11-content.png",
         "drive_id": null
       },
       "table_assets": [
         {
           "index": 0,
           "table_markdown": "| Lenguaje | Soporte | Ejemplo |\n|----------|---------|---------|\n| Pascal | Nativo | `type DiasLaborables = 1..5` |\n| Ada | Nativo | `type Day is range 1..7` |\n| TypeScript | Simulado | `type Day = 1\\|2\\|3\\|4\\|5` (literal union) |\n| Kotlin | Aproximado | `IntRange(1, 5)` — no es un tipo separado |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-11-table-1.png",
+          "drive_id": "1w0COKgA8ts3oB2JYfiuxRLM-1hjH0iAu"
         }
       ]
     },
@@ -876,8 +876,8 @@
         {
           "index": 0,
           "table_markdown": "| Lenguaje | Sistema | Observación |\n|----------|---------|-------------|\n| C (struct) | Nominal (con `typedef`) | Dos `struct` distintos → tipos distintos |\n| Java | Nominal | `class A {}` y `class B {}` nunca son iguales |\n| Kotlin | Nominal | Herencia/interfaces para compatibilidad |\n| TypeScript | **Estructural** | Si la forma coincide, el tipo es compatible |\n| Go | Estructural | Interfaces satisfechas implícitamente |\n| Haskell | Nominal + paramétrico | `data` define tipos nominales |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-13-table-1.png",
+          "drive_id": "16bcO1PmECJTDr7ApqrWGROWXTUu2GFbS"
         }
       ]
     },
@@ -917,8 +917,8 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "Cuatro formas geométricas: círculo azul, cuadrado gris, triángulo naranja y rombo gris claro, dispuestas en fila con una flecha bidireccional entre las dos primeras y un símbolo de bloqueo entre las dos últimas, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Fondo abstracto con nodos hexagonales en tonos oscuros conectados por líneas delgadas. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-14-bg.png",
         "drive_id": null
       },
       "table_assets": []
@@ -965,8 +965,8 @@
         {
           "index": 0,
           "table_markdown": "| Lenguaje | Naturaleza | Mutabilidad | Comparación |\n|----------|-----------|-------------|-------------|\n| TypeScript | Primitivo (con métodos via boxing) | Inmutable | `===` por valor ✓ |\n| Kotlin | Objeto (`String`) | Inmutable | `==` por valor (llama `equals`) |\n| Java | Objeto (`String`) | Inmutable | `==` por **referencia** ← ERROR clásico |\n| C | Puntero a `char[]` terminado en `\\0` | Mutable | `strcmp()` (no `==`) |\n| Python | Objeto `str` | Inmutable | `==` por valor ✓ |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-15-table-1.png",
+          "drive_id": "1F1meswTjB9BuISXgq_cnoyJBE7AjMffA"
         }
       ]
     },
@@ -1000,15 +1000,15 @@
       "image": {
         "layer": "none",
         "prompt": "",
-        "local_asset": "",
+        "local_asset": "slides/assets/F-16-content.png",
         "drive_id": null
       },
       "table_assets": [
         {
           "index": 0,
           "table_markdown": "| Categoría | Forma | Rango | Almacenamiento | Ejemplo |\n|-----------|-------|-------|----------------|---------|\n| **Estático** | Estático | Compila | Estático | `int a[10]` en C (global) |\n| **Semi-dinámico (stack)** | Fija en runtime | Post-elaboración | Stack (se libera al salir) | `int a[n]` en C99 (local) |\n| **Heap fijo** | Dinámica (heap) | Fija luego | Heap (manual) | `new Array<number>(n)` en TS |\n| **Heap flexible** | Totalmente dinámica | Cambia | Heap (GC) | `number[]` en TS / `list` Python |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-16-table-1.png",
+          "drive_id": "1o4tgKzY32FSDW5vGCoRo3Qpm_zRppVqr"
         }
       ]
     },
@@ -1161,8 +1161,8 @@
         {
           "index": 0,
           "table_markdown": "| Lenguaje | Sintaxis | Comportamiento |\n|----------|----------|----------------|\n| Python | `lista[1:4]` | Produce **nueva lista** (copia) |\n| Kotlin | `lista.subList(1, 4)` | Vista **viva** — comparte memoria |\n| Go | `a[1:4]` | Ciudadano de primera clase (length + capacity) |\n| Ada | `A(2..4)` | Slice de array nativo |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-18-table-1.png",
+          "drive_id": "1LDzDPEL7OVyl6gfvagUkChq5CaxEyoWj"
         }
       ]
     },
@@ -1328,8 +1328,8 @@
         {
           "index": 0,
           "table_markdown": "| Tipo | Bits | Rango | Equivalente C |\n|------|------|-------|---------------|\n| `Int8Array` | 8 | −128 a +127 | `int8_t` |\n| `Uint8Array` | 8 | 0 a 255 | `uint8_t` |\n| `Int16Array` | 16 | −32.768 a +32.767 | `int16_t` |\n| `Int32Array` | 32 | −2.147.483.648 a +2.147.483.647 | `int32_t` |\n| `Uint32Array` | 32 | 0 a 4.294.967.295 | `uint32_t` |\n| `Float32Array` | 32 | ±3.4 × 10³⁸ (precisión simple) | `float` |\n| `Float64Array` | 64 | ±1.8 × 10³⁰⁸ — igual que `number` | `double` |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-20-table-1.png",
+          "drive_id": "1LFun9vaIf1HIJiUxxpgevUWuPS0DQmeJ"
         }
       ]
     },
@@ -1432,8 +1432,8 @@
         {
           "index": 0,
           "table_markdown": "| Lenguaje | Tuplas | Observación |\n|----------|--------|-------------|\n| TypeScript | `[A, B, C]` | Literales tipados |\n| Kotlin | `Pair<A,B>` / `Triple<A,B,C>` | Solo hasta 3 elementos nativos |\n| Python | `(a, b, c)` | Inmutables por defecto |\n| Haskell | `(a, b, c)` | Tipos algebraicos nativos |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-22-table-1.png",
+          "drive_id": "1NoYpCF3PUzSKn1LCbNPTkN4MALMNvMR_"
         }
       ]
     },
@@ -1504,16 +1504,16 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Cadena de círculos azules conectados por flechas horizontales, con el último círculo apuntando a un círculo vacío con borde punteado, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Cadena de nodos circulares conectados por flechas de izquierda a derecha sobre fondo neutro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-23-content.png",
         "drive_id": null
       },
       "table_assets": [
         {
           "index": 0,
           "table_markdown": "| Aspecto | Array | Lista enlazada |\n|---------|-------|----------------|\n| Acceso aleatorio | O(1) | O(n) |\n| Inserción al frente | O(n) | O(1) |\n| Uso de memoria | Contigua | Fragmentada (punteros) |\n| Mutabilidad | Mutable por defecto | Inmutable en FP |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-23-table-1.png",
+          "drive_id": "1325_pO6AIAnKbnepqHZAw4j7gxtNf0eq"
         }
       ]
     },
@@ -1554,8 +1554,8 @@
         {
           "index": 0,
           "table_markdown": "| Lenguaje | Tipo | Estructura real | Inmutable |\n|----------|------|----------------|-----------|\n| TypeScript | `T[]` / `Array<T>` | Array dinámico | Solo con `ReadonlyArray<T>` |\n| TypeScript | `ReadonlyArray<T>` | Array dinámico | ✅ |\n| Kotlin | `List<T>` | ArrayList | ✅ |\n| Kotlin | `MutableList<T>` | ArrayList | ❌ |\n| Python | `list` | Array dinámico (¡no lista enlazada!) | ❌ |\n| Haskell | `[a]` | Lista enlazada real | ✅ siempre |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-24-table-1.png",
+          "drive_id": "18d1h6X3lsDDQDaZ3x981JjvCPm4yL28b"
         }
       ]
     },
@@ -1755,8 +1755,8 @@
         {
           "index": 0,
           "table_markdown": "| Aspecto | TypeScript | Kotlin | Haskell |\n|---------|-----------|--------|---------|\n| Mecanismo | `kind` explícito | `sealed class` | ADT (`data`) |\n| Exhaustividad | Con `never` trick | Compilador garantiza | Pattern matching |\n| Runtime tag | Campo de objeto | `is` check | Constructor tag |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-27-table-1.png",
+          "drive_id": "19tWxj4SNbAT3f-gPYROXpH0E-TVkd2b0"
         }
       ]
     },
@@ -1815,8 +1815,8 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "Cuadrilátero dividido en cuatro secciones coloreadas (azul, gris, azul claro, blanco) con flechas apuntando entre secciones, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Fondo abstracto con triángulos y polígonos irregulares en paleta de grises oscuros. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-28-bg.png",
         "drive_id": null
       },
       "table_assets": []
@@ -1882,7 +1882,7 @@
       "image": {
         "layer": "content",
         "prompt": "diagrama de memoria con una variable \"ptr\" que contiene una dirección de memoria, una flecha apuntando a una celda de heap etiquetada con un valor, y otra variable \"null\" señalando a nada",
-        "local_asset": "",
+        "local_asset": "slides/assets/F-29-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -1927,15 +1927,15 @@
       "image": {
         "layer": "none",
         "prompt": "",
-        "local_asset": "",
+        "local_asset": "slides/assets/F-30-content.png",
         "drive_id": null
       },
       "table_assets": [
         {
           "index": 0,
           "table_markdown": "| Problema | Qué pasa | Detectado por |\n|---------|----------|---------------|\n| **Dangling pointer** | Puntero apunta a memoria ya liberada | Valgrind / AddressSanitizer |\n| **Memory leak** | Memoria asignada sin referencia, sin liberar | Valgrind / Heaptrack |\n| **Double free** | Liberar el mismo bloque dos veces → UB | AddressSanitizer |\n| **Null dereference** | `*null` → crash | OS (SIGSEGV) |\n| **Buffer overflow** | Aritmética fuera de rango → sobreescritura | AddressSanitizer |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-30-table-1.png",
+          "drive_id": "1W_HW88OGKC97ghpytr8qpbPV5lEDPdwl"
         }
       ]
     },
@@ -2046,7 +2046,7 @@
       "image": {
         "layer": "content",
         "prompt": "diagrama de grafo de objetos en heap con flechas de referencia, algunos nodos alcanzables desde raíz marcados en verde, otros nodos aislados marcados en rojo como \"recolectables\"",
-        "local_asset": "",
+        "local_asset": "slides/assets/F-31-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -2106,8 +2106,8 @@
         {
           "index": 0,
           "table_markdown": "| Aspecto | Puntero (C) | Referencia (C++) | Referencias JS/TS/Kotlin |\n|---------|-------------|-----------------|--------------------------|\n| Aritmética | ✅ `ptr++` | ❌ No permitida | ❌ No existe |\n| Reasignable | ✅ | ❌ Siempre apunta al mismo objeto | ✅ Variables reasignables |\n| Puede ser null | ✅ `NULL` | ❌ Debe inicializarse | ✅ (con nullable) |\n| Derreferencia explícita | ✅ `*ptr` | ❌ Implícita | ❌ Implícita |\n| Gestión de memoria | Manual | Manual (o RAII) | GC automático |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-32-table-1.png",
+          "drive_id": "1U3gTal9Sb1HtKGPJoVnl1G7B36RMWb2n"
         }
       ]
     },
@@ -2161,8 +2161,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Cuadrado que contiene un cuadrado más pequeño que contiene otro más pequeño aún, degradado de azul oscuro a azul claro hacia el centro, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Árbol de nodos con ramas que se bifurcan simétricamente usando círculos y conectores sobre fondo claro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-33-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -2283,8 +2283,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Cuadrado con un signo de advertencia triangular en rojo en el centro izquierdo, y un rectángulo vacío con borde gris a la derecha, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Caja contenedora con interior vacío resaltado en rojo sobre fondo blanco con sombra ligera. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-35-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -2321,8 +2321,8 @@
         {
           "index": 0,
           "table_markdown": "| Operador | Nombre | Comportamiento |\n|----------|--------|----------------|\n| `T \\| null` | Tipo nulable | Declara que `T` puede ser null |\n| `T \\| undefined` | Tipo indefinido | Parámetros opcionales por defecto |\n| `x?.prop` | Optional chaining | Si `x` es null/undefined → retorna `undefined` |\n| `x ?? valor` | Nullish coalescing | Si `x` es null/undefined → usa `valor` |\n| `x!` | Non-null assertion | Fuerza acceso — puede fallar en runtime |\n| `if (x !== null)` | Type narrowing | El compilador infiere tipo más estrecho |\n| `function f(x?: T)` | Parámetro opcional | `x` es `T \\| undefined` |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-36-table-1.png",
+          "drive_id": "1IFbtRzDqqcLBmb4_Zx3dgaYVdndV8XtZ"
         }
       ]
     },
@@ -2393,14 +2393,14 @@
         {
           "index": 0,
           "table_markdown": "| Lenguaje | Mecanismo | Activación | Safety |\n|----------|-----------|-----------|--------|\n| C / Java (pre-8) | `null` sin restricción | Siempre | ❌ Ninguna |\n| Python | `None` sin restricción | Siempre | ❌ Ninguna |\n| TypeScript | `T \\| null` + `strictNullChecks` | **Opt-in** | ✅ Con flag |\n| Kotlin | `T` vs. `T?` + operadores `?.` `?:` `!!` | **Siempre** | ✅ Por diseño |\n| Haskell | `Maybe a = Nothing \\| Just a` | Siempre | ✅ Monádico |\n| Rust | `Option<T> = None \\| Some(T)` | Siempre | ✅ Tipo de datos |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-38-table-1.png",
+          "drive_id": "1rNDlNKy2Waf_FTepz7d-XSuVmcp0tl1e"
         },
         {
           "index": 1,
           "table_markdown": "| TypeScript | Kotlin | Significado |\n|-----------|--------|-------------|\n| `x ?? y` | `x ?: y` | Si null → usar y (Elvis) |\n| `x?.prop` | `x?.prop` | Acceso seguro (igual sintaxis) |\n| `x!` | `x!!` | Forzar no-null (peligroso) |\n| `if (x !== null)` | `if (x != null)` | Type narrowing |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-38-table-2.png",
+          "drive_id": "1uMClVv8Kh8eIeRRs6GCW1UMisPeGNX6B"
         }
       ]
     },
@@ -2445,8 +2445,8 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "Bloque rectangular con una banda roja tachada a la izquierda, transformado por una flecha central en un bloque rectangular con un candado verde a la derecha, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Fondo abstracto con patrón de rombos en degradado de gris a negro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-39-bg.png",
         "drive_id": null
       },
       "table_assets": []
@@ -2525,8 +2525,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Balanza de dos platillos equilibrados: platillo izquierdo en azul marino, platillo derecho en gris claro, travesaño horizontal gris, base triangular negra, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Balanza con dos platos equilibrados con formas geométricas abstractas en cada plato sobre fondo neutro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-40-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -2695,7 +2695,7 @@
       "image": {
         "layer": "content",
         "prompt": "diagrama de tres ejes en espacio tridimensional: eje X \"cuándo verifica\" con extremos Estático-Dinámico, eje Y \"qué tan rígido\" con extremos Weak-Strong, eje Z \"cuántos tipos\" con extremos Monomórfico-Polimórfico, con puntos representando lenguajes C Python TypeScript Kotlin Haskell",
-        "local_asset": "",
+        "local_asset": "slides/assets/F-42-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -2762,16 +2762,16 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Ícono de escudo con borde azul marino en el centro izquierdo, fondo degradado de blanco a gris muy claro, sombra circular azul detrás del escudo, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Escudo hexagonal sólido en rojo oscuro con borde blanco centrado sobre fondo claro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-43-content.png",
         "drive_id": null
       },
       "table_assets": [
         {
           "index": 0,
           "table_markdown": "| Lenguaje | ¿Strongly typed? | Razón |\n|----------|-----------------|-------|\n| C / C++ | ❌ NO | Uniones sin discriminación, `void*`, coerciones |\n| Java | ⚠️ MODERADO | Coerciones numéricas implícitas (widening) |\n| Python | ❌ NO en práctica | Sin anotaciones → sin chequeo estático real |\n| TypeScript (strict) | ✅ EN COMPILACIÓN | El runtime (JS) no tiene tipos |\n| Kotlin | ✅ | Strong en compilación y runtime (JVM) |\n| Haskell | ✅ | El más estricto — sin coerciones implícitas |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-43-table-1.png",
+          "drive_id": "148GadfFdbUUL9MHrE8ozmORJXQah4ugq"
         }
       ]
     },
@@ -2858,8 +2858,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Punto azul sólido en el centro de un espacio blanco delimitado por un cuadrado gris, sin otros elementos visuales, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Cuadrícula de cuadrados uniformes del mismo tamaño y color ordenados en filas y columnas. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-44-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -2925,7 +2925,7 @@
       "image": {
         "layer": "content",
         "prompt": "árbol de clasificación del polimorfismo: raíz \"Polimorfismo\", dos ramas principales \"Ad-hoc\" y \"Universal\", bajo Ad-hoc \"Sobrecarga\" y \"Coerción\", bajo Universal \"Paramétrico\" y \"Subtipo (inclusión)\"",
-        "local_asset": "",
+        "local_asset": "slides/assets/F-45-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -3067,8 +3067,8 @@
         {
           "index": 0,
           "table_markdown": "| Varianza | Definición | Kotlin | TypeScript |\n|----------|-----------|--------|-----------|\n| **Covariante** | `Caja<Gato>` ≤ `Caja<Animal>` — produce T | `out T` | Inferida automáticamente |\n| **Contravariante** | `Caja<Animal>` ≤ `Caja<Gato>` — consume T | `in T` | Inferida automáticamente |\n| **Invariante** | No hay subtipado | (por defecto) | (por defecto si read+write) |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-48-table-1.png",
+          "drive_id": "1eKCrW-WFpx2qBbPudMjWDRDdLtPhDoSt"
         }
       ]
     },
@@ -3142,8 +3142,8 @@
         {
           "index": 0,
           "table_markdown": "| Aspecto | Ad-hoc (sobrecarga) | Paramétrico (generics) | Por subtipo (herencia) |\n|---------|---------------------|----------------------|----------------------|\n| **Mecanismo** | Nombre compartido | Parámetro de tipo `<T>` | Herencia / interface |\n| **Binding** | Compilación (static dispatch) | Compilación | Runtime (dynamic dispatch) |\n| **Overhead** | Ninguno | Ninguno (erasure en JVM) | Virtual dispatch |\n| **Restricción** | Firmas distintas | Upper bounds (`extends`) | Is-a relationship |\n| **Ejemplo TS** | Function overloads | `function f<T>(...)` | `class C implements I` |\n| **Expresividad** | Baja | Alta | Media-Alta |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-50-table-1.png",
+          "drive_id": "1GJenuqUnb5Nq_6S6X5oka0EABREV1-H6"
         }
       ]
     },
@@ -3245,8 +3245,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Llave inglesa azul marino en la esquina superior izquierda y candado cerrado gris en la esquina inferior derecha, conectados por una línea diagonal punteada, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Dos formas geométricas idénticas conectadas por líneas de doble flecha sobre fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-52-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -3328,7 +3328,7 @@
       "image": {
         "layer": "content",
         "prompt": "mapa conceptual jerárquico completo: raíz \"Tipos de Datos\", ramas hacia Primitivos (enteros, float, bool, char), Compuestos (array, registro, tupla, unión), Recursivos (lista, árbol), Opcionales (null, Maybe); segunda raíz \"Sistemas de Tipos\" con ramas Monomórfico y Polimórfico (Ad-hoc, Paramétrico, Subtipo); flechas de conexión entre conceptos",
-        "local_asset": "",
+        "local_asset": "slides/assets/F-53-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -3360,8 +3360,8 @@
         {
           "index": 0,
           "table_markdown": "| Año | Lenguaje / Evento | Aporte al sistema de tipos |\n|-----|-------------------|---------------------------|\n| 1958 | LISP | Tipos dinámicos, listas como ciudadanos |\n| 1968 | ALGOL 68 | Tipos compuestos ricos, equivalencia estructural |\n| 1972 | C | Punteros, uniones, tipado débil |\n| 1978 | ML | Inferencia de tipos (Hindley-Milner), polimorfismo paramétrico |\n| 1985 | C++ | Templates, sobrecarga, herencia múltiple |\n| 1987 | Haskell (precursor) | ADTs, type classes, sin null (Maybe) |\n| 1995 | Java | GC, referencias, generics (2004) |\n| 2012 | TypeScript | Tipado estructural sobre JS, generics, discriminated unions |\n| 2016 | Kotlin | Null safety por diseño, data classes, sealed |\n| 2015 | Rust | Ownership, lifetime, `Option<T>` sin null |",
-          "local_asset": "",
-          "drive_id": null
+          "local_asset": "slides/assets/F-54-table-1.png",
+          "drive_id": "1z5afbfr2Ji5tbo_ypmO_-Tf9Jh33ZGAN"
         }
       ]
     },
@@ -3422,8 +3422,8 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "Tres círculos concéntricos azul oscuro, azul medio y gris claro, con flechas apuntando hacia afuera desde el centro en cuatro direcciones, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Fondo abstracto con olas suaves de líneas curvas en tonos neutros oscuros. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-55-bg.png",
         "drive_id": null
       },
       "table_assets": []
@@ -3510,8 +3510,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Flecha horizontal que avanza de izquierda a derecha con tres puntos circulares de tamaño creciente sobre ella, degradado de azul oscuro a azul claro, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Flecha larga que apunta hacia la derecha con puntos nodales en su trayectoria sobre fondo claro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-56-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -3609,8 +3609,8 @@
       },
       "image": {
         "layer": "content",
-        "prompt": "Ícono de documento rectangular con esquinas redondeadas en azul marino, una pequeña flecha de carga en la esquina inferior derecha del documento, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Cuadrícula de casillas con marcadores en las esquinas en disposición formal sobre fondo neutro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-57-content.png",
         "drive_id": null
       },
       "table_assets": []
@@ -3692,8 +3692,8 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "Nudo geométrico formado por líneas curvas azul oscuro que convergen en un punto central brillante, con gradiente de opacidad desde el exterior, fondo blanco. Flat design, borde y gris oscuro. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
-        "local_asset": "",
+        "prompt": "Fondo abstracto con gradiente profundo de rojo oscuro a negro con destellos radiales suaves. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.",
+        "local_asset": "slides/assets/F-58-bg.png",
         "drive_id": null
       },
       "table_assets": []

@@ -4,10 +4,10 @@
     "topic_id": "10-tipos-de-datos",
     "title": "Tipos de Datos y Sistemas de Tipos",
     "source": "filminas.md",
-    "generated_at": "2026-05-26T13:14:04",
+    "generated_at": "2026-05-26T15:17:56",
     "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
-    "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
-    "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\10-tipos-de-datos",
+    "topics_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas",
+    "topic_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas/10-tipos-de-datos",
     "design_system_path": "_edu/slides-config.yaml",
     "pipeline_runtime_path": "_edu/slides-pipeline.json",
     "schema_registry_path": "_edu/schemas/schema-registry.json"
