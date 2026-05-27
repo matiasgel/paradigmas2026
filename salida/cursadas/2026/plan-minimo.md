@@ -112,6 +112,19 @@ Tópicos mínimos obligatorios:
 - Vistas genéricas para manejo de usuario y formularios
 - Desarrollo de templates para manejo de usuarios
 - **Autorización en Django**: permisos en modelos y vistas
+- Grupos y permisos: modelo `Group`, modelo `Permission`, asignación a usuarios
+- Permisos por defecto (`add`, `change`, `delete`, `view`) y permisos personalizados
+- Decoradores de autorización: `@login_required`, `@permission_required`, `@user_passes_test`
+- Mixins de autorización en vistas de clase: `LoginRequiredMixin`, `PermissionRequiredMixin`
+- Verificación de permisos en templates con `{% if perms %}`
+- **App de administración de Django (`django.contrib.admin`)**
+- Registro de modelos: `admin.site.register()`, decorador `@admin.register`
+- Personalización de `ModelAdmin`: `list_display`, `list_filter`, `search_fields`, `ordering`
+- Campos y formularios en el admin: `fields`, `fieldsets`, `readonly_fields`, `exclude`
+- Acciones en masa personalizadas (`actions`)
+- Relaciones en el admin: `InlineModelAdmin`, `TabularInline`, `StackedInline`
+- Control de acceso en el admin: `has_add_permission`, `has_change_permission`, `has_delete_permission`
+- Personalización del sitio admin: `AdminSite`, título, cabecera e índice
 - Generación de interfaz de administrador con manejo de permisos
 
 ---

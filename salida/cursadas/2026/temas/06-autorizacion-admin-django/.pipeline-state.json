@@ -1,0 +1,45 @@
+{
+  "topic_number": "06",
+  "topic_slug": "autorizacion-admin-django",
+  "current_step": "quality",
+  "started_at": "2026-05-27",
+  "steps": {
+    "init": {
+      "status": "complete",
+      "completed_at": "2026-05-27"
+    },
+    "design": {
+      "status": "complete",
+      "completed_at": "2026-05-27",
+      "artifacts": [
+        "topic.yaml",
+        "diseno.md"
+      ]
+    },
+    "approval": {
+      "status": "complete",
+      "completed_at": "2026-05-27",
+      "approved_by": "docente"
+    },
+    "content": {
+      "status": "complete",
+      "completed_at": "2026-05-27",
+      "artifacts": [
+        "minuta.md",
+        "filminas.md"
+      ]
+    },
+    "quality": {
+      "status": "pending"
+    },
+    "pipeline": {
+      "status": "pending"
+    },
+    "tp": {
+      "status": "pending"
+    },
+    "simulation": {
+      "status": "pending"
+    }
+  }
+}

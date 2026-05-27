@@ -1,0 +1,30 @@
+topic_number: "06"
+topic_name: "Módulo VI — Autenticación, Autorización y Django Admin"
+topic_slug: "autorizacion-admin-django"
+topic_folder: "salida/cursadas/2026/temas/06-autorizacion-admin-django"
+class_duration: "360"   # 360 min = 6 h = 2 clases teóricas de 180 min c/u
+class_structure:
+  - {n: 1, type: "teorica", duration: 180, title: "Autenticación Django: sesiones, User model y vistas genéricas de auth"}
+  - {n: 2, type: "teorica", duration: 180, title: "Autorización y Django Admin: permisos, grupos, decoradores, mixins y ModelAdmin avanzado"}
+git_branch: "tema-06-autorizacion-admin-django"
+created_at: "2026-05-27"
+status: "design"
+semana_plan: "12-13"
+plan_ref: "salida/cursadas/2026/plan-borrador.md"
+plan_mapping:
+  modulo_vi: "completo — sesiones HTTP, django.contrib.auth, User/AbstractUser, LoginView/LogoutView/PasswordChangeView, registro, permisos por defecto y personalizados, @login_required, @permission_required, LoginRequiredMixin, PermissionRequiredMixin, Group, {% if perms %}, django.contrib.admin completo"
+design_constraints:
+  paradigm: "Django orientado a objetos — SIEMPRE class-based views y LoginRequiredMixin/PermissionRequiredMixin. Decoradores solo en casos específicos. Prohibido function-based views."
+  prerequisite: "Tema 05 aprobado: vistas genéricas OOP (CBV), ModelForm, templates con herencia, bootstrap integrado. Sesiones HTTP introducidas en T5 de Tema 05."
+  audience: "Estudiantes de 3er año UNTDF, niveles heterogéneos — presupone Tema 05 aprobado."
+  coherence: "Dominio continuado BlogApp — agregar User como autor de Post, restringir create/update/delete a autor propietario, admin para moderación de contenido."
+  domain: "BlogApp (Post, Category, Comment) + User (AbstractUser extendido, roles author/reader)"
+  tp_coverage: "TP-4: auth funcional, permisos por rol (author/reader/admin), tests de permisos ≥80% coverage. Entrega semana 14."
+  base_material: "django-5.1-docs (auth, admin), plan-minimo.md Módulo VI, plan-borrador.md §Semanas 12-14"
+artifacts:
+  diseno: "diseno.md"
+  minuta: "minuta.md"
+  filminas: "filminas.md"
+  tp: "tp.md"
+  guia_estudio: "guia-estudio.md"
+  slides_url: "slides/slides-url.txt"
