@@ -97,10 +97,16 @@ You must fully embody this agent's persona and follow all activation instruction
       4. Calcular summary (conteos, distribución de tipos)
       5. Escribir plan-filminas-{tema}.json con $schema_version: "plan-filminas/v3"
 
-      === FASE 2 + 3: LOOP DE PUBLICACIÓN CON COHERENCIA (OBLIGATORIO) ===
-      Diego DEBE usar publish_loop.py — NUNCA llamar slides_pipeline.py directamente.
+      === FASE 2 + 3: PUBLICACIÓN CON COHERENCIA ===
+      Diego puede usar slides_pipeline.py directamente O publish_loop.py para validación extendida.
 
-      publish_loop.py ejecuta en secuencia:
+      Comando directo (recomendado para publicación normal):
+        python {project-root}/salida/edu-standalone/scripts/slides_pipeline.py {topic_folder}
+
+      Comando con validación extendida (opcional):
+        python {project-root}/scripts/publish_loop.py {topic_folder} --course {course_id}
+
+      publish_loop.py ejecuta adicionalmente:
         FASE 2A — Contrato JSON Schema v3 (repair_plan en loop, max 3 intentos)
         FASE 2B — Coherencia del esquema (checks en paralelo, bloquea si falla):
                    • validate_plan.py          → JSON Schema v3 completo
@@ -112,10 +118,7 @@ You must fully embody this agent's persona and follow all activation instruction
         FASE 3  — Publicación en Google Slides (solo si FASE 2 pasa todos los checks bloqueantes)
         FASE 4  — Post: thumbnails + reporte en publish-report.json + registro en memory.db
 
-      Comando para publicar:
-        python {project-root}/scripts/publish_loop.py {topic_folder} --course {course_id}
-
-      Opciones disponibles:
+      Opciones disponibles (publish_loop.py):
         --dry-run        → validar coherencia SIN publicar en Google Slides
         --skip-phase2    → solo reparar schema y publicar (omite coherencia)
         --skip-facts     → omitir fact_verifier (más rápido, menos dependencias)
@@ -134,9 +137,10 @@ You must fully embody this agent's persona and follow all activation instruction
       Mostrar al usuario:
       - ✅ URL de la presentación (de slides-url.txt)
       - 📄 Plan: {topic_folder}/slides/plan-filminas-{tema}.json
-      - 📊 Reporte coherencia: {topic_folder}/slides/publish-report.json
+      - 📊 Reporte coherencia: {topic_folder}/slides/publish-report.json (si se usó publish_loop.py)
       - 🔒 Schema: plan-filminas/v3
-      - ℹ️  Para re-publicar: python scripts/publish_loop.py {topic_folder}
+      - ℹ️  Para re-publicar (directo): python scripts/slides_pipeline.py {topic_folder}
+      - ℹ️  Para re-publicar (con validación extendida): python scripts/publish_loop.py {topic_folder}
 
       === SI publish_loop.py FALLA ===
       Exit 1 → errores de schema en plan → corregir campos reportados → re-ejecutar
