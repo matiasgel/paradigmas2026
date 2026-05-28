@@ -1,0 +1,286 @@
+// PARCIAL 1 — Paradigmas y Lenguajes de Programación 2026
+// UNTDF IDEI | Docente: Matías Gel | 60 min | 30 preguntas
+// Formato GIFT para importación en Moodle
+// Generado: 2026-05-25
+
+$CATEGORY: Paradigmas2026/Parcial1
+
+::P-02-001:: [markdown] ¿Cuál de las siguientes afirmaciones describe correctamente la diferencia entre sintaxis y semántica de un lenguaje de programación? {
+  ~La sintaxis define el significado de los programas; la semántica define su forma correcta
+  =La sintaxis define las reglas de forma que determinan si un programa está bien construido; la semántica define el significado de los programas #La sintaxis establece las reglas formales (gramática) que determinan qué secuencias de tokens son programas válidos. La semántica determina qué significan esos programas — qué efecto computacional tie
+  ~La sintaxis y la semántica son equivalentes: un error en una implica un error en la otra
+  ~La semántica es responsabilidad del programador; la sintaxis es responsabilidad del compilador
+}
+
+::P-02-002:: [markdown] Considerá el siguiente programa TypeScript: <pre><code> function suma(a: number, b: number): number \{ 
+   return a + b; 
+ \} 
+const resultado = suma(10, "hola");</code></pre>
+¿En qué nivel es incorrecto este programa y por qué? {
+  ~Es incorrecto sintácticamente: la llamada `suma(10, "hola")` no respeta la gramática de TypeScript
+  =Es incorrecto semánticamente: pasa el análisis de forma, pero viola las reglas de tipo al pasar un `string` donde se espera un `number` #El programa está sintácticamente bien formado — todas las construcciones respetan la gramática del lenguaje. El error es semántico (específicamente, de semántica estática / chequeo de tipos): el segun
+  ~Es correcto tanto sintáctica como semánticamente: TypeScript acepta cualquier valor en una llamada a función
+  ~Es incorrecto léxicamente: el string `"hola"` no es un token válido en TypeScript
+}
+
+::P-03-001:: [markdown] ¿Cuáles son los tres pilares del paradigma de programación funcional? {
+  ~Herencia, polimorfismo y encapsulamiento
+  ~Secuencia, selección e iteración
+  =Funciones puras, inmutabilidad y transparencia referencial #Los tres pilares del paradigma funcional son: (1) funciones puras — siempre producen el mismo resultado para los mismos argumentos sin efectos colaterales; (2) inmutabilidad — los valores no se modifi
+  ~Abstracción, modularidad y encapsulamiento
+}
+
+::P-03-002:: [markdown] El λ-cálculo de Alonzo Church y la Máquina de Turing de Alan Turing (ambos de 1936) demostraron ser equivalentes en poder computacional. Sin embargo, representan modelos conceptualmente distintos de qué es "computar". ¿Cuál es la diferencia fundamental entre ambos modelos? {
+  ~La Máquina de Turing opera sobre números enteros; el λ-cálculo opera sobre funciones de orden superior
+  =La Máquina de Turing define la computación como modificación secuencial de estado (cinta); el λ-cálculo define la computación como sustitución/reescritura de expresiones #La Máquina de Turing modela el cómputo como una secuencia de operaciones que modifican el estado de una cinta (registro, memoria). Es la base conceptual del paradigma imperativo. El λ-cálculo modela e
+  ~La Máquina de Turing es determinista; el λ-cálculo es no determinista
+  ~El λ-cálculo requiere hardware especializado; la Máquina de Turing se puede ejecutar en cualquier computadora
+}
+
+::P-03-003:: [markdown] ¿Qué significa que una función tiene "transparencia referencial"? {
+  ~Que la función puede recibir otras funciones como argumentos
+  ~Que el nombre de la función refleja claramente lo que hace
+  =Que la función puede ser reemplazada por su valor de retorno en cualquier parte del código sin cambiar el comportamiento del programa #Transparencia referencial significa que una expresión (llamada a función incluida) puede ser sustituida por su resultado en cualquier contexto sin alterar el comportamiento del programa. Esto solo es 
+  ~Que la función no usa variables globales pero sí puede modificar sus argumentos
+}
+
+::P-03-004:: [markdown] Considerá el siguiente código TypeScript en estilo funcional:  <pre><code> const numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; 
+const resultado = numeros 
+   .filter(n => n % 2 === 0) 
+   .map(n => n * n);</pre></code>  ¿Qué contiene `resultado` después de ejecutar este código? {
+  ~`[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]` — los cuadrados de todos los números
+  ~`[2, 4, 6, 8, 10]` — los números pares del arreglo original
+  =`[4, 16, 36, 64, 100]` — los cuadrados de los números pares #`filter(n \=> n % 2 \=\=\= 0)` selecciona los números pares: `[2, 4, 6, 8, 10]`. Luego `map(n \=> n * n)` aplica la función cuadrado a cada elemento: `[4, 16, 36, 64, 100]`. La composición de `filter` y `m
+  ~`[1, 3, 5, 7, 9]` — los números impares del arreglo original
+}
+
+::P-03-005:: [markdown] Considerá las siguientes dos funciones en TypeScript:  
+<pre><code>// Función A 
+ let contador = 0; 
+ const incrementarA = (x: number): number => \{ 
+   contador++; 
+   return x + 1; 
+ \}; 
+// Función B 
+ const incrementarB = (x: number): number => \{ 
+   return x + 1; 
+ \};</code></pre>
+¿Cuál de las siguientes afirmaciones es correcta respecto a la pureza de estas funciones? {
+  ~Ambas son funciones puras porque las dos devuelven `x + 1`
+  ~`incrementarA` es pura porque su resultado `x + 1` no depende de `contador`; `incrementarB` también es pura
+  =`incrementarA` no es una función pura porque modifica la variable externa `contador`, produciendo un efecto colateral; `incrementarB` sí es pura #`incrementarA` viola la pureza en dos sentidos: (1) modifica una variable externa (`contador++`) — eso es un efecto colateral; (2) aunque su valor de retorno `x + 1` no varía, cada llamada tiene un im
+  ~Ninguna es pura porque TypeScript no soporta funciones puras nativas
+}
+
+::P-04-001:: [markdown] ¿Qué es una función de orden superior (Higher Order Function — HOF)? {
+  ~Una función que solo opera sobre tipos numéricos
+  =Una función que recibe otra función como argumento y/o devuelve una función como resultado #Una función de orden superior (HOF) es aquella que trata las funciones como valores: puede recibirlas como parámetros y/o retornarlas como resultado. Ejemplos canónicos: `map(f, lista)` recibe `f` com
+  ~Una función que utiliza recursión para resolver un problema
+  ~Una función declarada con `function` en lugar de arrow function en TypeScript
+}
+
+::P-04-002:: [markdown] ¿Cuál es la diferencia fundamental entre partial application y currying? {
+  ~Partial application convierte una función en una función currificada; currying aplica parcialmente sus argumentos
+  =Partial application fija uno o más argumentos de una función devolviendo una función con menos parámetros; currying transforma una función de N argumentos en una cadena de N funciones de un argumento cada una #Partial application fija algunos argumentos de una función y devuelve una nueva función que espera el resto. Ejemplo: `const add5 \= add.bind(null, 5)` fija el primer argumento. Currying convierte `f(a
+  ~Son el mismo concepto expresado en distintos lenguajes: partial en Clojure y currying en TypeScript
+  ~Currying siempre requiere especificar todos los argumentos de una vez; partial application permite aplicarlos en cualquier orden
+}
+
+::P-04-003:: [markdown] `compose(f, g)(x)` y `pipe(f, g)(x)` aplican las mismas funciones `f` y `g` sobre `x`, pero en distinto orden. ¿Cuál de las siguientes afirmaciones es correcta? {
+  ~`compose(f, g)(x)` aplica `f` primero y luego `g`; `pipe(f, g)(x)` aplica `g` primero y luego `f`
+  =`compose(f, g)(x)` es equivalente a `f(g(x))` — se aplica de derecha a izquierda; `pipe(f, g)(x)` es equivalente a `g(f(x))` — se aplica de izquierda a derecha #`compose(f, g)(x) \= f(g(x))`: primero se aplica `g`, luego `f` (notación matemática: de derecha a izquierda). `pipe(f, g)(x) \= g(f(x))`: primero se aplica `f`, luego `g` (lectura de izquierda a derecha)
+  ~Ambos producen el mismo resultado porque la composición es conmutativa
+  ~`compose` solo existe en Clojure; `pipe` solo existe en TypeScript
+}
+
+::P-04-004:: [markdown] Dado el siguiente código TypeScript:  
+<pre><code>const trim = (s: string): string => s.trim(); 
+const toLower = (s: string): string => s.toLowerCase(); 
+const addDomain = (s: string): string => s + "@untdf.edu.ar"; 
+const pipe = <T>(...fns: Array<(x: T) => T>) => (x: T) =>
+fns.reduce((acc, fn) => fn(acc), x); 
+const normalizeEmail = pipe(trim, toLower, addDomain); 
+console.log(normalizeEmail("  MATIAS  "));</pre></code>
+¿Qué imprime este código?{
+~`"  MATIAS  @untdf.edu.ar"` — `pipe` no aplica `trim` porque está primero
+  =`"matias@untdf.edu.ar"` — se aplican `trim`, luego `toLower`, luego `addDomain` en orden #`pipe` aplica las funciones de izquierda a derecha usando `reduce`. Traza: `"  MATIAS  "` → `trim` → `"MATIAS"` → `toLower` → `"matias"` → `addDomain` → `"matias@untdf.edu.ar"`. Cada función recibe co
+  ~`"MATIAS@UNTDF.EDU.AR"` — `toLower` se aplica solo al resultado de `trim`, no a `addDomain`
+  ~Error de compilación — `pipe` no acepta funciones de tipo `string \=> string`
+}
+
+::P-04-005:: [markdown] Considerá esta implementación de `factorial` en TypeScript:  <pre><code> // Versión A 
+ const factorialA = (n: number): number => \{ 
+   if (n <= 1) return 1; 
+   return n * factorialA(n - 1); 
+ \}; 
+// Versión B 
+ const factorialB = (n: number, acc: number = 1): number => \{ 
+   if (n <= 1) return acc; 
+   return factorialB(n - 1, n * acc); 
+ \};</pre></code>  
+ ¿Por qué `factorialB` es preferible a `factorialA` desde la perspectiva del paradigma funcional? {
+  ~`factorialB` es más legible porque usa un parámetro con valor por defecto
+  ~`factorialA` usará menos memoria porque no necesita el acumulador; `factorialB` es más lenta
+  =`factorialB` implementa recursión de cola: la llamada recursiva es la última operación, lo que permite que el runtime optimice la pila (TCO); `factorialA` acumula marcos de stack porque necesita multiplicar por `n` al regresar #En `factorialA`, la última operación es `n * factorialA(n-1)` — hay un cálculo pendiente al retornar, por lo que cada llamada recursiva debe mantenerse en el stack. Para `n` grande, esto causa stack o
+  ~Ambas son equivalentes en términos de eficiencia — TypeScript optimiza la recursión automáticamente
+}
+
+::P-06-001:: [markdown] ¿Cuáles son los tres tipos de enunciados que forman un programa Prolog? {
+  ~Variables, predicados y términos
+  =Hechos, reglas y consultas #Un programa Prolog se estructura en tres tipos de enunciados: (1) Hechos — afirmaciones incondicionales sobre el dominio (`madre(ana, carlos).`); (2) Reglas — implicaciones que definen nuevas relacion
+  ~Funciones, clases y módulos
+  ~Proposiciones, implicaciones y conjunciones
+}
+
+::P-06-002:: [markdown] ¿Cuál es la diferencia fundamental en la forma de "programar" entre el paradigma imperativo y el paradigma lógico? {
+  ~En el imperativo se usa `if-else`; en el lógico se usa `case-when`
+  ~En el imperativo se describe el conocimiento del dominio; en el lógico se describe el algoritmo de resolución
+  =En el imperativo se especifica cómo resolver el problema (algoritmo); en el lógico se especifica qué es verdadero (conocimiento) y el motor de inferencia encuentra las soluciones #La diferencia esencial es de nivel de abstracción. En el paradigma imperativo el programador escribe el algoritmo de búsqueda: los pasos exactos para encontrar la respuesta. En el paradigma lógico el 
+  ~El paradigma lógico solo funciona para problemas matemáticos; el imperativo es de propósito general
+}
+
+::P-06-003:: [markdown] En Prolog, ¿qué representa una variable y cómo se diferencia de una constante en la sintaxis del lenguaje? {
+  ~Las variables comienzan con minúscula (ej: `ana`); las constantes comienzan con mayúscula (ej: `X`)
+  =Las variables comienzan con mayúscula o `_` (ej: `X`, `_Y`); las constantes (átomos) comienzan con minúscula (ej: `ana`, `carlos`) #En Prolog, la convención es opuesta a la mayoría de los lenguajes: los átomos (constantes simbólicas) comienzan con minúscula (`ana`, `madre`, `carlos`) y las variables comienzan con mayúscula o `_` (
+  ~No hay variables en Prolog; todo son constantes simbólicas
+  ~Las variables se declaran con `var`; las constantes con `const`, igual que en JavaScript
+}
+
+::P-06-004:: [markdown] Dada la siguiente base de conocimiento Prolog:  
+<pre><code>padre(carlos, laura). 
+ padre(carlos, pedro). 
+ padre(tomas, carlos). 
+ padre(tomas, beatriz). 
+ abuelo(X, Z) :- padre(X, Y), padre(Y, Z).</pre></code>
+¿Cuál es el resultado de la consulta `?- abuelo(tomas, Z).`? {
+  ~`false` — no hay suficiente información en la base
+  ~`Z \= carlos` — Tomás es abuelo de Carlos
+  =`Z \= laura ; Z \= pedro` — Tomás es abuelo de Laura y Pedro #La regla `abuelo(X, Z) :- padre(X, Y), padre(Y, Z)` busca un `Y` intermedio tal que `padre(tomas, Y)` y `padre(Y, Z)`. Instanciando `X \= tomas`: se busca `Y` tal que `padre(tomas, Y)`. Hay dos solucio
+  ~`Z \= carlos ; Z \= beatriz` — Tomás es padre de Carlos y Beatriz, no abuelo
+}
+
+::P-06-005:: [markdown] Considerá la siguiente regla Prolog:  
+<pre><code>hermano(X, Y) :- padre(P, X), padre(P, Y), X \\= Y.</pre></code>
+¿Cuál de las siguientes afirmaciones describe correctamente lo que hace esta regla? {
+  =Define que X es hermano de Y si X y Y tienen el mismo padre P y X es distinto de Y #La regla se lee: "X es hermano de Y si existe un P tal que P es padre de X (`padre(P, X)`), P es padre de Y (`padre(P, Y)`), y X es distinto de Y (`X \\\= Y`)." El operador `\\\=` en Prolog significa "no 
+  ~Define que X es hermano de Y si X es padre de P y P es padre de Y
+  ~Define que X es hermano de Y solo si ambos tienen exactamente un padre en común
+  ~La regla tiene un error: en Prolog no se puede usar `\\\=` para comparar variables
+}
+
+::P-07-001:: [markdown] ¿Qué es la unificación en Prolog? {
+  ~Un algoritmo de búsqueda que recorre el árbol de soluciones de izquierda a derecha
+  ~El proceso de calcular el valor numérico de una expresión aritmética
+  =El proceso de encontrar una sustitución de variables que haga que dos términos sean sintácticamente idénticos #La unificación es el mecanismo central de Prolog: dados dos términos, busca la sustitución más general (MGU — Most General Unifier) que los haga iguales sintácticamente. No evalúa, no computa numérica
+  ~La técnica de ordenar los hechos en la base de conocimiento para optimizar las consultas
+}
+
+::P-07-002:: [markdown] En Prolog, si ejecutamos `?- X = 2 + 3.`, el motor responde `X = 2+3` sin evaluar la suma. ¿Por qué? {
+  ~Porque Prolog no tiene operadores aritméticos
+  =Porque `\=` realiza unificación, no evaluación. `2+3` es una estructura `+(2,3)` que se unifica como término; para evaluar numéricamente se usa `is/2` #En Prolog `\=` es el predicado de unificación. `2+3` no es "dos más tres" sino la estructura de término `+(2,3)` — un functor `+` con dos argumentos. La unificación simplemente liga `X` a esa estructur
+  ~Porque `X` es una variable entera y no puede contener una expresión
+  ~Porque la unificación en Prolog es lazy y solo evalúa cuando se necesita el resultado
+}
+
+::P-07-003:: [markdown] ¿Qué es un "choice point" (punto de elección) en el backtracking de Prolog? {
+  ~El punto del programa donde el programador declara que hay una sola solución posible
+  =Una marca que el motor crea cuando encuentra múltiples cláusulas que pueden unificar con el goal actual, guardando las alternativas para explorar si la rama actual falla #Cuando Prolog intenta resolver un goal y hay varias cláusulas que podrían unificar con él, crea un choice point: guarda el estado actual (bindings del trail) y la lista de cláusulas alternativas no pr
+  ~Un predicado especial que le permite al programador elegir entre varias bases de conocimiento
+  ~El nodo raíz del árbol SLD a partir del cual se inicia la resolución
+}
+
+::P-07-004:: [markdown] ¿Cuál es la diferencia entre `=` y `==` en Prolog? {
+  ~`\=` compara por valor; `\=\=` compara por referencia de memoria
+  =`\=` intenta unificar los dos términos (puede ligar variables); `\=\=` verifica si los dos términos son ya idénticos sin ligar ninguna variable #`\=` es el predicado de unificación: `?- X \= ana.` tiene éxito y liga `X \= ana`. `\=\=` es el predicado de identidad estructural: `?- X \=\= ana.` falla si `X` no está ya ligada a `ana`. La diferencia clav
+  ~`\=` solo funciona con átomos; `\=\=` funciona con cualquier término
+  ~Son sinónimos — en SWI-Prolog ambos realizan la misma operación
+}
+
+::P-07-005:: [markdown] ¿Cuál de las siguientes consultas de unificación tiene ÉXITO en Prolog? {
+  ~`?- f(X, b) \= f(a, a).`
+  ~`?- f(X, X) \= f(ana, beatriz).`
+  =`?- f(X, b) \= f(a, Y).` #Analisis de cada opción:   a) `f(X, b) \= f(a, a)`: liga `X\=a` pero el segundo argumento `b ≠ a` → falla.   b) `f(X, X) \= f(ana, beatriz)`: `X` debe unificar con `ana` y con `beatriz` simultáneamente →
+  ~`?- f(X, g(X)) \= f(a, g(b)).`
+}
+
+::P-07-006:: [markdown] Dada la siguiente base de conocimiento:  
+<pre><code>miembro(X, [X|_]). 
+ miembro(X, [_|T]) :- miembro(X, T).</pre></code>
+ ¿Cuáles son TODAS las respuestas que da Prolog a `?- miembro(X, [a, b, c]).`? {
+  ~Solo `X \= a` — Prolog devuelve la primera solución encontrada y se detiene
+  =`X \= a ; X \= b ; X \= c` — Prolog devuelve las tres soluciones vía backtracking #`miembro/2` tiene dos cláusulas. Primera: unifica `X` con la cabeza de la lista → `X \= a` (éxito). Si se pide más (`;`), backtrack: segunda cláusula con `T \= [b, c]` → aplica de nuevo → `X \= b`. Backt
+  ~`X \= [a, b, c]` — Prolog unifica X con la lista completa
+  ~`false` — `miembro/2` requiere que el primer argumento ya esté instanciado
+}
+
+::P-07-007:: [markdown] Considerá el siguiente programa:  
+<pre><code> color(rojo). color(verde). color(azul). 
+?- color(X), write(X), nl, fail.</pre></code>
+¿Qué imprime esta consulta y por qué? {
+  ~Solo `rojo` — porque `fail` hace que la consulta falle después del primer resultado
+  ~No imprime nada — `fail` hace que toda la consulta falle antes de ejecutar `write`
+  =Imprime `rojo`, luego `verde`, luego `azul`, luego falla — `fail` fuerza el backtracking que agota todos los valores de `color/1` #Este es el patrón fail-driven loop de Prolog. La secuencia: (1) `color(X)` unifica `X\=rojo`; (2) `write(rojo)` imprime `rojo`; (3) `nl` imprime nueva línea; (4) `fail` fuerza backtrack al choice point
+  ~Imprime `rojo verde azul` en una sola línea separado por espacios
+}
+
+::P-07-008:: [markdown] Considerá los siguientes dos predicados:  
+<pre><code> % Versión A 
+ maximo(X, Y, X) :- X >= Y. 
+ maximo(X, Y, Y) :- X < Y. 
+% Versión B 
+ maximo(X, Y, X) :- X >= Y, !. 
+ maximo(_, Y, Y).</pre></code>
+¿Cuál es la diferencia de comportamiento entre la Versión A y la Versión B? {
+  ~Ambas son equivalentes en todos los casos — el corte `!` es solo una optimización de rendimiento sin impacto semántico
+  =La Versión B usa corte **verde**: elimina elección cuando ya se sabe cuál es el máximo, sin cambiar las soluciones; la Versión A recalcula ambas condiciones; ambas dan el mismo resultado para enteros instanciados #El corte en Versión B es de tipo verde para inputs numéricos instanciados: si `X >\= Y`, corta para evitar probar la segunda cláusula (que fallaría de todas formas, ya que `X < Y` sería falso). No elim
+  ~La Versión B usa corte **rojo**: si se llama con variables no instanciadas, el corte hace que se devuelva una sola solución posiblemente incorrecta; la Versión A se comporta correctamente en más contextos
+  ~La Versión A falla si X e Y son iguales; la Versión B siempre devuelve X en ese caso
+}
+
+::P-07-009:: [markdown] El corte `!` en Prolog fue descrito en clase como una "navaja de doble filo". ¿Cuál de las siguientes afirmaciones captura mejor esta idea? {
+  ~El corte es siempre perjudicial y no debería usarse en programas bien diseñados
+  =El corte verde mejora la eficiencia sin cambiar las soluciones; el corte rojo cambia el significado declarativo del programa, haciendo que Prolog encuentre menos soluciones de las que debería encontrar lógicamente #El corte verde (`!` que solo elimina alternativas que de todas formas fallarían) no cambia el significado declarativo: el programa con y sin `!` tiene las mismas soluciones, solo difiere en eficiencia
+  ~El corte siempre mejora la eficiencia porque poda el árbol de búsqueda, pero nunca afecta la corrección del programa
+  ~El corte rojo y el verde son sinónimos — la diferencia es solo de estilo
+}
+
+::P-08-001:: [markdown] ¿Cuáles son los cuatro pilares del paradigma orientado a objetos? {
+  ~Secuencia, selección, iteración y recursión
+  =Encapsulamiento, abstracción, herencia y polimorfismo #Los cuatro pilares del paradigma OO son: (1) Encapsulamiento — agrupar estado y comportamiento en un objeto, controlando el acceso externo; (2) Abstracción — exponer solo lo necesario, ocultar la impl
+  ~Funciones puras, inmutabilidad, composición y transparencia referencial
+  ~Tipos, clases, interfaces y módulos
+}
+
+::P-08-002:: [markdown] Smalltalk afirma que "todo es un objeto" — incluyendo los números enteros y los booleanos. TypeScript no cumple este principio de la misma manera. ¿Por qué TypeScript no realiza el OO puro en el sentido de Smalltalk? {
+  ~Porque TypeScript no tiene clases — solo tiene interfaces y tipos estructurales
+  =Porque TypeScript tiene tipos primitivos (`number`, `boolean`, `string`) que no son objetos sino valores sin métodos propios, a diferencia de Smalltalk donde `1` y `true` son instancias de clases con métodos #En Smalltalk el principio "todo es un objeto" es absoluto: el número `1` es una instancia de `SmallInt`, `true` es una instancia de `True`, incluso las clases son objetos. TypeScript (como JavaScript)
+  ~Porque TypeScript fue diseñado como lenguaje funcional con sintaxis de clases opcional
+  ~Porque en TypeScript no existe el concepto de mensaje — las llamadas a método son solo invocaciones de función
+}
+
+::P-08-003:: [markdown] Considerá la siguiente clase TypeScript:  
+<pre><code> class CuentaBancaria \{ 
+   private saldo: number; 
+constructor(saldoInicial: number) \{ 
+     this.saldo = saldoInicial; 
+   \} 
+depositar(monto: number): void \{ 
+     this.saldo += monto; 
+   \} 
+getSaldo(): number \{ 
+     return this.saldo; 
+   \} 
+ \}</pre></code>
+¿Cuál de los cuatro pilares del OO aplica PRINCIPALMENTE este diseño, y cómo? {
+  ~Herencia — la clase hereda de `Object` y extiende su comportamiento
+  ~Polimorfismo — `depositar` puede recibir distintos tipos de valores
+  =Encapsulamiento — el campo `saldo` es `private`, accesible solo a través de los métodos públicos `depositar` y `getSaldo` #El diseño aplica principalmente encapsulamiento: el campo `saldo` está marcado `private`, lo que significa que no puede ser accedido ni modificado directamente desde afuera de la clase. Solo se puede 
+  ~Abstracción — la clase oculta la implementación del sistema bancario completo
+}
+
+::P-08-004:: [markdown] En el paradigma funcional, la inmutabilidad es un principio central: los datos no se modifican. En el paradigma OO, el encapsulamiento gestiona el estado mutable. ¿Cuál de las siguientes afirmaciones describe mejor la diferencia en cómo cada paradigma trata el estado? {
+  ~No hay diferencia — ambos paradigmas prohíben la mutación del estado
+  =El funcional elimina el estado mutable; el OO lo contiene dentro de los objetos y controla el acceso a él. El funcional gana en predecibilidad; el OO gana en capacidad de modelar entidades con identidad y ciclo de vida #El paradigma funcional evita el estado mutable: las funciones puras siempre devuelven el mismo resultado para el mismo input y no tienen efectos colaterales. El paradigma OO acepta el estado mutable p
+  ~El OO elimina el estado porque encapsular significa que el estado no existe fuera del objeto
+  ~El funcional permite mutación pero solo dentro de funciones; el OO permite mutación solo dentro de clases
+}

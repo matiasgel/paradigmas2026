@@ -157,13 +157,24 @@ epics:
         status: completed
         priority: medium
 
+  - id: "E7"
+    name: "Publicación directa de filminas v2"
+    status: in-progress
+    sprint: 7
+    stories:
+      - id: "7.1"
+        title: "Pipeline de publicación directa sin imágenes, tablas nativas, highlight de código y partición"
+        status: ready-for-dev
+        priority: high
+
 summary:
-  total_epics: 6
-  total_stories: 23
+  total_epics: 7
+  total_stories: 24
   stories_not_started: 0
   stories_in_progress: 0
   stories_completed: 23
-  estimated_sprints: 6
+  stories_ready_for_dev: 1
+  estimated_sprints: 7
   completed_sprints: 6
-  next_story: null
-  next_story_title: "— PIPELINE COMPLETO —"
+  next_story: "7.1"
+  next_story_title: "Pipeline de publicación directa sin imágenes, tablas nativas, highlight de código y partición"
