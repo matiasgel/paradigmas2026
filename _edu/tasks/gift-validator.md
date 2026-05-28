@@ -68,6 +68,9 @@ y sus negativos: -5, -10, -11.11111, -12.5, -14.28571, -16.66667, -20, -25,
 | C4 | $CATEGORY malformado | `$CATEGORY:` sin ruta después, o con espacios antes del `:`. Advertir. |
 | C5 | Titulo duplicado | Dos preguntas con el mismo `::titulo::`. Moodle puede sobreescribir. Advertir. |
 | C6 | Pregunta sin feedback en quiz formativo | Si el quiz es formativo y la pregunta no tiene `#` ni `####`, advertir que el alumno no recibirá orientación. |
+| C7 | `[markdown]` ausente en pregunta con código | Si el enunciado contiene `<pre>`, `<code>`, o patrones de código (backtick, `function`, `class`, `:-`) pero NO tiene `[markdown]` → advertencia. |
+| C8 | Cierre HTML incorrecto | Si el enunciado contiene `</pre></code>` (orden incorrecto) → advertencia. El correcto es `</code></pre>`. |
+| C9 | Feedback truncado | Si el texto de feedback termina mid-word (sin punto, ?, !) → advertencia. |
 
 ---
 

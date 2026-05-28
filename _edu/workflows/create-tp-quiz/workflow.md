@@ -101,8 +101,9 @@ Para cada pregunta candidata, verificar:
 - Si es multiple choice múltiple:
   - los pesos parciales suman como máximo `100%`
   - las incorrectas tienen peso `0` o negativo si se quiere evitar marcar todo
-- Si incluye símbolos GIFT reservados `~ = # { } :`, deben escaparse con `\`.
-- Si requiere formato enriquecido, usar `[html]` o `[markdown]` de manera consistente.
+- Si incluye símbolos GIFT reservados `~ = # { } :`, deben escaparse con `\`. Esto incluye código TypeScript (`===` → `\=\=\=`, `=>` → `\=>`), Prolog (`=` → `\=`) y cualquier otro lenguaje.
+- **Formato de texto con código:** Si el enunciado o una opción contiene un bloque de código, OBLIGATORIO usar `[markdown]` después del `::id::` y representar el código como `<pre><code>CÓDIGO</code></pre>` con saltos de línea reales (no `\n` ni `↵`). El cierre correcto es siempre `</code></pre>` (primero `</code>`, luego `</pre>`). No usar la notación `[CÓDIGO: ...]`.
+- **Feedback:** Máximo 3 oraciones por pregunta. Siempre completar la última oración — no dejar texto cortado.
 - Debe haber una línea en blanco entre preguntas en el archivo final.
 
 Si alguna pregunta falla, listar el problema y corregir antes de exportar.
