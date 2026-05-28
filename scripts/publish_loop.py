@@ -172,7 +172,6 @@ def phase0_consult_registry(topic_folder: Path, course_id: str) -> None:
     print(f"  Para historial del tema: python scripts/error_registry.py query --topic {topic_name}")
 
 
-def phase1_repair_loop(
     topic_folder: Path,
     python: str,
     max_attempts: int,
@@ -398,7 +397,7 @@ def phase4_post(
     report_path = topic_folder / "slides" / "publish-report.json"
     report_path.parent.mkdir(parents=True, exist_ok=True)
     save_json(report_path, report)
-    _status(True, f"Reporte guardado: {report_path.relative_to(find_project_root(topic_folder))}")
+    _status(True, f"Reporte guardado: {report_path.relative_to(find_project_root())}")
 
     # Escribir en memory.db si está disponible
     memory_script = _scripts / "edu_memory.py"

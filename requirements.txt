@@ -29,6 +29,9 @@ Pillow>=10.0.0
 # Sprint 7 — TTS (narración de filminas)
 # edge-tts>=6.1.0
 
+# Sprint 7.1 — Layout desde template PPTX
+python-pptx>=1.0.2
+
 # Sprint 9 — NLP Semántico (drift, topic analysis, fact verification)
 # sentence-transformers>=2.2.0
 # chromadb>=0.4.0

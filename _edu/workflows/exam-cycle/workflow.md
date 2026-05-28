@@ -227,8 +227,11 @@ Ciclo completo de producción de un examen: selección de tipo → blueprint →
   
   2. **For GIFT:**
      - Read preguntas files → convert to GIFT format
-     - Validate per `{project-root}/_edu/tasks/gift-validator.md` (if exists)
-     - Rules: UTF-8 sin BOM, `::id::` titles, blank line between questions, escape reserved chars
+     - **Formato de texto con código:** Si la pregunta contiene un bloque de código, OBLIGATORIO usar `[markdown]` después del `::id::` y representar el código como `<pre><code>CÓDIGO</code></pre>` con saltos de línea reales (no `\n` ni `↵`). El cierre correcto es siempre `</code></pre>` (primero `</code>`, luego `</pre>`).
+     - **Escape de caracteres reservados en texto visible:** `=` → `\=`, `{` → `\{`, `}` → `\}`, `#` → `\#`. Esto incluye código TypeScript (`===` → `\=\=\=`, `=>` → `\=>`), Prolog (`=` → `\=`, `\=` → `\\=`) y cualquier otro lenguaje.
+     - **Feedback:** Máximo 3 oraciones de feedback por pregunta. Siempre completar la última oración. No dejar oraciones incompletas.
+     - **Validación obligatoria:** Antes de escribir `examen.gift` a disco, ejecutar la validación completa del task `{project-root}/_edu/tasks/gift-validator.md`. Si hay errores Grupo A → corregir inline antes de guardar. Reportar al docente: "✅ Validación GIFT: N preguntas OK, M advertencias." No exportar si hay errores A o B sin resolver.
+     - Rules: UTF-8 sin BOM, `::id::` titles, blank line between questions
      - Write: `{course_output_folder}/evaluaciones/{exam_type}/examen.gift`
      - Generate: `examen-moodle-config.md` (instrucciones de configuración: tiempo, intentos, navegación, review options)
   

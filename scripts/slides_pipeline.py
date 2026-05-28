@@ -172,6 +172,96 @@ def _zones(w: int = SLIDE_W, h: int = SLIDE_H, m: int = MARGIN, th: int = TITLE_
 
 ZONES = _zones()
 
+
+def _load_template_zones(pptx_path: Path, slide_w: int = SLIDE_W, slide_h: int = SLIDE_H) -> "dict[str, tuple] | None":
+    """
+    Lee un .pptx y extrae las posiciones de placeholders como zonas EMU.
+    Busca en slide layouts y slide masters.
+    Retorna dict con keys: titulo, subtitulo, contenido, header, footer.
+    Retorna None si el archivo no existe o no tiene los placeholders esperados.
+
+    Los placeholders se detectan por nombre (case-insensitive):
+      - "titulo" o "title" → zona del título
+      - "subtitulo" o "subtitle" → zona del subtítulo
+      - "contenido" o "content" o "body" → zona del contenido principal
+
+    EMU conversion: python-pptx usa Emu natively (int); no requiere conversión.
+    """
+    try:
+        from pptx import Presentation  # type: ignore[import]
+        from pptx.util import Emu  # type: ignore[import]  # noqa: F401
+    except ImportError:
+        return None
+
+    if not pptx_path.exists():
+        return None
+
+    try:
+        prs = Presentation(str(pptx_path))
+    except Exception:
+        return None
+
+    # Candidatos de búsqueda: slide layouts primero, luego slide masters
+    candidates: list[Any] = list(prs.slide_layouts) + list(prs.slide_master.slide_layouts) if hasattr(prs, "slide_master") else list(prs.slide_layouts)
+
+    titulo_geo: tuple | None = None
+    subtitulo_geo: tuple | None = None
+    contenido_geo: tuple | None = None
+
+    def _extract(shape: Any) -> tuple[int, int, int, int]:
+        return (int(shape.left), int(shape.top), int(shape.width), int(shape.height))
+
+    def _name_match(name: str, *keys: str) -> bool:
+        return name.strip().lower() in {k.lower() for k in keys}
+
+    for layout in candidates:
+        for shape in layout.placeholders:
+            n = getattr(shape, "name", "") or ""
+            if _name_match(n, "titulo", "title") and titulo_geo is None:
+                titulo_geo = _extract(shape)
+            elif _name_match(n, "subtitulo", "subtitle") and subtitulo_geo is None:
+                subtitulo_geo = _extract(shape)
+            elif _name_match(n, "contenido", "content", "body") and contenido_geo is None:
+                contenido_geo = _extract(shape)
+        # Also try by placeholder type (idx 0 = title, idx 1 = body)
+        if titulo_geo is None or contenido_geo is None:
+            for shape in layout.placeholders:
+                try:
+                    idx = shape.placeholder_format.idx
+                except Exception:
+                    continue
+                if idx == 0 and titulo_geo is None:
+                    titulo_geo = _extract(shape)
+                elif idx == 1 and contenido_geo is None:
+                    contenido_geo = _extract(shape)
+        if titulo_geo and contenido_geo:
+            break
+
+    if not titulo_geo or not contenido_geo:
+        return None
+
+    # Calcular header y footer a partir de los bordes del contenido
+    content_y_min = min(
+        g[1] for g in [titulo_geo, subtitulo_geo, contenido_geo] if g is not None
+    )
+    content_y_max = max(
+        g[1] + g[3] for g in [titulo_geo, subtitulo_geo, contenido_geo] if g is not None
+    )
+    header_geo = (0, 0, slide_w, content_y_min)
+    footer_geo = (0, content_y_max, slide_w, slide_h - content_y_max)
+
+    result: dict[str, tuple] = {
+        "titulo":    titulo_geo,
+        "contenido": contenido_geo,
+        "header":    header_geo,
+        "footer":    footer_geo,
+    }
+    if subtitulo_geo:
+        result["subtitulo"] = subtitulo_geo
+
+    return result
+
+
 # ═══════════════════════════════════════════════════════════════════════
 # HELPERS
 # ═══════════════════════════════════════════════════════════════════════
@@ -570,6 +660,39 @@ def _fit_text_font_size(
     return float(min_size)
 
 
+def _fit_table_font_size(
+    n_rows: int,
+    n_cols: int,
+    geo: tuple[int, int, int, int],
+    preferred_body: float = 13.0,
+    preferred_header: float = 14.0,
+    min_size: float = 7.0,
+) -> tuple[float, float]:
+    """
+    Retorna (header_font_size, body_font_size) ajustados para que la tabla entre en geo.
+    Modelo: cada fila ocupa aprox size * 1.6pt de alto; cada col ocupa aprox size * 7pt de ancho.
+    """
+    _, _, width_emu, height_emu = geo
+    width_pt = width_emu / EMU_PER_PT
+    height_pt = height_emu / EMU_PER_PT
+
+    size = preferred_body
+    while size >= min_size:
+        row_height_pt = size * 1.6
+        col_width_pt = size * 7.0
+        total_height = n_rows * row_height_pt
+        total_width = n_cols * col_width_pt
+        if total_height <= height_pt and total_width <= width_pt:
+            break
+        size -= 0.5
+    else:
+        size = min_size
+
+    body_size = max(min_size, size)
+    header_size = max(min_size, min(preferred_header, body_size + 1.0))
+    return header_size, body_size
+
+
 def _table_dimensions(table_md: str) -> tuple[int, int]:
     rows = []
     for line in table_md.strip().splitlines():
@@ -605,6 +728,149 @@ def _centered_box(geo: tuple[int, int, int, int], width_ratio: float, height_rat
     inner_x = x + (w - inner_w) // 2
     inner_y = y + (h - inner_h) // 2
     return (inner_x, inner_y, inner_w, inner_h)
+
+
+# ── Syntax highlighting ─────────────────────────────────────────────────
+
+HIGHLIGHT_COLORS = {
+    "keyword":   "#0000CC",   # azul
+    "string":    "#007700",   # verde oscuro
+    "comment":   "#999999",   # gris medio
+    "number":    "#AA0000",   # rojo oscuro
+    "type":      "#666600",   # oliva (tipos/clases)
+    "decorator": "#AA6600",   # marrón (decoradores/anotaciones)
+    "operator":  "#884400",   # terracota (operadores especiales)
+    "builtin":   "#006699",   # azul petróleo (built-ins)
+}
+
+HIGHLIGHT_TOKENS: dict[str, dict[str, str]] = {
+    "python": {
+        "comment":   r"#[^\n]*",
+        "string":    r'("""[\s\S]*?"""|\'\'\'[\s\S]*?\'\'\'|"[^"\n]*"|\'[^\'\n]*\')',
+        "decorator": r"@\w+",
+        "keyword":   r"\b(def|class|import|from|return|if|elif|else|for|while|in|not|and|or|is|None|True|False|lambda|with|as|try|except|finally|raise|yield|async|await|pass|break|continue|global|nonlocal|del)\b",
+        "builtin":   r"\b(print|len|range|str|int|float|list|dict|set|tuple|type|isinstance|hasattr|getattr|open|super|map|filter|zip|enumerate|sorted|reversed|any|all|max|min|sum)\b",
+        "number":    r"\b\d+(\.\d+)?\b",
+    },
+    "java": {
+        "comment":    r"//[^\n]*|/\*[\s\S]*?\*/",
+        "string":     r'"[^"\n]*"',
+        "decorator":  r"@\w+",
+        "keyword":    r"\b(public|private|protected|class|interface|extends|implements|static|final|void|int|String|boolean|return|new|if|else|for|while|import|package|try|catch|throw|throws|super|this|null|true|false|abstract|enum|instanceof|long|double|float|char|byte|short)\b",
+        "number":     r"\b\d+(\.\d+)?[lLfFdD]?\b",
+    },
+    "javascript": {
+        "comment":   r"//[^\n]*|/\*[\s\S]*?\*/",
+        "string":    r'("`[^`]*`"|"[^"\n]*"|\'[^\'\n]*\')',
+        "keyword":   r"\b(const|let|var|function|class|return|if|else|for|while|import|export|from|new|this|null|undefined|true|false|async|await|try|catch|throw|typeof|instanceof|of|in)\b",
+        "builtin":   r"\b(console|document|window|Array|Object|String|Number|Boolean|Promise|Math)\b",
+        "number":    r"\b\d+(\.\d+)?\b",
+    },
+    "haskell": {
+        "comment":   r"--[^\n]*|\{-[\s\S]*?-\}",
+        "string":    r'"[^"\n]*"',
+        "keyword":   r"\b(data|type|class|instance|where|let|in|do|of|case|if|then|else|import|module|deriving|newtype|infixl|infixr)\b",
+        "operator":  r"(->|=>|::|<-|\|>|\$|\\)",
+        "number":    r"\b\d+(\.\d+)?\b",
+    },
+    "c": {
+        "comment":   r"//[^\n]*|/\*[\s\S]*?\*/",
+        "string":    r'"[^"\n]*"',
+        "keyword":   r"\b(int|char|float|double|void|return|if|else|for|while|do|struct|typedef|include|define|const|static|extern|sizeof|malloc|free|NULL|true|false)\b",
+        "number":    r"\b\d+(\.\d+)?[uUlL]?\b",
+    },
+    "cpp": {
+        "comment":   r"//[^\n]*|/\*[\s\S]*?\*/",
+        "string":    r'"[^"\n]*"',
+        "keyword":   r"\b(int|char|float|double|void|return|if|else|for|while|do|struct|class|typedef|template|namespace|public|private|protected|const|static|new|delete|nullptr|true|false|auto|vector|string|cout|cin|endl|include|using)\b",
+        "number":    r"\b\d+(\.\d+)?[uUlL]?\b",
+    },
+    "scala": {
+        "comment":   r"//[^\n]*|/\*[\s\S]*?\*/",
+        "string":    r'("""[\s\S]*?"""|"[^"\n]*")',
+        "keyword":   r"\b(val|var|def|class|object|trait|extends|with|import|package|return|if|else|for|while|match|case|new|this|null|true|false|override|abstract|sealed|final|type|yield|lazy)\b",
+        "operator":  r"(=>|<-|::|\|>|@)",
+        "number":    r"\b\d+(\.\d+)?\b",
+    },
+    "sql": {
+        "comment":   r"--[^\n]*|/\*[\s\S]*?\*/",
+        "string":    r"'[^']*'",
+        "keyword":   r"\b(SELECT|FROM|WHERE|JOIN|LEFT|RIGHT|INNER|OUTER|ON|GROUP|BY|ORDER|HAVING|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|INDEX|VIEW|AS|DISTINCT|COUNT|SUM|AVG|MAX|MIN|AND|OR|NOT|IN|EXISTS|LIKE|BETWEEN|NULL|IS|CASE|WHEN|THEN|ELSE|END|LIMIT|OFFSET|UNION|ALL)\b",
+        "number":    r"\b\d+(\.\d+)?\b",
+    },
+    "bash": {
+        "comment":   r"#[^\n]*",
+        "string":    r'("[^"]*"|\'[^\']*\')',
+        "keyword":   r"\b(if|then|else|elif|fi|for|while|do|done|case|esac|function|return|export|source|echo|cd|ls|mkdir|rm|cp|mv|cat|grep|sed|awk|find|chmod|sudo|apt|pip|python|python3)\b",
+        "number":    r"\b\d+\b",
+    },
+    "kotlin": {
+        "comment":   r"//[^\n]*|/\*[\s\S]*?\*/",
+        "string":    r'("""[\s\S]*?"""|"[^"\n]*")',
+        "keyword":   r"\b(val|var|fun|class|object|interface|return|if|else|for|while|when|is|in|as|import|package|null|true|false|override|abstract|sealed|data|companion|init|constructor|this|super|by|lazy)\b",
+        "operator":  r"(->|=>|::|\?\.|\?\?)",
+        "number":    r"\b\d+(\.\d+)?[lLfF]?\b",
+    },
+}
+
+_TOKEN_PRIORITY = ["comment", "string", "decorator", "keyword", "builtin", "type", "number", "operator"]
+
+
+def _apply_syntax_highlighting(
+    tb_id: str,
+    code_text: str,
+    lang: str,
+) -> list[dict]:
+    """
+    Retorna lista de updateTextStyle requests con foregroundColor por token.
+    Usa tokenizador regex no-overlapping (prioridad: comment > string > decorator > keyword > rest).
+    Si lang no está en HIGHLIGHT_TOKENS, retorna [].
+    """
+    lang_key = lang.strip().lower() if lang else ""
+    patterns = HIGHLIGHT_TOKENS.get(lang_key)
+    if not patterns:
+        return []
+
+    try:
+        # Compilar patrones en orden de prioridad
+        ordered_patterns: list[tuple[str, re.Pattern]] = []
+        for token_type in _TOKEN_PRIORITY:
+            pat = patterns.get(token_type)
+            if pat:
+                ordered_patterns.append((token_type, re.compile(pat)))
+
+        # Marcar rangos ya ocupados para evitar solapamiento
+        occupied: list[tuple[int, int]] = []
+        matches: list[tuple[int, int, str]] = []  # (start, end, token_type)
+
+        for token_type, compiled in ordered_patterns:
+            for m in compiled.finditer(code_text):
+                start, end = m.start(), m.end()
+                if any(s <= start < e or s < end <= e for s, e in occupied):
+                    continue
+                occupied.append((start, end))
+                matches.append((start, end, token_type))
+
+        reqs: list[dict] = []
+        for start, end, token_type in matches:
+            color = HIGHLIGHT_COLORS.get(token_type, HIGHLIGHT_COLORS.get("keyword", "#0000CC"))
+            reqs.append({
+                "updateTextStyle": {
+                    "objectId": tb_id,
+                    "style": {
+                        "foregroundColor": _color(color),
+                    },
+                    "textRange": {
+                        "type": "FIXED_RANGE",
+                        "startIndex": start,
+                        "endIndex": end,
+                    },
+                    "fields": "foregroundColor",
+                }
+            })
+        return reqs
+    except Exception:
+        return []
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -1243,36 +1509,14 @@ def generate_assets(
     gemini_api_key: str,
     topic_folder: Path,
 ) -> dict:
-    """Fase 2: Genera imágenes Gemini, renderiza tablas y sube todo a Drive."""
-    print("\n🎨 Fase 2 — Generando assets …")
+    """Fase 2: No-op — imágenes Gemini y tablas PNG deshabilitadas (S7.1).
 
-    drive_svc = build("drive", "v3", credentials=creds)
-    folder_id = _ensure_drive_folder(drive_svc, f"edu-slides-{plan['meta']['topic_id']}")
-
-    updated = []
-    for slide in plan["slides"]:
-        s = dict(slide)
-
-        # Imágenes Gemini DESHABILITADAS — se omite generación de imágenes
-
-        # ── Tablas como PNG ─────────────────────────────────────────────
-        updated_ta = []
-        for ta in slide.get("table_assets") or []:
-            ta = dict(ta)
-            lp = topic_folder / ta["local_asset"]
-            if not lp.exists() and ta.get("table_markdown"):
-                print(f"  📊 Renderizando tabla {slide['id']}-table-{ta['index'] + 1} …")
-                _render_table_png(ta["table_markdown"], lp, config)
-            if lp.exists() and not ta.get("drive_id"):
-                ta["drive_id"] = _upload_drive(drive_svc, lp, folder_id)
-            updated_ta.append(ta)
-        s["table_assets"] = updated_ta
-
-        updated.append(s)
-
-    plan = dict(plan)
-    plan["slides"] = updated
-    print("  ✅ Assets completados.")
+    Las tablas son siempre nativas de Google Slides (createTable API).
+    No se generan imágenes Gemini ni se sube nada a Drive.
+    Se mantiene la firma para compatibilidad con --assets-only CLI.
+    """
+    print("\n🎨 Fase 2 — Assets (no-op: tablas nativas, sin imágenes Gemini) …")
+    print("  ✅ Assets completados (no se requieren recursos externos).")
     return plan
 
 
@@ -1649,11 +1893,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         if zone == "table-main":
             y += 110_000
             h = max(360_000, h - 620_000)
-        header_font = 13
-        body_font = 12
-        if n_rows >= 7:
-            header_font = 10
-            body_font = 9
+        header_font, body_font = _fit_table_font_size(n_rows, n_cols, (x, y, w, h))
         tbl_id = nid("tbl")
         reqs.append({
             "createTable": {
@@ -1740,23 +1980,12 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         if img_zone != "none":
             add_image(_drive_url(img_drive_id), img_zone)
 
-    # ── 5. Tablas (preferir nativas cuando entren bien) ─────────────────
+    # ── 5. Tablas (siempre nativas — never Drive/PNG) ───────────────────
     table_zone = layout.get("table", "full-bottom")
-    ta_list    = slide.get("table_assets") or []
     tables     = slide.get("tables") or []
 
-    if table_zone and table_zone != "none":
-        if tables and _should_use_native_table(tables[0]):
-            add_native_table(tables[0], table_zone)
-        else:
-            used_image = False
-            for ta in ta_list:
-                if ta.get("drive_id"):
-                    add_image(_drive_url(ta["drive_id"]), table_zone)
-                    used_image = True
-                    break
-            if not used_image and tables:
-                add_native_table(tables[0], table_zone)
+    if table_zone and table_zone != "none" and tables:
+        add_native_table(tables[0], table_zone)
 
     # ── 6. Título ───────────────────────────────────────────────────────
     title      = slide.get("title", "")
@@ -1826,7 +2055,35 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
                     inner_geo = _inset_geometry(code_geo, 280_000, 210_000)
                     add_box(inner_geo, "#FFFFFF", outline="#C8C8C8")
                     c_size, _ = _fit_code_font_size(code_text, inner_geo, min(c_size, typo.get("code", {}).get("size", 14)), min_size=5)
-                add_textbox_geo(code_text, inner_geo, c_size, font="Roboto Mono", color="#222222")
+                tb_code_id = nid("code")
+                reqs.append({
+                    "createShape": {
+                        "objectId":  tb_code_id,
+                        "shapeType": "TEXT_BOX",
+                        "elementProperties": {
+                            "pageObjectId": page_id,
+                            "size":         _emu_size(inner_geo[2], inner_geo[3]),
+                            "transform":    _transform(inner_geo[0], inner_geo[1]),
+                        },
+                    }
+                })
+                reqs.append({"insertText": {"objectId": tb_code_id, "insertionIndex": 0, "text": code_text}})
+                reqs.append({
+                    "updateTextStyle": {
+                        "objectId": tb_code_id,
+                        "style": {
+                            "fontSize":   _pt(c_size),
+                            "fontFamily": "Roboto Mono",
+                            "foregroundColor": _color("#222222"),
+                        },
+                        "textRange": {"type": "ALL"},
+                        "fields": "fontSize,fontFamily,foregroundColor",
+                    }
+                })
+                # Syntax highlighting (per-token color override)
+                lang = code_blocks[0].get("lang", "") if code_blocks else ""
+                hl_reqs = _apply_syntax_highlighting(tb_code_id, code_text, lang)
+                reqs.extend(hl_reqs)
 
     return reqs
 
@@ -1866,6 +2123,96 @@ def _get_presentation_page_size(slides_svc, pres_id: str) -> tuple[int, int]:
     except Exception as exc:
         print(f"  ⚠️  No se pudieron leer dimensiones del template: {exc}")
     return SLIDE_W, SLIDE_H
+
+
+def _split_mixed_slides(slides: list[dict]) -> list[dict]:
+    """
+    Pre-procesa slides con body sustancial (≥ 2 bloques) + código O tabla.
+
+    Un body es "sustancial" si tiene ≥ 2 bloques (texto, lista o heading).
+    Se ejecuta ANTES de _split_oversized_code_slides en el flujo de _publish_part.
+
+    Divide en 2 slides consecutivas:
+    - body + código → Slide A: "— Conceptos" (concepto-abstracto) + Slide B: "— Código" (codigo)
+    - body + tabla  → Slide A: "— Conceptos" (concepto-abstracto) + Slide B: "— Tabla" (tabla)
+    """
+    result: list[dict] = []
+    for slide in slides:
+        stype = slide.get("type", "concepto-abstracto")
+        body_blocks = slide.get("body_blocks") or []
+        code_blocks = slide.get("code_blocks") or []
+        tables = slide.get("tables") or []
+
+        # Contar bloques sustanciales (texto, lista, heading)
+        substantial = sum(
+            1 for b in body_blocks
+            if b.get("type") in ("text", "list", "heading")
+        )
+
+        # Solo dividir si hay ≥ 2 bloques sustanciales Y contenido mixto
+        has_mixed_code = substantial >= 2 and code_blocks
+        has_mixed_table = substantial >= 2 and tables
+
+        if not has_mixed_code and not has_mixed_table:
+            result.append(slide)
+            continue
+
+        base_title = slide.get("title", "")
+        base_id = slide.get("id", "F-00")
+
+        # Slide A: solo body_blocks
+        slide_a: dict = {
+            "id":          f"{base_id}-info",
+            "type":        "concepto-abstracto",
+            "title":       f"{base_title} — Conceptos",
+            "subtitle":    slide.get("subtitle", ""),
+            "body_blocks": list(body_blocks),
+            "code_blocks": [],
+            "tables":      [],
+            "directives":  {},
+            "asset_hints": [],
+            "layout":      LAYOUT_MAP.get("concepto-abstracto", {}),
+            "image":       {"layer": "none", "prompt": "", "local_asset": "", "drive_id": None},
+            "table_assets": [],
+        }
+
+        if has_mixed_code:
+            # Slide B: solo code_blocks
+            slide_b: dict = {
+                "id":          f"{base_id}-code",
+                "type":        "codigo",
+                "title":       f"{base_title} — Código",
+                "subtitle":    "",
+                "body_blocks": [],
+                "code_blocks": list(code_blocks),
+                "tables":      [],
+                "directives":  {},
+                "asset_hints": [],
+                "layout":      LAYOUT_MAP.get("codigo", {}),
+                "image":       {"layer": "none", "prompt": "", "local_asset": "", "drive_id": None},
+                "table_assets": [],
+            }
+        else:
+            # Slide B: solo tables
+            slide_b = {
+                "id":          f"{base_id}-table",
+                "type":        "tabla",
+                "title":       f"{base_title} — Tabla",
+                "subtitle":    "",
+                "body_blocks": [],
+                "code_blocks": [],
+                "tables":      list(tables),
+                "directives":  {},
+                "asset_hints": [],
+                "layout":      LAYOUT_MAP.get("tabla", {}),
+                "image":       {"layer": "none", "prompt": "", "local_asset": "", "drive_id": None},
+                "table_assets": list(slide.get("table_assets") or []),
+            }
+
+        result.append(slide_a)
+        result.append(slide_b)
+
+    return result
 
 
 def _split_oversized_code_slides(
@@ -1908,9 +2255,39 @@ def _split_oversized_code_slides(
             result.append(slide)
             continue
 
-        # Código ilegible: si hay un solo bloque no se puede dividir más
+        # Código ilegible: si hay un solo bloque, intentar partir en 2 por líneas
         if len(code_blocks) <= 1:
-            result.append(slide)
+            lines = code_blocks[0]["content"].splitlines() if code_blocks else []
+            if not lines:
+                result.append(slide)
+                continue
+            half = max(1, len(lines) // 2)
+            block_a = {"lang": code_blocks[0]["lang"], "content": "\n".join(lines[:half])}
+            block_b = {"lang": code_blocks[0]["lang"], "content": "\n".join(lines[half:])}
+            codigo_layout = LAYOUT_MAP.get("codigo", layout)
+
+            slide_a = {k: (list(v) if isinstance(v, list) else v) for k, v in slide.items()}
+            slide_a["title"] = slide.get("title", "") + " (1/2)"
+            slide_a["code_blocks"] = [block_a]
+            slide_a["type"] = "codigo"
+            slide_a["layout"] = codigo_layout
+
+            slide_b: dict = {
+                "id":          f"{slide['id']}-cont",
+                "type":        "codigo",
+                "title":       slide.get("title", "") + " (2/2)",
+                "subtitle":    "",
+                "body_blocks": [],
+                "code_blocks": [block_b],
+                "tables":      [],
+                "directives":  {},
+                "asset_hints": [],
+                "layout":      codigo_layout,
+                "image":       {"layer": "none", "prompt": "", "local_asset": "", "drive_id": None},
+                "table_assets": [],
+            }
+            result.append(slide_a)
+            result.append(slide_b)
             continue
 
         # Múltiples bloques: primera slide mantiene cuerpo + primer bloque
@@ -1966,7 +2343,8 @@ def _publish_part(
 
     _clear_slides(slides_svc, pres_id)
 
-    # Pre-procesar: dividir slides con código ilegible en slides adicionales
+    # Pre-procesar: dividir slides mixtos y código ilegible en slides adicionales
+    slides = _split_mixed_slides(slides)
     slides = _split_oversized_code_slides(slides, config, page_w, page_h)
 
     all_reqs: list[dict] = []
@@ -2054,8 +2432,8 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
     if len(all_slides) > SLIDES_PER_PRESENTATION:
         half = (len(all_slides) + 1) // 2  # parte 1 recibe la mitad superior
         parts: list[tuple[str, list[dict], str]] = [
-            (f"{base_title} 1", all_slides[:half],        "-1"),
-            (f"{base_title} 2", all_slides[half:],        "-2"),
+            (f"{base_title} — Parte 1", all_slides[:half],   "-1"),
+            (f"{base_title} — Parte 2", all_slides[half:],   "-2"),
         ]
         print(f"  ⚡ {len(all_slides)} slides → dividiendo en 2 partes "
               f"({half} + {len(all_slides) - half} slides)")
@@ -2063,11 +2441,15 @@ def publish_slides(plan: dict, config: dict, creds: Credentials, topic_folder: P
         parts = [(base_title, all_slides, "")]
 
     urls: list[str] = []
-    for part_title, part_slides, url_suffix in parts:
+    for i, (part_title, part_slides, url_suffix) in enumerate(parts):
         url = _publish_part(
             drive_svc, slides_svc, template_id, part_title,
             part_slides, config, topic_folder, url_suffix,
         )
+        if len(parts) > 1:
+            slide_start = sum(len(p[1]) for p in parts[:i]) + 1
+            slide_end = slide_start + len(part_slides) - 1
+            print(f"  ✅ Parte {i + 1}: {url}  (slides {slide_start}-{slide_end})")
         urls.append(url)
 
     # slides-url.txt apunta siempre a la primera parte (o única presentación)
@@ -2140,6 +2522,28 @@ def main(argv: list[str] | None = None) -> None:
             sys.exit(1)
 
     config  = load_yaml(config_path)
+
+    # ── Cargar zonas desde template PPTX (si está configurado) ───────────
+    pptx_rel = config.get("pptx_template_path", "")
+    if pptx_rel:
+        pptx_abs = project_root / pptx_rel
+        tpl_zones = _load_template_zones(pptx_abs)
+        if tpl_zones:
+            global ZONES
+            # Mapear placeholders del template a las zonas canónicas del pipeline
+            if "titulo" in tpl_zones:
+                ZONES["full-title"] = tpl_zones["titulo"]
+                ZONES["left-top"] = tpl_zones["titulo"]
+                ZONES["center-top"] = tpl_zones["titulo"]
+            if "subtitulo" in tpl_zones:
+                ZONES["subtitle-only"] = tpl_zones["subtitulo"]
+            if "contenido" in tpl_zones:
+                ZONES["left-middle"] = tpl_zones["contenido"]
+                ZONES["full-bottom"] = tpl_zones["contenido"]
+                ZONES["right-half"] = tpl_zones["contenido"]
+                ZONES["table-main"] = tpl_zones["contenido"]
+                ZONES["full-center"] = tpl_zones["contenido"]
+            print(f"  ✓ Zonas cargadas desde template PPTX: {pptx_rel}")
 
     # ── --regen-plan: regenerar plan desde filminas.md ────────────────────
     if args.regen_plan:

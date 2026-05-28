@@ -82,10 +82,6 @@ def _validate_v3_schema(plan: dict, project_root: Path) -> Result[dict]:
             _reg = _reg.with_resource("filmina-slide.schema.json", _slide_res)
             if slide_schema.get("$id"):
                 _reg = _reg.with_resource(slide_schema["$id"], _slide_res)
-                # También registrar bajo la forma resuelta: base_id + ".schema.json"
-                # (cuando plan $id = "edu-schemas/plan-filminas", el $ref relativo
-                # "filmina-slide.schema.json" resuelve a "edu-schemas/filmina-slide.schema.json")
-                _reg = _reg.with_resource(slide_schema["$id"] + ".schema.json", _slide_res)
         _validator = jsonschema.Draft202012Validator(plan_schema, registry=_reg)
     except ImportError:
         pass  # 'referencing' no instalado → usar RefResolver legacy

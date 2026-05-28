@@ -5,6 +5,11 @@
 # 0 = "Simple Light" (default). Cambiar por el ID de un template propio si tenés.
 template_id: "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI"
 
+# --- Template PPTX para layout (opcional) ---
+# Si existe, el pipeline extrae las zonas de los placeholders {titulo}, {subtitulo}, {contenido}.
+# Si no existe o no tiene los placeholders esperados, se usan las zonas hardcodeadas.
+pptx_template_path: "_edu/templates/slides-template.pptx"  # opcional; si no existe, usa zonas hardcodeadas
+
 # --- Paleta de colores ---
 palette:
   primary: "#8B0000"
@@ -165,8 +170,8 @@ slide_types:
 # --- Estrategia de imágenes (Gemini) ---
 gemini_image_strategy:
   default: "content"
-  max_per_presentation: 30
-  max_images_per_presentation: 30  # alias de compatibilidad
+  max_per_presentation: 12
+  max_images_per_presentation: 12  # alias de compatibilidad
   fallback: "none"
   safety_rules: "Sin texto, sin letras, sin código, sin etiquetas ni fórmulas. Solo elementos visuales: objetos, iconos, escenas o diagramas mudos. Estilo vectorial limpio, fondo claro, académico."
   prompt_guide: |
