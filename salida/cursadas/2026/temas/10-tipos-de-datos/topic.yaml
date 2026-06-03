@@ -9,7 +9,7 @@ created_at: "2026-05-25"
 status: "published"
 slides_url: "https://docs.google.com/presentation/d/1z4W1bgnI8MQLZ19k-eJtx3feT67Fbr1D0RYRJAlrpls/edit"
 published_at: "2026-05-25"
-tp_type: "repo"
+tp_type: "quiz-moodle"
 module: "VII"
 week: 11
 language_primary: "TypeScript"

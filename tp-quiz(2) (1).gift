@@ -1,0 +1,321 @@
+// TP 09: Variables, Binding, Ámbito, Aliases, Closures y GC
+// Cubre temas 09.1 (Variables, Binding, Ámbito) + 09.2 (Aliases, Closures, GC, Gradual Typing, FP)
+// Importar en Moodle 5: Banco de preguntas > Importar > Formato GIFT
+// Encoding obligatorio: UTF-8 sin BOM
+// Generado por Valeria (tp-designer) — 2026-05-28
+
+$CATEGORY: TP/09-variables-binding-closures
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BLOQUE 09.1 — Variables, Binding y Ámbito (Q01–Q15)
+// ─────────────────────────────────────────────────────────────────────────────
+
+::TP09-Q01-5tupla::[markdown]Según el modelo formal de Sebesta, una variable se define formalmente como una **5-tupla** con los siguientes atributos. ¿Cuál de las siguientes opciones lista correctamente esos cinco atributos? {
+=nombre, dirección, tipo, L-valor y R-valor#Correcto. Esos son los cinco atributos formales: nombre (identificador textual), dirección (L-value), tipo, valor almacenado (R-value) y tiempo de vida/ámbito (agrupados en la 5-tupla).
+~nombre, valor, tipo, tamaño y visibilidad#Incorrecto. Tamaño no es un atributo de la 5-tupla formal. El atributo correcto es la dirección (L-value) y se distinguen explícitamente L-valor y R-valor.
+~identificador, puntero, clase, contenido y alcance#Incorrecto. Esta lista mezcla terminología informal. La 5-tupla usa términos precisos: nombre, dirección, tipo, L-valor y R-valor.
+~nombre, scope, tipo, valor y modificabilidad#Incorrecto. Modificabilidad no es un atributo de la 5-tupla. El quinto elemento es el L-valor (dirección de memoria).
+#### La 5-tupla es una simplificación pedagógica de los seis atributos completos; los fundamentales son nombre, dirección (L-value), tipo, L-valor y R-valor.
+}
+
+::TP09-Q02-lvalue-rvalue::[markdown]En el fragmento TypeScript:
+<pre><code>let x \= 10;
+let y \= x + 5;
+</code></pre>
+¿Qué rol cumple `x` en la segunda línea? {
+=R-value: se lee el contenido de `x` para sumarlo a 5#Correcto. Cuando `x` aparece a la derecha de una expresión, denota su contenido (R-value). El L-value es la dirección, solo relevante cuando `x` está a la izquierda de una asignación.
+~L-value: se referencia la dirección de memoria de `x`#Incorrecto. En la segunda línea `x` está a la derecha del `\=`, no a la izquierda. En ese contexto se accede al contenido, no a la dirección.
+~El nombre `x` actúa como alias de `y`#Incorrecto. No hay creación de alias aquí; `y` recibe una copia del valor de `x` más 5.
+~L-value y R-value simultáneamente, porque `x` está en ambos lados#Incorrecto. En la segunda línea `x` solo aparece a la derecha del `\=` en `x + 5`, por lo que cumple únicamente el rol de R-value.
+#### L-value \= dirección (lado izquierdo de la asignación); R-value \= contenido (lado derecho). El mismo nombre puede ser L-value o R-value según su posición.
+}
+
+::TP09-Q03-binding-def::[markdown]En teoría de lenguajes de programación, **binding** se define como: {
+=La asociación entre una entidad del lenguaje y uno de sus atributos, establecida en un momento determinado#Correcto. Esta es la definición precisa de Sebesta: binding vincula una entidad (variable, operador, tipo) con un atributo en un momento específico del ciclo de vida del programa.
+~El proceso por el cual el compilador asigna memoria a una variable#Incorrecto. Eso describe solo el binding de almacenamiento. El binding es un concepto más amplio que aplica a cualquier par entidad-atributo.
+~La vinculación de un nombre a un bloque de código en tiempo de ejecución#Incorrecto. Eso podría describir el dispatch dinámico, pero el binding es el concepto general que incluye todos los momentos, no solo ejecución.
+~La resolución de un símbolo en su dirección de memoria por el linker#Incorrecto. Eso describe una instancia específica (binding de dirección en tiempo de linkeo), no la definición general del concepto.
+#### Binding no es solo para variables: el significado de `*` como multiplicación es un binding establecido en tiempo de diseño del lenguaje.
+}
+
+::TP09-Q04-momentos-binding::[markdown]¿En cuál de los siguientes **momentos de binding** se establece que el tipo del literal `3.14` en TypeScript es `number` (IEEE 754 float64)? {
+=Tiempo de implementación del compilador/intérprete#Correcto. El rango y representación interna de `number` en TypeScript (IEEE 754 float64) lo decide quien implementa el compilador, no el diseñador del lenguaje ni el programador.
+~Tiempo de diseño del lenguaje#Incorrecto. En tiempo de diseño se decide que TypeScript tendrá un tipo numérico, pero la representación concreta (float64) la elige el implementador.
+~Tiempo de compilación#Incorrecto. En tiempo de compilación TypeScript verifica que el literal sea de tipo `number`, pero el rango del tipo ya fue fijado en tiempo de implementación.
+~Tiempo de ejecución#Incorrecto. Para TypeScript (estáticamente tipado), el tipo de un literal numérico está resuelto antes de ejecutar.
+#### Los 6 momentos en orden cronológico: diseño → implementación → compilación → linkeo → carga → ejecución.
+}
+
+::TP09-Q05-binding-estatico-dinamico::[markdown]¿Cuál es la diferencia correcta entre **binding estático** y **binding dinámico** de tipos? {
+=Estático: el tipo se vincula en compilación y no cambia. Dinámico: el tipo se vincula en ejecución y puede cambiar.#Correcto. Esta es la distinción precisa: en binding estático el tipo es inmutable después de la compilación; en binding dinámico puede variar en runtime.
+~Estático: solo para tipos primitivos. Dinámico: solo para objetos y clases.#Incorrecto. La distinción no es por tipo de dato sino por momento del binding.
+~Estático: el tipo se infiere automáticamente. Dinámico: el tipo se declara explícitamente.#Incorrecto. La inferencia automática sigue siendo binding estático (en compilación). No hay relación con declaración explícita.
+~Estático: binding fuerte (sin coerciones). Dinámico: binding débil (con coerciones implícitas).#Incorrecto. Estático/dinámico y fuerte/débil son dimensiones ortogonales e independientes.
+#### TypeScript \= estático + fuerte. Python \= dinámico + fuerte. JavaScript \= dinámico + débil. C \= estático + débil.
+}
+
+::TP09-Q06-dimensiones-ortogonales::[markdown]Un estudiante afirma: *"Si un lenguaje tiene tipado dinámico, entonces necesariamente tiene tipado débil."* ¿Es correcta esta afirmación? {
+=No. Estático/dinámico y fuerte/débil son dimensiones ortogonales. Python es dinámico y fuerte a la vez.#Correcto. Las dos dimensiones son independientes. Python es el ejemplo canónico: tipado dinámico (el tipo se establece en runtime) pero fuerte (no hay coerciones implícitas arbitrarias).
+~Sí. El tipado dinámico implica que el lenguaje debe aceptar operaciones entre tipos distintos, lo que requiere coerciones.#Incorrecto. Python refuta este argumento: `"5" + 3` lanza `TypeError` en Python, no hace coerción silenciosa.
+~Sí. Los lenguajes con tipado dinámico no verifican tipos, así que cualquier operación es válida.#Incorrecto. Python verifica tipos en runtime y lanza excepciones ante operaciones incompatibles.
+~Depende: es verdad para lenguajes interpretados pero no para lenguajes JIT-compilados.#Incorrecto. La distinción interpretado/compilado no determina si el tipado es fuerte o débil.
+#### Las cuatro combinaciones existen en lenguajes reales: (estático+fuerte), (estático+débil), (dinámico+fuerte), (dinámico+débil).
+}
+
+::TP09-Q07-inferencia::[markdown]En TypeScript, cuando el compilador deduce que la variable `items` en `const items \= [1, 2, 3]` es de tipo `number[]` sin que el programador lo declare explícitamente, esto es un ejemplo de: {
+=Binding estático de tipos con inferencia — el tipo se establece en compilación sin declaración explícita#Correcto. La inferencia no es binding dinámico. El compilador resuelve el tipo en compilación; simplemente no requiere que el programador lo escriba.
+~Binding dinámico de tipos, porque el tipo no se escribió en el código#Incorrecto. La ausencia de declaración explícita no implica binding dinámico. TypeScript infiere el tipo en compilación.
+~Binding débil de tipos, porque TypeScript acepta arrays mixtos por defecto#Incorrecto. Binding débil/fuerte se refiere a la permisividad de coerciones, no a la inferencia.
+~Un proceso de runtime similar al de Python#Incorrecto. Python evalúa el tipo en ejecución. TypeScript infiere el tipo en compilación; son mecanismos fundamentalmente distintos.
+#### Inferencia \= binding estático sin declaración explícita. El compilador deduce el tipo del contexto en tiempo de compilación.
+}
+
+::TP09-Q08-categorias-variables::[markdown]¿Cuál de las siguientes categorías de variables **no soporta recursión efectiva** en los lenguajes que la implementan? {
+=Variables estáticas, porque todas las invocaciones de la función comparten el mismo frame de almacenamiento#Correcto. Las variables estáticas tienen una única celda para toda la vida del programa. Si la función se llama recursivamente, todas las invocaciones comparten esa celda, lo que impide tener valores independientes por invocación.
+~Variables stack-dynamic, porque el stack tiene tamaño limitado#Incorrecto. El tamaño finito del stack es una restricción práctica, pero las variables stack-dynamic sí soportan recursión: cada invocación tiene su propio frame independiente.
+~Variables heap-dynamic explícitas, porque el GC puede liberar el objeto durante la recursión#Incorrecto. El GC no libera objetos con referencias activas. Las variables heap-dynamic sí soportan recursión.
+~Variables heap-dynamic implícitas, porque el binding cambia en cada asignación#Incorrecto. El binding dinámico de estas variables no impide la recursión; cada frame de activación es independiente.
+#### Variables estáticas: su dirección se conoce en compilación y persiste toda la ejecución → no hay frame independiente por invocación.
+}
+
+::TP09-Q09-stack-dynamic::[markdown]En el siguiente código TypeScript, ¿cuál es la categoría de binding de almacenamiento de la variable `n`?
+<pre><code>function factorial(n: number): number \{
+  if (n <\= 1) return 1;
+  return n * factorial(n - 1);
+\}
+</code></pre> {
+=Stack-dynamic: `n` se crea al activar la función y se destruye al retornar, con un frame independiente por cada invocación#Correcto. `n` es un parámetro local de la función. Cada invocación de `factorial` crea su propio frame en la pila con su propia copia de `n`, lo que permite la recursión.
+~Estática: `n` persiste entre llamadas porque es el parámetro de la función#Incorrecto. Los parámetros de función en TypeScript son stack-dynamic: se crean al activar y se destruyen al retornar.
+~Heap-dynamic explícita: TypeScript aloja los parámetros numéricos en el heap#Incorrecto. Los parámetros primitivos como `number` son stack-dynamic. Solo los objetos y closures van al heap.
+~Heap-dynamic implícita: el tipo de `n` podría cambiar en runtime#Incorrecto. TypeScript es estáticamente tipado; el tipo de `n` es `number` en compilación. Y la categoría de almacenamiento es stack, no heap.
+#### La recursión es posible precisamente porque cada invocación de `factorial` tiene su propio frame con su propia `n` en la pila.
+}
+
+::TP09-Q10-ambito-estatico::[markdown]En TypeScript, el **ámbito estático (léxico)** de una variable se determina: {
+=Por la estructura del código fuente en el lugar donde está escrita la declaración, resuelto en compilación#Correcto. El ámbito léxico se determina por dónde aparece la declaración en el texto del programa. El compilador resuelve qué variable corresponde a cada nombre sin ejecutar el código.
+~Por la cadena de llamadas activas en el momento de ejecución del programa#Incorrecto. Eso describe el ámbito dinámico. TypeScript usa ámbito estático como todos los lenguajes modernos.
+~Por la posición en el archivo: las variables declaradas antes son siempre visibles después#Incorrecto. El ámbito no es solo cuestión de posición lineal; la estructura de bloques `\{\}` delimita los scopes.
+~Por el tipo de la variable: las variables de tipo `any` tienen ámbito global automático#Incorrecto. El tipo no afecta el ámbito. `any` solo desactiva la verificación de tipos.
+#### El algoritmo de resolución estático sube por la cadena léxica: local → padre → abuelo → módulo raíz. Si no encuentra el nombre → error de compilación.
+}
+
+::TP09-Q11-ambito-vs-lifetime::[markdown]¿Cuál es la diferencia correcta entre **ámbito** y **tiempo de vida** de una variable? {
+=Ámbito \= visibilidad del nombre en el código. Tiempo de vida \= periodo durante el cual la variable existe en memoria. Son atributos independientes.#Correcto. Una variable puede existir en memoria (tiempo de vida activo) pero estar fuera de ámbito (nombre invisible). Las closures son el ejemplo más claro: la variable vive en heap aunque su ámbito original ya terminó.
+~Ámbito \= duración en memoria. Tiempo de vida \= alcance textual en el código fuente.#Incorrecto. Las definiciones están invertidas.
+~Son sinónimos: en lenguajes con GC, cuando el ámbito termina, la variable se libera inmediatamente.#Incorrecto. Las closures demuestran que esto es falso: la variable puede sobrevivir a su ámbito léxico.
+~El tiempo de vida solo aplica a variables en el heap; el ámbito solo aplica a variables en el stack.#Incorrecto. Ambos conceptos aplican a todas las categorías de variables.
+#### Ejemplo: una variable capturada por una closure tiene ámbito léxico en la función que la define, pero tiempo de vida extendido mientras la closure exista.
+}
+
+::TP09-Q12-hoisting-var::[markdown]¿Qué imprime este fragmento JavaScript/TypeScript con `var`?
+<pre><code>function test() \{
+  console.log(x); // línea A
+  var x \= 5;
+  console.log(x); // línea B
+\}
+test();
+</code></pre> {
+=`undefined` en la línea A y `5` en la línea B#Correcto. Con `var`, la declaración se eleva (hoisting) al tope de la función pero la inicialización permanece en su lugar. En la línea A, `x` existe pero vale `undefined`.
+~Error de referencia en la línea A porque `x` no fue declarada todavía#Incorrecto. Eso ocurriría con `let` o `const` (Temporal Dead Zone), no con `var`. `var` hace hoisting de la declaración.
+~`5` en la línea A y `5` en la línea B#Incorrecto. El hoisting solo eleva la declaración, no la inicialización. En la línea A, `x` aún vale `undefined`.
+~`null` en la línea A y `5` en la línea B#Incorrecto. El valor inicial de una variable `var` no inicializada es `undefined`, no `null`.
+#### Con `let`/`const` la línea A lanzaría un `ReferenceError` (Temporal Dead Zone). Usar siempre `let`/`const` en TypeScript moderno.
+}
+
+::TP09-Q13-ambito-dinamico::[markdown]¿Cuál es el principal problema de legibilidad del **ámbito dinámico** comparado con el ámbito estático? {
+=Con ámbito dinámico, para saber qué variable usa una función hay que conocer la cadena de llamadas en runtime, que puede cambiar en cada ejecución#Correcto. El razonamiento sobre el código es imposible sin simular la ejecución. Con ámbito estático, la relación entre nombre y variable está fija en el texto del programa.
+~El ámbito dinámico es menos eficiente porque busca variables en un árbol en vez de una tabla plana#Incorrecto. La eficiencia no es el problema principal; el problema es la legibilidad y el razonamiento.
+~El ámbito dinámico impide el uso de recursión porque las variables locales se solapan#Incorrecto. El ámbito dinámico no impide la recursión per se, aunque complica el razonamiento sobre las variables capturadas.
+~El ámbito dinámico requiere declarar todas las variables antes de usarlas#Incorrecto. Esa es una restricción de algunos lenguajes con ámbito estático, no una característica del ámbito dinámico.
+#### `this` en JavaScript/TypeScript tiene semántica dinámica. Por eso las arrow functions capturan `this` léxicamente, como solución al problema del ámbito dinámico.
+}
+
+::TP09-Q14-shadowing::[markdown]En el siguiente código TypeScript, ¿qué valor imprime la última línea?
+<pre><code>const x \= 10;
+function processar(items: number[])\: void \{
+  for (const x of items) \{
+    // x interno al for
+  \}
+  console.log(x); // ¿qué imprime?
+\}
+processar([1, 2, 3]);
+</code></pre> {
+=`10`, porque la variable `x` del módulo es visible fuera del `for`; el `x` interno al `for` solo existe dentro de ese bloque#Correcto. El `x` declarado con `const` dentro del `for` hace shadowing del `x` exterior pero solo dentro del bloque del `for`. Fuera del `for`, `x` vuelve a referirse al `x` externo de valor `10`.
+~`3`, porque el último valor del loop fue `3` y se propagó al scope exterior#Incorrecto. Con `const x of items`, el `x` es local al bloque `for`. No se propaga al exterior.
+~`undefined`, porque el `x` externo queda indefinido después del shadowing#Incorrecto. El shadowing no afecta la variable exterior; simplemente la hace invisible dentro del bloque interno.
+~Error de compilación, porque TypeScript no permite redeclarar `x` en el mismo scope#Incorrecto. El `x` del `for` está en un scope hijo, no en el mismo scope. TypeScript permite esto (aunque ESLint `no-shadow` puede advertirlo).
+#### Configurar ESLint con `@typescript-eslint/no-shadow` para detectar shadowings accidentales.
+}
+
+::TP09-Q15-coerciones::[markdown]¿Qué resultado produce `"5" - 3` en JavaScript (tipado débil) y por qué TypeScript strict lo rechaza? {
+=JavaScript retorna `2` (coerciona `"5"` a número). TypeScript strict da error de compilación porque `string` y `number` no son operandos válidos para `-`.#Correcto. JavaScript aplica coerción implícita: convierte `"5"` a `5` para poder restar. TypeScript strict detecta la incompatibilidad de tipos en compilación.
+~Ambos retornan `"53"` porque la concatenación tiene prioridad sobre la resta#Incorrecto. `"5" + 3 \= "53"` (concatenación), pero `"5" - 3 \= 2` (coerción numérica). El operador `-` no hace concatenación.
+~JavaScript lanza `TypeError`. TypeScript también lanza error, pero en runtime#Incorrecto. JavaScript hace coerción silenciosa para `-`. TypeScript strict detecta el error en compilación (no en runtime).
+~Ambos retornan `NaN` porque no se puede operar un string con un número#Incorrecto. `NaN` aparecería si la coerción fallara (ej. `"hola" - 3`). `"5"` se convierte exitosamente a `5`.
+#### La inconsistencia de JavaScript\: `"5" + 3 \= "53"` pero `"5" - 3 \= 2`. TypeScript strict corta esto en compilación. Tipado débil ≠ tipado dinámico.
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BLOQUE 09.2 — Aliases, Closures, GC, Gradual Typing, FP (Q16–Q30)
+// ─────────────────────────────────────────────────────────────────────────────
+
+::TP09-Q16-alias-def::[markdown]Según la definición de Sebesta §5.3.3, un **alias** ocurre cuando: {
+=Dos nombres distintos están vinculados a la misma celda de memoria al mismo tiempo#Correcto. Un alias es exactamente eso: dos identificadores distintos con el mismo L-value. La modificación desde uno afecta silenciosamente al otro.
+~Una variable tiene dos tipos distintos asignados al mismo tiempo#Incorrecto. Eso no es posible en lenguajes estáticamente tipados. Alias se refiere a dos nombres, no a dos tipos.
+~El compilador reutiliza la misma dirección de memoria para dos variables de distinto ámbito#Incorrecto. Eso sería una optimización del compilador (reutilización de stack frames), no un alias en el sentido de Sebesta.
+~Un objeto tiene más de un método que accede a la misma propiedad interna#Incorrecto. Eso describe encapsulamiento, no aliases.
+#### Alias \= dos flechas apuntando al mismo rectángulo (misma celda). La modificación desde cualquiera de los dos nombres afecta el objeto compartido.
+}
+
+::TP09-Q17-alias-ts::[markdown]¿Qué sucede al ejecutar el siguiente código TypeScript?
+<pre><code>const obj1 \= \{ valor\: 10 \};
+const obj2 \= obj1;
+obj2.valor \= 99;
+console.log(obj1.valor);
+</code></pre> {
+=Imprime `99`. `obj2` es un alias de `obj1`; modificar `obj2.valor` modifica el mismo objeto.#Correcto. La asignación `obj2 \= obj1` copia la referencia (puntero), no el objeto. Ambas variables apuntan al mismo objeto en heap. Modificar desde `obj2` cambia el objeto que también ve `obj1`.
+~Imprime `10`. TypeScript crea una copia del objeto al asignar.#Incorrecto. TypeScript no hace copia automática de objetos. La asignación de objetos siempre copia la referencia.
+~Error de compilación\: `const` no permite reasignar propiedades#Incorrecto. `const` impide reasignar la variable (cambiar a qué apunta), pero no impide mutar las propiedades del objeto apuntado.
+~Comportamiento indefinido dependiendo del motor de JavaScript#Incorrecto. El comportamiento está perfectamente definido: la asignación de referencia crea un alias y la mutación es visible desde ambos nombres.
+#### Para evitar el alias: `const obj2 \= \{ ...obj1 \}` (shallow copy) o `const obj2 \= structuredClone(obj1)` (deep copy).
+}
+
+::TP09-Q18-shallow-vs-deep::[markdown]Dado el objeto anidado en TypeScript:
+<pre><code>const original \= \{ x\: 1, config\: \{ timeout\: 30 \} \};
+const copia \= \{ ...original \};
+copia.config.timeout \= 999;
+console.log(original.config.timeout);
+</code></pre>
+¿Qué imprime y por qué? {
+=`999`. El spread hace shallow copy: `copia.config` es un alias del mismo objeto `\{ timeout\: 30 \}` que tiene `original.config`.#Correcto. El spread `\{ ...original \}` crea un objeto nuevo para el primer nivel, pero las propiedades que son objetos (como `config`) siguen siendo referencias al mismo objeto original. Por eso modificar `copia.config.timeout` afecta también a `original.config.timeout`.
+~`30`. El spread hace una copia independiente de todo el objeto, incluyendo los anidados.#Incorrecto. El spread solo copia el primer nivel. Las propiedades que son objetos comparten la referencia.
+~`undefined`. La propiedad `config` no es copiable con spread.#Incorrecto. El spread sí copia la propiedad `config`, pero como referencia, no como copia profunda.
+~Error de compilación\: no se puede mutar una propiedad de un objeto copiado con spread.#Incorrecto. TypeScript no restringe la mutación de propiedades de objetos creados con spread a menos que se use `Readonly<T>` explícitamente.
+#### Para una copia profunda usar `structuredClone(original)` (ES2022). El spread solo independiza el primer nivel.
+}
+
+::TP09-Q19-readonly::[markdown]¿Qué garantiza `readonly` en TypeScript cuando se usa en un parámetro de función? {
+=Que el compilador rechazará cualquier intento de modificar el objeto a través de ese parámetro dentro de la función#Correcto. `readonly` es un contrato en compilación: la función declara que no modificará el objeto recibido. El compilador verifica y rechaza cualquier mutación dentro de esa función.
+~Que el objeto recibido es una copia profunda independiente del original#Incorrecto. `readonly` no genera ninguna copia. El objeto es el mismo; solo cambia lo que el compilador permite hacer con él dentro de la función.
+~Que el parámetro no puede ser `null` ni `undefined`#Incorrecto. Eso lo garantiza `strictNullChecks`, no `readonly`.
+~Que la función no puede retornar el objeto ni pasarlo a otra función#Incorrecto. `readonly` no restringe el retorno ni el paso del objeto, solo su mutación directa a través de ese parámetro.
+#### `readonly` no previene la creación del alias; previene la mutación a través de él. Es un guardrail del compilador, no una copia defensiva.
+}
+
+::TP09-Q20-closure-def::[markdown]Una **closure** en programación se define como: {
+=La combinación de una función y el entorno léxico en el que fue definida, que viaja con la función#Correcto. Esta es la definición estándar (Sebesta §10, Gabbrielli §7.4). La closure "lleva su mochila": tiene acceso a las variables del scope de creación aunque ese scope haya cerrado.
+~Una función que retorna otra función como valor#Incorrecto. Eso es una función de orden superior (higher-order function). Una función de orden superior puede crear closures, pero no es sinónimo.
+~Un objeto que encapsula estado privado mediante métodos de acceso#Incorrecto. Eso describe el patrón de encapsulamiento OO. Las closures son un mecanismo de captura de entorno léxico, no de encapsulamiento per se.
+~Una variable global accesible desde cualquier función del programa#Incorrecto. Las variables capturadas en una closure son locales al scope de creación, no globales.
+#### Las variables capturadas migran de Categoría 2 (stack-dynamic) a Categoría 3 (heap-dynamic) cuando son capturadas por una closure.
+}
+
+::TP09-Q21-closure-contador::[markdown]¿Cuántas veces se puede llamar a `c.incrementar()` después de que `crearContador` retornó en el siguiente código TypeScript?
+<pre><code>function crearContador(inicio: number) \{
+  let cuenta \= inicio;
+  return \{
+    incrementar: () \=> ++cuenta,
+    valor\: () \=> cuenta
+  \};
+\}
+const c \= crearContador(10);
+</code></pre> {
+=Indefinidamente. La closure mantiene `cuenta` viva en el heap mientras `c` exista.#Correcto. `cuenta` escapa al heap porque el objeto retornado (`c`) mantiene referencias a ella. El GC no libera `cuenta` mientras `c` esté accesible. El activation record de `crearContador` fue destruido, pero `cuenta` sobrevive.
+~Solo una vez. Después del primer `incrementar()`, el activation record se invalida.#Incorrecto. El activation record ya fue destruido cuando `crearContador` retornó, pero `cuenta` no depende de él; vive en el heap.
+~Cero veces. `crearContador` ya retornó y `cuenta` fue liberada por el GC.#Incorrecto. El GC no libera `cuenta` porque hay referencias activas a ella desde las funciones `incrementar` y `valor` dentro de `c`.
+~Depende del garbage collector; puede liberarse en cualquier momento.#Incorrecto. El GC solo libera objetos sin referencias activas. Mientras `c` exista, `cuenta` tiene referencias y no será liberada.
+#### V8 usa escape analysis para detectar que `cuenta` es referenciada por las funciones retornadas y la aloja en el heap desde el principio.
+}
+
+::TP09-Q22-closure-var-bug::[markdown]¿Qué imprime el siguiente código JavaScript (no TypeScript) con `var`?
+<pre><code>const funcs \= [];
+for (var i \= 0; i < 3; i++) \{
+  funcs.push(() \=> i);
+\}
+console.log(funcs[0](), funcs[1](), funcs[2]());
+</code></pre> {
+=`3 3 3`. Todas las closures capturan la misma variable `i` que al terminar el loop vale `3`.#Correcto. Con `var`, hay un solo `i` en el scope de la función contenedora. Las tres closures capturan la referencia a ese mismo `i`. Cuando se ejecutan, `i` ya vale `3` (el loop terminó).
+~`0 1 2`. Cada closure captura el valor de `i` en el momento de su creación.#Incorrecto. Eso sería el comportamiento correcto si se usara `let` (deep binding por iteración). Con `var`, todas comparten la misma referencia a `i`.
+~Error de ejecución porque las closures no pueden capturar variables de bucles.#Incorrecto. Las closures pueden capturar cualquier variable del scope léxico, incluyendo variables de bucles.
+~`0 0 0`. `var` hace hoisting y todas las closures ven el valor inicial `0`.#Incorrecto. El hoisting eleva la declaración al inicio de la función, pero el valor de `i` cambia durante el loop. Al momento de ejecución de las closures, `i \= 3`.
+#### Solución\: reemplazar `var i` por `let i`. Con `let`, se crea un nuevo binding por iteración (deep binding) y cada closure captura su propio valor.
+}
+
+::TP09-Q23-deep-shallow-binding::[markdown]¿Cuál es la diferencia entre **deep binding** y **shallow binding** en el contexto de closures? {
+=Deep binding: la closure captura el entorno en el momento de su creación. Shallow binding: la función usa el entorno en el momento de su llamada.#Correcto. Deep binding es el comportamiento de TypeScript, Python y todos los lenguajes modernos. Shallow binding es característico del ámbito dinámico (LISP clásico) y es la causa del bug de `var` en loops.
+~Deep binding: se capturan los valores por copia. Shallow binding: se capturan las referencias.#Incorrecto. La distinción deep/shallow binding se refiere al momento del binding (creación vs. llamada), no al mecanismo de captura (valor vs. referencia).
+~Deep binding: la closure tiene acceso a todo el scope global. Shallow binding: solo al scope local.#Incorrecto. Ambas formas pueden tener acceso a variables no-locales; la diferencia es el momento en que se resuelve el binding.
+~Deep binding es el que usa Python; shallow binding es el que usa TypeScript.#Incorrecto. Tanto Python como TypeScript usan deep binding (entorno capturado en el momento de creación de la closure).
+#### Con `let` en loops (deep binding), cada iteración crea su propio binding de la variable de control.
+}
+
+::TP09-Q24-gc-reference-counting::[markdown]¿Cuál es el talón de Aquiles del **reference counting** como estrategia de garbage collection? {
+=No puede liberar objetos en referencias circulares porque ningún contador llega a cero, provocando memory leaks#Correcto. Si A apunta a B y B apunta a A, y se eliminan las referencias externas, ambos contadores valen 1. Ninguno llega a 0, por lo que nunca se liberan.
+~Es demasiado lento porque revisa todos los objetos del heap en cada GC cycle#Incorrecto. Eso describe el mark-and-sweep, no el reference counting. El RC es inmediato y localizado: solo actualiza el contador del objeto afectado.
+~No funciona con objetos en el heap; solo sirve para variables del stack#Incorrecto. El reference counting opera exactamente sobre objetos en el heap.
+~Requiere pausar el programa completo durante la recolección#Incorrecto. Eso es el "stop-the-world" del mark-and-sweep clásico. Una ventaja del RC es la liberación determinista sin pausa global.
+#### Python combina RC + cycle detector (módulo `gc`) para solucionar este problema. Swift usa `weak` references para romper ciclos manualmente.
+}
+
+::TP09-Q25-mark-sweep::[markdown]En el algoritmo **mark-and-sweep**, ¿por qué puede liberar objetos con referencias circulares mientras que el reference counting no puede? {
+=Porque marca desde las raíces (stack y globales) los objetos alcanzables; los no alcanzados —aunque se apunten entre sí— no quedan marcados y se liberan en el sweep#Correcto. El mark-and-sweep no cuenta referencias: determina alcanzabilidad desde las raíces. Un ciclo aislado (sin referencia desde una raíz) no queda marcado y es liberado en la fase sweep.
+~Porque mantiene un grafo de dependencias que detecta ciclos explícitamente antes de liberar#Incorrecto. El algoritmo no busca ciclos; determina alcanzabilidad. Los ciclos sin referencia externa quedan sin marcar por el mismo mecanismo que los objetos ordinarios inaccesibles.
+~Porque pausa el programa antes de marcar, garantizando que los contadores de referencia sean correctos#Incorrecto. La pausa (stop-the-world) sirve para evitar modificaciones durante el marcado, no para corregir contadores.
+~Porque los objetos circulares son movidos a una zona especial del heap antes del sweep#Incorrecto. No existe tal zona especial; el algoritmo es más simple: alcanzable \= marcado, no alcanzable \= libre.
+#### V8 combina ambas técnicas\: RC para liberación rápida de objetos sin ciclos + mark-and-sweep generacional para ciclos y objetos de larga vida.
+}
+
+::TP09-Q26-gc-v8::[markdown]¿Por qué en TypeScript/JavaScript el programador **no puede obtener la dirección de memoria** de un objeto en runtime? {
+=Porque el GC de V8 puede mover objetos en el heap durante la compactación, invalidando cualquier dirección previa#Correcto. V8 compacta el heap moviendo objetos vivos a posiciones contiguas para eliminar fragmentación. Las direcciones cambian, por lo que exponer punteros sería inseguro. Por eso TypeScript no tiene punteros al estilo de C.
+~Porque TypeScript es un lenguaje interpretado y no tiene acceso a la memoria nativa#Incorrecto. V8 JIT-compila JavaScript a código nativo. La razón no es interpretación sino la gestión del heap por el GC.
+~Porque el modelo de memoria de JavaScript es exclusivamente de valor, sin referencias#Incorrecto. JavaScript tiene referencias a objetos. El problema es la movilidad de objetos en el heap, no la ausencia de referencias.
+~Porque la especificación ECMAScript prohíbe el acceso a memoria por razones de seguridad#Incorrecto. La razón técnica es el GC con compactación. La seguridad es un beneficio adicional, pero la causa raíz es el movimiento de objetos.
+#### Python sí expone `id(obj)` como la dirección del objeto. En CPython, el GC no mueve objetos, por eso es posible. V8 sí los mueve.
+}
+
+::TP09-Q27-gradual-typing::[markdown]¿Cuál de las siguientes afirmaciones describe correctamente el **gradual typing** implementado en TypeScript? {
+=TypeScript permite mezclar código con tipos explícitos y código sin tipos en el mismo programa, migrando gradualmente desde JavaScript puro hasta `strict: true`#Correcto. El gradual typing es exactamente esta coexistencia. Un archivo `.js` renombrado a `.ts` compila inmediatamente; los tipos se agregan incrementalmente donde más importan.
+~TypeScript convierte los tipos en tiempo de ejecución para detectar errores dinámicamente, como Python#Incorrecto. TypeScript elimina los tipos en la transpilación; en runtime solo existe JavaScript. La verificación es en compilación, no en ejecución.
+~El gradual typing de TypeScript requiere anotar el 100% del código antes de compilar#Incorrecto. Eso sería tipado estático obligatorio, lo opuesto al gradual typing.
+~`any` en TypeScript hace que el tipo sea verificado en runtime usando el motor V8#Incorrecto. `any` desactiva la verificación de tipos en compilación y no activa ninguna verificación en runtime.
+#### La propuesta de valor\: tomar una codebase de 100k líneas de JavaScript, renombrar `.js` → `.ts`, y compila. Luego se agregan tipos incrementalmente.
+}
+
+::TP09-Q28-type-narrowing::[markdown]En el siguiente código TypeScript, ¿qué tipo infiere TypeScript para `r` en la última línea `return r.toUpperCase()`?
+<pre><code>type Resultado \= string | number | null;
+function formatear(r\: Resultado)\: string \{
+  if (r \=\=\= null) return "vacío";
+  if (typeof r \=\=\= "number") return r.toFixed(2);
+  return r.toUpperCase();
+\}
+</code></pre> {
+=`string`. Después de descartar `null` y `number`, TypeScript sabe que `r` solo puede ser `string`.#Correcto. Cada rama `if` actúa como type guard. Después del primer `if`, TypeScript sabe que `r` no es `null`. Después del segundo `if`, sabe que no es `number`. En la última línea, la única posibilidad restante es `string`.
+~`string | number | null`. TypeScript no reduce el tipo dentro de las ramas condicionales.#Incorrecto. El type narrowing es exactamente el mecanismo por el cual TypeScript reduce el tipo conocido dentro de cada rama.
+~`unknown`. TypeScript no puede inferir el tipo exacto en la última rama sin anotación explícita.#Incorrecto. TypeScript aplica narrowing exhaustivo. La última rama es alcanzable solo si `r` es `string`.
+~`any`. El uso de `typeof` desactiva la verificación de tipos.#Incorrecto. `typeof` es precisamente un type guard que activa el narrowing, no que lo desactiva.
+#### El narrowing permite que TypeScript verifique exhaustividad\: si faltara una rama para `number`, `.toUpperCase()` daría error en compilación.
+}
+
+::TP09-Q29-inmutabilidad-fp::[markdown]¿Cuál es la diferencia entre `const` en TypeScript y un binding inmutable en Haskell (como `let x \= 5`)? {
+=`const` en TypeScript impide reasignar la variable pero permite mutar el objeto apuntado. En Haskell, `let x \= 5` es definitivo e inmutable en todos los niveles; el modelo semántico no tiene mutación.#Correcto. `const obj \= \{\}; obj.x \= 1` es válido en TypeScript. En Haskell, cualquier intento de "modificar" un binding es un error; la computación es reescritura de expresiones, no mutación de celdas.
+~Son equivalentes\: ambos crean una referencia que no puede ser modificada ni reasignada.#Incorrecto. En TypeScript, `const obj \= \{\}; obj.prop \= "nuevo"` es válido. `const` no hace el objeto inmutable.
+~En TypeScript `const` es solo una convención; el compilador no la verifica.#Incorrecto. TypeScript sí verifica `const`\: intentar reasignar una variable `const` da error de compilación.
+~Haskell `let x \= 5` crea una variable en el stack que puede ser modificada dentro de la misma función.#Incorrecto. Haskell es un lenguaje funcional puro sin mutación. `let` en Haskell crea un binding definitivo, no una variable mutable.
+#### Para inmutabilidad de contenido en TypeScript\: `Object.freeze(obj)` o `Readonly<T>`. `const` solo protege la referencia.
+}
+
+::TP09-Q30-nonlocal-python::[markdown]En Python, ¿por qué es necesaria la declaración `nonlocal` para **modificar** (no solo leer) una variable capturada en una closure?
+<pre><code>def crear_contador(inicio):
+    cuenta \= inicio
+    def incrementar():
+        nonlocal cuenta  # ¿por qué?
+        cuenta +\= 1
+        return cuenta
+    return incrementar
+</code></pre> {
+=Sin `nonlocal`, Python crea una nueva variable local `cuenta` en `incrementar`, ocultando (shadowing) la capturada. `nonlocal` indica que la asignación debe afectar la variable del scope padre.#Correcto. En Python, cualquier asignación dentro de una función crea una variable local por defecto. Sin `nonlocal`, `cuenta +\= 1` sería `cuenta \= cuenta + 1` con un `cuenta` local nuevo, lo que causaría `UnboundLocalError` (se usa antes de definir) o shadowing silencioso.
+~Sin `nonlocal`, Python no permite leer variables del scope exterior en una función anidada#Incorrecto. Python sí permite leer variables del scope exterior sin `nonlocal`. El problema solo aparece al intentar asignar/modificar.
+~`nonlocal` es equivalente a `global`; ambos hacen la variable visible en todo el módulo#Incorrecto. `global` hace la variable global al módulo. `nonlocal` busca la variable en el scope padre inmediato (no en el global), que es exactamente el comportamiento correcto para una closure.
+~`nonlocal` es necesario en Python porque las closures copian los valores por defecto, no las referencias#Incorrecto. Python no copia valores por defecto en closures. El problema es la semántica de asignación: en Python, asignar dentro de una función siempre crea una variable local a menos que se declare `nonlocal` o `global`.
+#### Comparación\: TypeScript y Go capturan por referencia sin necesidad de declaración extra. Python requiere `nonlocal` para modificar. Java/Kotlin requieren que la variable capturada sea `final`/`val`.
+}
