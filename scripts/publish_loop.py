@@ -171,7 +171,7 @@ def phase0_consult_registry(topic_folder: Path, course_id: str) -> None:
     print(f"\n  Para consulta completa: python scripts/error_registry.py rules")
     print(f"  Para historial del tema: python scripts/error_registry.py query --topic {topic_name}")
 
-
+def phase1_repair_loop(
     topic_folder: Path,
     python: str,
     max_attempts: int,

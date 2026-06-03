@@ -4,10 +4,10 @@ applyTo: "**"
 
 # 🔒 EDU Standalone — Reglas de Protección de Archivos Inmutables
 
-## CRÍTICO: Archivos que NINGÚN agente puede modificar
+## CRÍTICO: Protecciones por defecto de archivos sensibles
 
-Los siguientes paths son **de solo lectura** para todos los agentes del módulo EDU.
-**NUNCA** crear, editar, renombrar ni borrar archivos en estas rutas:
+Los siguientes paths son **de solo lectura por defecto** para todos los agentes del módulo EDU.
+Por defecto, los agentes NO deben crear, editar, renombrar ni borrar archivos en estas rutas:
 
 ### 1. Schemas del pipeline (`_edu/schemas/`)
 - `_edu/schemas/schema-registry.json` — Manifiesto inmutable del pipeline
@@ -18,7 +18,7 @@ Los siguientes paths son **de solo lectura** para todos los agentes del módulo 
 
 **Razón:** Los schemas son el contrato técnico del pipeline. Modificarlos sin bump de versión rompe reproducibilidad y corrompe planes existentes.
 
-### 2. Scripts del pipeline (`scripts/`)
+### 2. Scripts del pipeline (`scripts/`) — solo lectura por defecto
 - `scripts/slides_pipeline.py` — Motor de publicación Google Slides
 - `scripts/validate_plan.py` — Validador de contratos
 - `scripts/repair_plan.py` — Orquestador de corrección
@@ -28,7 +28,7 @@ Los siguientes paths son **de solo lectura** para todos los agentes del módulo 
 - `scripts/*.py` — **Todos** los scripts
 - `scripts/requirements.txt`
 
-**Razón:** Los scripts son binarios de producción auditados. Los agentes los ejecutan, no los programan.
+**Razón:** Los scripts son binarios de producción auditados. Los agentes los ejecutan por defecto. **Excepción:** si el usuario/docente lo indica explícitamente en la conversación actual, se permite modificar scripts dentro del alcance solicitado.
 
 ### 3. Templates del módulo (`_edu/templates/`)
 - `_edu/templates/class-template.md`
@@ -46,6 +46,7 @@ Los siguientes paths son **de solo lectura** para todos los agentes del módulo 
 |--------|-----------------|
 | Leer (siempre) | Todo el proyecto |
 | Ejecutar (siempre) | `scripts/*.py` |
+| Crear y editar (solo con solicitud explicita del usuario/docente) | `scripts/**` |
 | Crear y editar | `{topics_folder}/**` (filminas.md, minuta.md, diseño.md, topic.yaml, .pipeline-state.json, plan-filminas-*.json, slides-url.txt, *.gift) |
 | Crear y editar | `_edu/config.yaml`, `_edu/active-topic.yaml`, `_edu/slides-config.yaml` |
 | Crear y editar | `_edu-memory/**` (memory.db, calibraciones) |

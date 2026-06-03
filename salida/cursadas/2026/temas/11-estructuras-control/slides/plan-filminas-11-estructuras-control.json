@@ -1,0 +1,2434 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "11-estructuras-control",
+    "title": "Expresiones y Estructuras de Control",
+    "source": "filminas.md",
+    "generated_at": "2026-06-01T22:33:34",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas",
+    "topic_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas/11-estructuras-control",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/slides-pipeline.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 45,
+    "images_planned": 0,
+    "tables_planned": 5,
+    "code_slides": 16,
+    "status": "PUBLISHED",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "concepto-mixto": 28,
+      "codigo": 12,
+      "tabla-comparativa": 5
+    }
+  },
+  "slides": [
+    {
+      "id": "F-00",
+      "type": "concepto-mixto",
+      "title": "Portada",
+      "subtitle": "Expresiones y Estructuras de Control",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Paradigmas y Lenguajes de Programación · Tema 11 · Módulo VIII\nUNTDF IDEI 2026"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-01",
+      "type": "concepto-mixto",
+      "title": "Pregunta de apertura",
+      "subtitle": "¿Dos expresiones equivalentes siempre se comportan igual?",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿Dónde puede cambiar el resultado: en el parseo, la evaluación, o los side effects?",
+              "level": 0
+            },
+            {
+              "content": "¿Puede una expresión producir resultados distintos según el lenguaje que la ejecute?",
+              "level": 0
+            },
+            {
+              "content": "¿Qué garantiza realmente una tabla de precedencia de operadores?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-02",
+      "type": "concepto-mixto",
+      "title": "Objetivos",
+      "subtitle": "Objetivos de la secuencia",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Al finalizar este tema el estudiante podrá"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Definir formalmente expresión, sentencia y contexto de evaluación (Sebesta §7.1).",
+              "level": 0
+            },
+            {
+              "content": "Aplicar precedencia, asociatividad y orden de evaluación con y sin side effects.",
+              "level": 0
+            },
+            {
+              "content": "Distinguir short-circuit de evaluación estricta y justificar su uso por corrección semántica.",
+              "level": 0
+            },
+            {
+              "content": "Elegir estructuras de control por criterio semántico y de mantenibilidad.",
+              "level": 0
+            },
+            {
+              "content": "Modelar iteración con invariantes y condición de terminación verificable.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-03",
+      "type": "concepto-mixto",
+      "title": "Mapa conceptual del tema",
+      "subtitle": "Expresiones → Evaluación → Control",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ejes del tema"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Expresiones**: forma sintáctica que produce un valor o efecto colateral.",
+              "level": 0
+            },
+            {
+              "content": "**Evaluación**: orden, precedencia y semántica operacional.",
+              "level": 0
+            },
+            {
+              "content": "**Selección**: decisión estructurada y criterios de mantenibilidad.",
+              "level": 0
+            },
+            {
+              "content": "**Iteración**: invariante, terminación y costo cognitivo.",
+              "level": 0
+            },
+            {
+              "content": "**Abstracciones de flujo**: iteradores, generadores y asincronía.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-04",
+      "type": "concepto-mixto",
+      "title": "Expresión y sentencia",
+      "subtitle": "Expresión produce valor · Sentencia causa efecto",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Distinción fundamental (Sebesta §7.1)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Expresión**: construcción sintáctica que se evalúa y retorna un valor.",
+              "level": 0
+            },
+            {
+              "content": "**Sentencia**: unidad de ejecución que controla el flujo o provoca efectos colaterales.",
+              "level": 0
+            },
+            {
+              "content": "Un lenguaje que permite *assignment expressions* mezcla ambos roles: mayor poder, mayor riesgo.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: en C, `x = 5` es simultáneamente expresión (valor: 5) y sentencia (efecto: asignación).",
+              "level": 0
+            },
+            {
+              "content": "La distinción impacta el diseño: Haskell elimina sentencias; C las maximiza.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "concepto-mixto",
+      "title": "AST y parseo",
+      "subtitle": "El árbol sintáctico abstracto fija la forma de la expresión",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Cómo el AST determina semántica (Sebesta §7.2)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "La **precedencia** de operadores determina la estructura del árbol de parseo.",
+              "level": 0
+            },
+            {
+              "content": "La **asociatividad** resuelve empates entre operadores de igual precedencia.",
+              "level": 0
+            },
+            {
+              "content": "El AST captura estructura, no evaluación: es una representación intermedia.",
+              "level": 0
+            },
+            {
+              "content": "Parseo y evaluación son **fases distintas**: el árbol no garantiza orden de evaluación temporal.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: el operador con mayor precedencia queda más profundo en el árbol → se evalúa primero.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-06",
+      "type": "concepto-mixto",
+      "title": "Precedencia",
+      "subtitle": "La precedencia determina la agrupación sintáctica",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Reglas de prioridad (Sebesta §7.2)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Multiplicación y división se agrupan antes que suma y resta (convención matemática).",
+              "level": 0
+            },
+            {
+              "content": "**Lenguajes difieren** en precedencia de operadores relacionales, lógicos y de bits.",
+              "level": 0
+            },
+            {
+              "content": "Parentizar explícitamente mejora legibilidad y elimina dependencia de reglas implícitas.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: la tabla de precedencias es una decisión de diseño del lenguaje, no un estándar universal.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ejemplo"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "a + b * c     →   a + (b * c)      # precedencia mayor de *\n(a + b) * c   →   suma antes        # paréntesis explicitan intención\na ** b ** c   →   a ** (b ** c)    # asociatividad derecha en Python"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-07",
+      "type": "concepto-mixto",
+      "title": "Asociatividad",
+      "subtitle": "Mismo nivel de precedencia: ¿izquierda o derecha?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Resolución de empates (Sebesta §7.2)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Asociatividad izquierda**: mayoría de los operadores aritméticos (`+`, `-`, `*`, `/`).",
+              "level": 0
+            },
+            {
+              "content": "**Asociatividad derecha**: exponenciación, asignación en C/Java, operador condicional ternario.",
+              "level": 0
+            },
+            {
+              "content": "La asociatividad izquierda es la esperada intuitivamente para operaciones aritméticas.",
+              "level": 0
+            },
+            {
+              "content": "Caso crítico: `a = b = c = 5` en C evalúa de derecha a izquierda.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ejemplo"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "a - b - c   →   (a - b) - c    # asociatividad izquierda\na = b = c   →   a = (b = c)    # asociatividad derecha (C, Java)\n2 ** 3 ** 2 →   2 ** (3 ** 2)  # derecha → 512, no 64 (Python)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-08",
+      "type": "concepto-mixto",
+      "title": "Orden de evaluación de operandos",
+      "subtitle": "Parseo ≠ orden de evaluación temporal de los operandos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Semántica operacional (Sebesta §7.3)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El AST fija la **forma** de la expresión (qué se calcula).",
+              "level": 0
+            },
+            {
+              "content": "El **orden en que se evalúan los operandos** lo define —o no define— el lenguaje.",
+              "level": 0
+            },
+            {
+              "content": "Java garantiza evaluación de izquierda a derecha en todos los contextos.",
+              "level": 0
+            },
+            {
+              "content": "C/C++ deja el orden **sin especificar**: cada compilador puede optimizarlo libremente.",
+              "level": 0
+            },
+            {
+              "content": "Con **side effects**, el orden de evaluación altera el resultado observable del programa.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: esta ambigüedad en C fue fuente histórica de bugs de portabilidad entre compiladores.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-09",
+      "type": "codigo",
+      "title": "Efectos colaterales",
+      "subtitle": "Side effects ocultos en expresiones",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ejemplo con post-incremento (Sebesta §7.3)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Regla de diseño (Sebesta §7.3)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Evitar expresiones que **mezclen cálculo y mutación** en la misma sentencia.",
+              "level": 0
+            },
+            {
+              "content": "Preferir separación explícita: primero mutar, luego calcular.",
+              "level": 0
+            },
+            {
+              "content": "C deja este comportamiento **undefined** → el compilador puede producir cualquier resultado.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "let i = 1\nconst a = [10, 20, 30]\nconst x = a[i] + i++\n// ¿x = a[1] + 1 = 21?  → si i se lee antes de incrementar\n// ¿x = a[2] + 1 = 31?  → si a[i] se evalúa después del incremento\n// El resultado depende del orden garantizado por el lenguaje"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-10",
+      "type": "codigo",
+      "title": "Asignación como expresión",
+      "subtitle": "Asignación: sentencia y expresión a la vez",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Decisiones de lenguaje (Sebesta §7.7)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Riesgo"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Lenguajes que admiten *assignment expressions* en condiciones habilitan el bug clásico `if (x = 0)`.",
+              "level": 0
+            },
+            {
+              "content": "C lo permite; compiladores modernos emiten warning con `-Wall`.",
+              "level": 0
+            },
+            {
+              "content": "Rust, Swift, Kotlin **prohíben** assignment expressions en condiciones por diseño.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "c",
+          "content": "while ((c = getchar()) != EOF) {\n    procesar(c);\n    // Idiomático en C: getchar() asigna y su valor se compara con EOF\n}"
+        },
+        {
+          "lang": "ts",
+          "content": "let y = (x = 5) + 3   // x queda 5, y queda 8"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "concepto-mixto",
+      "title": "Prevención de bugs de asignación",
+      "subtitle": "`if (x = 0)`: el bug clásico de asignación en condición",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Estrategias de prevención (Sebesta §7.7, Louden §8)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Yoda conditions**: `if (0 == x)` → una asignación accidental falla al compilar.",
+              "level": 0
+            },
+            {
+              "content": "Activar warnings del compilador (`-Wparentheses`, `-Wall` en GCC/Clang).",
+              "level": 0
+            },
+            {
+              "content": "Lenguajes modernos (Rust, Swift, Kotlin) eliminan el problema por diseño del lenguaje.",
+              "level": 0
+            },
+            {
+              "content": "Linters como ESLint/TSLint detectan automáticamente este patrón.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: uno de los ejemplos canónicos de cómo decisiones de diseño impactan en confiabilidad del código.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-12",
+      "type": "tabla-comparativa",
+      "title": "Conversión y coerción",
+      "subtitle": "Conversión explícita vs. coerción implícita",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Taxonomía (Sebesta §7.4, Gabbrielli-Martini §4.3)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Principio de Sebesta"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "La coerción implícita puede **enmascarar errores de tipo** que el sistema de tipos debería detectar.",
+              "level": 0
+            },
+            {
+              "content": "Lenguajes con tipado estático fuerte (Haskell, Rust) minimizan las coerciones implícitas.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Mecanismo | Control | Riesgo | Ejemplo |\n|-----------|---------|--------|---------|\n| Conversión explícita (cast) | Programador | Bajo | `int(3.7)` → 3 |\n| Coerción implícita widening | Lenguaje | Medio | `int` → `float` automático |\n| Coerción implícita narrowing | Lenguaje | Alto | `float` → `int` (pérdida de datos) |\n| Sobrecarga de operadores | Lenguaje/Prog. | Variable | `+` en strings y enteros |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Mecanismo | Control | Riesgo | Ejemplo |\n|-----------|---------|--------|---------|\n| Conversión explícita (cast) | Programador | Bajo | `int(3.7)` → 3 |\n| Coerción implícita widening | Lenguaje | Medio | `int` → `float` automático |\n| Coerción implícita narrowing | Lenguaje | Alto | `float` → `int` (pérdida de datos) |\n| Sobrecarga de operadores | Lenguaje/Prog. | Variable | `+` en strings y enteros |",
+          "local_asset": "slides/assets/F-12-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-13",
+      "type": "concepto-mixto",
+      "title": "Control conceptual — Bloque A",
+      "subtitle": "Consolidando fundamentos de expresiones",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿Cuál es la diferencia entre precedencia de operadores y orden de evaluación de operandos?",
+              "level": 0
+            },
+            {
+              "content": "¿Cuándo una *assignment expression* en un `if` se convierte en bug?",
+              "level": 0
+            },
+            {
+              "content": "Dar un ejemplo donde la coerción implícita produce un resultado diferente al esperado.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-14",
+      "type": "concepto-mixto",
+      "title": "Álgebra booleana aplicada",
+      "subtitle": "Operadores lógicos como control del flujo de evaluación",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Más que tablas de verdad (Sebesta §7.6)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "En código real, `&&` y `||` **controlan qué sub-expresiones se evalúan**.",
+              "level": 0
+            },
+            {
+              "content": "La conjunción y disyunción permiten codificar precondiciones de forma declarativa.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta distingue: operadores lógicos con y sin short-circuit tienen **semánticas distintas**.",
+              "level": 0
+            },
+            {
+              "content": "La forma normal DNF/CNF permite simplificar condiciones complejas antes de codificarlas.",
+              "level": 0
+            },
+            {
+              "content": "Gabbrielli-Martini: formalizan el short-circuit como semántica perezosa de operadores lógicos.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-15",
+      "type": "tabla-comparativa",
+      "title": "Truthiness entre lenguajes",
+      "subtitle": "Verdad no booleana: qué cuenta como `true` según el lenguaje",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Variación semántica (Sebesta §7.6, Louden §8)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Regla de diseño"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "No migrar intuiciones de truthiness de un lenguaje a otro sin validar la semántica local.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Lenguaje | `0` es falsy | `\"\"` es falsy | `null`/`None` falsy | Bool estricto |\n|----------|------------|-------------|--------------------|--------------------|\n| C | Sí | N/A | — | No (usa `int`) |\n| Python | Sí | Sí | Sí | Sí, flexible |\n| TypeScript | Sí | Sí | Sí | Sí, flexible |\n| Java | No | No | Sí | Sí, estricto |\n| Kotlin | No | No | Error de compilación | Sí, estricto |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Lenguaje | `0` es falsy | `\"\"` es falsy | `null`/`None` falsy | Bool estricto |\n|----------|------------|-------------|--------------------|--------------------|\n| C | Sí | N/A | — | No (usa `int`) |\n| Python | Sí | Sí | Sí | Sí, flexible |\n| TypeScript | Sí | Sí | Sí | Sí, flexible |\n| Java | No | No | Sí | Sí, estricto |\n| Kotlin | No | No | Error de compilación | Sí, estricto |",
+          "local_asset": "slides/assets/F-15-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-16",
+      "type": "concepto-mixto",
+      "title": "Evaluación estricta",
+      "subtitle": "Evaluación estricta: todos los operandos se evalúan siempre",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Semántica estricta (Sebesta §7.6)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Evalúa **todos** los operandos antes de aplicar el operador lógico.",
+              "level": 0
+            },
+            {
+              "content": "Predecible y conveniente para análisis formal y optimizaciones del compilador.",
+              "level": 0
+            },
+            {
+              "content": "Puede ejecutar **sub-expresiones inválidas** innecesariamente (división por cero, acceso null).",
+              "level": 0
+            },
+            {
+              "content": "Pascal original usaba `and`/`or` sin garantía de short-circuit.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: la evaluación estricta favorece la verificabilidad; el short-circuit favorece la corrección operativa.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-17",
+      "type": "concepto-mixto",
+      "title": "Short-circuit",
+      "subtitle": "Short-circuit: evaluación que se detiene cuando el resultado ya es conocido",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Semántica de corto circuito (Sebesta §7.6)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`p && q`: si `p` es **false**, `q` **no se evalúa** — el resultado ya es `false`.",
+              "level": 0
+            },
+            {
+              "content": "`p || q`: si `p` es **true**, `q` **no se evalúa** — el resultado ya es `true`.",
+              "level": 0
+            },
+            {
+              "content": "Es una herramienta de **corrección semántica**, no solo de rendimiento.",
+              "level": 0
+            },
+            {
+              "content": "Permite usar la primera condición como **guarda** de seguridad de la segunda.",
+              "level": 0
+            },
+            {
+              "content": "Gabbrielli-Martini: el short-circuit es semántica perezosa de operadores lógicos.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-18",
+      "type": "codigo",
+      "title": "Patrón defensivo con short-circuit",
+      "subtitle": "Short-circuit como guarda de corrección",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Evitar división por cero y acceso null (Sebesta §7.6)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué funciona"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Si la primera condición **falla**, la segunda nunca se evalúa.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: este patrón es la base del *guarded command* en programación defensiva.",
+              "level": 0
+            },
+            {
+              "content": "Invertir el orden destruye la guarda y puede causar runtime error.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "// Guarda contra división por cero\nif (x !== 0 && y / x > 2) {\n    aprobar()\n}\n\n// Guarda contra acceso null\nif (user !== null && user.isActive()) {\n    procesar(user)\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "codigo",
+      "title": "Side effects en booleanos: anti-patrón",
+      "subtitle": "Mezclar predicados con efectos en operadores lógicos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Anti-patrón con side effects (Sebesta §7.3 + §7.6)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Principio"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Separar **predicados** (sin efectos) de **funciones con efectos colaterales**.",
+              "level": 0
+            },
+            {
+              "content": "Short-circuit convierte un efecto secundario en un efecto condicional → comportamiento inesperado.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "// ANTI-PATRÓN: logAndMutate() puede no ejecutarse si isReady() es true\nif (isReady() || logAndMutate()) {\n    ejecutar()\n}\n\n// CORRECTO: el efecto ocurre siempre, independiente del predicado\nconst logged = logAndMutate()\nif (isReady() || logged) {\n    ejecutar()\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-20",
+      "type": "tabla-comparativa",
+      "title": "Operadores lógicos: comparativa por lenguaje",
+      "subtitle": "Operadores lógicos y bit a bit por lenguaje",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Comparativa (Sebesta §7.6, Louden §8)"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Lenguaje | AND lógico | OR lógico | Short-circuit | AND bit | OR bit |\n|----------|-----------|-----------|---------------|---------|--------|\n| C/C++ | `&&` | `\\|\\|` | Sí | `&` | `\\|` |\n| Java | `&&` | `\\|\\|` | Sí | `&` | `\\|` |\n| TypeScript | `&&` | `\\|\\|` | Sí | `&` | `\\|` |\n| Python | `and` | `or` | Sí | `&` | `\\|` |\n| Kotlin | `&&` | `\\|\\|` | Sí | `and` | `or` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Lenguaje | AND lógico | OR lógico | Short-circuit | AND bit | OR bit |\n|----------|-----------|-----------|---------------|---------|--------|\n| C/C++ | `&&` | `\\|\\|` | Sí | `&` | `\\|` |\n| Java | `&&` | `\\|\\|` | Sí | `&` | `\\|` |\n| TypeScript | `&&` | `\\|\\|` | Sí | `&` | `\\|` |\n| Python | `and` | `or` | Sí | `&` | `\\|` |\n| Kotlin | `&&` | `\\|\\|` | Sí | `and` | `or` |",
+          "local_asset": "slides/assets/F-20-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-21",
+      "type": "codigo",
+      "title": "Null safety con operadores lógicos",
+      "subtitle": "`?.` y `??`: short-circuit especializado para null",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "TypeScript (Sebesta §7, extensión moderna)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Semántica"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`?.` implementa short-circuit ante `null` o `undefined`.",
+              "level": 0
+            },
+            {
+              "content": "`??` es más estricto que `||`: no cortocircuita ante `0` o `\"\"`.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "// Optional chaining: corta en null/undefined\nconst ciudad = usuario?.direccion?.ciudad\n\n// Nullish coalescing: default solo para null/undefined (no para 0 ni \"\")\nconst nombre = entrada ?? \"sin nombre\"\n\n// Combinados: guarda completa de acceso y fallback\nconst zip = usuario?.direccion?.codigoPostal ?? \"0000\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-22",
+      "type": "codigo",
+      "title": "Guard clauses",
+      "subtitle": "Reducir anidamiento con cláusulas de guarda",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Patrón de *early return* (Sebesta §8, Louden §8)"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "// SIN guard clauses: anidamiento profundo\nfunction procesar(x?: number) {\n    if (x != null) {\n        if (x >= 0) { return `ok:${x}` }\n    }\n    return \"inválido\"\n}\n\n// CON guard clauses: flujo plano y legible\nfunction procesar(x?: number) {\n    if (x == null) return \"faltante\"\n    if (x < 0)    return \"inválido\"\n    return `ok:${x}`\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "concepto-mixto",
+      "title": "Control conceptual — Bloque B",
+      "subtitle": "Consolidando booleanos y short-circuit",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Reescribir una condición compleja a forma legible sin cambiar la semántica de short-circuit.",
+              "level": 0
+            },
+            {
+              "content": "¿Por qué `if (ptr != null && ptr->value > 0)` es correcto pero invertido puede producir segfault?",
+              "level": 0
+            },
+            {
+              "content": "Nombrar dos lenguajes donde el tipo booleano es estricto y no acepta truthiness implícita.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "concepto-mixto",
+      "title": "Programación estructurada y el debate sobre goto",
+      "subtitle": "Goto y la emergencia de las estructuras de control",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Contexto histórico (Sebesta §8.2, Louden §8)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`goto` permite saltos **arbitrarios** a cualquier punto del programa.",
+              "level": 0
+            },
+            {
+              "content": "Aumenta el poder de expresión local; reduce la trazabilidad y verificabilidad global.",
+              "level": 0
+            },
+            {
+              "content": "Dijkstra (1968): \"Go To Statement Considered Harmful\" — fundamento del movimiento estructurado.",
+              "level": 0
+            },
+            {
+              "content": "Las estructuras de control buscan **control explícito**: entrada única, salida única, verificable.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: el `goto` moderno restringido (C, C++) sobrevive para manejo de errores y salida de bucles anidados — uso justificado y acotado.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "codigo",
+      "title": "If y else if: árbol de decisiones",
+      "subtitle": "Selección simple y encadenada",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Semántica del if-else (Sebesta §8.3)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Propiedades"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Las ramas son **mutuamente excluyentes** y evaluadas en orden.",
+              "level": 0
+            },
+            {
+              "content": "El `else` final cubre todos los casos no capturados: actúa como caso base implícito.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: la ausencia de `else` puede dejar variables sin inicializar → bug silencioso.",
+              "level": 0
+            },
+            {
+              "content": "El orden de las condiciones importa: una condición más general antes de una específica puede oscurecer ramas.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "if (score >= 9)      grado = \"A\"\nelse if (score >= 7) grado = \"B\"\nelse if (score >= 4) grado = \"C\"\nelse                 grado = \"D\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-26",
+      "type": "codigo",
+      "title": "Switch: selección múltiple",
+      "subtitle": "Switch como alternativa estructurada a cadenas de if-else",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Semántica del switch (Sebesta §8.4)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Decisiones de diseño por lenguaje (Sebesta §8.4)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**C**: fallthrough implícito → `break` es necesario; fuente de bugs históricos.",
+              "level": 0
+            },
+            {
+              "content": "**Java**: igual que C para primitivos; switch expressions (Java 14+) son exhaustivas.",
+              "level": 0
+            },
+            {
+              "content": "**TypeScript/Kotlin**: `when` con exhaustividad verificable en tiempo de compilación.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: el fallthrough es una decisión controvertida con implicancias directas de mantenibilidad.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "switch (token) {\n    case \"INT\": parseIntToken();    break\n    case \"ID\":  parseIdToken();     break\n    case \"STR\": parseStringToken(); break\n    default:    reportError()\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-27",
+      "type": "concepto-mixto",
+      "title": "Pattern matching: evolución del control múltiple",
+      "subtitle": "Pattern matching como selección estructural sobre datos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Evolución del switch (Sebesta §8.4, Gabbrielli-Martini §5.1)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`switch` clásico: discrimina por **valor** (escalar, enum).",
+              "level": 0
+            },
+            {
+              "content": "**Pattern matching**: discrimina por **estructura** del dato — forma, tipo y desestructuración.",
+              "level": 0
+            },
+            {
+              "content": "Disponible en Haskell, Scala, Rust, Python 3.10+, Java 21+.",
+              "level": 0
+            },
+            {
+              "content": "Tabla de despacho: extensibilidad en dominios abiertos (polimorfismo por datos).",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: en lenguajes con tipos algebraicos, pattern matching reemplaza la selección como estructura primaria.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-28",
+      "type": "concepto-mixto",
+      "title": "Complejidad cognitiva del anidamiento",
+      "subtitle": "Cada nivel de anidamiento incrementa la carga cognitiva",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Impacto en mantenibilidad (Sebesta §8, Louden §8)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Cada nivel de anidamiento extra **multiplica** los paths de ejecución posibles.",
+              "level": 0
+            },
+            {
+              "content": "Las ramas profundas elevan el riesgo de paths **no testeados** en revisión manual.",
+              "level": 0
+            },
+            {
+              "content": "La **complejidad ciclomática** (McCabe) mide el número de paths linealmente independientes.",
+              "level": 0
+            },
+            {
+              "content": "Guard clauses y early return reducen complejidad accidental sin cambiar la semántica.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Regla práctica"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Máximo 3 niveles de anidamiento antes de extraer una función o reestructurar el flujo.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-29",
+      "type": "tabla-comparativa",
+      "title": "Criterios para elegir estructura de selección",
+      "subtitle": "Elegir entre if-else, switch y tabla de despacho",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Matriz de decisión (Sebesta §8.3–8.4, Louden §8)"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Criterio | if-else | switch | Tabla de despacho |\n|----------|---------|--------|-------------------|\n| Pocas ramas (2–3) | óptimo | Posible | Sobreingeniería |\n| Muchas ramas (>5) | Verboso | legible | extensible |\n| Condiciones complejas | natural | Limitado | — |\n| Cambio frecuente de casos | Costoso | Costoso | Open/Closed |\n| Exhaustividad verificable | Manual | Sí (con default) | Manual |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Criterio | if-else | switch | Tabla de despacho |\n|----------|---------|--------|-------------------|\n| Pocas ramas (2–3) | óptimo | Posible | Sobreingeniería |\n| Muchas ramas (>5) | Verboso | legible | extensible |\n| Condiciones complejas | natural | Limitado | — |\n| Cambio frecuente de casos | Costoso | Costoso | Open/Closed |\n| Exhaustividad verificable | Manual | Sí (con default) | Manual |",
+          "local_asset": "slides/assets/F-29-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-30",
+      "type": "codigo",
+      "title": "Despacho por tabla",
+      "subtitle": "Tabla de despacho: separar lógica de control de los datos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Patrón (Sebesta §8, extensión OOP)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ventajas"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Agregar un caso = agregar una entrada. **No se modifica lógica de control**.",
+              "level": 0
+            },
+            {
+              "content": "Principio Open/Closed aplicado a estructuras de selección.",
+              "level": 0
+            },
+            {
+              "content": "Cada rama es testeable independientemente sin afectar al bloque completo.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "const handlers: Record<string, () => void> = {\n    INT: parseIntToken,\n    ID:  parseIdToken,\n    STR: parseStringToken,\n}\n\n;(handlers[token] ?? reportError)()"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-31",
+      "type": "concepto-mixto",
+      "title": "Code smells de selección",
+      "subtitle": "Señales de fragilidad en estructuras de selección",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Detectar y refactorizar (Sebesta §8, Louden §8)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Condiciones duplicadas** en múltiples ramas → violan DRY y ocultan semántica.",
+              "level": 0
+            },
+            {
+              "content": "**Default que esconde errores** → enmascarar casos no manejados reduce trazabilidad.",
+              "level": 0
+            },
+            {
+              "content": "**Predicados opacos con side effects** → mezclan responsabilidades de evaluación y acción.",
+              "level": 0
+            },
+            {
+              "content": "**Cascadas largas sin dominio explícito** → señal de que falta una abstracción de datos.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-32",
+      "type": "concepto-mixto",
+      "title": "Taller: refactorizar selección anidada",
+      "subtitle": "Actividad de refactorización guiada",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Identificar redundancias y paths no cubiertos en ramas anidadas.",
+              "level": 0
+            },
+            {
+              "content": "Reestructurar con guard clauses o tabla de despacho.",
+              "level": 0
+            },
+            {
+              "content": "Verificar equivalencia semántica con casos de prueba específicos.",
+              "level": 0
+            },
+            {
+              "content": "¿El cambio mejoró la complejidad ciclomática medida con McCabe?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-33",
+      "type": "concepto-mixto",
+      "title": "Estructuras iterativas clásicas",
+      "subtitle": "While, do-while y for: tres formas de iteración",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Semántica de bucles (Sebesta §8.5, Louden §8)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**`while`**: evalúa condición al **inicio** → puede no ejecutarse si la condición es falsa de entrada.",
+              "level": 0
+            },
+            {
+              "content": "**`do-while`**: evalúa condición al **final** → garantiza al menos una ejecución.",
+              "level": 0
+            },
+            {
+              "content": "**`for`**: contador, condición y actualización en una línea → para iteración acotada.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: en la mayoría de lenguajes modernos, `for` es azúcar sintáctico sobre `while`.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ejemplo"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "while (hayDatos())           leer()\ndo { leer() } while (hayDatos())\nfor (let i = 0; i < n; i++) procesar(i)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-34",
+      "type": "concepto-mixto",
+      "title": "Invariantes de bucle",
+      "subtitle": "El invariante garantiza la corrección del bucle",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Razonamiento formal sobre iteración (Sebesta §8.5, Gabbrielli-Martini §5.2)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Invariante de bucle**: propiedad verdadera antes de cada iteración.",
+              "level": 0
+            },
+            {
+              "content": "Al inicio: el invariante debe ser **establecido** antes del bucle.",
+              "level": 0
+            },
+            {
+              "content": "En cada iteración: el cuerpo del bucle debe **preservar** el invariante.",
+              "level": 0
+            },
+            {
+              "content": "Al terminar: invariante + negación de la condición implica el resultado correcto.",
+              "level": 0
+            },
+            {
+              "content": "Gabbrielli-Martini: los invariantes son la base de la verificación formal (Hoare Logic).",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-35",
+      "type": "concepto-mixto",
+      "title": "Terminación del bucle",
+      "subtitle": "El bucle termina si hay progreso medible hacia la condición de parada",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Condición de terminación (Sebesta §8.5, Gabbrielli-Martini §5.2)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Definir una **función de ranking** (*loop variant*): entero acotado inferiormente que decrece en cada iteración.",
+              "level": 0
+            },
+            {
+              "content": "El bucle termina si el variant es estrictamente decreciente y acotado.",
+              "level": 0
+            },
+            {
+              "content": "Verificar **casos borde**: `n = 0`, colecciones vacías, centinela inalcanzable.",
+              "level": 0
+            },
+            {
+              "content": "Bucles con centinela: la terminación depende de que el centinela sea **alcanzable** en la entrada.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-36",
+      "type": "codigo",
+      "title": "Break y continue",
+      "subtitle": "Escapar del flujo normal de iteración",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Semántica del escape estructurado (Sebesta §8.5, Louden §8)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Diseño de lenguaje"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`break` y `continue` son transferencias **estructuradas**: afectan solo el bucle más cercano.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: Java permite `break label` para salir de bucles anidados — transferencia estructurada restringida, similar al goto limitado.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "for (const x of xs) {\n    if (!esValido(x)) continue       // salta al próximo elemento\n    if (x === objetivo) {\n        encontrado = true\n        break                         // sale del bucle\n    }\n    procesar(x)\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-37",
+      "type": "concepto-mixto",
+      "title": "Contador y centinela",
+      "subtitle": "Dos patrones clásicos de control de iteración",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Contador vs. centinela (Sebesta §8.5, Louden §8)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Contador**: control por límites explícitos; adecuado cuando la cota es conocida de antemano.",
+              "level": 0
+            },
+            {
+              "content": "**Centinela**: control por valor especial en el stream; evita evaluar longitud en cada iteración.",
+              "level": 0
+            },
+            {
+              "content": "El centinela es útil en lectura incremental de streams o archivos.",
+              "level": 0
+            },
+            {
+              "content": "Riesgo: si el valor centinela nunca aparece en la entrada, el bucle no termina.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-38",
+      "type": "concepto-mixto",
+      "title": "Iteradores: separar estructura de recorrido",
+      "subtitle": "El iterador desacopla la colección del recorrido",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Patrón iterador (Sebesta §8.5, Gabbrielli-Martini §5.3)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "La **colección** almacena los datos.",
+              "level": 0
+            },
+            {
+              "content": "El **iterador** encapsula el estado de recorrido y define el *traversal*.",
+              "level": 0
+            },
+            {
+              "content": "Habilita recorridos alternativos sobre la misma estructura sin duplicar su estado interno.",
+              "level": 0
+            },
+            {
+              "content": "El protocolo `Iterable/Iterator` (TypeScript, Java, Python) estandariza el contrato.",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: los iteradores son la forma moderna de iterar sobre estructuras sin exponer su representación interna.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-39",
+      "type": "codigo",
+      "title": "Generadores: secuencias perezosas",
+      "subtitle": "Generadores: producir valores bajo demanda con `yield`",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Semántica de yield (Sebesta §8, extensión moderna)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Propiedades"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El generador **suspende** la ejecución en cada `yield` y la **reanuda** al siguiente `next()`.",
+              "level": 0
+            },
+            {
+              "content": "Permite trabajar con secuencias **infinitas** sin consumir memoria proporcional al tamaño.",
+              "level": 0
+            },
+            {
+              "content": "Cada `next()` reanuda la función exactamente donde se suspendió.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "function* rango(inicio: number, fin: number) {\n    for (let i = inicio; i < fin; i++) yield i\n}\n\nfunction* fibonacci() {\n    let [a, b] = [0, 1]\n    while (true) { yield a; [a, b] = [b, a + b] }\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-40",
+      "type": "tabla-comparativa",
+      "title": "for...of vs for...in",
+      "subtitle": "Diferencia crítica en iteración sobre colecciones",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "TypeScript (Sebesta §8.5, extensión modern JS)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Advertencia"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "const arr = [10, 20, 30]\nfor (const k in arr)  console.log(k)   // \"0\", \"1\", \"2\"  → claves\nfor (const v of arr)  console.log(v)   // 10, 20, 30     → valores correctos"
+        }
+      ],
+      "tables": [
+        "| Forma | Itera sobre | Garantías de orden | Uso correcto |\n|-------|-------------|-------------------|--------------|\n| `for...of` | Valores del iterable | Garantizado | Arrays, Sets, Maps, generadores |\n| `for...in` | Claves del objeto (strings) | Sin garantía | Enumerar propiedades de objetos |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Forma | Itera sobre | Garantías de orden | Uso correcto |\n|-------|-------------|-------------------|--------------|\n| `for...of` | Valores del iterable | Garantizado | Arrays, Sets, Maps, generadores |\n| `for...in` | Claves del objeto (strings) | Sin garantía | Enumerar propiedades de objetos |",
+          "local_asset": "slides/assets/F-40-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-41",
+      "type": "concepto-mixto",
+      "title": "Recursión e iteración: misma potencia, costos distintos",
+      "subtitle": "Recursión vs. iteración: equivalencia expresiva, costos operacionales distintos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Análisis comparativo (Sebesta §8.6, Gabbrielli-Martini §5.2)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Recursión**: estilo declarativo; el estado está implícito en la pila de llamadas.",
+              "level": 0
+            },
+            {
+              "content": "**Iteración**: control operativo explícito; el estado está en variables locales.",
+              "level": 0
+            },
+            {
+              "content": "Toda recursión primitiva puede transformarse en iteración con una pila explícita.",
+              "level": 0
+            },
+            {
+              "content": "Gabbrielli-Martini: equivalencia expresiva con costos operacionales distintos (stack vs. heap).",
+              "level": 0
+            },
+            {
+              "content": "**Tail call optimization (TCO)**: Haskell, Scheme, Scala optimizan recursión en cola como iteración — elimina costo de stack.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-42",
+      "type": "codigo",
+      "title": "Control asíncrono con async/await",
+      "subtitle": "async/await: secuencialidad aparente sobre operaciones asíncronas",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Flujo asíncrono como control (Sebesta §8, extensión moderna)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Modelo de control"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`await` **suspende** la función actual sin bloquear el hilo de ejecución.",
+              "level": 0
+            },
+            {
+              "content": "Permite escribir flujo de control **lineal** sobre operaciones inherentemente concurrentes.",
+              "level": 0
+            },
+            {
+              "content": "El runtime convierte el código en una máquina de estados implícita.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "async function pipeline() {\n    const datos     = await obtenerDatos()       // se suspende hasta resolución\n    const validado  = await validar(datos)\n    const resultado = await transformar(validado)\n    return resultado\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-43",
+      "type": "concepto-mixto",
+      "title": "Caso integrador: lectura crítica de código",
+      "subtitle": "Checklist de lectura crítica de código",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Al revisar código real, verificar:"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "¿Hay expresiones con coerción peligrosa o precedencia ambigua que debería parentizar?",
+              "level": 0
+            },
+            {
+              "content": "¿Las ramas están bien estructuradas? ¿Existen redundancias o casos no cubiertos?",
+              "level": 0
+            },
+            {
+              "content": "¿Cada bucle tiene un invariante implícito y una condición de terminación verificable?",
+              "level": 0
+            },
+            {
+              "content": "¿Los predicados en condiciones tienen side effects ocultos?",
+              "level": 0
+            },
+            {
+              "content": "¿Se aprovecha el short-circuit donde corresponde — o se evita donde puede causar bugs?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-44",
+      "type": "concepto-mixto",
+      "title": "Cierre: criterios de diseño semántico",
+      "subtitle": "Expresiones y estructuras de control: criterios para diseñar bien",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ideas fuerza del tema"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Parseo ≠ evaluación**: la precedencia fija la forma; el orden de evaluación lo fija el lenguaje.",
+              "level": 0
+            },
+            {
+              "content": "**Short-circuit por corrección**: la semántica de corto circuito evita estados inválidos, no solo optimiza.",
+              "level": 0
+            },
+            {
+              "content": "**Estructuras por mantenibilidad**: if-else, switch o dispatch según el dominio y el cambio esperado.",
+              "level": 0
+            },
+            {
+              "content": "**Iteración correcta**: un bucle sin invariante y sin función de ranking no es correcto por accidente.",
+              "level": 0
+            },
+            {
+              "content": "**Legibilidad semántica**: nombrar bien predicados y estructurar el flujo previene defectos futuros.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Referencias"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Sebesta** (fuente principal): caps. 7 y 8 — expresiones, evaluación, asignación y estructuras de control.",
+              "level": 0
+            },
+            {
+              "content": "**Gabbrielli-Martini** (auxiliar): semántica operacional, coerciones, invariantes de bucle y recursión.",
+              "level": 0
+            },
+            {
+              "content": "**Louden** (auxiliar): implementación del control de flujo, legibilidad y decisiones de diseño de lenguajes.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    }
+  ]
+}

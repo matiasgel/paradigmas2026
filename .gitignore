@@ -55,3 +55,5 @@ salida/cursadas/*/students/
 .idea/
 salida/cursadas/2026/temas/06-autenticacion-autorizacion-django/slides/**
 salida/cursadas/2026/temas/07-django-admin/slides/**
+.venv-edu/lib/python3.12/site-packages/pip/_vendor/certifi/cacert.pem
+.venv-edu/**
