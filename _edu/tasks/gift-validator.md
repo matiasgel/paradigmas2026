@@ -68,9 +68,25 @@ y sus negativos: -5, -10, -11.11111, -12.5, -14.28571, -16.66667, -20, -25,
 | C4 | $CATEGORY malformado | `$CATEGORY:` sin ruta después, o con espacios antes del `:`. Advertir. |
 | C5 | Titulo duplicado | Dos preguntas con el mismo `::titulo::`. Moodle puede sobreescribir. Advertir. |
 | C6 | Pregunta sin feedback en quiz formativo | Si el quiz es formativo y la pregunta no tiene `#` ni `####`, advertir que el alumno no recibirá orientación. |
-| C7 | `[markdown]` ausente en pregunta con código | Si el enunciado contiene `<pre>`, `<code>`, o patrones de código (backtick, `function`, `class`, `:-`) pero NO tiene `[markdown]` → advertencia. |
-| C8 | Cierre HTML incorrecto | Si el enunciado contiene `</pre></code>` (orden incorrecto) → advertencia. El correcto es `</code></pre>`. |
-| C9 | Feedback truncado | Si el texto de feedback termina mid-word (sin punto, ?, !) → advertencia. |
+| C7 | `[markdown]` ausente en pregunta con código | Si el enunciado contiene `<pre>`, `<code>`, o patrones de código (backtick, `function`, `class`, `:-`) pero NO tiene `[markdown]` --> advertencia. |
+| C8 | Cierre HTML incorrecto | Si el enunciado contiene `</pre></code>` (orden incorrecto) --> advertencia. El correcto es `</code></pre>`. |
+| C9 | Feedback truncado | Si el texto de feedback termina mid-word (sin punto, ?, !) --> advertencia. |
+
+### GRUPO D -- Errores de encoding (bloquean importación con error PostgreSQL)
+
+| ID | Regla | Descripción |
+|----|-------|-------------|
+| D1 | Em dash / en dash Unicode | Presencia de U+2014 (--) o U+2013 (-) en cualquier campo. PostgreSQL en el servidor Moodle puede rechazar con `ERROR: secuencia de bytes no válida para codificación UTF8: 0xe2 0x80`. Reemplazar por `--`. |
+| D2 | Caracteres Unicode no-ASCII fuera del rango latin-1 | Presencia de superíndices (U+2070-U+2079), flechas (U+2192 ->), operador menos matemático (U+2212), puntos suspensivos (U+2026), comillas tipográficas (U+201C U+201D U+2018 U+2019). Reemplazar por equivalentes ASCII: `^N`, `->`, `-`, `...`, `"`. |
+| D3 | BOM UTF-8 | Primeros bytes `EF BB BF`. Eliminar. |
+
+### GRUPO E -- Errores de WAF/ModSecurity (bloquean processattempt.php con HTTP 403 Forbidden)
+
+| ID | Regla | Descripción |
+|----|-------|-------------|
+| E1 | `console.log(` en bloque de código | Apache/ModSecurity en servidores Moodle bloquea el POST de `processattempt.php` cuando el cuerpo contiene `console.log(`. El texto de cada pregunta se incluye como campo oculto en el form de respuesta. Reemplazar por la expresión sola con comentario: `expr  // ¿qué retorna?`. |
+| E2 | Otras llamadas JS peligrosas | `alert(`, `document.write(`, `eval(`, `innerHTML` en bloques de código activan las mismas reglas XSS del WAF. Mismo tratamiento que E1. |
+| E3 | Métodos string/array OWASP CRS PL2 | `toUpperCase(`, `toLowerCase(` (regla 941200), `Math.abs(`, `Math.sqrt(`, `Math.random(`, `Math.floor(` y otros `Math.*` (regla 941210), `toFixed(`, `reduce(` (reglas custom frecuentes). Reemplazos seguros: `.trim()`, `.toPrecision()`, literales numéricos `3.14159`, bucles `for...of`. Afectan tanto bloques de código como texto de opciones y feedback. |
 
 ---
 
@@ -83,17 +99,21 @@ PARA CADA pregunta en el archivo:
   3. Aplicar reglas del GRUPO A correspondientes al tipo
   4. Si tipo es MC-múltiple: aplicar reglas del GRUPO B
   5. Aplicar reglas del GRUPO C como advertencias
-  6. Si BOM detectado al inicio del archivo: reportar A1 inmediatamente
+  6. Si BOM detectado al inicio del archivo: reportar A1 / D3 inmediatamente
+
+EXTRA (sobre el archivo completo, no por pregunta):
+  7. Escanear todo el contenido en busca de caracteres D1/D2 (Unicode no-ASCII problemático)
+  8. Escanear bloques <pre><code> y texto de opciones/feedback en busca de patrones E1/E2/E3 (llamadas JS que activan WAF)
 
 CONSOLIDAR resultados:
-  - Errores críticos (A*, B*): listar con número de pregunta y descripción exacta del problema
+  - Errores críticos (A*, B*, D*, E*): listar con número de pregunta y descripción exacta del problema
   - Advertencias (C*): listar separadas
   - Preguntas OK: indicar cantidad
 
 REPORTAR en formato:
   ✅ N pregunta(s) válidas
-  ❌ M error(es) crítico(s) → NO exportar hasta corregir
-  ⚠️  K advertencia(s) → revisar antes de publicar
+  ❌ M error(es) crítico(s) --> NO exportar hasta corregir
+  ⚠️  K advertencia(s) --> revisar antes de publicar
 ```
 
 ---
@@ -132,17 +152,21 @@ REPORTAR en formato:
 
 Si el usuario solicita `autofix: sí`, el validador puede corregir automáticamente:
 
-- **Pesos redondeados** → reemplazar por el valor más cercano de la lista Moodle.
+- **Pesos redondeados** --> reemplazar por el valor más cercano de la lista Moodle.
   Regla: si la diferencia es < 0.01, corregir automáticamente; si es mayor, reportar y pedir confirmación.
-- **BOM** → eliminar del archivo si se puede editar.
-- **Líneas en blanco faltantes** → agregar entre preguntas automáticamente.
+- **BOM** --> eliminar del archivo si se puede editar.
+- **Líneas en blanco faltantes** --> agregar entre preguntas automáticamente.
+- **Em/en dashes (D1)** --> reemplazar `--` y `-` por `--` automáticamente.
+- **Otros Unicode D2** --> reemplazar superíndices, flechas Unicode, elipsis y operador menos matemático por equivalentes ASCII.
+- **Llamadas WAF E1/E2** --> comentar el wrapper: `console.log(expr)` --> `expr  // ¿qué retorna?`.
+- **Métodos WAF E3** --> sustituir por equivalente seguro: `toUpperCase()` --> `trim()`, `Math.PI` --> `3.14159`, `reduce(...)` --> bucle `for...of`, `toFixed(N)` --> `toPrecision(N+2)`.
 
 Los fixes se reportan en la sección "Correcciones aplicadas".
 
 **NO autofix automático para:**
-- Agregar/quitar respuestas correctas (A6) → decisión pedagógica del docente.
-- Escapar caracteres (A7) → requiere interpretación semántica.
-- Títulos vacíos o duplicados → requiere contexto del docente.
+- Agregar/quitar respuestas correctas (A6) --> decisión pedagógica del docente.
+- Escapar caracteres (A7) --> requiere interpretación semántica.
+- Títulos vacíos o duplicados --> requiere contexto del docente.
 
 ---
 
