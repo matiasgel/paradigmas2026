@@ -53,3 +53,6 @@ salida/cursadas/*/students/
 # IDE
 .vscode/
 .idea/
+.venv-edu/**
+salida/cursadas/2026/temas/06-autenticacion-autorizacion-django/slides/thumbnails/slide-18-slide_F_17.
+**/*.jpg
