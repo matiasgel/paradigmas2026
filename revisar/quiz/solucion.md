@@ -1,15 +1,15 @@
 # Plan de Solución — Defectos en generación GIFT para Moodle
 
-**Fecha:** 2026-05-28  
-**Analista:** Winston (System Architect)  
-**Archivos de referencia:** `parcial-1-moodle-original.gift` · `parcial-1-moodle-arreglado.gift`  
+**Fecha inicial:** 2026-05-28 | **Actualizado:** 2026-06-04  
+**Analista:** Winston (System Architect) — ampliado con hallazgos de sesión de debug 2026-06-04  
+**Archivos de referencia:** `parcial-1-moodle-original.gift` · `parcial-1-moodle-arreglado.gift` · `tp-quiz_erores.gift`  
 **Alcance:** Agentes generadores de GIFT — exam-designer (Santiago) y tp-designer (Valeria)
 
 ---
 
 ## 1. Resumen ejecutivo
 
-El archivo original generado por el agente tiene **4 defectos estructurales** que hacen imposible su uso directo en Moodle. El archivo arreglado (corregido manualmente) funciona pero introduce **2 bugs menores** propios del proceso manual. Todos los defectos tienen causa raíz en **instrucciones incompletas en el workflow y en los agentes**, no en la lógica de negocio.
+El análisis original (2026-05-28) identificó **4 defectos estructurales** en la generación GIFT. La sesión de debug del 2026-06-04 con el archivo `tp-quiz_erores.gift` (TP 10 — Tipos de Datos, 30 preguntas) descubrió **3 defectos adicionales** distintos a los originales: un escaping incompleto en declaraciones multi-línea (D5), caracteres Unicode fuera del rango latin-1 que generan errores PostgreSQL (D6), y llamadas JavaScript que activan el WAF de Apache bloqueando con HTTP 403 Forbidden (D7). Los 7 defectos totales tienen causa raíz en instrucciones incompletas en los agentes, no en la lógica de negocio.
 
 ---
 
@@ -183,3 +183,135 @@ Para validar que las correcciones funcionan, el próximo ciclo de examen debe pr
 3. Todo cierre de tag es `</code></pre>` → verificar con `grep '</pre></code>'` (debe dar 0)
 4. Todo feedback termina con `.`, `?` o `!` → revisión manual de 5 preguntas muestra
 5. El GIFT pasa la validación completa del gift-validator sin errores del Grupo A
+
+---
+
+## 8. Defectos adicionales — Sesión 2026-06-04 (tp-quiz_erores.gift, TP 10)
+
+### Defecto D5 — Cierre `}` sin escapar al final de declaraciones multi-línea
+
+| | Evidencia |
+|---|---|
+| **Archivo** | `tp-quiz_erores.gift`, pregunta `TP10-Q25-polimorfismo-subtipo` |
+| **Bug** | `class Circulo implements Forma \{ area() \{ return Math.PI * this.radio**2 \} }` — el `}` final de la línea no tiene backslash |
+| **Síntoma** | Moodle parsea el `}` sin escapar como cierre del bloque de respuestas de Q25, creando una pregunta espuria adicional. El docente vio "una pregunta más de la esperada" al importar. |
+| **Fix** | `\} }` → `\} \}` en cada línea que cierra clase o método con doble llave |
+
+**Causa raíz:** La regla de escaping decía "escapar `{` y `}`" pero no especificaba que **cada** carácter individualmente, incluyendo el cierre de cuerpos de clase/función al final de línea, debe escaparse. El LLM escapaba el `{` de apertura y el `}` interior pero omitía el `}` final por considerarlo "cierre de bloque de código" en lugar de texto GIFT.
+
+---
+
+### Defecto D6 — Em dash (U+2014) genera error PostgreSQL
+
+| | Evidencia |
+|---|---|
+| **Archivo** | `tp-quiz_erores.gift`, 39 líneas con `—` (em dash) |
+| **Error Moodle** | `ERROR: secuencia de bytes no válida para codificación «UTF8»: 0xe2 0x80 — CONTEXT: INSERT INTO mdl_question ... generalfeedback => 'Tabla de Cardelli: Ad-hoc (sobrecarga, coerción) \uFFFD'` |
+| **Pregunta afectada** | `TP10-Q25` (el error del feedback `Tabla de Cardelli: Ad-hoc ... —` era el que el error citaba) |
+| **Fix** | Reemplazar todos los `—`/`–` por `--` vía `String.Replace` con bytes exactos |
+
+**Causa raíz:** El LLM genera em dashes (U+2014) naturalmente al redactar en español. La regla anterior solo decía "UTF-8 sin BOM" sin mencionar que caracteres Unicode del plano BMP fuera de latin-1 pueden fallar en el pipeline PostgreSQL del servidor Moodle específico (campus.untdf.edu.ar).
+
+**Fix técnico aplicado:**
+```powershell
+$text=[IO.File]::ReadAllText($path,[Text.Encoding]::UTF8)
+$fixed=$text.Replace([char]0x2014,'--').Replace([char]0x2013,'--')
+[IO.File]::WriteAllText($path,$fixed,(New-Object Text.UTF8Encoding($false)))
+```
+
+---
+
+### Defecto D7 — `console.log()` activa WAF de Apache (HTTP 403 Forbidden)
+
+| | Evidencia |
+|---|---|
+| **Archivo** | `tp-quiz_erores.gift`, preguntas Q02, Q03, Q08, Q13, Q19, Q29 |
+| **Error Moodle** | HTTP 403 Forbidden de Apache/2.4.65 al navegar a `processattempt.php?cmid=15056` al intentar previsualizar Q02 |
+| **Mecanismo** | Moodle incluye el texto de todas las preguntas del intento como campos ocultos en el POST a `processattempt.php` para verificar integridad de secuencia. ModSecurity detecta `console.log(` en el body y bloquea con regla XSS. |
+| **Preguntas afectadas** | Q02: `console.log(0.1 + 0.2 === 0.3)`, Q08: `console.log(x === y)`, Q13: `console.log(original[0], original[1].x)`, Q19: `console.log(result)`, Q29: `console.log(u.name.toUpperCase())`, Q03 (comentado): `// console.log(n + m)` |
+| **Fix** | Reemplazar el wrapper por la expresión sola con comentario explicativo: `expr  // ¿qué retorna?` |
+
+**Causa raíz:** No existía ninguna regla que prohibiera el uso de `console.log()` en bloques de código GIFT. Es un patrón pedagógicamente natural para preguntas de "¿qué imprime?" pero incompatible con WAF de Apache/ModSecurity en servidores universitarios con configuración de seguridad estándar.
+
+---
+
+## 9. Impacto en artefactos — Sesión 2026-06-04
+
+| Artefacto | Tipo | Cambio |
+|-----------|------|--------|
+| `revisar/quiz/tp-quiz_erores.gift` | Archivo corregido | D5: `\} }` → `\} \}` en Q25; D6: 39 em dashes → `--`; D7: 6 `console.log()` eliminados |
+| `salida/edu-standalone/_edu/agents/tp-designer.md` | Agent | Regla GIFT ESCAPING: agrega nota sobre `\}` al final de línea; Regla GIFT ENCODING reescrita (ASCII-only explícito); Regla GIFT WAF/MOODLE nueva |
+| `salida/edu-standalone/_edu/tasks/gift-validator.md` | Task | Nuevos GRUPO D (encoding, 3 reglas: D1-D3) y GRUPO E (WAF, 2 reglas: E1-E2); algoritmo actualizado con escaneo global D/E; autofix ampliado |
+
+---
+
+## 10. Checklist de validación ampliado
+
+```
+# Validación GIFT antes de importar a Moodle — checklist completo
+grep -c '\[markdown\]'   archivo.gift   # debe ser >= N preguntas con código
+grep -c '\[CÓDIGO'        archivo.gift   # debe ser 0
+grep -c '</pre></code>'   archivo.gift   # debe ser 0 (orden incorrecto)
+grep -c 'console\.log'   archivo.gift   # debe ser 0
+grep -c 'alert('          archivo.gift   # debe ser 0
+python3 -c "
+import sys, re
+t = open(sys.argv[1]).read()
+# em/en dashes
+bad = re.findall(r'[\u2013\u2014]', t)
+print(f'Em/en dashes: {len(bad)}')
+# unescaped } at end of line (after escaped content)
+lines = [(i+1,l) for i,l in enumerate(t.splitlines()) if re.search(r'\\\\}[^\\\\].*\}', l)]
+print(f'Possible unescaped closing braces: {len(lines)}')
+" archivo.gift
+```
+
+---
+
+## 11. OWASP ModSecurity CRS PL2 -- patrones adicionales bloqueados
+
+**Contexto:** Apache/ModSecurity con OWASP CRS a Paranoia Level 2 (PL2) bloquea más patrones que el
+PL1 usado para `console.log`. En campus.untdf.edu.ar se detectó bloqueo HTTP 403 en
+`processattempt.php` originado por texto de preguntas en la RESPUESTA AJAX que Moodle devuelve
+al navegar entre preguntas (el quiz usa AJAX en Moodle 4.x/5.x -- la respuesta a `processattempt.php`
+incluye el HTML de la siguiente pregunta).
+
+**Reglas CRS PL2 confirmadas:**
+
+| Regla CRS | Patrón bloqueado | Fix aplicado |
+|-----------|-----------------|--------------|
+| 941200 | `toUpperCase`, `toLowerCase` (word boundary) | → `trim()` o descripción |
+| 941210 | `Math.abs(`, `Math.sqrt(`, `Math.random(`, otros `Math.*` | → literal `3.14159` o notación matemática |
+| 941210 | `console.log(`, `alert(`, `eval(` | → expresión con comentario (fix previo) |
+| custom? | `toFixed(`, `reduce(` | → `toPrecision()`, bucle `for...of` |
+
+**False positive identificado:**
+- Patrón `String\.` (case-insensitive) también matchea la palabra "string." al final de una oración
+  en inglés (ej. "El sistema de tipos no verifica la longitud de un string."). NO es WAF peligroso.
+  Verificar con contexto antes de corregir.
+
+**Mecanismo WAF confirmado:**
+Moodle quiz en modo AJAX: `processattempt.php` recibe la respuesta del estudiante (POST con
+integer para MCQ) y devuelve HTML con la siguiente pregunta. ModSecurity escanea el CUERPO de la
+RESPUESTA. Si ese HTML contiene patrones CRS PL2, devuelve HTTP 403 al JavaScript del browser.
+El quiz se rompe al navegar de Q(n) a Q(n+1) cuando Q(n+1) contiene un patrón bloqueado.
+
+**Estrategia de fix (en orden de preferencia):**
+1. En feedback/texto de opciones: reescribir sin la llamada al método (usar notación matemática,
+   descripción, etc.)
+2. En bloques de código: cambiar el método por un equivalente seguro que preserve el concepto:
+   - `toUpperCase()` → `trim()` (misma categoría: transformación de string, sin patrón WAF)
+   - `toFixed(N)` → `toPrecision(N+2)` (misma categoría: formato numérico)
+   - `Math.PI` → `3.14159` (mismo resultado, sin prefijo `Math.`)
+   - `array.reduce(fn, init)` → bucle `for...of` equivalente
+3. Alternativa para `toUpperCase` en TypeScript: `toLocaleUpperCase()` (no matcheado por regla 941200)
+4. Última opción: solicitar exclusión WAF al admin del servidor para paths de Moodle quiz.
+
+**Fixes aplicados en tp-quiz_erores.gift:**
+- Q02 feedback: `Math.abs(a - b) < Number.EPSILON` → `|a - b| < Number.EPSILON`
+- Q14 código: `r.value.toFixed(2)` → `r.value.toPrecision(4)`; `r.msg.toUpperCase()` → `r.msg.trim()`
+- Q19 código+opciones: `user.email?.toUpperCase()` → `user.email?.trim()` (3 ocurrencias)
+- Q23 código: `Math.PI * a * a` → `3.14159 * a * a`
+- Q25 código: `Math.PI * this.radio**2` → `3.14159 * this.radio * this.radio`
+- Q25 código: `formas.reduce((s, f) => s + f.area(), 0)` → bucle `for...of` con variable `s`
+- Q29 código+opciones: `u.name.toUpperCase()` → `u.name.trim()` (3 ocurrencias + correct answer)

@@ -1,0 +1,419 @@
+// TP 10: Tipos de Datos y Sistemas de Tipos
+// Cubre Módulo VII completo -- Sebesta Cap. 6 + Louden Cap. 8 + Gabbrielli Cap. 8
+// Importar en Moodle 5: Banco de preguntas > Importar > Formato GIFT
+// Encoding obligatorio: UTF-8 sin BOM
+// Generado por Valeria (tp-designer) -- 2026-06-03
+// Nivel: 4to año universitario -- 30 preguntas teórico-prácticas
+
+$CATEGORY: TP/10-tipos-de-datos
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BLOQUE 1 -- Tipos Primitivos y Ordinales (Q01--Q07)
+// ─────────────────────────────────────────────────────────────────────────────
+
+::TP10-Q01-tipo-definicion::[markdown]Según Sebesta, la definición canónica de un **tipo de dato** es: {
+=Una colección de valores y un conjunto de operaciones predefinidas sobre esos valores#Correcto. Esta es la definición precisa de Sebesta. Un tipo define tanto el universo de valores válidos como las operaciones permitidas sobre ellos.
+~Una etiqueta que indica el tamaño en bytes que ocupa una variable en memoria#Incorrecto. El tamaño es una consecuencia de la implementación, no la definición del tipo. El tipo define valores y operaciones.
+~Un mecanismo del compilador para reservar espacio en el stack de ejecución#Incorrecto. La reserva de memoria en el stack es una consecuencia del binding de almacenamiento, no la definición del tipo de dato en sí.
+~Una restricción que impide que dos variables compartan la misma dirección de memoria#Incorrecto. Eso describe parcialmente el aislamiento de variables, no el concepto de tipo de dato.
+#### Las tres razones por las que los lenguajes incluyen tipos son legibilidad, detección de errores y reusabilidad. La definición de "colección de valores + operaciones" es el punto de partida de todo el Módulo VII.
+}
+
+::TP10-Q02-number-ts::[markdown]En TypeScript, ¿cuál es la representación interna del tipo `number` y cuál es su consecuencia directa?
+<pre><code>0.1 + 0.2 \=\=\= 0.3  // ¿qué retorna: true o false?
+</code></pre> {
+=`false`. `number` es siempre IEEE 754 double de 64 bits; 0.1 y 0.2 no tienen representación exacta en binario y su suma acumula error.#Correcto. TypeScript hereda de JavaScript: `number` es siempre un IEEE 754 de 64 bits. No existe tipo `float` de 32 bits ni tipo `int` separado. La representación binaria de 0.1 y 0.2 genera un resultado de 0.30000000000000004.
+~`true`. TypeScript normaliza los resultados de operaciones de punto flotante antes de comparar.#Incorrecto. TypeScript no hace ninguna normalización. La comparación `\=\=\=` compara el bit pattern exacto del resultado, que difiere de 0.3.
+~`true`. El tipo `number` de TypeScript es decimal de precisión arbitraria, sin error de representación.#Incorrecto. TypeScript `number` no es decimal de precisión arbitraria. Para eso existe `decimal.js` como librería externa. El tipo nativo es IEEE 754.
+~Error de compilación. TypeScript detecta operaciones de punto flotante imprecisas en compilación.#Incorrecto. TypeScript no puede detectar imprecisiones de punto flotante en compilación; eso es un comportamiento de runtime heredado de la representación IEEE 754.
+#### Para comparar floats correctamente usar epsilon: verificar que `|a - b| < Number.EPSILON`. Para finanzas usar `decimal.js`. `Number.MAX_SAFE_INTEGER` \= 2^53 - 1.
+}
+
+::TP10-Q03-bigint::[markdown]¿Para qué se usa el tipo `bigint` en TypeScript y cuál es su limitación más importante?
+<pre><code>const n\: bigint \= 9007199254740991n + 1n;
+const m\: number \= 100;
+// n + m  // ¿compila esta suma?
+</code></pre> {
+=`bigint` sirve para enteros de precisión arbitraria. No compila porque `bigint` y `number` no son compatibles operacionalmente en TypeScript.#Correcto. `bigint` representa enteros más grandes que `Number.MAX_SAFE_INTEGER` sin pérdida de precisión. Sin embargo, TypeScript rechaza mezclar `bigint` y `number` en operaciones aritméticas; hay que hacer la conversión explícita.
+~`bigint` es equivalente a `number` con más precisión; la suma `n + m` compila sin problemas.#Incorrecto. `bigint` y `number` son tipos distintos en TypeScript. La suma entre ellos es un error de compilación, no una conversión automática.
+~`bigint` solo sirve para criptografía y es un tipo experimental que puede eliminarse en futuras versiones.#Incorrecto. `bigint` es parte del estándar ES2020 y está completamente soportado en TypeScript. No es experimental ni solo para criptografía.
+~`bigint` es un alias de `number` cuando el valor supera `Number.MAX_SAFE_INTEGER`; la conversión es automática.#Incorrecto. TypeScript no hace ninguna conversión automática entre `number` y `bigint`. Son tipos distintos que el programador debe manejar explícitamente.
+#### `bigint` usa literales terminados en `n`: `42n`, `9007199254740992n`. Conversión explícita: `BigInt(100)` o `Number(n)` (con posible pérdida de precisión).
+}
+
+::TP10-Q04-boolean-char::[markdown]¿Por qué en TypeScript **no existe el tipo `char`** y cuál es la consecuencia práctica? {
+=TypeScript heredó de JavaScript donde los caracteres son strings de longitud 1. La consecuencia es que `"hola"[0]` retorna el string `"h"`, no un valor de tipo `char`.#Correcto. TypeScript no tiene tipo `char` como Kotlin (`Char`) o C (`char`). Un carácter se representa siempre como `string` de longitud 1. Esto simplifica el modelo pero puede sorprender a programadores de Java o C.
+~TypeScript sí tiene `char` como alias de `string` cuando la longitud es 1; se verifica en runtime.#Incorrecto. No existe ningún tipo `char` en TypeScript, ni siquiera como alias. El sistema de tipos no verifica la longitud de un string.
+~TypeScript eliminó `char` porque los caracteres Unicode no caben en un byte y el tipo sería confuso.#Incorrecto. Si bien Unicode es una razón de diseño válida, la razón real es la herencia de JavaScript donde todo es `string`. Kotlin tiene `Char` de UTF-16 sin ese problema.
+~En TypeScript, `char` existe pero es parte de la librería estándar, no un tipo primitivo.#Incorrecto. No existe ninguna clase o tipo `char` en TypeScript ni en su librería estándar.
+#### Contraste: Kotlin tiene `Char` de UTF-16 real, C tiene `char` de un byte (ASCII-compatible). TypeScript usa `string` para todo. Para iterar caracteres: `for (const c of "hola")` -- respeta code points Unicode.
+}
+
+::TP10-Q05-enum-ts::[markdown]¿Cuál de las siguientes afirmaciones describe correctamente una **debilidad de los numeric enums** de TypeScript?
+<pre><code>enum Direction \{ Up, Down, Left, Right \}
+function move(dir\: Direction)\: void \{ /* ... */ \}
+move(42); // ¿compila?
+</code></pre> {
+=Sí compila. TypeScript acepta el número literal `42` donde se espera `Direction` porque los numeric enums son compatibles con `number`. Es una debilidad de type safety.#Correcto. Los numeric enums de TypeScript tienen una debilidad conocida: el compilador acepta pasar el valor numérico subyacente directamente. `move(0)` o `move(42)` compilan sin error. Los string enums evitan esto porque no se puede pasar un string arbitrario donde se espera el enum.
+~No compila. TypeScript rechaza `42` porque no es un miembro declarado de `Direction`.#Incorrecto. Esta sería la respuesta correcta para string enums, pero los numeric enums de TypeScript tienen compatibilidad bidireccional con `number`. `move(42)` compila.
+~No compila. TypeScript detecta en compilación que `42` está fuera del rango 0--3 de `Direction`.#Incorrecto. TypeScript no verifica rangos de numeric enums. Solo verifica si el tipo es `number`, que `42` sí es.
+~Sí compila, y es el comportamiento correcto y esperado de los enums en TypeScript.#Incorrecto. Aunque compila, TypeScript mismo recomienda los string enums para mayor seguridad precisamente para evitar este comportamiento.
+#### Solución: usar `const enum` para APIs internas (inlining sin objeto runtime) o string enum (`enum Status \{ Active \= 'active' \}`) para APIs externas y mejor type safety.
+}
+
+::TP10-Q06-equiv-estructural::[markdown]TypeScript usa equivalencia **estructural** de tipos. ¿Qué problema concreto genera esto?
+<pre><code>type UserId \= string;
+type Email \= string;
+function enviarEmail(dest\: Email, msg\: string)\: void \{ /* ... */ \}
+declare const uid\: UserId;
+enviarEmail(uid, "Hola"); // ¿compila?
+</code></pre> {
+=Sí compila. TypeScript trata `UserId` y `Email` como el mismo tipo porque ambos son alias de `string`. El compilador no puede detectar la confusión semántica.#Correcto. La equivalencia estructural de TypeScript significa que dos type aliases del mismo tipo base son intercambiables. El compilador no puede distinguir un UserId de un Email aunque semánticamente son conceptos distintos. Esto es un bug latente.
+~No compila. TypeScript distingue `UserId` de `Email` por su nombre, aunque ambos sean alias de `string`.#Incorrecto. TypeScript usa equivalencia estructural, no nominal. Los aliases de tipos no crean tipos nuevos -- son simples sinónimos. Para distinción nominal se necesitan branded types.
+~Compila pero con warning. TypeScript detecta la confusión y la reporta como advertencia.#Incorrecto. TypeScript no genera ningún warning en este caso. El código compila limpiamente sin ningún diagnóstico.
+~No compila. TypeScript tiene un modo estricto que distingue type aliases semánticamente distintos.#Incorrecto. No existe tal modo en TypeScript. La distinción nominal requiere implementar branded types explícitamente.
+#### Solución con branded types: `type UserId \= string & \{ readonly _brand\: 'UserId' \}`. El `_brand` solo existe en el sistema de tipos, no en runtime. Así el compilador rechaza pasar un `Email` donde se espera `UserId`.
+}
+
+::TP10-Q07-subrango-ts::[markdown]Pascal tiene subrangos nativos: `type DiasLaborables = 1..5`. ¿Cómo simula TypeScript el mismo nivel de seguridad estática?
+<pre><code>type Day \= 1|2|3|4|5;
+const d\: Day \= 6; // ¿compila?
+</code></pre> {
+=No compila. TypeScript rechaza `6` porque no es miembro de la union literal `1|2|3|4|5`. Logra la misma seguridad estática que el subrango de Pascal.#Correcto. Aunque TypeScript no tiene sintaxis de subrangos como Pascal (`1..5`), las union literals de tipos numéricos literales logran el mismo efecto: el compilador rechaza valores fuera del conjunto. `const d: Day = 6` da error de tipo en compilación.
+~Compila con advertencia. TypeScript verifica subrangos en runtime pero no en compilación.#Incorrecto. TypeScript no tiene verificación de subrangos en runtime. La verificación ocurre en compilación con literal types y union literals.
+~Compila sin error. TypeScript no puede verificar valores numéricos en union literals.#Incorrecto. TypeScript sí verifica union literals de tipos numéricos en compilación. `const d: Day = 6` da error `Type '6' is not assignable to type 'Day'`.
+~No compila, pero porque `|` en TypeScript es solo para tipos objeto, no para literales numéricos.#Incorrecto. Las union literals de TypeScript funcionan perfectamente con literales numéricos, string literales, booleanos y cualquier combinación.
+#### Diferencia semántica: Pascal verifica en runtime si se sobrepasa el rango. TypeScript solo verifica en compilación -- en runtime `d` es un `number` ordinario. Para validación en runtime usar Zod: `z.union([z.literal(1), z.literal(2), ...])`.
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BLOQUE 2 -- Tipos de Agregación y Colecciones (Q08--Q14)
+// ─────────────────────────────────────────────────────────────────────────────
+
+::TP10-Q08-string-comparacion::[markdown]¿Por qué el siguiente código Java es un bug famoso y cómo lo resuelve TypeScript?
+<pre><code>// Java
+String a \= "hola";
+String b \= new String("hola");
+System.out.println(a \=\= b); // ¿qué imprime?
+// TypeScript
+const x \= "hola";
+const y \= "hola";
+x \=\=\= y;  // ¿qué retorna?
+</code></pre> {
+=Java imprime `false` (compara referencias, no contenido). TypeScript imprime `true` (compara por valor con `\=\=\=`).#Correcto. En Java, `\=\=` sobre objetos `String` compara referencias (direcciones de memoria). `a` y `b` son objetos distintos en heap aunque tengan el mismo contenido. En TypeScript, `\=\=\=` sobre primitivos `string` compara el valor directamente.
+~Ambos imprimen `true`. Tanto Java como TypeScript comparan strings por valor cuando se usa `\=\=` o `\=\=\=`.#Incorrecto. Java con `\=\=` compara referencias, no contenido. `new String("hola")` crea un objeto nuevo en heap cuya referencia es distinta a la del literal `"hola"` del string pool.
+~Java imprime `true` porque el compilador detecta que los valores son iguales y usa el string pool. TypeScript imprime `false` porque usa comparación por referencia.#Incorrecto. Java imprime `false` para `new String("hola")` porque `new` siempre crea un objeto nuevo fuera del string pool. TypeScript imprime `true`.
+~Java da `NullPointerException` porque `b` es `null`. TypeScript imprime `false`.#Incorrecto. `new String("hola")` nunca produce null; crea un objeto String inicializado. Java imprime `false`.
+#### Para comparar strings en Java usar `.equals()`. En TypeScript, `\=\=\=` siempre compara strings por valor porque son primitivos inmutables. `new String("hola")` en TypeScript crea un objeto wrapper raro -- evitar siempre.
+}
+
+::TP10-Q09-arrays-taxonomia::[markdown]Según la taxonomía de Sebesta, ¿cuál de las siguientes describe correctamente un array de tipo **heap fijo** en TypeScript? {
+=`new Array<number>(5).fill(0)` -- el tamaño se decide en runtime pero no puede cambiar después de creado.#Correcto. El heap fijo (fixed heap-dynamic) tiene su tamaño determinado en runtime, no en compilación, y luego permanece fijo. Se aloja en el heap con gestión automática por GC. `new Array<number>(5)` crea un array de 5 elementos cuyo tamaño no crece ni achica.
+~`const a \= [1, 2, 3]` -- el compilador conoce el tamaño exacto y lo aloja en el stack.#Incorrecto. Los arrays de TypeScript son siempre de heap flexible (heap-dynamic). El compilador no los aloja en el stack como C haría con `int a[3]`.
+~`const a\: [number, number, number] \= [1, 2, 3]` -- es estático porque el tipo especifica exactamente 3 elementos.#Incorrecto. Las tuplas tipadas de TypeScript son verificadas en compilación, pero siguen siendo objetos de heap en runtime. No son arrays estáticos en el sentido de memoria estática de C.
+~`let a\: number[] \= []` -- el rango se fija en la primera asignación y no puede cambiar.#Incorrecto. Esta es la declaración de un array de heap flexible (el más común en TypeScript). El array puede crecer con `push()`, `unshift()`, etc.
+#### Clasificación de Sebesta: (1) Estático: `int a[10]` en C global -- compilación, memoria estática. (2) Semi-dinámico: VLA en C99. (3) Heap fijo: tamaño en runtime, luego fijo. (4) Heap flexible: TypeScript `T[]` -- puede crecer y achicarse.
+}
+
+::TP10-Q10-row-major::[markdown]¿Por qué el orden de iteración sobre un array multidimensional **importa para el rendimiento** en lenguajes con row-major storage como TypeScript/JavaScript?
+<pre><code>const M\: number[][] \= /* matriz 1000×1000 */;
+// Versión A -- iterar por filas
+for (let i \= 0; i < 1000; i++)
+  for (let j \= 0; j < 1000; j++) M[i][j];
+// Versión B -- iterar por columnas
+for (let j \= 0; j < 1000; j++)
+  for (let i \= 0; i < 1000; i++) M[i][j];
+</code></pre> {
+=La versión A es más rápida porque accede a elementos contiguos en memoria (row-major), maximizando la efectividad de la caché de CPU.#Correcto. En row-major, los elementos de una fila están contiguos en memoria. La versión A accede secuencialmente → los datos están en caché. La versión B salta de fila en fila → muchos cache misses → puede ser 10× más lento en matrices grandes.
+~Ambas versiones son igual de rápidas porque el motor V8 detecta el patrón y optimiza el acceso.#Incorrecto. V8 no reordena el acceso a memoria para optimizar cache locality de bucles escritos por el programador. El orden de acceso determina los cache misses reales.
+~La versión B es más rápida porque acceder por columnas permite vectorización SIMD automática.#Incorrecto. La vectorización SIMD requiere acceso contiguo en memoria. Column-major sobre un array row-major genera acceso no contiguo, lo opuesto a lo que SIMD necesita.
+~No hay diferencia para JavaScript/TypeScript porque los arrays son objetos de heap con acceso por referencia, no contiguo.#Incorrecto. Los motores modernos como V8 optimizan los arrays tipados con almacenamiento contiguo similar al de lenguajes de bajo nivel cuando el tipo es uniforme.
+#### Fortran y MATLAB usan column-major. C, Java, TypeScript usan row-major. La fórmula de acceso: `base + (i × cols + j) × size`. Para matrices grandes, la cache locality puede importar más que la complejidad algorítmica.
+}
+
+::TP10-Q11-jagged-vs-rectangular::[markdown]En el siguiente código TypeScript, ¿qué tipo de array multidimensional se crea y cuál es su característica distintiva?
+<pre><code>const matrix\: number[][] \= [
+  [1, 2, 3],
+  [4, 5],       // solo 2 elementos
+  [6, 7, 8, 9]  // 4 elementos
+];
+</code></pre> {
+=Un array jagged (dentado): cada fila puede tener distinta longitud porque `number[][]` es un array de referencias a arrays.#Correcto. TypeScript (como Java) implementa los arrays multidimensionales como arrays de referencias a arrays. Esto permite filas de distinta longitud (jagged) pero añade una indirección extra comparado con los arrays rectangulares de C# o Fortran.
+~Un array rectangular: TypeScript verifica en compilación que todas las filas tengan la misma longitud.#Incorrecto. TypeScript no verifica ni en compilación ni en runtime que todas las filas de un `number[][]` tengan la misma longitud. El tipo `number[][]` solo dice "array de arrays de numbers".
+~Un error de compilación: TypeScript no permite arrays con filas de distinto tamaño.#Incorrecto. TypeScript permite perfectamente arrays jagged. No hay ningún error de tipo ni advertencia al crear filas de distinto tamaño.
+~Un array con padding automático: TypeScript rellena con `undefined` las filas más cortas hasta igualar la longitud máxima.#Incorrecto. TypeScript nunca hace padding automático. Las filas tienen exactamente los elementos que el programador declaró.
+#### Arrays rectangulares (C#): `int[,] m \= new int[3,4]` -- todos los subarrays tienen la misma longitud garantizada. Arrays jagged (TypeScript/Java): indirección extra pero filas flexibles. Para matrices científicas con homogeneidad garantizada usar `Float64Array` o `TypedArray`.
+}
+
+::TP10-Q12-map-record::[markdown]¿Cuándo es preferible usar `Map<K, V>` en lugar de `Record<string, V>` en TypeScript? {
+=`Map<K, V>` es preferible cuando las claves no son strings (por ejemplo objetos, números o símbolos), o cuando el orden de inserción importa.#Correcto. `Record<string, V>` es un objeto JavaScript cuyas claves son solo strings (o symbols). `Map<K, V>` acepta claves de cualquier tipo, preserva el orden de inserción y tiene una API más explícita con `.get()`, `.set()`, `.has()`. Sebesta los llama "arrays asociativos -- colecciones no ordenadas indexadas por claves".
+~`Map<K, V>` es siempre preferible porque es más rápido que `Record` para cualquier tipo de clave.#Incorrecto. `Record` (objeto plano) puede ser más rápido para claves string con acceso frecuente por nombre literal. La elección depende del tipo de clave y el caso de uso.
+~`Record<string, V>` es preferible en todos los casos porque es la forma estándar de TypeScript de representar mapeos.#Incorrecto. `Record` tiene limitaciones: solo acepta claves string/symbol y no garantiza el orden de inserción en todas las implementaciones. Para claves no-string, `Map` es la única opción.
+~Son intercambiables; TypeScript genera el mismo código JavaScript para ambos.#Incorrecto. `Map` compila a una instancia de `Map` de JavaScript con su propia API. `Record` compila a un objeto literal `{}`. Son estructuras de datos distintas en runtime.
+#### Regla práctica: `Record<string, V>` para configuración y objetos JSON; `Map<K, V>` para claves no-string, claves dinámicas o cuando el tamaño cambia frecuentemente.
+}
+
+::TP10-Q13-shallow-copy-slice::[markdown]¿Qué imprime el siguiente código TypeScript y por qué?
+<pre><code>const original \= [1, \{ x\: 2 \}, 3];
+const copia \= [...original];
+copia[0] \= 99;
+copia[1].x \= 88;
+// ¿Qué valores tienen original[0] y original[1].x?
+</code></pre> {
+=`1` y `88`. El spread hace shallow copy: el número `1` es un primitivo copiado por valor, pero el objeto `\{ x\: 2 \}` es copiado por referencia, así que `copia[1]` y `original[1]` apuntan al mismo objeto.#Correcto. El operador spread `[...arr]` crea un array nuevo con los mismos elementos. Para primitivos (como `1`), copia el valor. Para objetos, copia la referencia. Por eso modificar `copia[0]` no afecta `original[0]`, pero modificar `copia[1].x` sí afecta `original[1].x`.
+~`99` y `88`. El spread crea una referencia al array original, por lo que todas las modificaciones afectan el original.#Incorrecto. El spread sí crea un array nuevo (no una referencia al mismo array), por eso `copia[0] \= 99` no afecta `original[0]`.
+~`1` y `2`. El spread hace deep copy de todos los elementos, incluyendo los objetos anidados.#Incorrecto. El spread hace shallow copy, no deep copy. Para deep copy usar `structuredClone(original)`.
+~`99` y `2`. El spread copia todos los primitivos por valor y todos los objetos también por valor.#Incorrecto. El spread no copia objetos por valor. Los objetos siempre se copian por referencia en JavaScript/TypeScript.
+#### Para deep copy en TypeScript moderno usar `structuredClone(original)` (ES2022, disponible en Node 17+ y browsers modernos). Alternativa: `JSON.parse(JSON.stringify(original))` -- pero no soporta `undefined`, `Date`, `Map`, etc.
+}
+
+::TP10-Q14-discriminated-union::[markdown]¿Qué ventaja fundamental ofrecen las **uniones discriminadas** de TypeScript sobre los `union` de C?
+<pre><code>// TypeScript
+type Result \= \{ kind\: 'ok'; value\: number \} | \{ kind\: 'err'; msg\: string \};
+function handle(r\: Result)\: string \{
+  switch (r.kind) \{
+    case 'ok'\:  return r.value.toPrecision(4); // ¿TypeScript sabe el tipo de r?
+    case 'err'\: return r.msg.trim();
+  \}
+\}
+</code></pre> {
+=Dentro de cada `case`, TypeScript hace narrowing automático: sabe que en `case 'ok'` el tipo de `r` es `\{ kind\: 'ok'; value\: number \}`. C no puede hacer esto -- el programador debe recordar qué campo es válido.#Correcto. El campo discriminante `kind` permite que TypeScript aplique type narrowing: en cada branch del switch conoce exactamente cuál de las variantes es activa y verifica que solo se accedan los campos de esa variante. C no tiene esta capacidad; acceder al campo incorrecto de un `union` es UB.
+~La ventaja es de rendimiento: las uniones discriminadas de TypeScript usan menos memoria porque no reservan espacio para todos los campos simultáneamente.#Incorrecto. Los objetos discriminados de TypeScript son objetos JavaScript regulares -- no comparten memoria como los `union` de C. La ventaja es de seguridad de tipos, no de uso de memoria.
+~La ventaja es de rendimiento: el `switch` sobre el campo `kind` compila a un jump table más eficiente que el de C.#Incorrecto. La ventaja es semántica y de type safety, no de rendimiento en el código generado.
+~No hay ventaja real; ambas formas son equivalentes en seguridad porque el programador siempre sabe qué variante es activa.#Incorrecto. En C, el programador puede acceder al campo incorrecto de un `union` sin que el compilador detecte el error. TypeScript lo previene en compilación.
+#### Para exhaustividad en TypeScript usar el `never` trick: `default\: const _\: never \= r`. Si se agrega una variante nueva y no se maneja en el switch, el compilador da error. Kotlin `sealed class` lo hace automáticamente en `when`.
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BLOQUE 3 -- Punteros, Null Safety y Tipos Recursivos (Q15--Q20)
+// ─────────────────────────────────────────────────────────────────────────────
+
+::TP10-Q15-dangling-pointer::[markdown]¿Cuál de los siguientes problemas de punteros es el que describe un **dangling pointer** (puntero colgante)?
+<pre><code>int* ptr \= malloc(sizeof(int));
+*ptr \= 42;
+free(ptr);
+*ptr \= 99; // ¿qué ocurre?
+</code></pre> {
+=`ptr` ahora apunta a memoria liberada. El acceso `*ptr \= 99` es comportamiento indefinido; el sistema operativo podría haber reasignado esa memoria a otro objeto.#Correcto. Después de `free(ptr)`, la dirección que contiene `ptr` fue devuelta al heap. El sistema puede reasignarla. Escribir en esa dirección corrompe silenciosamente otro objeto o produce un segfault. Este es el dangling pointer que Sebesta menciona como uno de los problemas fundamentales de los punteros.
+~El programa lanza una excepción de tipo `UseAfterFree` en runtime porque el runtime de C verifica los accesos a memoria liberada.#Incorrecto. C no tiene verificación de accesos en runtime. El comportamiento es indefinido, no una excepción controlada. Herramientas como Valgrind o AddressSanitizer pueden detectarlo, pero el lenguaje no.
+~`ptr` se convierte automáticamente en `NULL` después de `free()` en compiladores modernos de C.#Incorrecto. `free(ptr)` libera la memoria pero no modifica el valor del puntero. `ptr` sigue conteniendo la misma dirección -- ahora inválida. Para evitar el bug: `free(ptr); ptr \= NULL;`.
+~El compilador de C detecta en compilación que se usa un puntero después de `free()` y rechaza el código.#Incorrecto. Los compiladores de C no tienen análisis de flujo suficiente para detectar use-after-free en todos los casos. Clang y GCC tienen sanitizers opcionales, pero no es una verificación estándar de compilación.
+#### Los cinco problemas clásicos de Sebesta: dangling pointer, memory leak, double free, null dereference y buffer overflow. TypeScript/JavaScript eliminan los tres primeros con GC, pero null dereference subsiste (mitigado con `strictNullChecks`).
+}
+
+::TP10-Q16-gc-tipos::[markdown]Python usa reference counting y ciclos de recolección. ¿Por qué el reference counting **solo** no es suficiente?
+<pre><code>class Nodo:
+    def __init__(self):
+        self.siguiente \= None
+
+a \= Nodo()
+b \= Nodo()
+a.siguiente \= b  # a → b
+b.siguiente \= a  # b → a (ciclo)
+del a
+del b
+# ¿se liberan a y b?
+</code></pre> {
+=No se liberan con solo reference counting. Después de `del a` y `del b`, ambos objetos tienen contador 1 (por las referencias entre ellos), por lo que RC nunca llega a 0. Requiere el cycle detector de Python.#Correcto. El reference counting basa la liberación en que el contador llegue a 0. En un ciclo, aunque no haya referencias externas, los objetos se referencian mutuamente y el contador nunca llega a 0. Python incluye un detector de ciclos (`gc` module) adicional al RC para resolver esto.
+~Sí se liberan. Python convierte los ciclos en listas antes de aplicar RC para garantizar la liberación.#Incorrecto. Python no convierte ciclos en listas. El módulo `gc` ejecuta un algoritmo separado de detección de ciclos (tracing) para liberar este tipo de objetos.
+~Sí se liberan inmediatamente al ejecutar `del b`. Python detecta el ciclo en ese momento.#Incorrecto. Python no detecta ciclos de forma determinista en cada `del`. El cycle detector corre periódicamente y en ciertos umbrales, no necesariamente en el momento del `del`.
+~No se liberan, pero tampoco es un memory leak porque Python nunca libera objetos de larga vida.#Incorrecto. Python sí libera objetos cuando ya no son alcanzables. El punto es que RC solo no puede detectar objetos mutuamente referenciados sin referencia externa.
+#### Solución en Python: `import gc; gc.collect()` fuerza la recolección de ciclos. Swift usa `weak` references para romper ciclos manualmente. V8 (TypeScript) combina RC + mark-and-sweep generacional.
+}
+
+::TP10-Q17-referencia-vs-puntero::[markdown]Sebesta define: "Una referencia es un puntero constante que siempre se desreferencia implícitamente." ¿Cuál de las siguientes afirmaciones ilustra correctamente esta definición en TypeScript? {
+=En TypeScript, `const obj \= \{ x\: 1 \}` crea una referencia implícita al objeto. Pasarlo a una función permite mutarlo, pero no hay `*` explícito ni aritmética de punteros.#Correcto. TypeScript maneja referencias de forma implícita: el programador nunca ve la dirección de memoria, no puede hacer aritmética de punteros y la desreferencia es automática al acceder a `.x`. Es el modelo de "puntero constante implícitamente desreferenciado" de Sebesta.
+~En TypeScript, los objetos se pasan siempre por valor a las funciones, como en C con structs.#Incorrecto. Los objetos en TypeScript/JavaScript se pasan por referencia (se pasa la dirección del objeto, no una copia). Una función puede mutar el objeto recibido.
+~TypeScript permite la aritmética de punteros con el operador `+` sobre referencias.#Incorrecto. TypeScript no tiene ninguna operación de aritmética de punteros. Las referencias son opacas -- el programador no puede sumarles ni restarles bytes.
+~En TypeScript, `const obj` garantiza que el objeto es inmutable porque `const` prohíbe cualquier modificación.#Incorrecto. `const` solo prohíbe reasignar la variable (cambiar a qué apunta la referencia). No impide mutar las propiedades del objeto apuntado.
+#### Python sí expone direcciones con `id(obj)` porque CPython no mueve objetos. V8 mueve objetos durante la compactación del heap, así que exponer direcciones sería inseguro -- por eso TypeScript no lo permite.
+}
+
+::TP10-Q18-tipo-recursivo::[markdown]¿Por qué el siguiente tipo recursivo **es válido** en TypeScript pero su equivalente en C **requiere un puntero**?
+<pre><code>// TypeScript
+type Lista \= null | \{ valor\: number; siguiente\: Lista \};
+// C (equivalente)
+struct Nodo \{
+  int valor;
+  struct Nodo* siguiente; // ¿por qué con *?
+\};
+</code></pre> {
+=En C, sin el `*` el compilador calcularía un tamaño infinito: `struct Nodo` contendría otro `struct Nodo` completo, que contendría otro, etc. El puntero tiene tamaño fijo (4 u 8 bytes). En TypeScript, el campo `siguiente` ya es una referencia de tamaño fijo por defecto.#Correcto. En C, un struct debe tener tamaño determinado en tiempo de compilación. Sin el puntero, `Nodo` contendría otro `Nodo` completo → tamaño infinito → error del compilador. El puntero tiene tamaño conocido. En TypeScript, todas las propiedades de objeto son referencias implícitas de tamaño fijo, por lo que el tipo recursivo funciona directamente.
+~En C, el `*` es obligatorio por convención de estilo, no por razones técnicas. Sin `*` también compilaría.#Incorrecto. Sin el `*`, el compilador de C reporta error de tipo incompleto: no puede calcular el tamaño de una estructura que se contiene a sí misma directamente.
+~En TypeScript, `Lista` es un tipo anónimo que el motor aloja en el stack; por eso no necesita puntero.#Incorrecto. Los objetos en TypeScript siempre se alojan en el heap, nunca en el stack. El motivo es que todas las referencias son implícitamente de tamaño fijo, no que estén en el stack.
+~La diferencia es solo sintáctica; el compilador de TypeScript genera punteros internamente igual que C.#Incorrecto. La diferencia es semántica y estructural: en TypeScript el programador nunca maneja punteros explícitos; el GC gestiona la memoria automáticamente.
+#### Los tipos recursivos en TypeScript son naturales para árboles y listas. `type BinaryTree<T> \= null | \{ value\: T; left\: BinaryTree<T>; right\: BinaryTree<T> \}`. La función que lo procesa tiene la misma estructura recursiva.
+}
+
+::TP10-Q19-null-safety-operadores::[markdown]¿Qué retorna la siguiente expresión de TypeScript con `strictNullChecks` activado?
+<pre><code>const user\: \{ email\: string | null \} \= \{ email\: null \};
+const result \= user.email?.trim() ?? "sin email";
+// ¿Qué contiene result?
+</code></pre> {
+=`"sin email"`. `user.email` es `null`, por lo que `?.` retorna `undefined`. El operador `??` devuelve el operando derecho cuando el izquierdo es `null` o `undefined`.#Correcto. El optional chaining `?.` evalúa la expresión hasta el primer `null`/`undefined` y retorna `undefined` sin lanzar error. Luego `??` (nullish coalescing) detecta que el resultado es `undefined` y retorna `"sin email"`.
+~`null`. `user.email?.trim()` retorna `null` cuando `email` es `null`, y `??` no cambia `null`.#Incorrecto. `?.` retorna `undefined` (no `null`) cuando encuentra un `null` en la cadena. El operador `??` activa con ambos: `null` y `undefined`.
+~`""`. TypeScript convierte `null` a string vacío cuando se usa `?.`.#Incorrecto. `?.` no convierte nada; simplemente cortocircuita y retorna `undefined`. No hay conversión a string vacío.
+~Error en runtime: `cannot read properties of null (reading 'trim')`.#Incorrecto. Ese error ocurriría si se usara `user.email.trim()` sin el `?.`. El optional chaining previene exactamente ese error.
+#### Los tres operadores de null safety: `?.` (short-circuit), `??` (default value para null/undefined), `!` (non-null assertion para cuando el programador sabe con certeza que no es null). Con `strictNullChecks`, el compilador fuerza el manejo de `null` en compilación.
+}
+
+::TP10-Q20-null-opt-in::[markdown]¿Por qué TypeScript hizo el null safety **opt-in** (con `strictNullChecks: true`) mientras Kotlin lo activó **por diseño** desde el inicio? {
+=TypeScript debía mantener retrocompatibilidad con millones de líneas de JavaScript existente. Activar null safety por defecto habría roto todo ese código. Kotlin no tenía ese legado -- fue diseñado desde cero.#Correcto. La decisión de diseño es pragmática: TypeScript es un superconjunto tipado de JavaScript. Cualquier proyecto JavaScript renombrado a `.ts` debe compilar inicialmente. Kotlin fue diseñado sin legado JavaScript, por lo que pudo tomar decisiones más estrictas desde el inicio.
+~TypeScript hace opt-in porque null safety tiene un costo de rendimiento significativo en runtime.#Incorrecto. El null safety de TypeScript es verificación en compilación; no tiene costo de rendimiento en runtime porque los tipos se borran al transpilar a JavaScript.
+~TypeScript hace opt-in porque los diseñadores consideraron que el null safety es una preferencia del programador, no una necesidad.#Incorrecto. Los diseñadores de TypeScript consideran `strictNullChecks` una buena práctica. La razón del opt-in es técnica (retrocompatibilidad), no filosófica.
+~Kotlin activa null safety por defecto porque JVM puede verificar tipos en runtime gratuitamente.#Incorrecto. El null safety de Kotlin es principalmente verificación en compilación. La JVM no provee null safety automático -- es una característica del compilador de Kotlin.
+#### Para activar null safety en TypeScript: `\{ "compilerOptions"\: \{ "strictNullChecks"\: true \} \}` en `tsconfig.json`, o simplemente `"strict"\: true` que activa todos los checks recomendados incluyendo `strictNullChecks`, `noImplicitAny`, `strictFunctionTypes`, etc.
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BLOQUE 4 -- Sistemas de Tipos: Polimorfismo y Strong Typing (Q21--Q28)
+// ─────────────────────────────────────────────────────────────────────────────
+
+::TP10-Q21-strong-typing-c::[markdown]Sebesta afirma que C **no es fuertemente tipado** a pesar de ser un lenguaje estaticamente tipado. ¿Cuál de las siguientes es la razón correcta? {
+=C tiene `void*` (puntero sin tipo que puede castearse a cualquier puntero) y `union` sin discriminación. El compilador no puede garantizar que todos los errores de tipo sean detectados.#Correcto. La definición de Sebesta de fuertemente tipado es: "todos los errores de tipo son siempre detectados". C falla en esto por dos mecanismos: `void*` permite burlar el sistema de tipos con casts, y los `union` sin discriminación permiten leer el campo incorrecto sin detección.
+~C no es fuertemente tipado porque permite conversiones implícitas entre `int`, `float` y `double`.#Incorrecto. Las coerciones implícitas (widening) están presentes en muchos lenguajes y no son la razón principal por la que C no es fuertemente tipado. Haskell, por ejemplo, no permite coerciones implícitas y es el ejemplo más fuertemente tipado.
+~C no es fuertemente tipado porque usa tipado dinámico en algunas expresiones.#Incorrecto. C es un lenguaje estáticamente tipado. No usa tipado dinámico en ninguna parte del lenguaje estándar.
+~C no es fuertemente tipado porque los arrays decaen a punteros, perdiendo la información de tamaño.#Incorrecto. El decay de arrays a punteros es una particularidad de C que complica el razonamiento, pero la razón principal de que C no sea fuertemente tipado son los `void*` y los `union` no discriminados.
+#### Escala de Sebesta: Haskell y Ada son los más fuertemente tipados. C/C++ no lo son. TypeScript es fuertemente tipado en compilación pero no en runtime (type erasure + `as any`). Kotlin es fuertemente tipado en compilación y en runtime (JVM verifica tipos).
+}
+
+::TP10-Q22-type-erasure::[markdown]TypeScript transpila a JavaScript y aplica **type erasure**. ¿Cuál de las siguientes afirmaciones sobre las implicaciones de runtime es correcta? {
+=En runtime, el código JavaScript no tiene información de tipos TypeScript. Un cast `as T` que TypeScript acepta puede fallar silenciosamente en runtime si el objeto no es realmente de tipo `T`.#Correcto. Type erasure significa que todos los tipos se eliminan al transpilar. En runtime solo existe JavaScript. Un `obj as User` le dice al compilador de TypeScript "confía, este es un User", pero si en runtime es otro objeto, no hay ninguna verificación -- el error puede aparecer más tarde como un acceso a propiedad inexistente.
+~TypeScript incluye verificación de tipos en runtime usando los tipos del archivo `.d.ts` generado.#Incorrecto. Los archivos `.d.ts` son solo para el compilador TypeScript, no son ejecutados. En runtime existe solo el JavaScript compilado sin tipos.
+~El type erasure solo afecta a los generics; los tipos primitivos como `string` y `number` son verificados en runtime.#Incorrecto. `string` y `number` de JavaScript son tipos de runtime (hay `typeof`), pero los tipos de TypeScript como interfaces, type aliases y generics se borran completamente. El erasure afecta a toda la información de tipos TypeScript.
+~El type erasure es una limitación de TypeScript que fue corregida en la versión 5.0 con el modo de verificación en runtime.#Incorrecto. No existe tal modo en TypeScript 5.x. El type erasure es una característica de diseño intencional para mantener compatibilidad con el runtime de JavaScript.
+#### Para verificación en runtime usar librerías como Zod (`z.parse()`) o io-ts. Patrón común: parsear datos externos (APIs, JSON) con Zod y confiar en el compilador para el código interno.
+}
+
+::TP10-Q23-polimorfismo-ad-hoc::[markdown]En TypeScript, la sobrecarga de funciones es un ejemplo de **polimorfismo ad-hoc**. ¿Qué la distingue del polimorfismo paramétrico (generics)?
+<pre><code>// Sobrecarga (ad-hoc)
+function area(r\: number)\: number;
+function area(b\: number, h\: number)\: number;
+function area(a\: number, b?\: number)\: number \{
+  return b \=\=\= undefined ? 3.14159 * a * a \: a * b;
+\}
+// Genérica (paramétrica)
+function primero<T>(lista\: T[])\: T \{ return lista[0]; \}
+</code></pre> {
+=La sobrecarga es ad-hoc porque son múltiples funciones distintas unidas bajo un nombre; el binding es estático (compilación). Los generics son paramétricos: una sola función que funciona genuinamente para cualquier tipo T.#Correcto. Strachey (1967) define ad-hoc como "apariencia de uniformidad": `area(5)` y `area(3, 4)` llaman a código diferente aunque parezcan llamar a la misma función. Los generics son "uniformidad real": `primero` tiene exactamente una implementación que funciona para cualquier T.
+~Son equivalentes; TypeScript compila ambos al mismo JavaScript y la distinción es solo teórica.#Incorrecto. Son mecanismos fundamentalmente distintos. La sobrecarga elige implementación en compilación según los tipos de argumentos. Los generics tienen una implementación con el tipo parametrizado.
+~La diferencia es de rendimiento: los generics son más lentos porque requieren dispatch dinámico en runtime.#Incorrecto. Los generics de TypeScript aplican type erasure -- en runtime no hay información del tipo T. No hay dispatch dinámico. El rendimiento es idéntico al código no tipado.
+~Los generics solo funcionan con objetos; la sobrecarga funciona con primitivos. Por eso son mecanismos distintos.#Incorrecto. Los generics de TypeScript funcionan perfectamente con primitivos: `primero<number>([1,2,3])` es válido.
+#### Taxonomía de Strachey/Cardelli: Ad-hoc (sobrecarga + coerción) vs. Universal (paramétrico + subtipo). La distinción no es de implementación sino de semántica: ¿hay una implementación o muchas?
+}
+
+::TP10-Q24-generics-constraint::[markdown]¿Qué garantiza el constraint `T extends \{ length\: number \}` en el siguiente generic de TypeScript?
+<pre><code>function longest<T extends \{ length\: number \}>(a\: T, b\: T)\: T \{
+  return a.length \>= b.length ? a \: b;
+\}
+longest([1, 2], [1, 2, 3]);      // ¿válido?
+longest("hola", "mundo");        // ¿válido?
+longest(10, 20);                 // ¿válido?
+</code></pre> {
+=Las dos primeras llamadas son válidas (arrays y strings tienen `.length`). La tercera da error de compilación porque `number` no tiene propiedad `length`.#Correcto. El constraint `T extends \{ length: number \}` significa que T debe tener al menos una propiedad `length` de tipo `number`. Arrays y strings la tienen. `number` no tiene `length`, por lo que `longest(10, 20)` es un error de tipo en compilación.
+~Las tres llamadas son válidas. TypeScript infiere automáticamente que `number` tiene `length` como `toString().length`.#Incorrecto. TypeScript no hace inferencias automáticas de ese tipo. El tipo `number` primitivo no tiene propiedad `length` directamente. El constraint se evalúa estructuralmente sobre el tipo, no sobre sus conversiones.
+~Las tres llamadas son inválidas porque `T extends \{ length: number \}` requiere que T sea una clase, no un tipo primitivo o literal.#Incorrecto. TypeScript usa equivalencia estructural en los constraints. `T extends \{ length: number \}` acepta cualquier tipo que tenga esa propiedad, incluyendo arrays, strings y objetos con `length`.
+~Solo la primera llamada es válida porque TypeScript infiere que T debe ser `number[]` por el primer argumento.#Incorrecto. TypeScript infiere el tipo T de forma independiente en cada llamada. La inferencia no se "fija" en la primera llamada para las siguientes.
+#### Los constraints en TypeScript son estructurales, no nominales. `T extends Comparable` en Java es nominal (T debe implementar la interfaz Comparable). En TypeScript, cualquier tipo con la estructura requerida cumple el constraint.
+}
+
+::TP10-Q25-polimorfismo-subtipo::[markdown]¿En qué se diferencia el **polimorfismo por subtipo** del polimorfismo paramétrico en términos del momento del binding?
+<pre><code>// Polimorfismo por subtipo
+interface Forma \{ area()\: number \}
+class Circulo implements Forma \{ area() \{ return 3.14159 * this.radio * this.radio \} \}
+class Rect implements Forma \{ area() \{ return this.b * this.h \} \}
+function total(formas\: Forma[])\: number \{
+  let s\: number \= 0;
+  for (const f of formas) s +\= f.area();
+  return s;
+\}
+</code></pre> {
+=El polimorfismo por subtipo hace dispatch dinámico en **runtime**: el motor llama a `Circulo.area` o `Rect.area` según el tipo real del objeto. El polimorfismo paramétrico hace binding en **compilación**: el compilador instancia T.#Correcto. Esta es la distinción fundamental. Con subtipo, el método a llamar se decide en runtime según el tipo real del objeto (virtual dispatch). Con paramétrico, el tipo T se resuelve en compilación y en runtime no hay overhead de dispatch.
+~Ambos tipos de polimorfismo hacen dispatch en compilación. La diferencia es solo si usan herencia o generics.#Incorrecto. El polimorfismo por subtipo usa virtual dispatch en runtime. Los generics de TypeScript hacen type erasure y no hay overhead de tipo en runtime.
+~El polimorfismo por subtipo es siempre más lento porque hace una búsqueda en tabla de símbolos en cada llamada a método.#Incorrecto. El virtual dispatch es extremadamente rápido en motores modernos como V8 (usa inline caching y hidden classes). La diferencia de rendimiento con los generics es generalmente insignificante en código de aplicación.
+~El polimorfismo paramétrico solo funciona con tipos definidos por el usuario; el subtipo funciona con cualquier tipo incluyendo primitivos.#Incorrecto. Los generics de TypeScript funcionan con cualquier tipo, incluyendo primitivos. El subtipo (polimorfismo de inclusión) requiere que los tipos tengan una relación de subtipado, lo que no aplica a los primitivos.
+#### Tabla de Cardelli: Ad-hoc (sobrecarga, coerción) -- binding estático. Universal paramétrico -- binding estático (type erasure). Universal subtipo -- binding dinámico (virtual dispatch). El overhead del virtual dispatch en V8 es ~1-2ns gracias a inline caches.
+}
+
+::TP10-Q26-branded-types::[markdown]Un equipo decide usar **branded types** en TypeScript para distinguir `UserId` de `Email`. ¿Cuál de las siguientes implementaciones es correcta?
+<pre><code>// Opción A
+type UserId \= string;
+type Email \= string;
+// Opción B
+type UserId \= string & \{ readonly _brand\: 'UserId' \};
+type Email  \= string & \{ readonly _brand\: 'Email'  \};
+declare function makeUserId(s\: string)\: UserId;
+</code></pre> {
+=Opción B. El campo `_brand` hace los tipos estructuralmente distintos para el compilador. `_brand` no existe en runtime -- es solo un marcador del sistema de tipos. La Opción A es equivalente a `string` y no distingue los tipos.#Correcto. En la Opción A, ambos alias son intercambiables (equivalencia estructural de TypeScript). En la Opción B, la intersección `string & \{ readonly _brand: 'UserId' \}` crea un tipo que TypeScript trata como distinto de `string & \{ readonly _brand: 'Email' \}`. El campo `_brand` solo existe en el sistema de tipos, no en el objeto JavaScript generado.
+~Opción A. Los type aliases crean tipos nominalmente distintos en TypeScript, por lo que `UserId` y `Email` son incompatibles.#Incorrecto. Los type aliases en TypeScript son transparentes -- son sinónimos del tipo base. No crean tipos nominalmente distintos. La Opción A permite intercambiarlos libremente.
+~Ninguna de las dos. TypeScript no puede simular equivalencia nominal porque no tiene el operador `nominal` como Haskell.#Incorrecto. Los branded types son exactamente el patrón para simular equivalencia nominal en TypeScript. La Opción B logra el objetivo deseado.
+~Opción B, pero solo funciona si `_brand` tiene el mismo valor en ambos tipos (`'string'`).#Incorrecto. El objetivo de los branded types es que `_brand` tenga valores **distintos** para cada tipo. Si ambos tienen `_brand: 'string'`, serían estructuralmente iguales y el compilador los trataría como el mismo tipo.
+#### Alternativa en Kotlin: `@JvmInline value class UserId(val value\: String)` -- nominal sin overhead en JVM. En TypeScript se necesita la función constructora `makeUserId()` que hace el cast, actuando como el único punto de creación del tipo.
+}
+
+::TP10-Q27-varianza::[markdown]¿Cuál de las siguientes afirmaciones sobre la **varianza** en TypeScript y Kotlin es correcta?
+<pre><code>// Kotlin
+class Caja<out T>(val valor\: T)  // covariante
+// TypeScript: la varianza se infiere de la estructura
+</code></pre> {
+=Kotlin requiere declarar la varianza explícitamente (`out` para covariante, `in` para contravariante). TypeScript infiere la varianza automáticamente de la estructura del tipo sin anotaciones.#Correcto. Kotlin usa declaration-site variance: el programador declara `out T` (el tipo solo aparece en posiciones de salida/productor) o `in T` (posiciones de entrada/consumidor). TypeScript usa use-site variance infiriéndola de cómo T aparece en la definición del tipo.
+~En TypeScript, todos los genéricos son invariantes. `Caja<Gato>` nunca es subtipo de `Caja<Animal>`.#Incorrecto. TypeScript infiere covarianza automáticamente cuando T solo aparece en posiciones de salida. La varianza no es siempre invariante.
+~La varianza solo importa para los arrays; para otros tipos genéricos TypeScript siempre aplica covarianza.#Incorrecto. La varianza aplica a cualquier tipo genérico, no solo a arrays. Y la varianza de arrays de TypeScript es de hecho covariante pero técnicamente debería ser invariante (es un known unsoundness de TypeScript).
+~`out T` en Kotlin y `readonly T` en TypeScript son equivalentes en semántica de varianza.#Incorrecto. `readonly` en TypeScript controla la mutabilidad de propiedades, no la varianza del tipo genérico. `out` en Kotlin es una declaración de varianza que restringe dónde puede usarse T.
+#### Covariante (`out`/productor): si `Gato` es subtipo de `Animal`, `Caja<Gato>` es subtipo de `Caja<Animal>`. Contravariante (`in`/consumidor): relación inversa. Invariante: no hay subtipado en ninguna dirección. Arrays de TypeScript son (unsoundly) covariantes.
+}
+
+::TP10-Q28-lsp::[markdown]El **Principio de Sustitución de Liskov (LSP)** establece que si `S` es subtipo de `T`, cualquier programa correcto usando `T` debe funcionar correctamente reemplazado por `S`. ¿Cuál de las siguientes jerarquías viola el LSP?
+<pre><code>class Rectangulo \{
+  setAncho(a\: number) \{ this.ancho \= a \}
+  setAlto(h\: number)  \{ this.alto  \= h \}
+  area() \{ return this.ancho * this.alto \}
+\}
+class Cuadrado extends Rectangulo \{
+  setAncho(a\: number) \{ this.ancho \= a; this.alto \= a \} // sobreescribe
+  setAlto(h\: number)  \{ this.ancho \= h; this.alto \= h \} // sobreescribe
+\}
+</code></pre> {
+=`Cuadrado extends Rectangulo` viola el LSP. Una función que hace `r.setAncho(5); r.setAlto(10)` espera que `r.area() \=\=\= 50`, pero con `Cuadrado` obtiene `100`. El subtipo no se comporta como el supertipo.#Correcto. El LSP requiere que el subtipo sea sustituible sin cambiar el comportamiento del programa. `Cuadrado` viola la postcondición implícita de `Rectangulo`: cambiar el ancho no debería cambiar el alto. Una función bien escrita para `Rectangulo` puede romperse cuando recibe un `Cuadrado`. Es el ejemplo clásico de violación del LSP.
+~No viola el LSP. `Cuadrado` extiende `Rectangulo` correctamente porque un cuadrado es un caso especial de rectángulo en geometría.#Incorrecto. El LSP no es sobre relaciones geométricas sino sobre comportamiento del programa. Aunque matemáticamente un cuadrado es un rectángulo, el subtipo viola las postcondiciones del supertipo.
+~No viola el LSP porque TypeScript detecta la violación en compilación y da un error de tipo.#Incorrecto. TypeScript no detecta violaciones del LSP automáticamente. El LSP es una restricción semántica del diseño que el compilador no puede verificar en general.
+~Viola el LSP, pero solo en lenguajes con tipado nominal como Java. En TypeScript con tipado estructural, el LSP no aplica.#Incorrecto. El LSP aplica independientemente del sistema de equivalencia de tipos. Es un principio de diseño orientado a objetos, no una regla del sistema de tipos.
+#### El LSP es el "L" de SOLID. Solución: no usar herencia de implementación para relaciones de tipo "es-un" que no respetan el comportamiento. Usar composición o rediseñar la jerarquía: `interface Forma \{ area()\: number \}` implementado independientemente por `Rectangulo` y `Cuadrado`.
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BLOQUE 5 -- Síntesis Integradora (Q29--Q30)
+// ─────────────────────────────────────────────────────────────────────────────
+
+::TP10-Q29-integracion-sistema::[markdown]Un desarrollador escribe el siguiente código TypeScript y lo compila sin errores. ¿Por qué puede fallar en **runtime** a pesar de pasar la verificación de tipos?
+<pre><code>interface User \{ name\: string; age\: number \}
+function processUser(u\: User)\: void \{
+  u.name.trim();  // ¿puede lanzar error en runtime?
+\}
+const data \= JSON.parse('\{"name": null, "age": 25\}') as User;
+processUser(data); // ¿puede fallar?
+</code></pre> {
+=Sí puede fallar. `JSON.parse` retorna `any`; el cast `as User` le dice al compilador "confía en mí" pero no verifica el contenido en runtime. `null.trim()` lanza `TypeError` en runtime.#Correcto. Este es el límite del type erasure de TypeScript. `JSON.parse` retorna `any`, lo que desactiva la verificación de tipos. El cast `as User` es solo una afirmación del programador al compilador, no una verificación real. En runtime, `data.name` es `null`, y `null.trim()` lanza un `TypeError`.
+~No puede fallar. TypeScript verifica el `as User` cast en runtime para garantizar que el objeto cumple la interfaz.#Incorrecto. TypeScript aplica type erasure: no hay verificación en runtime de los cast. El `as User` es una instrucción al compilador estático, no al runtime.
+~No puede fallar. `strictNullChecks` detecta que `name` puede ser `null` dentro de `processUser` y rechaza la llamada al método.#Incorrecto. `strictNullChecks` verifica según los tipos declarados. `u` está declarado como `User` donde `name: string` (no null), así que el compilador confía en esa declaración. El problema viene de datos externos que no fueron validados.
+~Puede fallar, pero el motor V8 lo detecta en compilación mediante su propio análisis de tipos.#Incorrecto. V8 es un runtime de JavaScript; no realiza análisis de tipos estático. Solo ejecuta el código JavaScript generado.
+#### Solución: validar datos externos con Zod antes del cast. `const data \= UserSchema.parse(JSON.parse(raw))` -- Zod valida en runtime y lanza un error descriptivo si el esquema no coincide. Nunca usar `as T` con datos de APIs o JSON sin validar.
+}
+
+::TP10-Q30-diseno-tradeoffs::[markdown]Un equipo debe elegir entre tres diseños para representar el resultado de una operación que puede fallar:
+<pre><code>// Opción A -- C style
+int resultado;
+int error_code; // 0 \= ok, -1 \= error
+// Opción B -- Excepción (Java/TypeScript clásico)
+function op()\: number \{ if (fail) throw new Error("fallo"); return 42; \}
+// Opción C -- Union discriminada (TypeScript funcional)
+type Result<T> \= \{ kind\: 'ok'; value\: T \} | \{ kind\: 'err'; error\: string \};
+function op()\: Result<number> \{ ... \}
+</code></pre>
+¿Cuál opción garantiza que el **compilador** obligue al llamador a manejar el caso de error? {
+=Opción C. El compilador de TypeScript obliga al llamador a hacer narrowing sobre `kind` antes de poder acceder a `value`. Las excepciones (Opción B) son invisibles al sistema de tipos de TypeScript.#Correcto. Con la Opción C, si el llamador intenta acceder a `result.value` sin verificar `result.kind`, el compilador da error de tipo. Las excepciones en TypeScript no están en las firmas de tipo (no hay `throws` como en Java), por lo que el sistema de tipos no puede obligar a manejarlas. La Opción A requiere disciplina del programador sin ayuda del compilador.
+~Opción B. Las excepciones en TypeScript son parte de la firma de tipo de la función; el compilador obliga a capturarlas con `try/catch`.#Incorrecto. TypeScript no tiene excepciones chequeadas como Java. Las excepciones no aparecen en las firmas de tipo. El llamador puede ignorar completamente que la función puede lanzar.
+~Opción A. El código de retorno `error_code` es visible en la firma de la función y el compilador alerta si se ignora.#Incorrecto. TypeScript no tiene ningún mecanismo para marcar valores de retorno como "no ignorables". El llamador puede ignorar `error_code` sin que el compilador diga nada.
+~Las tres opciones son equivalentes en lo que respecta al compilador de TypeScript; la elección es solo de estilo.#Incorrecto. La Opción C provee verificación en compilación. Las Opciones A y B dependen de la disciplina del programador.
+#### Este patrón se llama "Result type" o "Either monad" y es central en Haskell (`Either a b`), Rust (`Result<T, E>`), Kotlin (`Result<T>`) y Elm. TypeScript lo adopta en estilo funcional. La ventaja sobre excepciones: el error es explícito en el sistema de tipos, no implícito.
+}
