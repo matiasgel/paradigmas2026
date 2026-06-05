@@ -1,4 +1,216 @@
 questions:
+# === T12-Manejo-Excepciones — generado 2026-06-05 (cuestionario Moodle GIFT) ===
+- bloom: recordar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q01
+  text_preview: 'Según Sebesta §14.1, ¿cuál es la definición correcta de "excepción"?'
+  topic: 12-manejo-excepciones
+- bloom: recordar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q02
+  text_preview: '¿Cómo se llama el código encargado de responder a una excepción? [SHORT]'
+  topic: 12-manejo-excepciones
+- bloom: recordar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q03
+  text_preview: 'En el modelo de terminación, ¿qué ocurre con el scope donde se ejecutó el raise?'
+  topic: 12-manejo-excepciones
+- bloom: recordar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q04
+  text_preview: '¿Cuál es una de las 8 preguntas de diseño de lenguaje de Sebesta?'
+  topic: 12-manejo-excepciones
+- bloom: recordar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q05
+  text_preview: '¿Qué bloque de try/catch/finally garantiza ejecución siempre? [SHORT]'
+  topic: 12-manejo-excepciones
+- bloom: recordar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q06
+  text_preview: '¿Cuál lenguaje usa retornos múltiples (T, error) sin try/catch? [SHORT]'
+  topic: 12-manejo-excepciones
+- bloom: comprender
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q07
+  text_preview: 'Diferencia fundamental entre modelo de terminación y reanudación'
+  topic: 12-manejo-excepciones
+- bloom: comprender
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q08
+  text_preview: '¿Cuáles lenguajes garantizan exhaustividad en tiempo de compilación?'
+  topic: 12-manejo-excepciones
+- bloom: comprender
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q09
+  text_preview: '¿Qué ocurre si no hay handler compatible en la función actual?'
+  topic: 12-manejo-excepciones
+- bloom: comprender
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q10
+  text_preview: '¿Qué permite Error.cause incorporado en ES2022?'
+  topic: 12-manejo-excepciones
+- bloom: comprender
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q11
+  text_preview: '[TF] Java/C++/TS/Kotlin/Rust usan modelo de terminación — ¿verdadero?'
+  topic: 12-manejo-excepciones
+- bloom: comprender
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q12
+  text_preview: 'En TypeScript, Result<T,E> se implementa como tipo unión discriminado. ¿Cómo?'
+  topic: 12-manejo-excepciones
+- bloom: comprender
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q13
+  text_preview: '¿Qué funcionalidad incorpora errors.Join en Go 1.20?'
+  topic: 12-manejo-excepciones
+- bloom: comprender
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q14
+  text_preview: '[TF] En Kotlin, try es una expresión que puede retornar valor — ¿verdadero?'
+  topic: 12-manejo-excepciones
+- bloom: aplicar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q15
+  text_preview: '[CÓDIGO TS] finally con return — ¿qué imprime console.log(test())?'
+  topic: 12-manejo-excepciones
+- bloom: aplicar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q16
+  text_preview: '[CÓDIGO TS] Result con ok:false — ¿qué imprime el programa?'
+  topic: 12-manejo-excepciones
+- bloom: aplicar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q17
+  text_preview: '[CÓDIGO GO] user, _ := fetchUser — problema de diseño con _ silenciando error'
+  topic: 12-manejo-excepciones
+- bloom: aplicar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q18
+  text_preview: 'Kotlin sealed class UserResult con when sin else — ventaja principal'
+  topic: 12-manejo-excepciones
+- bloom: aplicar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q19
+  text_preview: '[CÓDIGO RUST] operador ? en let data = read_file(url)? — ¿qué hace?'
+  topic: 12-manejo-excepciones
+- bloom: aplicar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q20
+  text_preview: 'TS: AppError > HttpError/DatabaseError — instanceof en catch: ¿qué captura?'
+  topic: 12-manejo-excepciones
+- bloom: aplicar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q21
+  text_preview: 'throw new Error(msg, { cause: originalError }) — ¿cómo acceder al original?'
+  topic: 12-manejo-excepciones
+- bloom: aplicar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q22
+  text_preview: 'Agente con catch vacío en fetch — consecuencia en pasos siguientes del pipeline'
+  topic: 12-manejo-excepciones
+- bloom: analizar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q23
+  text_preview: 'Limitación real de throw/catch para programación funcional vs Result<T,E>'
+  topic: 12-manejo-excepciones
+- bloom: analizar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q24
+  text_preview: '[CÓDIGO GO] func getUser con _ silenciando error — problema de diseño'
+  topic: 12-manejo-excepciones
+- bloom: analizar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q25
+  text_preview: 'Go (T,error) vs Rust Result<T,E> — diferencia en seguridad en compilación'
+  topic: 12-manejo-excepciones
+- bloom: analizar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q26
+  text_preview: '¿Cuáles de los 5 enfoques producen stack unwinding al propagar errores?'
+  topic: 12-manejo-excepciones
+- bloom: analizar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q27
+  text_preview: '[SHORT] Fenómeno Anthropic 2024: error no manejado amplificado en pasos siguientes'
+  topic: 12-manejo-excepciones
+- bloom: evaluar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q28
+  text_preview: '¿Cuándo es preferible Result<T,E> vs throw/catch para API pública TypeScript?'
+  topic: 12-manejo-excepciones
+- bloom: evaluar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q29
+  text_preview: 'Microservicio crítico sin errores silenciados — Go vs Rust: ¿cuál es mejor?'
+  topic: 12-manejo-excepciones
+- bloom: evaluar
+  course_id: IF009-2026
+  created_at: '2026-06-05'
+  exam_type: cuestionario-gift
+  id: T12-Q30
+  text_preview: 'Tool MCP con 3 tipos de fallo — estrategia óptima según principios T12'
+  topic: 12-manejo-excepciones
+# === Fin T12 ===
 - bloom: recordar
   course_id: '2026'
   created_at: '2026-05-25'

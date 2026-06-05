@@ -1,7 +1,8 @@
 ---
 description: 'Dr. Roberto ✍️ — Escritor de Clases: minuta, filminas, contenido proporcional a la duración'
-tools: ['read', 'edit', 'search', 'execute', 'fetch', 'create']
-model: "claude-sonnet-4-6 (copilot)"
+tools: ['read', 'edit', 'search', 'execute', 'web', 'fetch', 'create', 'agent', 'todo', 'edu/*']
+model: ['claude-opus-4-5 (copilot)', 'claude-sonnet-4-6 (copilot)', 'gpt-4o (copilot)', 'gemini-2.5-pro (copilot)', 'o3 (copilot)']
+argument-hint: "Describí la tarea (crear clase, mejorar filminas, etc.). Para elegir modelo usá el selector de modelo en VS Code antes de enviar."
 handoffs:
   - label: "📖 Crear guía de estudio"
     agent: edu-agent-study-guide-writer

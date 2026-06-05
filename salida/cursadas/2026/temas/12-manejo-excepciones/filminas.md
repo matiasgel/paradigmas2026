@@ -16,8 +16,7 @@
 ### [F-00] Portada
 
 @tipo: portada
-@imagen: background
-@prompt-imagen: ilustración conceptual de un flujo de programa que se bifurca ante un error — una flecha roja diverge del camino principal hacia un handler, con símbolos de TypeScript, Go, Kotlin y Rust en el fondo difuminado
+@imagen: none
 
 # Manejo de Excepciones
 
@@ -71,14 +70,14 @@ UNTDF IDEI 2026
 ### [F-03] ¿Qué es una excepción?
 
 @tipo: concepto-abstracto
-@imagen: content
-@prompt-imagen: diagrama conceptual mostrando el flujo normal de un programa (flecha verde) y el flujo excepcional (flecha roja que salta hacia un bloque handler), con etiquetas 'raise', 'propagation' y 'catch'
+@imagen: none
 
 # Evento anómalo que el código normal no puede manejar
 
 ## Definición (Sebesta §14.1, p. 611)
 
-> "An **exception** is any unusual event, either erroneous or not, detectable by either hardware or software, that may require special processing."
+> "Una **excepción** es cualquier evento inusual, ya sea erróneo o no, detectable por hardware o software, que puede requerir un procesamiento especial."
+> — Sebesta §14.1, p. 611 (traducción)
 
 ## Componentes clave
 
@@ -141,8 +140,7 @@ void processFile(const char *path, ErrorHandler onError) {
 ### [F-05] Historia: de PL/I a TypeScript
 
 @tipo: timeline
-@imagen: content
-@prompt-imagen: línea de tiempo horizontal con hitos de lenguajes desde los años 70 hasta hoy: PL/I (1964), Ada (1983), C++ (1985), Java (1995), Python (2001), Go (2009), Kotlin (2011), TypeScript (2012), Rust (2015) — cada uno con su ícono y color
+@imagen: none
 
 # Evolución del manejo de excepciones
 
@@ -156,6 +154,8 @@ void processFile(const char *path, ErrorHandler onError) {
 | 2011 | **Kotlin** | Sin checked exceptions + `sealed class` para errores tipados |
 | 2015 | **Rust** | Sin excepciones en runtime — `Result<T,E>` obligatorio |
 | 2012+ | **TypeScript** | `try/catch` heredado de JS + tipado con union types |
+| 2022 | **ES2022** | `Error.cause` estándar: encadenamiento nativo de errores |
+| 2023 | **Go 1.20** | `errors.Join`: un error puede envolver múltiples errores |
 
 > Tendencia: los lenguajes más recientes prefieren errores como **valores** sobre excepciones como **flujo de control**.
 
@@ -164,8 +164,7 @@ void processFile(const char *path, ErrorHandler onError) {
 ### [F-06] Terminación vs. Reanudación
 
 @tipo: tabla-comparativa
-@imagen: content
-@prompt-imagen: diagrama de dos flujos de control paralelos: izquierda muestra 'terminación' donde el bloque que generó el error se termina y el handler toma control permanentemente; derecha muestra 'reanudación' donde el handler ejecuta y retorna al punto exacto donde se levantó la excepción
+@imagen: none
 
 # Dos modelos de continuación (Sebesta §14.1)
 
@@ -173,19 +172,21 @@ void processFile(const char *path, ErrorHandler onError) {
 |---------|-----------------|-----------------|
 | ¿Qué pasa al lanzar? | El scope que generó la excepción **termina** | El scope que generó la excepción **se pausa** |
 | ¿Dónde sigue? | En el handler — nunca vuelve al raise | El handler ejecuta → **vuelve** al punto del raise |
-| Lenguajes | Java, C++, C#, TypeScript, Kotlin, Go*, Rust*, Python | PL/I (legacy), algunos LISP |
-| Ventaja | Simple, predecible, stack unwinding claro | Permite "corrección" y retry in-place |
+| Lenguajes | Java, C++, C#, TypeScript, Kotlin, Go¹, Rust¹, Python | PL/I (legacy), algunos LISP |
+| Ventaja | Simple, predecible, stack unwinding claro | Permite “corrección” y retry in-place |
 | Desventaja | No se puede continuar donde se cortó | El handler debe conocer el contexto interno del caller |
+
+> ¹ Go y Rust no tienen excepciones en el sentido clásico: usan valores de retorno (`error`, `Result<T,E>`). Incluidos aquí porque su modelo de propagación (`?`, retorno explícito) sigue la semántica de **terminación** — no hay vuelta al punto de falla.
 
 ## La conclusión de Sebesta
 
-> "Termination is **obviously the simpler** of the two models and is the model used in most contemporary languages."
-> — Sebesta, p. 612
+> "La **terminación** es obviamente el más simple de los dos modelos y es el modelo utilizado en la mayoría de los lenguajes contemporáneos."
+> — Sebesta, p. 612 (traducción)
 
 ## Gabbrielli & Martini sobre terminación
 
-> "This way of working is called 'handling with termination' — the construct where the exception is determined is **terminated**."
-> — Gabbrielli §7.3.1
+> "Esta forma de operar se denomina 'manejo con terminación' — el constructo donde se determina la excepción queda **terminado**."
+> — Gabbrielli §7.3.1 (traducción)
 
 ---
 
@@ -266,23 +267,28 @@ async function loadUserData(userId: string): Promise<UserProfile> {
 ### [F-09] Propagación por el call stack
 
 @tipo: diagrama
-@imagen: content
-@prompt-imagen: diagrama vertical de call stack con 4 capas: main → fetchUserProfile → loadUserData → fetch(). Una excepción HttpError se lanza en fetch(), sube por loadUserData (tiene handler catch → relanza UserNotFoundError), sube por fetchUserProfile (no tiene handler), llega a main (tiene catch genérico). Flechas rojas hacia arriba muestran la propagación
+@imagen: none
 
 # La excepción sube el stack hasta encontrar un handler
 
+## Visualización del call stack
+
+```
+  main()
+  └─ fetchUserProfile(id)    ← sin handler → propaga
+       └─ loadUserData(id)       ← catch → relanza UserNotFoundError
+            └─ fetch("/api/...")  ← lanza HttpError(404)
+
+Flujo de propagación (hacia arriba):
+  HttpError(404)       → capturada en loadUserData
+  UserNotFoundError    → relanzada, NO capturada en fetchUserProfile
+  UserNotFoundError    → capturada en main
+```
+
 ## Regla de Sebesta §14.2
 
-> "If the current block doesn't have a handler, the exception propagates to the caller — and so on, until a handler is found or the program terminates."
-
-## Ejemplo de propagación
-
-```
-main()
-  └─ fetchUserProfile(id)          ← no tiene catch para HttpError
-       └─ loadUserData(id)          ← tiene catch → relanza UserNotFoundError
-            └─ fetch("/api/...")    ← lanza HttpError(404)
-```
+> "Si el bloque actual no tiene un handler, la excepción se propaga al llamador — y así sucesivamente, hasta que se encuentre un handler o el programa termine."
+> — Sebesta §14.2 (traducción)
 
 ## Pasos de propagación
 
@@ -303,7 +309,7 @@ catch (error) {
 }
 ```
 
-`[Sebesta, p. 614: "information about the exception is made available to the handler"]`
+`[Sebesta, p. 614: "la información sobre la excepción se pone a disposición del handler" (traducción)]`
 
 ---
 
@@ -360,7 +366,38 @@ class DatabaseError extends AppError {
 - `catch (e instanceof AppError)` → captura todos los errores de dominio
 - `catch (e instanceof HttpError)` → solo HTTP
 - El campo `code` permite switch/match sin `instanceof` anidados
-- Sebesta: "the thrown object could include **any number of data fields** useful in the handler" (p. 614)
+- Sebesta: "el objeto lanzado puede incluir **cualquier cantidad de campos de datos** útiles para el handler" (p. 614, traducción)
+
+## Error chaining — `Error.cause` (ES2022)
+
+```typescript
+// Error.cause: propiedad estándar desde ES2022 (TC39 Stage 4 — Node.js ≥ 16.9)
+// Permite encadenar errores sin perder el contexto original
+
+async function loadUserData(userId: string): Promise<User> {
+  try {
+    const res = await fetch(`/api/users/${userId}`)
+    if (!res.ok) throw new HttpError(res.status, `HTTP ${res.status}`)
+    return res.json()
+  } catch (e) {
+    // Sintaxis ES2022: segundo argumento { cause } preserva el error original
+    throw new Error('Failed to load user data', { cause: e })
+    //                                           ^^^^^^^^^^^
+    //   e queda accesible como .cause en el error resultante
+  }
+}
+
+// Inspección de la cadena de causas
+try {
+  await loadUserData('42')
+} catch (err) {
+  console.error('Error principal:', err.message)    // 'Failed to load user data'
+  console.error('Causado por:',    err.cause)       // HttpError original preservado
+  console.error('Mensaje origen:', err.cause?.message) // 'HTTP 404'
+}
+```
+
+> **Antes de ES2022**: se usaba `wrapErr.cause = originalErr` (no estándar, sin soporte en herramientas de debug). Desde ES2022 el constructor `new Error(msg, { cause })` es parte del estándar ECMAScript — DevTools y stack tracers inspeccionan automáticamente la cadena. Mismo patrón que `fmt.Errorf("...: %w", err)` en Go.
 
 ---
 
@@ -483,6 +520,34 @@ if err != nil {
 - ❌ Verboso: `if err != nil` repetido en cada llamada
 - ❌ Fácil de ignorar: `user, _ := fetchUser("42")` silencia el error
 
+## Go 1.20: `errors.Join` — múltiples errores
+
+```go
+// Go 1.20 (2023): errors.Join une varios errores en uno solo
+// Útil en validaciones que pueden fallar en múltiples puntos
+func validateUser(u User) error {
+    var errs []error
+    if u.Name == "" {
+        errs = append(errs, errors.New("name is required"))
+    }
+    if u.Email == "" {
+        errs = append(errs, errors.New("email is required"))
+    }
+    if u.Age < 0 {
+        errs = append(errs, errors.New("age must be non-negative"))
+    }
+    return errors.Join(errs...)  // nil si errs está vacío
+}
+
+// Inspeccionar con errors.Is / errors.As a través del árbol
+err := validateUser(User{})
+if err != nil {
+    fmt.Println(err)  // imprime todos los errores separados por \n
+}
+```
+
+> `fmt.Errorf` también acepta múltiples `%w` desde Go 1.20: `fmt.Errorf("fallo: %w, %w", err1, err2)`. `errors.Is/As` recorren el árbol completo.
+
 ---
 
 ### [F-13] Kotlin: sealed classes y try-expression
@@ -603,7 +668,7 @@ let resp = match reqwest::get(url).await {
 @tipo: tabla-comparativa
 @imagen: none
 
-# Imperativo vs. Funcional — 4 lenguajes
+# Imperativo vs. Funcional — 4 lenguajes · 5 enfoques
 
 | Aspecto | TS `throw/catch` | TS `Result<T,E>` | Go `(T, error)` | Kotlin `sealed` | Rust `Result<T,E>` |
 |---------|-----------------|-----------------|-----------------|-----------------|-------------------|
@@ -633,16 +698,28 @@ let resp = match reqwest::get(url).await {
 ### [F-16] Excepciones en programación agéntica
 
 @tipo: concepto-mixto
-@imagen: content
-@prompt-imagen: diagrama de un pipeline agéntico multi-step: orquestador LLM → tool-call A → tool-call B (falla con ícono rojo) → el error tipado sube al orquestador → decisión: retry o abortar. Flechas y nodos con colores verde/rojo/amarillo
+@imagen: none
 
 # Por qué el manejo de errores es crítico en sistemas agénticos
 
-## El problema: context poisoning
+## El problema: errores en cascada (compounding errors)
 
 - Un agente encadena múltiples llamadas a tools (fetch data → process → store)
 - Si `fetch` falla silenciosamente (`catch {}` vacío), el agente procesa **datos inconsistentes**
 - Los pasos siguientes actúan sobre un estado corrupto → **el agente alucina resultados**
+- Anthropic (2024): "Los agentes autónomos tienen mayor costo y potencial de **errores en cascada**" — cada error no manejado se amplifica en los pasos siguientes
+
+## Validación del estado en cada paso
+
+- Anthropic recomienda: "el agente debe obtener **verdad del terreno** (*ground truth*) del entorno en cada paso — resultados de tool calls, ejecución de código — para evaluar su progreso"
+- Patrón: **nunca asumir que un paso anterior fue exitoso** sin verificar su resultado
+- Las condiciones de parada (*stopping conditions*) — máximo de intentos, tiempo límite — son el mecanismo de control ante errores irrecuperables
+
+## Interfaz Agente-Computadora (ACI)
+
+- Anthropic: hay que invertir en el diseño de tools tanto como en el diseño de prompts
+- "Poka-yoke" tus tools: diseñalas para que sea **difícil cometer errores** — ej: requerir rutas absolutas en lugar de relativas
+- Los contratos de error de cada tool son parte del ACI: qué retorna si falla, en qué casos es reintentable
 
 ## MCP Protocol y errores tipados
 
@@ -669,18 +746,18 @@ async function eduSearchTool(query: string): Promise<ToolResult> {
 }
 ```
 
-## Retry con backoff — patrón agéntico
+## Reintento con espera exponencial — patrón agéntico
 
 ```typescript
 async function withRetry<T>(
   fn: () => Promise<Result<T, Error>>,
-  maxAttempts = 3
+  maxAttempts = 3   // condición de parada: máximo de intentos
 ): Promise<Result<T, Error>> {
   for (let i = 0; i < maxAttempts; i++) {
     const result = await fn()
     if (result.ok) return result
-    if (!isRetryable(result.error)) return result  // error no recuperable
-    await sleep(2 ** i * 200)  // exponential backoff
+    if (!isRetryable(result.error)) return result  // error irrecuperable
+    await sleep(2 ** i * 200)  // espera exponencial
   }
   return { ok: false, error: new MaxRetriesError(maxAttempts) }
 }
@@ -688,18 +765,17 @@ async function withRetry<T>(
 
 ## Conexión con esta cátedra
 
-- `publish_loop.py` de EDU usa exactamente este patrón: retry hasta 3 veces, registra errores en `error-registry.jsonl`
+- `publish_loop.py` de EDU usa exactamente este patrón: reintento hasta 3 veces, registra errores en `error-registry.jsonl`
 - `edu-mcp-server` retorna `isError: true` cuando ChromaDB falla — el agente sabe cómo reaccionar
 
-`[insight cátedra — programación agéntica con MCP (Anthropic 2024)]`
+`[Anthropic, "Building effective agents", dic. 2024]`
 
 ---
 
 ### [F-17] Cierre y puntos clave
 
 @tipo: cierre
-@imagen: background
-@prompt-imagen: imagen conceptual de cierre con red de conceptos: excepción, handler, propagación, terminación, Result, agéntica — conectados con líneas sobre fondo oscuro con gradiente azul-verde
+@imagen: none
 
 # Manejo de Excepciones — Lo que se lleva hoy
 

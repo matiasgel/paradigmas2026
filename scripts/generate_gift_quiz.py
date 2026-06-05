@@ -327,7 +327,7 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    root = find_project_root()
+    root = find_project_root(Path(__file__).resolve())
 
     # Determinar course_id
     course_id = args.course

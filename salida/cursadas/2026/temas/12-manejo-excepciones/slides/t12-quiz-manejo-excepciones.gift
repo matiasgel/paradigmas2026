@@ -1,0 +1,257 @@
+// Cuestionario T12 — Manejo de Excepciones
+// Curso: IF009-2026 · Laboratorio de Programación y Lenguajes
+// UNTDF IDEI 2026 · Docente: Matías Gel
+// Generado: 2026-06-05 · Agente: edu-agent-exam-designer (Lic. Santiago)
+// Bloom: L1×6 | L2×8 | L3×8 | L4×5 | L5×3
+// Tipos: Opción múltiple×24 | Verdadero/Falso×2 | Respuesta corta×4
+// Referencias: Sebesta Cap.14, Gabbrielli §7.3.1, Louden §9.5, Anthropic 2024
+
+$CATEGORY: T12-Manejo-Excepciones
+
+// ===================================================================
+// BLOQUE L1 — RECORDAR (T12-Q01 a T12-Q06)
+// ===================================================================
+
+::T12-Q01:: Según Sebesta §14.1, ¿cuál es la definición correcta de "excepción" en el contexto de los lenguajes de programación? {
+   =Un evento inusual, erróneo o no, detectable por hardware o software, que puede requerir un procesamiento especial
+   ~Un error de lógica en el código fuente que produce resultados incorrectos en tiempo de compilación
+   ~Una condición de parada cuando un valor de retorno es nulo o indefinido en tiempo de ejecución
+   ~Un mecanismo de depuración que registra eventos del sistema operativo en tiempo de ejecución
+}
+
+::T12-Q02:: ¿Cómo se llama el código específico encargado de responder a una excepción una vez que esta fue disparada? {
+   =handler
+   =exception handler
+   =manejador de excepción
+}
+
+::T12-Q03:: En el modelo de terminación (Sebesta §14.1), luego de que se lanza una excepción y un handler la procesa, ¿qué ocurre con el scope donde se ejecutó el raise/throw? {
+   =El scope termina definitivamente y la ejecución nunca retorna al punto del raise
+   ~El scope se pausa temporalmente; el handler ejecuta y devuelve el control al punto del raise
+   ~El scope se suspende hasta que el handler invoque una función de reanudación explícita
+   ~El scope se reinicia automáticamente desde el principio como mecanismo de retry
+}
+
+::T12-Q04:: ¿Cuál de las siguientes es una de las 8 preguntas de diseño de lenguaje que Sebesta enumera para el manejo de excepciones? {
+   =¿Puede información de la excepción pasarse al handler?
+   ~¿Cuántos handlers simultáneos puede tener un único bloque try?
+   ~¿Cuántos ciclos de CPU consume el stack unwinding en el peor caso?
+   ~¿Puede una excepción transmitirse entre procesos del sistema operativo mediante IPC?
+}
+
+::T12-Q05:: En TypeScript, ¿qué bloque del mecanismo try/catch/finally garantiza su ejecución independientemente de si se lanzó o no una excepción? {
+   =finally
+}
+
+::T12-Q06:: ¿Cuál lenguaje fue diseñado deliberadamente sin mecanismo try/catch, usando retornos múltiples (T, error) como única forma idiomática de manejo de errores? {
+   =Go
+}
+
+// ===================================================================
+// BLOQUE L2 — COMPRENDER (T12-Q07 a T12-Q14)
+// ===================================================================
+
+::T12-Q07:: ¿Cuál es la diferencia fundamental entre el modelo de terminación y el modelo de reanudación en el manejo de excepciones? {
+   =En terminación el scope donde ocurre la excepción se cierra permanentemente sin retorno al punto del raise; en reanudación el handler puede devolver el control exactamente al punto donde ocurrió el error
+   ~En terminación el programa finaliza con código de error; en reanudación puede reiniciarse automáticamente desde el main
+   ~En terminación solo se capturan excepciones predefinidas del sistema; en reanudación también se capturan las definidas por el usuario
+   ~En terminación el bloque finally nunca se ejecuta; en reanudación siempre ejecuta antes de que el handler intervenga
+}
+
+::T12-Q08:: Según la tabla comparativa del Tema 12, ¿cuáles son los dos lenguajes que garantizan exhaustividad en el manejo de errores en tiempo de compilación? {
+   =Kotlin —mediante when sobre sealed class— y Rust —mediante match sobre Result<T,E>
+   ~TypeScript —con union types— y Go —con múltiples valores de retorno
+   ~Java —con checked exceptions— y Kotlin —con sealed class
+   ~Rust —con Result— y Go —con errors.Join en Go 1.20
+}
+
+::T12-Q09:: ¿Qué ocurre cuando una excepción se lanza dentro de un bloque try y no existe un handler compatible en la función actual? {
+   =La excepción se propaga hacia el llamador en el call stack, y así sucesivamente hasta encontrar un handler compatible o terminar el programa
+   ~La excepción es ignorada automáticamente y la función retorna null por defecto
+   ~El runtime convierte la excepción en un valor de retorno de tipo error sin propagarla al llamador
+   ~El programa termina inmediatamente con un código de error sin ejecutar el bloque finally
+}
+
+::T12-Q10:: ¿Qué permite la propiedad Error.cause incorporada como estándar en ES2022? {
+   =Encadenar errores preservando el error original como propiedad accesible del nuevo error, sin perder el contexto de la causa raíz durante la propagación
+   ~Lanzar simultáneamente múltiples excepciones en un mismo bloque throw sin necesidad de errors.Join
+   ~Convertir automáticamente errores de tipo Error al patrón Result<T,E> sin código adicional
+   ~Declarar el nivel de severidad del error para sistemas de logging automáticos en Node.js
+}
+
+::T12-Q11:: Java, C++, TypeScript, Kotlin y Rust utilizan el modelo de terminación para el manejo de excepciones, siendo este el modelo predominante en los lenguajes modernos contemporáneos. {TRUE}
+
+::T12-Q12:: En TypeScript, el patrón Result<T,E> se implementa como un tipo unión discriminado. ¿Cuál opción describe correctamente su estructura? {
+   =Dos variantes: una con ok: true y value: T para el caso de éxito, y otra con ok: false y error: E para el caso de fallo
+   ~Una promesa genérica que resuelve con T o rechaza con E según el resultado de la operación asíncrona
+   ~Un tuple de dos elementos donde el primero es el valor y el segundo es el error, siendo exactamente uno null
+   ~Una clase genérica con métodos getValue() y getError() que lanzan excepción si se invocan en el estado incorrecto
+}
+
+::T12-Q13:: ¿Qué funcionalidad incorpora errors.Join introducido en Go 1.20? {
+   =Combinar múltiples errores en un único error compuesto, inspeccionable con errors.Is y errors.As recorriendo el árbol completo de causas
+   ~Capturar errores de múltiples goroutines simultáneamente en un único canal de errores compartido
+   ~Introducir la sintaxis try/catch como azúcar sintáctico sobre el patrón (T, error) de Go
+   ~Permitir que fmt.Errorf propague automáticamente errores sin necesidad del verbo de formato %w
+}
+
+::T12-Q14:: En Kotlin, a diferencia de TypeScript, el bloque try es una expresión que puede retornar un valor y asignarse directamente a una variable. {TRUE}
+
+// ===================================================================
+// BLOQUE L3 — APLICAR (T12-Q15 a T12-Q22)
+// ===================================================================
+
+::T12-Q15::[markdown]Considerá el siguiente código TypeScript:
+<pre><code>function test(): string \{
+  try \{
+    throw new Error("fallo")
+  \} catch (e) \{
+    return "catch"
+  \} finally \{
+    return "finally"
+  \}
+\}
+console.log(test())</code></pre>
+
+¿Qué imprime el programa? {
+   ="finally"
+   ~"catch"
+   ~No compila porque finally no puede contener una sentencia return en TypeScript
+   ~Lanza Error sin capturar y termina el programa con excepción no controlada
+}
+
+::T12-Q16::[markdown]Dado el siguiente fragmento TypeScript que usa el patrón Result:
+<pre><code>const result \= \{ ok: false, error: "no encontrado" \}
+if (result.ok) \{
+  console.log("éxito")
+\} else \{
+  console.log(result.error)
+\}</code></pre>
+
+¿Qué imprime el programa? {
+   ="no encontrado"
+   ~"éxito"
+   ~Lanza una excepción porque result.ok es false y el patrón Result requiere throw
+   ~undefined, porque result.error no está tipado como string explícitamente
+}
+
+::T12-Q17::[markdown]Observá el siguiente código Go:
+<pre><code>user, _ :\= fetchUser("42")
+fmt.Println(user.Name)</code></pre>
+
+¿Cuál es el problema de diseño que presenta este fragmento según la filosofía de Go? {
+   =El error retornado por fetchUser es silenciado con _, por lo que si la función falla user puede ser nil, causando un panic en runtime al acceder a user.Name
+   ~El uso de _ es inválido en Go; se debe declarar una variable de error aunque no se use, de lo contrario no compila
+   ~fmt.Println no acepta campos de structs directamente en Go; se necesita fmt.Sprintf previo
+   ~fetchUser no puede retornar múltiples valores en Go; este código no compilaría en ningún contexto
+}
+
+::T12-Q18:: En Kotlin se define una sealed class UserResult con dos subclases: Success(user: String) y NotFound(id: String). Se evalúa una instancia con when sin cláusula else. ¿Cuál es la ventaja principal de sealed class con when respecto a if/instanceof en TypeScript? {
+   =El compilador Kotlin verifica en tiempo de compilación que todos los subtipos de la sealed class estén cubiertos; si falta un caso, el código no compila
+   ~La sealed class permite capturar automáticamente excepciones que ocurren dentro de sus subclases sin bloque catch
+   ~El when en Kotlin es más performante porque usa tablas de salto optimizadas a nivel de bytecode JVM
+   ~La sealed class hereda automáticamente de Throwable y puede usarse directamente en bloques catch de Kotlin
+}
+
+::T12-Q19::[markdown]Considerá el siguiente código Rust:
+<pre><code>fn fetch(url: &str) -> Result<String, std::io::Error> \{
+    let data \= read_file(url)?;
+    Ok(data)
+\}</code></pre>
+
+¿Qué hace el operador ? aplicado a read_file(url)? {
+   =Si read_file retorna Err(e), la función retorna inmediatamente Err(e) propagando el error; si retorna Ok(v), desempaqueta el valor en data y continúa la ejecución
+   ~Convierte automáticamente cualquier error en panic!, terminando el programa de forma abrupta
+   ~Descarta el error y asigna None a data si read_file falla, continuando la ejecución normalmente
+   ~Espera (await) la resolución asíncrona de read_file antes de continuar con la siguiente instrucción
+}
+
+::T12-Q20:: En TypeScript, si AppError extiende Error, y HttpError y DatabaseError extienden AppError, ¿qué afirmación es correcta sobre el uso de instanceof en un bloque catch? {
+   =Un catch que evalúa error instanceof AppError captura tanto HttpError como DatabaseError; un catch con error instanceof HttpError solo captura errores de tipo HTTP
+   ~Un catch que evalúa error instanceof AppError solo captura instancias directas de AppError, no de sus subclases
+   ~instanceof no puede usarse en bloques catch de TypeScript porque el tipo del parámetro siempre es unknown
+   ~TypeScript no soporta jerarquías de excepciones; todas deben extender directamente de Error sin subclases intermedias
+}
+
+::T12-Q21:: Al escribir throw new Error('Error al cargar usuario', \{ cause: originalError \}) en TypeScript con soporte ES2022, ¿cómo accede el bloque catch al error original que causó la falla? {
+   =A través de la propiedad .cause del error capturado: err.cause contiene el originalError preservado en la cadena
+   ~A través de err.inner, propiedad estándar ES2022 para errores encadenados en Node.js y navegadores modernos
+   ~A través de err.getCause() que retorna el error envuelto en forma de Optional para inspección segura
+   ~No es posible; el constructor de Error en TypeScript no acepta un segundo argumento en ninguna versión
+}
+
+::T12-Q22:: En un sistema agéntico con pipeline fetch → procesar → guardar, si la tool fetch falla silenciosamente (catch vacío sin re-throw ni isError), ¿cuál es la consecuencia descrita en el Tema 12? {
+   =Los pasos siguientes actúan sobre datos nulos o inconsistentes, llevando al agente a procesar estado corrupto y potencialmente producir resultados incorrectos o alucinados
+   ~El agente detecta automáticamente el fallo y detiene su ejecución antes de iniciar el paso procesar
+   ~El protocolo MCP captura el error y notifica al agente con isError: true de forma automática y transparente
+   ~El error se propaga inmediatamente al orquestador del agente sin afectar los pasos intermedios del pipeline
+}
+
+// ===================================================================
+// BLOQUE L4 — ANALIZAR (T12-Q23 a T12-Q27)
+// ===================================================================
+
+::T12-Q23:: Al comparar throw/catch y Result<T,E> en TypeScript, ¿cuál describe una limitación real de throw/catch para programación funcional? {
+   =throw es un efecto secundario que rompe el flujo de ejecución y no aparece en los tipos, dificultando la composición funcional con map/flatMap; Result<T,E> codifica el error en el tipo y permite componer sin efectos secundarios ocultos
+   ~throw no puede usarse con async/await en TypeScript; solo Result<T,E> es compatible con Promises en código asíncrono
+   ~Result<T,E> es siempre más performante porque evita la creación del objeto Error en el heap del motor V8
+   ~throw/catch no soporta excepciones definidas por el usuario en ninguna versión de TypeScript
+}
+
+::T12-Q24::[markdown]Analizá el siguiente código Go:
+<pre><code>func getUser(id string) \{
+    user, _ :\= fetchUser(id)
+    process(user)
+\}</code></pre>
+
+¿Qué problema de diseño presenta este código según la filosofía de manejo de errores de Go? {
+   =El error de fetchUser es descartado explícitamente con _; si la función falla, process recibe un puntero nil causando potencialmente un panic en runtime que Go no previene en compilación
+   ~La firma de getUser debería declarar retorno (User, error) obligatoriamente para que el código compile en Go
+   ~process debería recibir un puntero a error como segundo argumento según el idiom estándar de Go
+   ~El uso de id como string en lugar de int64 es el problema de diseño que el type checker de Go debería detectar
+}
+
+::T12-Q25:: Al analizar Go (patrón (T, error)) versus Rust (Result<T,E>), ¿cuál es la diferencia más significativa en cuanto a seguridad en tiempo de compilación? {
+   =En Go el programador puede silenciar errores con _ sin advertencia del compilador; en Rust el tipo Result es #[must_use] y el compilador advierte si se ignora, además de exigir manejo explícito para acceder al valor interno
+   ~En Go el compilador verifica que todos los paths de código retornen el error explícitamente; en Rust esto es opcional
+   ~Go usa checked exceptions como Java; Rust usa errores como valores, similar a Go pero con sintaxis más verbosa
+   ~En Rust los errores son solo strings; en Go son objetos que implementan la interfaz error de primera clase
+}
+
+::T12-Q26:: De los cinco enfoques comparados en el Tema 12 (TS throw, TS Result, Go error, Kotlin sealed, Rust Result), ¿cuáles producen stack unwinding al propagarse un error? {
+   =TypeScript throw/catch y Kotlin cuando lanza una excepción real; los enfoques basados en valores de retorno (TS Result, Go errors, Rust Result) no producen stack unwinding
+   ~Todos producen stack unwinding porque todos propagan errores hacia el llamador a través del call stack
+   ~Solo Rust produce stack unwinding para garantizar la ejecución del Drop trait en cada frame del stack
+   ~Ninguno produce stack unwinding; fue eliminado como mecanismo en todos los lenguajes modernos post-2010
+}
+
+::T12-Q27:: Según Anthropic ("Building effective agents", 2024), ¿cómo se denomina el fenómeno en sistemas agénticos donde un error no manejado en el primer paso de un pipeline se amplifica en los pasos subsiguientes? {
+   =errores en cascada
+   =compounding errors
+   =cascada de errores
+}
+
+// ===================================================================
+// BLOQUE L5 — EVALUAR (T12-Q28 a T12-Q30)
+// ===================================================================
+
+::T12-Q28:: Estás diseñando una librería TypeScript pública cuya función principal puede fallar con tres tipos de error distintos. ¿Cuándo es preferible usar Result<T,E> en lugar de throw/catch para la API pública? {
+   =Cuando querés que los tipos de error sean exhaustivos y visibles en la firma de la función, forzando a los consumidores a manejar explícitamente cada caso; especialmente en pipelines funcionales o integraciones con sistemas agénticos
+   ~Cuando el equipo consumidor ya conoce los posibles errores y no necesita documentación adicional en los tipos de retorno
+   ~Cuando la función es async/await, porque throw/catch no funciona correctamente con Promises en TypeScript moderno
+   ~Siempre que se trabaje con TypeScript, porque throw/catch es solo compatibilidad con JavaScript legacy de versiones anteriores a ES6
+}
+
+::T12-Q29:: Un equipo debe implementar un microservicio crítico donde ningún error puede ser silenciado. Al evaluar Go versus Rust, ¿cuál ofrece garantías más fuertes en tiempo de compilación y por qué? {
+   =Rust: el compilador exige que cada Result<T,E> sea manejado con match, ? o unwrap explícito bajo pena de warning tratado como error; en Go, el programador puede usar _ para silenciar errores sin ninguna advertencia del compilador
+   ~Go: su sistema de tipos verifica que todos los paths de código retornen el error de manera explícita sin excepción
+   ~Ambos ofrecen las mismas garantías en compilación; la diferencia es solo sintáctica y de preferencia del equipo
+   ~Go: panic/recover permite capturar cualquier error en runtime incluyendo situaciones que Rust no puede manejar
+}
+
+::T12-Q30:: Al diseñar una tool MCP para un agente educativo que puede fallar por: (a) ChromaDB no disponible, (b) query vacío, (c) timeout de red, ¿cuál estrategia sigue mejor los principios del Tema 12 para manejo de errores en sistemas agénticos? {
+   =Retornar ToolResult con isError: true para errores reintentables (ChromaDB, timeout) con backoff exponencial, y ToolResult con isError: true y mensaje descriptivo para errores no reintentables (query vacío); nunca dejar excepciones sin capturar que corrompan el contexto del agente
+   ~Lanzar una excepción para ChromaDB caído y retornar null para query vacío, dejando al agente inferir el estado de fallo
+   ~Usar try/catch global y retornar siempre isError: false con el mensaje de error incluido dentro del campo content
+   ~Retornar siempre null y registrar el error en logs sin exponer la falla al agente para no interrumpir el pipeline
+}

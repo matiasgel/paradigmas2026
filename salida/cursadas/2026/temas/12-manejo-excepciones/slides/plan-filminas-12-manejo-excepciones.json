@@ -1,0 +1,1407 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "12-manejo-excepciones",
+    "title": "Manejo de Excepciones",
+    "source": "filminas.md",
+    "generated_at": "2026-06-05T12:13:37",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
+    "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\12-manejo-excepciones",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/slides-pipeline.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 18,
+    "images_planned": 0,
+    "tables_planned": 3,
+    "code_slides": 9,
+    "status": "READY_FOR_VALIDATION",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "concepto-mixto": 7,
+      "codigo": 7,
+      "tabla-comparativa": 3,
+      "demo": 1
+    }
+  },
+  "slides": [
+    {
+      "id": "F-00",
+      "type": "concepto-mixto",
+      "title": "Portada",
+      "subtitle": "Manejo de Excepciones",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Paradigmas y Lenguajes de Programación · Tema 12 · Módulo IX\nUNTDF IDEI 2026"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "local_asset": "",
+        "drive_id": "",
+        "prompt": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-01",
+      "type": "concepto-mixto",
+      "title": "Pregunta de apertura",
+      "subtitle": "¿Qué hace tu programa cuando algo falla?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Pensá en este escenario"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Una función llama a una API externa. La respuesta tarda 30 segundos y llega vacía.",
+              "level": 0
+            },
+            {
+              "content": "Otra función divide por un número que el usuario ingresó. Ese número es cero.",
+              "level": 0
+            },
+            {
+              "content": "Un agente de IA intenta ejecutar una tool. La tool lanza un error interno.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Preguntas"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿El programa sigue ejecutando? ¿Se detiene? ¿Avisa al usuario?",
+              "level": 0
+            },
+            {
+              "content": "¿Quién es responsable de manejar el error: quien llama, o quien es llamado?",
+              "level": 0
+            },
+            {
+              "content": "¿El error es un valor de retorno normal, o una \"salida de emergencia\"?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "local_asset": "",
+        "drive_id": "",
+        "prompt": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-02",
+      "type": "concepto-mixto",
+      "title": "Objetivos",
+      "subtitle": "Al finalizar esta clase vas a poder",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Definir excepción, handler, raise y propagación — terminología Sebesta §14.1",
+              "level": 0
+            },
+            {
+              "content": "Distinguir el modelo de **terminación** del de **reanudación** y saber cuál usan los lenguajes modernos",
+              "level": 0
+            },
+            {
+              "content": "Escribir `try / catch / finally` en TypeScript con excepciones user-defined",
+              "level": 0
+            },
+            {
+              "content": "Implementar el patrón `Result<T,E>` (enfoque funcional) en TypeScript",
+              "level": 0
+            },
+            {
+              "content": "Comparar cómo Go, Kotlin y Rust manejan errores — como decisiones de diseño de lenguaje",
+              "level": 0
+            },
+            {
+              "content": "Evaluar cuándo usar throw vs. Result en código real",
+              "level": 0
+            },
+            {
+              "content": "Identificar por qué el manejo de excepciones es crítico en programación agéntica",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "local_asset": "",
+        "drive_id": "",
+        "prompt": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-03",
+      "type": "concepto-mixto",
+      "title": "¿Qué es una excepción?",
+      "subtitle": "Evento anómalo que el código normal no puede manejar",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición (Sebesta §14.1, p. 611)"
+        },
+        {
+          "type": "text",
+          "content": "> \"Una **excepción** es cualquier evento inusual, ya sea erróneo o no, detectable por hardware o software, que puede requerir un procesamiento especial.\"\n> — Sebesta §14.1, p. 611 (traducción)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Componentes clave"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Exception**: el evento en sí — detectado en runtime",
+              "level": 0
+            },
+            {
+              "content": "**Exception handler**: el código que responde al evento",
+              "level": 0
+            },
+            {
+              "content": "**Raise / throw**: disparar la excepción",
+              "level": 0
+            },
+            {
+              "content": "**Catch**: capturarla en el handler",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "No todo error es una excepción"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Error de lógica en el código → bug (se resuelve con debugging)",
+              "level": 0
+            },
+            {
+              "content": "Condición inesperada en runtime → excepción (se maneja con handlers)",
+              "level": 0
+            },
+            {
+              "content": "Archivo no encontrado, red caída, input inválido → candidatos naturales",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, Cap. 14 §14.1, p. 611]`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "local_asset": "",
+        "drive_id": "",
+        "prompt": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-04",
+      "type": "codigo",
+      "title": "El problema antes de las excepciones",
+      "subtitle": "Manejo de errores sin try/catch",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Patrón clásico: códigos de retorno (C)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Patrón: callback de error (Louden §9.5)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Problemas de estos enfoques"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Fácil olvidar chequear el código de retorno → error silenciado",
+              "level": 0
+            },
+            {
+              "content": "El código de manejo de errores **mezcla** con la lógica principal",
+              "level": 0
+            },
+            {
+              "content": "`errno` es global — no thread-safe, se sobreescribe",
+              "level": 0
+            },
+            {
+              "content": "Callback solo cubre **un** tipo de error por función",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Louden & Lambert, Cap. 9 §9.5, p. 406]`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "c",
+          "content": "// C — sin excepciones: flags de error + errno global\nFILE *f = fopen(\"data.txt\", \"r\");\nif (f == NULL) {\n    fprintf(stderr, \"Error: %s\\n\", strerror(errno));\n    return -1;  // propagar manualmente por cada nivel\n}\n// el llamador también debe chequear el -1..."
+        },
+        {
+          "lang": "c",
+          "content": "typedef void (*ErrorHandler)(ErrorKind);\n\nvoid processFile(const char *path, ErrorHandler onError) {\n    // si algo falla: llamar onError en lugar de retornar -1\n    // el handler es inyectado por el caller\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "tabla-comparativa",
+      "title": "Historia: de PL/I a TypeScript",
+      "subtitle": "Evolución del manejo de excepciones",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Tendencia: los lenguajes más recientes prefieren errores como **valores** sobre excepciones como **flujo de control**."
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Año | Lenguaje | Aporte |\n|-----|----------|--------|\n| ~1964 | **PL/I** | Primer mecanismo formal — modelo de **reanudación** |\n| 1983 | **Ada** | Modelo de **terminación** — se convierte en el estándar |\n| 1985 | **C++** | `try/catch/throw` — excepciones como objetos |\n| 1995 | **Java** | Jerarquía `Throwable` + checked exceptions |\n| 2009 | **Go** | Rechaza excepciones — `(T, error)` como valores |\n| 2011 | **Kotlin** | Sin checked exceptions + `sealed class` para errores tipados |\n| 2015 | **Rust** | Sin excepciones en runtime — `Result<T,E>` obligatorio |\n| 2012+ | **TypeScript** | `try/catch` heredado de JS + tipado con union types |\n| 2022 | **ES2022** | `Error.cause` estándar: encadenamiento nativo de errores |\n| 2023 | **Go 1.20** | `errors.Join`: un error puede envolver múltiples errores |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Año | Lenguaje | Aporte |\n|-----|----------|--------|\n| ~1964 | **PL/I** | Primer mecanismo formal — modelo de **reanudación** |\n| 1983 | **Ada** | Modelo de **terminación** — se convierte en el estándar |\n| 1985 | **C++** | `try/catch/throw` — excepciones como objetos |\n| 1995 | **Java** | Jerarquía `Throwable` + checked exceptions |\n| 2009 | **Go** | Rechaza excepciones — `(T, error)` como valores |\n| 2011 | **Kotlin** | Sin checked exceptions + `sealed class` para errores tipados |\n| 2015 | **Rust** | Sin excepciones en runtime — `Result<T,E>` obligatorio |\n| 2012+ | **TypeScript** | `try/catch` heredado de JS + tipado con union types |\n| 2022 | **ES2022** | `Error.cause` estándar: encadenamiento nativo de errores |\n| 2023 | **Go 1.20** | `errors.Join`: un error puede envolver múltiples errores |",
+          "local_asset": "slides/assets/F-05-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "type": "tabla-comparativa",
+      "title": "Terminación vs. Reanudación",
+      "subtitle": "Dos modelos de continuación (Sebesta §14.1)",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> ¹ Go y Rust no tienen excepciones en el sentido clásico: usan valores de retorno (`error`, `Result<T,E>`). Incluidos aquí porque su modelo de propagación (`?`, retorno explícito) sigue la semántica de **terminación** — no hay vuelta al punto de falla."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La conclusión de Sebesta"
+        },
+        {
+          "type": "text",
+          "content": "> \"La **terminación** es obviamente el más simple de los dos modelos y es el modelo utilizado en la mayoría de los lenguajes contemporáneos.\"\n> — Sebesta, p. 612 (traducción)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Gabbrielli & Martini sobre terminación"
+        },
+        {
+          "type": "text",
+          "content": "> \"Esta forma de operar se denomina 'manejo con terminación' — el constructo donde se determina la excepción queda **terminado**.\"\n> — Gabbrielli §7.3.1 (traducción)"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Aspecto | **Terminación** | **Reanudación** |\n|---------|-----------------|-----------------|\n| ¿Qué pasa al lanzar? | El scope que generó la excepción **termina** | El scope que generó la excepción **se pausa** |\n| ¿Dónde sigue? | En el handler — nunca vuelve al raise | El handler ejecuta → **vuelve** al punto del raise |\n| Lenguajes | Java, C++, C#, TypeScript, Kotlin, Go¹, Rust¹, Python | PL/I (legacy), algunos LISP |\n| Ventaja | Simple, predecible, stack unwinding claro | Permite “corrección” y retry in-place |\n| Desventaja | No se puede continuar donde se cortó | El handler debe conocer el contexto interno del caller |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | **Terminación** | **Reanudación** |\n|---------|-----------------|-----------------|\n| ¿Qué pasa al lanzar? | El scope que generó la excepción **termina** | El scope que generó la excepción **se pausa** |\n| ¿Dónde sigue? | En el handler — nunca vuelve al raise | El handler ejecuta → **vuelve** al punto del raise |\n| Lenguajes | Java, C++, C#, TypeScript, Kotlin, Go¹, Rust¹, Python | PL/I (legacy), algunos LISP |\n| Ventaja | Simple, predecible, stack unwinding claro | Permite “corrección” y retry in-place |\n| Desventaja | No se puede continuar donde se cortó | El handler debe conocer el contexto interno del caller |",
+          "local_asset": "slides/assets/F-06-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-07",
+      "type": "concepto-mixto",
+      "title": "Las 8 preguntas de diseño (Sebesta §14.1)",
+      "subtitle": "Todo lenguaje debe responder estas preguntas",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Sebesta enumera las decisiones de diseño clave (pp. 612–614)"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "¿Cómo se **especifican y clasifican** las excepciones?",
+              "level": 0
+            },
+            {
+              "content": "¿Cómo se **levanta** (raise/throw) una excepción?",
+              "level": 0
+            },
+            {
+              "content": "¿Cómo se **liga** una excepción a su handler?",
+              "level": 0
+            },
+            {
+              "content": "¿Puede **información** de la excepción pasarse al handler?",
+              "level": 0
+            },
+            {
+              "content": "¿Dónde **continúa** la ejecución después del handler?",
+              "level": 0
+            },
+            {
+              "content": "¿Se provee alguna forma de **finalización** (`finally`)?",
+              "level": 0
+            },
+            {
+              "content": "¿Pueden **definirse excepciones** por el usuario?",
+              "level": 0
+            },
+            {
+              "content": "¿Deben **declararse** excepciones predefinidas (checked vs. unchecked)?",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por qué importa"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "No es que TypeScript \"tiene try/catch\" — es que TypeScript **tomó decisiones concretas** en estas 8 dimensiones.",
+              "level": 0
+            },
+            {
+              "content": "Kotlin y Rust tomaron decisiones **diferentes** — y eso cambia cómo escribís código.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "local_asset": "",
+        "drive_id": "",
+        "prompt": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-08",
+      "type": "codigo",
+      "title": "try / catch / finally en TypeScript",
+      "subtitle": "Anatomía del bloque try/catch/finally",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Flujo de control"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Si no hay excepción: `try` → `finally` → retorno normal",
+              "level": 0
+            },
+            {
+              "content": "Si hay excepción capturada: `try` (hasta el throw) → `catch` → `finally`",
+              "level": 0
+            },
+            {
+              "content": "Si hay excepción no capturada: `try` → `finally` → propagación al llamador",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta §14.1, preguntas 5 y 6, p. 613]`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Ejemplo completo — TypeScript\nasync function loadUserData(userId: string): Promise<UserProfile> {\n  try {\n    // Bloque try: código que puede lanzar excepciones\n    const response = await fetch(`/api/users/${userId}`)\n    \n    if (!response.ok) {\n      // Lanzar excepción user-defined con contexto\n      throw new HttpError(response.status, `User ${userId} not found`)\n    }\n    \n    return await response.json() as UserProfile\n    \n  } catch (error) {\n    // Bloque catch: handler — recibe el objeto lanzado\n    if (error instanceof HttpError && error.statusCode === 404) {\n      throw new UserNotFoundError(userId)   // re-lanzar más específica\n    }\n    throw error   // re-lanzar si no podemos manejarla aquí\n    \n  } finally {\n    // Bloque finally: SIEMPRE ejecuta (con o sin excepción)\n    console.log(`loadUserData(${userId}) completado`)\n  }\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-09",
+      "type": "concepto-mixto",
+      "title": "Propagación por el call stack",
+      "subtitle": "La excepción sube el stack hasta encontrar un handler",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Visualización del call stack"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Regla de Sebesta §14.2"
+        },
+        {
+          "type": "text",
+          "content": "> \"Si el bloque actual no tiene un handler, la excepción se propaga al llamador — y así sucesivamente, hasta que se encuentre un handler o el programa termine.\"\n> — Sebesta §14.2 (traducción)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Pasos de propagación"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "`fetch()` lanza `HttpError(404)` → busca handler en `loadUserData`",
+              "level": 0
+            },
+            {
+              "content": "`loadUserData` tiene `catch` → captura, transforma, relanza `UserNotFoundError`",
+              "level": 0
+            },
+            {
+              "content": "`fetchUserProfile` no tiene handler para `UserNotFoundError` → propaga",
+              "level": 0
+            },
+            {
+              "content": "`main` tiene `catch (e: UserNotFoundError)` → captura y maneja",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Información disponible en el handler"
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, p. 614: \"la información sobre la excepción se pone a disposición del handler\" (traducción)]`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "  main()\n  └─ fetchUserProfile(id)    ← sin handler → propaga\n       └─ loadUserData(id)       ← catch → relanza UserNotFoundError\n            └─ fetch(\"/api/...\")  ← lanza HttpError(404)\n\nFlujo de propagación (hacia arriba):\n  HttpError(404)       → capturada en loadUserData\n  UserNotFoundError    → relanzada, NO capturada en fetchUserProfile\n  UserNotFoundError    → capturada en main"
+        },
+        {
+          "lang": "typescript",
+          "content": "catch (error) {\n  if (error instanceof HttpError) {\n    console.log(error.statusCode)   // campo custom\n    console.log(error.message)      // heredado de Error\n    console.log(error.stack)        // stack trace completo\n  }\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "local_asset": "",
+        "drive_id": "",
+        "prompt": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-10",
+      "type": "codigo",
+      "title": "Excepciones user-defined en TypeScript",
+      "subtitle": "Excepciones propias con contexto estructurado",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Jerarquía de clases (respuesta al diseño de lenguaje #7)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "¿Por qué una jerarquía?"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`catch (e instanceof AppError)` → captura todos los errores de dominio",
+              "level": 0
+            },
+            {
+              "content": "`catch (e instanceof HttpError)` → solo HTTP",
+              "level": 0
+            },
+            {
+              "content": "El campo `code` permite switch/match sin `instanceof` anidados",
+              "level": 0
+            },
+            {
+              "content": "Sebesta: \"el objeto lanzado puede incluir **cualquier cantidad de campos de datos** útiles para el handler\" (p. 614, traducción)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Error chaining — `Error.cause` (ES2022)"
+        },
+        {
+          "type": "text",
+          "content": "> **Antes de ES2022**: se usaba `wrapErr.cause = originalErr` (no estándar, sin soporte en herramientas de debug). Desde ES2022 el constructor `new Error(msg, { cause })` es parte del estándar ECMAScript — DevTools y stack tracers inspeccionan automáticamente la cadena. Mismo patrón que `fmt.Errorf(\"...: %w\", err)` en Go."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Base: extender Error siempre\nclass AppError extends Error {\n  constructor(message: string, public readonly code: string) {\n    super(message)\n    this.name = this.constructor.name\n    // Fix para stack trace en TypeScript con targets ES5\n    if (Error.captureStackTrace) {\n      Error.captureStackTrace(this, this.constructor)\n    }\n  }\n}\n\n// Errors específicos del dominio\nclass HttpError extends AppError {\n  constructor(\n    public readonly statusCode: number,\n    message: string\n  ) {\n    super(message, `HTTP_${statusCode}`)\n  }\n}\n\nclass UserNotFoundError extends AppError {\n  constructor(public readonly userId: string) {\n    super(`User ${userId} not found`, 'USER_NOT_FOUND')\n  }\n}\n\nclass DatabaseError extends AppError {\n  constructor(\n    message: string,\n    public readonly query?: string\n  ) {\n    super(message, 'DB_ERROR')\n  }\n}"
+        },
+        {
+          "lang": "typescript",
+          "content": "// Error.cause: propiedad estándar desde ES2022 (TC39 Stage 4 — Node.js ≥ 16.9)\n// Permite encadenar errores sin perder el contexto original\n\nasync function loadUserData(userId: string): Promise<User> {\n  try {\n    const res = await fetch(`/api/users/${userId}`)\n    if (!res.ok) throw new HttpError(res.status, `HTTP ${res.status}`)\n    return res.json()\n  } catch (e) {\n    // Sintaxis ES2022: segundo argumento { cause } preserva el error original\n    throw new Error('Failed to load user data', { cause: e })\n    //                                           ^^^^^^^^^^^\n    //   e queda accesible como .cause en el error resultante\n  }\n}\n\n// Inspección de la cadena de causas\ntry {\n  await loadUserData('42')\n} catch (err) {\n  console.error('Error principal:', err.message)    // 'Failed to load user data'\n  console.error('Causado por:',    err.cause)       // HttpError original preservado\n  console.error('Mensaje origen:', err.cause?.message) // 'HTTP 404'\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "codigo",
+      "title": "El enfoque funcional: Result\\<T,E\\>",
+      "subtitle": "Errores como valores — sin romper el flujo",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Motivación"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`throw` es un **efecto secundario**: rompe el flujo de ejecución, difícil de componer en FP",
+              "level": 0
+            },
+            {
+              "content": "Alternativa: retornar un **tipo suma** que codifica éxito o error",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Implementación"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Uso — exhaustivo por discriminated union"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Composición con map/flatMap"
+        },
+        {
+          "type": "text",
+          "content": "`[Conexión curricular: Tema 5 — Mónadas. Result<T,E> es la mónada Either]`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// Definición de Result<T,E>\ntype Result<T, E extends Error = Error> =\n  | { ok: true;  value: T }\n  | { ok: false; error: E }\n\n// Helpers\nconst ok  = <T>(value: T): Result<T, never> => ({ ok: true, value })\nconst err = <E extends Error>(error: E): Result<never, E> => ({ ok: false, error })"
+        },
+        {
+          "lang": "typescript",
+          "content": "async function fetchUser(id: string): Promise<Result<User, HttpError>> {\n  const res = await fetch(`/api/users/${id}`)\n  if (!res.ok) return err(new HttpError(res.status, `HTTP ${res.status}`))\n  return ok(await res.json() as User)\n}"
+        },
+        {
+          "lang": "typescript",
+          "content": "const result = await fetchUser(\"42\")\n\nif (result.ok) {\n  // TypeScript sabe que result.value: User\n  console.log(result.value.name)\n} else {\n  // TypeScript sabe que result.error: HttpError\n  console.error(`Error ${result.error.statusCode}: ${result.error.message}`)\n}"
+        },
+        {
+          "lang": "typescript",
+          "content": "const user = await fetchUser(\"42\")\n  .then(r => r.ok ? ok(r.value.email.toLowerCase()) : r)\n\n// O con librería como neverthrow / fp-ts"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-12",
+      "type": "codigo",
+      "title": "Go: errors as values",
+      "subtitle": "La filosofía de Go — no hay excepciones",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Decisión de diseño de Go"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Go **no tiene** `try/catch` — fue una decisión deliberada de los diseñadores",
+              "level": 0
+            },
+            {
+              "content": "Los errores son **valores** de retorno normales, tipo `error` (interfaz)",
+              "level": 0
+            },
+            {
+              "content": "`panic` / `recover` existen pero se usan solo para casos excepcionales reales",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Patrón idiomático Go"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ventajas e inconvenientes"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "✅ Explícito: el error está visible en la firma de la función",
+              "level": 0
+            },
+            {
+              "content": "✅ Sin stack unwinding — más predecible en performance",
+              "level": 0
+            },
+            {
+              "content": "❌ Verboso: `if err != nil` repetido en cada llamada",
+              "level": 0
+            },
+            {
+              "content": "❌ Fácil de ignorar: `user, _ := fetchUser(\"42\")` silencia el error",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Go 1.20: `errors.Join` — múltiples errores"
+        },
+        {
+          "type": "text",
+          "content": "> `fmt.Errorf` también acepta múltiples `%w` desde Go 1.20: `fmt.Errorf(\"fallo: %w, %w\", err1, err2)`. `errors.Is/As` recorren el árbol completo."
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "go",
+          "content": "// Go — retorno múltiple: (resultado, error)\nfunc fetchUser(id string) (*User, error) {\n    resp, err := http.Get(\"/api/users/\" + id)\n    if err != nil {\n        // Wrap error con contexto usando %w (Go 1.13+)\n        return nil, fmt.Errorf(\"fetchUser: %w\", err)\n    }\n    defer resp.Body.Close()  // defer = equivalente a finally\n\n    if resp.StatusCode == 404 {\n        return nil, &UserNotFoundError{ID: id}\n    }\n\n    var u User\n    if err := json.NewDecoder(resp.Body).Decode(&u); err != nil {\n        return nil, fmt.Errorf(\"decode user: %w\", err)\n    }\n    return &u, nil\n}\n\n// Caller — OBLIGADO a manejar el error (o ignorarlo explícitamente con _)\nuser, err := fetchUser(\"42\")\nif err != nil {\n    var notFound *UserNotFoundError\n    if errors.As(err, &notFound) {  // errors.As unwrap la cadena\n        log.Printf(\"usuario %s no existe\", notFound.ID)\n        return\n    }\n    return fmt.Errorf(\"error inesperado: %w\", err)\n}"
+        },
+        {
+          "lang": "go",
+          "content": "// Go 1.20 (2023): errors.Join une varios errores en uno solo\n// Útil en validaciones que pueden fallar en múltiples puntos\nfunc validateUser(u User) error {\n    var errs []error\n    if u.Name == \"\" {\n        errs = append(errs, errors.New(\"name is required\"))\n    }\n    if u.Email == \"\" {\n        errs = append(errs, errors.New(\"email is required\"))\n    }\n    if u.Age < 0 {\n        errs = append(errs, errors.New(\"age must be non-negative\"))\n    }\n    return errors.Join(errs...)  // nil si errs está vacío\n}\n\n// Inspeccionar con errors.Is / errors.As a través del árbol\nerr := validateUser(User{})\nif err != nil {\n    fmt.Println(err)  // imprime todos los errores separados por \\n\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "codigo",
+      "title": "Kotlin: sealed classes y try-expression",
+      "subtitle": "Kotlin — exhaustividad en compilación",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "sealed class para errores tipados"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Uso — when es exhaustivo"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Diferencias con TypeScript"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Kotlin: **sin checked exceptions** (a diferencia de Java)",
+              "level": 0
+            },
+            {
+              "content": "`try` como expresión → integra naturalmente con FP",
+              "level": 0
+            },
+            {
+              "content": "`sealed class` = discriminated union del compilador (vs. union types estructurales de TS)",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "kotlin",
+          "content": "// Sealed class = union type exhaustiva y verificada por el compilador\nsealed class UserResult {\n    data class Success(val user: User) : UserResult()\n    data class NotFound(val id: String) : UserResult()\n    data class NetworkError(val statusCode: Int) : UserResult()\n}\n\n// try en Kotlin es una EXPRESIÓN (retorna valor)\nfun fetchUser(id: String): UserResult = try {\n    val resp = httpClient.get(\"/api/users/$id\")\n    when (resp.status) {\n        200  -> UserResult.Success(resp.body<User>())\n        404  -> UserResult.NotFound(id)\n        else -> UserResult.NetworkError(resp.status)\n    }\n} catch (e: IOException) {\n    UserResult.NetworkError(-1)\n}"
+        },
+        {
+          "lang": "kotlin",
+          "content": "val result = fetchUser(\"42\")\nwhen (result) {\n    is UserResult.Success      -> println(result.user.name)\n    is UserResult.NotFound     -> println(\"No encontrado: ${result.id}\")\n    is UserResult.NetworkError -> println(\"Error HTTP ${result.statusCode}\")\n    // No hay else — el compilador verifica que todos los casos estén cubiertos\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-14",
+      "type": "codigo",
+      "title": "Rust: Result\\<T,E\\> y el operador `?`",
+      "subtitle": "Rust — sin excepciones en runtime por diseño",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Filosofía de Rust"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Rust garantiza que **no existen excepciones en runtime** (excepto `panic!` explícito)",
+              "level": 0
+            },
+            {
+              "content": "Toda operación fallable retorna `Result<T, E>` — el tipo fuerza el manejo en el compilador",
+              "level": 0
+            },
+            {
+              "content": "El operador `?` azucariza la propagación",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Implementación"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El operador `?` desazucarado"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ventajas clave"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "✅ Exhaustividad **garantizada por el compilador** — no podés ignorar un error",
+              "level": 0
+            },
+            {
+              "content": "✅ Sin runtime overhead de stack unwinding",
+              "level": 0
+            },
+            {
+              "content": "✅ `?` hace el código conciso manteniendo la seguridad",
+              "level": 0
+            },
+            {
+              "content": "✅ Drop trait = RAII → limpieza automática sin `finally`",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "rust",
+          "content": "// Definir errores del dominio\n#[derive(Debug)]\nenum FetchError {\n    Network(reqwest::Error),\n    NotFound(String),\n    Decode(serde_json::Error),\n}\n\n// impl From<reqwest::Error> for FetchError { ... }  → permite usar ?\n\nasync fn fetch_user(id: &str) -> Result<User, FetchError> {\n    let resp = reqwest::get(format!(\"/api/users/{id}\"))\n        .await\n        .map_err(FetchError::Network)?;  // ? = propagación implícita\n\n    if resp.status() == 404 {\n        return Err(FetchError::NotFound(id.to_string()));\n    }\n\n    resp.json::<User>()\n        .await\n        .map_err(FetchError::Decode)\n}"
+        },
+        {
+          "lang": "rust",
+          "content": "// Esto:\nlet resp = reqwest::get(url).await?;\n\n// Es equivalente a:\nlet resp = match reqwest::get(url).await {\n    Ok(val)  => val,\n    Err(e)   => return Err(e.into()),\n};"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-15",
+      "type": "tabla-comparativa",
+      "title": "Tabla comparativa",
+      "subtitle": "Imperativo vs. Funcional — 4 lenguajes · 5 enfoques",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Regla de selección"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**TS imperativo (`throw`)**: código OO, async/await, equipos con background Java/JS",
+              "level": 0
+            },
+            {
+              "content": "**TS funcional (`Result`)**: pipelines de datos, código FP, integración con sistemas agénticos",
+              "level": 0
+            },
+            {
+              "content": "**Go**: sistemas de bajo nivel, microservicios, cuando la legibilidad explícita importa",
+              "level": 0
+            },
+            {
+              "content": "**Kotlin**: Android, backend JVM donde la exhaustividad en compile time importa",
+              "level": 0
+            },
+            {
+              "content": "**Rust**: sistemas, WASM, cuando la seguridad en memoria es crítica",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Aspecto | TS `throw/catch` | TS `Result<T,E>` | Go `(T, error)` | Kotlin `sealed` | Rust `Result<T,E>` |\n|---------|-----------------|-----------------|-----------------|-----------------|-------------------|\n| **Mecanismo** | Excepción (throw) | Valor de retorno | Valor de retorno | Expresión (try) | Valor de retorno |\n| **Flujo** | Ruptura de stack | Normal | Normal | Normal | Normal |\n| **Exhaustividad** | Runtime | Union type TS | Ninguna (ignorable) | Compilador (when) | Compilador (match) |\n| **Composabilidad** | Difícil en FP | map/flatMap | Secuencial if/err | Fluida (expr) | ? operator |\n| **Stack unwinding** | Sí (costoso) | No | No | Sí (si lanza) | No |\n| **Limpieza recursos** | `finally` | Manual | `defer` | `finally` / use | Drop (RAII) |\n| **Verbose** | Bajo | Medio | Alto (if err ≠ nil) | Bajo | Bajo (con `?`) |\n| **async/Promise** | Natural | `Promise<Result>` | goroutines | `suspend` | `async/await` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | TS `throw/catch` | TS `Result<T,E>` | Go `(T, error)` | Kotlin `sealed` | Rust `Result<T,E>` |\n|---------|-----------------|-----------------|-----------------|-----------------|-------------------|\n| **Mecanismo** | Excepción (throw) | Valor de retorno | Valor de retorno | Expresión (try) | Valor de retorno |\n| **Flujo** | Ruptura de stack | Normal | Normal | Normal | Normal |\n| **Exhaustividad** | Runtime | Union type TS | Ninguna (ignorable) | Compilador (when) | Compilador (match) |\n| **Composabilidad** | Difícil en FP | map/flatMap | Secuencial if/err | Fluida (expr) | ? operator |\n| **Stack unwinding** | Sí (costoso) | No | No | Sí (si lanza) | No |\n| **Limpieza recursos** | `finally` | Manual | `defer` | `finally` / use | Drop (RAII) |\n| **Verbose** | Bajo | Medio | Alto (if err ≠ nil) | Bajo | Bajo (con `?`) |\n| **async/Promise** | Natural | `Promise<Result>` | goroutines | `suspend` | `async/await` |",
+          "local_asset": "slides/assets/F-15-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-16",
+      "type": "concepto-mixto",
+      "title": "Excepciones en programación agéntica",
+      "subtitle": "Por qué el manejo de errores es crítico en sistemas agénticos",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El problema: errores en cascada (compounding errors)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Un agente encadena múltiples llamadas a tools (fetch data → process → store)",
+              "level": 0
+            },
+            {
+              "content": "Si `fetch` falla silenciosamente (`catch {}` vacío), el agente procesa **datos inconsistentes**",
+              "level": 0
+            },
+            {
+              "content": "Los pasos siguientes actúan sobre un estado corrupto → **el agente alucina resultados**",
+              "level": 0
+            },
+            {
+              "content": "Anthropic (2024): \"Los agentes autónomos tienen mayor costo y potencial de **errores en cascada**\" — cada error no manejado se amplifica en los pasos siguientes",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Validación del estado en cada paso"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Anthropic recomienda: \"el agente debe obtener **verdad del terreno** (*ground truth*) del entorno en cada paso — resultados de tool calls, ejecución de código — para evaluar su progreso\"",
+              "level": 0
+            },
+            {
+              "content": "Patrón: **nunca asumir que un paso anterior fue exitoso** sin verificar su resultado",
+              "level": 0
+            },
+            {
+              "content": "Las condiciones de parada (*stopping conditions*) — máximo de intentos, tiempo límite — son el mecanismo de control ante errores irrecuperables",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Interfaz Agente-Computadora (ACI)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Anthropic: hay que invertir en el diseño de tools tanto como en el diseño de prompts",
+              "level": 0
+            },
+            {
+              "content": "\"Poka-yoke\" tus tools: diseñalas para que sea **difícil cometer errores** — ej: requerir rutas absolutas en lugar de relativas",
+              "level": 0
+            },
+            {
+              "content": "Los contratos de error de cada tool son parte del ACI: qué retorna si falla, en qué casos es reintentable",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "MCP Protocol y errores tipados"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Reintento con espera exponencial — patrón agéntico"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Conexión con esta cátedra"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`publish_loop.py` de EDU usa exactamente este patrón: reintento hasta 3 veces, registra errores en `error-registry.jsonl`",
+              "level": 0
+            },
+            {
+              "content": "`edu-mcp-server` retorna `isError: true` cuando ChromaDB falla — el agente sabe cómo reaccionar",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Anthropic, \"Building effective agents\", dic. 2024]`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// MCP spec (Anthropic 2024): las tools deben retornar errores estructurados\ninterface ToolResult {\n  content: Array<{ type: \"text\" | \"image\", text?: string }>\n  isError?: boolean  // true = el agente sabe que falló\n}\n\n// Tool que usa Result internamente pero expone MCP\nasync function eduSearchTool(query: string): Promise<ToolResult> {\n  const result = await searchKnowledge(query)  // retorna Result<T,E>\n\n  if (!result.ok) {\n    return {\n      isError: true,\n      content: [{ type: \"text\", text: `Error: ${result.error.message}` }]\n    }\n  }\n  return {\n    content: [{ type: \"text\", text: JSON.stringify(result.value) }]\n  }\n}"
+        },
+        {
+          "lang": "typescript",
+          "content": "async function withRetry<T>(\n  fn: () => Promise<Result<T, Error>>,\n  maxAttempts = 3   // condición de parada: máximo de intentos\n): Promise<Result<T, Error>> {\n  for (let i = 0; i < maxAttempts; i++) {\n    const result = await fn()\n    if (result.ok) return result\n    if (!isRetryable(result.error)) return result  // error irrecuperable\n    await sleep(2 ** i * 200)  // espera exponencial\n  }\n  return { ok: false, error: new MaxRetriesError(maxAttempts) }\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-17",
+      "type": "demo",
+      "title": "Cierre y puntos clave",
+      "subtitle": "Manejo de Excepciones — Lo que se lleva hoy",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Los 5 puntos que no podés olvidar"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Excepción = evento anómalo en runtime** — no es un bug, es una condición que el código normal no maneja (Sebesta §14.1)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**El modelo de terminación domina** — al lanzar, el scope se termina. No hay vuelta al punto del raise (Sebesta p. 612)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Propagación sube el stack** — si no hay handler local, sube al llamador hasta encontrar uno o terminar el programa",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Dos filosofías de diseño**:",
+              "level": 0
+            },
+            {
+              "content": "Imperativo (`throw`): expresivo, natural en async, estándar OO",
+              "level": 0
+            },
+            {
+              "content": "Funcional (`Result`): composable, exhaustivo en tipos, esencial en sistemas agénticos",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**En programación agéntica**: los errores no manejados envenenan el contexto — siempre tipar y propagar errores en tools MCP",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Conexiones curriculares"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**← Tema 11**: excepciones como control de flujo no lineal",
+              "level": 0
+            },
+            {
+              "content": "**← Tema 5**: `Result<T,E>` es la mónada Either",
+              "level": 0
+            },
+            {
+              "content": "**→ Tema 13**: cómo las excepciones cruzan límites de módulos",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Próxima clase"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Tema 13 — Abstracción Procedural y Modularidad**",
+              "level": 0
+            },
+            {
+              "content": "Cómo los módulos encapsulan no solo datos, sino también contratos de error.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "local_asset": "",
+        "drive_id": "",
+        "prompt": ""
+      },
+      "table_assets": []
+    }
+  ]
+}

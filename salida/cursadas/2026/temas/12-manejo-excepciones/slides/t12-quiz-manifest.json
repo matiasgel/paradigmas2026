@@ -1,0 +1,168 @@
+{
+  "quiz_id": "T12-Manejo-Excepciones",
+  "topic": "12-manejo-excepciones",
+  "course_id": "IF009-2026",
+  "topic_title": "Manejo de Excepciones",
+  "generated_at": "2026-06-05",
+  "generated_by": "edu-agent-exam-designer (Lic. Santiago)",
+  "source_file": "salida/cursadas/2026/temas/12-manejo-excepciones/filminas.md",
+  "gift_file": "salida/cursadas/2026/temas/12-manejo-excepciones/slides/t12-quiz-manejo-excepciones.gift",
+  "references": [
+    "Sebesta — Concepts of Programming Languages, Cap. 14, pp. 611-646",
+    "Gabbrielli & Martini — Programming Languages: Principles and Paradigms, §7.3.1",
+    "Louden & Lambert — Programming Languages: Principles and Practice, §9.5",
+    "Anthropic — Building effective agents, diciembre 2024"
+  ],
+  "primary_language": "TypeScript",
+  "contrast_languages": ["Go", "Kotlin", "Rust"],
+  "total_questions": 30,
+  "bloom_distribution": {
+    "L1_recordar": {
+      "count": 6,
+      "percentage": 20,
+      "questions": ["T12-Q01", "T12-Q02", "T12-Q03", "T12-Q04", "T12-Q05", "T12-Q06"]
+    },
+    "L2_comprender": {
+      "count": 8,
+      "percentage": 27,
+      "questions": ["T12-Q07", "T12-Q08", "T12-Q09", "T12-Q10", "T12-Q11", "T12-Q12", "T12-Q13", "T12-Q14"]
+    },
+    "L3_aplicar": {
+      "count": 8,
+      "percentage": 27,
+      "questions": ["T12-Q15", "T12-Q16", "T12-Q17", "T12-Q18", "T12-Q19", "T12-Q20", "T12-Q21", "T12-Q22"]
+    },
+    "L4_analizar": {
+      "count": 5,
+      "percentage": 17,
+      "questions": ["T12-Q23", "T12-Q24", "T12-Q25", "T12-Q26", "T12-Q27"]
+    },
+    "L5_evaluar": {
+      "count": 3,
+      "percentage": 10,
+      "questions": ["T12-Q28", "T12-Q29", "T12-Q30"]
+    }
+  },
+  "question_types": {
+    "multiple_choice": {
+      "count": 24,
+      "min_required": 20,
+      "compliant": true,
+      "questions": [
+        "T12-Q01", "T12-Q03", "T12-Q04",
+        "T12-Q07", "T12-Q08", "T12-Q09", "T12-Q10", "T12-Q12", "T12-Q13",
+        "T12-Q15", "T12-Q16", "T12-Q17", "T12-Q18", "T12-Q19", "T12-Q20", "T12-Q21", "T12-Q22",
+        "T12-Q23", "T12-Q24", "T12-Q25", "T12-Q26",
+        "T12-Q28", "T12-Q29", "T12-Q30"
+      ]
+    },
+    "true_false": {
+      "count": 2,
+      "max_allowed": 5,
+      "compliant": true,
+      "questions": ["T12-Q11", "T12-Q14"]
+    },
+    "short_answer": {
+      "count": 4,
+      "max_allowed": 5,
+      "compliant": true,
+      "questions": ["T12-Q02", "T12-Q05", "T12-Q06", "T12-Q27"]
+    }
+  },
+  "code_questions": {
+    "count": 5,
+    "format": "GIFT [markdown] con <pre><code>",
+    "questions": [
+      { "id": "T12-Q15", "language": "TypeScript", "concept": "try/catch/finally — return en finally override" },
+      { "id": "T12-Q16", "language": "TypeScript", "concept": "Result<T,E> — discriminated union branch" },
+      { "id": "T12-Q17", "language": "Go", "concept": "errors as values — silenciar error con _" },
+      { "id": "T12-Q19", "language": "Rust", "concept": "operador ? — propagación implícita de Result" },
+      { "id": "T12-Q24", "language": "Go", "concept": "detectar bug — _ silenciando error en func getUser" }
+    ]
+  },
+  "topics_covered": [
+    {
+      "id": 1,
+      "name": "Definición de excepción (Sebesta §14.1)",
+      "questions": ["T12-Q01"]
+    },
+    {
+      "id": 2,
+      "name": "Componentes: exception, handler, raise/throw, catch",
+      "questions": ["T12-Q02"]
+    },
+    {
+      "id": 3,
+      "name": "Modelo terminación vs. reanudación",
+      "questions": ["T12-Q03", "T12-Q07", "T12-Q11"]
+    },
+    {
+      "id": 4,
+      "name": "Las 8 preguntas de diseño de lenguaje (Sebesta §14.1 pp.612-614)",
+      "questions": ["T12-Q04", "T12-Q08"]
+    },
+    {
+      "id": 5,
+      "name": "try/catch/finally en TypeScript — flujo de control",
+      "questions": ["T12-Q05", "T12-Q15"]
+    },
+    {
+      "id": 6,
+      "name": "Propagación por el call stack",
+      "questions": ["T12-Q09"]
+    },
+    {
+      "id": 7,
+      "name": "Excepciones user-defined y jerarquía de clases",
+      "questions": ["T12-Q20"]
+    },
+    {
+      "id": 8,
+      "name": "Error.cause (ES2022)",
+      "questions": ["T12-Q10", "T12-Q21"]
+    },
+    {
+      "id": 9,
+      "name": "Result<T,E> — enfoque funcional",
+      "questions": ["T12-Q12", "T12-Q16", "T12-Q23", "T12-Q28"]
+    },
+    {
+      "id": 10,
+      "name": "Go: errors as values, errors.Join (Go 1.20)",
+      "questions": ["T12-Q06", "T12-Q13", "T12-Q17", "T12-Q24"]
+    },
+    {
+      "id": 11,
+      "name": "Kotlin: sealed class, when exhaustivo, try-expression",
+      "questions": ["T12-Q14", "T12-Q18"]
+    },
+    {
+      "id": 12,
+      "name": "Rust: Result<T,E>, operador ?, Drop/RAII",
+      "questions": ["T12-Q19", "T12-Q25", "T12-Q29"]
+    },
+    {
+      "id": 13,
+      "name": "Tabla comparativa: TS throw vs Result vs Go vs Kotlin vs Rust",
+      "questions": ["T12-Q08", "T12-Q26"]
+    },
+    {
+      "id": 14,
+      "name": "Excepciones en agentes: errores en cascada, ground truth, stopping conditions",
+      "questions": ["T12-Q22", "T12-Q27", "T12-Q30"]
+    }
+  ],
+  "coverage_check": {
+    "all_required_topics_covered": true,
+    "topics_missing": []
+  },
+  "gift_escaping_notes": {
+    "escaped_chars": ["= → \\=", "{ → \\{", "} → \\}"],
+    "code_questions_format": "[markdown] + <pre><code>",
+    "examples": [
+      "TypeScript `:=` in code → `:\\=`",
+      "Object literal `{ ok: false }` → `\\{ ok: false \\}`",
+      "Rust/TS `=` assignment → `\\=`"
+    ]
+  }
+}
