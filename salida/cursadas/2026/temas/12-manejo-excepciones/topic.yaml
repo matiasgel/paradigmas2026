@@ -1,0 +1,31 @@
+topic_number: "12"
+topic_name: "Manejo de Excepciones"
+topic_slug: "manejo-excepciones"
+topic_folder: "salida/cursadas/2026/temas/12-manejo-excepciones"
+class_duration: "120"
+classes_count: 1
+git_branch: "tema-12-manejo-excepciones"
+created_at: "2026-06-04"
+status: "class-written"
+artifacts:
+  diseno: "diseno.md"
+  filminas: "filminas.md"
+  minuta: "minuta.md"
+  topic_extract: "topic-extract.md"
+module: "IX"
+week: 12
+language_primary: "TypeScript"
+languages_contrast:
+  - Go
+  - Kotlin
+  - Rust
+main_reference: "Sebesta Cap. 14 (Exception Handling and Event Handling)"
+secondary_references:
+  - "Gabbrielli & Martini Cap. 7 §7.3 (Control Abstraction — Implementing Exceptions)"
+  - "Louden & Lambert Cap. 9 §9.5 (Exception Handling)"
+plan_minimo_topics:
+  - "Manejo de excepciones: conceptos, propagación, tipos"
+designer_v3_params:
+  libro: "Sebesta"
+  nivel: 2
+  languages_note: "TypeScript principal; Go (errors as values), Kotlin (sealed classes), Rust (Result<T,E>) como contraste; funcional vs imperativa; programación agéntica"

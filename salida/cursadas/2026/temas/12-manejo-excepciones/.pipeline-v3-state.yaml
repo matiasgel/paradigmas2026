@@ -1,0 +1,18 @@
+pipeline_version: "v3"
+topic_number: "12"
+topic_name: "Manejo de Excepciones"
+created_at: "2026-06-04"
+pasos_completados:
+  - "paso-0"
+  - "paso-1a"
+  - "paso-1b"
+  - "paso-1c"
+  - "paso-2"
+checkpoint_1_aprobado: true
+checkpoint_2_aprobado: true
+params:
+  libro: "Sebesta"
+  nivel: 2
+  languages: ["TypeScript", "Go", "Kotlin", "Rust"]
+  enfoques: ["imperativo", "funcional"]
+  nota_docente: "Incluir importancia en programación agéntica"
