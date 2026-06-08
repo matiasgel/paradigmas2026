@@ -1,4 +1,7 @@
 module,phase,name,code,sequence,workflow-file,command,required,agent-name,agent-command,agent-display-name,agent-title,options,description,output-location,outputs
+BMad Automator,_meta,,,,,,false,,,,,,,,
+BMad Automator,bmad-story-automator,Story Automator,SA,Automate the BMAD story build cycle across create dev QA review and retrospective steps.,,,4-implementation,bmad-sprint-planning,,,,,false,implementation_artifacts,story automation run
+BMad Automator,bmad-story-automator-review,Story Automator Review,SAR,Runs the autonomous code review flow used by story automator sessions including auto-fix handling and sprint-status sync.,,,4-implementation,bmad-dev-story,,,,,false,implementation_artifacts,review report
 BMad Builder,_meta,,,,,,false,,,,,,,https://bmad-builder-docs.bmad-method.org/llms.txt,
 BMad Builder,bmad-agent-builder,Build an Agent,BA,"Create, edit, or rebuild an agent skill through conversational discovery.",build-process,{-H: headless mode}|{description: initial agent concept}|{path: existing agent to edit or rebuild},anytime,,,,,bmad-agent-builder:quality-analysis,false,bmad_builder_output_folder,agent skill
 BMad Builder,bmad-agent-builder,Analyze an Agent,AA,"Run quality analysis on an existing agent — structure, cohesion, prompt craft, and enhancement opportunities.",quality-analysis,{-H: headless mode}|{path: agent to analyze},anytime,bmad-agent-builder:build-process,,,,,false,bmad_builder_reports,quality report
@@ -67,7 +70,6 @@ Game Dev Studio,gds-create-epics-and-stories,Create Epics and Stories,CE,Create 
 Game Dev Studio,gds-create-game-brief,Game Brief,GB,Interactive game brief creation that guides users through defining their game vision.,,,1-preproduction,,,,,,false,output_folder,game brief
 Game Dev Studio,gds-create-narrative,Narrative Design,ND,Create comprehensive narrative documentation including story structure character arcs and world-building. Use for story-driven games.,,,2-design,gds-gdd,,,,,false,planning_artifacts,narrative design
 Game Dev Studio,gds-create-story,Create Story,CS,Create Story with comprehensive context for developer agent implementation.,,,4-production,gds-sprint-planning,,,,,true,implementation_artifacts,story
-Game Dev Studio,gds-create-ux-design,Create UX Design,CU,"Guidance through realizing the plan for your game UX/UI, strongly recommended if UI is a primary piece of the proposed game.",,,2-design,gds-gdd,,,,,false,planning_artifacts,ux design
 Game Dev Studio,gds-dev-story,Dev Story,DS,Execute Dev Story workflow implementing tasks and tests.,,,4-production,gds-create-story,,,,,true,,
 Game Dev Studio,gds-document-project,Document Project,DP,Analyze an existing game project to produce useful documentation.,,,anytime,,,,,,false,project_knowledge,project documentation
 Game Dev Studio,gds-domain-research,Domain Research,DR,Game industry domain deep dive subject matter expertise and terminology.,,,1-preproduction,,,,,,false,planning_artifacts,research documents
@@ -87,6 +89,7 @@ Game Dev Studio,gds-test-automate,Test Automate,TA,Generate automated game tests
 Game Dev Studio,gds-test-design,Test Design,TD,Create comprehensive game test scenarios covering gameplay progression and quality requirements.,,,3-technical,gds-test-framework,,,,,false,planning_artifacts,test design
 Game Dev Studio,gds-test-framework,Test Framework,TF,Initialize game test framework architecture for Unity Unreal Engine or Godot projects.,,,3-technical,,,,,,false,,
 Game Dev Studio,gds-test-review,Test Review,TR,Review test quality and coverage.,,,gametest,gds-performance-test,,,,,false,,
+Game Dev Studio,gds-ux,Game UX Design,CU,"Plan game UX with DESIGN.md and EXPERIENCE.md spines covering UI, HUD, input schemes, and player journeys.",,,2-design,gds-gdd,,,,,false,planning_artifacts,ux design
 Test Architecture Enterprise,_meta,,,,,,false,,,,,,,https://bmad-code-org.github.io/bmad-method-test-architecture-enterprise/llms.txt,
 Test Architecture Enterprise,bmad-teach-me-testing,Teach Me Testing,TMT,Teach testing fundamentals through 7 sessions (TEA Academy).,,,0-learning,,,,,,false,test_artifacts,progress file|session notes|certificate
 Test Architecture Enterprise,bmad-testarch-atdd,ATDD,AT,Generate red-phase acceptance test scaffolds before implementation.,,,4-implementation,bmad-create-story:create,,,,bmad-dev-story,false,test_artifacts,atdd-checklist|red-phase acceptance tests
