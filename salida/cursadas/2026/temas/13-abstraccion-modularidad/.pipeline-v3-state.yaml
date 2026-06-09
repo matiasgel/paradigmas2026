@@ -1,0 +1,24 @@
+topic_number: 13
+topic_name: "Abstracción Procedural y Modularidad"
+pipeline_version: v3
+created: "2026-06-08"
+updated: "2026-06-08"
+pasos_completados:
+  - paso-0
+  - paso-1a
+  - paso-1b
+  - paso-1c
+  - checkpoint-1
+  - paso-2
+  - paso-3
+  - paso-4
+checkpoint_1_aprobado: true
+checkpoint_2_aprobado: true
+libro_principal: "Robert W. Sebesta — Concepts of Programming Languages (Pearson 2019)"
+nivel: 2
+next_step: "checkpoint-3-filminas"
+notas: "Grounding real ChromaDB (C:/Users/matia/chroma_db) — Sebesta caps 9/11/12, Gabbrielli caps 5/7, Louden cap 11. Archivos generados: topic.yaml, minuta.md, filminas.md"
+archivos_generados:
+  - topic.yaml
+  - minuta.md
+  - filminas.md

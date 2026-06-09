@@ -1,0 +1,60 @@
+﻿topic_number: 13
+topic_name: "Estructuración de Programas"
+topic_subtitle: "Módulo X — Abstracción Procedural, Modularidad y Genéricos"
+topic_folder: "salida/cursadas/2026/temas/13-abstraccion-modularidad"
+module: X
+week: 13
+clases: 2
+duration_min: 240
+status: en-curso
+course_id: leng-2026
+created: "2026-06-08"
+updated: "2026-06-08"
+pipeline_version: v3
+lenguaje_principal_ejemplos: "TypeScript"
+siguiente_tema: "Módulo XI — Concurrencia"
+
+libro_principal: "Robert W. Sebesta — Concepts of Programming Languages (Pearson 2019)"
+capitulos_sebesta: [9, 10, 11, 12]
+libros_complementarios:
+  - "Gabbrielli/Martini — Programming Languages: Principles and Paradigms (2nd ed., Springer 2023) — caps. 5, 7, 9"
+  - "Louden/Lambert — Programming Languages: Principles and Practices (Course Technology 2012) — cap. 11"
+
+objetivos_bloom:
+  - "C1 Recordar: definir subprograma, procedimiento, función, perfil, protocolo, activation record"
+  - "C2 Comprender: explicar modos de pasaje, diferencia sobrecarga vs polimorfismo, módulo vs ADT"
+  - "C3 Aplicar: implementar subprogramas tipados, genéricos y módulos en TypeScript"
+  - "C4 Analizar: comparar compilación separada vs independiente; analizar tradeoffs de overloading"
+  - "C5 Evaluar: evaluar diseño de interfaz pública de un módulo TypeScript"
+
+plan_clases:
+  clase_13A:
+    titulo: "Subprogramas, Parámetros y Sobrecarga"
+    duracion: 120
+    subtopicos:
+      - "Fundamentos de subprogramas — procedimiento vs función"
+      - "Variables locales: stack-dynamic vs static"
+      - "Pasaje de parámetros: modos semánticos y métodos"
+      - "Subprogramas como parámetros y closures"
+      - "Sobrecarga (ad hoc polymorphism)"
+      - "Polimorfismo paramétrico y genéricos — intro"
+      - "Implementación: activation records y stack de llamadas"
+  clase_13B:
+    titulo: "Módulos, Interfaces y Genéricos en TypeScript"
+    duracion: 120
+    subtopicos:
+      - "ADTs formales: encapsulamiento e information hiding"
+      - "Interfaz vs Implementación — separación"
+      - "Módulos: import/export explícito, dependencias"
+      - "Compilación separada e independiente"
+      - "Librerías de módulos en TypeScript/Node.js"
+      - "Estructuras de datos genéricas en TypeScript"
+      - "Síntesis del Módulo X — preview Concurrencia"
+
+grounding_chromadb:
+  fuente: "C:/Users/matia/chroma_db"
+  chunks_relevantes:
+    - "Sebesta txt/389-440 (relevancia 0.699) — sobrecarga, polimorfismo ad-hoc, paramétrico, genéricos §9.8-9.10"
+    - "Sebesta txt/441-470 (relevancia 0.56) — implementación subprogramas, activation records, stack-dynamic §10.1-10.3"
+    - "Gabbrielli txt/106-135 (relevancia 0.51) — dynamic chain pointer, stack of activation records §5.3.3"
+    - "Louden txt/496-545 (relevancia 0.657) — módulos, dependencias explícitas, DEFINITION MODULE, compilación separada §11.3"
