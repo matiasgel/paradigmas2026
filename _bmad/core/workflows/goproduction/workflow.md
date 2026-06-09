@@ -83,6 +83,7 @@ Mostrar la siguiente tabla al usuario:
 | REEMPLAZAR | `.github/agents/edu-*.agent.md` en production | `salida/edu-standalone/.github/agents/` |
 | REEMPLAZAR | `.github/prompts/edu-*.prompt.md` en production | `salida/edu-standalone/.github/prompts/` |
 | ACTUALIZAR | Bloque EDU en `.github/copilot-instructions.md` | `salida/edu-standalone/.github/copilot-instructions.md` |
+| GENERAR | `AGENTS.md` para Codex/OpenCode con el mismo contexto de Copilot | `.github/copilot-instructions.md` reconstruido |
 | REEMPLAZAR | `scripts/` en production | `scripts/` |
 | ⏭️ PRESERVAR | `_edu/config.yaml` | si ya existe en production |
 | 🛡️ PRESERVAR | `_edu-memory/` | siempre |
@@ -193,7 +194,7 @@ cp -r scripts "$WORKTREE_PATH/scripts"
 echo "✅ scripts/ → $(ls $WORKTREE_PATH/scripts | wc -l) archivos"
 ```
 
-#### 4.8 — Actualizar bloque EDU en `copilot-instructions.md`
+#### 4.8 — Actualizar contexto de Copilot y Codex
 
 ```bash
 if [ -f "$WORKTREE_PATH/.github/copilot-instructions.md" ]; then
@@ -201,7 +202,8 @@ if [ -f "$WORKTREE_PATH/.github/copilot-instructions.md" ]; then
 fi
 echo "" >> "$WORKTREE_PATH/.github/copilot-instructions.md"
 cat salida/edu-standalone/.github/copilot-instructions.md >> "$WORKTREE_PATH/.github/copilot-instructions.md"
-echo "✅ copilot-instructions.md — bloque EDU actualizado"
+cp "$WORKTREE_PATH/.github/copilot-instructions.md" "$WORKTREE_PATH/AGENTS.md"
+echo "✅ copilot-instructions.md y AGENTS.md — contexto EDU actualizado"
 ```
 
 #### 4.8 — Commit a rama `production`
@@ -277,6 +279,7 @@ salida/edu-standalone/     ← fuente de verdad (editar aquí, en main/develop)
 ✅ `_edu/agents/`, `_edu/workflows/`, `_edu/module-help.csv` actualizados
 ✅ `.github/agents/edu-*` y `.github/prompts/edu-*` actualizados
 ✅ Bloque EDU en `copilot-instructions.md` reemplazado
+✅ `AGENTS.md` generado para Codex/OpenCode con el mismo contexto de Copilot
 ✅ `_edu/config.yaml`, `_edu-memory/`, `salida/cursadas/` PRESERVADOS
 ✅ La rama de trabajo actual no fue modificada
 ✅ `_edu-memory/`, `salida/cursadas/`, `material/` sin modificar
