@@ -1,0 +1,35 @@
+﻿
+InputObject                                                                    
+-----------                                                                    
+classroom_publish.py â€” PublicaciÃ³n de TPs a GitHub Classroom (S3.1)         
+Solo lectura de archivos EDU â€” no modifica artefactos existentes.            
+    0 â€” publicado correctamente (o feature desactivada)                      
+    1 â€” error (gh CLI no instalado, topic no encontrado, etc.)               
+    """Verifica que `gh` CLI estÃ© instalado y autenticado."""                 
+    """Verifica autenticaciÃ³n de gh CLI."""                                   
+    title = f"{course_id} â€” {topic_id}"                                      
+        print("â„¹ï¸  GitHub Classroom desactivado (classroom_enabled: fals...
+        print("âŒ GitHub CLI (gh) no estÃ¡ instalado.")                       
+        print("   InstalaciÃ³n: https://cli.github.com/")                      
+        print("âŒ GitHub CLI no autenticado. Ejecutar: gh auth login")        
+        print(f"âŒ {result['error']}")                                        
+        print(f"âŒ Carpeta de tema no encontrada: {topic_folder}")            
+        print(f"âœ… Assignment publicado: {result['title']}")                  
+    print(f"âŒ {result['error']}")                                            
+classroom_publish.py Ã”Ã‡Ã¶ Publicaciâ”œâ”‚n de TPs a GitHub Classroom (S3.1)  
+Solo lectura de archivos EDU Ã”Ã‡Ã¶ no modifica artefactos existentes.         
+    0 Ã”Ã‡Ã¶ publicado correctamente (o feature desactivada)                   
+    1 Ã”Ã‡Ã¶ error (gh CLI no instalado, topic no encontrado, etc.)            
+    """Verifica que `gh` CLI estâ”œÂ® instalado y autenticado."""              
+    """Verifica autenticaciâ”œâ”‚n de gh CLI."""                               
+    title = f"{course_id} Ã”Ã‡Ã¶ {topic_id}"                                   
+        print("Ã”Ã¤â•£Â´Â©Ã…  GitHub Classroom desactivado (classroom_enable...
+        print("Ã”Ã˜Ã® GitHub CLI (gh) no estâ”œÃ­ instalado.")                 
+        print("   Instalaciâ”œâ”‚n: https://cli.github.com/")                  
+        print("Ã”Ã˜Ã® GitHub CLI no autenticado. Ejecutar: gh auth login")     
+        print(f"Ã”Ã˜Ã® {result['error']}")                                     
+        print(f"Ã”Ã˜Ã® Carpeta de tema no encontrada: {topic_folder}")         
+        print(f"Ã”Â£Ã  Assignment publicado: {result['title']}")               
+    print(f"Ã”Ã˜Ã® {result['error']}")                                         
+
+

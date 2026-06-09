@@ -37,6 +37,10 @@ Cuando cualquier agente (BMAD o EDU) crea o modifica artefactos del módulo EDU,
 
 Solo artefactos del framework BMAD (PRDs, epics, stories, arquitectura, etc.) que NO sean parte del módulo EDU.
 
+### Scripts del Pipeline — Regla de Modificación
+
+Los archivos `salida/edu-standalone/scripts/*.py` son **SOLO LECTURA para agentes EDU por defecto**. Un agente EDU solo puede crear, editar o eliminar scripts si el docente lo solicita **explícitamente** en el mensaje actual. Ante cualquier solicitud de modificación, el agente debe listar los archivos a cambiar y pedir confirmación antes de proceder. Para sincronizar scripts corregidos desde la rama `production`: usar `git show origin/production:scripts/<archivo>` y volcar el contenido al archivo destino.
+
 ### Deploy
 
 `/goproduction` despliega `salida/edu-standalone/` → rama `production`. GitHub Actions lo ejecuta automáticamente al hacer push a `main` si se modificó algún path dentro de `salida/edu-standalone/`.
