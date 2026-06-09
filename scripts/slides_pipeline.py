@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 EDU Slides Pipeline — Módulo EDU (v4 — Schema-Driven)
 ======================================================
@@ -46,6 +46,7 @@ import requests
 import yaml
 
 # Google API
+from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -84,6 +85,7 @@ BOTTOM_CLEAR = 760_000
 TABLE_BOTTOM_CLEAR = 1_520_000
 EMU_PER_PT = 12_700
 MIN_READABLE_CODE_PT = 9   # font size mínimo legible para código — si quedaría menor, se divide en nueva slide
+MIN_READABLE_BODY_PT = 14  # cuerpo mínimo legible — contenido más denso se divide en nuevas slides
 SLIDES_PER_PRESENTATION = 60  # máximo slides por presentación — si supera, se divide en 2 partes iguales
 
 # Directrices de layout por tipo — fuente canónica: schema-registry.json
@@ -537,9 +539,9 @@ def _compose_rich_text(subtitle: str, blocks: list[dict]) -> dict[str, Any]:
         if kind == "list":
             paragraphs = []
             for item in block.get("items", []):
-                item_text, _level = _list_item_parts(item)
+                item_text, level = _list_item_parts(item)
                 if item_text:
-                    paragraphs.append(item_text)
+                    paragraphs.append({"text": item_text, "level": level})
             if paragraphs:
                 groups.append({
                     "kind": "list",
@@ -559,10 +561,21 @@ def _compose_rich_text(subtitle: str, blocks: list[dict]) -> dict[str, Any]:
             cursor += 2
 
         group_start = cursor
-        for paragraph_idx, paragraph in enumerate(group.get("paragraphs", [])):
+        for paragraph_idx, raw_paragraph in enumerate(group.get("paragraphs", [])):
             if paragraph_idx > 0:
                 text_parts.append("\n")
                 cursor += 1
+
+            if isinstance(raw_paragraph, dict):
+                paragraph = str(raw_paragraph.get("text", ""))
+                level = max(0, int(raw_paragraph.get("level", 0) or 0))
+            else:
+                paragraph = str(raw_paragraph)
+                level = 0
+            if group["kind"] == "list" and level:
+                indent = "\t" * level
+                text_parts.append(indent)
+                cursor += len(indent)
 
             plain, local_spans = _parse_inline_markdown(paragraph)
             if not plain:
@@ -641,23 +654,33 @@ def _fit_text_font_size(
     preferred_size: float,
     min_size: float = 10,
 ) -> float:
+    probe = int(preferred_size)
+    floor = int(min_size)
+    for size in range(probe, floor - 1, -1):
+        if _text_fits_at_size(text, geo, size):
+            return float(size)
+
+    return float(min_size)
+
+
+def _text_fits_at_size(
+    text: str,
+    geo: tuple[int, int, int, int],
+    size: float,
+) -> bool:
+    """Conservative text fit estimate that accounts for wrapping and paragraph spacing."""
     lines = [line.strip() for line in text.splitlines() if line.strip()] or [""]
     _, _, width_emu, height_emu = geo
     width_pt = width_emu / EMU_PER_PT
     height_pt = height_emu / EMU_PER_PT
-
-    probe = int(preferred_size)
-    floor = int(min_size)
-    for size in range(probe, floor - 1, -1):
-        chars_per_line = max(width_pt / max(size * 0.52, 1), 8)
-        visual_lines = 0
-        for line in lines:
-            visual_lines += max(1, int((len(line) + chars_per_line - 1) // chars_per_line))
-        max_lines = height_pt / max(size * 1.32, 1)
-        if visual_lines <= max_lines:
-            return float(size)
-
-    return float(min_size)
+    chars_per_line = max(width_pt / max(size * 0.58, 1), 8)
+    visual_lines = sum(
+        max(1, int((len(line) + chars_per_line - 1) // chars_per_line))
+        for line in lines
+    )
+    paragraph_spacing = max(0, len(lines) - 1) * 0.35
+    required_height = (visual_lines + paragraph_spacing) * size * 1.48
+    return required_height <= height_pt
 
 
 def _fit_table_font_size(
@@ -1524,17 +1547,21 @@ def generate_assets(
 # FASE 3 — PUBLICACIÓN EN GOOGLE SLIDES
 # ═══════════════════════════════════════════════════════════════════════
 
-def _get_creds(secrets_path: Path, token_path: Path) -> Credentials:
+def _get_creds(secrets_path: Path, token_path: Path, force_reauth: bool = False) -> Credentials:
     secrets   = load_yaml(secrets_path)
     creds_file = Path(secrets["google_credentials_path"])
     creds: Credentials | None = None
 
-    if token_path.exists():
+    if token_path.exists() and not force_reauth:
         creds = Credentials.from_authorized_user_file(str(token_path), SCOPES)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
+            try:
+                creds.refresh(Request())
+            except RefreshError:
+                print("  ⚠️  El refresh token fue rechazado; iniciando nueva autorización OAuth.")
+                creds = None
+        if not creds or not creds.valid:
             flow  = InstalledAppFlow.from_client_secrets_file(str(creds_file), SCOPES)
             creds = flow.run_local_server(port=0)
         token_path.write_text(creds.to_json(), encoding="utf-8")
@@ -1716,7 +1743,9 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
             }
         })
 
-        for bullet in rich.get("bullet_ranges", []):
+        # Creating bullets removes leading indentation tabs, shifting later indices.
+        # Apply ranges from the end so those shifts cannot invalidate pending ranges.
+        for bullet in reversed(rich.get("bullet_ranges", [])):
             if bullet["end"] <= bullet["start"]:
                 continue
             reqs.append({
@@ -2012,7 +2041,7 @@ def _build_slide_requests(slide: dict, config: dict, page_id: str, insert_idx: i
         add_textbox(subtitle, "center-middle", s_size, color=text_col, align="CENTER")
 
     # ── 8. Cuerpo (texto + listas) ──────────────────────────────────────
-    body_zone = layout.get("body", "left-middle")
+    body_zone = _effective_body_zone(slide)
     body_subtitle = slide.get("subtitle", "") if stype != "portada" else ""
     if body_zone not in ("none", "subtitle-only"):
         body_blocks = slide.get("body_blocks") or []
@@ -2125,6 +2154,21 @@ def _get_presentation_page_size(slides_svc, pres_id: str) -> tuple[int, int]:
     return SLIDE_W, SLIDE_H
 
 
+def _effective_body_zone(slide: dict) -> str:
+    """Use the vacant right side when a body-only slide has no competing visual content."""
+    layout = slide.get("layout") or LAYOUT_MAP.get(slide.get("type", ""), {})
+    body_zone = layout.get("body", "none")
+    image = _get_slide_image(slide)
+    if (
+        body_zone in ("left-middle", "left-half")
+        and image.get("layer", "none") == "none"
+        and not slide.get("code_blocks")
+        and not slide.get("tables")
+    ):
+        return "full-bottom"
+    return body_zone
+
+
 def _split_mixed_slides(slides: list[dict]) -> list[dict]:
     """
     Pre-procesa slides con body sustancial (≥ 2 bloques) + código O tabla.
@@ -2211,6 +2255,112 @@ def _split_mixed_slides(slides: list[dict]) -> list[dict]:
 
         result.append(slide_a)
         result.append(slide_b)
+
+    return result
+
+
+def _coalesce_list_blocks(blocks: list[dict]) -> list[dict]:
+    """Merge adjacent lists with the same numbering mode so bullets do not restart."""
+    result: list[dict] = []
+    for block in blocks:
+        if (
+            result
+            and block.get("type") == "list"
+            and result[-1].get("type") == "list"
+            and bool(block.get("ordered")) == bool(result[-1].get("ordered"))
+        ):
+            result[-1]["items"].extend(list(block.get("items", [])))
+        else:
+            copied = dict(block)
+            if copied.get("type") == "list":
+                copied["items"] = list(copied.get("items", []))
+            result.append(copied)
+    return result
+
+
+def _body_atoms(blocks: list[dict]) -> list[dict]:
+    """Expand lists into one-item atoms so dense bodies can split at semantic boundaries."""
+    atoms: list[dict] = []
+    for block in blocks:
+        if block.get("type") != "list":
+            atoms.append(dict(block))
+            continue
+        item_groups: list[list[dict]] = []
+        current_items: list[dict] = []
+        for item in block.get("items", []):
+            level = max(0, int(item.get("level", 0) or 0))
+            if current_items and level == 0:
+                item_groups.append(current_items)
+                current_items = []
+            current_items.append(dict(item))
+        if current_items:
+            item_groups.append(current_items)
+        for items in item_groups:
+            atoms.append({
+                "type": "list",
+                "ordered": bool(block.get("ordered", False)),
+                "items": items,
+            })
+    return atoms
+
+
+def _split_oversized_body_slides(
+    slides: list[dict],
+    config: dict,
+    page_w: int = SLIDE_W,
+    page_h: int = SLIDE_H,
+) -> list[dict]:
+    """Split body-only slides until each chunk fits at a readable body font size."""
+    zones = _zones(page_w, page_h)
+    result: list[dict] = []
+
+    for slide in slides:
+        blocks = slide.get("body_blocks") or []
+        if not blocks or slide.get("code_blocks") or slide.get("tables"):
+            result.append(slide)
+            continue
+
+        body_zone = _effective_body_zone(slide)
+        body_geo = zones.get(body_zone)
+        if not body_geo or body_zone in ("none", "subtitle-only"):
+            result.append(slide)
+            continue
+
+        subtitle = slide.get("subtitle", "")
+        normalized = _coalesce_list_blocks(list(blocks))
+        body_text = _compose_body_text(subtitle, normalized)
+        if _text_fits_at_size(body_text, body_geo, MIN_READABLE_BODY_PT):
+            current = dict(slide)
+            current["body_blocks"] = normalized
+            result.append(current)
+            continue
+
+        chunks: list[list[dict]] = []
+        current_atoms: list[dict] = []
+        for atom in _body_atoms(normalized):
+            candidate_atoms = current_atoms + [atom]
+            candidate = _coalesce_list_blocks(candidate_atoms)
+            candidate_text = _compose_body_text(subtitle if not chunks else "", candidate)
+            if current_atoms and not _text_fits_at_size(candidate_text, body_geo, MIN_READABLE_BODY_PT):
+                chunks.append(_coalesce_list_blocks(current_atoms))
+                current_atoms = [atom]
+            else:
+                current_atoms = candidate_atoms
+        if current_atoms:
+            chunks.append(_coalesce_list_blocks(current_atoms))
+
+        if len(chunks) <= 1:
+            result.append(slide)
+            continue
+
+        total = len(chunks)
+        for index, chunk in enumerate(chunks, start=1):
+            part = dict(slide)
+            part["id"] = f"{slide.get('id', 'F-00')}-body{index}"
+            part["title"] = f"{slide.get('title', '')} ({index}/{total})"
+            part["subtitle"] = subtitle if index == 1 else ""
+            part["body_blocks"] = chunk
+            result.append(part)
 
     return result
 
@@ -2343,8 +2493,9 @@ def _publish_part(
 
     _clear_slides(slides_svc, pres_id)
 
-    # Pre-procesar: dividir slides mixtos y código ilegible en slides adicionales
+    # Pre-procesar: dividir contenido denso en slides adicionales
     slides = _split_mixed_slides(slides)
+    slides = _split_oversized_body_slides(slides, config, page_w, page_h)
     slides = _split_oversized_code_slides(slides, config, page_w, page_h)
 
     all_reqs: list[dict] = []
@@ -2478,6 +2629,7 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--regen-plan",   action="store_true", help="Regenera plan JSON desde filminas.md")
     parser.add_argument("--assets-only",  action="store_true", help="Solo genera assets (requiere plan previo)")
     parser.add_argument("--publish-only", action="store_true", help="Solo publica (requiere plan + assets)")
+    parser.add_argument("--reauth", action="store_true", help="Ignora el token guardado y solicita autorización OAuth nueva")
     args = parser.parse_args(argv)
 
     topic_folder = Path(args.topic_folder).resolve()
@@ -2580,7 +2732,7 @@ def main(argv: list[str] | None = None) -> None:
     # ── Autenticar con Google ─────────────────────────────────────────────
     secrets = load_yaml(secrets_path) if secrets_path.exists() else {}
     gemini_key   = secrets.get("gemini_api_key", "")
-    creds = _get_creds(secrets_path, token_path)
+    creds = _get_creds(secrets_path, token_path, force_reauth=args.reauth)
 
     # ── Fase 2: Generar assets ─────────────────────────────────────────────
     if not args.publish_only:

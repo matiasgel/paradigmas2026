@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 publish_loop.py — Loop de publicación con prueba de coherencia de esquema (v1)
 ================================================================================
@@ -43,6 +43,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -172,6 +173,7 @@ def phase0_consult_registry(topic_folder: Path, course_id: str) -> None:
     print(f"  Para historial del tema: python scripts/error_registry.py query --topic {topic_name}")
 
 
+def phase1_repair_loop(
     topic_folder: Path,
     python: str,
     max_attempts: int,
@@ -240,21 +242,21 @@ def phase2_coherence_checks(
             "id": "accessibility",
             "label": "Accesibilidad WCAG AA (contraste, tipografía, alt_text)",
             "script": "validate_accessibility.py",
-            "args": ["--topic", topic_folder.name, "--course", course_id],
+            "args": [str(topic_folder)],
             "blocking": False,  # warning, no bloquea
         },
         {
             "id": "layout-cognition",
             "label": "Reglas cognitivas (Mayer/Garner: assertion-evidence, densidad)",
             "script": "validate_layout_cognition.py",
-            "args": ["--topic", topic_folder.name, "--course", course_id],
+            "args": [str(topic_folder)],
             "blocking": False,
         },
         {
             "id": "composition",
             "label": "Composición visual (márgenes, densidad 35-55%, superposiciones)",
             "script": "validate_slide_composition.py",
-            "args": ["--topic", topic_folder.name, "--course", course_id],
+            "args": [str(topic_folder)],
             "blocking": False,
         },
     ]
@@ -366,6 +368,8 @@ def phase4_post(
         pres_id = _extract_presentation_id(url_file.read_text(encoding="utf-8").strip())
         if pres_id:
             thumbs_dir = topic_folder / "slides" / "thumbnails"
+            if thumbs_dir.exists():
+                shutil.rmtree(thumbs_dir)
             thumbs_dir.mkdir(parents=True, exist_ok=True)
             code, _ = _run(
                 [python, str(thumbs_script), pres_id, str(thumbs_dir)],
@@ -397,7 +401,7 @@ def phase4_post(
     report_path = topic_folder / "slides" / "publish-report.json"
     report_path.parent.mkdir(parents=True, exist_ok=True)
     save_json(report_path, report)
-    _status(True, f"Reporte guardado: {report_path.relative_to(find_project_root())}")
+    _status(True, f"Reporte guardado: {report_path.relative_to(find_project_root(topic_folder))}")
 
     # Escribir en memory.db si está disponible
     memory_script = _scripts / "edu_memory.py"
@@ -462,7 +466,7 @@ def main() -> None:
     # Determinar course_id
     course_id = args.course
     if not course_id:
-        root = find_project_root()
+        root = find_project_root(topic_folder)
         try:
             cfg = load_yaml(root / "_edu" / "config.yaml").value
             prefix = cfg.get("course_prefix", "edu")
