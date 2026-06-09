@@ -16,6 +16,7 @@ como fuente única de verdad — los scripts importan desde este módulo.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Generic, TypeVar
@@ -140,6 +141,27 @@ def load_config(project_root: Path) -> dict:
     if config_path.exists():
         return load_yaml(config_path)
     return {}
+
+
+def table_dimensions(table: str | dict) -> tuple[int, int]:
+    """Return row and column counts for schema v3 Markdown or legacy table objects."""
+    if isinstance(table, dict):
+        rows = table.get("rows", [])
+        if not rows:
+            return 0, 0
+        first = rows[0]
+        columns = len(first) if isinstance(first, list) else len(first.get("cells", []))
+        return len(rows), columns
+
+    rows: list[list[str]] = []
+    for line in table.splitlines():
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) < 2:
+            continue
+        if all(re.fullmatch(r":?-{3,}:?", cell) for cell in cells):
+            continue
+        rows.append(cells)
+    return len(rows), max((len(row) for row in rows), default=0)
 
 
 def find_plan(topic_folder: Path) -> Result[Path]:

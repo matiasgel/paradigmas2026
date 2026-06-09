@@ -27,7 +27,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from pipeline_common import find_plan, find_project_root, load_json, load_yaml
+from pipeline_common import find_plan, find_project_root, load_json, load_yaml, table_dimensions
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -102,7 +102,7 @@ def count_code_lines(slide: dict) -> int:
     """Cuenta las líneas de código en code_blocks."""
     total = 0
     for cb in slide.get("code_blocks", []):
-        code = cb.get("code", "")
+        code = cb.get("content", "")
         total += code.count("\n") + (1 if code.strip() else 0)
     return total
 
@@ -169,7 +169,7 @@ def validate_slide_cognition(slide: dict, config: dict) -> list[dict]:
     # 3. Image required
     if rules.get("image_required"):
         image = slide.get("image", {})
-        has_image = image.get("image_layer", "none") != "none"
+        has_image = image.get("layer", "none") != "none"
         if not has_image:
             issues.append({
                 "rule": "Imagen obligatoria",
@@ -224,22 +224,20 @@ def validate_slide_cognition(slide: dict, config: dict) -> list[dict]:
     max_cols = rules.get("max_columns")
     if max_rows or max_cols:
         for tbl in slide.get("tables", []):
-            rows = tbl.get("rows", [])
-            if max_rows and len(rows) > max_rows:
+            row_count, column_count = table_dimensions(tbl)
+            if max_rows and row_count > max_rows:
                 issues.append({
                     "rule": "Tabla densa",
                     "severity": "warning",
-                    "message": f"Tabla con {len(rows)} filas (máximo: {max_rows})",
+                    "message": f"Tabla con {row_count} filas (máximo: {max_rows})",
                     "suggestion": "Simplificar o dividir tabla",
                 })
-            if max_cols and rows:
-                n_cols = len(rows[0]) if isinstance(rows[0], list) else len(rows[0].get("cells", []))
-                if n_cols > max_cols:
-                    issues.append({
-                        "rule": "Tabla ancha",
-                        "severity": "warning",
-                        "message": f"Tabla con {n_cols} columnas (máximo: {max_cols})",
-                    })
+            if max_cols and column_count > max_cols:
+                issues.append({
+                    "rule": "Tabla ancha",
+                    "severity": "warning",
+                    "message": f"Tabla con {column_count} columnas (máximo: {max_cols})",
+                })
 
     return issues
 

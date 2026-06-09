@@ -6,7 +6,7 @@ class_duration: "120"
 classes_count: 1
 git_branch: "tema-12-manejo-excepciones"
 created_at: "2026-06-04"
-status: "class-written"
+status: "slides-published"
 artifacts:
   diseno: "diseno.md"
   filminas: "filminas.md"
