@@ -26,7 +26,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from pipeline_common import find_plan, find_project_root, load_json, load_yaml
+from pipeline_common import find_plan, find_project_root, load_json, load_yaml, table_dimensions
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -132,7 +132,7 @@ def estimate_visual_density(slide: dict) -> dict:
     code_blocks = slide.get("code_blocks", [])
     if code_blocks:
         for cb in code_blocks:
-            code = cb.get("code", "")
+            code = cb.get("content", "")
             lines = code.count("\n") + 1
             weights["code"] = 15 + lines * 1
     
@@ -140,12 +140,12 @@ def estimate_visual_density(slide: dict) -> dict:
     tables = slide.get("tables", [])
     if tables:
         for tbl in tables:
-            rows = tbl.get("rows", [])
-            weights["table"] = 20 + len(rows) * 2
+            row_count, _ = table_dimensions(tbl)
+            weights["table"] = 20 + row_count * 2
 
     # Image
     image = slide.get("image", {})
-    img_layer = image.get("image_layer", "none")
+    img_layer = image.get("layer", "none")
     if img_layer == "background":
         weights["image"] = 100.0
     elif img_layer == "content":

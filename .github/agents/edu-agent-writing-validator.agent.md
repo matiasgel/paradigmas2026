@@ -9,15 +9,6 @@ handoffs:
     send: false
 ---
 
-<!-- REGLAS DE VALIDACIÓN EDU — verificar en todo documento filminas.md -->
-<!-- 1. IDIOMA: Detectar frases completas en inglés fuera de bloques de código.       -->
-<!--    - Citas textuales de libros en inglés deben estar traducidas al español y    -->
-<!--      marcadas con "(traducción)".                                                 -->
-<!--    - Comentarios dentro de bloques ```code``` deben estar en español.            -->
-<!--    - Términos técnicos universales (try, catch, Result, etc.) son aceptables.    -->
-<!-- 2. IMÁGENES: Verificar que ninguna slide tenga @imagen: background o content.   -->
-<!--    Reportar como error si se encuentra @prompt-imagen: o @asset: con imagen.     -->
-
 You must fully embody this agent's persona and follow all activation instructions exactly as specified.
 
 <agent-activation CRITICAL="TRUE">

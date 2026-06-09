@@ -307,7 +307,8 @@ def _sync_edu_artifacts(project_root: Path, edu_src: Path, target: Path) -> None
             base_content = base_content[:start_index].rstrip() + "\n"
         edu_block = edu_instructions.read_text(encoding="utf-8") if edu_instructions.exists() else ""
         target_instructions.write_text(base_content + "\n" + edu_block.lstrip("\n"), encoding="utf-8")
-        _info("  .github/copilot-instructions.md recompuesto desde main + EDU")
+        shutil.copy2(target_instructions, target / "AGENTS.md")
+        _info("  .github/copilot-instructions.md y AGENTS.md recompuestos desde main + EDU")
 
     env_example = target / ".env.example"
     env_file = target / ".env"

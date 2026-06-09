@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-05T16:17:03.610292+00:00",
+  "generated_at": "2026-06-09T01:36:09.203327+00:00",
   "topic": "12-manejo-excepciones",
   "course_id": "edu-2026",
-  "publish_success": false,
+  "publish_success": true,
   "coherence_checks": [
     {
       "id": "schema-contract",
@@ -13,28 +13,28 @@
     },
     {
       "id": "accessibility",
-      "label": "Accesibilidad WCAG AA (contraste, tipografÃ­a, alt_text)",
-      "passed": false,
+      "label": "Accesibilidad WCAG AA (contraste, tipografía, alt_text)",
+      "passed": true,
       "blocking": false,
-      "exit_code": 1
+      "exit_code": 0
     },
     {
       "id": "layout-cognition",
       "label": "Reglas cognitivas (Mayer/Garner: assertion-evidence, densidad)",
-      "passed": false,
+      "passed": true,
       "blocking": false,
-      "exit_code": 1
+      "exit_code": 0
     },
     {
       "id": "composition",
-      "label": "ComposiciÃ³n visual (mÃ¡rgenes, densidad 35-55%, superposiciones)",
-      "passed": false,
+      "label": "Composición visual (márgenes, densidad 35-55%, superposiciones)",
+      "passed": true,
       "blocking": false,
-      "exit_code": 1
+      "exit_code": 0
     },
     {
       "id": "semantic-drift",
-      "label": "Coherencia semÃ¡ntica inter-clases (MiniLM drift detector)",
+      "label": "Coherencia semántica inter-clases (MiniLM drift detector)",
       "passed": true,
       "blocking": false,
       "exit_code": 0

@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from urllib.parse import urljoin
 
 try:
     import jsonschema
@@ -78,14 +79,15 @@ def _validate_v3_schema(plan: dict, project_root: Path) -> Result[dict]:
         _reg: Registry = Registry()
         if slide_schema:
             _slide_res = Resource.from_contents(slide_schema)
-            # Registrar bajo el nombre de archivo (como aparece en $ref) y bajo $id
-            _reg = _reg.with_resource("filmina-slide.schema.json", _slide_res)
-            if slide_schema.get("$id"):
-                _reg = _reg.with_resource(slide_schema["$id"], _slide_res)
-            # Registrar también bajo la URI resuelta relativa al $id del plan
-            # plan $id="edu-schemas/plan-filminas" + $ref="filmina-slide.schema.json"
-            # → resuelve a "edu-schemas/filmina-slide.schema.json"
-            _reg = _reg.with_resource("edu-schemas/filmina-slide.schema.json", _slide_res)
+            # A relative $ref is resolved against the plan schema's $id.
+            slide_uris = {
+                "filmina-slide.schema.json",
+                slide_schema.get("$id", ""),
+                urljoin(plan_schema.get("$id", ""), "filmina-slide.schema.json"),
+            }
+            for uri in slide_uris:
+                if uri:
+                    _reg = _reg.with_resource(uri, _slide_res)
         _validator = jsonschema.Draft202012Validator(plan_schema, registry=_reg)
     except ImportError:
         pass  # 'referencing' no instalado → usar RefResolver legacy

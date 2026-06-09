@@ -17,7 +17,7 @@
     "images_planned": 0,
     "tables_planned": 3,
     "code_slides": 9,
-    "status": "READY_FOR_VALIDATION",
+    "status": "PUBLISHED",
     "pending_types": 0,
     "pending_prompts": 0,
     "type_distribution": {
@@ -1325,11 +1325,11 @@
             },
             {
               "content": "Imperativo (`throw`): expresivo, natural en async, estándar OO",
-              "level": 0
+              "level": 1
             },
             {
               "content": "Funcional (`Result`): composable, exhaustivo en tipos, esencial en sistemas agénticos",
-              "level": 0
+              "level": 1
             }
           ]
         },
