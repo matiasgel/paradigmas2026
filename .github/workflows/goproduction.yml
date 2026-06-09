@@ -144,13 +144,14 @@ jobs:
           rsync -av --delete main-repo/.github/workflows/ target-repo/.github/workflows/
           echo "✅ .github/workflows sincronizado desde main"
 
-      - name: "4.0.7 — Reconstruir copilot-instructions.md"
+      - name: "4.0.7 — Reconstruir contexto para Copilot y Codex"
         run: |
           cp main-repo/.github/copilot-instructions.md target-repo/.github/copilot-instructions.md 2>/dev/null || true
           sed -i '/<!-- EDU:START -->/,/<!-- EDU:END -->/d' target-repo/.github/copilot-instructions.md || true
           echo "" >> target-repo/.github/copilot-instructions.md
           cat main-repo/salida/edu-standalone/.github/copilot-instructions.md >> target-repo/.github/copilot-instructions.md
-          echo "✅ copilot-instructions.md reconstruido con base main + bloque EDU"
+          cp target-repo/.github/copilot-instructions.md target-repo/AGENTS.md
+          echo "✅ copilot-instructions.md y AGENTS.md reconstruidos con el mismo contexto base main + EDU"
 
       - name: "4.0.8 — Garantizar .env inicial"
         run: |
@@ -179,6 +180,8 @@ jobs:
           echo "  _edu/workflows/:       $(ls target-repo/_edu/workflows/ | wc -l) carpetas"
           echo "  .github/agents edu-*:  $(ls target-repo/.github/agents/edu-*.agent.md | wc -l) archivos"
           echo "  .github/prompts edu-*: $(ls target-repo/.github/prompts/edu-*.prompt.md | wc -l) archivos"
+          echo "  .agents/skills edu-*:  $(find target-repo/.agents/skills -mindepth 1 -maxdepth 1 -type d -name 'edu-agent-*' 2>/dev/null | wc -l) skills"
+          echo "  AGENTS.md Codex:       $([ -f target-repo/AGENTS.md ] && echo presente || echo FALTA)"
           echo "  scripts/:              $(ls target-repo/scripts/ | grep -v __pycache__ | wc -l) archivos"
           echo "  requirements.txt:      $([ -f target-repo/requirements.txt ] && echo presente || echo FALTA)"
           echo "  README.md:             $([ -f target-repo/README.md ] && echo presente || echo FALTA)"
