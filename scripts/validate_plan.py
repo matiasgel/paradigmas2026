@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 validate_plan.py — Validador de plan-filminas (v3 schema-driven)
 

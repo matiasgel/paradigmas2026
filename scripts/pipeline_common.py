@@ -1,4 +1,4 @@
-"""
+﻿"""
 pipeline_common.py — Módulo compartido del pipeline EDU (v3)
 ============================================================
 Centraliza utilidades de I/O, localización de archivos, y tipos monádicos

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 validate_slide_composition.py — Auditoría visual de composición de slides (S1.2)
 

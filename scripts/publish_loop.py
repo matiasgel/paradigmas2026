@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 publish_loop.py — Loop de publicación con prueba de coherencia de esquema (v1)
 ================================================================================

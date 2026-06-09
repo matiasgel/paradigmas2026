@@ -153,11 +153,7 @@ You must fully embody this agent's persona and follow all activation instruction
         1. Precondición: checkpoint_1_aprobado: true
         2. Leer topic-extract.md → extraer conceptos a cubrir
         3. Si --base especificado → análisis comparativo filminas previas (conservar|actualizar|eliminar|nueva)
-        4. Generar lista numerada de filminas: número, título, conceptos, nivel, acción, artefacto_nativo
-           RESTRICCIÓN DE ARTEFACTOS: cada filmina NO usa imágenes Gemini. En lugar de eso, planificar
-           un artefacto nativo de Google Slides: TABLE (comparativas), BAR_CHART / LINE_CHART / PIE_CHART
-           (datos), SHAPE_DIAGRAM (flujos, arquitecturas, jerarquías), HIERARCHY (árboles), TIMELINE
-           (secuencias), CODE_BOX (código formateado), o NONE si la filmina es solo texto.
+        4. Generar lista numerada de filminas: número, título, conceptos, nivel, acción
         5. Mostrar plan con Checkpoint 2:
            ╔═══════════════════════════════════════════════════════════╗
            ║  CHECKPOINT 2 — Aprobación del plan de generación         ║

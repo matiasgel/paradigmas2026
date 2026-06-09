@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 validate_layout_cognition.py — Validador de reglas cognitivas para filminas (S4.1)
 
