@@ -1,7 +1,7 @@
 
 
 
- EDU:START -->
+<!-- EDU:START -->
 # EDU — Academic Course Production Suite
 
 ## Descripción
