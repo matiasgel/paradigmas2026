@@ -1,5 +1,5 @@
 ---
-name: "class-writer"
+name: "edu-agent-class-writer"
 description: "Class Writer"
 ---
 

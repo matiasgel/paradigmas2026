@@ -1,29 +1,29 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """
-publish_loop.py â€” Loop de publicaciÃ³n con prueba de coherencia de esquema (v1)
+publish_loop.py — Loop de publicación con prueba de coherencia de esquema (v1)
 ================================================================================
 Orquesta el ciclo completo:
 
-    FASE 1 â€” VALIDACIÃ“N ESTRUCTURAL (schema contract)
+    FASE 1 — VALIDACIÓN ESTRUCTURAL (schema contract)
         repair_plan.py --attempt N
-        â†’ exit 0: plan vÃ¡lido â†’ continuar
-        â†’ exit 1: errores schema â†’ agente corrige â†’ reintentar
-        â†’ exit 2: max intentos â†’ STOP humano
+        → exit 0: plan válido → continuar
+        → exit 1: errores schema → agente corrige → reintentar
+        → exit 2: max intentos → STOP humano
 
-    FASE 2 â€” COHERENCIA DEL ESQUEMA (antes de publicar)
-        2a. validate_plan.py         â†’ contrato JSON Schema v3
-        2b. validate_accessibility.py â†’ WCAG AA contraste/tipografÃ­a/alt_text
-        2c. validate_layout_cognition.py â†’ reglas cognitivas (Mayer/Garner)
-        2d. validate_slide_composition.py â†’ mÃ¡rgenes, densidad visual
-        2e. fact_verifier.py          â†’ verificaciÃ³n factual NLI (si habilitado)
-        2f. semantic_drift_detector.py â†’ coherencia inter-clases (si habilitado)
+    FASE 2 — COHERENCIA DEL ESQUEMA (antes de publicar)
+        2a. validate_plan.py         → contrato JSON Schema v3
+        2b. validate_accessibility.py → WCAG AA contraste/tipografía/alt_text
+        2c. validate_layout_cognition.py → reglas cognitivas (Mayer/Garner)
+        2d. validate_slide_composition.py → márgenes, densidad visual
+        2e. fact_verifier.py          → verificación factual NLI (si habilitado)
+        2f. semantic_drift_detector.py → coherencia inter-clases (si habilitado)
 
-    FASE 3 â€” PUBLICACIÃ“N (solo si FASE 2 pasa)
+    FASE 3 — PUBLICACIÓN (solo si FASE 2 pasa)
         slides_pipeline.py
 
-    FASE 4 â€” POST-PUBLICACIÃ“N
+    FASE 4 — POST-PUBLICACIÓN
         capture_thumbnails.py (si habilitado)
-        â†’ Escribe resultado en memory.db
+        → Escribe resultado en memory.db
 
 Uso:
     python scripts/publish_loop.py <topic_folder>
@@ -34,10 +34,10 @@ Uso:
     python scripts/publish_loop.py <topic_folder> --max-attempts 5
 
 Exit codes:
-    0 â€” publicaciÃ³n exitosa
-    1 â€” errores de validaciÃ³n (se muestra reporte)
-    2 â€” max intentos de reparaciÃ³n superados â†’ revisiÃ³n humana
-    3 â€” FASE 2 fallÃ³: coherencia bloqueada
+    0 — publicación exitosa
+    1 — errores de validación (se muestra reporte)
+    2 — max intentos de reparación superados → revisión humana
+    3 — FASE 2 falló: coherencia bloqueada
 """
 from __future__ import annotations
 
@@ -56,7 +56,7 @@ if str(_scripts) not in sys.path:
 
 from pipeline_common import find_project_root, find_plan, load_yaml, save_json
 
-# Registro de errores â€” importaciÃ³n tolerante a fallo (no bloquea el pipeline)
+# Registro de errores — importación tolerante a fallo (no bloquea el pipeline)
 try:
     from error_registry import ErrorRegistry as _ErrorRegistry
     _registry = _ErrorRegistry()
@@ -86,15 +86,15 @@ def _record_error(
             root_cause=root_cause,
             context=context,
         )
-        print(f"  ðŸ“‹ Error registrado en error-registry.jsonl (ID: {eid[:8]}...)")
+        print(f"  📋 Error registrado en error-registry.jsonl (ID: {eid[:8]}...)")
         print(f"     Consultar reglas: python scripts/error_registry.py rules --phase {phase}")
     except Exception as exc:  # noqa: BLE001
-        print(f"  âš ï¸  No se pudo registrar en error-registry.jsonl: {exc}", file=sys.stderr)
+        print(f"  ⚠️  No se pudo registrar en error-registry.jsonl: {exc}", file=sys.stderr)
 
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────
 # Helpers
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────
 
 def _run(cmd: list[str], label: str) -> tuple[int, str]:
     """Ejecuta un comando y retorna (exit_code, stdout+stderr)."""
@@ -111,82 +111,81 @@ def _run(cmd: list[str], label: str) -> tuple[int, str]:
 
 def _print_section(title: str) -> None:
     width = 72
-    print(f"\n{'â•' * width}")
+    print(f"\n{'═' * width}")
     print(f"  {title}")
-    print(f"{'â•' * width}")
+    print(f"{'═' * width}")
 
 
 def _status(ok: bool, label: str, detail: str = "") -> None:
-    icon = "âœ…" if ok else "âŒ"
-    detail_str = f" â€” {detail}" if detail else ""
+    icon = "✅" if ok else "❌"
+    detail_str = f" — {detail}" if detail else ""
     print(f"  {icon} {label}{detail_str}")
 
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────
 # Fases
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────
 
 def phase0_consult_registry(topic_folder: Path, course_id: str) -> None:
     """
     FASE 0: Consulta obligatoria del registro de errores antes de iniciar.
-    Muestra las reglas de prevenciÃ³n relevantes para el tema y las globales.
-    No bloquea la ejecuciÃ³n â€” es informativa.
+    Muestra las reglas de prevención relevantes para el tema y las globales.
+    No bloquea la ejecución — es informativa.
     """
-    _print_section("FASE 0 â€” Consulta del registro de errores (obligatoria)")
+    _print_section("FASE 0 — Consulta del registro de errores (obligatoria)")
 
     if _registry is None:
-        print("  âš ï¸  error_registry.py no disponible â€” omitiendo consulta")
+        print("  ⚠️  error_registry.py no disponible — omitiendo consulta")
         return
 
     topic_name = topic_folder.name
 
-    # Errores anteriores para este tema especÃ­fico
+    # Errores anteriores para este tema específico
     topic_errors = _registry.query(topic=topic_name, status="open")
     if topic_errors:
-        print(f"  âš ï¸  {len(topic_errors)} error(es) ABIERTO(S) previos para '{topic_name}':")
-        for e in topic_errors[-5:]:  # Ãºltimos 5
+        print(f"  ⚠️  {len(topic_errors)} error(es) ABIERTO(S) previos para '{topic_name}':")
+        for e in topic_errors[-5:]:  # últimos 5
             ts = (e.get("timestamp") or "?")[:10]
             print(f"     [{ts}] {e.get('phase')} / {e.get('error_type')}: "
                   f"{(e.get('description') or '')[:80]}")
         print()
 
-    # Reglas de prevenciÃ³n para las fases del pipeline
+    # Reglas de prevención para las fases del pipeline
     rules = _registry.get_prevention_rules()
     pipeline_rules = [r for r in rules if r["phase"] in ("FASE1", "FASE2", "FASE3")]
 
     if pipeline_rules:
-        print(f"  ðŸ“‹ {len(pipeline_rules)} regla(s) de prevenciÃ³n activas para este pipeline:")
+        print(f"  📋 {len(pipeline_rules)} regla(s) de prevención activas para este pipeline:")
         for r in pipeline_rules[:6]:  # mostrar hasta 6
             print(f"     [{r['phase']} / {r['error_type']}]")
-            # Primera oraciÃ³n de la regla
+            # Primera oración de la regla
             first_sentence = (r.get("rule") or "").split(".")[0][:100]
             if first_sentence:
-                print(f"     â†’ {first_sentence}.")
+                print(f"     → {first_sentence}.")
         if len(pipeline_rules) > 6:
-            print(f"     ... y {len(pipeline_rules) - 6} mÃ¡s. "
+            print(f"     ... y {len(pipeline_rules) - 6} más. "
                   f"Ver: python scripts/error_registry.py rules")
     else:
-        print("  âœ… Sin errores previos registrados. Primera publicaciÃ³n de este pipeline.")
+        print("  ✅ Sin errores previos registrados. Primera publicación de este pipeline.")
 
     print(f"\n  Para consulta completa: python scripts/error_registry.py rules")
     print(f"  Para historial del tema: python scripts/error_registry.py query --topic {topic_name}")
 
 
-def phase1_repair_loop(
     topic_folder: Path,
     python: str,
     max_attempts: int,
 ) -> int:
     """
-    Ejecuta repair_plan.py en loop hasta que el plan sea vÃ¡lido o se agoten los intentos.
+    Ejecuta repair_plan.py en loop hasta que el plan sea válido o se agoten los intentos.
     El agente (Diego) corrige el plan entre intentos cuando se corre en modo agente.
     Retorna el exit code final (0=ok, 1=errores, 2=max_attempts).
     """
-    _print_section("FASE 1 â€” ValidaciÃ³n estructural del plan (schema v3)")
+    _print_section("FASE 1 — Validación estructural del plan (schema v3)")
 
     repair_script = _scripts / "repair_plan.py"
     if not repair_script.exists():
-        print(f"  âŒ repair_plan.py no encontrado en {_scripts}", file=sys.stderr)
+        print(f"  ❌ repair_plan.py no encontrado en {_scripts}", file=sys.stderr)
         return 1
 
     for attempt in range(1, max_attempts + 1):
@@ -200,17 +199,17 @@ def phase1_repair_loop(
             print(f"    {line}")
 
         if code == 0:
-            _status(True, f"Plan vÃ¡lido en intento {attempt}")
+            _status(True, f"Plan válido en intento {attempt}")
             return 0
         elif code == 2:
-            _status(False, f"MÃ¡x intentos superados â€” revisiÃ³n humana requerida")
+            _status(False, f"Máx intentos superados — revisión humana requerida")
             return 2
         else:
             _status(False, f"Intento {attempt}: errores encontrados")
             if attempt < max_attempts:
-                print(f"\n  âš ï¸  El agente debe corregir SOLO los campos reportados arriba.")
+                print(f"\n  ⚠️  El agente debe corregir SOLO los campos reportados arriba.")
                 print(f"     Luego retomar con: python scripts/publish_loop.py {topic_folder}")
-                # En modo automÃ¡tico el agente puede iterar; en modo CLI retornamos para que corrija
+                # En modo automático el agente puede iterar; en modo CLI retornamos para que corrija
                 return 1
 
     return 2
@@ -227,7 +226,7 @@ def phase2_coherence_checks(
     Ejecuta todos los validadores de coherencia.
     Retorna (all_passed: bool, results: list[dict]) con detalle por check.
     """
-    _print_section("FASE 2 â€” Coherencia del esquema (pre-publicaciÃ³n)")
+    _print_section("FASE 2 — Coherencia del esquema (pre-publicación)")
 
     checks = [
         {
@@ -239,7 +238,7 @@ def phase2_coherence_checks(
         },
         {
             "id": "accessibility",
-            "label": "Accesibilidad WCAG AA (contraste, tipografÃ­a, alt_text)",
+            "label": "Accesibilidad WCAG AA (contraste, tipografía, alt_text)",
             "script": "validate_accessibility.py",
             "args": ["--topic", topic_folder.name, "--course", course_id],
             "blocking": False,  # warning, no bloquea
@@ -253,7 +252,7 @@ def phase2_coherence_checks(
         },
         {
             "id": "composition",
-            "label": "ComposiciÃ³n visual (mÃ¡rgenes, densidad 35-55%, superposiciones)",
+            "label": "Composición visual (márgenes, densidad 35-55%, superposiciones)",
             "script": "validate_slide_composition.py",
             "args": ["--topic", topic_folder.name, "--course", course_id],
             "blocking": False,
@@ -263,7 +262,7 @@ def phase2_coherence_checks(
     if not skip_facts:
         checks.append({
             "id": "fact-check",
-            "label": "VerificaciÃ³n factual NLI (ChromaDB evidence)",
+            "label": "Verificación factual NLI (ChromaDB evidence)",
             "script": "fact_verifier.py",
             "args": ["--topic", topic_folder.name, "--course", course_id],
             "blocking": False,
@@ -272,7 +271,7 @@ def phase2_coherence_checks(
     if not skip_drift:
         checks.append({
             "id": "semantic-drift",
-            "label": "Coherencia semÃ¡ntica inter-clases (MiniLM drift detector)",
+            "label": "Coherencia semántica inter-clases (MiniLM drift detector)",
             "script": "semantic_drift_detector.py",
             "args": ["--course", course_id],
             "blocking": False,
@@ -285,7 +284,7 @@ def phase2_coherence_checks(
         script_path = _scripts / check["script"]
         if not script_path.exists():
             results.append({**check, "code": -1, "output": "script no encontrado", "passed": False})
-            _status(False, check["label"], "script no encontrado â€” omitido")
+            _status(False, check["label"], "script no encontrado — omitido")
             continue
 
         code, output = _run(
@@ -299,7 +298,7 @@ def phase2_coherence_checks(
             _status(True, check["label"])
         else:
             _status(False, check["label"], "BLOQUEA" if check["blocking"] else "advertencia")
-            # Mostrar las primeras lÃ­neas del output de error
+            # Mostrar las primeras líneas del output de error
             lines = [l for l in output.strip().splitlines() if l.strip()][:8]
             for line in lines:
                 print(f"    {line}")
@@ -309,9 +308,9 @@ def phase2_coherence_checks(
     # Mostrar resumen de advertencias (non-blocking)
     warnings = [r for r in results if not r["passed"] and not r.get("blocking", False)]
     if warnings:
-        print(f"\n  âš ï¸  {len(warnings)} advertencia(s) no bloqueantes â€” pueden publicarse con precauciÃ³n:")
+        print(f"\n  ⚠️  {len(warnings)} advertencia(s) no bloqueantes — pueden publicarse con precaución:")
         for w in warnings:
-            print(f"     â€¢ {w['label']}")
+            print(f"     • {w['label']}")
 
     return all_blocking_passed, results
 
@@ -323,14 +322,14 @@ def phase3_publish(
 ) -> int:
     """Ejecuta slides_pipeline.py para publicar en Google Slides."""
     if dry_run:
-        _print_section("FASE 3 â€” PublicaciÃ³n [DRY-RUN â€” omitida]")
-        print("  â„¹ï¸  Modo --dry-run: pipeline no ejecutado. El plan es vÃ¡lido.")
+        _print_section("FASE 3 — Publicación [DRY-RUN — omitida]")
+        print("  ℹ️  Modo --dry-run: pipeline no ejecutado. El plan es válido.")
         return 0
 
-    _print_section("FASE 3 â€” PublicaciÃ³n â†’ Google Slides")
+    _print_section("FASE 3 — Publicación → Google Slides")
     pipeline = _scripts / "slides_pipeline.py"
     if not pipeline.exists():
-        print(f"  âŒ slides_pipeline.py no encontrado en {_scripts}", file=sys.stderr)
+        print(f"  ❌ slides_pipeline.py no encontrado en {_scripts}", file=sys.stderr)
         return 1
 
     print(f"  Ejecutando slides_pipeline.py para: {topic_folder.name}")
@@ -340,12 +339,12 @@ def phase3_publish(
         print(f"  {line}")
 
     if code == 0:
-        _status(True, "Pipeline completado â€” presentaciÃ³n publicada en Google Slides")
+        _status(True, "Pipeline completado — presentación publicada en Google Slides")
         url_file = topic_folder / "slides" / "slides-url.txt"
         if url_file.exists():
-            print(f"\n  ðŸ”— URL: {url_file.read_text(encoding='utf-8').strip()}")
+            print(f"\n  🔗 URL: {url_file.read_text(encoding='utf-8').strip()}")
     else:
-        _status(False, "Pipeline fallÃ³")
+        _status(False, "Pipeline falló")
 
     return code
 
@@ -358,7 +357,7 @@ def phase4_post(
     publish_code: int,
 ) -> None:
     """Captura thumbnails y escribe resultado en memory.db."""
-    _print_section("FASE 4 â€” Post-publicaciÃ³n")
+    _print_section("FASE 4 — Post-publicación")
 
     # Intentar capture_thumbnails
     url_file = topic_folder / "slides" / "slides-url.txt"
@@ -372,7 +371,7 @@ def phase4_post(
                 [python, str(thumbs_script), pres_id, str(thumbs_dir)],
                 "capture_thumbnails",
             )
-            _status(code == 0, "Thumbnails capturados", str(thumbs_dir) if code == 0 else "fallÃ³")
+            _status(code == 0, "Thumbnails capturados", str(thumbs_dir) if code == 0 else "falló")
 
     # Escribir reporte de coherencia en slides/
     report = {
@@ -398,17 +397,17 @@ def phase4_post(
     report_path = topic_folder / "slides" / "publish-report.json"
     report_path.parent.mkdir(parents=True, exist_ok=True)
     save_json(report_path, report)
-    _status(True, f"Reporte guardado: {report_path.relative_to(find_project_root(Path(__file__)))}")
+    _status(True, f"Reporte guardado: {report_path.relative_to(find_project_root())}")
 
-    # Escribir en memory.db si estÃ¡ disponible
+    # Escribir en memory.db si está disponible
     memory_script = _scripts / "edu_memory.py"
     if memory_script.exists():
         checks_summary = ", ".join(
-            f"{r['id']}={'âœ“' if r['passed'] else 'âœ—'}" for r in coherence_results
+            f"{r['id']}={'✓' if r['passed'] else '✗'}" for r in coherence_results
         )
         category = "publish-success" if publish_code == 0 else "publish-failure"
         note = (
-            f"publish_loop: {category} â€” coherencia: [{checks_summary}]"
+            f"publish_loop: {category} — coherencia: [{checks_summary}]"
         )
         _run(
             [python, str(memory_script), "add",
@@ -422,48 +421,48 @@ def phase4_post(
 
 
 def _extract_presentation_id(url: str) -> str | None:
-    """Extrae el ID de presentaciÃ³n de una URL de Google Slides."""
+    """Extrae el ID de presentación de una URL de Google Slides."""
     import re
     m = re.search(r"/presentation/d/([a-zA-Z0-9_-]+)", url)
     return m.group(1) if m else None
 
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────
 # CLI
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ─────────────────────────────────────────────────────────────────────
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="publish_loop.py â€” Loop de publicaciÃ³n con prueba de coherencia de esquema",
+        description="publish_loop.py — Loop de publicación con prueba de coherencia de esquema",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
     parser.add_argument("topic_folder", help="Ruta al directorio del tema")
     parser.add_argument("--course", default=None, help="ID del curso (ej: leng-2026)")
     parser.add_argument("--max-attempts", type=int, default=3,
-                        help="MÃ¡x intentos de reparaciÃ³n de schema (default: 3)")
+                        help="Máx intentos de reparación de schema (default: 3)")
     parser.add_argument("--dry-run", action="store_true",
                         help="Validar y probar coherencia sin publicar en Google Slides")
     parser.add_argument("--skip-phase2", action="store_true",
-                        help="Omitir FASE 2 (coherencia) â€” solo reparar schema y publicar")
+                        help="Omitir FASE 2 (coherencia) — solo reparar schema y publicar")
     parser.add_argument("--skip-facts", action="store_true",
-                        help="Omitir fact_verifier.py (mÃ¡s lento, requiere ChromaDB)")
+                        help="Omitir fact_verifier.py (más lento, requiere ChromaDB)")
     parser.add_argument("--skip-drift", action="store_true",
                         help="Omitir semantic_drift_detector.py")
     parser.add_argument("--python", default=sys.executable,
-                        help="IntÃ©rprete Python a usar (default: sys.executable)")
+                        help="Intérprete Python a usar (default: sys.executable)")
 
     args = parser.parse_args()
     topic_folder = Path(args.topic_folder).resolve()
 
     if not topic_folder.exists():
-        print(f"âŒ No existe: {topic_folder}", file=sys.stderr)
+        print(f"❌ No existe: {topic_folder}", file=sys.stderr)
         sys.exit(1)
 
     # Determinar course_id
     course_id = args.course
     if not course_id:
-        root = find_project_root(Path(__file__))
+        root = find_project_root()
         try:
             cfg = load_yaml(root / "_edu" / "config.yaml").value
             prefix = cfg.get("course_prefix", "edu")
@@ -472,21 +471,21 @@ def main() -> None:
         except Exception:
             course_id = "edu-2026"
 
-    print(f"\nðŸ”„ publish_loop â€” Tema: {topic_folder.name}  |  Curso: {course_id}")
+    print(f"\n🔄 publish_loop — Tema: {topic_folder.name}  |  Curso: {course_id}")
     print(f"   Modo: {'DRY-RUN' if args.dry_run else 'PUBLICAR'}  |  "
-          f"MÃ¡x intentos reparaciÃ³n: {args.max_attempts}")
+          f"Máx intentos reparación: {args.max_attempts}")
 
-    # â”€â”€ FASE 0: consulta obligatoria del registro de errores â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── FASE 0: consulta obligatoria del registro de errores ──────────
     phase0_consult_registry(topic_folder, course_id)
 
-    # â”€â”€ FASE 1: repair loop â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── FASE 1: repair loop ───────────────────────────────────────────
     code = phase1_repair_loop(topic_folder, args.python, args.max_attempts)
     if code != 0:
         err_type = "repair_exhausted" if code == 2 else "schema_violation"
         err_desc = (
-            f"repair_plan agotÃ³ {args.max_attempts} intentos sin plan vÃ¡lido"
+            f"repair_plan agotó {args.max_attempts} intentos sin plan válido"
             if code == 2
-            else f"repair_plan reportÃ³ errores de schema (exit {code})"
+            else f"repair_plan reportó errores de schema (exit {code})"
         )
         _record_error(
             phase="FASE1",
@@ -496,12 +495,12 @@ def main() -> None:
             course=course_id,
             context={"exit_code": code, "max_attempts": args.max_attempts},
         )
-        print(f"\nðŸ›‘ FASE 1 fallÃ³ (exit {code}). Corregir plan antes de continuar.", file=sys.stderr)
-        print(f"   âœ… Error registrado. Ver: python scripts/error_registry.py query --topic {topic_folder.name}",
+        print(f"\n🛑 FASE 1 falló (exit {code}). Corregir plan antes de continuar.", file=sys.stderr)
+        print(f"   ✅ Error registrado. Ver: python scripts/error_registry.py query --topic {topic_folder.name}",
               file=sys.stderr)
         sys.exit(code)
 
-    # â”€â”€ FASE 2: coherence checks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── FASE 2: coherence checks ──────────────────────────────────────
     coherence_results: list[dict] = []
     if not args.skip_phase2:
         all_ok, coherence_results = phase2_coherence_checks(
@@ -510,7 +509,7 @@ def main() -> None:
             skip_drift=args.skip_drift,
         )
         if not all_ok:
-            # Registrar cada check bloqueante que fallÃ³
+            # Registrar cada check bloqueante que falló
             for r in coherence_results:
                 if not r.get("passed") and r.get("blocking"):
                     _type_map = {
@@ -525,7 +524,7 @@ def main() -> None:
                     _record_error(
                         phase="FASE2",
                         error_type=etype,
-                        description=f"{r.get('label', r.get('id'))} fallÃ³ (exit {r.get('code', -1)})",
+                        description=f"{r.get('label', r.get('id'))} falló (exit {r.get('code', -1)})",
                         topic=topic_folder.name,
                         course=course_id,
                         context={
@@ -534,43 +533,43 @@ def main() -> None:
                             "output_excerpt": (r.get("output") or "")[:500],
                         },
                     )
-            print(f"\nðŸ›‘ FASE 2 bloqueÃ³ la publicaciÃ³n â€” corregir errores marcados con âŒ BLOQUEA.",
+            print(f"\n🛑 FASE 2 bloqueó la publicación — corregir errores marcados con ❌ BLOQUEA.",
                   file=sys.stderr)
-            print(f"   âœ… Errores registrados. Ver: python scripts/error_registry.py query --topic {topic_folder.name}",
+            print(f"   ✅ Errores registrados. Ver: python scripts/error_registry.py query --topic {topic_folder.name}",
                   file=sys.stderr)
             # Igual escribir el reporte
             phase4_post(topic_folder, args.python, course_id, coherence_results, publish_code=3)
             sys.exit(3)
     else:
-        print("\n  âš ï¸  FASE 2 omitida (--skip-phase2)")
+        print("\n  ⚠️  FASE 2 omitida (--skip-phase2)")
 
-    # â”€â”€ FASE 3: publicar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── FASE 3: publicar ─────────────────────────────────────────────
     publish_code = phase3_publish(topic_folder, args.python, args.dry_run)
     if publish_code != 0 and not args.dry_run:
         _record_error(
             phase="FASE3",
             error_type="pipeline",
-            description=f"slides_pipeline.py fallÃ³ con exit code {publish_code}",
+            description=f"slides_pipeline.py falló con exit code {publish_code}",
             topic=topic_folder.name,
             course=course_id,
             context={"exit_code": publish_code},
         )
-        print(f"   âœ… Error de pipeline registrado. Ver: python scripts/error_registry.py query --phase FASE3",
+        print(f"   ✅ Error de pipeline registrado. Ver: python scripts/error_registry.py query --phase FASE3",
               file=sys.stderr)
 
-    # â”€â”€ FASE 4: post-publicaciÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── FASE 4: post-publicación ──────────────────────────────────────
     phase4_post(topic_folder, args.python, course_id, coherence_results, publish_code)
 
     # Resumen final
     _print_section("RESUMEN FINAL")
-    _status(publish_code == 0, "PublicaciÃ³n",
+    _status(publish_code == 0, "Publicación",
             "completada" if publish_code == 0 else f"exit code {publish_code}")
     if not args.dry_run and publish_code == 0:
         url_file = topic_folder / "slides" / "slides-url.txt"
         if url_file.exists():
-            print(f"\n  ðŸ”— {url_file.read_text(encoding='utf-8').strip()}")
-    print(f"\n  ðŸ“„ Reporte: {topic_folder}/slides/publish-report.json")
-    print(f"  ðŸ“‹ Registro errores: python scripts/error_registry.py stats\n")
+            print(f"\n  🔗 {url_file.read_text(encoding='utf-8').strip()}")
+    print(f"\n  📄 Reporte: {topic_folder}/slides/publish-report.json")
+    print(f"  📋 Registro errores: python scripts/error_registry.py stats\n")
 
     sys.exit(publish_code)
 
