@@ -89,6 +89,14 @@ jobs:
             template-repo/.github/prompts/
           echo "✅ .github/prompts sincronizado"
 
+      - name: Sync — .agents/skills/ (agentes EDU para Codex)
+        run: |
+          mkdir -p template-repo/.agents/skills
+          rsync -av --delete \
+            main-repo/salida/edu-standalone/.agents/skills/ \
+            template-repo/.agents/skills/
+          echo "✅ Skills Codex EDU sincronizadas"
+
       - name: Sync — _edu/agents/
         run: |
           mkdir -p template-repo/_edu/agents
