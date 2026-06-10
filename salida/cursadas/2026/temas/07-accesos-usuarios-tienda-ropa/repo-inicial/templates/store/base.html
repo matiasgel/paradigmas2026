@@ -1,0 +1,34 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Tienda v0.1{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'store/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'store/style.css' %}">
+</head>
+<body>
+  <header class="container py-4">
+    <nav class="d-flex align-items-center justify-content-between">
+      <a class="text-uppercase fs-4 text-decoration-none" href="{% url 'starter-home' %}">
+        Tienda v0.1
+      </a>
+      <div class="d-flex gap-3">
+        <a href="{% url 'starter-home' %}">Inicio</a>
+        <a href="/admin/">Panel interno</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="container border-top mt-5 py-4 text-muted">
+    Base visual derivada de ThemeWagon MiniStore. La clase conectará esta interfaz con Django.
+  </footer>
+  <script src="{% static 'store/js/jquery-1.11.0.min.js' %}"></script>
+  <script src="{% static 'store/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

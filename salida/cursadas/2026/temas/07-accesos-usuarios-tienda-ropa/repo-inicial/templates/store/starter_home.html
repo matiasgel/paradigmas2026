@@ -1,0 +1,48 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+{% block title %}Inicio preparado | Tienda v0.1{% endblock %}
+
+{% block content %}
+<section class="bg-light-blue overflow-hidden">
+  <div class="container">
+    <div class="row align-items-center py-5">
+      <div class="col-md-6">
+        <p class="text-uppercase text-muted">Repositorio inicial preparado</p>
+        <h1 class="display-3 text-uppercase">De theme estático a tienda Django</h1>
+        <p class="lead">
+          MiniStore ya está servido desde Django. Durante la clase crearemos
+          <code>accounts</code> y <code>products</code> para convertir esta base en Tienda v0.1.
+        </p>
+      </div>
+      <div class="col-md-6">
+        <img class="img-fluid" src="{% static 'store/images/banner-image.png' %}" alt="Imagen de muestra del theme MiniStore">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container py-5">
+  <h2 class="text-uppercase">Estado inicial</h2>
+  <div class="row g-4 mt-2">
+    <div class="col-md-4">
+      <div class="border p-4 h-100">
+        <h3 class="h5">Infraestructura lista</h3>
+        <p>Django, Jazzmin, templates, static, media y pytest están configurados.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="border p-4 h-100">
+        <h3 class="h5">Sin solución anticipada</h3>
+        <p>Las apps <code>accounts</code> y <code>products</code> todavía no existen.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="border p-4 h-100">
+        <h3 class="h5">Meta de la clase</h3>
+        <p>Terminar con productos, variantes, roles y una tienda navegable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

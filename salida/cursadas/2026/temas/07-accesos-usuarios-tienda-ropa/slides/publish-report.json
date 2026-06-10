@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-06-10T16:06:25.246424+00:00",
+  "topic": "07-accesos-usuarios-tienda-ropa",
+  "course_id": "leng-2026",
+  "publish_success": true,
+  "coherence_checks": [
+    {
+      "id": "schema-contract",
+      "label": "Contrato JSON Schema v3",
+      "passed": true,
+      "blocking": true,
+      "exit_code": 0
+    },
+    {
+      "id": "accessibility",
+      "label": "Accesibilidad WCAG AA (contraste, tipografía, alt_text)",
+      "passed": true,
+      "blocking": false,
+      "exit_code": 0
+    },
+    {
+      "id": "layout-cognition",
+      "label": "Reglas cognitivas (Mayer/Garner: assertion-evidence, densidad)",
+      "passed": true,
+      "blocking": false,
+      "exit_code": 0
+    },
+    {
+      "id": "composition",
+      "label": "Composición visual (márgenes, densidad 35-55%, superposiciones)",
+      "passed": true,
+      "blocking": false,
+      "exit_code": 0
+    }
+  ],
+  "all_blocking_passed": true
+}
