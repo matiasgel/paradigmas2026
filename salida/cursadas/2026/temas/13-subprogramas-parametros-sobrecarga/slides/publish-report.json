@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-06-11T16:06:51.103837+00:00",
+  "topic": "13-subprogramas-parametros-sobrecarga",
+  "course_id": "leng-2026",
+  "publish_success": true,
+  "coherence_checks": [
+    {
+      "id": "schema-contract",
+      "label": "Contrato JSON Schema v3",
+      "passed": true,
+      "blocking": true,
+      "exit_code": 0
+    },
+    {
+      "id": "accessibility",
+      "label": "Accesibilidad WCAG AA (contraste, tipografía, alt_text)",
+      "passed": true,
+      "blocking": false,
+      "exit_code": 0
+    },
+    {
+      "id": "layout-cognition",
+      "label": "Reglas cognitivas (Mayer/Garner: assertion-evidence, densidad)",
+      "passed": true,
+      "blocking": false,
+      "exit_code": 0
+    },
+    {
+      "id": "composition",
+      "label": "Composición visual (márgenes, densidad 35-55%, superposiciones)",
+      "passed": true,
+      "blocking": false,
+      "exit_code": 0
+    },
+    {
+      "id": "fact-check",
+      "label": "Verificación factual NLI (ChromaDB evidence)",
+      "passed": true,
+      "blocking": false,
+      "exit_code": 0
+    },
+    {
+      "id": "semantic-drift",
+      "label": "Coherencia semántica inter-clases (MiniLM drift detector)",
+      "passed": true,
+      "blocking": false,
+      "exit_code": 0
+    }
+  ],
+  "all_blocking_passed": true
+}

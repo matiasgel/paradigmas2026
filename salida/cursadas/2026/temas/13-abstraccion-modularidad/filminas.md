@@ -17,7 +17,6 @@
 
 @tipo: portada
 @imagen: none
-@slide-artefact: tipo=NONE, descripcion="Portada del tema con título, módulo, institución y bibliografía"
 
 # Estructuración de Programas
 
@@ -37,7 +36,6 @@ Paradigmas y Lenguajes de Programación · Semana 13 · UNTDF IDEI 2026
 
 @tipo: tabla
 @imagen: none
-@slide-artefact: tipo=TABLE, descripcion="Tabla con dos filas (Clase 13A y 13B), columnas: Clase, Contenido principal, Duración"
 
 # Dos Clases — 240 Minutos
 
@@ -58,7 +56,6 @@ Paradigmas y Lenguajes de Programación · Semana 13 · UNTDF IDEI 2026
 
 @tipo: portada
 @imagen: none
-@slide-artefact: tipo=NONE, descripcion="Portada de Clase 13A con subtítulo y lista de temas principales"
 
 # CLASE 13A
 
@@ -77,7 +74,6 @@ Paradigmas y Lenguajes de Programación · Semana 13 · UNTDF IDEI 2026
 
 @tipo: concepto-abstracto
 @imagen: none
-@slide-artefact: tipo=NONE, descripcion="Definición formal de subprograma con cinco características numeradas: única entrada, llamador suspende, retorno de control, parámetro formal, parámetro real"
 
 # Subprograma: Unidad de Abstracción de Comportamiento
 
@@ -101,7 +97,6 @@ Paradigmas y Lenguajes de Programación · Semana 13 · UNTDF IDEI 2026
 
 @tipo: tabla-comparativa
 @imagen: none
-@slide-artefact: tipo=TABLE, descripcion="Tabla comparativa de procedimiento vs función por criterio (propósito, retorno) y por lenguaje: Ada, C, Python, Haskell, TypeScript"
 
 # Procedimiento vs. Función
 
@@ -125,7 +120,6 @@ Paradigmas y Lenguajes de Programación · Semana 13 · UNTDF IDEI 2026
 
 @tipo: concepto-abstracto
 @imagen: none
-@slide-artefact: tipo=NONE, descripcion="Diagrama textual mostrando la relación entre perfil (número, orden y tipos de parámetros) y protocolo (perfil + tipo de retorno), con ejemplo TypeScript de calcularIMC"
 
 # Perfil y Protocolo de un Subprograma
 
@@ -154,7 +148,6 @@ Paradigmas y Lenguajes de Programación · Semana 13 · UNTDF IDEI 2026
 
 @tipo: concepto-abstracto
 @imagen: none
-@slide-artefact: tipo=TABLE, descripcion="Tabla comparando stack-dynamic vs static local con filas: duración, soporte recursión, lenguajes, comportamiento entre llamadas"
 
 # Variables Locales: Duración ≠ Alcance
 
@@ -180,7 +173,6 @@ Paradigmas y Lenguajes de Programación · Semana 13 · UNTDF IDEI 2026
 
 @tipo: codigo
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Dos funciones TypeScript: registrarAcceso (void, efecto lateral) y calcularIMC (number, pura). Comentarios marcando perfil y protocolo"
 
 # Función Pura vs. Procedimiento en TypeScript
 
@@ -209,7 +201,6 @@ registrarAcceso("matias");                   // [timestamp] Acceso: matias
 
 @tipo: tabla-comparativa
 @imagen: none
-@slide-artefact: tipo=TABLE, descripcion="Tabla de 5 métodos de pasaje: columnas Método, Dirección de flujo, Descripción, Lenguajes que lo usan"
 
 # Métodos de Pasaje de Parámetros
 
@@ -231,7 +222,6 @@ registrarAcceso("matias");                   // [timestamp] Acceso: matias
 
 @tipo: codigo
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Dos bloques: (1) primitivo number no cambia al llamar doblar(x), (2) array sí cambia al llamar agregarItem(lista, 99). Comentarios explicando el comportamiento"
 
 # Pass-by-Value (Primitivos) vs. Pass-by-Sharing (Objetos)
 
@@ -260,7 +250,6 @@ console.log(lista);  // [1, 2, 3, 99] — ¡sí cambió! ✓
 
 @tipo: socratica
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Función cambiarNombre que modifica obj.nombre (línea A) y luego reasigna obj (línea B). Pregunta: ¿qué imprime persona.nombre?"
 
 # ¿TypeScript Pasa Objetos por Valor o por Referencia?
 
@@ -289,7 +278,6 @@ console.log(persona.nombre);  // ¿"original", "cambiado" o "nuevo obj"?
 
 @tipo: codigo
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="makeAdder en TypeScript: retorna función que cierra sobre x. Dos instancias sumar5 y sumar10. Comentarios sobre activation record y GC"
 
 # Closures: Captura del Entorno Léxico
 
@@ -321,7 +309,6 @@ console.log(sumar10(3));  // 13 ← x=10 capturado
 
 @tipo: codigo
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="TypeScript: tipos Predicado<T> y Transformacion<A,B> como tipos de función. Funciones filtrar y transformar que reciben funciones como parámetros. Pipeline: nums → pares → cuadrados"
 
 # Subprogramas como Parámetros (Higher-Order Functions)
 
@@ -352,7 +339,6 @@ const cuadrados = transformar(pares, n => n ** 2);     // [4, 16, 36]
 
 @tipo: concepto-abstracto
 @imagen: none
-@slide-artefact: tipo=TABLE, descripcion="Tabla comparativa de polimorfismo ad hoc (sobrecarga) vs paramétrico: columnas tipo, implementaciones, selección, ejemplo TypeScript"
 
 # Sobrecarga: Polimorfismo Ad Hoc
 
@@ -381,7 +367,6 @@ const cuadrados = transformar(pares, n => n ** 2);     // [4, 16, 36]
 
 @tipo: codigo
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Tres overload signatures de procesar (string→string, number→number, boolean→string) seguidas de implementación unificada. Tres llamadas con tipos inferidos en compilación"
 
 # Overload Signatures en TypeScript
 
@@ -412,7 +397,6 @@ procesar(true);     // → string: "verdadero"
 
 @tipo: socratica
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Código C++ con dos declaraciones fun(): una con float b=0.0 y otra sin parámetros. Llamada fun() resulta ambigua. Contraste con TypeScript que evita el problema"
 
 # Sobrecarga + Parámetros por Defecto: ¿Quién Gana?
 
@@ -442,7 +426,6 @@ fun();  // ← AMBIGUO: el compilador no puede decidir cuál usar
 
 @tipo: concepto-abstracto
 @imagen: none
-@slide-artefact: tipo=NONE, descripcion="Definiciones formales de polimorfismo paramétrico y subprograma genérico citando Sebesta §9.9-9.10, con comparación de instanciaciones y beneficio de reutilización"
 
 # Polimorfismo Paramétrico y Genéricos
 
@@ -470,7 +453,6 @@ fun();  // ← AMBIGUO: el compilador no puede decidir cuál usar
 
 @tipo: codigo
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Función primerElemento<T> con inferencia de tipo y función máximo<T extends Comparable<T>> con interface Comparable. Ejemplos de uso mostrando inferencia automática de T"
 
 # Generic Functions con Constraints en TypeScript
 
@@ -500,7 +482,6 @@ function máximo<T extends Comparable<T>>(a: T, b: T): T {
 
 @tipo: diagrama
 @imagen: none
-@slide-artefact: tipo=SHAPE_DIAGRAM, descripcion="Diagrama de pila con tres activation records para factorial(3→2→1). Cada frame tiene nombre de función, variable n, retval, y dynamic link apuntando al frame inferior. Tope del stack arriba."
 
 # Activation Records — `factorial(3)` Recursivo
 
@@ -532,7 +513,6 @@ Stack de llamadas                    Código TypeScript
 
 @tipo: concepto-abstracto
 @imagen: none
-@slide-artefact: tipo=SHAPE_DIAGRAM, descripcion="Diagrama de dos columnas: pasos al llamar (CALL) y al retornar (RETURN), con numeración 1-5 en cada columna. Flechas entre llamador y subprograma"
 
 # Semántica de Call y Return (Sebesta §10.1)
 
@@ -559,7 +539,6 @@ Stack de llamadas                    Código TypeScript
 
 @tipo: cierre
 @imagen: none
-@slide-artefact: tipo=TABLE, descripcion="Tabla resumen de 8 conceptos de la clase 13A con definición breve de cada uno. Última fila con anticipación de la clase 13B"
 
 # Cierre Clase 13A — Mapa de Conceptos
 
@@ -586,7 +565,6 @@ Stack de llamadas                    Código TypeScript
 
 @tipo: portada
 @imagen: none
-@slide-artefact: tipo=NONE, descripcion="Portada de Clase 13B con título y lista de temas principales"
 
 # CLASE 13B
 
@@ -606,7 +584,6 @@ Stack de llamadas                    Código TypeScript
 
 @tipo: concepto-abstracto
 @imagen: none
-@slide-artefact: tipo=NONE, descripcion="Definición formal de ADT con tres propiedades. Principios: encapsulamiento, information hiding, separación de concerns. Ejemplos de ADTs fundamentales"
 
 # Tipos de Datos Abstractos (ADT)
 
@@ -638,7 +615,6 @@ Un ADT es un tipo de dato que satisface:
 
 @tipo: codigo
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Clase Stack<T> con campo private datos: T[]. Métodos push, pop, peek, size. Comentario mostrando error de compilación al intentar acceder a datos desde fuera"
 
 # ADT Stack en TypeScript — `private` como Barrera de Abstracción
 
@@ -678,7 +654,6 @@ console.log(pila.peek());   // 20
 
 @tipo: socratica
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Clase Stack parcial en TypeScript con métodos básicos. Comentarios con operaciones candidatas para la interfaz pública: clear, toArray, at(index), contains. Preguntas sobre cuáles violan information hiding"
 
 # ¿Qué Debería Exponer la Interfaz de una Stack?
 
@@ -710,7 +685,6 @@ class Stack<T> {
 
 @tipo: concepto-abstracto
 @imagen: none
-@slide-artefact: tipo=SHAPE_DIAGRAM, descripcion="Diagrama con rectángulo INTERFAZ (contrato público) a la izquierda, flecha implements al rectángulo IMPLEMENTACIÓN (detalles privados) a la derecha. Abajo: el cliente solo ve la interfaz"
 
 # Separación Interfaz / Implementación
 
@@ -742,7 +716,6 @@ export class LinkedStack<T> implements IStack<T> { ... }  // impl. B
 
 @tipo: codigo
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Módulo stack.ts con export interface IStack<T> (5 operaciones tipadas) y export class ArrayStack<T> implements IStack<T> con campo private readonly elementos: T[]"
 
 # Interfaz y Clase en TypeScript — Módulo `stack.ts`
 
@@ -776,7 +749,6 @@ export class ArrayStack<T> implements IStack<T> {
 
 @tipo: concepto-abstracto
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Código Modula-2 con DEFINITION MODULE Stack (tipo abstracto + procedimientos) y IMPLEMENTATION MODULE Stack (RECORD con array + top, implementaciones). Nota: cliente solo compila contra DEFINITION MODULE"
 
 # Módulos Clásicos: Modula-2 (Louden §11.3)
 
@@ -815,7 +787,6 @@ END Stack.
 
 @tipo: diagrama
 @imagen: none
-@slide-artefact: tipo=SHAPE_DIAGRAM, descripcion="Diagrama de módulos: main.ts en el centro con flechas import hacia stack.ts (IStack, ArrayStack) y utils/logger.ts (Logger). stack.ts con sección interfaz y sección implementación separadas"
 
 # Módulo: Dependencias Explícitas
 
@@ -847,7 +818,6 @@ END Stack.
 
 @tipo: tabla-comparativa
 @imagen: none
-@slide-artefact: tipo=TABLE, descripcion="Tabla comparativa: columnas Compilación Separada vs Compilación Independiente. Filas: definición, verificación de tipos cruzada, acceso a interfaz, detección de errores, ejemplos de lenguaje"
 
 # Compilación Separada vs. Compilación Independiente
 
@@ -868,7 +838,6 @@ END Stack.
 
 @tipo: codigo
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Tres archivos: stack.ts (exports), colecciones.ts (re-exports con export type), main.ts (import y import type). Fragmento de tsconfig.json con module ES2022 y moduleResolution Node16"
 
 # Módulos TypeScript: `import` / `export`
 
@@ -901,7 +870,6 @@ console.log(s.pop());   // "paradigmas"
 
 @tipo: concepto-abstracto
 @imagen: none
-@slide-artefact: tipo=HIERARCHY, descripcion="Jerarquía: npm registry (nivel 1) → paquete date-fns (nivel 2) → módulos internos (nivel 3). A la derecha: DefinitelyTyped (@types) con archivos .d.ts para paquetes JS sin tipos propios"
 
 # Librerías de Módulos en TypeScript / Node.js
 
@@ -932,7 +900,6 @@ import type { Config } from './types/app';    // solo tipo (sin runtime)
 
 @tipo: codigo
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Implementación completa de Stack<T> con métodos push, pop, peek, contains (predicado), size, isEmpty y toArray (readonly). Ejemplos de uso con Stack<number>"
 
 # `Stack<T>` Genérico — Implementación Completa
 
@@ -967,7 +934,6 @@ console.log(pila.toArray());             // [1, 2, 3]
 
 @tipo: codigo
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Clase Queue<T extends Printable> con enqueue/dequeue/size/print y clase TypedMap<K extends string|number, V> con set/get/has. Ejemplos de uso con tipos concretos"
 
 # Estructuras Genéricas con Constraints
 
@@ -1002,7 +968,6 @@ console.log(mapa.get("paradigmas")); // 2026
 
 @tipo: codigo
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Conditional type EsArray<T>, TipoRetorno<F> con infer R. Mapped types SoloLectura<T> y Parcial<T>. Ejemplos con tipos concretos mostrando inferencia en compilación"
 
 # Tipos Avanzados: Conditional y Mapped Types
 
@@ -1034,7 +999,6 @@ type ConfigRO = SoloLectura<Config>;
 
 @tipo: diagrama
 @imagen: none
-@slide-artefact: tipo=HIERARCHY, descripcion="Pirámide de tres niveles: base Subprograma (abstrae comportamiento), medio ADT (encapsula tipo + operaciones), cima Módulo (unidad de compilación con dependencias). Flechas hacia arriba indicando progresión"
 
 # Tres Niveles de Abstracción — Módulo X
 
@@ -1068,7 +1032,6 @@ type ConfigRO = SoloLectura<Config>;
 
 @tipo: tabla
 @imagen: none
-@slide-artefact: tipo=TABLE, descripcion="Tabla síntesis de 8 conceptos del Módulo X con columnas: Concepto, Definición breve, Herramienta TypeScript, Referencia Sebesta"
 
 # Síntesis del Módulo X
 
@@ -1089,7 +1052,6 @@ type ConfigRO = SoloLectura<Config>;
 
 @tipo: socratica
 @imagen: none
-@slide-artefact: tipo=CODE_BOX, descripcion="Interfaz parcial IUserRepository con findById, save, delete. Clase PostgresUserRepository con private pool y private cache. Preguntas sobre qué debe y no debe estar en la interfaz"
 
 # Socrática Final: ¿Cómo Diseñás la Interfaz de un Módulo?
 
@@ -1121,7 +1083,6 @@ class PostgresUserRepository implements IUserRepository {
 
 @tipo: cierre
 @imagen: none
-@slide-artefact: tipo=NONE, descripcion="Slide de cierre con síntesis del recorrido del Módulo X (dos clases) y preview de Módulo XI sobre concurrencia con preguntas motivadoras"
 
 # Módulo X — Completado ✓
 

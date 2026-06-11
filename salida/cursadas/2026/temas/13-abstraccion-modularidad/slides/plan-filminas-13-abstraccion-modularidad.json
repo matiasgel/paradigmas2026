@@ -1,0 +1,1680 @@
+{
+  "meta": {
+    "topic_id": "13-abstraccion-modularidad",
+    "title": "Estructuraci?n de Programas",
+    "source": "salida/cursadas/2026/temas/13-abstraccion-modularidad/filminas.md",
+    "generated_at": "2026-06-11T15:06:01.655Z",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "salida/cursadas/2026/temas",
+    "topic_folder": "salida/cursadas/2026/temas/13-abstraccion-modularidad",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/slides-pipeline.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 39,
+    "images_planned": 12,
+    "tables_planned": 7,
+    "code_slides": 19,
+    "status": "READY_FOR_VALIDATION",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "portada": 3,
+      "tabla": 2,
+      "concepto-mixto": 10,
+      "tabla-comparativa": 3,
+      "codigo": 12,
+      "socratica": 4,
+      "diagrama": 3,
+      "cierre": 2
+    }
+  },
+  "slides": [
+    {
+      "id": "F-00",
+      "type": "portada",
+      "title": "Portada",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 3,
+          "content": "Módulo X — Abstracción Procedural, Modularidad y Genéricos"
+        },
+        {
+          "type": "text",
+          "content": "Paradigmas y Lenguajes de Programación · Semana 13 · UNTDF IDEI 2026"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "*Bibliografía: Sebesta — Caps. 9, 10, 11, 12 · Gabbrielli §5, 7 · Louden §11*",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Una gran esfera bordo en el centro, rodeada por rectÃƒÂ¡ngulos grises conectados con lÃƒÂ­neas finas. ComposiciÃƒÂ³n abstracta equilibrada, flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin cÃƒÂ³digo, sin nÃƒÂºmeros. Alta resoluciÃƒÂ³n.",
+        "local_asset": "slides/assets/F-00-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-01",
+      "type": "tabla",
+      "title": "Agenda: 2 Clases del Módulo X",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "*\"La abstracción permite ignorar detalles irrelevantes. La modularidad permite distribuir la complejidad.\"*"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "CLASE 13A — Subprogramas, Parámetros y Sobrecarga"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| # | Clase | Contenido | Duración |\n|---|-------|-----------|----------|\n| **13A** | Subprogramas, Parámetros y Sobrecarga | Fundamentos · Variables Locales · Pasaje · Closures · Overloading · Activation Records | 120 min |\n| **13B** | Módulos, Interfaces y Genéricos | ADTs · Interfaz/Impl · Módulos · Compilación · Genéricos · Síntesis | 120 min |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| # | Clase | Contenido | DuraciÃƒÆ’Ã‚Â³n |\n|---|-------|-----------|----------|\n| **13A** | Subprogramas, ParÃƒÆ’Ã‚Â¡metros y Sobrecarga | Fundamentos Ãƒâ€šÃ‚Â· Variables Locales Ãƒâ€šÃ‚Â· Pasaje Ãƒâ€šÃ‚Â· Closures Ãƒâ€šÃ‚Â· Overloading Ãƒâ€šÃ‚Â· Activation Records | 120 min |\n| **13B** | MÃƒÆ’Ã‚Â³dulos, Interfaces y GenÃƒÆ’Ã‚Â©ricos | ADTs Ãƒâ€šÃ‚Â· Interfaz/Impl Ãƒâ€šÃ‚Â· MÃƒÆ’Ã‚Â³dulos Ãƒâ€šÃ‚Â· CompilaciÃƒÆ’Ã‚Â³n Ãƒâ€šÃ‚Â· GenÃƒÆ’Ã‚Â©ricos Ãƒâ€šÃ‚Â· SÃƒÆ’Ã‚Â­ntesis | 120 min |",
+          "local_asset": "slides/assets/F-01-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-02",
+      "type": "portada",
+      "title": "Portada 13A",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Subprogramas, Parámetros y Sobrecarga"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Fundamentos de subprogramas: procedimiento vs. función",
+              "level": 0
+            },
+            {
+              "content": "Variables locales: stack-dynamic vs. static",
+              "level": 0
+            },
+            {
+              "content": "Pasaje de parámetros: modos y métodos",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Una gran esfera bordo en el centro, rodeada por rectÃƒÂ¡ngulos grises conectados con lÃƒÂ­neas finas. ComposiciÃƒÂ³n abstracta equilibrada, flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin cÃƒÂ³digo, sin nÃƒÂºmeros. Alta resoluciÃƒÂ³n.",
+        "local_asset": "slides/assets/F-02-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-03",
+      "type": "concepto-mixto",
+      "title": "Subprograma: La Unidad de Abstracción de Comportamiento",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición (Sebesta §9.1)"
+        },
+        {
+          "type": "text",
+          "content": "\"Un subprograma tiene una sola entrada y, salvo en el caso de la recursividad, el subprograma en ejecución es el único activo.\""
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Características fundamentales"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Única entrada**: el flujo siempre inicia desde el mismo punto de definición",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-04",
+      "type": "tabla-comparativa",
+      "title": "Procedimiento vs. Función",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "La distinción es **semántica** en la mayoría de lenguajes; en Ada es **sintáctica y obligatoria**"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Criterio | Procedimiento | Función |\n|----------|--------------|---------|\n| **Propósito** | Producir un efecto lateral | Computar y retornar un valor |\n| **Retorna** | `void` / nada | Un valor tipado |\n| **Ada** | `procedure P(...)` | `function F(...) return T` |\n| **C** | `void f(...)` | `int f(...)` |\n| **Python** | `def p()` → retorna `None` | `def f(): return v` |\n| **Haskell** | *(solo funciones puras)* | `f :: A -> B` |\n| **TypeScript** | `function p(): void` | `function f(): T` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Criterio | Procedimiento | FunciÃƒÆ’Ã‚Â³n |\n|----------|--------------|---------|\n| **PropÃƒÆ’Ã‚Â³sito** | Producir un efecto lateral | Computar y retornar un valor |\n| **Retorna** | `void` / nada | Un valor tipado |\n| **Ada** | `procedure P(...)` | `function F(...) return T` |\n| **C** | `void f(...)` | `int f(...)` |\n| **Python** | `def p()` ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ retorna `None` | `def f(): return v` |\n| **Haskell** | *(solo funciones puras)* | `f :: A -> B` |\n| **TypeScript** | `function p(): void` | `function f(): T` |",
+          "local_asset": "slides/assets/F-04-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-05",
+      "type": "concepto-mixto",
+      "title": "Perfil y Protocolo",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Perfil de parámetros (Sebesta §9.1)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Número, orden y **tipos** de los parámetros formales",
+              "level": 0
+            },
+            {
+              "content": "Ejemplo: `(peso: number, altura: number)` → perfil de `calcularIMC`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Protocolo"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Perfil de parámetros **+** tipo de retorno",
+              "level": 0
+            },
+            {
+              "content": "Ejemplo: `(number, number) → number`",
+              "level": 0
+            },
+            {
+              "content": "En TypeScript: `(peso: number, altura: number): number`",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-06",
+      "type": "concepto-mixto",
+      "title": "Variables Locales: Stack-Dynamic vs. Static",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Stack-Dynamic (default en lenguajes modernos)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Creadas al invocar → existen en el **activation record** del frame actual",
+              "level": 0
+            },
+            {
+              "content": "Destruidas al retornar → liberadas del stack automáticamente",
+              "level": 0
+            },
+            {
+              "content": "**Soporte para recursividad**: cada llamada tiene su propio frame independiente",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Variables Estáticas Locales"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Útiles para contadores o caches entre llamadas sucesivas",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-07",
+      "type": "codigo",
+      "title": "Código TypeScript: Función Pura vs. Procedimiento",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function registrarAcceso(usuario: string): void {\n  console.log(`[${new Date().toISOString()}] Acceso: ${usuario}`);\n}\n\nfunction calcularIMC(peso: number, altura: number): number {\n  return peso / (altura * altura);\n}\n\n\nconst imc: number = calcularIMC(70, 1.75);  // 22.857...\nregistrarAcceso(\"matias\");                   // [timestamp] Acceso: matias"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-08",
+      "type": "tabla-comparativa",
+      "title": "Métodos de Pasaje de Parámetros",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "En TypeScript: primitivos → pass-by-value · objetos → **pass-by-sharing** (referencia copiada, objeto compartido)"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Método | Flujo | Descripción | Lenguajes |\n|--------|-------|-------------|-----------|\n| **Pass-by-value** | in | Copia el valor; cambios no se propagan | C, Java (prim.), TypeScript (prim.) |\n| **Pass-by-result** | out | Copia resultado al retorno | Ada (`out`) |\n| **Pass-by-value-result** | in-out | Copia in + copia out al retorno | Ada (`in out`), FORTRAN |\n| **Pass-by-reference** | in-out | Pasa dirección; cambios se propagan al original | C++ (`&`), Fortran, Ada (`access`) |\n| **Pass-by-name** | — | Sustitución textual lazy (histórico) | Algol 60, Scala (by-name params) |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| MÃƒÆ’Ã‚Â©todo | Flujo | DescripciÃƒÆ’Ã‚Â³n | Lenguajes |\n|--------|-------|-------------|-----------|\n| **Pass-by-value** | in | Copia el valor; cambios no se propagan | C, Java (prim.), TypeScript (prim.) |\n| **Pass-by-result** | out | Copia resultado al retorno | Ada (`out`) |\n| **Pass-by-value-result** | in-out | Copia in + copia out al retorno | Ada (`in out`), FORTRAN |\n| **Pass-by-reference** | in-out | Pasa direcciÃƒÆ’Ã‚Â³n; cambios se propagan al original | C++ (`&`), Fortran, Ada (`access`) |\n| **Pass-by-name** | ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â | SustituciÃƒÆ’Ã‚Â³n textual lazy (histÃƒÆ’Ã‚Â³rico) | Algol 60, Scala (by-name params) |",
+          "local_asset": "slides/assets/F-08-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-09",
+      "type": "codigo",
+      "title": "Código TypeScript: Pass-by-Value vs. Pass-by-Sharing",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function doblar(n: number): number {\n  n = n * 2;   // modifica la copia local únicamente\n  return n;\n}\nlet x = 10;\ndoblar(x);\nconsole.log(x);   // 10 — sin cambio ✓\n\nfunction agregarItem(arr: number[], item: number): void {\n  arr.push(item);  // modifica el MISMO objeto en heap\n}\nconst lista: number[] = [1, 2, 3];\nagregarItem(lista, 99);\nconsole.log(lista);  // [1, 2, 3, 99] — ¡sí cambió! ✓"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-10",
+      "type": "socratica",
+      "title": "Socrática: ¿Qué Pasa con Pass-by-Sharing?",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Preguntas para el aula"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿Cuál de las dos líneas (A o B) afecta a `persona` fuera de la función?",
+              "level": 0
+            },
+            {
+              "content": "¿La reasignación en la línea B cambia `persona`? ¿Por qué?",
+              "level": 0
+            },
+            {
+              "content": "¿Cómo llamarías a este mecanismo? ¿Pass-by-value? ¿Pass-by-reference?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function cambiarNombre(obj: { nombre: string }): void {\n  obj.nombre = \"cambiado\";        // línea A: modifica la propiedad\n  obj = { nombre: \"nuevo obj\" };  // línea B: reasigna la variable local\n}\n\nconst persona = { nombre: \"original\" };\ncambiarNombre(persona);\nconsole.log(persona.nombre);  // ¿\"original\", \"cambiado\" o \"nuevo obj\"?"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Un gran cÃƒÂ­rculo bordo central rodeado por cuatro cÃƒÂ­rculos grises pequeÃƒÂ±os unidos mediante lÃƒÂ­neas finas. ComposiciÃƒÂ³n abstracta con espacio negativo, flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin cÃƒÂ³digo, sin nÃƒÂºmeros. Alta resoluciÃƒÂ³n.",
+        "local_asset": "slides/assets/F-10-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "codigo",
+      "title": "Closures y Captura del Entorno Léxico",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "La closure es un **subprograma + su entorno de referencia** en el momento de creación"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function makeAdder(x: number): (y: number) => number {\n  return (y: number): number => x + y;\n}\n\nconst sumar5  = makeAdder(5);\nconst sumar10 = makeAdder(10);\n\nconsole.log(sumar5(3));   // 8  ← x=5 capturado\nconsole.log(sumar10(3));  // 13 ← x=10 capturado\n"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-12",
+      "type": "codigo",
+      "title": "Subprogramas como Parámetros: Funciones de Orden Superior",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "El tipo del parámetro `pred` es un **tipo de función**: `(item: T) => boolean`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Predicado<T>        = (item: T) => boolean;\ntype Transformacion<A,B> = (item: A) => B;\n\nfunction filtrar<T>(arr: T[], pred: Predicado<T>): T[] {\n  return arr.filter(pred);\n}\n\nfunction transformar<A, B>(arr: A[], fn: Transformacion<A, B>): B[] {\n  return arr.map(fn);\n}\n\nconst nums      = [1, 2, 3, 4, 5, 6];\nconst pares     = filtrar(nums, n => n % 2 === 0);     // [2, 4, 6]\nconst cuadrados = transformar(pares, n => n ** 2);     // [4, 16, 36]"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "concepto-mixto",
+      "title": "Sobrecarga: Polimorfismo Ad Hoc",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición (Sebesta §9.8)"
+        },
+        {
+          "type": "text",
+          "content": "\"Los subprogramas sobrecargados **no necesitan comportarse de manera similar**.\""
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ad hoc vs. paramétrico"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| | Ad hoc (sobrecarga) | Paramétrico (genérico) |\n|--|---------------------|------------------------|\n| Implementaciones | Múltiples distintas | Una única genérica |\n| Selección | Por tipos de argumentos en compilación | Por parámetro de tipo `<T>` |\n| Ejemplo TS | `procesar(string)` vs `procesar(number)` | `identidad<T>(x: T): T` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| | Ad hoc (sobrecarga) | ParamÃƒÆ’Ã‚Â©trico (genÃƒÆ’Ã‚Â©rico) |\n|--|---------------------|------------------------|\n| Implementaciones | MÃƒÆ’Ã‚Âºltiples distintas | Una ÃƒÆ’Ã‚Âºnica genÃƒÆ’Ã‚Â©rica |\n| SelecciÃƒÆ’Ã‚Â³n | Por tipos de argumentos en compilaciÃƒÆ’Ã‚Â³n | Por parÃƒÆ’Ã‚Â¡metro de tipo `<T>` |\n| Ejemplo TS | `procesar(string)` vs `procesar(number)` | `identidad<T>(x: T): T` |",
+          "local_asset": "slides/assets/F-13-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-14",
+      "type": "codigo",
+      "title": "Código TypeScript: Overload Signatures",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "TypeScript selecciona la signature correcta en **tiempo de compilación** por tipo de argumento"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function procesar(input: string): string;\nfunction procesar(input: number): number;\nfunction procesar(input: boolean): string;\n\nfunction procesar(input: string | number | boolean): string | number {\n  if (typeof input === 'string')  return input.toUpperCase();\n  if (typeof input === 'number')  return input * 2;\n  return input ? 'verdadero' : 'falso';\n}\n\nprocesar(\"hola\");   // → string: \"HOLA\"\nprocesar(21);       // → number: 42\nprocesar(true);     // → string: \"verdadero\""
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-15",
+      "type": "socratica",
+      "title": "Socrática: Sobrecarga + Defaults → Ambigüedad",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Caso en C++ (Sebesta §9.8)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Preguntas para el aula"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿Por qué TypeScript evita este problema con sus overload signatures?",
+              "level": 0
+            },
+            {
+              "content": "¿Cuándo es preferible usar genéricos en lugar de sobrecarga?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "cpp",
+          "content": "// C++ — ambas declaraciones son válidas individualmente\nvoid fun(float b = 0.0);  // puede llamarse fun() por el default\nvoid fun();               // también acepta fun()\n\nfun();  // ← AMBIGUO: el compilador no puede decidir cuál usar"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Un gran cÃƒÂ­rculo bordo central rodeado por cuatro cÃƒÂ­rculos grises pequeÃƒÂ±os unidos mediante lÃƒÂ­neas finas. ComposiciÃƒÂ³n abstracta con espacio negativo, flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin cÃƒÂ³digo, sin nÃƒÂºmeros. Alta resoluciÃƒÂ³n.",
+        "local_asset": "slides/assets/F-15-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-16",
+      "type": "concepto-mixto",
+      "title": "Polimorfismo Paramétrico y Subprogramas Genéricos",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición (Sebesta §9.9)"
+        },
+        {
+          "type": "text",
+          "content": "\"El polimorfismo paramétrico es provisto por un subprograma que toma **parámetros genéricos** usados en expresiones de tipo que describen los tipos de los parámetros.\""
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Una implementación — múltiples instanciaciones"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`sort<T>` reemplaza `sortInt`, `sortString`, `sortFloat`...",
+              "level": 0
+            },
+            {
+              "content": "C++: templates — instanciación explícita en tiempo de compilación",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-17",
+      "type": "codigo",
+      "title": "Código TypeScript: Generic Functions con Constraints",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`extends` en el parámetro de tipo impone un **constraint**: T debe satisfacer la interfaz"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function primerElemento<T>(coleccion: T[]): T | undefined {\n  return coleccion.length > 0 ? coleccion[0] : undefined;\n}\nconst p1 = primerElemento([1, 2, 3]);    // T inferred: number → 1\nconst p2 = primerElemento([\"a\", \"b\"]);   // T inferred: string → \"a\"\n\ninterface Comparable<T> {\n  compareTo(other: T): number;  // retorna -1, 0, o 1\n}\n\nfunction máximo<T extends Comparable<T>>(a: T, b: T): T {\n  return a.compareTo(b) >= 0 ? a : b;\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-18",
+      "type": "diagrama",
+      "title": "Activation Records y Stack de Llamadas",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Cada llamada crea un **nuevo** activation record — así la recursividad es posible"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Cinco rectÃƒÂ¡ngulos bordo y gris oscuro organizados en niveles, conectados por flechas finas descendentes. ComposiciÃƒÂ³n geomÃƒÂ©trica clara, flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin cÃƒÂ³digo, sin nÃƒÂºmeros. Alta resoluciÃƒÂ³n.",
+        "local_asset": "slides/assets/F-18-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "concepto-mixto",
+      "title": "Implementación de Subprogramas: Semántica de Call/Return",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Al momento de la llamada (CALL)"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Se crea un nuevo **activation record** (AR) en el stack",
+              "level": 0
+            },
+            {
+              "content": "Se copian / pasan los **parámetros** al AR",
+              "level": 0
+            },
+            {
+              "content": "Se guarda la **dirección de retorno** (program counter)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Al momento del retorno (RETURN)"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Se evalúa el **valor de retorno** (si lo hay)",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-20",
+      "type": "cierre",
+      "title": "Cierre 13A",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "→ Próxima clase: ADTs, Módulos e Interfaces en TypeScript"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "CLASE 13B — Módulos, Interfaces y Genéricos en TypeScript"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Concepto | Clave |\n|----------|-------|\n| **Subprograma** | Única entrada, llamador suspende, retorno de control |\n| **Perfil / Protocolo** | Tipos de params / perfil + tipo de retorno |\n| **Stack-dynamic** | Variable local por frame → habilita recursión |\n| **Pass-by-sharing** | Referencia copiada: propiedades mutables, reasignación local no |\n| **Closure** | Subprograma + entorno léxico capturado en creación |\n| **Sobrecarga** | Mismo nombre, distintas implementaciones (ad hoc) |\n| **Genéricos** | Una implementación `<T>` para múltiples tipos |\n| **Activation Record** | Frame con params, variables locales, return address, dynamic link |"
+      ],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Tres formas geomÃƒÂ©tricas bordo y gris oscuro convergen hacia un cÃƒÂ­rculo luminoso central. ComposiciÃƒÂ³n minimalista, flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin cÃƒÂ³digo, sin nÃƒÂºmeros. Alta resoluciÃƒÂ³n.",
+        "local_asset": "slides/assets/F-20-bg.png",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Concepto | Clave |\n|----------|-------|\n| **Subprograma** | ÃƒÆ’Ã…Â¡nica entrada, llamador suspende, retorno de control |\n| **Perfil / Protocolo** | Tipos de params / perfil + tipo de retorno |\n| **Stack-dynamic** | Variable local por frame ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ habilita recursiÃƒÆ’Ã‚Â³n |\n| **Pass-by-sharing** | Referencia copiada: propiedades mutables, reasignaciÃƒÆ’Ã‚Â³n local no |\n| **Closure** | Subprograma + entorno lÃƒÆ’Ã‚Â©xico capturado en creaciÃƒÆ’Ã‚Â³n |\n| **Sobrecarga** | Mismo nombre, distintas implementaciones (ad hoc) |\n| **GenÃƒÆ’Ã‚Â©ricos** | Una implementaciÃƒÆ’Ã‚Â³n `<T>` para mÃƒÆ’Ã‚Âºltiples tipos |\n| **Activation Record** | Frame con params, variables locales, return address, dynamic link |",
+          "local_asset": "slides/assets/F-20-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-21",
+      "type": "portada",
+      "title": "Portada 13B",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Módulos, Interfaces y Genéricos en TypeScript"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "ADTs formales: encapsulamiento e information hiding",
+              "level": 0
+            },
+            {
+              "content": "Interfaz vs. Implementación — separación estricta",
+              "level": 0
+            },
+            {
+              "content": "Módulos TypeScript: `import` / `export` explícito",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Una gran esfera bordo en el centro, rodeada por rectÃƒÂ¡ngulos grises conectados con lÃƒÂ­neas finas. ComposiciÃƒÂ³n abstracta equilibrada, flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin cÃƒÂ³digo, sin nÃƒÂºmeros. Alta resoluciÃƒÂ³n.",
+        "local_asset": "slides/assets/F-21-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-22",
+      "type": "concepto-mixto",
+      "title": "Tipos de Datos Abstractos (ADT)",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definición formal (Sebesta §11.1)"
+        },
+        {
+          "type": "text",
+          "content": "Un ADT es un tipo de dato que satisface:"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "La **representación interna** está **oculta** a los clientes",
+              "level": 0
+            },
+            {
+              "content": "Las **operaciones** son accesibles solo a través de la **interfaz pública**",
+              "level": 0
+            },
+            {
+              "content": "Las operaciones garantizan las **invariantes** del tipo",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "codigo",
+      "title": "Código TypeScript: Stack con `private`",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "class Stack<T> {\n  private datos: T[] = [];  // representación oculta al cliente\n\n  push(item: T): void {\n    this.datos.push(item);\n  }\n\n  pop(): T | undefined {\n    return this.datos.pop();\n  }\n\n  peek(): T | undefined {\n    return this.datos[this.datos.length - 1];\n  }"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "socratica",
+      "title": "Socrática: ¿Qué Debe Exponer la Interfaz?",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Preguntas para el aula"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿`toArray()` viola el information hiding? ¿Expone la representación?",
+              "level": 0
+            },
+            {
+              "content": "¿`at(index)` convierte la Stack en un Array con acceso aleatorio?",
+              "level": 0
+            },
+            {
+              "content": "¿Qué criterio usás para decidir qué operaciones son *esenciales* del ADT?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "class Stack<T> {\n  private datos: T[] = [];\n  push(item: T): void    { this.datos.push(item); }\n  pop(): T | undefined   { return this.datos.pop(); }\n  peek(): T | undefined  { return this.datos.at(-1); }\n  get size(): number     { return this.datos.length; }\n\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Un gran cÃƒÂ­rculo bordo central rodeado por cuatro cÃƒÂ­rculos grises pequeÃƒÂ±os unidos mediante lÃƒÂ­neas finas. ComposiciÃƒÂ³n abstracta con espacio negativo, flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin cÃƒÂ³digo, sin nÃƒÂºmeros. Alta resoluciÃƒÂ³n.",
+        "local_asset": "slides/assets/F-24-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "concepto-mixto",
+      "title": "Separación Interfaz / Implementación",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El principio (Sebesta §11.2 · Louden §11.3)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "La **interfaz** declara el *qué*: operaciones con sus tipos",
+              "level": 0
+            },
+            {
+              "content": "La **implementación** define el *cómo*: estructuras de datos y algoritmos",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Beneficios directos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Sustitución**: cambiar `ArrayStack` por `LinkedStack` sin tocar al cliente",
+              "level": 0
+            },
+            {
+              "content": "**Testabilidad**: mockear la interfaz en tests unitarios",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "export interface IStack<T> { ... }            // contrato observable\nexport class ArrayStack<T> implements IStack<T> { ... }   // impl. A\nexport class LinkedStack<T> implements IStack<T> { ... }  // impl. B"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-26",
+      "type": "codigo",
+      "title": "Código TypeScript: `interface` + `class` Separadas",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "El cliente importa `IStack<T>` y **nunca necesita saber** que la implementación usa un array"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "export interface IStack<T> {\n  push(item: T): void;\n  pop(): T | undefined;\n  peek(): T | undefined;\n  readonly size: number;\n  isEmpty(): boolean;\n}\n\nexport class ArrayStack<T> implements IStack<T> {\n  private readonly elementos: T[] = [];\n\n  push(item: T): void       { this.elementos.push(item); }\n  pop(): T | undefined      { return this.elementos.pop(); }\n  peek(): T | undefined     { return this.elementos.at(-1); }"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-27",
+      "type": "concepto-mixto",
+      "title": "DEFINITION MODULE vs. IMPLEMENTATION MODULE (Modula-2)",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "DEFINITION MODULE — el contrato público"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "IMPLEMENTATION MODULE — los detalles ocultos"
+        },
+        {
+          "type": "text",
+          "content": "El cliente **solo puede compilar contra** el DEFINITION MODULE — nunca ve el IMPLEMENTATION MODULE"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "modula2",
+          "content": "DEFINITION MODULE Stack;\n  TYPE Stack;     (* tipo abstracto — representación oculta al cliente *)\n  PROCEDURE Push(VAR s: Stack; x: INTEGER);\n  PROCEDURE Pop(VAR s: Stack): INTEGER;\n  PROCEDURE IsEmpty(VAR s: Stack): BOOLEAN;\nEND Stack."
+        },
+        {
+          "lang": "modula2",
+          "content": "IMPLEMENTATION MODULE Stack;\n  CONST MaxSize = 100;\n  TYPE Stack = RECORD\n    data : ARRAY[0..MaxSize-1] OF INTEGER;\n    top  : INTEGER\n  END;\n  PROCEDURE Push(VAR s: Stack; x: INTEGER);\n  BEGIN s.data[s.top] := x; INC(s.top) END Push;\nEND Stack."
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-28",
+      "type": "diagrama",
+      "title": "Módulo con Dependencias Explícitas",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "El compilador lee las dependencias y puede **recompilar solo los módulos desactualizados**"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Cinco rectÃƒÂ¡ngulos bordo y gris oscuro organizados en niveles, conectados por flechas finas descendentes. ComposiciÃƒÂ³n geomÃƒÂ©trica clara, flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin cÃƒÂ³digo, sin nÃƒÂºmeros. Alta resoluciÃƒÂ³n.",
+        "local_asset": "slides/assets/F-28-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-29",
+      "type": "tabla-comparativa",
+      "title": "Compilación Separada vs. Compilación Independiente",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Característica | Compilación Separada | Compilación Independiente |\n|----------------|----------------------|---------------------------|\n| **Qué es** | Cada módulo compila por separado pero con acceso a interfaces de otros | Cada unidad compila sin saber nada de otras unidades |\n| **Verificación de tipos** | Sí: el compilador chequea contra la interfaz exportada | No: sin chequeo cruzado en compilación |\n| **Acceso a interfaz** | Requiere `.d.ts` / DEFINITION MODULE / headers | No requiere nada externo |\n| **Detección de errores** | En **tiempo de compilación** | Solo en enlace o ejecución |\n| **Lenguajes** | TypeScript (`.d.ts`), Ada, Modula-2, C++ con headers | C clásico sin headers, FORTRAN original |\n| **Ventaja** | Seguridad de tipos entre módulos | Máxima independencia física |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| CaracterÃƒÆ’Ã‚Â­stica | CompilaciÃƒÆ’Ã‚Â³n Separada | CompilaciÃƒÆ’Ã‚Â³n Independiente |\n|----------------|----------------------|---------------------------|\n| **QuÃƒÆ’Ã‚Â© es** | Cada mÃƒÆ’Ã‚Â³dulo compila por separado pero con acceso a interfaces de otros | Cada unidad compila sin saber nada de otras unidades |\n| **VerificaciÃƒÆ’Ã‚Â³n de tipos** | SÃƒÆ’Ã‚Â­: el compilador chequea contra la interfaz exportada | No: sin chequeo cruzado en compilaciÃƒÆ’Ã‚Â³n |\n| **Acceso a interfaz** | Requiere `.d.ts` / DEFINITION MODULE / headers | No requiere nada externo |\n| **DetecciÃƒÆ’Ã‚Â³n de errores** | En **tiempo de compilaciÃƒÆ’Ã‚Â³n** | Solo en enlace o ejecuciÃƒÆ’Ã‚Â³n |\n| **Lenguajes** | TypeScript (`.d.ts`), Ada, Modula-2, C++ con headers | C clÃƒÆ’Ã‚Â¡sico sin headers, FORTRAN original |\n| **Ventaja** | Seguridad de tipos entre mÃƒÆ’Ã‚Â³dulos | MÃƒÆ’Ã‚Â¡xima independencia fÃƒÆ’Ã‚Â­sica |",
+          "local_asset": "slides/assets/F-29-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-30",
+      "type": "codigo",
+      "title": "Código TypeScript: `import` / `export` y `tsconfig`",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "export interface IStack<T> { push(item: T): void; pop(): T | undefined; }\nexport class ArrayStack<T> implements IStack<T> { /* ... */ }\n\nexport type { IStack } from './stack';      // solo el tipo (sin runtime cost)\nexport { ArrayStack } from './stack';       // la clase con su implementación\n\nimport { ArrayStack } from './colecciones';\nimport type { IStack } from './colecciones';  // solo para el compilador\n\nconst s: IStack<string> = new ArrayStack<string>();\ns.push(\"paradigmas\");\nconsole.log(s.pop());   // \"paradigmas\""
+        },
+        {
+          "lang": "json",
+          "content": "// tsconfig.json — configuración de resolución de módulos\n{ \"compilerOptions\": { \"module\": \"ES2022\", \"moduleResolution\": \"Node16\" } }"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-31",
+      "type": "concepto-mixto",
+      "title": "Librerías de Módulos: npm y `@types`",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El ecosistema npm"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**npm registry**: 2.5 millones de paquetes públicos disponibles",
+              "level": 0
+            },
+            {
+              "content": "Cada paquete = colección de módulos con `package.json` como manifiesto",
+              "level": 0
+            },
+            {
+              "content": "Instalación: `npm install date-fns` → `node_modules/date-fns/`",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "`@types` — DefinitelyTyped"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Paquetes JavaScript sin tipos propios → definiciones en `@types/`",
+              "level": 0
+            },
+            {
+              "content": "Ejemplo: `npm install --save-dev @types/lodash`",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "import { format } from 'date-fns';            // módulo npm\nimport { calcularIMC } from './imc';          // módulo local relativo\nimport type { Config } from './types/app';    // solo tipo (sin runtime)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-32",
+      "type": "codigo",
+      "title": "Código TypeScript: `Stack<T>` Genérico Completo",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "class Stack<T> {\n  private datos: T[] = [];\n\n  push(item: T): void           { this.datos.push(item); }\n  pop(): T | undefined          { return this.datos.pop(); }\n  peek(): T | undefined         { return this.datos.at(-1); }\n  get size(): number            { return this.datos.length; }\n  isEmpty(): boolean            { return this.datos.length === 0; }\n\n  contains(pred: (item: T) => boolean): boolean {\n    return this.datos.some(pred);\n  }\n\n  toArray(): readonly T[]       { return [...this.datos]; }"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-33",
+      "type": "codigo",
+      "title": "Código TypeScript: `Queue<T>` y `Map<K,V>` con Constraints",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "interface Printable { toString(): string; }\n\nclass Queue<T extends Printable> {\n  private cola: T[] = [];\n  enqueue(item: T): void   { this.cola.push(item); }\n  dequeue(): T | undefined { return this.cola.shift(); }\n  get size(): number       { return this.cola.length; }\n  print(): void            { console.log(this.cola.map(x => x.toString())); }\n}\n\nclass TypedMap<K extends string | number, V> {\n  private store = new Map<K, V>();\n  set(key: K, value: V): void    { this.store.set(key, value); }\n  get(key: K): V | undefined     { return this.store.get(key); }"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-34",
+      "type": "codigo",
+      "title": "Código TypeScript: Conditional Types y Mapped Types",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type EsArray<T> = T extends any[] ? true : false;\ntype A = EsArray<number[]>;    // true\ntype B = EsArray<string>;      // false\n\ntype TipoRetorno<F extends (...args: any[]) => any>\n  = F extends (...args: any[]) => infer R ? R : never;\n\nfunction calcularArea(r: number): number { return Math.PI * r * r; }\ntype R = TipoRetorno<typeof calcularArea>;   // number\n\ntype SoloLectura<T> = { readonly [K in keyof T]: T[K] };\ntype Parcial<T>     = { [K in keyof T]?: T[K] };\n\ntype Config = { host: string; port: number };"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-35",
+      "type": "diagrama",
+      "title": "Jerarquía de Abstracción del Módulo X",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "Cada nivel construye sobre el anterior — la complejidad se doma por capas"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Cinco rectÃƒÂ¡ngulos bordo y gris oscuro organizados en niveles, conectados por flechas finas descendentes. ComposiciÃƒÂ³n geomÃƒÂ©trica clara, flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin cÃƒÂ³digo, sin nÃƒÂºmeros. Alta resoluciÃƒÂ³n.",
+        "local_asset": "slides/assets/F-35-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-36",
+      "type": "tabla",
+      "title": "Tabla Síntesis — Módulo X",
+      "subtitle": "",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Concepto | Definición breve | Tool TypeScript | Sebesta |\n|----------|-----------------|----------------|---------|\n| **Subprograma** | Única entrada + retorno de control | `function` / método | §9.1 |\n| **Variables locales** | Stack-dynamic por frame; static = persistente | `let` / `const` | §9.2 |\n| **Pasaje de params** | Primitivos: valor · Objetos: sharing | tipos explícitos | §9.5 |\n| **Closures** | Subprograma + entorno léxico capturado | arrow functions | §9.12 |\n| **Sobrecarga** | Mismo nombre, distintas implementaciones | overload signatures | §9.8 |\n| **Genéricos** | Una impl. para múltiples tipos `<T>` | `<T extends ...>` | §9.9 |\n| **ADT / `private`** | Representación oculta, ops. por interfaz | `class` + `private` | §11.1 |\n| **Módulos** | Unidad de compilación con deps. explícitas | `import`/`export` | §11.5 |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": ""
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Concepto | DefiniciÃƒÆ’Ã‚Â³n breve | Tool TypeScript | Sebesta |\n|----------|-----------------|----------------|---------|\n| **Subprograma** | ÃƒÆ’Ã…Â¡nica entrada + retorno de control | `function` / mÃƒÆ’Ã‚Â©todo | Ãƒâ€šÃ‚Â§9.1 |\n| **Variables locales** | Stack-dynamic por frame; static = persistente | `let` / `const` | Ãƒâ€šÃ‚Â§9.2 |\n| **Pasaje de params** | Primitivos: valor Ãƒâ€šÃ‚Â· Objetos: sharing | tipos explÃƒÆ’Ã‚Â­citos | Ãƒâ€šÃ‚Â§9.5 |\n| **Closures** | Subprograma + entorno lÃƒÆ’Ã‚Â©xico capturado | arrow functions | Ãƒâ€šÃ‚Â§9.12 |\n| **Sobrecarga** | Mismo nombre, distintas implementaciones | overload signatures | Ãƒâ€šÃ‚Â§9.8 |\n| **GenÃƒÆ’Ã‚Â©ricos** | Una impl. para mÃƒÆ’Ã‚Âºltiples tipos `<T>` | `<T extends ...>` | Ãƒâ€šÃ‚Â§9.9 |\n| **ADT / `private`** | RepresentaciÃƒÆ’Ã‚Â³n oculta, ops. por interfaz | `class` + `private` | Ãƒâ€šÃ‚Â§11.1 |\n| **MÃƒÆ’Ã‚Â³dulos** | Unidad de compilaciÃƒÆ’Ã‚Â³n con deps. explÃƒÆ’Ã‚Â­citas | `import`/`export` | Ãƒâ€šÃ‚Â§11.5 |",
+          "local_asset": "slides/assets/F-36-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-37",
+      "type": "socratica",
+      "title": "Socrática Final: Diseñar una API Pública",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Preguntas para el aula"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿Qué operaciones son esenciales vs. detalles de implementación?",
+              "level": 0
+            },
+            {
+              "content": "¿Cómo cambia la interfaz si migrás de PostgreSQL a MongoDB?",
+              "level": 0
+            },
+            {
+              "content": "¿Qué viola exponer `pool` en la interfaz pública?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "export interface IUserRepository {\n  findById(id: string): Promise<User | null>;\n  save(user: User): Promise<void>;\n  delete(id: string): Promise<boolean>;\n}\n\nclass PostgresUserRepository implements IUserRepository {\n  private pool: Pool;                    // ← ¿debería ser accesible al cliente?\n  private cache: Map<string, User>;      // ← ¿y este detalle de performance?\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Un gran cÃƒÂ­rculo bordo central rodeado por cuatro cÃƒÂ­rculos grises pequeÃƒÂ±os unidos mediante lÃƒÂ­neas finas. ComposiciÃƒÂ³n abstracta con espacio negativo, flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin cÃƒÂ³digo, sin nÃƒÂºmeros. Alta resoluciÃƒÂ³n.",
+        "local_asset": "slides/assets/F-37-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-38",
+      "type": "cierre",
+      "title": "Cierre Módulo X — Preview Concurrencia",
+      "subtitle": "",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Recorrido del Módulo X"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Clase 13A**: Subprogramas · Variables Locales · Pasaje de Parámetros · Closures · Sobrecarga · Activation Records",
+              "level": 0
+            },
+            {
+              "content": "**Clase 13B**: ADTs · Interfaz/Implementación · Módulos · Compilación Separada · Genéricos",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "*→ Semana 14*",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Tres formas geomÃƒÂ©tricas bordo y gris oscuro convergen hacia un cÃƒÂ­rculo luminoso central. ComposiciÃƒÂ³n minimalista, flat design, fondo blanco. Sin texto, sin letras, sin etiquetas, sin cÃƒÂ³digo, sin nÃƒÂºmeros. Alta resoluciÃƒÂ³n.",
+        "local_asset": "slides/assets/F-38-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    }
+  ],
+  "$schema_version": "plan-filminas/v3"
+}

@@ -1,0 +1,1578 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "13-subprogramas-parametros-sobrecarga",
+    "title": "CLASE 13A",
+    "source": "filminas.md",
+    "generated_at": "2026-06-11T13:04:07",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
+    "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\13-subprogramas-parametros-sobrecarga",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/slides-pipeline.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 31,
+    "images_planned": 12,
+    "tables_planned": 8,
+    "code_slides": 12,
+    "status": "DRAFT",
+    "pending_types": 0,
+    "pending_prompts": 12,
+    "type_distribution": {
+      "portada": 1,
+      "concepto-mixto": 11,
+      "tabla-comparativa": 5,
+      "socratica": 5,
+      "concepto-abstracto": 5,
+      "tabla": 3,
+      "cierre": 1
+    }
+  },
+  "slides": [
+    {
+      "id": "F-00",
+      "type": "portada",
+      "title": "Portada 13A",
+      "subtitle": "CLASE 13A",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Subprogramas: del contrato a la ejecución"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿Qué promete un subprograma?",
+              "level": 0
+            },
+            {
+              "content": "¿Cómo se comunican llamador y llamado?",
+              "level": 0
+            },
+            {
+              "content": "¿Qué decisiones favorecen seguridad, reutilización y recursividad?",
+              "level": 0
+            },
+            {
+              "content": "¿Cómo implementa el runtime una llamada?",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "",
+        "local_asset": "slides/assets/F-00-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-01",
+      "type": "concepto-mixto",
+      "title": "Un subprograma abstrae una acción",
+      "subtitle": "Un subprograma permite razonar por contrato, no por instrucciones",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Tiene un punto de entrada y devuelve el control al llamador.",
+              "level": 0
+            },
+            {
+              "content": "Su encabezado establece qué datos recibe y qué resultado produce.",
+              "level": 0
+            },
+            {
+              "content": "El cuerpo queda oculto durante el uso: el cliente invoca una abstracción.",
+              "level": 0
+            },
+            {
+              "content": "Cada llamada crea una activación distinta del mismo código.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.1, pp. 389-394]`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function distancia(x1: number, y1: number,\n                   x2: number, y2: number): number {\n  return Math.hypot(x2 - x1, y2 - y1);\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-02",
+      "type": "tabla-comparativa",
+      "title": "La definición y la llamada cumplen roles distintos",
+      "subtitle": "Definición y llamada forman un contrato",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.1]`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Elemento | En la definición | En la llamada |\n|---|---|---|\n| Nombre | Identifica el servicio | Selecciona el servicio |\n| Parámetros | Formales: variables locales del llamado | Reales: valores o expresiones aportadas |\n| Perfil | Número, orden y tipos de parámetros | Debe ser compatible con los argumentos |\n| Protocolo | Perfil más tipo de retorno | Determina el tipo de la expresión resultante |\n| Cuerpo | Implementa el servicio | Permanece oculto al cliente |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Elemento | En la definición | En la llamada |\n|---|---|---|\n| Nombre | Identifica el servicio | Selecciona el servicio |\n| Parámetros | Formales: variables locales del llamado | Reales: valores o expresiones aportadas |\n| Perfil | Número, orden y tipos de parámetros | Debe ser compatible con los argumentos |\n| Protocolo | Perfil más tipo de retorno | Determina el tipo de la expresión resultante |\n| Cuerpo | Implementa el servicio | Permanece oculto al cliente |",
+          "local_asset": "slides/assets/F-02-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "type": "tabla-comparativa",
+      "title": "Procedimiento y función expresan intenciones diferentes",
+      "subtitle": "El retorno distingue cálculo de efecto",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.1 · Gabbrielli/Martini, cap. 5]`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Decisión | Procedimiento | Función |\n|---|---|---|\n| Intención principal | Cambiar el estado o producir un efecto | Calcular un valor |\n| Resultado | Implícito en el estado modificado | Explícito mediante retorno |\n| Composición | Se encadena por secuencia | Se compone dentro de expresiones |\n| En TypeScript | Retorno `void` | Retorno tipado |\n| Riesgo | Efectos difíciles de rastrear | Dependencia de entradas y entorno |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Decisión | Procedimiento | Función |\n|---|---|---|\n| Intención principal | Cambiar el estado o producir un efecto | Calcular un valor |\n| Resultado | Implícito en el estado modificado | Explícito mediante retorno |\n| Composición | Se encadena por secuencia | Se compone dentro de expresiones |\n| En TypeScript | Retorno `void` | Retorno tipado |\n| Riesgo | Efectos difíciles de rastrear | Dependencia de entradas y entorno |",
+          "local_asset": "slides/assets/F-03-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-04",
+      "type": "concepto-mixto",
+      "title": "Perfil y protocolo permiten verificar llamadas",
+      "subtitle": "El protocolo convierte una función en un valor tipado",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El **perfil** incluye cantidad, orden y tipos de los parámetros.",
+              "level": 0
+            },
+            {
+              "content": "El **protocolo** agrega el tipo de retorno.",
+              "level": 0
+            },
+            {
+              "content": "El chequeo estático rechaza llamadas incompatibles antes de ejecutar.",
+              "level": 0
+            },
+            {
+              "content": "El mismo concepto reaparece en sobrecarga y funciones de orden superior.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.1, pp. 392-394]`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Distancia = (\n  x1: number, y1: number,\n  x2: number, y2: number\n) => number;"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "socratica",
+      "title": "Actividad: reconstruir el contrato",
+      "subtitle": "¿Qué puede saber el cliente sin leer el cuerpo?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Actividad de 5 minutos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Escriban el perfil y el protocolo de `distancia`.",
+              "level": 0
+            },
+            {
+              "content": "Propongan una llamada válida y dos llamadas inválidas.",
+              "level": 0
+            },
+            {
+              "content": "Señalen qué errores puede detectar TypeScript.",
+              "level": 0
+            },
+            {
+              "content": "Expliquen qué información sigue oculta.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "",
+        "local_asset": "slides/assets/F-05-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-06",
+      "type": "tabla-comparativa",
+      "title": "Las variables locales plantean una decisión de diseño",
+      "subtitle": "Duración y alcance no son lo mismo",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.4, pp. 398-402]`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Variable local | Cuándo existe | Consecuencia |\n|---|---|---|\n| Estática | Durante toda la ejecución | Conserva historia entre llamadas |\n| Stack-dynamic | Desde la llamada hasta el retorno | Cada activación obtiene su propia copia |\n| Explícitamente heap-dynamic | Según creación y liberación explícita | Flexible, pero costosa y riesgosa |\n| Implícitamente heap-dynamic | Según asignaciones en ejecución | Flexible, con menor previsibilidad |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Variable local | Cuándo existe | Consecuencia |\n|---|---|---|\n| Estática | Durante toda la ejecución | Conserva historia entre llamadas |\n| Stack-dynamic | Desde la llamada hasta el retorno | Cada activación obtiene su propia copia |\n| Explícitamente heap-dynamic | Según creación y liberación explícita | Flexible, pero costosa y riesgosa |\n| Implícitamente heap-dynamic | Según asignaciones en ejecución | Flexible, con menor previsibilidad |",
+          "local_asset": "slides/assets/F-06-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-07",
+      "type": "concepto-mixto",
+      "title": "La recursividad necesita activaciones independientes",
+      "subtitle": "Una variable local por llamada hace posible la recursión",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El código de `factorial` existe una sola vez.",
+              "level": 0
+            },
+            {
+              "content": "Cada llamada necesita un valor de `n` diferente.",
+              "level": 0
+            },
+            {
+              "content": "Las locales stack-dynamic viven en activation records separados.",
+              "level": 0
+            },
+            {
+              "content": "Con una única copia estática, las llamadas se sobrescribirían.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, §§9.4 y 10.3]`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function factorial(n: number): number {\n  if (n <= 1) return 1;\n  return n * factorial(n - 1);\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-08",
+      "type": "concepto-abstracto",
+      "title": "Los parámetros describen flujo de información",
+      "subtitle": "Antes del mecanismo, importa la dirección del flujo",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Modo **in**: el llamado recibe información del llamador.",
+              "level": 0
+            },
+            {
+              "content": "Modo **out**: el llamado produce información para el llamador.",
+              "level": 0
+            },
+            {
+              "content": "Modo **inout**: la información circula en ambas direcciones.",
+              "level": 0
+            },
+            {
+              "content": "La elección debería minimizar acceso innecesario a datos externos.",
+              "level": 0
+            },
+            {
+              "content": "Luego se elige un mecanismo que implemente ese modo.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.5 · Gabbrielli/Martini, cap. 5]`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-08-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-09",
+      "type": "tabla-comparativa",
+      "title": "Los mecanismos de pasaje tienen costos y riesgos distintos",
+      "subtitle": "No existe un mecanismo óptimo para todos los casos",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.5, pp. 403-420]`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Mecanismo | Implementa | Ventaja | Riesgo o costo |\n|---|---|---|---|\n| Valor | in | Aísla al llamador | Copiar objetos grandes |\n| Resultado | out | Expresa salida | Colisión al copiar resultados |\n| Valor-resultado | inout | Evita aliasing durante la llamada | Orden de copia al retornar |\n| Referencia | inout | Evita copias grandes | Aliasing y efectos laterales |\n| Nombre | inout | Reevalúa expresiones | Semántica difícil de predecir |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Mecanismo | Implementa | Ventaja | Riesgo o costo |\n|---|---|---|---|\n| Valor | in | Aísla al llamador | Copiar objetos grandes |\n| Resultado | out | Expresa salida | Colisión al copiar resultados |\n| Valor-resultado | inout | Evita aliasing durante la llamada | Orden de copia al retornar |\n| Referencia | inout | Evita copias grandes | Aliasing y efectos laterales |\n| Nombre | inout | Reevalúa expresiones | Semántica difícil de predecir |",
+          "local_asset": "slides/assets/F-09-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-10",
+      "type": "concepto-mixto",
+      "title": "Pass-by-value crea una variable local",
+      "subtitle": "Modificar el parámetro formal no modifica el argumento",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "La expresión real se evalúa antes de entrar.",
+              "level": 0
+            },
+            {
+              "content": "Su valor inicializa una nueva variable local.",
+              "level": 0
+            },
+            {
+              "content": "La asignación afecta solo esa copia.",
+              "level": 0
+            },
+            {
+              "content": "El retorno explícito comunica el resultado.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.5.2.1 · Gabbrielli/Martini, cap. 5]`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function incrementar(n: number): number {\n  n = n + 1;\n  return n;\n}\nlet edad = 20;\nconst siguiente = incrementar(edad); // edad sigue siendo 20"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "concepto-abstracto",
+      "title": "Pass-by-reference introduce aliasing",
+      "subtitle": "Dos nombres para una ubicación vuelven menos local el razonamiento",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El formal se vincula con la ubicación del argumento real.",
+              "level": 0
+            },
+            {
+              "content": "Asignar al formal modifica directamente el dato del llamador.",
+              "level": 0
+            },
+            {
+              "content": "Si dos parámetros referencian la misma ubicación aparece **aliasing**.",
+              "level": 0
+            },
+            {
+              "content": "El resultado puede depender de un detalle invisible en el encabezado.",
+              "level": 0
+            },
+            {
+              "content": "Se gana eficiencia, pero se pierde aislamiento.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.5.2.4, pp. 412-416]`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-11-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-12",
+      "type": "concepto-abstracto",
+      "title": "Valor-resultado cambia aliasing por copia diferida",
+      "subtitle": "Copy-in/copy-out evita aliasing interno, pero crea otro conflicto",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Al llamar, cada formal recibe una copia independiente.",
+              "level": 0
+            },
+            {
+              "content": "Durante el cuerpo, los formales no comparten ubicación.",
+              "level": 0
+            },
+            {
+              "content": "Al retornar, cada resultado se copia al argumento correspondiente.",
+              "level": 0
+            },
+            {
+              "content": "Si dos argumentos designan la misma variable, importa el orden de copia.",
+              "level": 0
+            },
+            {
+              "content": "El lenguaje debe definir o restringir ese caso.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.5.2.3, pp. 409-412]`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-12-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "socratica",
+      "title": "Actividad: elegir un mecanismo",
+      "subtitle": "¿Qué mecanismo elegirían y qué riesgo aceptarían?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Caso"
+        },
+        {
+          "type": "text",
+          "content": "Una función recibe una matriz grande, consulta casi todas sus celdas y debe modificar solo una."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Comparen valor, referencia y valor-resultado.",
+              "level": 0
+            },
+            {
+              "content": "Evalúen eficiencia, claridad y riesgo de aliasing.",
+              "level": 0
+            },
+            {
+              "content": "Propongan una firma que haga explícita la intención.",
+              "level": 0
+            },
+            {
+              "content": "Defiendan una elección.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "",
+        "local_asset": "slides/assets/F-13-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-14",
+      "type": "concepto-mixto",
+      "title": "TypeScript siempre copia el valor del argumento",
+      "subtitle": "En objetos, el valor copiado es una referencia compartida",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Reasignar el parámetro no cambia la variable del llamador.",
+              "level": 0
+            },
+            {
+              "content": "Mutar el objeto alcanzado sí es observable desde afuera.",
+              "level": 0
+            },
+            {
+              "content": "Esta semántica suele llamarse **pass-by-sharing**.",
+              "level": 0
+            },
+            {
+              "content": "No equivale a la referencia de C++, porque no permite reasignar la variable externa.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function actualizar(p: { nombre: string }): void {\n  p.nombre = \"Ada\";          // muta el objeto compartido\n  p = { nombre: \"Grace\" };   // reasigna solo el formal\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-15",
+      "type": "tabla-comparativa",
+      "title": "La mutabilidad define si compartir es peligroso",
+      "subtitle": "Compartir referencias no implica necesariamente compartir cambios",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Estrategia | Qué recibe el llamado | Efecto observable |\n|---|---|---|\n| Objeto mutable | Referencia al mismo objeto | Puede modificar propiedades |\n| `Readonly<T>` | Referencia con restricción estática | TypeScript impide mutación directa |\n| Copia superficial | Nuevo contenedor, elementos compartidos | Aísla estructura, no objetos internos |\n| Copia profunda | Nuevo grafo de objetos | Mayor aislamiento y costo |\n| Valor de retorno | Resultado nuevo | Flujo explícito y fácil de probar |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Estrategia | Qué recibe el llamado | Efecto observable |\n|---|---|---|\n| Objeto mutable | Referencia al mismo objeto | Puede modificar propiedades |\n| `Readonly<T>` | Referencia con restricción estática | TypeScript impide mutación directa |\n| Copia superficial | Nuevo contenedor, elementos compartidos | Aísla estructura, no objetos internos |\n| Copia profunda | Nuevo grafo de objetos | Mayor aislamiento y costo |\n| Valor de retorno | Resultado nuevo | Flujo explícito y fácil de probar |",
+          "local_asset": "slides/assets/F-15-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-16",
+      "type": "socratica",
+      "title": "Actividad: explicar pass-by-sharing",
+      "subtitle": "Predigan antes de ejecutar",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿Qué nombre queda?",
+              "level": 0
+            },
+            {
+              "content": "¿Qué roles quedan?",
+              "level": 0
+            },
+            {
+              "content": "Dibujen variables y objetos.",
+              "level": 0
+            },
+            {
+              "content": "Expliquen sin decir “se pasa por referencia”.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "const usuario = { nombre: \"Lin\", roles: [\"lector\"] };\nfunction cambiar(u: typeof usuario): void {\n  u.roles.push(\"editor\");\n  u = { nombre: \"Otro\", roles: [] };\n}\ncambiar(usuario);"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "",
+        "local_asset": "slides/assets/F-16-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-17",
+      "type": "concepto-mixto",
+      "title": "Pasar un subprograma exige definir su entorno",
+      "subtitle": "Una función como parámetro lleva código, pero también necesita nombres",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El protocolo permite verificar qué función puede pasarse.",
+              "level": 0
+            },
+            {
+              "content": "El cuerpo de esa función puede usar variables no locales.",
+              "level": 0
+            },
+            {
+              "content": "El lenguaje debe decidir qué entorno se usa al ejecutarla.",
+              "level": 0
+            },
+            {
+              "content": "Con alcance estático suele preservarse el entorno de definición.",
+              "level": 0
+            },
+            {
+              "content": "Ese problema conduce al concepto de closure.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.6, pp. 420-425]`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Comparador<T> = (a: T, b: T) => number;\nfunction ordenar<T>(xs: T[], comparar: Comparador<T>): T[] {\n  return [...xs].sort(comparar);\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-18",
+      "type": "concepto-mixto",
+      "title": "Una closure conserva el entorno que necesita",
+      "subtitle": "Closure = subprograma + entorno de referencia",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`crearContador` retorna después de crear la función interna.",
+              "level": 0
+            },
+            {
+              "content": "La variable `cuenta` debe sobrevivir al retorno.",
+              "level": 0
+            },
+            {
+              "content": "Cada invocación crea un entorno independiente.",
+              "level": 0
+            },
+            {
+              "content": "El runtime mantiene ese entorno mientras sea alcanzable.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.12 · Gabbrielli/Martini, cap. 5]`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function crearContador(): () => number {\n  let cuenta = 0;\n  return () => ++cuenta;\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "concepto-mixto",
+      "title": "Las funciones de orden superior reutilizan políticas",
+      "subtitle": "Separar recorrido de criterio reduce duplicación",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`filtrar` implementa el recorrido una sola vez.",
+              "level": 0
+            },
+            {
+              "content": "El predicado representa una política variable.",
+              "level": 0
+            },
+            {
+              "content": "Su protocolo limita qué políticas son compatibles.",
+              "level": 0
+            },
+            {
+              "content": "El parámetro de tipo conserva la relación entre entrada y salida.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "type Predicado<T> = (valor: T) => boolean;\nfunction filtrar<T>(xs: T[], acepta: Predicado<T>): T[] {\n  return xs.filter(acepta);\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-20",
+      "type": "concepto-abstracto",
+      "title": "Sobrecarga ofrece varias implementaciones bajo un nombre",
+      "subtitle": "Sobrecarga es polimorfismo ad hoc",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Dos subprogramas comparten nombre en el mismo entorno.",
+              "level": 0
+            },
+            {
+              "content": "Sus protocolos deben permitir distinguir cada llamada.",
+              "level": 0
+            },
+            {
+              "content": "La selección depende de los argumentos y reglas del lenguaje.",
+              "level": 0
+            },
+            {
+              "content": "Las implementaciones pueden realizar operaciones diferentes.",
+              "level": 0
+            },
+            {
+              "content": "Defaults y conversiones implícitas pueden volver ambigua la resolución.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.9, pp. 429-432]`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-20-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-21",
+      "type": "concepto-mixto",
+      "title": "TypeScript sobrecarga contratos, no cuerpos",
+      "subtitle": "Las overload signatures describen casos visibles",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El cliente ve protocolos específicos.",
+              "level": 0
+            },
+            {
+              "content": "Existe una única implementación JavaScript en runtime.",
+              "level": 0
+            },
+            {
+              "content": "El cuerpo debe aceptar todos los casos declarados.",
+              "level": 0
+            },
+            {
+              "content": "Un genérico suele ser mejor cuando la relación entre tipos es uniforme.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function longitud(x: string): number;\nfunction longitud<T>(x: T[]): number;\nfunction longitud(x: string | unknown[]): number {\n  return x.length;\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-22",
+      "type": "concepto-mixto",
+      "title": "Un genérico expresa una familia uniforme",
+      "subtitle": "Polimorfismo paramétrico: una implementación para muchos tipos",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El parámetro de tipo reemplaza nombres de tipos concretos.",
+              "level": 0
+            },
+            {
+              "content": "La implementación solo puede asumir operaciones permitidas para `T`.",
+              "level": 0
+            },
+            {
+              "content": "La inferencia evita indicar el tipo en muchas llamadas.",
+              "level": 0
+            },
+            {
+              "content": "El resultado conserva relaciones precisas entre tipos.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.10, pp. 432-438]`"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function primero<T>(xs: readonly T[]): T | undefined {\n  return xs[0];\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "concepto-mixto",
+      "title": "Los constraints declaran capacidades necesarias",
+      "subtitle": "Un constraint debe ser tan débil como permita el algoritmo",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Sin constraint, el algoritmo no puede asumir operaciones específicas.",
+              "level": 0
+            },
+            {
+              "content": "`extends` exige una estructura mínima.",
+              "level": 0
+            },
+            {
+              "content": "Un constraint excesivo reduce reutilización sin aportar seguridad.",
+              "level": 0
+            },
+            {
+              "content": "El protocolo documenta exactamente qué necesita el algoritmo.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "function mayorPor<T>(\n  a: T, b: T, comparar: (x: T, y: T) => number\n): T {\n  return comparar(a, b) >= 0 ? a : b;\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "socratica",
+      "title": "Actividad: sobrecarga o genérico",
+      "subtitle": "¿Múltiples comportamientos o una relación uniforme?",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Clasifiquen `parsear(string)`, `primero<T>(T[])` y `sumar(number|string)`.",
+              "level": 0
+            },
+            {
+              "content": "Decidan cuándo usar overload, unión o genérico.",
+              "level": 0
+            },
+            {
+              "content": "Expliquen qué relación entre entrada y salida debe preservar el tipo.",
+              "level": 0
+            },
+            {
+              "content": "Detecten una elección que sería engañosa para el cliente.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "",
+        "local_asset": "slides/assets/F-24-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "tabla",
+      "title": "El activation record materializa una llamada",
+      "subtitle": "Cada activación necesita estado propio",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`[Sebesta, §10.3, pp. 420-428]`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Componente | Función durante la llamada |\n|---|---|\n| Parámetros | Comunican datos desde el llamador |\n| Variables locales | Conservan el estado privado de esa activación |\n| Dirección de retorno | Indica dónde continuar al terminar |\n| Dynamic link | Apunta al activation record del llamador |\n| Valor de retorno | Comunica el resultado |\n| Static link, si aplica | Permite acceder a variables no locales léxicas |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Componente | Función durante la llamada |\n|---|---|\n| Parámetros | Comunican datos desde el llamador |\n| Variables locales | Conservan el estado privado de esa activación |\n| Dirección de retorno | Indica dónde continuar al terminar |\n| Dynamic link | Apunta al activation record del llamador |\n| Valor de retorno | Comunica el resultado |\n| Static link, si aplica | Permite acceder a variables no locales léxicas |",
+          "local_asset": "slides/assets/F-25-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-26",
+      "type": "tabla",
+      "title": "Call y return administran el stack",
+      "subtitle": "Llamar suspende un contexto; retornar lo restaura",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "`[Sebesta, §§10.1-10.3]`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Momento | Acción |\n|---|---|\n| 1. Preparar llamada | Evaluar argumentos y establecer parámetros |\n| 2. Crear activación | Reservar activation record |\n| 3. Transferir control | Guardar retorno y saltar al punto de entrada |\n| 4. Ejecutar | Usar parámetros, locales y enlaces |\n| 5. Retornar | Producir resultado y restaurar al llamador |\n| 6. Liberar | Retirar el activation record terminado |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Momento | Acción |\n|---|---|\n| 1. Preparar llamada | Evaluar argumentos y establecer parámetros |\n| 2. Crear activación | Reservar activation record |\n| 3. Transferir control | Guardar retorno y saltar al punto de entrada |\n| 4. Ejecutar | Usar parámetros, locales y enlaces |\n| 5. Retornar | Producir resultado y restaurar al llamador |\n| 6. Liberar | Retirar el activation record terminado |",
+          "local_asset": "slides/assets/F-26-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-27",
+      "type": "concepto-abstracto",
+      "title": "La cadena dinámica reconstruye quién llamó a quién",
+      "subtitle": "Dynamic link y static link responden preguntas diferentes",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El **dynamic link** apunta al activation record del llamador.",
+              "level": 0
+            },
+            {
+              "content": "Permite restaurar el stack al retornar.",
+              "level": 0
+            },
+            {
+              "content": "El **static link** apunta hacia un ancestro léxico.",
+              "level": 0
+            },
+            {
+              "content": "Permite buscar variables no locales con alcance estático.",
+              "level": 0
+            },
+            {
+              "content": "El orden de llamadas y la estructura del programa no siempre coinciden.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, §10.4 · Gabbrielli/Martini, §5.3.3]`"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "",
+        "local_asset": "slides/assets/F-27-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-28",
+      "type": "socratica",
+      "title": "Actividad: construir factorial(3)",
+      "subtitle": "Dibujen las activaciones, no solo el resultado",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Representen `factorial(3)`, `factorial(2)` y `factorial(1)`.",
+              "level": 0
+            },
+            {
+              "content": "Incluyan parámetro, dirección de retorno y dynamic link.",
+              "level": 0
+            },
+            {
+              "content": "Marquen el orden de creación y liberación.",
+              "level": 0
+            },
+            {
+              "content": "Expliquen por qué una única variable estática `n` no alcanzaría.",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "",
+        "local_asset": "slides/assets/F-28-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-29",
+      "type": "tabla",
+      "title": "Las decisiones de diseño están conectadas",
+      "subtitle": "Del contrato visible al mecanismo de ejecución",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Pregunta | Decisión | Consecuencia |\n|---|---|---|\n| ¿Qué acepta y retorna? | Perfil y protocolo | Verificación de llamadas |\n| ¿Cómo circulan datos? | Modos y mecanismos de pasaje | Copias, aliasing y efectos |\n| ¿Dónde viven las locales? | Estáticas o stack-dynamic | Historia o recursividad |\n| ¿Puede recibir funciones? | Protocolo y entorno de referencia | HOF y closures |\n| ¿Cómo reutiliza comportamiento? | Sobrecarga o genéricos | Ad hoc o paramétrico |\n| ¿Cómo se ejecuta? | Activation records y enlaces | Call, return y acceso no local |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Pregunta | Decisión | Consecuencia |\n|---|---|---|\n| ¿Qué acepta y retorna? | Perfil y protocolo | Verificación de llamadas |\n| ¿Cómo circulan datos? | Modos y mecanismos de pasaje | Copias, aliasing y efectos |\n| ¿Dónde viven las locales? | Estáticas o stack-dynamic | Historia o recursividad |\n| ¿Puede recibir funciones? | Protocolo y entorno de referencia | HOF y closures |\n| ¿Cómo reutiliza comportamiento? | Sobrecarga o genéricos | Ad hoc o paramétrico |\n| ¿Cómo se ejecuta? | Activation records y enlaces | Call, return y acceso no local |",
+          "local_asset": "slides/assets/F-29-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-30",
+      "type": "cierre",
+      "title": "Cierre 13A",
+      "subtitle": "Un subprograma es simultáneamente contrato, abstracción y activación",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El contrato permite usarlo.",
+              "level": 0
+            },
+            {
+              "content": "Los mecanismos de pasaje determinan cómo comparte información.",
+              "level": 0
+            },
+            {
+              "content": "El entorno determina qué nombres puede observar.",
+              "level": 0
+            },
+            {
+              "content": "El activation record permite ejecutarlo y volver.",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Próxima clase: del subprograma aislado al ADT y al módulo"
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "",
+        "local_asset": "slides/assets/F-30-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    }
+  ],
+  "_draft_instructions": {
+    "pending_type_ids": [],
+    "pending_prompt_ids": [
+      "F-00",
+      "F-05",
+      "F-08",
+      "F-11",
+      "F-12",
+      "F-13",
+      "F-16",
+      "F-20",
+      "F-24",
+      "F-27",
+      "F-28",
+      "F-30"
+    ],
+    "canonical_types": [
+      "portada",
+      "concepto-abstracto",
+      "concepto-mixto",
+      "codigo",
+      "tabla",
+      "tabla-comparativa",
+      "tabla-mixta",
+      "diagrama",
+      "socratica",
+      "demo",
+      "cierre",
+      "timeline"
+    ],
+    "next_steps": [
+      "1. Leer schema-registry.json ANTES de cualquier edición",
+      "2. Asignar type explícito desde canonical_types a cada slide en pending_type_ids",
+      "3. Copiar layout EXACTO del type_layout_map para cada tipo asignado",
+      "4. Para slides con image.layer!='none': escribir prompt VISUAL PURO (ver prompt-imagen-guide.md)",
+      "5. Actualizar summary: total_slides, images_planned, tables_planned, code_slides, type_distribution",
+      "6. Cambiar summary.status a 'READY_FOR_VALIDATION'",
+      "7. Eliminar esta clave '_draft_instructions'",
+      "8. Renombrar a: slides/plan-filminas-13-subprogramas-parametros-sobrecarga.json",
+      "9. Validar: python scripts/repair_plan.py <topic_folder> --attempt 1",
+      "10. Publicar: python scripts/slides_pipeline.py <topic_folder>"
+    ]
+  }
+}

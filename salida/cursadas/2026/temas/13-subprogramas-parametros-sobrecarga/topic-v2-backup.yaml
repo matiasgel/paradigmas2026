@@ -1,0 +1,12 @@
+topic_number: 13
+topic_name: "Subprogramas, Parametros y Sobrecarga"
+topic_subtitle: "Clase 13A"
+topic_folder: "salida/cursadas/2026/temas/13-subprogramas-parametros-sobrecarga"
+module: X
+week: 13
+clases: 1
+duration_min: 120
+status: en-curso
+course_id: leng-2026
+pipeline_version: v3
+source_topic: "13-abstraccion-modularidad"
