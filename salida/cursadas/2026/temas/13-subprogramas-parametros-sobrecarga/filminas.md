@@ -1,9 +1,12 @@
 # Filminas - Clase 13A - Subprogramas, parámetros y sobrecarga
 
 > Duración: 120 minutos
-> Hilo conductor: decisiones de diseño de subprogramas
+> Hilo conductor: del contrato fuente al protocolo efectivo de ejecución
 > Fuente principal: Sebesta, capítulos 9 y 10
 > Complemento: Gabbrielli y Martini, capítulo 5
+> Lenguaje principal: TypeScript | Contraste: Go, Rust, Kotlin y Swift
+> Enfoque actualizado: ownership, efectos, dispatch, ABI y async
+> Documentación contemporánea: Rust Book, Kotlin Docs y Swift Language Guide
 
 ---
 
@@ -15,10 +18,10 @@
 
 ## Subprogramas: del contrato a la ejecución
 
-- ¿Qué promete un subprograma?
-- ¿Cómo se comunican llamador y llamado?
-- ¿Qué decisiones favorecen seguridad, reutilización y recursividad?
-- ¿Cómo implementa el runtime una llamada?
+- Contrato observable de un subprograma.
+- Comunicación entre llamador y llamado.
+- Decisiones que controlan mutación, ownership y efectos.
+- Implementación de llamadas síncronas y asíncronas.
 
 ---
 
@@ -75,7 +78,7 @@ function distancia(x1: number, y1: number,
 | Intención principal | Cambiar el estado o producir un efecto | Calcular un valor |
 | Resultado | Implícito en el estado modificado | Explícito mediante retorno |
 | Composición | Se encadena por secuencia | Se compone dentro de expresiones |
-| En TypeScript | Retorno `void` | Retorno tipado |
+| Contraste moderno | Kotlin usa `Unit` para efectos | Rust exige declarar el tipo retornado cuando no es `()` |
 | Riesgo | Efectos difíciles de rastrear | Dependencia de entradas y entorno |
 
 ---
@@ -98,61 +101,61 @@ type Distancia = (
   x1: number, y1: number,
   x2: number, y2: number
 ) => number;
+
+const euclidea: Distancia = (x1, y1, x2, y2) =>
+  Math.hypot(x2 - x1, y2 - y1);
+
+const resultado = euclidea(0, 0, 3, 4); // 5
 ```
 
 ---
 
-### [F-05] Actividad: reconstruir el contrato
+### [F-05] El contrato permite validar sin leer el cuerpo
 
-@tipo: socratica
+@tipo: concepto-abstracto
 
-# ¿Qué puede saber el cliente sin leer el cuerpo?
+# El cliente razona con información visible
 
-## Actividad de 5 minutos
-
-- Escriban el perfil y el protocolo de `distancia`.
-- Propongan una llamada válida y dos llamadas inválidas.
-- Señalen qué errores puede detectar TypeScript.
-- Expliquen qué información sigue oculta.
+- El perfil de `distancia` exige cuatro argumentos numéricos.
+- El protocolo agrega que el resultado también es numérico.
+- TypeScript rechaza cantidad y tipos incompatibles antes de ejecutar.
+- El algoritmo, sus variables locales y su costo permanecen ocultos.
+- El contrato reduce conocimiento necesario, pero no describe toda la semántica.
 
 ---
 
-### [F-06] Las variables locales plantean una decisión de diseño
+### [F-06] El contrato moderno incluye efectos observables
 
 @tipo: tabla-comparativa
 
-# Duración y alcance no son lo mismo
+# La firma tipada no siempre cuenta toda la historia
 
-`[Sebesta, §9.4, pp. 398-402]`
+`[Sebesta, §§9.1 y 9.8 · Gabbrielli/Martini, cap. 5]`
 
-| Variable local | Cuándo existe | Consecuencia |
+| Efecto | Evidencia en el contrato | Consecuencia para el llamador |
 |---|---|---|
-| Estática | Durante toda la ejecución | Conserva historia entre llamadas |
-| Stack-dynamic | Desde la llamada hasta el retorno | Cada activación obtiene su propia copia |
-| Explícitamente heap-dynamic | Según creación y liberación explícita | Flexible, pero costosa y riesgosa |
-| Implícitamente heap-dynamic | Según asignaciones en ejecución | Flexible, con menor previsibilidad |
+| Retorno normal | Tipo de retorno | Composición directa |
+| Mutación | `&mut`, `inout`, objeto mutable | Estado compartido observable |
+| Falla | `Result<T,E>`, excepción documentada | Flujo alternativo |
+| Suspensión | `async`, `suspend` | Continuación diferida |
+| Cancelación | Señal o contexto | Terminación cooperativa |
 
 ---
 
-### [F-07] La recursividad necesita activaciones independientes
+### [F-07] Los efectos exigen permisos sobre los datos
 
-@tipo: concepto-mixto
+@tipo: tabla-comparativa
 
-# Una variable local por llamada hace posible la recursión
+# El contrato debe limitar qué puede hacer el subprograma
 
-- El código de `factorial` existe una sola vez.
-- Cada llamada necesita un valor de `n` diferente.
-- Las locales stack-dynamic viven en activation records separados.
-- Con una única copia estática, las llamadas se sobrescribirían.
+| Intención | Permiso mínimo | Evidencia moderna |
+|---|---|---|
+| Consultar | Lectura compartida | Referencia inmutable, `readonly` |
+| Modificar | Acceso mutable exclusivo | `&mut`, `inout` |
+| Consumir | Transferencia de ownership | Parámetro por valor no copiable |
+| Producir | Retorno tipado | Valor, `Result` o promesa |
 
-`[Sebesta, §§9.4 y 10.3]`
-
-```typescript
-function factorial(n: number): number {
-  if (n <= 1) return 1;
-  return n * factorial(n - 1);
-}
-```
+> Esta relación entre intención y permiso conduce a los modos y mecanismos de pasaje.
 
 ---
 
@@ -190,7 +193,7 @@ function factorial(n: number): number {
 
 ---
 
-### [F-10] Pass-by-value crea una variable local
+### [F-10] Go muestra el aislamiento de pass-by-value
 
 @tipo: concepto-mixto
 
@@ -203,63 +206,77 @@ function factorial(n: number): number {
 
 `[Sebesta, §9.5.2.1 · Gabbrielli/Martini, cap. 5]`
 
-```typescript
-function incrementar(n: number): number {
-  n = n + 1;
-  return n;
+```go
+func incrementar(n int) int {
+    n = n + 1
+    return n
 }
-let edad = 20;
-const siguiente = incrementar(edad); // edad sigue siendo 20
+edad := 20
+siguiente := incrementar(edad) // edad sigue siendo 20
 ```
 
 ---
 
-### [F-11] Pass-by-reference introduce aliasing
+### [F-11] Rust restringe el aliasing mutable
 
-@tipo: concepto-abstracto
+@tipo: concepto-mixto
 
-# Dos nombres para una ubicación vuelven menos local el razonamiento
+# Una referencia mutable exige acceso exclusivo
 
 - El formal se vincula con la ubicación del argumento real.
 - Asignar al formal modifica directamente el dato del llamador.
-- Si dos parámetros referencian la misma ubicación aparece **aliasing**.
-- El resultado puede depender de un detalle invisible en el encabezado.
-- Se gana eficiencia, pero se pierde aislamiento.
+- Rust permite muchas referencias inmutables o una sola mutable.
+- El borrow checker rechaza aliasing mutable antes de ejecutar.
 
 `[Sebesta, §9.5.2.4, pp. 412-416]`
 
+```rust
+fn incrementar(n: &mut i32) {
+    *n += 1;
+}
+let mut x = 10;
+incrementar(&mut x);
+// dos &mut x simultáneos serían rechazados
+```
+
 ---
 
-### [F-12] Valor-resultado cambia aliasing por copia diferida
+### [F-12] Swift hace explícita la mutación del argumento
 
-@tipo: concepto-abstracto
+@tipo: concepto-mixto
 
-# Copy-in/copy-out evita aliasing interno, pero crea otro conflicto
+# `inout` distingue entrada mutable de retorno
 
-- Al llamar, cada formal recibe una copia independiente.
-- Durante el cuerpo, los formales no comparten ubicación.
-- Al retornar, cada resultado se copia al argumento correspondiente.
-- Si dos argumentos designan la misma variable, importa el orden de copia.
-- El lenguaje debe definir o restringir ese caso.
+- Los parámetros comunes son constantes dentro de la función.
+- `inout` permite leer y escribir el argumento del llamador.
+- La llamada usa `&` para hacer visible la posible mutación.
+- Swift restringe accesos superpuestos al mismo almacenamiento.
 
 `[Sebesta, §9.5.2.3, pp. 409-412]`
 
+```swift
+func avanzar(posicion: inout Int, pasos: Int) -> Bool {
+    posicion += pasos
+    return posicion >= 100
+}
+var posicion = 90
+let final = avanzar(posicion: &posicion, pasos: 15)
+```
+
 ---
 
-### [F-13] Actividad: elegir un mecanismo
+### [F-13] Elegir un mecanismo exige balancear riesgos
 
-@tipo: socratica
+@tipo: tabla-comparativa
 
-# ¿Qué mecanismo elegirían y qué riesgo aceptarían?
+# Una matriz grande muestra el compromiso entre copia y aliasing
 
-## Caso
-
-Una función recibe una matriz grande, consulta casi todas sus celdas y debe modificar solo una.
-
-- Comparen valor, referencia y valor-resultado.
-- Evalúen eficiencia, claridad y riesgo de aliasing.
-- Propongan una firma que haga explícita la intención.
-- Defiendan una elección.
+| Mecanismo | Costo principal | Riesgo principal | Lectura del contrato |
+|---|---|---|---|
+| Valor | Copiar toda la matriz | Consumo de memoria | Aislamiento total |
+| Referencia mutable | Sin copia inicial | Aliasing y efectos laterales | Mutación compartida |
+| Valor-resultado | Copia al entrar y salir | Orden de copia final | Cambio diferido |
+| Referencia inmutable + resultado | Copia solo del resultado | Construcción de nueva matriz | Flujo explícito |
 
 ---
 
@@ -272,11 +289,11 @@ Una función recibe una matriz grande, consulta casi todas sus celdas y debe mod
 - Reasignar el parámetro no cambia la variable del llamador.
 - Mutar el objeto alcanzado sí es observable desde afuera.
 - Esta semántica suele llamarse **pass-by-sharing**.
-- No equivale a la referencia de C++, porque no permite reasignar la variable externa.
+- No equivale a `inout` de Swift, porque no permite reasignar la variable externa.
 
 ```typescript
 function actualizar(p: { nombre: string }): void {
-  p.nombre = "Ada";          // muta el objeto compartido
+  p.nombre = "Lin";          // muta el objeto compartido
   p = { nombre: "Grace" };   // reasigna solo el formal
 }
 ```
@@ -299,11 +316,11 @@ function actualizar(p: { nombre: string }): void {
 
 ---
 
-### [F-16] Actividad: explicar pass-by-sharing
+### [F-16] Pass-by-sharing separa variable y objeto
 
-@tipo: socratica
+@tipo: concepto-mixto
 
-# Predigan antes de ejecutar
+# La mutación compartida sobrevive; la reasignación local no
 
 ```typescript
 const usuario = { nombre: "Lin", roles: ["lector"] };
@@ -314,24 +331,24 @@ function cambiar(u: typeof usuario): void {
 cambiar(usuario);
 ```
 
-- ¿Qué nombre queda?
-- ¿Qué roles quedan?
-- Dibujen variables y objetos.
-- Expliquen sin decir “se pasa por referencia”.
+- `usuario.nombre` permanece `"Lin"`.
+- `usuario.roles` contiene `"lector"` y `"editor"`.
+- `u.roles.push` muta el objeto compartido.
+- Reasignar `u` cambia únicamente la variable formal.
 
 ---
 
-### [F-17] Pasar un subprograma exige definir su entorno
+### [F-17] Un callback es parte del contrato del llamador
 
 @tipo: concepto-mixto
 
-# Una función como parámetro lleva código, pero también necesita nombres
+# Pasar comportamiento exige definir protocolo, efectos y frecuencia
 
-- El protocolo permite verificar qué función puede pasarse.
-- El cuerpo de esa función puede usar variables no locales.
-- El lenguaje debe decidir qué entorno se usa al ejecutarla.
-- Con alcance estático suele preservarse el entorno de definición.
-- Ese problema conduce al concepto de closure.
+- La firma establece entradas y retorno del callback.
+- El contrato debe aclarar cuántas veces y cuándo será invocado.
+- También importa si puede fallar, suspenderse o retenerse.
+- Una callback retenida puede extender la vida de su entorno capturado.
+- La closure ya fue estudiada; aquí importa su impacto contractual.
 
 `[Sebesta, §9.6, pp. 420-425]`
 
@@ -344,137 +361,131 @@ function ordenar<T>(xs: T[], comparar: Comparador<T>): T[] {
 
 ---
 
-### [F-18] Una closure conserva el entorno que necesita
+### [F-18] Kotlin distingue callback síncrono y suspendible
 
 @tipo: concepto-mixto
 
-# Closure = subprograma + entorno de referencia
+# `suspend` cambia qué implementaciones son compatibles
 
-- `crearContador` retorna después de crear la función interna.
-- La variable `cuenta` debe sobrevivir al retorno.
-- Cada invocación crea un entorno independiente.
-- El runtime mantiene ese entorno mientras sea alcanzable.
+- `(T) -> R` debe completar antes de devolver el control.
+- `suspend (T) -> R` puede suspender y reanudarse.
+- El modificador comunica un efecto que el tipo de retorno no expresa solo.
+- Un API debe elegir cuál de los dos protocolos acepta.
 
-`[Sebesta, §9.12 · Gabbrielli/Martini, cap. 5]`
+```kotlin
+fun <T, R> transformar(xs: List<T>, f: (T) -> R): List<R>
+suspend fun <T, R> transformarAsync(
+    xs: List<T>, f: suspend (T) -> R
+): List<R>
+```
 
-```typescript
-function crearContador(): () => number {
-  let cuenta = 0;
-  return () => ++cuenta;
+---
+
+### [F-19] Una callback puede escapar de la llamada
+
+@tipo: concepto-mixto
+
+# Escapar cambia duración, ownership y manejo de errores
+
+- Una callback no escapante se ejecuta durante la llamada.
+- Una callback escapante se almacena y ejecuta más tarde.
+- Swift exige marcar `@escaping` para volver visible esa diferencia.
+- Retener callbacks puede crear ciclos de referencias y recursos vivos.
+
+```swift
+func registrar(_ handler: @escaping (Evento) -> Void) {
+    handlers.append(handler)
 }
 ```
 
 ---
 
-### [F-19] Las funciones de orden superior reutilizan políticas
+### [F-20] Un nombre puede resolverse en momentos diferentes
 
-@tipo: concepto-mixto
+@tipo: tabla-comparativa
 
-# Separar recorrido de criterio reduce duplicación
+# Resolución estática, despacho dinámico e indirección no son equivalentes
 
-- `filtrar` implementa el recorrido una sola vez.
-- El predicado representa una política variable.
-- Su protocolo limita qué políticas son compatibles.
-- El parámetro de tipo conserva la relación entre entrada y salida.
-
-```typescript
-type Predicado<T> = (valor: T) => boolean;
-function filtrar<T>(xs: T[], acepta: Predicado<T>): T[] {
-  return xs.filter(acepta);
-}
-```
+| Mecanismo | Cuándo se selecciona | Información usada | Costo principal |
+|---|---|---|---|
+| Sobrecarga | Compilación | Tipos y argumentos | Complejidad de resolución |
+| Despacho virtual | Ejecución | Tipo dinámico del receptor | Indirección |
+| Callback | Ejecución | Valor función recibido | Indirección y captura |
+| Trait/genérico | Compilación o ejecución | Estrategia del lenguaje | Código generado o tabla dinámica |
 
 ---
 
-### [F-20] Sobrecarga ofrece varias implementaciones bajo un nombre
+### [F-21] Kotlin resuelve sobrecargas entre cuerpos distintos
 
-@tipo: concepto-abstracto
+@tipo: concepto-mixto
 
-# Sobrecarga es polimorfismo ad hoc
+# La firma selecciona una implementación en compilación
 
-- Dos subprogramas comparten nombre en el mismo entorno.
-- Sus protocolos deben permitir distinguir cada llamada.
-- La selección depende de los argumentos y reglas del lenguaje.
-- Las implementaciones pueden realizar operaciones diferentes.
-- Defaults y conversiones implícitas pueden volver ambigua la resolución.
+- Cada sobrecarga tiene su propio cuerpo.
+- El compilador busca la mejor coincidencia según los argumentos.
+- Conversiones implícitas y parámetros por defecto pueden crear ambigüedad.
+- Si el algoritmo es uniforme, una plantilla evita duplicación.
 
 `[Sebesta, §9.9, pp. 429-432]`
 
----
+```kotlin
+fun area(radio: Double): Double = Math.PI * radio * radio
+fun area(base: Double, altura: Double): Double = base * altura
 
-### [F-21] TypeScript sobrecarga contratos, no cuerpos
-
-@tipo: concepto-mixto
-
-# Las overload signatures describen casos visibles
-
-- El cliente ve protocolos específicos.
-- Existe una única implementación JavaScript en runtime.
-- El cuerpo debe aceptar todos los casos declarados.
-- Un genérico suele ser mejor cuando la relación entre tipos es uniforme.
-
-```typescript
-function longitud(x: string): number;
-function longitud<T>(x: T[]): number;
-function longitud(x: string | unknown[]): number {
-  return x.length;
-}
+area(3.0)       // círculo
+area(3.0, 4.0)  // rectángulo
 ```
 
 ---
 
-### [F-22] Un genérico expresa una familia uniforme
+### [F-22] Rust separa dispatch estático y dinámico
 
 @tipo: concepto-mixto
 
-# Polimorfismo paramétrico: una implementación para muchos tipos
+# `impl Trait` y `dyn Trait` eligen costos distintos
 
-- El parámetro de tipo reemplaza nombres de tipos concretos.
-- La implementación solo puede asumir operaciones permitidas para `T`.
-- La inferencia evita indicar el tipo en muchas llamadas.
-- El resultado conserva relaciones precisas entre tipos.
+- `impl Trait` permite especialización estática y optimización.
+- `dyn Trait` acepta implementaciones heterogéneas mediante indirección.
+- Ambos expresan capacidades, pero producen representaciones distintas.
+- La elección afecta tamaño de código, rendimiento y flexibilidad.
 
-`[Sebesta, §9.10, pp. 432-438]`
+`[Sebesta, §§9.9-9.10, reinterpretación contemporánea]`
 
-```typescript
-function primero<T>(xs: readonly T[]): T | undefined {
-  return xs[0];
-}
+```rust
+fn ejecutar_estatico(t: &impl Tarea) { t.ejecutar(); }
+fn ejecutar_dinamico(t: &dyn Tarea) { t.ejecutar(); }
 ```
 
 ---
 
-### [F-23] Los constraints declaran capacidades necesarias
+### [F-23] La implementación genérica tiene una estrategia de runtime
 
-@tipo: concepto-mixto
+@tipo: tabla-comparativa
 
-# Un constraint debe ser tan débil como permita el algoritmo
+# Monomorfización y borrado intercambian rendimiento por tamaño
 
-- Sin constraint, el algoritmo no puede asumir operaciones específicas.
-- `extends` exige una estructura mínima.
-- Un constraint excesivo reduce reutilización sin aportar seguridad.
-- El protocolo documenta exactamente qué necesita el algoritmo.
+| Estrategia | Idea | Ventaja | Costo |
+|---|---|---|---|
+| Monomorfización | Generar código por instanciación | Optimización específica | Mayor binario |
+| Borrado de tipos | Compartir implementación runtime | Menor duplicación | Menor información runtime |
+| Reificación parcial | Conservar ciertos tipos | Inspección selectiva | Reglas más complejas |
 
-```typescript
-function mayorPor<T>(
-  a: T, b: T, comparar: (x: T, y: T) => number
-): T {
-  return comparar(a, b) >= 0 ? a : b;
-}
-```
+`[Sebesta, §9.10 · Gabbrielli/Martini, discusión de implementación de polimorfismo]`
 
 ---
 
-### [F-24] Actividad: sobrecarga o genérico
+### [F-24] La API debe expresar la variación correcta
 
-@tipo: socratica
+@tipo: tabla-comparativa
 
-# ¿Múltiples comportamientos o una relación uniforme?
+# Elegir dispatch evita contratos engañosos
 
-- Clasifiquen `parsear(string)`, `primero<T>(T[])` y `sumar(number|string)`.
-- Decidan cuándo usar overload, unión o genérico.
-- Expliquen qué relación entre entrada y salida debe preservar el tipo.
-- Detecten una elección que sería engañosa para el cliente.
+| Herramienta | Variación modelada | Ejemplo apropiado | Riesgo de mal uso |
+|---|---|---|---|
+| Sobrecarga | Protocolos estáticos distintos | `parsear(string)` y `parsear(bytes)` | Ambigüedad |
+| Unión sellada | Conjunto cerrado de casos | Estado de una operación | Acoplar todos los casos |
+| Genérico/trait | Capacidad uniforme | Algoritmo sobre ordenables | Restricción excesiva |
+| Interfaz dinámica | Implementaciones abiertas | Plugins | Fallas tardías de integración |
 
 ---
 
@@ -532,16 +543,25 @@ function mayorPor<T>(
 
 ---
 
-### [F-28] Actividad: construir factorial(3)
+### [F-28] `async` extiende el modelo de activación
 
-@tipo: socratica
+@tipo: concepto-mixto
 
-# Dibujen las activaciones, no solo el resultado
+# Una suspensión conserva estado sin mantener el stack síncrono completo
 
-- Representen `factorial(3)`, `factorial(2)` y `factorial(1)`.
-- Incluyan parámetro, dirección de retorno y dynamic link.
-- Marquen el orden de creación y liberación.
-- Expliquen por qué una única variable estática `n` no alcanzaría.
+- Antes del primer `await`, la función ejecuta como una llamada ordinaria.
+- Al suspenderse, debe conservar parámetros, locales y punto de continuación.
+- El compilador/runtime materializa una máquina de estados reanudable.
+- Los stack traces async reconstruyen una cadena lógica, no siempre el stack físico original.
+
+`[Sebesta, cap. 10, extensión contemporánea sobre implementación de llamadas]`
+
+```typescript
+async function cargar(id: string): Promise<Usuario> {
+  const respuesta = await fetch(`/usuarios/${id}`);
+  return respuesta.json() as Promise<Usuario>;
+}
+```
 
 ---
 
@@ -555,10 +575,10 @@ function mayorPor<T>(
 |---|---|---|
 | ¿Qué acepta y retorna? | Perfil y protocolo | Verificación de llamadas |
 | ¿Cómo circulan datos? | Modos y mecanismos de pasaje | Copias, aliasing y efectos |
-| ¿Dónde viven las locales? | Estáticas o stack-dynamic | Historia o recursividad |
-| ¿Puede recibir funciones? | Protocolo y entorno de referencia | HOF y closures |
-| ¿Cómo reutiliza comportamiento? | Sobrecarga o genéricos | Ad hoc o paramétrico |
-| ¿Cómo se ejecuta? | Activation records y enlaces | Call, return y acceso no local |
+| ¿Qué efectos produce? | Mutación, falla, suspensión | Obligaciones del llamador |
+| ¿Puede retener callbacks? | Escapante o no escapante | Duración y recursos |
+| ¿Cómo selecciona implementación? | Sobrecarga, trait o dispatch | Costo y extensibilidad |
+| ¿Cómo se ejecuta? | Frames, continuaciones y ABI | Call, return y depuración |
 
 ---
 
@@ -573,4 +593,4 @@ function mayorPor<T>(
 - El entorno determina qué nombres puede observar.
 - El activation record permite ejecutarlo y volver.
 
-## Próxima clase: del subprograma aislado al ADT y al módulo
+## Próxima clase: del subprograma aislado a fronteras modulares versionadas

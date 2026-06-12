@@ -2,33 +2,15 @@
   "$schema_version": "plan-filminas/v3",
   "meta": {
     "topic_id": "13-subprogramas-parametros-sobrecarga",
-    "title": "CLASE 13A",
+    "title": "Portada 13A",
     "source": "filminas.md",
-    "generated_at": "2026-06-11T13:04:07",
+    "generated_at": "2026-06-12T15:19:03.198897+00:00",
     "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
     "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
     "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\13-subprogramas-parametros-sobrecarga",
     "design_system_path": "_edu/slides-config.yaml",
     "pipeline_runtime_path": "_edu/slides-pipeline.json",
     "schema_registry_path": "_edu/schemas/schema-registry.json"
-  },
-  "summary": {
-    "total_slides": 31,
-    "images_planned": 12,
-    "tables_planned": 8,
-    "code_slides": 12,
-    "status": "READY_FOR_VALIDATION",
-    "pending_types": 0,
-    "pending_prompts": 0,
-    "type_distribution": {
-      "portada": 1,
-      "concepto-mixto": 11,
-      "tabla-comparativa": 5,
-      "socratica": 5,
-      "concepto-abstracto": 5,
-      "tabla": 3,
-      "cierre": 1
-    }
   },
   "slides": [
     {
@@ -47,19 +29,19 @@
           "ordered": false,
           "items": [
             {
-              "content": "¿Qué promete un subprograma?",
+              "content": "Contrato observable de un subprograma.",
               "level": 0
             },
             {
-              "content": "¿Cómo se comunican llamador y llamado?",
+              "content": "Comunicación entre llamador y llamado.",
               "level": 0
             },
             {
-              "content": "¿Qué decisiones favorecen seguridad, reutilización y recursividad?",
+              "content": "Decisiones que controlan mutación, ownership y efectos.",
               "level": 0
             },
             {
-              "content": "¿Cómo implementa el runtime una llamada?",
+              "content": "Implementación de llamadas síncronas y asíncronas.",
               "level": 0
             }
           ]
@@ -187,7 +169,7 @@
       ],
       "code_blocks": [],
       "tables": [
-        "| Decisión | Procedimiento | Función |\n|---|---|---|\n| Intención principal | Cambiar el estado o producir un efecto | Calcular un valor |\n| Resultado | Implícito en el estado modificado | Explícito mediante retorno |\n| Composición | Se encadena por secuencia | Se compone dentro de expresiones |\n| En TypeScript | Retorno `void` | Retorno tipado |\n| Riesgo | Efectos difíciles de rastrear | Dependencia de entradas y entorno |"
+        "| Decisión | Procedimiento | Función |\n|---|---|---|\n| Intención principal | Cambiar el estado o producir un efecto | Calcular un valor |\n| Resultado | Implícito en el estado modificado | Explícito mediante retorno |\n| Composición | Se encadena por secuencia | Se compone dentro de expresiones |\n| Contraste moderno | Kotlin usa `Unit` para efectos | Rust exige declarar el tipo retornado cuando no es `()` |\n| Riesgo | Efectos difíciles de rastrear | Dependencia de entradas y entorno |"
       ],
       "layout": {
         "title": "full-title",
@@ -202,14 +184,7 @@
         "local_asset": "",
         "drive_id": null
       },
-      "table_assets": [
-        {
-          "index": 0,
-          "table_markdown": "| Decisión | Procedimiento | Función |\n|---|---|---|\n| Intención principal | Cambiar el estado o producir un efecto | Calcular un valor |\n| Resultado | Implícito en el estado modificado | Explícito mediante retorno |\n| Composición | Se encadena por secuencia | Se compone dentro de expresiones |\n| En TypeScript | Retorno `void` | Retorno tipado |\n| Riesgo | Efectos difíciles de rastrear | Dependencia de entradas y entorno |",
-          "local_asset": "slides/assets/F-03-table-1.png",
-          "drive_id": null
-        }
-      ]
+      "table_assets": []
     },
     {
       "id": "F-04",
@@ -247,7 +222,7 @@
       "code_blocks": [
         {
           "lang": "typescript",
-          "content": "type Distancia = (\n  x1: number, y1: number,\n  x2: number, y2: number\n) => number;"
+          "content": "type Distancia = (\n  x1: number, y1: number,\n  x2: number, y2: number\n) => number;\n\nconst euclidea: Distancia = (x1, y1, x2, y2) =>\n  Math.hypot(x2 - x1, y2 - y1);\n\nconst resultado = euclidea(0, 0, 3, 4); // 5"
         }
       ],
       "tables": [],
@@ -268,33 +243,32 @@
     },
     {
       "id": "F-05",
-      "type": "socratica",
-      "title": "Actividad: reconstruir el contrato",
-      "subtitle": "¿Qué puede saber el cliente sin leer el cuerpo?",
+      "type": "concepto-abstracto",
+      "title": "El contrato permite validar sin leer el cuerpo",
+      "subtitle": "El cliente razona con información visible",
       "body_blocks": [
-        {
-          "type": "heading",
-          "level": 2,
-          "content": "Actividad de 5 minutos"
-        },
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Escriban el perfil y el protocolo de `distancia`.",
+              "content": "El perfil de `distancia` exige cuatro argumentos numéricos.",
               "level": 0
             },
             {
-              "content": "Propongan una llamada válida y dos llamadas inválidas.",
+              "content": "El protocolo agrega que el resultado también es numérico.",
               "level": 0
             },
             {
-              "content": "Señalen qué errores puede detectar TypeScript.",
+              "content": "TypeScript rechaza cantidad y tipos incompatibles antes de ejecutar.",
               "level": 0
             },
             {
-              "content": "Expliquen qué información sigue oculta.",
+              "content": "El algoritmo, sus variables locales y su costo permanecen ocultos.",
+              "level": 0
+            },
+            {
+              "content": "El contrato reduce conocimiento necesario, pero no describe toda la semántica.",
               "level": 0
             }
           ]
@@ -303,14 +277,14 @@
       "code_blocks": [],
       "tables": [],
       "layout": {
-        "title": "center-top",
-        "body": "center-middle",
-        "image": "background",
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
         "code": "none",
         "table": "none"
       },
       "image": {
-        "layer": "background",
+        "layer": "content",
         "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
         "local_asset": "slides/assets/F-05-bg.png",
         "drive_id": null
@@ -320,17 +294,17 @@
     {
       "id": "F-06",
       "type": "tabla-comparativa",
-      "title": "Las variables locales plantean una decisión de diseño",
-      "subtitle": "Duración y alcance no son lo mismo",
+      "title": "El contrato moderno incluye efectos observables",
+      "subtitle": "La firma tipada no siempre cuenta toda la historia",
       "body_blocks": [
         {
           "type": "text",
-          "content": "`[Sebesta, §9.4, pp. 398-402]`"
+          "content": "`[Sebesta, §§9.1 y 9.8 · Gabbrielli/Martini, cap. 5]`"
         }
       ],
       "code_blocks": [],
       "tables": [
-        "| Variable local | Cuándo existe | Consecuencia |\n|---|---|---|\n| Estática | Durante toda la ejecución | Conserva historia entre llamadas |\n| Stack-dynamic | Desde la llamada hasta el retorno | Cada activación obtiene su propia copia |\n| Explícitamente heap-dynamic | Según creación y liberación explícita | Flexible, pero costosa y riesgosa |\n| Implícitamente heap-dynamic | Según asignaciones en ejecución | Flexible, con menor previsibilidad |"
+        "| Efecto | Evidencia en el contrato | Consecuencia para el llamador |\n|---|---|---|\n| Retorno normal | Tipo de retorno | Composición directa |\n| Mutación | `&mut`, `inout`, objeto mutable | Estado compartido observable |\n| Falla | `Result<T,E>`, excepción documentada | Flujo alternativo |\n| Suspensión | `async`, `suspend` | Continuación diferida |\n| Cancelación | Señal o contexto | Terminación cooperativa |"
       ],
       "layout": {
         "title": "full-title",
@@ -345,61 +319,29 @@
         "local_asset": "",
         "drive_id": null
       },
-      "table_assets": [
-        {
-          "index": 0,
-          "table_markdown": "| Variable local | Cuándo existe | Consecuencia |\n|---|---|---|\n| Estática | Durante toda la ejecución | Conserva historia entre llamadas |\n| Stack-dynamic | Desde la llamada hasta el retorno | Cada activación obtiene su propia copia |\n| Explícitamente heap-dynamic | Según creación y liberación explícita | Flexible, pero costosa y riesgosa |\n| Implícitamente heap-dynamic | Según asignaciones en ejecución | Flexible, con menor previsibilidad |",
-          "local_asset": "slides/assets/F-06-table-1.png",
-          "drive_id": null
-        }
-      ]
+      "table_assets": []
     },
     {
       "id": "F-07",
-      "type": "concepto-mixto",
-      "title": "La recursividad necesita activaciones independientes",
-      "subtitle": "Una variable local por llamada hace posible la recursión",
+      "type": "tabla-comparativa",
+      "title": "Los efectos exigen permisos sobre los datos",
+      "subtitle": "El contrato debe limitar qué puede hacer el subprograma",
       "body_blocks": [
         {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "El código de `factorial` existe una sola vez.",
-              "level": 0
-            },
-            {
-              "content": "Cada llamada necesita un valor de `n` diferente.",
-              "level": 0
-            },
-            {
-              "content": "Las locales stack-dynamic viven en activation records separados.",
-              "level": 0
-            },
-            {
-              "content": "Con una única copia estática, las llamadas se sobrescribirían.",
-              "level": 0
-            }
-          ]
-        },
-        {
           "type": "text",
-          "content": "`[Sebesta, §§9.4 y 10.3]`"
+          "content": "> Esta relación entre intención y permiso conduce a los modos y mecanismos de pasaje."
         }
       ],
-      "code_blocks": [
-        {
-          "lang": "typescript",
-          "content": "function factorial(n: number): number {\n  if (n <= 1) return 1;\n  return n * factorial(n - 1);\n}"
-        }
+      "code_blocks": [],
+      "tables": [
+        "| Intención | Permiso mínimo | Evidencia moderna |\n|---|---|---|\n| Consultar | Lectura compartida | Referencia inmutable, `readonly` |\n| Modificar | Acceso mutable exclusivo | `&mut`, `inout` |\n| Consumir | Transferencia de ownership | Parámetro por valor no copiable |\n| Producir | Retorno tipado | Valor, `Result` o promesa |"
       ],
-      "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
+        "body": "table-intro",
         "image": "none",
-        "code": "right-half",
-        "table": "none"
+        "code": "none",
+        "table": "table-main"
       },
       "image": {
         "layer": "none",
@@ -503,7 +445,7 @@
     {
       "id": "F-10",
       "type": "concepto-mixto",
-      "title": "Pass-by-value crea una variable local",
+      "title": "Go muestra el aislamiento de pass-by-value",
       "subtitle": "Modificar el parámetro formal no modifica el argumento",
       "body_blocks": [
         {
@@ -535,8 +477,8 @@
       ],
       "code_blocks": [
         {
-          "lang": "typescript",
-          "content": "function incrementar(n: number): number {\n  n = n + 1;\n  return n;\n}\nlet edad = 20;\nconst siguiente = incrementar(edad); // edad sigue siendo 20"
+          "lang": "go",
+          "content": "func incrementar(n int) int {\n    n = n + 1\n    return n\n}\nedad := 20\nsiguiente := incrementar(edad) // edad sigue siendo 20"
         }
       ],
       "tables": [],
@@ -557,9 +499,9 @@
     },
     {
       "id": "F-11",
-      "type": "concepto-abstracto",
-      "title": "Pass-by-reference introduce aliasing",
-      "subtitle": "Dos nombres para una ubicación vuelven menos local el razonamiento",
+      "type": "concepto-mixto",
+      "title": "Rust restringe el aliasing mutable",
+      "subtitle": "Una referencia mutable exige acceso exclusivo",
       "body_blocks": [
         {
           "type": "list",
@@ -574,15 +516,11 @@
               "level": 0
             },
             {
-              "content": "Si dos parámetros referencian la misma ubicación aparece **aliasing**.",
+              "content": "Rust permite muchas referencias inmutables o una sola mutable.",
               "level": 0
             },
             {
-              "content": "El resultado puede depender de un detalle invisible en el encabezado.",
-              "level": 0
-            },
-            {
-              "content": "Se gana eficiencia, pero se pierde aislamiento.",
+              "content": "El borrow checker rechaza aliasing mutable antes de ejecutar.",
               "level": 0
             }
           ]
@@ -592,17 +530,22 @@
           "content": "`[Sebesta, §9.5.2.4, pp. 412-416]`"
         }
       ],
-      "code_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "rust",
+          "content": "fn incrementar(n: &mut i32) {\n    *n += 1;\n}\nlet mut x = 10;\nincrementar(&mut x);\n// dos &mut x simultáneos serían rechazados"
+        }
+      ],
       "tables": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
+        "image": "none",
+        "code": "right-half",
         "table": "none"
       },
       "image": {
-        "layer": "content",
+        "layer": "none",
         "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
         "local_asset": "slides/assets/F-11-content.png",
         "drive_id": null
@@ -611,32 +554,28 @@
     },
     {
       "id": "F-12",
-      "type": "concepto-abstracto",
-      "title": "Valor-resultado cambia aliasing por copia diferida",
-      "subtitle": "Copy-in/copy-out evita aliasing interno, pero crea otro conflicto",
+      "type": "concepto-mixto",
+      "title": "Swift hace explícita la mutación del argumento",
+      "subtitle": "`inout` distingue entrada mutable de retorno",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Al llamar, cada formal recibe una copia independiente.",
+              "content": "Los parámetros comunes son constantes dentro de la función.",
               "level": 0
             },
             {
-              "content": "Durante el cuerpo, los formales no comparten ubicación.",
+              "content": "`inout` permite leer y escribir el argumento del llamador.",
               "level": 0
             },
             {
-              "content": "Al retornar, cada resultado se copia al argumento correspondiente.",
+              "content": "La llamada usa `&` para hacer visible la posible mutación.",
               "level": 0
             },
             {
-              "content": "Si dos argumentos designan la misma variable, importa el orden de copia.",
-              "level": 0
-            },
-            {
-              "content": "El lenguaje debe definir o restringir ese caso.",
+              "content": "Swift restringe accesos superpuestos al mismo almacenamiento.",
               "level": 0
             }
           ]
@@ -646,17 +585,22 @@
           "content": "`[Sebesta, §9.5.2.3, pp. 409-412]`"
         }
       ],
-      "code_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "swift",
+          "content": "func avanzar(posicion: inout Int, pasos: Int) -> Bool {\n    posicion += pasos\n    return posicion >= 100\n}\nvar posicion = 90\nlet final = avanzar(posicion: &posicion, pasos: 15)"
+        }
+      ],
       "tables": [],
       "layout": {
         "title": "full-title",
         "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
+        "image": "none",
+        "code": "right-half",
         "table": "none"
       },
       "image": {
-        "layer": "content",
+        "layer": "none",
         "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
         "local_asset": "slides/assets/F-12-content.png",
         "drive_id": null
@@ -665,53 +609,23 @@
     },
     {
       "id": "F-13",
-      "type": "socratica",
-      "title": "Actividad: elegir un mecanismo",
-      "subtitle": "¿Qué mecanismo elegirían y qué riesgo aceptarían?",
-      "body_blocks": [
-        {
-          "type": "heading",
-          "level": 2,
-          "content": "Caso"
-        },
-        {
-          "type": "text",
-          "content": "Una función recibe una matriz grande, consulta casi todas sus celdas y debe modificar solo una."
-        },
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Comparen valor, referencia y valor-resultado.",
-              "level": 0
-            },
-            {
-              "content": "Evalúen eficiencia, claridad y riesgo de aliasing.",
-              "level": 0
-            },
-            {
-              "content": "Propongan una firma que haga explícita la intención.",
-              "level": 0
-            },
-            {
-              "content": "Defiendan una elección.",
-              "level": 0
-            }
-          ]
-        }
-      ],
+      "type": "tabla-comparativa",
+      "title": "Elegir un mecanismo exige balancear riesgos",
+      "subtitle": "Una matriz grande muestra el compromiso entre copia y aliasing",
+      "body_blocks": [],
       "code_blocks": [],
-      "tables": [],
+      "tables": [
+        "| Mecanismo | Costo principal | Riesgo principal | Lectura del contrato |\n|---|---|---|---|\n| Valor | Copiar toda la matriz | Consumo de memoria | Aislamiento total |\n| Referencia mutable | Sin copia inicial | Aliasing y efectos laterales | Mutación compartida |\n| Valor-resultado | Copia al entrar y salir | Orden de copia final | Cambio diferido |\n| Referencia inmutable + resultado | Copia solo del resultado | Construcción de nueva matriz | Flujo explícito |"
+      ],
       "layout": {
-        "title": "center-top",
-        "body": "center-middle",
-        "image": "background",
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
         "code": "none",
-        "table": "none"
+        "table": "table-main"
       },
       "image": {
-        "layer": "background",
+        "layer": "none",
         "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
         "local_asset": "slides/assets/F-13-bg.png",
         "drive_id": null
@@ -741,7 +655,7 @@
               "level": 0
             },
             {
-              "content": "No equivale a la referencia de C++, porque no permite reasignar la variable externa.",
+              "content": "No equivale a `inout` de Swift, porque no permite reasignar la variable externa.",
               "level": 0
             }
           ]
@@ -750,7 +664,7 @@
       "code_blocks": [
         {
           "lang": "typescript",
-          "content": "function actualizar(p: { nombre: string }): void {\n  p.nombre = \"Ada\";          // muta el objeto compartido\n  p = { nombre: \"Grace\" };   // reasigna solo el formal\n}"
+          "content": "function actualizar(p: { nombre: string }): void {\n  p.nombre = \"Lin\";          // muta el objeto compartido\n  p = { nombre: \"Grace\" };   // reasigna solo el formal\n}"
         }
       ],
       "tables": [],
@@ -803,28 +717,28 @@
     },
     {
       "id": "F-16",
-      "type": "socratica",
-      "title": "Actividad: explicar pass-by-sharing",
-      "subtitle": "Predigan antes de ejecutar",
+      "type": "concepto-mixto",
+      "title": "Pass-by-sharing separa variable y objeto",
+      "subtitle": "La mutación compartida sobrevive; la reasignación local no",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "¿Qué nombre queda?",
+              "content": "`usuario.nombre` permanece `\"Lin\"`.",
               "level": 0
             },
             {
-              "content": "¿Qué roles quedan?",
+              "content": "`usuario.roles` contiene `\"lector\"` y `\"editor\"`.",
               "level": 0
             },
             {
-              "content": "Dibujen variables y objetos.",
+              "content": "`u.roles.push` muta el objeto compartido.",
               "level": 0
             },
             {
-              "content": "Expliquen sin decir “se pasa por referencia”.",
+              "content": "Reasignar `u` cambia únicamente la variable formal.",
               "level": 0
             }
           ]
@@ -838,14 +752,14 @@
       ],
       "tables": [],
       "layout": {
-        "title": "center-top",
-        "body": "center-middle",
-        "image": "background",
-        "code": "none",
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
         "table": "none"
       },
       "image": {
-        "layer": "background",
+        "layer": "none",
         "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
         "local_asset": "slides/assets/F-16-bg.png",
         "drive_id": null
@@ -855,31 +769,31 @@
     {
       "id": "F-17",
       "type": "concepto-mixto",
-      "title": "Pasar un subprograma exige definir su entorno",
-      "subtitle": "Una función como parámetro lleva código, pero también necesita nombres",
+      "title": "Un callback es parte del contrato del llamador",
+      "subtitle": "Pasar comportamiento exige definir protocolo, efectos y frecuencia",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "El protocolo permite verificar qué función puede pasarse.",
+              "content": "La firma establece entradas y retorno del callback.",
               "level": 0
             },
             {
-              "content": "El cuerpo de esa función puede usar variables no locales.",
+              "content": "El contrato debe aclarar cuántas veces y cuándo será invocado.",
               "level": 0
             },
             {
-              "content": "El lenguaje debe decidir qué entorno se usa al ejecutarla.",
+              "content": "También importa si puede fallar, suspenderse o retenerse.",
               "level": 0
             },
             {
-              "content": "Con alcance estático suele preservarse el entorno de definición.",
+              "content": "Una callback retenida puede extender la vida de su entorno capturado.",
               "level": 0
             },
             {
-              "content": "Ese problema conduce al concepto de closure.",
+              "content": "La closure ya fue estudiada; aquí importa su impacto contractual.",
               "level": 0
             }
           ]
@@ -914,40 +828,36 @@
     {
       "id": "F-18",
       "type": "concepto-mixto",
-      "title": "Una closure conserva el entorno que necesita",
-      "subtitle": "Closure = subprograma + entorno de referencia",
+      "title": "Kotlin distingue callback síncrono y suspendible",
+      "subtitle": "`suspend` cambia qué implementaciones son compatibles",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "`crearContador` retorna después de crear la función interna.",
+              "content": "`(T) -> R` debe completar antes de devolver el control.",
               "level": 0
             },
             {
-              "content": "La variable `cuenta` debe sobrevivir al retorno.",
+              "content": "`suspend (T) -> R` puede suspender y reanudarse.",
               "level": 0
             },
             {
-              "content": "Cada invocación crea un entorno independiente.",
+              "content": "El modificador comunica un efecto que el tipo de retorno no expresa solo.",
               "level": 0
             },
             {
-              "content": "El runtime mantiene ese entorno mientras sea alcanzable.",
+              "content": "Un API debe elegir cuál de los dos protocolos acepta.",
               "level": 0
             }
           ]
-        },
-        {
-          "type": "text",
-          "content": "`[Sebesta, §9.12 · Gabbrielli/Martini, cap. 5]`"
         }
       ],
       "code_blocks": [
         {
-          "lang": "typescript",
-          "content": "function crearContador(): () => number {\n  let cuenta = 0;\n  return () => ++cuenta;\n}"
+          "lang": "kotlin",
+          "content": "fun <T, R> transformar(xs: List<T>, f: (T) -> R): List<R>\nsuspend fun <T, R> transformarAsync(\n    xs: List<T>, f: suspend (T) -> R\n): List<R>"
         }
       ],
       "tables": [],
@@ -969,27 +879,27 @@
     {
       "id": "F-19",
       "type": "concepto-mixto",
-      "title": "Las funciones de orden superior reutilizan políticas",
-      "subtitle": "Separar recorrido de criterio reduce duplicación",
+      "title": "Una callback puede escapar de la llamada",
+      "subtitle": "Escapar cambia duración, ownership y manejo de errores",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "`filtrar` implementa el recorrido una sola vez.",
+              "content": "Una callback no escapante se ejecuta durante la llamada.",
               "level": 0
             },
             {
-              "content": "El predicado representa una política variable.",
+              "content": "Una callback escapante se almacena y ejecuta más tarde.",
               "level": 0
             },
             {
-              "content": "Su protocolo limita qué políticas son compatibles.",
+              "content": "Swift exige marcar `@escaping` para volver visible esa diferencia.",
               "level": 0
             },
             {
-              "content": "El parámetro de tipo conserva la relación entre entrada y salida.",
+              "content": "Retener callbacks puede crear ciclos de referencias y recursos vivos.",
               "level": 0
             }
           ]
@@ -997,8 +907,8 @@
       ],
       "code_blocks": [
         {
-          "lang": "typescript",
-          "content": "type Predicado<T> = (valor: T) => boolean;\nfunction filtrar<T>(xs: T[], acepta: Predicado<T>): T[] {\n  return xs.filter(acepta);\n}"
+          "lang": "swift",
+          "content": "func registrar(_ handler: @escaping (Evento) -> Void) {\n    handlers.append(handler)\n}"
         }
       ],
       "tables": [],
@@ -1019,52 +929,23 @@
     },
     {
       "id": "F-20",
-      "type": "concepto-abstracto",
-      "title": "Sobrecarga ofrece varias implementaciones bajo un nombre",
-      "subtitle": "Sobrecarga es polimorfismo ad hoc",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Dos subprogramas comparten nombre en el mismo entorno.",
-              "level": 0
-            },
-            {
-              "content": "Sus protocolos deben permitir distinguir cada llamada.",
-              "level": 0
-            },
-            {
-              "content": "La selección depende de los argumentos y reglas del lenguaje.",
-              "level": 0
-            },
-            {
-              "content": "Las implementaciones pueden realizar operaciones diferentes.",
-              "level": 0
-            },
-            {
-              "content": "Defaults y conversiones implícitas pueden volver ambigua la resolución.",
-              "level": 0
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "content": "`[Sebesta, §9.9, pp. 429-432]`"
-        }
-      ],
+      "type": "tabla-comparativa",
+      "title": "Un nombre puede resolverse en momentos diferentes",
+      "subtitle": "Resolución estática, despacho dinámico e indirección no son equivalentes",
+      "body_blocks": [],
       "code_blocks": [],
-      "tables": [],
+      "tables": [
+        "| Mecanismo | Cuándo se selecciona | Información usada | Costo principal |\n|---|---|---|---|\n| Sobrecarga | Compilación | Tipos y argumentos | Complejidad de resolución |\n| Despacho virtual | Ejecución | Tipo dinámico del receptor | Indirección |\n| Callback | Ejecución | Valor función recibido | Indirección y captura |\n| Trait/genérico | Compilación o ejecución | Estrategia del lenguaje | Código generado o tabla dinámica |"
+      ],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
+        "body": "table-intro",
+        "image": "none",
         "code": "none",
-        "table": "none"
+        "table": "table-main"
       },
       "image": {
-        "layer": "content",
+        "layer": "none",
         "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
         "local_asset": "slides/assets/F-20-content.png",
         "drive_id": null
@@ -1074,36 +955,40 @@
     {
       "id": "F-21",
       "type": "concepto-mixto",
-      "title": "TypeScript sobrecarga contratos, no cuerpos",
-      "subtitle": "Las overload signatures describen casos visibles",
+      "title": "Kotlin resuelve sobrecargas entre cuerpos distintos",
+      "subtitle": "La firma selecciona una implementación en compilación",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "El cliente ve protocolos específicos.",
+              "content": "Cada sobrecarga tiene su propio cuerpo.",
               "level": 0
             },
             {
-              "content": "Existe una única implementación JavaScript en runtime.",
+              "content": "El compilador busca la mejor coincidencia según los argumentos.",
               "level": 0
             },
             {
-              "content": "El cuerpo debe aceptar todos los casos declarados.",
+              "content": "Conversiones implícitas y parámetros por defecto pueden crear ambigüedad.",
               "level": 0
             },
             {
-              "content": "Un genérico suele ser mejor cuando la relación entre tipos es uniforme.",
+              "content": "Si el algoritmo es uniforme, una plantilla evita duplicación.",
               "level": 0
             }
           ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, §9.9, pp. 429-432]`"
         }
       ],
       "code_blocks": [
         {
-          "lang": "typescript",
-          "content": "function longitud(x: string): number;\nfunction longitud<T>(x: T[]): number;\nfunction longitud(x: string | unknown[]): number {\n  return x.length;\n}"
+          "lang": "kotlin",
+          "content": "fun area(radio: Double): Double = Math.PI * radio * radio\nfun area(base: Double, altura: Double): Double = base * altura\n\narea(3.0)       // círculo\narea(3.0, 4.0)  // rectángulo"
         }
       ],
       "tables": [],
@@ -1125,40 +1010,40 @@
     {
       "id": "F-22",
       "type": "concepto-mixto",
-      "title": "Un genérico expresa una familia uniforme",
-      "subtitle": "Polimorfismo paramétrico: una implementación para muchos tipos",
+      "title": "Rust separa dispatch estático y dinámico",
+      "subtitle": "`impl Trait` y `dyn Trait` eligen costos distintos",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "El parámetro de tipo reemplaza nombres de tipos concretos.",
+              "content": "`impl Trait` permite especialización estática y optimización.",
               "level": 0
             },
             {
-              "content": "La implementación solo puede asumir operaciones permitidas para `T`.",
+              "content": "`dyn Trait` acepta implementaciones heterogéneas mediante indirección.",
               "level": 0
             },
             {
-              "content": "La inferencia evita indicar el tipo en muchas llamadas.",
+              "content": "Ambos expresan capacidades, pero producen representaciones distintas.",
               "level": 0
             },
             {
-              "content": "El resultado conserva relaciones precisas entre tipos.",
+              "content": "La elección afecta tamaño de código, rendimiento y flexibilidad.",
               "level": 0
             }
           ]
         },
         {
           "type": "text",
-          "content": "`[Sebesta, §9.10, pp. 432-438]`"
+          "content": "`[Sebesta, §§9.9-9.10, reinterpretación contemporánea]`"
         }
       ],
       "code_blocks": [
         {
-          "lang": "typescript",
-          "content": "function primero<T>(xs: readonly T[]): T | undefined {\n  return xs[0];\n}"
+          "lang": "rust",
+          "content": "fn ejecutar_estatico(t: &impl Tarea) { t.ejecutar(); }\nfn ejecutar_dinamico(t: &dyn Tarea) { t.ejecutar(); }"
         }
       ],
       "tables": [],
@@ -1179,46 +1064,25 @@
     },
     {
       "id": "F-23",
-      "type": "concepto-mixto",
-      "title": "Los constraints declaran capacidades necesarias",
-      "subtitle": "Un constraint debe ser tan débil como permita el algoritmo",
+      "type": "tabla-comparativa",
+      "title": "La implementación genérica tiene una estrategia de runtime",
+      "subtitle": "Monomorfización y borrado intercambian rendimiento por tamaño",
       "body_blocks": [
         {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Sin constraint, el algoritmo no puede asumir operaciones específicas.",
-              "level": 0
-            },
-            {
-              "content": "`extends` exige una estructura mínima.",
-              "level": 0
-            },
-            {
-              "content": "Un constraint excesivo reduce reutilización sin aportar seguridad.",
-              "level": 0
-            },
-            {
-              "content": "El protocolo documenta exactamente qué necesita el algoritmo.",
-              "level": 0
-            }
-          ]
+          "type": "text",
+          "content": "`[Sebesta, §9.10 · Gabbrielli/Martini, discusión de implementación de polimorfismo]`"
         }
       ],
-      "code_blocks": [
-        {
-          "lang": "typescript",
-          "content": "function mayorPor<T>(\n  a: T, b: T, comparar: (x: T, y: T) => number\n): T {\n  return comparar(a, b) >= 0 ? a : b;\n}"
-        }
+      "code_blocks": [],
+      "tables": [
+        "| Estrategia | Idea | Ventaja | Costo |\n|---|---|---|---|\n| Monomorfización | Generar código por instanciación | Optimización específica | Mayor binario |\n| Borrado de tipos | Compartir implementación runtime | Menor duplicación | Menor información runtime |\n| Reificación parcial | Conservar ciertos tipos | Inspección selectiva | Reglas más complejas |"
       ],
-      "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
+        "body": "table-intro",
         "image": "none",
-        "code": "right-half",
-        "table": "none"
+        "code": "none",
+        "table": "table-main"
       },
       "image": {
         "layer": "none",
@@ -1230,44 +1094,23 @@
     },
     {
       "id": "F-24",
-      "type": "socratica",
-      "title": "Actividad: sobrecarga o genérico",
-      "subtitle": "¿Múltiples comportamientos o una relación uniforme?",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Clasifiquen `parsear(string)`, `primero<T>(T[])` y `sumar(number|string)`.",
-              "level": 0
-            },
-            {
-              "content": "Decidan cuándo usar overload, unión o genérico.",
-              "level": 0
-            },
-            {
-              "content": "Expliquen qué relación entre entrada y salida debe preservar el tipo.",
-              "level": 0
-            },
-            {
-              "content": "Detecten una elección que sería engañosa para el cliente.",
-              "level": 0
-            }
-          ]
-        }
-      ],
+      "type": "tabla-comparativa",
+      "title": "La API debe expresar la variación correcta",
+      "subtitle": "Elegir dispatch evita contratos engañosos",
+      "body_blocks": [],
       "code_blocks": [],
-      "tables": [],
+      "tables": [
+        "| Herramienta | Variación modelada | Ejemplo apropiado | Riesgo de mal uso |\n|---|---|---|---|\n| Sobrecarga | Protocolos estáticos distintos | `parsear(string)` y `parsear(bytes)` | Ambigüedad |\n| Unión sellada | Conjunto cerrado de casos | Estado de una operación | Acoplar todos los casos |\n| Genérico/trait | Capacidad uniforme | Algoritmo sobre ordenables | Restricción excesiva |\n| Interfaz dinámica | Implementaciones abiertas | Plugins | Fallas tardías de integración |"
+      ],
       "layout": {
-        "title": "center-top",
-        "body": "center-middle",
-        "image": "background",
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
         "code": "none",
-        "table": "none"
+        "table": "table-main"
       },
       "image": {
-        "layer": "background",
+        "layer": "none",
         "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
         "local_asset": "slides/assets/F-24-bg.png",
         "drive_id": null
@@ -1404,44 +1247,53 @@
     },
     {
       "id": "F-28",
-      "type": "socratica",
-      "title": "Actividad: construir factorial(3)",
-      "subtitle": "Dibujen las activaciones, no solo el resultado",
+      "type": "concepto-mixto",
+      "title": "`async` extiende el modelo de activación",
+      "subtitle": "Una suspensión conserva estado sin mantener el stack síncrono completo",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Representen `factorial(3)`, `factorial(2)` y `factorial(1)`.",
+              "content": "Antes del primer `await`, la función ejecuta como una llamada ordinaria.",
               "level": 0
             },
             {
-              "content": "Incluyan parámetro, dirección de retorno y dynamic link.",
+              "content": "Al suspenderse, debe conservar parámetros, locales y punto de continuación.",
               "level": 0
             },
             {
-              "content": "Marquen el orden de creación y liberación.",
+              "content": "El compilador/runtime materializa una máquina de estados reanudable.",
               "level": 0
             },
             {
-              "content": "Expliquen por qué una única variable estática `n` no alcanzaría.",
+              "content": "Los stack traces async reconstruyen una cadena lógica, no siempre el stack físico original.",
               "level": 0
             }
           ]
+        },
+        {
+          "type": "text",
+          "content": "`[Sebesta, cap. 10, extensión contemporánea sobre implementación de llamadas]`"
         }
       ],
-      "code_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "async function cargar(id: string): Promise<Usuario> {\n  const respuesta = await fetch(`/usuarios/${id}`);\n  return respuesta.json() as Promise<Usuario>;\n}"
+        }
+      ],
       "tables": [],
       "layout": {
-        "title": "center-top",
-        "body": "center-middle",
-        "image": "background",
-        "code": "none",
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
         "table": "none"
       },
       "image": {
-        "layer": "background",
+        "layer": "none",
         "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
         "local_asset": "slides/assets/F-28-bg.png",
         "drive_id": null
@@ -1456,7 +1308,7 @@
       "body_blocks": [],
       "code_blocks": [],
       "tables": [
-        "| Pregunta | Decisión | Consecuencia |\n|---|---|---|\n| ¿Qué acepta y retorna? | Perfil y protocolo | Verificación de llamadas |\n| ¿Cómo circulan datos? | Modos y mecanismos de pasaje | Copias, aliasing y efectos |\n| ¿Dónde viven las locales? | Estáticas o stack-dynamic | Historia o recursividad |\n| ¿Puede recibir funciones? | Protocolo y entorno de referencia | HOF y closures |\n| ¿Cómo reutiliza comportamiento? | Sobrecarga o genéricos | Ad hoc o paramétrico |\n| ¿Cómo se ejecuta? | Activation records y enlaces | Call, return y acceso no local |"
+        "| Pregunta | Decisión | Consecuencia |\n|---|---|---|\n| ¿Qué acepta y retorna? | Perfil y protocolo | Verificación de llamadas |\n| ¿Cómo circulan datos? | Modos y mecanismos de pasaje | Copias, aliasing y efectos |\n| ¿Qué efectos produce? | Mutación, falla, suspensión | Obligaciones del llamador |\n| ¿Puede retener callbacks? | Escapante o no escapante | Duración y recursos |\n| ¿Cómo selecciona implementación? | Sobrecarga, trait o dispatch | Costo y extensibilidad |\n| ¿Cómo se ejecuta? | Frames, continuaciones y ABI | Call, return y depuración |"
       ],
       "layout": {
         "title": "full-title",
@@ -1471,14 +1323,7 @@
         "local_asset": "",
         "drive_id": null
       },
-      "table_assets": [
-        {
-          "index": 0,
-          "table_markdown": "| Pregunta | Decisión | Consecuencia |\n|---|---|---|\n| ¿Qué acepta y retorna? | Perfil y protocolo | Verificación de llamadas |\n| ¿Cómo circulan datos? | Modos y mecanismos de pasaje | Copias, aliasing y efectos |\n| ¿Dónde viven las locales? | Estáticas o stack-dynamic | Historia o recursividad |\n| ¿Puede recibir funciones? | Protocolo y entorno de referencia | HOF y closures |\n| ¿Cómo reutiliza comportamiento? | Sobrecarga o genéricos | Ad hoc o paramétrico |\n| ¿Cómo se ejecuta? | Activation records y enlaces | Call, return y acceso no local |",
-          "local_asset": "slides/assets/F-29-table-1.png",
-          "drive_id": null
-        }
-      ]
+      "table_assets": []
     },
     {
       "id": "F-30",
@@ -1511,7 +1356,7 @@
         {
           "type": "heading",
           "level": 2,
-          "content": "Próxima clase: del subprograma aislado al ADT y al módulo"
+          "content": "Próxima clase: del subprograma aislado a fronteras modulares versionadas"
         }
       ],
       "code_blocks": [],
@@ -1531,5 +1376,22 @@
       },
       "table_assets": []
     }
-  ]
+  ],
+  "summary": {
+    "total_slides": 31,
+    "images_planned": 5,
+    "tables_planned": 13,
+    "code_slides": 13,
+    "status": "READY_FOR_VALIDATION",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "portada": 1,
+      "concepto-mixto": 13,
+      "tabla-comparativa": 10,
+      "concepto-abstracto": 3,
+      "tabla": 3,
+      "cierre": 1
+    }
+  }
 }

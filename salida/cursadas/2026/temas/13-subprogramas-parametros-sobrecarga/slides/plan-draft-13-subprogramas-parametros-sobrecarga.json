@@ -750,7 +750,7 @@
       "code_blocks": [
         {
           "lang": "typescript",
-          "content": "function actualizar(p: { nombre: string }): void {\n  p.nombre = \"Ada\";          // muta el objeto compartido\n  p = { nombre: \"Grace\" };   // reasigna solo el formal\n}"
+          "content": "function actualizar(p: { nombre: string }): void {\n  p.nombre = \"Lin\";          // muta el objeto compartido\n  p = { nombre: \"Grace\" };   // reasigna solo el formal\n}"
         }
       ],
       "tables": [],

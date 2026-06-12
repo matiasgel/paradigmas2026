@@ -1,5 +1,5 @@
 # Reporte de Accesibilidad — 13-subprogramas-parametros-sobrecarga
-**Generado:** 2026-06-11 13:04
+**Generado:** 2026-06-12 12:24
 **Estándar:** WCAG 2.1 Level AA
 
 ## Contraste de Colores
@@ -16,16 +16,16 @@
 | Slide | Título | Problema |
 |-------|--------|----------|
 | F-00 | Portada 13A | ❌ Filmina con imagen pero sin alt_text |
-| F-05 | Actividad: reconstruir el contrato | ❌ Filmina con imagen pero sin alt_text |
+| F-05 | El contrato permite validar sin leer el cuerpo | ❌ Filmina con imagen pero sin alt_text |
 | F-08 | Los parámetros describen flujo de información | ❌ Filmina con imagen pero sin alt_text |
-| F-11 | Pass-by-reference introduce aliasing | ❌ Filmina con imagen pero sin alt_text |
-| F-12 | Valor-resultado cambia aliasing por copia diferida | ❌ Filmina con imagen pero sin alt_text |
-| F-13 | Actividad: elegir un mecanismo | ❌ Filmina con imagen pero sin alt_text |
-| F-16 | Actividad: explicar pass-by-sharing | ❌ Filmina con imagen pero sin alt_text |
-| F-20 | Sobrecarga ofrece varias implementaciones bajo un nombre | ❌ Filmina con imagen pero sin alt_text |
-| F-24 | Actividad: sobrecarga o genérico | ❌ Filmina con imagen pero sin alt_text |
+| F-11 | Rust restringe el aliasing mutable | ❌ Filmina con imagen pero sin alt_text |
+| F-12 | Swift hace explícita la mutación del argumento | ❌ Filmina con imagen pero sin alt_text |
+| F-13 | Elegir un mecanismo exige balancear riesgos | ❌ Filmina con imagen pero sin alt_text |
+| F-16 | Pass-by-sharing separa variable y objeto | ❌ Filmina con imagen pero sin alt_text |
+| F-20 | Un nombre puede resolverse en momentos diferentes | ❌ Filmina con imagen pero sin alt_text |
+| F-24 | La API debe expresar la variación correcta | ❌ Filmina con imagen pero sin alt_text |
 | F-27 | La cadena dinámica reconstruye quién llamó a quién | ❌ Filmina con imagen pero sin alt_text |
-| F-28 | Actividad: construir factorial(3) | ❌ Filmina con imagen pero sin alt_text |
+| F-28 | `async` extiende el modelo de activación | ❌ Filmina con imagen pero sin alt_text |
 | F-30 | Cierre 13A | ❌ Filmina con imagen pero sin alt_text |
 
 ## Tamaño Tipográfico

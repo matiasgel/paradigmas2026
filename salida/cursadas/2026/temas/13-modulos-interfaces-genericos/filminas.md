@@ -1,8 +1,11 @@
-# Filminas - Clase 13B - ADTs, módulos e interfaces
+# Filminas - Clase 13B - Módulos, contratos e interfaces
 
 > Duración: 120 minutos
-> Hilo conductor: de una especificación observable a una unidad modular
+> Hilo conductor: de un contrato tipado a una frontera modular versionada
 > Fuentes: Sebesta, capítulos 11 y 12; Louden/Lambert, capítulo 11; Gabbrielli/Martini, capítulo 9
+> Lenguaje principal: TypeScript | Contraste: Kotlin, Rust, Swift y Go
+> Enfoque actualizado: tipos algebraicos, capacidades, privacidad, dependencias y compatibilidad
+> Documentación contemporánea: Rust Book, Kotlin Docs, TypeScript Handbook y Go Modules
 
 ---
 
@@ -12,91 +15,101 @@
 
 # CLASE 13B
 
-## ADTs y módulos: organizar abstracciones que pueden cambiar
+## Módulos y contratos: organizar decisiones que pueden cambiar
 
-- ¿Cómo se especifica un tipo sin revelar su representación?
-- ¿Qué debe garantizar una interfaz?
-- ¿Cómo escala la abstracción desde un tipo hacia un módulo?
-- ¿Qué permite compilar y evolucionar partes por separado?
-
----
-
-### [F-01] La abstracción de datos separa uso y representación
-
-@tipo: concepto-abstracto
-
-# Un ADT se define por valores y operaciones observables
-
-- El cliente conoce qué valores conceptuales existen.
-- Solo accede mediante operaciones definidas por el tipo.
-- La representación interna permanece oculta.
-- Las operaciones preservan las invariantes.
-- Dos implementaciones equivalentes pueden representar los datos distinto.
-
-`[Sebesta, §11.1 · Gabbrielli/Martini, cap. 9]`
+- Tipos algebraicos para modelar datos con casos cerrados.
+- Interfaces y protocolos para expresar capacidades.
+- Módulos y paquetes para seleccionar una API pública.
+- Compatibilidad y evolución separada de componentes.
 
 ---
 
-### [F-02] Una Stack no es simplemente un array
+### [F-01] Tres mecanismos parecidos resuelven problemas distintos
 
 @tipo: tabla-comparativa
 
-# La abstracción limita operaciones para preservar significado
+# Tipo algebraico, interfaz y módulo no son sinónimos
 
-| Pregunta | Array | Stack |
+| Mecanismo | Pregunta central | Ejemplo moderno |
 |---|---|---|
-| Acceso permitido | Cualquier posición | Solo el tope |
-| Inserción | En múltiples posiciones | `push` en el tope |
-| Eliminación | Por índice o criterio | `pop` del tope |
-| Regla observable | Secuencia indexada | LIFO |
-| Representación posible | Celdas contiguas | Array, lista enlazada u otra |
+| Tipo algebraico | ¿Qué formas puede tener un dato? | `sealed class` de Kotlin, `enum` de Rust |
+| Interfaz o protocolo | ¿Qué capacidades debe ofrecer una implementación? | `interface` de Kotlin, trait de Rust |
+| Módulo o paquete | ¿Qué nombres son públicos y de qué depende el componente? | módulo Rust, package Go |
 
-`[Louden/Lambert, §11.1]`
+> Un tipo algebraico modela datos; no implica por sí mismo ocultamiento de representación ni una frontera modular.
 
 ---
 
-### [F-03] La especificación algebraica describe comportamiento
+### [F-02] La independencia de representación preserva clientes
 
-@tipo: concepto-abstracto
+@tipo: tabla-comparativa
 
-# Las ecuaciones definen qué debe cumplir cualquier implementación
+# Una frontera estable permite reemplazar decisiones internas
 
-- `create` construye una Stack vacía.
-- `push(s, x)` construye una Stack con `x` en el tope.
-- `top(push(s, x)) = x`.
-- `pop(push(s, x)) = s`.
-- Las ecuaciones hablan de comportamiento, no de arrays ni nodos.
-
-`[Louden/Lambert, §11.1, pp. 494-498]`
-
----
-
-### [F-04] Constructores, observadores y transformadores cumplen roles
-
-@tipo: tabla
-
-# Clasificar operaciones revela el contrato del ADT
-
-| Rol | Operación de Stack | Qué aporta |
+| Decisión interna que cambia | Contrato que permanece | Cliente que no debería cambiar |
 |---|---|---|
-| Constructor base | `create()` | Produce el valor inicial |
-| Constructor no base | `push(s, x)` | Produce una nueva configuración |
-| Observador | `top(s)`, `isEmpty(s)` | Informa sin cambiar el valor conceptual |
-| Transformador | `pop(s)` | Produce o establece otro estado |
-| Condición de error | `top(create())` | Define comportamiento fuera del dominio válido |
+| Memoria o base de datos | `Repository.save/findById` | Servicio de aplicación |
+| Caché local o distribuida | `Cache.get/put` | Consumidor de la caché |
+| HTTP o cola de mensajes | `PaymentGateway.charge` | Módulo de pedidos |
+| Algoritmo secuencial o paralelo | Firma y semántica del servicio | Orquestador |
+
+`[Gabbrielli/Martini, cap. 9 · Sebesta, cap. 11]`
 
 ---
 
-### [F-05] Actividad: especificar antes de implementar
+### [F-03] Un tipo algebraico describe la forma de los datos
 
-@tipo: socratica
+@tipo: concepto-mixto
 
-# Diseñen el contrato de una Queue
+# Sumas y productos hacen explícitos estados posibles
 
-- Clasifiquen `create`, `enqueue`, `front`, `dequeue` e `isEmpty`.
-- Escriban dos ecuaciones observables.
-- Definan qué ocurre al consultar una Queue vacía.
-- Eviten mencionar arrays, índices o nodos.
+- Un producto combina campos: un pago aprobado tiene identificador y fecha.
+- Una suma ofrece alternativas: pendiente, aprobado o rechazado.
+- Una jerarquía sellada permite verificar que todos los casos fueron tratados.
+- Esto modela estados; la privacidad y las dependencias pertenecen a otros mecanismos.
+
+```kotlin
+sealed interface ResultadoPago {
+    data object Pendiente : ResultadoPago
+    data class Aprobado(val id: String) : ResultadoPago
+    data class Rechazado(val motivo: String) : ResultadoPago
+}
+```
+
+---
+
+### [F-04] Mundo cerrado y mundo abierto favorecen diseños distintos
+
+@tipo: tabla-comparativa
+
+# La extensibilidad deseada orienta el mecanismo
+
+| Diseño | Quién agrega variantes | Verificación favorecida | Ejemplo |
+|---|---|---|---|
+| Tipo algebraico sellado | Autor del tipo | Exhaustividad de casos | Estados de una operación |
+| Interfaz abierta | Autores de implementaciones | Capacidades requeridas | Proveedores de pago |
+| Módulo cerrado | Equipo propietario | Superficie exportada | Núcleo de facturación |
+| Plugin | Terceros autorizados | Integración en runtime | Adaptadores externos |
+
+---
+
+### [F-05] Los tipos de dominio pueden impedir estados inválidos
+
+@tipo: concepto-mixto
+
+# Un wrapper nominal agrega significado sin inventar una arquitectura
+
+- `String` no distingue un correo de un identificador.
+- Un tipo de valor evita intercambiar datos con igual representación.
+- La validación puede concentrarse en la construcción.
+- Kotlin puede representar ciertos value classes sin wrapper adicional en runtime.
+
+```kotlin
+@JvmInline
+value class UserId(val value: String)
+
+fun buscarUsuario(id: UserId): Usuario
+```
 
 ---
 
@@ -108,55 +121,57 @@
 
 | Concepto | Pregunta que responde | Ejemplo |
 |---|---|---|
-| Encapsulación | ¿Qué datos y operaciones forman una unidad? | Clase `Stack<T>` |
-| Information hiding | ¿Qué decisiones pueden cambiar sin afectar clientes? | Array o lista enlazada |
-| Interfaz | ¿Qué puede observar y solicitar el cliente? | `push`, `pop`, `top` |
-| Invariante | ¿Qué debe permanecer cierto? | Solo se elimina el último agregado |
+| Encapsulación | ¿Qué datos y operaciones forman una unidad? | Componente de pagos |
+| Information hiding | ¿Qué decisiones pueden cambiar sin afectar clientes? | Proveedor HTTP o cola |
+| Interfaz | ¿Qué puede observar y solicitar el cliente? | `charge`, `refund`, `status` |
+| Invariante | ¿Qué debe permanecer cierto? | Un pago confirmado no vuelve a pendiente |
 
 `[Sebesta, §§11.1-11.3 · Gabbrielli/Martini, cap. 9]`
 
 ---
 
-### [F-07] La interfaz debe expresar semántica, no conveniencia
+### [F-07] Kotlin expresa capacidades sin fijar implementaciones
 
 @tipo: concepto-mixto
 
 # Una operación pública amplía para siempre lo que el cliente puede asumir
 
-- `push`, `pop` y `peek` preservan la semántica LIFO.
-- `at(index)` permite tratar la Stack como un array.
-- `toArray()` puede filtrar detalles o exponerlos, según su contrato.
+- La interfaz declara operaciones que el cliente necesita.
+- Cada proveedor conserva autenticación, transporte y reintentos internos.
 - Una interfaz mínima reduce acoplamiento y mantiene opciones abiertas.
+- La semántica documentada importa tanto como las firmas.
 
-```typescript
-export interface Stack<T> {
-  push(value: T): void;
-  pop(): T | undefined;
-  peek(): T | undefined;
-  readonly size: number;
+```kotlin
+interface PaymentGateway {
+    suspend fun charge(order: OrderId, amount: Money): ResultadoPago
+    suspend fun refund(payment: PaymentId): ResultadoPago
 }
 ```
 
 ---
 
-### [F-08] La representación debe quedar detrás de las operaciones
+### [F-08] Rust oculta la representación por defecto
 
 @tipo: concepto-mixto
 
-# `private` impide accesos que romperían la invariante
+# `pub` selecciona la superficie observable del módulo
 
-- El cliente no puede insertar debajo del tope.
+- Los campos privados solo son visibles dentro de su módulo.
+- Los métodos `pub` forman la interfaz accesible al cliente.
 - Toda modificación pasa por operaciones controladas.
-- La clase puede cambiar su representación interna.
-- Ocultar datos no alcanza: las operaciones públicas también deben ser cuidadosas.
+- La implementación puede cambiar sin reescribir clientes.
 
-```typescript
-class ArrayStack<T> implements Stack<T> {
-  private data: T[] = [];
-  push(x: T): void { this.data.push(x); }
-  pop(): T | undefined { return this.data.pop(); }
-  peek(): T | undefined { return this.data.at(-1); }
-  get size(): number { return this.data.length; }
+`[Louden/Lambert, §11.2 · Sebesta, §11.4]`
+
+```rust
+pub struct Token {
+    raw: String, // privado fuera del módulo
+}
+impl Token {
+    pub fn parse(raw: String) -> Result<Self, TokenError> {
+        validar(&raw)?;
+        Ok(Self { raw })
+    }
 }
 ```
 
@@ -166,52 +181,56 @@ class ArrayStack<T> implements Stack<T> {
 
 @tipo: concepto-mixto
 
-# Una interfaz segura controla también los valores que escapan
+# Una interfaz segura controla también los valores y permisos que escapan
 
-- Devolver `data` permite modificar la representación sin usar operaciones.
-- `readonly T[]` restringe mutaciones directas en TypeScript.
-- Una copia evita compartir el contenedor interno.
-- Una copia superficial todavía comparte los elementos.
+- Devolver una colección mutable filtra decisiones internas.
+- Una vista de solo lectura restringe capacidades del cliente.
+- Un iterador permite recorrer sin revelar almacenamiento.
+- Una copia aísla el contenedor, pero puede conservar elementos compartidos.
 
 ```typescript
-toArray(): readonly T[] {
-  return [...this.data];
+listar(): readonly UsuarioResumen[] {
+  return this.usuarios.map(resumir);
 }
 ```
 
 ---
 
-### [F-10] Actividad: auditar una interfaz
+### [F-10] Una interfaz puede preservar o filtrar la abstracción
 
-@tipo: socratica
+@tipo: tabla-comparativa
 
-# ¿Qué operaciones pertenecen realmente a Stack?
+# Cada operación pública amplía dependencias y compromisos
 
-- Evalúen `clear`, `contains`, `at`, `sort` y `toArray`.
-- Para cada operación, indiquen si preserva la abstracción LIFO.
-- Identifiquen qué compromiso agrega al contrato.
-- Propongan una interfaz mínima y una interfaz extendida.
+| Operación pública | Capacidad expuesta | Consecuencia contractual |
+|---|---|---|
+| `findById` | Consulta por identidad | Exige definir ausencia y errores |
+| `save` | Persistencia | Exige definir consistencia |
+| `rawConnection` | Acceso a infraestructura | Filtra representación |
+| `clearCache` | Control operacional | Acopla al uso de caché |
+| `list` | Recorrido | Exige definir orden y paginación |
 
 ---
 
-### [F-11] Parametrizar el ADT separa estructura y elemento
+### [F-11] Swift relaciona tipos a través de un protocolo genérico
 
 @tipo: concepto-mixto
 
-# `Stack<T>` reutiliza la abstracción sin fijar el tipo almacenado
+# `associatedtype` conserva relaciones precisas en una frontera
 
-- Las reglas LIFO son independientes del tipo de elemento.
-- El parámetro `T` mantiene consistencia entre `push`, `pop` y `peek`.
-- Una única implementación sirve para muchas instanciaciones.
-- El cliente conserva información precisa de tipos.
-- El ADT genérico combina abstracción de datos y polimorfismo paramétrico.
+- Cada repositorio define qué entidad administra.
+- `Entity.ID` mantiene consistencia entre consulta y resultado.
+- Varias implementaciones cumplen el mismo protocolo.
+- El cliente conserva información precisa sin conocer infraestructura.
 
-`[Sebesta, §11.4, pp. 487-492]`
+`[Sebesta, §11.4, pp. 487-492, reinterpretado como contrato genérico]`
 
-```typescript
-const números = new ArrayStack<number>();
-const nombres = new ArrayStack<string>();
-// T preserva el tipo entre push, pop y peek.
+```swift
+protocol Repository {
+    associatedtype Entity: Identifiable
+    func find(id: Entity.ID) async throws -> Entity?
+    func save(_ entity: Entity) async throws
+}
 ```
 
 ---
@@ -224,108 +243,112 @@ const nombres = new ArrayStack<string>();
 
 | Diseño | Operaciones usadas por la implementación | Constraint necesario |
 |---|---|---|
-| `Stack<T>` | Almacenar y devolver | Ninguno |
-| `SortedSet<T>` | Comparar elementos | Comparador o capacidad de comparación |
-| `PrintableQueue<T>` | Formatear elementos | Capacidad de representación textual |
-| `Map<K,V>` | Identificar claves | Depende de la estrategia de claves |
+| `Repository<E>` | Identificar y persistir | Identidad estable |
+| `Orderer<T>` | Comparar elementos | Comparador |
+| `Serializer<T>` | Codificar y decodificar | Esquema o codec |
+| `Cache<K,V>` | Identificar claves | Igualdad y hashing |
 
 ---
 
-### [F-13] Un módulo encapsula más que un tipo
-
-@tipo: concepto-abstracto
-
-# El módulo lleva information hiding a programas grandes
-
-- Un ADT suele encapsular un tipo y sus operaciones.
-- Un módulo puede contener varios tipos, funciones, constantes y estado.
-- Expone una interfaz seleccionada y oculta decisiones internas.
-- Declara dependencias con otros módulos.
-- Puede constituir una unidad de compilación y despliegue.
-
-`[Sebesta, §11.6 · Gabbrielli/Martini, §9.3]`
-
----
-
-### [F-14] ADT y módulo resuelven problemas relacionados, pero distintos
-
-@tipo: tabla-comparativa
-
-# Programar “en pequeño” y “en grande” exige mecanismos diferentes
-
-| Dimensión | ADT | Módulo |
-|---|---|---|
-| Centro de la abstracción | Un tipo | Un subsistema |
-| Puede agrupar | Representación y operaciones | Varios tipos, funciones y recursos |
-| Instancias | Normalmente muchas | Frecuentemente una unidad |
-| Interfaz | Operaciones del tipo | Exportaciones del subsistema |
-| Dependencias | Otras abstracciones usadas | Imports explícitos |
-
-`[Gabbrielli/Martini, §9.3 · Sebesta, §11.6]`
-
----
-
-### [F-15] Una interfaz estable permite sustituir implementaciones
+### [F-13] Go permite sustituir implementaciones por comportamiento
 
 @tipo: concepto-mixto
 
 # El cliente depende del contrato, no de la representación
 
-- `ArrayStack` y `LinkedStack` pueden cumplir la misma interfaz.
-- El cliente compila y prueba contra `Stack<T>`.
+- Un reloj real y uno controlado pueden cumplir la misma interfaz.
+- El cliente compila y prueba contra la capacidad `Clock`.
 - Cambiar la implementación no debería cambiar el código cliente.
 - La sustitución falla si el contrato omite propiedades importantes.
 
-```typescript
-function vaciar<T>(s: Stack<T>): T[] {
-  const result: T[] = [];
-  while (s.size > 0) result.push(s.pop()!);
-  return result;
+```go
+type Clock interface {
+    Now() time.Time
+}
+func Expired(c Clock, deadline time.Time) bool {
+    return c.Now().After(deadline)
 }
 ```
 
 ---
 
-### [F-16] La sustitución exige preservar comportamiento
+### [F-14] La sustitución exige preservar comportamiento
 
 @tipo: concepto-abstracto
 
 # Coincidir en tipos no garantiza cumplir el contrato
 
 - Una implementación puede tener la firma correcta y semántica incorrecta.
-- Si `pop` elimina el elemento más antiguo, implementa Queue, no Stack.
-- Las invariantes y ecuaciones completan lo que los tipos no expresan.
+- Un reloj que retrocede inesperadamente puede romper clientes aunque cumpla la firma.
+- Invariantes, precondiciones y postcondiciones completan lo que los tipos no expresan.
 - Los tests de contrato deben ejecutarse sobre cada implementación.
 - La interfaz es sintáctica; el contrato también es semántico.
 
 ---
 
-### [F-17] Actividad: cambiar la representación
-
-@tipo: socratica
-
-# De ArrayStack a LinkedStack
-
-- Enumeren qué partes del cliente deberían permanecer iguales.
-- Identifiquen qué decisiones cambian dentro de la implementación.
-- Propongan tests de contrato comunes.
-- Expliquen qué filtración de representación impediría el reemplazo.
-
----
-
-### [F-18] Los módulos clásicos separan definición e implementación
+### [F-15] Los tests de contrato verifican sustitución
 
 @tipo: tabla-comparativa
 
-# Modula-2 vuelve física la frontera del contrato
+# El cliente permanece estable cuando el contrato es suficiente
+
+| Aspecto | Contrato compartido | Variación permitida |
+|---|---|---|
+| Operación | `Now()` devuelve un instante | Reloj del sistema o controlado |
+| Semántica | Zona, precisión y monotonicidad documentadas | Fuente temporal concreta |
+| Tests | Misma suite de contrato | Casos específicos de integración |
+| Rendimiento | Costo máximo publicado | Consulta local o remota |
+
+---
+
+### [F-16] Un módulo agrupa decisiones que cambian juntas
+
+@tipo: concepto-abstracto
+
+# El módulo lleva information hiding a programas grandes
+
+- Un módulo puede contener tipos, funciones, constantes y estado.
+- Expone una interfaz seleccionada y oculta decisiones internas.
+- Declara dependencias con otros módulos.
+- Puede constituir una unidad de compilación y despliegue.
+- Su frontera debería coincidir con una responsabilidad coherente.
+
+`[Sebesta, §11.6 · Gabbrielli/Martini, §9.3]`
+
+---
+
+### [F-17] Tipo, módulo, paquete y servicio operan en escalas distintas
+
+@tipo: tabla-comparativa
+
+# Programar “en pequeño” y “en grande” exige mecanismos diferentes
+
+| Unidad | Organiza | Frontera observable | Evolución |
+|---|---|---|---|
+| Tipo | Valores relacionados | Campos, casos u operaciones | Compilación |
+| Módulo | Código cohesivo | Exportaciones e imports | Recompilación |
+| Paquete | Biblioteca distribuible | API y versión | Gestor de dependencias |
+| Servicio | Capacidad desplegada | Protocolo de red | Despliegue independiente |
+
+`[Gabbrielli/Martini, §9.3 · Sebesta, §11.6]`
+
+---
+
+### [F-18] Los lenguajes modernos seleccionan una API pública
+
+@tipo: tabla-comparativa
+
+# La visibilidad convierte una frontera conceptual en una regla verificable
 
 `[Louden/Lambert, §11.3, pp. 503-509]`
 
 | Unidad | Contenido | Quién necesita verla |
 |---|---|---|
-| `DEFINITION MODULE` | Tipos abstractos y operaciones exportadas | Clientes y compilador |
-| `IMPLEMENTATION MODULE` | Representaciones, algoritmos y auxiliares privados | Implementación |
-| Cliente | Imports y uso de exportaciones | No necesita detalles internos |
+| Rust | Elementos `pub` frente a privados | El crate y sus clientes |
+| Kotlin | Visibilidad `public`, `internal` y `private` | El módulo de compilación |
+| Go | Nombres exportados con mayúscula | Otros packages |
+
+> En los tres casos, la interfaz pública es menor que el conjunto de decisiones internas.
 
 ---
 
@@ -341,10 +364,13 @@ function vaciar<T>(s: Stack<T>): T[] {
 - Los archivos `.d.ts` publican tipos sin implementación.
 
 ```typescript
-import type { Stack } from "./stack.js";
-import { ArrayStack } from "./array-stack.js";
-const s: Stack<number> = new ArrayStack<number>();
+import type { PaymentGateway } from "./payments.js";
+import { createCheckout } from "./checkout.js";
+declare const gateway: PaymentGateway;
+const checkout = createCheckout(gateway);
 ```
+
+> Contraste: Rust, Kotlin y Go conservan fronteras de módulo en compilación; TypeScript borra las interfaces al emitir JavaScript.
 
 ---
 
@@ -389,16 +415,17 @@ pedidos -> pagos -> pedidos
 
 ---
 
-### [F-22] Actividad: auditar dependencias
+### [F-22] Un grafo modular revela acoplamiento
 
-@tipo: socratica
+@tipo: concepto-abstracto
 
-# Diseñen un grafo modular
+# Dependencias dirigidas permiten localizar ciclos
 
-- Modelen módulos de usuarios, pedidos, pagos y notificaciones.
-- Dibujen imports necesarios.
-- Detecten un ciclo o dependencia excesiva.
-- Introduzcan una interfaz o evento para mejorar el diseño.
+- `pedidos` depende de contratos de usuarios y pagos.
+- `pagos` publica eventos sin depender de pedidos.
+- `notificaciones` consume eventos y permanece periférico.
+- Una interfaz compartida invierte dependencias concretas.
+- El grafo acíclico permite comprender y probar módulos por separado.
 
 ---
 
@@ -406,17 +433,18 @@ pedidos -> pagos -> pedidos
 
 @tipo: tabla-comparativa
 
-# Separada e independiente ofrecen garantías diferentes
+# Compilación incremental necesita contratos y grafos confiables
 
 `[Louden/Lambert, §11.2 · Sebesta, §11.6]`
 
-| Característica | Compilación separada | Compilación independiente |
+| Mecanismo moderno | Unidad y contexto | Beneficio |
 |---|---|---|
-| Unidad compilada | Un módulo por vez | Una unidad aislada |
-| Conoce interfaces externas | Sí | No necesariamente |
-| Chequeo entre módulos | Posible en compilación | Se difiere al enlace o ejecución |
-| Beneficio | Recompilar solo partes afectadas con seguridad | Máxima independencia física |
-| Riesgo | Interfaces desactualizadas | Incompatibilidades tardías |
+| TypeScript Project References | Proyectos con contratos `.d.ts` | Builds incrementales y límites explícitos |
+| Crates de Rust | Paquetes compilados con dependencias verificadas | Privacidad y chequeo estático |
+| Packages y modules de Go | Imports y versiones declaradas | Builds reproducibles |
+| Caché de compilación | Artefactos identificados por entradas | Evitar trabajo no afectado |
+
+> Separar archivos no alcanza: el sistema de build debe conocer contratos, versiones y dependencias.
 
 ---
 
@@ -424,15 +452,15 @@ pedidos -> pagos -> pedidos
 
 @tipo: tabla
 
-# No todo cambio interno obliga a recompilar clientes
+# No todo cambio compatible obliga a revisar clientes
 
 | Cambio | ¿Cambia la interfaz? | Impacto esperado |
 |---|---|---|
-| Optimizar un algoritmo privado | No | Recompilar implementación |
-| Cambiar array por lista enlazada | No | Recompilar implementación |
+| Optimizar un algoritmo privado | No | Recompilar o redesplegar implementación |
+| Cambiar proveedor interno | No | Verificar contrato y operación |
 | Agregar un parámetro público | Sí | Revisar clientes |
 | Cambiar el tipo de retorno | Sí | Revisar clientes |
-| Agregar una función privada | No | Sin impacto contractual |
+| Alterar semántica sin cambiar firma | No sintácticamente | Riesgo de ruptura semántica |
 
 ---
 
@@ -442,16 +470,16 @@ pedidos -> pagos -> pedidos
 
 # La API pública debe ser más pequeña que el código interno
 
-- `index.ts` reexporta únicamente los servicios estables.
-- `package.json` describe entradas, versiones y dependencias.
+- `exports` selecciona puntos de entrada soportados.
+- `package.json` describe versiones y dependencias.
 - `.d.ts` comunica contratos a consumidores TypeScript.
-- Versionar una biblioteca implica gestionar cambios de interfaz.
+- Versionar implica gestionar cambios sintácticos y semánticos.
 
 ```typescript
 // index.ts
-export type { Stack } from "./stack.js";
-export { ArrayStack } from "./array-stack.js";
-// No exporta helpers internos ni representación.
+export type { PaymentGateway } from "./payments.js";
+export { createCheckout } from "./checkout.js";
+// No exporta adaptadores ni helpers internos.
 ```
 
 ---
@@ -472,16 +500,19 @@ export { ArrayStack } from "./array-stack.js";
 
 ---
 
-### [F-27] Actividad: diseñar una API pública
+### [F-27] Una API versionada clasifica cambios por compatibilidad
 
-@tipo: socratica
+@tipo: tabla-comparativa
 
-# Repositorio de usuarios: contrato o detalle
+# La visibilidad y la versión comunican compromisos distintos
 
-- Decidan si exportar `findById`, `save`, `pool`, `cache` y `reconnect`.
-- Clasifiquen cada elemento como contrato o implementación.
-- Expliquen qué pasaría al migrar de PostgreSQL a MongoDB.
-- Propongan una interfaz mínima que permita probar clientes.
+| Cambio | Compatibilidad esperada | Tratamiento |
+|---|---|---|
+| Corregir implementación privada | Compatible | Patch |
+| Agregar capacidad opcional | Usualmente compatible | Minor |
+| Quitar exportación pública | Incompatible | Major |
+| Cambiar significado conservando firma | Potencialmente incompatible | Documentar y versionar |
+| Ampliar casos de un tipo cerrado | Depende de exhaustividad del cliente | Evaluar como ruptura |
 
 ---
 
@@ -494,13 +525,14 @@ export { ArrayStack } from "./array-stack.js";
 | Nivel | Abstrae | Oculta | Contrato visible |
 |---|---|---|---|
 | Subprograma | Una acción | Instrucciones y estado local | Perfil y protocolo |
-| ADT | Un tipo conceptual | Representación e invariantes internas | Operaciones del tipo |
+| Tipo algebraico | Casos de un dato | Representación concreta de variantes | Constructores y patrones |
 | Módulo | Un subsistema | Tipos, funciones y recursos internos | Exportaciones e imports |
 | Paquete | Una biblioteca distribuible | Organización y construcción internas | API, tipos y versión |
+| Servicio | Una capacidad desplegada | Procesos e infraestructura | Protocolo y política operativa |
 
 ---
 
-### [F-29] Una interfaz útil combina tipos y leyes
+### [F-29] Un contrato útil combina tipos, semántica y evolución
 
 @tipo: tabla
 
@@ -510,9 +542,10 @@ export { ArrayStack } from "./array-stack.js";
 |---|---|
 | Tipos | Descartan muchas llamadas inválidas |
 | Invariantes | Restringen estados válidos |
-| Ecuaciones | Relacionan operaciones observables |
+| Precondiciones y postcondiciones | Relacionan entradas, efectos y resultados |
 | Tests de contrato | Vuelven ejecutables las expectativas |
 | Documentación | Comunica garantías a clientes |
+| Política de versión | Comunica cómo puede evolucionar la API |
 
 `[Louden/Lambert, §11.1 · Sebesta, cap. 11]`
 
@@ -524,9 +557,9 @@ export { ArrayStack } from "./array-stack.js";
 
 # Modularidad es preservar libertad de cambio
 
-- El ADT oculta representación detrás de operaciones significativas.
-- La interfaz establece lo que clientes pueden asumir.
-- El módulo agrupa abstracciones y declara dependencias.
-- La compilación separada usa contratos para limitar impacto.
+- El tipo algebraico modela un conjunto cerrado de formas de datos.
+- La interfaz establece capacidades que implementaciones abiertas deben cumplir.
+- El módulo agrupa decisiones y declara dependencias.
+- El paquete publica una API versionada y limita el impacto de cambios.
 
-## Pregunta final: ¿qué decisión interna podría cambiar mañana sin romper clientes?
+## Criterio final: una decisión verdaderamente interna puede cambiar sin romper clientes
