@@ -1,0 +1,42 @@
+topic: "Concurrencia y Paralelismo"
+topic_number: "15"
+topic_folder: "salida/cursadas/2026/temas/15-concurrencia-paralelismo"
+libro_principal: "Sebesta"
+nivel: 2
+base_filminas_previas: null
+pasos_completados:
+  - "paso-0"
+  - "paso-1a"
+  - "paso-1b"
+  - "paso-1c"
+checkpoint_1_aprobado: false
+checkpoint_2_aprobado: false
+iniciado_en: "2026-06-15T21:58:32-03:00"
+ultimo_paso_en: "2026-06-15T21:58:32-03:00"
+status: "in-progress"
+grounding:
+  chromadb: "ok"
+  collection: "edu_knowledge"
+  primary_hits:
+    - "Robert W. Sebesta - Concepts of Programming Languages-Pearson (2019)/txt/557-610.txt"
+  secondary_hits:
+    - "Gabbrielli/Martini - Programming Languages: Principles and Paradigms (2023)/txt/447-486.txt"
+    - "Louden/Lambert - Programming Languages: Principles and Practices (2012)/txt/546-584.txt"
+  web_sources:
+    - "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model"
+    - "https://nodejs.org/api/worker_threads.html"
+    - "https://kotlinlang.org/docs/coroutines-overview.html"
+    - "https://go.dev/ref/mem"
+scope_guard:
+  included:
+    - "concurrencia a nivel de subprogramas"
+    - "threads, tareas, procesos como unidades de ejecucion"
+    - "sincronizacion de competencia y cooperacion"
+    - "semaforos, monitores y pasaje de mensajes"
+    - "asincronia en TypeScript"
+  excluded:
+    - "programacion distribuida"
+    - "GPU/CUDA/OpenCL"
+    - "OpenMP como tema central"
+    - "actores/Erlang como tema central"
+    - "reactive streams"

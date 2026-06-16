@@ -1,0 +1,36 @@
+topic_number: "15"
+topic_name: "Concurrencia y Paralelismo"
+topic_slug: "concurrencia-paralelismo"
+topic_folder: "salida/cursadas/2026/temas/15-concurrencia-paralelismo"
+class_duration: "120"
+classes_count: 1
+git_branch: "tema-15-concurrencia-paralelismo"
+created_at: "2026-06-15"
+status: "design-pending-approval"
+course_id: "leng-2026"
+artifacts:
+  diseno: "diseno.md"
+  topic_extract: "topic-extract.md"
+module: "XI"
+week: 15
+language_primary: "TypeScript"
+languages_contrast:
+  - Java
+  - Go
+  - Kotlin
+historical_models:
+  - Ada
+main_reference: "Sebesta Cap. 13 (Concurrency)"
+secondary_references:
+  - "Gabbrielli & Martini Cap. 14 (Concurrent Programming)"
+  - "Louden & Lambert Cap. 13 (Concurrency)"
+plan_minimo_topics:
+  - "Conceptos fundamentales de concurrencia a nivel de subprogramas"
+  - "Niveles de concurrencia; threads"
+  - "Sincronización de cooperación y competencia"
+  - "Comunicación entre procesos, tareas"
+  - "Programación asíncrona"
+designer_v3_params:
+  libro: "Sebesta"
+  nivel: 2
+  languages_note: "TypeScript principal; Java para threads/monitores; Go para canales y comunicación; Kotlin para corrutinas y concurrencia estructurada; Ada como modelo histórico de tareas."

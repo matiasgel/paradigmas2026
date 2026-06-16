@@ -2,15 +2,33 @@
   "$schema_version": "plan-filminas/v3",
   "meta": {
     "topic_id": "13-modulos-interfaces-genericos",
-    "title": "Portada 13B",
+    "title": "CLASE 13B",
     "source": "filminas.md",
-    "generated_at": "2026-06-12T15:15:04.625719+00:00",
+    "generated_at": "2026-06-15T20:17:34",
     "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
-    "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
-    "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\13-modulos-interfaces-genericos",
+    "topics_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas",
+    "topic_folder": "/home/matiasgel/Documentos/paradigmas2026/salida/cursadas/2026/temas/13-modulos-interfaces-genericos",
     "design_system_path": "_edu/slides-config.yaml",
     "pipeline_runtime_path": "_edu/slides-pipeline.json",
     "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 30,
+    "images_planned": 2,
+    "tables_planned": 17,
+    "code_slides": 13,
+    "status": "READY_FOR_VALIDATION",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "portada": 1,
+      "tabla": 5,
+      "tabla-comparativa": 10,
+      "demo": 4,
+      "codigo": 7,
+      "tabla-mixta": 2,
+      "cierre": 1
+    }
   },
   "slides": [
     {
@@ -22,26 +40,22 @@
         {
           "type": "heading",
           "level": 2,
-          "content": "Módulos y contratos: organizar decisiones que pueden cambiar"
+          "content": "Modulos, interfaces y genericos en TypeScript"
         },
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Tipos algebraicos para modelar datos con casos cerrados.",
+              "content": "Hoy subimos de escala: de una operacion aislada a una frontera de cambio.",
               "level": 0
             },
             {
-              "content": "Interfaces y protocolos para expresar capacidades.",
+              "content": "La pregunta central es que debe ver el cliente y que debe quedar oculto.",
               "level": 0
             },
             {
-              "content": "Módulos y paquetes para seleccionar una API pública.",
-              "level": 0
-            },
-            {
-              "content": "Compatibilidad y evolución separada de componentes.",
+              "content": "Sebesta guia la progresion: ADT -> encapsulamiento -> modulos -> compilacion separada.",
               "level": 0
             }
           ]
@@ -58,7 +72,7 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
+        "prompt": "Tres rectangulos horizontales conectados por lineas finas. Primero pequeno bordo, segundo mediano gris oscuro, tercero grande bordo claro. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
         "local_asset": "slides/assets/F-00-bg.png",
         "drive_id": null
       },
@@ -66,18 +80,18 @@
     },
     {
       "id": "F-01",
-      "type": "tabla-comparativa",
-      "title": "Tres mecanismos parecidos resuelven problemas distintos",
-      "subtitle": "Tipo algebraico, interfaz y módulo no son sinónimos",
+      "type": "tabla",
+      "title": "Puente: 13A termina donde 13B empieza",
+      "subtitle": "13B no repite subprogramas: los agrupa y les pone frontera",
       "body_blocks": [
         {
           "type": "text",
-          "content": "> Un tipo algebraico modela datos; no implica por sí mismo ocultamiento de representación ni una frontera modular."
+          "content": "> La clase no vuelve a explicar el subprograma: lo toma como ladrillo basico."
         }
       ],
       "code_blocks": [],
       "tables": [
-        "| Mecanismo | Pregunta central | Ejemplo moderno |\n|---|---|---|\n| Tipo algebraico | ¿Qué formas puede tener un dato? | `sealed class` de Kotlin, `enum` de Rust |\n| Interfaz o protocolo | ¿Qué capacidades debe ofrecer una implementación? | `interface` de Kotlin, trait de Rust |\n| Módulo o paquete | ¿Qué nombres son públicos y de qué depende el componente? | módulo Rust, package Go |"
+        "| En 13A vimos... | En 13B lo usamos para... |\n|---|---|\n| Perfil y protocolo de una operacion | Definir operaciones publicas de un ADT |\n| Tipos de parametros y retornos | Especificar interfaces verificables |\n| Generic functions | Construir tipos y modulos genericos |\n| Costos de ejecucion | Decidir que detalles no deben filtrarse |"
       ],
       "layout": {
         "title": "full-title",
@@ -88,8 +102,8 @@
       },
       "image": {
         "layer": "none",
-        "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
-        "local_asset": "slides/assets/F-01-content.png",
+        "prompt": "",
+        "local_asset": "",
         "drive_id": null
       },
       "table_assets": []
@@ -97,17 +111,12 @@
     {
       "id": "F-02",
       "type": "tabla-comparativa",
-      "title": "La independencia de representación preserva clientes",
-      "subtitle": "Una frontera estable permite reemplazar decisiones internas",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`[Gabbrielli/Martini, cap. 9 · Sebesta, cap. 11]`"
-        }
-      ],
+      "title": "Ruta de la clase",
+      "subtitle": "La secuencia va de representacion oculta a interfaz compilable",
+      "body_blocks": [],
       "code_blocks": [],
       "tables": [
-        "| Decisión interna que cambia | Contrato que permanece | Cliente que no debería cambiar |\n|---|---|---|\n| Memoria o base de datos | `Repository.save/findById` | Servicio de aplicación |\n| Caché local o distribuida | `Cache.get/put` | Consumidor de la caché |\n| HTTP o cola de mensajes | `PaymentGateway.charge` | Módulo de pedidos |\n| Algoritmo secuencial o paralelo | Firma y semántica del servicio | Orquestador |"
+        "| Bloque | Pregunta didactica | Resultado esperado |\n|---|---|---|\n| ADT | Que significa \"usar\" un tipo sin ver su representacion? | Distinguir contrato de estructura interna |\n| Interfaz | Que operaciones puede asumir el cliente? | Disenar interfaces publicas pequenas |\n| Modulo | Donde se declara una frontera de compilacion? | Leer import/export como dependencias |\n| Genericos | Como reutilizar sin perder tipos? | Crear ADTs parametrizados con constraints minimos |"
       ],
       "layout": {
         "title": "full-title",
@@ -126,28 +135,24 @@
     },
     {
       "id": "F-03",
-      "type": "concepto-mixto",
-      "title": "Un tipo algebraico describe la forma de los datos",
-      "subtitle": "Sumas y productos hacen explícitos estados posibles",
+      "type": "demo",
+      "title": "El problema: los clientes se pegan a detalles",
+      "subtitle": "Si el cliente conoce la representacion, cambiar deja de ser libre",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Un producto combina campos: un pago aprobado tiene identificador y fecha.",
+              "content": "El cliente ya no usa una pila: usa un array disfrazado.",
               "level": 0
             },
             {
-              "content": "Una suma ofrece alternativas: pendiente, aprobado o rechazado.",
+              "content": "Cualquier cambio interno rompe codigo externo.",
               "level": 0
             },
             {
-              "content": "Una jerarquía sellada permite verificar que todos los casos fueron tratados.",
-              "level": 0
-            },
-            {
-              "content": "Esto modela estados; la privacidad y las dependencias pertenecen a otros mecanismos.",
+              "content": "La abstraccion aparece cuando el cliente solo puede usar operaciones permitidas.",
               "level": 0
             }
           ]
@@ -155,8 +160,8 @@
       ],
       "code_blocks": [
         {
-          "lang": "kotlin",
-          "content": "sealed interface ResultadoPago {\n    data object Pendiente : ResultadoPago\n    data class Aprobado(val id: String) : ResultadoPago\n    data class Rechazado(val motivo: String) : ResultadoPago\n}"
+          "lang": "typescript",
+          "content": "// Cliente acoplado a un detalle interno: \"la pila es un array\".\npila.datos[0] = 99;\npila.datos.reverse();"
         }
       ],
       "tables": [],
@@ -169,8 +174,8 @@
       },
       "image": {
         "layer": "none",
-        "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
-        "local_asset": "slides/assets/F-03-content.png",
+        "prompt": "",
+        "local_asset": "",
         "drive_id": null
       },
       "table_assets": []
@@ -178,12 +183,12 @@
     {
       "id": "F-04",
       "type": "tabla-comparativa",
-      "title": "Mundo cerrado y mundo abierto favorecen diseños distintos",
-      "subtitle": "La extensibilidad deseada orienta el mecanismo",
+      "title": "Sebesta: un ADT se define por operaciones, no por almacenamiento",
+      "subtitle": "Un ADT oculta representacion y publica operaciones validas",
       "body_blocks": [],
       "code_blocks": [],
       "tables": [
-        "| Diseño | Quién agrega variantes | Verificación favorecida | Ejemplo |\n|---|---|---|---|\n| Tipo algebraico sellado | Autor del tipo | Exhaustividad de casos | Estados de una operación |\n| Interfaz abierta | Autores de implementaciones | Capacidades requeridas | Proveedores de pago |\n| Módulo cerrado | Equipo propietario | Superficie exportada | Núcleo de facturación |\n| Plugin | Terceros autorizados | Integración en runtime | Adaptadores externos |"
+        "| Parte del ADT | Que ve el cliente | Que queda oculto |\n|---|---|---|\n| Nombre del tipo | `Stack<T>` | Si usa array, lista o buffer |\n| Operaciones | `push`, `pop`, `peek` | Algoritmos y estructuras auxiliares |\n| Invariantes | \"LIFO: sale lo ultimo que entro\" | Como se mantiene ese orden |\n| Errores definidos | `pop()` puede no devolver elemento | Caso interno de pila vacia |"
       ],
       "layout": {
         "title": "full-title",
@@ -202,69 +207,38 @@
     },
     {
       "id": "F-05",
-      "type": "concepto-mixto",
-      "title": "Los tipos de dominio pueden impedir estados inválidos",
-      "subtitle": "Un wrapper nominal agrega significado sin inventar una arquitectura",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "`String` no distingue un correo de un identificador.",
-              "level": 0
-            },
-            {
-              "content": "Un tipo de valor evita intercambiar datos con igual representación.",
-              "level": 0
-            },
-            {
-              "content": "La validación puede concentrarse en la construcción.",
-              "level": 0
-            },
-            {
-              "content": "Kotlin puede representar ciertos value classes sin wrapper adicional en runtime.",
-              "level": 0
-            }
-          ]
-        }
+      "type": "tabla-comparativa",
+      "title": "Encapsular no alcanza si no se ocultan decisiones",
+      "subtitle": "Encapsulamiento agrupa; information hiding protege cambios futuros",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Concepto | Pregunta que responde | Error comun |\n|---|---|---|\n| Encapsulamiento | Que datos y operaciones forman una unidad? | Poner todo en una clase enorme |\n| Information hiding | Que decisiones internas pueden cambiar? | Exponer campos, arrays o conexiones |\n| Interfaz publica | Que promesas recibe el cliente? | Publicar helpers por comodidad |\n| Invariante | Que debe ser siempre cierto? | Permitir estados imposibles |"
       ],
-      "code_blocks": [
-        {
-          "lang": "kotlin",
-          "content": "@JvmInline\nvalue class UserId(val value: String)\n\nfun buscarUsuario(id: UserId): Usuario"
-        }
-      ],
-      "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
+        "body": "table-intro",
         "image": "none",
-        "code": "right-half",
-        "table": "none"
+        "code": "none",
+        "table": "table-main"
       },
       "image": {
         "layer": "none",
-        "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
-        "local_asset": "slides/assets/F-05-bg.png",
+        "prompt": "",
+        "local_asset": "",
         "drive_id": null
       },
       "table_assets": []
     },
     {
       "id": "F-06",
-      "type": "tabla-comparativa",
-      "title": "Encapsulación e information hiding no son sinónimos",
-      "subtitle": "Agrupar ayuda; ocultar decisiones permite cambiar",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`[Sebesta, §§11.1-11.3 · Gabbrielli/Martini, cap. 9]`"
-        }
-      ],
+      "type": "tabla",
+      "title": "La pila enseña la idea porque tiene una regla simple",
+      "subtitle": "LIFO es una invariante observable, no un detalle de implementacion",
+      "body_blocks": [],
       "code_blocks": [],
       "tables": [
-        "| Concepto | Pregunta que responde | Ejemplo |\n|---|---|---|\n| Encapsulación | ¿Qué datos y operaciones forman una unidad? | Componente de pagos |\n| Information hiding | ¿Qué decisiones pueden cambiar sin afectar clientes? | Proveedor HTTP o cola |\n| Interfaz | ¿Qué puede observar y solicitar el cliente? | `charge`, `refund`, `status` |\n| Invariante | ¿Qué debe permanecer cierto? | Un pago confirmado no vuelve a pendiente |"
+        "| Operacion | Promesa al cliente | Detalle que no importa |\n|---|---|---|\n| `push(x)` | Agrega `x` como proximo candidato a salir | Donde se almacena fisicamente |\n| `pop()` | Devuelve el ultimo elemento agregado disponible | Como se mueve el indice interno |\n| `peek()` | Observa sin remover | Si hay cache o calculo directo |\n| `isEmpty()` | Informa si `pop` tendria elemento | Si se guarda `size` o se calcula |"
       ],
       "layout": {
         "title": "full-title",
@@ -283,45 +257,22 @@
     },
     {
       "id": "F-07",
-      "type": "concepto-mixto",
-      "title": "Kotlin expresa capacidades sin fijar implementaciones",
-      "subtitle": "Una operación pública amplía para siempre lo que el cliente puede asumir",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "La interfaz declara operaciones que el cliente necesita.",
-              "level": 0
-            },
-            {
-              "content": "Cada proveedor conserva autenticación, transporte y reintentos internos.",
-              "level": 0
-            },
-            {
-              "content": "Una interfaz mínima reduce acoplamiento y mantiene opciones abiertas.",
-              "level": 0
-            },
-            {
-              "content": "La semántica documentada importa tanto como las firmas.",
-              "level": 0
-            }
-          ]
-        }
-      ],
+      "type": "codigo",
+      "title": "TypeScript puede expresar el ADT con una clase generica",
+      "subtitle": "`private` impide que el cliente dependa del array interno",
+      "body_blocks": [],
       "code_blocks": [
         {
-          "lang": "kotlin",
-          "content": "interface PaymentGateway {\n    suspend fun charge(order: OrderId, amount: Money): ResultadoPago\n    suspend fun refund(payment: PaymentId): ResultadoPago\n}"
+          "lang": "typescript",
+          "content": "class Stack<T> {\n  private readonly datos: T[] = [];\n\n  push(item: T): void {\n    this.datos.push(item);\n  }\n\n  pop(): T | undefined {\n    return this.datos.pop();\n  }\n\n  peek(): T | undefined {\n    return this.datos.at(-1);\n  }\n}"
         }
       ],
       "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
+        "body": "subtitle-only",
         "image": "none",
-        "code": "right-half",
+        "code": "full-bottom",
         "table": "none"
       },
       "image": {
@@ -334,41 +285,33 @@
     },
     {
       "id": "F-08",
-      "type": "concepto-mixto",
-      "title": "Rust oculta la representación por defecto",
-      "subtitle": "`pub` selecciona la superficie observable del módulo",
+      "type": "demo",
+      "title": "Pregunta de diseno: que debe exponer una Stack?",
+      "subtitle": "La interfaz debe respetar la semantica del ADT",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Los campos privados solo son visibles dentro de su módulo.",
+              "content": "`clear` puede ser una operacion legitima.",
               "level": 0
             },
             {
-              "content": "Los métodos `pub` forman la interfaz accesible al cliente.",
+              "content": "`toArray` solo es seguro si devuelve copia o vista de solo lectura.",
               "level": 0
             },
             {
-              "content": "Toda modificación pasa por operaciones controladas.",
-              "level": 0
-            },
-            {
-              "content": "La implementación puede cambiar sin reescribir clientes.",
+              "content": "`at(index)` rompe la idea de pila: convierte LIFO en acceso aleatorio.",
               "level": 0
             }
           ]
-        },
-        {
-          "type": "text",
-          "content": "`[Louden/Lambert, §11.2 · Sebesta, §11.4]`"
         }
       ],
       "code_blocks": [
         {
-          "lang": "rust",
-          "content": "pub struct Token {\n    raw: String, // privado fuera del módulo\n}\nimpl Token {\n    pub fn parse(raw: String) -> Result<Self, TokenError> {\n        validar(&raw)?;\n        Ok(Self { raw })\n    }\n}"
+          "lang": "typescript",
+          "content": "class Stack<T> {\n  push(item: T): void\n  pop(): T | undefined\n  peek(): T | undefined\n\n  clear(): void\n  toArray(): readonly T[]\n  at(index: number): T | undefined\n}"
         }
       ],
       "tables": [],
@@ -389,46 +332,20 @@
     },
     {
       "id": "F-09",
-      "type": "concepto-mixto",
-      "title": "Devolver una referencia puede romper el ocultamiento",
-      "subtitle": "Una interfaz segura controla también los valores y permisos que escapan",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Devolver una colección mutable filtra decisiones internas.",
-              "level": 0
-            },
-            {
-              "content": "Una vista de solo lectura restringe capacidades del cliente.",
-              "level": 0
-            },
-            {
-              "content": "Un iterador permite recorrer sin revelar almacenamiento.",
-              "level": 0
-            },
-            {
-              "content": "Una copia aísla el contenedor, pero puede conservar elementos compartidos.",
-              "level": 0
-            }
-          ]
-        }
+      "type": "tabla-comparativa",
+      "title": "Independencia de representacion: dos cuerpos, mismo contrato",
+      "subtitle": "El cliente no debe saber si la pila usa array o nodos enlazados",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Implementacion | Representacion interna | Cliente que usa `Stack<T>` |\n|---|---|---|\n| `ArrayStack<T>` | `T[]` y operaciones sobre el final | No cambia |\n| `LinkedStack<T>` | Nodo con `value` y `next` | No cambia |\n| `BoundedStack<T>` | Array con capacidad maxima | Solo cambia si el contrato agrega overflow |\n| `PersistentStack<T>` | Estructura inmutable compartida | No cambia si `push/pop` conservan semantica |"
       ],
-      "code_blocks": [
-        {
-          "lang": "typescript",
-          "content": "listar(): readonly UsuarioResumen[] {\n  return this.usuarios.map(resumir);\n}"
-        }
-      ],
-      "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
+        "body": "table-intro",
         "image": "none",
-        "code": "right-half",
-        "table": "none"
+        "code": "none",
+        "table": "table-main"
       },
       "image": {
         "layer": "none",
@@ -440,66 +357,33 @@
     },
     {
       "id": "F-10",
-      "type": "tabla-comparativa",
-      "title": "Una interfaz puede preservar o filtrar la abstracción",
-      "subtitle": "Cada operación pública amplía dependencias y compromisos",
-      "body_blocks": [],
-      "code_blocks": [],
-      "tables": [
-        "| Operación pública | Capacidad expuesta | Consecuencia contractual |\n|---|---|---|\n| `findById` | Consulta por identidad | Exige definir ausencia y errores |\n| `save` | Persistencia | Exige definir consistencia |\n| `rawConnection` | Acceso a infraestructura | Filtra representación |\n| `clearCache` | Control operacional | Acopla al uso de caché |\n| `list` | Recorrido | Exige definir orden y paginación |"
-      ],
-      "layout": {
-        "title": "full-title",
-        "body": "table-intro",
-        "image": "none",
-        "code": "none",
-        "table": "table-main"
-      },
-      "image": {
-        "layer": "none",
-        "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
-        "local_asset": "slides/assets/F-10-bg.png",
-        "drive_id": null
-      },
-      "table_assets": []
-    },
-    {
-      "id": "F-11",
-      "type": "concepto-mixto",
-      "title": "Swift relaciona tipos a través de un protocolo genérico",
-      "subtitle": "`associatedtype` conserva relaciones precisas en una frontera",
+      "type": "demo",
+      "title": "Regla de lectura: mirar primero el contrato",
+      "subtitle": "Antes de leer el cuerpo, preguntamos que promete la interfaz",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Cada repositorio define qué entidad administra.",
+              "content": "El tipo `IStack<string>` dice que operaciones existen.",
               "level": 0
             },
             {
-              "content": "`Entity.ID` mantiene consistencia entre consulta y resultado.",
+              "content": "La variable no revela la clase concreta.",
               "level": 0
             },
             {
-              "content": "Varias implementaciones cumplen el mismo protocolo.",
-              "level": 0
-            },
-            {
-              "content": "El cliente conserva información precisa sin conocer infraestructura.",
+              "content": "El cuerpo de `crearPila` puede cambiar sin cambiar este cliente.",
               "level": 0
             }
           ]
-        },
-        {
-          "type": "text",
-          "content": "`[Sebesta, §11.4, pp. 487-492, reinterpretado como contrato genérico]`"
         }
       ],
       "code_blocks": [
         {
-          "lang": "swift",
-          "content": "protocol Repository {\n    associatedtype Entity: Identifiable\n    func find(id: Entity.ID) async throws -> Entity?\n    func save(_ entity: Entity) async throws\n}"
+          "lang": "typescript",
+          "content": "const pila: IStack<string> = crearPila();\n\npila.push(\"a\");\npila.push(\"b\");\nconst x = pila.pop(); // \"b\" o undefined"
         }
       ],
       "tables": [],
@@ -509,6 +393,31 @@
         "image": "none",
         "code": "right-half",
         "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-11",
+      "type": "tabla-comparativa",
+      "title": "Interfaz e implementacion tienen responsabilidades distintas",
+      "subtitle": "La interfaz dice \"que\"; la implementacion decide \"como\"",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Nivel | Contiene | Cambia cuando... |\n|---|---|---|\n| Interfaz | Nombres, tipos, errores y significado observable | Cambia la promesa publica |\n| Implementacion | Estructuras, algoritmos, caches y adaptadores | Cambia una decision interna |\n| Cliente | Llamadas permitidas por la interfaz | Necesita otra capacidad publica |\n| Tests de contrato | Casos que toda implementacion debe pasar | Cambia la semantica prometida |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
       },
       "image": {
         "layer": "none",
@@ -520,13 +429,46 @@
     },
     {
       "id": "F-12",
-      "type": "tabla-comparativa",
-      "title": "Un constraint solo corresponde si una operación lo necesita",
-      "subtitle": "Restringir de más reduce reutilización",
+      "type": "codigo",
+      "title": "TypeScript separa contrato y cuerpo con `interface` y `class`",
+      "subtitle": "El cliente puede depender de `IStack<T>`, no de `ArrayStack<T>`",
       "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "export interface IStack<T> {\n  push(item: T): void;\n  pop(): T | undefined;\n  peek(): T | undefined;\n  readonly size: number;\n}\n\nexport class ArrayStack<T> implements IStack<T> {\n  private readonly datos: T[] = [];\n  push(item: T): void { this.datos.push(item); }\n  pop(): T | undefined { return this.datos.pop(); }\n  peek(): T | undefined { return this.datos.at(-1); }\n  get size(): number { return this.datos.length; }\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "tabla-comparativa",
+      "title": "TypeScript tiene dos niveles de privacidad",
+      "subtitle": "`private` protege en compilacion; `#campo` protege tambien en runtime",
+      "body_blocks": [
+        {
+          "type": "text",
+          "content": "> Para explicar ADTs alcanza `private`; para proteger runtime conviene `#`."
+        }
+      ],
       "code_blocks": [],
       "tables": [
-        "| Diseño | Operaciones usadas por la implementación | Constraint necesario |\n|---|---|---|\n| `Repository<E>` | Identificar y persistir | Identidad estable |\n| `Orderer<T>` | Comparar elementos | Comparador |\n| `Serializer<T>` | Codificar y decodificar | Esquema o codec |\n| `Cache<K,V>` | Identificar claves | Igualdad y hashing |"
+        "| Recurso | Cuando actua | Que impide |\n|---|---|---|\n| `private datos` | TypeScript, antes de emitir JS | Acceso tipado desde clientes |\n| `#datos` | JavaScript en runtime | Acceso real desde fuera de la clase |\n| `readonly` | TypeScript | Reasignar una referencia |\n| Copia defensiva | Runtime | Que el cliente modifique la coleccion interna |"
       ],
       "layout": {
         "title": "full-title",
@@ -544,101 +486,28 @@
       "table_assets": []
     },
     {
-      "id": "F-13",
-      "type": "concepto-mixto",
-      "title": "Go permite sustituir implementaciones por comportamiento",
-      "subtitle": "El cliente depende del contrato, no de la representación",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Un reloj real y uno controlado pueden cumplir la misma interfaz.",
-              "level": 0
-            },
-            {
-              "content": "El cliente compila y prueba contra la capacidad `Clock`.",
-              "level": 0
-            },
-            {
-              "content": "Cambiar la implementación no debería cambiar el código cliente.",
-              "level": 0
-            },
-            {
-              "content": "La sustitución falla si el contrato omite propiedades importantes.",
-              "level": 0
-            }
-          ]
-        }
-      ],
+      "id": "F-14",
+      "type": "codigo",
+      "title": "Un modulo selecciona que nombres salen al exterior",
+      "subtitle": "`export` convierte una decision interna en parte de la frontera publica",
+      "body_blocks": [],
       "code_blocks": [
         {
-          "lang": "go",
-          "content": "type Clock interface {\n    Now() time.Time\n}\nfunc Expired(c Clock, deadline time.Time) bool {\n    return c.Now().After(deadline)\n}"
+          "lang": "typescript",
+          "content": "// stack.ts\nexport type { IStack };\nexport { ArrayStack };\n\nclass NodeStack<T> implements IStack<T> {\n  // No exportada: implementacion alternativa interna.\n}\n\nfunction validarCapacidad(max: number): void {\n  // No exportada: helper privado del modulo.\n}"
         }
       ],
       "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
+        "body": "subtitle-only",
         "image": "none",
-        "code": "right-half",
+        "code": "full-bottom",
         "table": "none"
       },
       "image": {
         "layer": "none",
-        "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
-        "local_asset": "slides/assets/F-13-content.png",
-        "drive_id": null
-      },
-      "table_assets": []
-    },
-    {
-      "id": "F-14",
-      "type": "concepto-abstracto",
-      "title": "La sustitución exige preservar comportamiento",
-      "subtitle": "Coincidir en tipos no garantiza cumplir el contrato",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Una implementación puede tener la firma correcta y semántica incorrecta.",
-              "level": 0
-            },
-            {
-              "content": "Un reloj que retrocede inesperadamente puede romper clientes aunque cumpla la firma.",
-              "level": 0
-            },
-            {
-              "content": "Invariantes, precondiciones y postcondiciones completan lo que los tipos no expresan.",
-              "level": 0
-            },
-            {
-              "content": "Los tests de contrato deben ejecutarse sobre cada implementación.",
-              "level": 0
-            },
-            {
-              "content": "La interfaz es sintáctica; el contrato también es semántico.",
-              "level": 0
-            }
-          ]
-        }
-      ],
-      "code_blocks": [],
-      "tables": [],
-      "layout": {
-        "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
-        "table": "none"
-      },
-      "image": {
-        "layer": "content",
-        "prompt": "Dos formas geometricas diferentes, un circulo bordo y un hexagono gris oscuro, atraviesan el mismo marco rectangular fino y mantienen una trayectoria paralela hacia la derecha. Fondo blanco, composicion equilibrada, flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
+        "prompt": "",
         "local_asset": "",
         "drive_id": null
       },
@@ -646,13 +515,13 @@
     },
     {
       "id": "F-15",
-      "type": "tabla-comparativa",
-      "title": "Los tests de contrato verifican sustitución",
-      "subtitle": "El cliente permanece estable cuando el contrato es suficiente",
+      "type": "tabla",
+      "title": "Leer imports es leer dependencias entre modulos",
+      "subtitle": "Una dependencia explicita dice que otro contrato es necesario",
       "body_blocks": [],
       "code_blocks": [],
       "tables": [
-        "| Aspecto | Contrato compartido | Variación permitida |\n|---|---|---|\n| Operación | `Now()` devuelve un instante | Reloj del sistema o controlado |\n| Semántica | Zona, precisión y monotonicidad documentadas | Fuente temporal concreta |\n| Tests | Misma suite de contrato | Casos específicos de integración |\n| Rendimiento | Costo máximo publicado | Consulta local o remota |"
+        "| Import | Significado arquitectonico | Pregunta docente |\n|---|---|---|\n| `import type { IStack }` | Solo necesito el contrato en compilacion | Puedo evitar costo runtime? |\n| `import { ArrayStack }` | Necesito la implementacion concreta | Es correcto acoplarme a ella? |\n| `import { comparar } from \"./orden.js\"` | Uso otra unidad del programa | Esa dependencia pertenece aqui? |\n| `import \"./polyfill\"` | Dependo de un efecto global | El efecto esta documentado? |"
       ],
       "layout": {
         "title": "full-title",
@@ -671,53 +540,46 @@
     },
     {
       "id": "F-16",
-      "type": "concepto-abstracto",
-      "title": "Un módulo agrupa decisiones que cambian juntas",
-      "subtitle": "El módulo lleva information hiding a programas grandes",
+      "type": "codigo",
+      "title": "El modulo cliente deberia importar lo minimo necesario",
+      "subtitle": "`import type` permite depender de una interfaz sin traer codigo",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "Un módulo puede contener tipos, funciones, constantes y estado.",
+              "content": "El modulo cliente conoce `IStack<T>`, no `ArrayStack<T>`.",
               "level": 0
             },
             {
-              "content": "Expone una interfaz seleccionada y oculta decisiones internas.",
+              "content": "La interfaz visible alcanza para verificar llamadas.",
               "level": 0
             },
             {
-              "content": "Declara dependencias con otros módulos.",
-              "level": 0
-            },
-            {
-              "content": "Puede constituir una unidad de compilación y despliegue.",
-              "level": 0
-            },
-            {
-              "content": "Su frontera debería coincidir con una responsabilidad coherente.",
+              "content": "La implementacion concreta se decide en otra unidad.",
               "level": 0
             }
           ]
-        },
-        {
-          "type": "text",
-          "content": "`[Sebesta, §11.6 · Gabbrielli/Martini, §9.3]`"
         }
       ],
-      "code_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "// cliente.ts\nimport type { IStack } from \"./stack.js\";\n\nexport function copiar<T>(origen: IStack<T>, destino: IStack<T>): void {\n  while (origen.size > 0) {\n    const item = origen.pop();\n    if (item !== undefined) destino.push(item);\n  }\n}"
+        }
+      ],
       "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
         "table": "none"
       },
       "image": {
-        "layer": "content",
-        "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
+        "layer": "none",
+        "prompt": "",
         "local_asset": "",
         "drive_id": null
       },
@@ -726,17 +588,12 @@
     {
       "id": "F-17",
       "type": "tabla-comparativa",
-      "title": "Tipo, módulo, paquete y servicio operan en escalas distintas",
-      "subtitle": "Programar “en pequeño” y “en grande” exige mecanismos diferentes",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`[Gabbrielli/Martini, §9.3 · Sebesta, §11.6]`"
-        }
-      ],
+      "title": "Compilacion separada no significa compilar a ciegas",
+      "subtitle": "Para compilar separado, el compilador necesita contratos",
+      "body_blocks": [],
       "code_blocks": [],
       "tables": [
-        "| Unidad | Organiza | Frontera observable | Evolución |\n|---|---|---|---|\n| Tipo | Valores relacionados | Campos, casos u operaciones | Compilación |\n| Módulo | Código cohesivo | Exportaciones e imports | Recompilación |\n| Paquete | Biblioteca distribuible | API y versión | Gestor de dependencias |\n| Servicio | Capacidad desplegada | Protocolo de red | Despliegue independiente |"
+        "| Modelo | Que conoce cada unidad | Riesgo |\n|---|---|---|\n| Compilacion independiente | Solo su propio codigo | Errores aparecen al enlazar o ejecutar |\n| Compilacion separada | Interfaces de las unidades usadas | Requiere mantener contratos disponibles |\n| TypeScript moderno | `.ts` y `.d.ts` de dependencias | Tipos borrados en runtime |\n| Modula-2/Ada | Definicion/spec separada del cuerpo | Cambio de spec recompila clientes |"
       ],
       "layout": {
         "title": "full-title",
@@ -747,37 +604,33 @@
       },
       "image": {
         "layer": "none",
-        "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
-        "local_asset": "slides/assets/F-17-bg.png",
+        "prompt": "",
+        "local_asset": "",
         "drive_id": null
       },
       "table_assets": []
     },
     {
       "id": "F-18",
-      "type": "tabla-comparativa",
-      "title": "Los lenguajes modernos seleccionan una API pública",
-      "subtitle": "La visibilidad convierte una frontera conceptual en una regla verificable",
-      "body_blocks": [
+      "type": "tabla-mixta",
+      "title": "Modula-2 muestra la separacion de forma clasica",
+      "subtitle": "El cliente compila contra la definicion, no contra el cuerpo",
+      "body_blocks": [],
+      "code_blocks": [
         {
-          "type": "text",
-          "content": "`[Louden/Lambert, §11.3, pp. 503-509]`"
-        },
-        {
-          "type": "text",
-          "content": "> En los tres casos, la interfaz pública es menor que el conjunto de decisiones internas."
+          "lang": "modula2",
+          "content": "DEFINITION MODULE Stack;\n  TYPE Stack;\n  PROCEDURE Push(VAR s: Stack; x: INTEGER);\n  PROCEDURE Pop(VAR s: Stack): INTEGER;\nEND Stack."
         }
       ],
-      "code_blocks": [],
       "tables": [
-        "| Unidad | Contenido | Quién necesita verla |\n|---|---|---|\n| Rust | Elementos `pub` frente a privados | El crate y sus clientes |\n| Kotlin | Visibilidad `public`, `internal` y `private` | El módulo de compilación |\n| Go | Nombres exportados con mayúscula | Otros packages |"
+        "| Archivo | Rol |\n|---|---|\n| `DEFINITION MODULE Stack` | Publica tipo abstracto y operaciones |\n| `IMPLEMENTATION MODULE Stack` | Define representacion y algoritmos |\n| Cliente | Importa la definicion y no ve el record interno |"
       ],
       "layout": {
         "title": "full-title",
-        "body": "table-intro",
+        "body": "left-top-split",
         "image": "none",
-        "code": "none",
-        "table": "table-main"
+        "code": "left-bottom-split",
+        "table": "right-half"
       },
       "image": {
         "layer": "none",
@@ -789,50 +642,20 @@
     },
     {
       "id": "F-19",
-      "type": "concepto-mixto",
-      "title": "TypeScript separa interfaz estática y código ejecutable",
-      "subtitle": "Tipos y valores ocupan espacios relacionados, pero distintos",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "`export interface` describe un contrato solo para el compilador.",
-              "level": 0
-            },
-            {
-              "content": "`export class` produce también un valor JavaScript en runtime.",
-              "level": 0
-            },
-            {
-              "content": "`import type` declara una dependencia exclusivamente estática.",
-              "level": 0
-            },
-            {
-              "content": "Los archivos `.d.ts` publican tipos sin implementación.",
-              "level": 0
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "content": "> Contraste: Rust, Kotlin y Go conservan fronteras de módulo en compilación; TypeScript borra las interfaces al emitir JavaScript."
-        }
+      "type": "tabla",
+      "title": "Los archivos `.d.ts` publican una interfaz de compilacion",
+      "subtitle": "Un cliente puede compilar contra declaraciones, no contra cuerpos",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Pieza | Funcion |\n|---|---|\n| `stack.ts` | Contiene interfaz e implementacion fuente |\n| `stack.d.ts` | Expone declaraciones de tipos |\n| Cliente | Verifica llamadas contra esas declaraciones |\n| Cuerpo compilado | Puede cambiar si conserva la interfaz declarada |"
       ],
-      "code_blocks": [
-        {
-          "lang": "typescript",
-          "content": "import type { PaymentGateway } from \"./payments.js\";\nimport { createCheckout } from \"./checkout.js\";\ndeclare const gateway: PaymentGateway;\nconst checkout = createCheckout(gateway);"
-        }
-      ],
-      "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
+        "body": "table-intro",
         "image": "none",
-        "code": "right-half",
-        "table": "none"
+        "code": "none",
+        "table": "table-main"
       },
       "image": {
         "layer": "none",
@@ -844,54 +667,20 @@
     },
     {
       "id": "F-20",
-      "type": "concepto-mixto",
-      "title": "Las dependencias explícitas documentan arquitectura",
-      "subtitle": "Un import es una relación que debe poder justificarse",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Permite conocer qué servicios externos necesita un módulo.",
-              "level": 0
-            },
-            {
-              "content": "Ayuda al compilador a ordenar y verificar unidades.",
-              "level": 0
-            },
-            {
-              "content": "Permite detectar ciclos y cambios que requieren recompilación.",
-              "level": 0
-            },
-            {
-              "content": "Imports amplios aumentan acoplamiento.",
-              "level": 0
-            },
-            {
-              "content": "Depender de interfaces suele preservar más opciones.",
-              "level": 0
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "content": "`[Louden/Lambert, §11.2, pp. 500-503]`"
-        }
+      "type": "tabla-comparativa",
+      "title": "Los genericos vuelven reusable al ADT",
+      "subtitle": "En 13B el generico parametriza tipos completos, no solo funciones",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Sin genericos | Con genericos |\n|---|---|\n| `NumberStack`, `StringStack`, `UserStack` | `Stack<T>` |\n| Codigo duplicado por tipo | Una implementacion parametrizada |\n| Mas riesgo de divergencia | Un solo contrato reusable |\n| Cambios repetidos | Cambios en un punto |"
       ],
-      "code_blocks": [
-        {
-          "lang": "typescript",
-          "content": "import type { PaymentGateway } from \"./payments.js\";\n// El módulo depende del contrato, no de una implementación concreta."
-        }
-      ],
-      "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
+        "body": "table-intro",
         "image": "none",
-        "code": "right-half",
-        "table": "none"
+        "code": "none",
+        "table": "table-main"
       },
       "image": {
         "layer": "none",
@@ -903,28 +692,24 @@
     },
     {
       "id": "F-21",
-      "type": "concepto-mixto",
-      "title": "Un ciclo de dependencias revela responsabilidades mezcladas",
-      "subtitle": "Romper ciclos suele exigir introducir una abstracción",
+      "type": "codigo",
+      "title": "`Stack<T>` conserva el tipo de cada elemento",
+      "subtitle": "El parametro `T` viaja por operaciones, retornos e invariantes",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "`pedidos` usa `pagos` para cobrar.",
+              "content": "La estructura es la misma.",
               "level": 0
             },
             {
-              "content": "`pagos` usa `pedidos` para actualizar estado.",
+              "content": "El contrato cambia con el tipo de elemento.",
               "level": 0
             },
             {
-              "content": "Ninguno puede comprenderse o probarse aisladamente.",
-              "level": 0
-            },
-            {
-              "content": "Un contrato de eventos o servicio compartido puede invertir la dependencia.",
+              "content": "El compilador impide mezclar `Usuario` con `number`.",
               "level": 0
             }
           ]
@@ -932,16 +717,16 @@
       ],
       "code_blocks": [
         {
-          "lang": "text",
-          "content": "pedidos -> pagos -> pedidos\n          |\n          v\n    eventos-de-pago"
+          "lang": "typescript",
+          "content": "const numeros = new ArrayStack<number>();\nnumeros.push(10);\nconst n = numeros.pop(); // number | undefined\n\nconst usuarios = new ArrayStack<Usuario>();\nusuarios.push({ id: \"u1\", nombre: \"Ada\" });\nconst u = usuarios.peek(); // Usuario | undefined"
         }
       ],
       "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
+        "body": "subtitle-only",
         "image": "none",
-        "code": "right-half",
+        "code": "full-bottom",
         "table": "none"
       },
       "image": {
@@ -954,50 +739,33 @@
     },
     {
       "id": "F-22",
-      "type": "concepto-abstracto",
-      "title": "Un grafo modular revela acoplamiento",
-      "subtitle": "Dependencias dirigidas permiten localizar ciclos",
+      "type": "codigo",
+      "title": "Un constraint solo aparece cuando el codigo lo necesita",
+      "subtitle": "Restringir `T` de mas reduce reutilizacion sin ganar seguridad",
       "body_blocks": [
         {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "`pedidos` depende de contratos de usuarios y pagos.",
-              "level": 0
-            },
-            {
-              "content": "`pagos` publica eventos sin depender de pedidos.",
-              "level": 0
-            },
-            {
-              "content": "`notificaciones` consume eventos y permanece periférico.",
-              "level": 0
-            },
-            {
-              "content": "Una interfaz compartida invierte dependencias concretas.",
-              "level": 0
-            },
-            {
-              "content": "El grafo acíclico permite comprender y probar módulos por separado.",
-              "level": 0
-            }
-          ]
+          "type": "text",
+          "content": "> Si la estructura solo apila y desapila, no necesita `Comparable<T>`."
         }
       ],
-      "code_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "interface Comparable<T> {\n  compareTo(other: T): number;\n}\n\nclass SortedSet<T extends Comparable<T>> {\n  private readonly items: T[] = [];\n\n  add(item: T): void {\n    // El constraint existe porque ordenamos con compareTo.\n  }\n}"
+        }
+      ],
       "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
         "table": "none"
       },
       "image": {
-        "layer": "content",
-        "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
-        "local_asset": "slides/assets/F-22-bg.png",
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
         "drive_id": null
       },
       "table_assets": []
@@ -1005,21 +773,12 @@
     {
       "id": "F-23",
       "type": "tabla-comparativa",
-      "title": "Compilar por separado no significa compilar sin contexto",
-      "subtitle": "Compilación incremental necesita contratos y grafos confiables",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`[Louden/Lambert, §11.2 · Sebesta, §11.6]`"
-        },
-        {
-          "type": "text",
-          "content": "> Separar archivos no alcanza: el sistema de build debe conocer contratos, versiones y dependencias."
-        }
-      ],
+      "title": "Los constraints son contratos sobre capacidades",
+      "subtitle": "Cada constraint debe corresponder a una operacion real",
+      "body_blocks": [],
       "code_blocks": [],
       "tables": [
-        "| Mecanismo moderno | Unidad y contexto | Beneficio |\n|---|---|---|\n| TypeScript Project References | Proyectos con contratos `.d.ts` | Builds incrementales y límites explícitos |\n| Crates de Rust | Paquetes compilados con dependencias verificadas | Privacidad y chequeo estático |\n| Packages y modules de Go | Imports y versiones declaradas | Builds reproducibles |\n| Caché de compilación | Artefactos identificados por entradas | Evitar trabajo no afectado |"
+        "| Estructura | Operacion que exige capacidad | Constraint razonable |\n|---|---|---|\n| `Stack<T>` | Guardar y devolver elementos | Ninguno |\n| `SortedSet<T>` | Ordenar sin comparador externo | `T extends Comparable<T>` |\n| `IdentifiedSet<E>` | Buscar por identidad | `E extends { id: Id }` |\n| `Serializer<T>` | Codificar y decodificar | Codec externo o interfaz explicita |"
       ],
       "layout": {
         "title": "full-title",
@@ -1038,20 +797,42 @@
     },
     {
       "id": "F-24",
-      "type": "tabla",
-      "title": "La interfaz determina el impacto de un cambio",
-      "subtitle": "No todo cambio compatible obliga a revisar clientes",
-      "body_blocks": [],
-      "code_blocks": [],
-      "tables": [
-        "| Cambio | ¿Cambia la interfaz? | Impacto esperado |\n|---|---|---|\n| Optimizar un algoritmo privado | No | Recompilar o redesplegar implementación |\n| Cambiar proveedor interno | No | Verificar contrato y operación |\n| Agregar un parámetro público | Sí | Revisar clientes |\n| Cambiar el tipo de retorno | Sí | Revisar clientes |\n| Alterar semántica sin cambiar firma | No sintácticamente | Riesgo de ruptura semántica |"
+      "type": "codigo",
+      "title": "Devolver datos internos puede romper el ADT",
+      "subtitle": "Una copia de solo lectura preserva mejor el ocultamiento",
+      "body_blocks": [
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "El cliente no puede hacer `push` sobre el array retornado.",
+              "level": 0
+            },
+            {
+              "content": "La representacion interna no escapa.",
+              "level": 0
+            },
+            {
+              "content": "Si `T` es mutable, la copia no vuelve inmutable a cada objeto.",
+              "level": 0
+            }
+          ]
+        }
       ],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "class Stack<T> {\n  private readonly datos: T[] = [];\n\n  toArray(): readonly T[] {\n    return [...this.datos]; // copia superficial\n  }\n}"
+        }
+      ],
+      "tables": [],
       "layout": {
         "title": "full-title",
-        "body": "table-intro",
+        "body": "subtitle-only",
         "image": "none",
-        "code": "none",
-        "table": "table-main"
+        "code": "full-bottom",
+        "table": "none"
       },
       "image": {
         "layer": "none",
@@ -1063,37 +844,49 @@
     },
     {
       "id": "F-25",
-      "type": "concepto-mixto",
-      "title": "Un paquete publica una superficie seleccionada",
-      "subtitle": "La API pública debe ser más pequeña que el código interno",
+      "type": "tabla-mixta",
+      "title": "Caso integrador: `Set<T>` como modulo con interfaz",
+      "subtitle": "El cliente depende de operaciones, no de buckets internos",
+      "body_blocks": [],
+      "code_blocks": [
+        {
+          "lang": "typescript",
+          "content": "export interface ISet<T> {\n  add(item: T): void;\n  has(item: T): boolean;\n  delete(item: T): boolean;\n}"
+        }
+      ],
+      "tables": [
+        "| Elemento | Debe ser publico? | Motivo |\n|---|---|---|\n| `add` | Si | Operacion central del conjunto |\n| `has` | Si | Consulta observable |\n| `buckets` | No | Representacion interna |\n| `rehash` | No | Algoritmo auxiliar |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-top-split",
+        "image": "none",
+        "code": "left-bottom-split",
+        "table": "right-half"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-26",
+      "type": "demo",
+      "title": "Actividad breve: decidir una interfaz publica",
+      "subtitle": "Si todo es publico, nada queda protegido",
       "body_blocks": [
         {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "`exports` selecciona puntos de entrada soportados.",
-              "level": 0
-            },
-            {
-              "content": "`package.json` describe versiones y dependencias.",
-              "level": 0
-            },
-            {
-              "content": "`.d.ts` comunica contratos a consumidores TypeScript.",
-              "level": 0
-            },
-            {
-              "content": "Versionar implica gestionar cambios sintácticos y semánticos.",
-              "level": 0
-            }
-          ]
+          "type": "text",
+          "content": "> Pregunta: cuales son operaciones del tipo y cuales son detalles de representacion?"
         }
       ],
       "code_blocks": [
         {
           "lang": "typescript",
-          "content": "// index.ts\nexport type { PaymentGateway } from \"./payments.js\";\nexport { createCheckout } from \"./checkout.js\";\n// No exporta adaptadores ni helpers internos."
+          "content": "export interface ISet<T> {\n  add(item: T): void;\n  has(item: T): boolean;\n  delete(item: T): boolean;\n\n  // Candidatos:\n  // size(): number\n  // values(): readonly T[]\n  // rawBuckets(): T[][]\n  // rehash(): void\n}"
         }
       ],
       "tables": [],
@@ -1113,68 +906,14 @@
       "table_assets": []
     },
     {
-      "id": "F-26",
-      "type": "concepto-abstracto",
-      "title": "La modularidad permite trabajo y evolución independientes",
-      "subtitle": "Un buen módulo reduce el conocimiento necesario para cambiar el sistema",
-      "body_blocks": [
-        {
-          "type": "list",
-          "ordered": false,
-          "items": [
-            {
-              "content": "Alta cohesión: sus elementos colaboran en una responsabilidad clara.",
-              "level": 0
-            },
-            {
-              "content": "Bajo acoplamiento: depende de pocos contratos estables.",
-              "level": 0
-            },
-            {
-              "content": "Interfaz pequeña: ofrece lo necesario, no todos los detalles disponibles.",
-              "level": 0
-            },
-            {
-              "content": "Dependencias explícitas: permiten analizar impacto.",
-              "level": 0
-            },
-            {
-              "content": "Implementación oculta: conserva libertad de evolución.",
-              "level": 0
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "content": "`[Sebesta, §11.6 · Louden/Lambert, cap. 11]`"
-        }
-      ],
-      "code_blocks": [],
-      "tables": [],
-      "layout": {
-        "title": "full-title",
-        "body": "left-middle",
-        "image": "right-half",
-        "code": "none",
-        "table": "none"
-      },
-      "image": {
-        "layer": "content",
-        "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
-        "local_asset": "slides/assets/F-26-content.png",
-        "drive_id": null
-      },
-      "table_assets": []
-    },
-    {
       "id": "F-27",
       "type": "tabla-comparativa",
-      "title": "Una API versionada clasifica cambios por compatibilidad",
-      "subtitle": "La visibilidad y la versión comunican compromisos distintos",
+      "title": "Cambiar una interfaz cambia el costo para clientes",
+      "subtitle": "La compatibilidad depende de que promesa publica se modifica",
       "body_blocks": [],
       "code_blocks": [],
       "tables": [
-        "| Cambio | Compatibilidad esperada | Tratamiento |\n|---|---|---|\n| Corregir implementación privada | Compatible | Patch |\n| Agregar capacidad opcional | Usualmente compatible | Minor |\n| Quitar exportación pública | Incompatible | Major |\n| Cambiar significado conservando firma | Potencialmente incompatible | Documentar y versionar |\n| Ampliar casos de un tipo cerrado | Depende de exhaustividad del cliente | Evaluar como ruptura |"
+        "| Cambio | Rompe clientes? | Lectura didactica |\n|---|---|---|\n| Optimizar algoritmo privado | No | Implementacion interna |\n| Cambiar array por lista enlazada | No, si conserva contrato | Independencia de representacion |\n| Agregar parametro obligatorio | Si | Cambia la interfaz |\n| Cambiar significado sin cambiar tipo | Puede romper | Ruptura semantica |\n| Quitar exportacion | Si | Cambio de interfaz publica |"
       ],
       "layout": {
         "title": "full-title",
@@ -1185,8 +924,8 @@
       },
       "image": {
         "layer": "none",
-        "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
-        "local_asset": "slides/assets/F-27-bg.png",
+        "prompt": "",
+        "local_asset": "",
         "drive_id": null
       },
       "table_assets": []
@@ -1194,12 +933,12 @@
     {
       "id": "F-28",
       "type": "tabla",
-      "title": "La progresión completa va de operación a arquitectura",
-      "subtitle": "Cada nivel oculta una clase diferente de decisiones",
+      "title": "Sintesis: cada nivel oculta una decision distinta",
+      "subtitle": "De subprograma a modulo, crece la frontera de abstraccion",
       "body_blocks": [],
       "code_blocks": [],
       "tables": [
-        "| Nivel | Abstrae | Oculta | Contrato visible |\n|---|---|---|---|\n| Subprograma | Una acción | Instrucciones y estado local | Perfil y protocolo |\n| Tipo algebraico | Casos de un dato | Representación concreta de variantes | Constructores y patrones |\n| Módulo | Un subsistema | Tipos, funciones y recursos internos | Exportaciones e imports |\n| Paquete | Una biblioteca distribuible | Organización y construcción internas | API, tipos y versión |\n| Servicio | Una capacidad desplegada | Procesos e infraestructura | Protocolo y política operativa |"
+        "| Nivel | Lo que abstrae | Lo que oculta |\n|---|---|---|\n| Subprograma | Una accion | Instrucciones y variables locales |\n| ADT | Un conjunto de valores y operaciones | Representacion e invariantes internas |\n| Interfaz | Capacidades esperadas | Implementaciones concretas |\n| Modulo | Un conjunto cohesivo de nombres | Helpers, dependencias y estructura interna |\n| Unidad de compilacion | Archivo o conjunto compilable | Cuerpo, helpers y dependencias internas |"
       ],
       "layout": {
         "title": "full-title",
@@ -1218,58 +957,28 @@
     },
     {
       "id": "F-29",
-      "type": "tabla",
-      "title": "Un contrato útil combina tipos, semántica y evolución",
-      "subtitle": "La firma dice qué puede llamarse; el contrato dice qué significa",
-      "body_blocks": [
-        {
-          "type": "text",
-          "content": "`[Louden/Lambert, §11.1 · Sebesta, cap. 11]`"
-        }
-      ],
-      "code_blocks": [],
-      "tables": [
-        "| Parte del contrato | Garantía |\n|---|---|\n| Tipos | Descartan muchas llamadas inválidas |\n| Invariantes | Restringen estados válidos |\n| Precondiciones y postcondiciones | Relacionan entradas, efectos y resultados |\n| Tests de contrato | Vuelven ejecutables las expectativas |\n| Documentación | Comunica garantías a clientes |\n| Política de versión | Comunica cómo puede evolucionar la API |"
-      ],
-      "layout": {
-        "title": "full-title",
-        "body": "table-intro",
-        "image": "none",
-        "code": "none",
-        "table": "table-main"
-      },
-      "image": {
-        "layer": "none",
-        "prompt": "",
-        "local_asset": "",
-        "drive_id": null
-      },
-      "table_assets": []
-    },
-    {
-      "id": "F-30",
       "type": "cierre",
       "title": "Cierre 13B",
-      "subtitle": "Modularidad es preservar libertad de cambio",
+      "subtitle": "Modularidad es conservar libertad de cambio",
       "body_blocks": [
         {
           "type": "list",
           "ordered": false,
           "items": [
             {
-              "content": "El tipo algebraico modela un conjunto cerrado de formas de datos.",
+              "content": "Un ADT protege una representacion mediante operaciones con sentido.",
               "level": 0
             },
             {
-              "content": "La interfaz establece capacidades que implementaciones abiertas deben cumplir.",
+              "content": "Una interfaz publica transforma decisiones en promesas.",
               "level": 0
             },
             {
-              "content": "El módulo agrupa decisiones y declara dependencias.",
+              "content": "Un modulo hace visibles solo los nombres necesarios.",
               "level": 0
             },
             {
-              "content": "El paquete publica una API versionada y limita el impacto de cambios.",
+              "content": "Un generico reutiliza la estructura sin mezclar tipos.",
               "level": 0
             }
           ]
@@ -1277,7 +986,11 @@
         {
           "type": "heading",
           "level": 2,
-          "content": "Criterio final: una decisión verdaderamente interna puede cambiar sin romper clientes"
+          "content": "Criterio final"
+        },
+        {
+          "type": "text",
+          "content": "Una decision es verdaderamente interna si puede cambiar sin romper clientes."
         }
       ],
       "code_blocks": [],
@@ -1291,28 +1004,11 @@
       },
       "image": {
         "layer": "background",
-        "prompt": "Balanced composition of bordo circles and dark gray rectangles connected by thin lines on white background, with clear empty space. Flat design. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
-        "local_asset": "slides/assets/F-30-bg.png",
+        "prompt": "Cinco cajas simples en columna ascendente, de gris claro a bordo oscuro, conectadas por una linea fina vertical. Fondo blanco. Sin texto, sin letras, sin etiquetas, sin codigo, sin numeros. Alta resolucion.",
+        "local_asset": "slides/assets/F-29-bg.png",
         "drive_id": null
       },
       "table_assets": []
     }
-  ],
-  "summary": {
-    "total_slides": 31,
-    "images_planned": 6,
-    "tables_planned": 14,
-    "code_slides": 11,
-    "status": "READY_FOR_VALIDATION",
-    "pending_types": 0,
-    "pending_prompts": 0,
-    "type_distribution": {
-      "portada": 1,
-      "tabla-comparativa": 11,
-      "concepto-mixto": 11,
-      "concepto-abstracto": 4,
-      "tabla": 3,
-      "cierre": 1
-    }
-  }
+  ]
 }
