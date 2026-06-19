@@ -1,0 +1,2240 @@
+{
+  "$schema_version": "plan-filminas/v3",
+  "meta": {
+    "topic_id": "15-concurrencia-paralelismo",
+    "title": "Concurrencia y Paralelismo",
+    "source": "filminas.md",
+    "generated_at": "2026-06-19T12:34:46",
+    "template_id": "1mGncfOizGbRHXNo5xqi9wfqePnlnGKbZUtlvTysYMsI",
+    "topics_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas",
+    "topic_folder": "C:\\Users\\matia\\paradigmas2026\\salida\\cursadas\\2026\\temas\\15-concurrencia-paralelismo",
+    "design_system_path": "_edu/slides-config.yaml",
+    "pipeline_runtime_path": "_edu/slides-pipeline.json",
+    "schema_registry_path": "_edu/schemas/schema-registry.json"
+  },
+  "summary": {
+    "total_slides": 33,
+    "images_planned": 10,
+    "tables_planned": 8,
+    "code_slides": 22,
+    "status": "READY_FOR_VALIDATION",
+    "pending_types": 0,
+    "pending_prompts": 0,
+    "type_distribution": {
+      "portada": 1,
+      "socratica": 1,
+      "tabla-comparativa": 5,
+      "concepto-abstracto": 5,
+      "demo": 1,
+      "concepto-mixto": 5,
+      "codigo": 10,
+      "tabla": 2,
+      "diagrama": 2,
+      "cierre": 1
+    }
+  },
+  "slides": [
+    {
+      "id": "F-00",
+      "type": "portada",
+      "title": "Concurrencia y Paralelismo",
+      "subtitle": "Concurrencia y Paralelismo",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tema 15 — Modulo XI"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Lenguaje principal: TypeScript",
+              "level": 0
+            },
+            {
+              "content": "Contrastes: Java, C#, Go, Kotlin, Erlang, Rust",
+              "level": 0
+            },
+            {
+              "content": "Pregunta guia: que puede avanzar a la vez y que debe coordinarse?",
+              "level": 0
+            },
+            {
+              "content": "Recorrido: fundamentos, sincronizacion, modelos de comunicacion y lenguajes modernos",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Large dark red circle centered behind two overlapping gray rectangles. Thin curved lines radiate outward toward small dark gray dots. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin c?digo, sin n?meros. Alta resoluci?n.",
+        "local_asset": "slides/assets/F-00-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-01",
+      "type": "socratica",
+      "title": "Un resultado que cambia solo con el orden",
+      "subtitle": "Si dos unidades modifican el mismo dato, quien decide el valor final?",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El caso TOTAL"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Si A completa antes que B: resultado = 6",
+              "level": 0
+            },
+            {
+              "content": "Si B completa antes que A: resultado = 4",
+              "level": 0
+            },
+            {
+              "content": "Si se intercalan (interleaving): puede ser 4, 6, 7 u 8",
+              "level": 0
+            },
+            {
+              "content": "Leer–calcular–escribir **no es una operacion atomica**",
+              "level": 0
+            },
+            {
+              "content": "El problema no es el lenguaje: es estado compartido sin coordinacion",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "TOTAL := 3                       -- valor inicial compartido\n\n-- Tarea A                       -- Tarea B\nx := TOTAL  -- lee 3             x := TOTAL  -- lee 3\nx := x + 1  -- calcula 4         x := x * 2  -- calcula 6\nTOTAL := x  -- escribe 4         TOTAL := x  -- escribe 6"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "center-top",
+        "body": "center-middle",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Two dark gray rectangles side by side feeding into one red square at the bottom through thin crossing arrows. One pale gray circle behind the arrows. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin c?digo, sin n?meros. Alta resoluci?n.",
+        "local_asset": "slides/assets/F-01-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-02",
+      "type": "tabla-comparativa",
+      "title": "Concurrencia, paralelismo, asincronia y threads: cuatro preguntas distintas",
+      "subtitle": "No son sinonimos; cada termino responde una pregunta diferente",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lo que importa para este curso"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Un programa puede ser **concurrente sin ser paralelo** (un nucleo, multitarea)",
+              "level": 0
+            },
+            {
+              "content": "Un programa puede ser **asincrono sin ser concurrente** (single event loop, un handler a la vez)",
+              "level": 0
+            },
+            {
+              "content": "**Paralelismo necesita hardware multiple**; concurrencia no",
+              "level": 0
+            },
+            {
+              "content": "El foco de esta clase es la *concurrencia a nivel de subprogramas*",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Termino | Pregunta que responde | Ejemplo concreto |\n|---------|----------------------|------------------|\n| Concurrencia | ¿Varias actividades progresan solapadas? | Dos tareas alternando en un nucleo |\n| Paralelismo | ¿Ejecutan simultaneamente en hardware? | Dos nucleos corriendo al mismo tiempo |\n| Asincronia | ¿Puedo continuar mientras espero? | `await fetch(url)` sin bloquear |\n| Thread | ¿Quien ejecuta instrucciones? | Unidad de ejecucion del OS |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Termino | Pregunta que responde | Ejemplo concreto |\n|---------|----------------------|------------------|\n| Concurrencia | ¿Varias actividades progresan solapadas? | Dos tareas alternando en un nucleo |\n| Paralelismo | ¿Ejecutan simultaneamente en hardware? | Dos nucleos corriendo al mismo tiempo |\n| Asincronia | ¿Puedo continuar mientras espero? | `await fetch(url)` sin bloquear |\n| Thread | ¿Quien ejecuta instrucciones? | Unidad de ejecucion del OS |",
+          "local_asset": "slides/assets/F-02-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-03",
+      "type": "concepto-abstracto",
+      "title": "Concurrencia fisica vs concurrencia logica",
+      "subtitle": "El hardware y el lenguaje ofrecen dos niveles de concurrencia",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Concurrencia fisica"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Requiere multiprocesadores o multinucleo",
+              "level": 0
+            },
+            {
+              "content": "Ejecucion simultanea efectiva",
+              "level": 0
+            },
+            {
+              "content": "El runtime mapea tareas logicas a nucleos disponibles",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Concurrencia logica (multiprogramacion)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Un solo nucleo intercala tareas rapidamente",
+              "level": 0
+            },
+            {
+              "content": "El programador ve avance simultane",
+              "level": 0
+            },
+            {
+              "content": "El scheduler decide el orden real",
+              "level": 0
+            },
+            {
+              "content": "Es **la abstraccion central para razonar sobre concurrencia en lenguajes**",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por que importa la distincion"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Un programa correcto en logica debe serlo independientemente del hardware",
+              "level": 0
+            },
+            {
+              "content": "Las condiciones de carrera aparecen **en ambos niveles**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Two horizontal layers stacked vertically. Top layer has three dark gray circles in a row, bottom layer has one red rounded rectangle. Thin vertical arrows connect both layers. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin c?digo, sin n?meros. Alta resoluci?n.",
+        "local_asset": "slides/assets/F-03-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-04",
+      "type": "concepto-abstracto",
+      "title": "Concurrencia a nivel de subprogramas",
+      "subtitle": "Un programa se divide en unidades que avanzan independientemente",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "La idea central"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "La unidad concurrente puede ser una **tarea, un thread, un proceso liviano o una corrutina**",
+              "level": 0
+            },
+            {
+              "content": "El nombre no importa; lo que importa es el **avance independiente**",
+              "level": 0
+            },
+            {
+              "content": "El lenguaje define que operaciones se permiten y como se coordinan",
+              "level": 0
+            },
+            {
+              "content": "El runtime decide cuanto de eso se ejecuta en paralelo real",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Dos preguntas que el lenguaje debe responder"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**¿Como se crean las unidades concurrentes?** (palabras reservadas, librerias, corrutinas)",
+              "level": 0
+            },
+            {
+              "content": "**¿Como se sincronizan y comunican?** (semaforos, monitores, mensajes, canales)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Consecuencias de diseno"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Lenguajes con soporte nativo (Go, Rust) hacen visible la concurrencia en la sintaxis",
+              "level": 0
+            },
+            {
+              "content": "Lenguajes con librerias (Java, C#) la delegan a clases y frameworks",
+              "level": 0
+            },
+            {
+              "content": "Lenguajes funcionales (Erlang) eliminan el estado compartido y usan mensajes",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Five small dark gray rectangles arranged around a central red circle. Thin arrows point from the rectangles toward the circle and outward again. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin c?digo, sin n?meros. Alta resoluci?n.",
+        "local_asset": "slides/assets/F-04-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-05",
+      "type": "tabla-comparativa",
+      "title": "Tarea, thread, proceso y corrutina como unidades concurrentes",
+      "subtitle": "Separar concepto, mecanismo y costo de creacion evita confusiones",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Que comparten los threads pero no los procesos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Heap, variables globales y descriptores de archivo",
+              "level": 0
+            },
+            {
+              "content": "Por eso la condicion de carrera existe: comparten estado mutable",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Unidad | Nivel | Memoria | Costo creacion | Lenguajes tipicos |\n|--------|-------|---------|----------------|-------------------|\n| Tarea (task) | Logico/concurrente | Comparte con proceso | Bajo-medio | Modelo conceptual del tema |\n| Thread | OS o runtime | Comparte heap del proceso | Medio | Java, C#, C++, TypeScript workers |\n| Proceso | OS | Espacio propio | Alto | C, Unix fork, microservicios |\n| Goroutine | Runtime (Go) | Stack dinamico propio | Muy bajo (~2 KB) | Go |\n| Corrutina | Lenguaje | Stack suspendible | Muy bajo | Kotlin, Python, Dart, TypeScript |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Unidad | Nivel | Memoria | Costo creacion | Lenguajes tipicos |\n|--------|-------|---------|----------------|-------------------|\n| Tarea (task) | Logico/concurrente | Comparte con proceso | Bajo-medio | Modelo conceptual del tema |\n| Thread | OS o runtime | Comparte heap del proceso | Medio | Java, C#, C++, TypeScript workers |\n| Proceso | OS | Espacio propio | Alto | C, Unix fork, microservicios |\n| Goroutine | Runtime (Go) | Stack dinamico propio | Muy bajo (~2 KB) | Go |\n| Corrutina | Lenguaje | Stack suspendible | Muy bajo | Kotlin, Python, Dart, TypeScript |",
+          "local_asset": "slides/assets/F-05-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-06",
+      "type": "demo",
+      "title": "Condicion de carrera: anatomia del problema",
+      "subtitle": "El error nace en la ilusoria atomicidad de leer-calcular-escribir",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En TypeScript con workers compartidos"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "En Java con threads"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tres condiciones para que haya carrera"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "Existe estado compartido mutable",
+              "level": 0
+            },
+            {
+              "content": "Al menos dos unidades lo acceden concurrentemente",
+              "level": 0
+            },
+            {
+              "content": "Al menos una lo modifica",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "// SharedArrayBuffer compartido entre workers\nconst sab = new SharedArrayBuffer(4);\nconst arr = new Int32Array(sab);\narr[0] = 3;\n\n// Worker A                    // Worker B\nconst x = arr[0];  // lee 3   const x = arr[0];  // lee 3\narr[0] = x + 1;    // = 4     arr[0] = x * 2;    // = 6\n// resultado final: 4 o 6, dependiendo del interleaving"
+        },
+        {
+          "lang": "java",
+          "content": "class Contador {\n  int total = 3;\n\n  void incrementar() { total = total + 1; } // no atomico\n  void duplicar()    { total = total * 2; } // no atomico\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-07",
+      "type": "concepto-abstracto",
+      "title": "Sincronizacion de competencia: la seccion critica",
+      "subtitle": "La seccion critica es la region donde el interleaving importa",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Definicion"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Seccion critica**: segmento de codigo que accede a un recurso compartido y **no debe ejecutarse concurrentemente** por mas de una tarea",
+              "level": 0
+            },
+            {
+              "content": "**Exclusion mutua**: solo una tarea puede estar dentro de la seccion critica a la vez",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Cuatro propiedades que debe garantizar cualquier solucion"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Exclusion mutua**: como maximo una unidad dentro",
+              "level": 0
+            },
+            {
+              "content": "**Progreso**: si nadie esta adentro y alguien quiere entrar, debe poder",
+              "level": 0
+            },
+            {
+              "content": "**Espera acotada**: nadie espera indefinidamente si el recurso esta libre periodicamente",
+              "level": 0
+            },
+            {
+              "content": "**Sin suposicion de velocidad**: la solucion funciona independientemente del scheduling",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por que no alcanza con un flag booleano simple"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Leer el flag y setearlo no es atomico → se puede generar carrera sobre el propio mecanismo",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "One red rectangle inside a thin dark gray outline box. Several small gray circles wait outside the outline in a neat vertical column. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin c?digo, sin n?meros. Alta resoluci?n.",
+        "local_asset": "slides/assets/F-07-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-08",
+      "type": "concepto-mixto",
+      "title": "Semaforos: el mecanismo clasico de Dijkstra",
+      "subtitle": "Un semaforo coordina acceso con un contador entero y una cola de espera",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Operaciones fundamentales"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Dos usos canonicos"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Semaforo binario (contador=1)**: exclusion mutua → actua como mutex",
+              "level": 0
+            },
+            {
+              "content": "**Semaforo contador (contador=N)**: limita N accesos simultaneos a un recurso",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Propiedad clave"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`wait` y `release` son operaciones **atomicas** — el hardware garantiza que no hay interleaving dentro de ellas",
+              "level": 0
+            },
+            {
+              "content": "El programador es responsable de usar el protocolo correctamente",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "wait(s):\n  si contador(s) > 0 entonces\n    contador(s) := contador(s) - 1\n  si no\n    suspender tarea actual en cola(s)\n  fin\n\nrelease(s):\n  si cola(s) no esta vacia entonces\n    despertar primera tarea de cola(s)\n  si no\n    contador(s) := contador(s) + 1\n  fin"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-09",
+      "type": "codigo",
+      "title": "Semaforos en codigo: exclusion mutua y cooperacion",
+      "subtitle": "El semaforo resuelve competencia y cooperacion con el mismo mecanismo",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Exclusion mutua con Atomics en TypeScript (workers)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Sincronizacion de cooperacion: productor/consumidor"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Un semaforo resuelve **competencia** (mutex) y **cooperacion** (lleno/vacio) por separado",
+              "level": 0
+            },
+            {
+              "content": "Combinar mal los Wait puede causar **deadlock**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "// SharedArrayBuffer compartido entre workers\nconst sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT);\nconst mutex = new Int32Array(sab); // 0 = libre, 1 = tomado\n\nfunction adquirir(): void {\n  // compareExchange atomico: si es 0, setear a 1 y continuar\n  while (Atomics.compareExchange(mutex, 0, 0, 1) !== 0) {\n    Atomics.wait(mutex, 0, 1); // suspender hasta que alguien libere\n  }\n}\n\nfunction liberar(): void {\n  Atomics.store(mutex, 0, 0); // liberar\n  Atomics.notify(mutex, 0, 1); // despertar un waiter\n}\n\n// Uso: seccion critica protegida\nadquirir();\ntotal = total + 1;\nliberar();"
+        },
+        {
+          "lang": "text",
+          "content": "-- Semaforos: lleno y vacio\nvacio : Semaphore := N;   -- cuantos lugares quedan libres\nlleno : Semaphore := 0;   -- cuantos elementos hay disponibles\n\nProductor:                 Consumidor:\n  loop                       loop\n    producir(item)             Wait(lleno)\n    Wait(vacio)                Wait(mutex)\n    Wait(mutex)                item := extraer()\n    insertar(item)             Release(mutex)\n    Release(mutex)             Release(vacio)\n    Release(lleno)             consumir(item)\n  end loop                   end loop"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-10",
+      "type": "tabla",
+      "title": "Errores tipicos con semaforos y su consecuencia",
+      "subtitle": "El poder del semaforo es proporcional al riesgo de usarlo mal",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por que los monitores existen"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Los errores de semaforos **no son detectables por el compilador**",
+              "level": 0
+            },
+            {
+              "content": "Los monitores encapsulan el estado y hacen el protocolo **estructural**, no opcional",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Error de protocolo | Causa | Efecto observable |\n|--------------------|-------|-------------------|\n| Olvidar `release` tras `wait` | El programador omite la llamada | Deadlock permanente |\n| `release` sin `wait` previo | Logica incorrecta | Otro thread entra en seccion critica — dato corrupto |\n| `wait` y `release` en orden invertido | Error de diseno | Deadlock o corrupcion segun timing |\n| Seccion critica demasiado pequeña | Protege solo parte del acceso | Carrera sobre el resto del codigo |\n| Seccion critica demasiado grande | Protege mas de lo necesario | Serializa trabajo que podria ser paralelo |\n| Semaforo compartido entre modulos distintos | Acoplamiento implicito | Bloqueo inesperado desde codigo remoto |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Error de protocolo | Causa | Efecto observable |\n|--------------------|-------|-------------------|\n| Olvidar `release` tras `wait` | El programador omite la llamada | Deadlock permanente |\n| `release` sin `wait` previo | Logica incorrecta | Otro thread entra en seccion critica — dato corrupto |\n| `wait` y `release` en orden invertido | Error de diseno | Deadlock o corrupcion segun timing |\n| Seccion critica demasiado pequeña | Protege solo parte del acceso | Carrera sobre el resto del codigo |\n| Seccion critica demasiado grande | Protege mas de lo necesario | Serializa trabajo que podria ser paralelo |\n| Semaforo compartido entre modulos distintos | Acoplamiento implicito | Bloqueo inesperado desde codigo remoto |",
+          "local_asset": "slides/assets/F-10-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-11",
+      "type": "concepto-mixto",
+      "title": "Monitores: encapsulamiento y exclusion automatica",
+      "subtitle": "Un monitor protege estado compartido con exclusion garantizada por el lenguaje",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Modelo de Hoare"
+        },
+        {
+          "type": "text",
+          "content": "Un monitor es una abstraccion con tres partes:\n1. **Estado privado**: solo accesible desde dentro del monitor\n2. **Procedimientos sincronizados**: la entrada al monitor garantiza exclusion mutua automatica\n3. **Variables de condicion**: permiten que una tarea espere dentro del monitor sin bloquear a otras"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Monitor en Java (keyword `synchronized`)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`synchronized` es la palabra que convierte el metodo en procedimiento de monitor",
+              "level": 0
+            },
+            {
+              "content": "`wait()` suspende dentro del monitor **y libera el lock temporalmente**",
+              "level": 0
+            },
+            {
+              "content": "`notifyAll()` despierta a todos los que esperan para que re-evaluen la condicion",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "java",
+          "content": "class BufferMonitor<T> {\n  private final Queue<T> cola = new ArrayDeque<>();\n  private final int capacidad;\n\n  BufferMonitor(int cap) { this.capacidad = cap; }\n\n  synchronized void insertar(T item) throws InterruptedException {\n    while (cola.size() == capacidad) wait();  // espera si lleno\n    cola.add(item);\n    notifyAll();                               // avisa que hay dato\n  }\n\n  synchronized T extraer() throws InterruptedException {\n    while (cola.isEmpty()) wait();            // espera si vacio\n    T item = cola.poll();\n    notifyAll();                              // avisa que hay lugar\n    return item;\n  }\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-12",
+      "type": "concepto-mixto",
+      "title": "Monitores con variables de condicion: cooperacion explicita",
+      "subtitle": "Las variables de condicion permiten coordinar el orden de ejecucion dentro del monitor",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Variables de condicion"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Permiten a una tarea **esperar** dentro del monitor hasta que se cumpla una condicion",
+              "level": 0
+            },
+            {
+              "content": "Dos operaciones: `wait(c)` — suspender en cola de c; `signal(c)` — despertar una tarea de c",
+              "level": 0
+            },
+            {
+              "content": "`wait(c)` **libera el lock del monitor** mientras espera (diferencia clave con semaforo)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Productor/consumidor con `java.util.concurrent`"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Usar condiciones separadas (`noVacio`, `noLleno`) es mas eficiente que `notifyAll`",
+              "level": 0
+            },
+            {
+              "content": "El patron `while (condicion) await()` — nunca `if` — protege contra spurious wakeups",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "java",
+          "content": "import java.util.concurrent.locks.*;\n\nclass BufferCondicion<T> {\n  private final Queue<T> cola = new ArrayDeque<>();\n  private final Lock lock = new ReentrantLock();\n  private final Condition noVacio = lock.newCondition();\n  private final Condition noLleno = lock.newCondition();\n  private final int cap;\n\n  void insertar(T item) throws InterruptedException {\n    lock.lock();\n    try {\n      while (cola.size() == cap) noLleno.await(); // esperar lugar\n      cola.add(item);\n      noVacio.signal();                            // avisar al consumidor\n    } finally { lock.unlock(); }\n  }\n\n  T extraer() throws InterruptedException {\n    lock.lock();\n    try {\n      while (cola.isEmpty()) noVacio.await();      // esperar dato\n      T item = cola.poll();\n      noLleno.signal();                            // avisar al productor\n      return item;\n    } finally { lock.unlock(); }\n  }\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-13",
+      "type": "diagrama",
+      "title": "Pasaje de mensajes: comunicar en lugar de compartir",
+      "subtitle": "El estado queda local; la coordinacion ocurre mediante mensajes",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Modelo"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Cada unidad concurrente tiene **estado local privado**",
+              "level": 0
+            },
+            {
+              "content": "Las unidades se coordinan enviando y recibiendo **mensajes**",
+              "level": 0
+            },
+            {
+              "content": "No hay memoria compartida visible → no hay seccion critica por defecto",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Dos operaciones basicas"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Ventaja fundamental"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Elimina la necesidad de locks y semaforos para la mayoria de los casos",
+              "level": 0
+            },
+            {
+              "content": "El protocolo se hace **explicito** en el codigo: quien le habla a quien",
+              "level": 0
+            },
+            {
+              "content": "Erlang y Go hacen de esto su principio de diseno central",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Desventaja potencial"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Copiar datos tiene costo; para volumenes grandes hay que diseñar el protocolo",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "text",
+          "content": "send(destino, mensaje)   -- enviar un mensaje a una unidad\nreceive(origen, mensaje) -- recibir un mensaje desde una unidad"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Three isolated gray circles connected by thin red arrows. Each circle contains only a small abstract dot pattern, no marks or symbols. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin c?digo, sin n?meros. Alta resoluci?n.",
+        "local_asset": "slides/assets/F-13-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-14",
+      "type": "tabla-comparativa",
+      "title": "Mensajes sincronicos, asincronicos y canales",
+      "subtitle": "El modelo de mensaje define quien espera y cuanto",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Consecuencias de diseno"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Sincrona** = sincronizacion implicita → mas predecible, menos concurrencia real",
+              "level": 0
+            },
+            {
+              "content": "**Asincrona** = mayor concurrencia, pero puede haber acumulacion de mensajes",
+              "level": 0
+            },
+            {
+              "content": "La eleccion del modelo **cambia la semantica del programa**",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Variante | Comportamiento del emisor | Comportamiento del receptor | Lenguaje tipico |\n|----------|---------------------------|-----------------------------|-----------------|\n| Sincrona / canal sin buffer | Espera hasta que el receptor acepta | Espera hasta que hay mensaje | Go `make(chan T)`, TS MessageChannel |\n| Asincrona bufferizada | Continua si hay lugar en el buffer | Espera si buffer vacio | Go `make(chan T, N)`, BroadcastChannel |\n| Asincrona pura | Continua siempre sin esperar | El mensaje llega a la cola del receptor | Erlang `!`, TS `postMessage` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Variante | Comportamiento del emisor | Comportamiento del receptor | Lenguaje tipico |\n|----------|---------------------------|-----------------------------|-----------------|\n| Sincrona / canal sin buffer | Espera hasta que el receptor acepta | Espera hasta que hay mensaje | Go `make(chan T)`, TS MessageChannel |\n| Asincrona bufferizada | Continua si hay lugar en el buffer | Espera si buffer vacio | Go `make(chan T, N)`, BroadcastChannel |\n| Asincrona pura | Continua siempre sin esperar | El mensaje llega a la cola del receptor | Erlang `!`, TS `postMessage` |",
+          "local_asset": "slides/assets/F-14-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-15",
+      "type": "codigo",
+      "title": "TypeScript: cancelacion estructurada con AbortController",
+      "subtitle": "AbortController conecta el ciclo de vida de una operacion asincrona con su cancelacion",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Patron de timeout y cancelacion manual"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por que esto importa para concurrencia"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`signal.aborted` es el flag de cancelacion compartido entre operaciones encadenadas",
+              "level": 0
+            },
+            {
+              "content": "Es la version TypeScript de \"structured concurrency\": el padre controla el ciclo de vida de sus hijos",
+              "level": 0
+            },
+            {
+              "content": "Conecta conceptualmente con `coroutineScope` de Kotlin y los scopes de Go",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "// Cancelacion con timeout automatico\nasync function fetchConTimeout<T>(url: string, ms: number): Promise<T> {\n  const controller = new AbortController();\n  const timer = setTimeout(() => controller.abort(new Error(\"timeout\")), ms);\n\n  try {\n    const resp = await fetch(url, { signal: controller.signal });\n    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);\n    return await resp.json();\n  } finally {\n    clearTimeout(timer);\n  }\n}\n\n// Cancelacion desde fuera: el usuario hace click en \"Cancelar\"\nconst controller = new AbortController();\nbotonCancelar.addEventListener(\"click\", () => controller.abort());\n\n// Propagar signal a operaciones encadenadas\nasync function procesarPaginas(signal: AbortSignal): Promise<void> {\n  for (let pag = 1; !signal.aborted; pag++) {\n    const datos = await fetch(`/api?p=${pag}`, { signal }).then(r => r.json());\n    if (datos.fin) break;\n    await procesarLote(datos.items, signal); // propagar la misma signal\n  }\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-16",
+      "type": "codigo",
+      "title": "TypeScript: MessageChannel y BroadcastChannel — pasaje de mensajes real",
+      "subtitle": "TypeScript tiene canales de mensajes reales; no solo async/await sobre el event loop",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "MessageChannel: canal privado punto a punto entre contextos"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "BroadcastChannel: fan-out a todos los contextos del mismo origen"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Conexion con los modelos de comunicacion"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`MessageChannel` implementa pasaje de mensajes punto a punto",
+              "level": 0
+            },
+            {
+              "content": "`BroadcastChannel` implementa el modelo de publicacion/suscripcion",
+              "level": 0
+            },
+            {
+              "content": "La transferencia de ownership con `[port2]` conecta con el concepto de Rust: mover el recurso",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "// Crear el canal y los dos extremos del tubo\nconst { port1, port2 } = new MessageChannel();\n\n// Lado receptor (puede estar en un Worker)\nport1.onmessage = ({ data }: MessageEvent) => {\n  console.log(\"Recibido en port1:\", data);\n  port1.postMessage({ respuesta: \"ok\", eco: data }); // responder\n};\n\n// Lado emisor: enviar y esperar respuesta\nport2.postMessage({ tipo: \"ping\", valor: 42 });\nport2.onmessage = ({ data }) => console.log(\"Respuesta:\", data);\n\n// Transferir port2 a un Worker para comunicacion privada\nconst worker = new Worker(\"./worker.js\");\nworker.postMessage({ canal: port2 }, [port2]); // transferencia de ownership"
+        },
+        {
+          "lang": "ts",
+          "content": "// Cualquier tab, worker o iframe que tenga el mismo nombre recibe el mensaje\nconst receptor = new BroadcastChannel(\"cache-invalidation\");\nreceptor.onmessage = ({ data }) => {\n  if (data.tipo === \"invalidar\") limpiarCache(data.clave);\n};\n\n// Desde cualquier otro contexto:\nnew BroadcastChannel(\"cache-invalidation\").postMessage({\n  tipo: \"invalidar\",\n  clave: \"usuarios\"\n});"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-17",
+      "type": "concepto-mixto",
+      "title": "Rust: el compilador como garante de la concurrencia",
+      "subtitle": "Rust hace imposible compilar codigo con data races — sin GC, sin runtime de seguridad",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Threads con Arc<Mutex<T>> — compartir memoria de forma segura"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lo que el compilador rechaza en Rust"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Contraste pedagogico con TypeScript"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "rust",
+          "content": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    // Arc = puntero con conteo de referencias thread-safe\n    // Mutex<i32> = el i32 solo es accesible con el lock tomado\n    let contador = Arc::new(Mutex::new(0));\n\n    let handles: Vec<_> = (0..4).map(|_| {\n        let c = Arc::clone(&contador); // clonar la referencia, no el dato\n        thread::spawn(move || {\n            let mut lock = c.lock().unwrap(); // tomar el mutex\n            *lock += 1;                       // seccion critica\n            // lock se libera AUTOMATICAMENTE al salir del scope (RAII)\n        })\n    }).collect();\n\n    for h in handles { h.join().unwrap(); }\n    println!(\"Total: {}\", *contador.lock().unwrap()); // siempre 4\n}"
+        },
+        {
+          "lang": "rust",
+          "content": "let datos = vec![1, 2, 3];\n\nthread::spawn(|| {\n    println!(\"{:?}\", datos); // ERROR: datos no cumple Send — no puede cruzar threads\n});\n\n// Para cruzar threads, el tipo debe implementar Send (seguro para threads)\n// y Sync (seguro para compartirse). El compilador lo verifica estaticamente."
+        }
+      ],
+      "tables": [
+        "| Aspecto | TypeScript | Rust |\n|---------|-----------|------|\n| Quien detecta la carrera | El programador / runtime | El compilador |\n| Costo de la seguridad | Disciplina + tests | Verbose, pero garantizado |\n| Modelo de memoria | GC, heap dinamico | Ownership, sin GC |\n| Cuando usar | Web, servidores, tooling | Sistemas, drivers, Wasm critico |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Aspecto | TypeScript | Rust |\n|---------|-----------|------|\n| Quien detecta la carrera | El programador / runtime | El compilador |\n| Costo de la seguridad | Disciplina + tests | Verbose, pero garantizado |\n| Modelo de memoria | GC, heap dinamico | Ownership, sin GC |\n| Cuando usar | Web, servidores, tooling | Sistemas, drivers, Wasm critico |",
+          "local_asset": "slides/assets/F-17-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-18",
+      "type": "codigo",
+      "title": "Java Thread y Runnable: creacion de hilos",
+      "subtitle": "Java tiene dos formas de crear un hilo: subclase o interfaz Runnable",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Forma 1: extender Thread"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Forma 2: implementar Runnable (preferida)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por que Runnable es preferida"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Un objeto puede implementar `Runnable` y extender otra clase a la vez",
+              "level": 0
+            },
+            {
+              "content": "Se separa la **tarea** (logica) del **mecanismo** (Thread)",
+              "level": 0
+            },
+            {
+              "content": "Compatible con `ExecutorService` sin cambios",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "java",
+          "content": "class MiTarea extends Thread {\n  private final String nombre;\n\n  MiTarea(String nombre) { this.nombre = nombre; }\n\n  @Override\n  public void run() {\n    for (int i = 0; i < 3; i++) {\n      System.out.println(nombre + \": paso \" + i);\n    }\n  }\n}\n\n// Uso\nThread t1 = new MiTarea(\"A\");\nThread t2 = new MiTarea(\"B\");\nt1.start();    // crea el hilo del OS y llama run() en el\nt2.start();\nt1.join();     // esperar que t1 termine antes de continuar\nt2.join();"
+        },
+        {
+          "lang": "java",
+          "content": "Runnable tarea = () -> {\n  for (int i = 0; i < 3; i++) System.out.println(\"Lambda: \" + i);\n};\n\nThread t = new Thread(tarea);\nt.start();\nt.join();"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-19",
+      "type": "codigo",
+      "title": "Java synchronized, wait y notify",
+      "subtitle": "`synchronized` implementa monitores; `wait`/`notify` implementan cooperacion",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Exclusion mutua con synchronized"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Cooperacion con wait/notify en el monitor"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "`wait()` **libera el lock** y suspende — luego re-adquiere el lock al despertar",
+              "level": 0
+            },
+            {
+              "content": "Siempre `while` con `wait()`, nunca `if` — protege contra spurious wakeups",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "java",
+          "content": "class Banco {\n  private double saldo = 1000.0;\n\n  // Monitor: solo un thread ejecuta este metodo a la vez\n  public synchronized void depositar(double monto) {\n    saldo += monto;                        // seccion critica protegida\n  }\n\n  public synchronized void retirar(double monto) {\n    if (saldo >= monto) saldo -= monto;\n  }\n\n  // Bloque synchronized: proteger parte del metodo\n  public void transferir(Banco destino, double monto) {\n    synchronized (this) {\n      saldo -= monto;\n    }\n    synchronized (destino) {\n      destino.saldo += monto;\n    }\n  }\n}"
+        },
+        {
+          "lang": "java",
+          "content": "class BufferCircular {\n  private int[] datos = new int[10];\n  private int entrada = 0, salida = 0, cantidad = 0;\n\n  public synchronized void poner(int valor) throws InterruptedException {\n    while (cantidad == datos.length) wait();    // buffer lleno: libera lock y espera\n    datos[entrada] = valor;\n    entrada = (entrada + 1) % datos.length;\n    cantidad++;\n    notifyAll();                               // avisar a consumidores que hay dato\n  }\n\n  public synchronized int sacar() throws InterruptedException {\n    while (cantidad == 0) wait();             // buffer vacio: libera lock y espera\n    int val = datos[salida];\n    salida = (salida + 1) % datos.length;\n    cantidad--;\n    notifyAll();                              // avisar a productores que hay lugar\n    return val;\n  }\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-20",
+      "type": "tabla-comparativa",
+      "title": "Java java.util.concurrent: herramientas modernas",
+      "subtitle": "Java 5+ ofrece abstracciones de alto nivel sobre threads",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Pool de threads — patron tipico de produccion"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "java",
+          "content": "ExecutorService pool = Executors.newFixedThreadPool(4);\nList<Future<Integer>> futuros = new ArrayList<>();\n\nfor (int i = 0; i < 20; i++) {\n  final int id = i;\n  futuros.add(pool.submit(() -> procesarElemento(id)));  // tarea asincrona\n}\n\nfor (Future<Integer> f : futuros) {\n  System.out.println(\"Resultado: \" + f.get());           // esperar cada resultado\n}\npool.shutdown();"
+        }
+      ],
+      "tables": [
+        "| Clase / Interfaz | Para que sirve | Ejemplo de uso |\n|-----------------|----------------|----------------|\n| `ExecutorService` | Pool de threads reutilizable | `Executors.newFixedThreadPool(4)` |\n| `Future<T>` | Resultado asincrono de una tarea | `future.get()` espera y retorna valor |\n| `ReentrantLock` | Lock explicito con tryLock y timeout | Alternativa a `synchronized` mas flexible |\n| `Semaphore` | Semaforo contable | `sem.acquire()` / `sem.release()` |\n| `CountDownLatch` | Esperar que N tareas terminen | `latch.await()` despues de `latch.countDown()` |\n| `BlockingQueue<T>` | Cola thread-safe con bloqueo | `queue.put()` / `queue.take()` |\n| `AtomicInteger` | Operacion atomica sin lock | `counter.incrementAndGet()` |\n| `CompletableFuture<T>` | Concurrencia funcional encadenada | `.thenApply()`, `.thenCombine()` |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Clase / Interfaz | Para que sirve | Ejemplo de uso |\n|-----------------|----------------|----------------|\n| `ExecutorService` | Pool de threads reutilizable | `Executors.newFixedThreadPool(4)` |\n| `Future<T>` | Resultado asincrono de una tarea | `future.get()` espera y retorna valor |\n| `ReentrantLock` | Lock explicito con tryLock y timeout | Alternativa a `synchronized` mas flexible |\n| `Semaphore` | Semaforo contable | `sem.acquire()` / `sem.release()` |\n| `CountDownLatch` | Esperar que N tareas terminen | `latch.await()` despues de `latch.countDown()` |\n| `BlockingQueue<T>` | Cola thread-safe con bloqueo | `queue.put()` / `queue.take()` |\n| `AtomicInteger` | Operacion atomica sin lock | `counter.incrementAndGet()` |\n| `CompletableFuture<T>` | Concurrencia funcional encadenada | `.thenApply()`, `.thenCombine()` |",
+          "local_asset": "slides/assets/F-20-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-21",
+      "type": "concepto-mixto",
+      "title": "C# threads, lock y Task",
+      "subtitle": "C# evoluciono de Thread/lock hacia Task y async/await como abstraccion preferida",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Thread y lock (API clasica)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Task y async/await (API moderna)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Monitor.Wait / Monitor.Pulse"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Diferencia de diseno con Java"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "C# `async`/`await` esta integrado en el lenguaje desde C# 5 (2012)",
+              "level": 0
+            },
+            {
+              "content": "`Task` es equivalente a `Future` de Java pero con mejor ergonomia",
+              "level": 0
+            },
+            {
+              "content": "No hay `synchronized` keyword; se usa `lock(objeto) { }` explicito",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "csharp",
+          "content": "class Contador {\n  private int valor = 0;\n  private readonly object candado = new object();\n\n  public void Incrementar() {\n    lock (candado) {       // equivalente a synchronized de Java\n      valor++;\n    }\n  }\n}"
+        },
+        {
+          "lang": "csharp",
+          "content": "async Task<string[]> CargarDatosAsync() {\n  Task<string> t1 = ObtenerUsuariosAsync();\n  Task<string> t2 = ObtenerPedidosAsync();\n\n  await Task.WhenAll(t1, t2);           // esperar ambas sin bloquear el hilo\n  return new[] { t1.Result, t2.Result };\n}"
+        },
+        {
+          "lang": "csharp",
+          "content": "lock (cola) {\n  while (cola.Count == 0)\n    Monitor.Wait(cola);       // equivalente a wait() de Java\n  var item = cola.Dequeue();\n  Monitor.Pulse(cola);        // equivalente a notify()\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "none",
+        "code": "right-half",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-22",
+      "type": "concepto-abstracto",
+      "title": "Erlang y actores: concurrencia sin estado compartido",
+      "subtitle": "Erlang elimina el estado compartido: cada proceso tiene su estado, comunica por mensajes",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Modelo de actores de Erlang"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Cada proceso Erlang tiene **estado completamente aislado**",
+              "level": 0
+            },
+            {
+              "content": "La comunicacion es **exclusivamente por mensajes asincrónicos**",
+              "level": 0
+            },
+            {
+              "content": "No existen locks, semaforos ni monitores — no hacen falta",
+              "level": 0
+            },
+            {
+              "content": "Si un proceso falla, los otros **no se ven afectados** (fault isolation)",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Sintaxis Erlang"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por que esto escala"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Millones de procesos livianisimos en la misma VM",
+              "level": 0
+            },
+            {
+              "content": "Sin memoria compartida = sin carreras de datos",
+              "level": 0
+            },
+            {
+              "content": "La supervision de procesos (`supervisor`) implementa tolerancia a fallas",
+              "level": 0
+            },
+            {
+              "content": "Influencia directa en Go, Akka (Scala/Java), Elixir",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "erlang",
+          "content": "% Crear un proceso\nPid = spawn(fun contador/0).\n\n% Funcion que corre en el proceso\ncontador() ->\n  receive\n    {incrementar, N} ->\n      % el estado es local: no hay nada compartido\n      contador_con_valor(N + 1);\n    {obtener, Remitente} ->\n      Remitente ! {valor, 0},\n      contador()\n  end.\n\n% Enviar mensaje (asincrono, no bloquea)\nPid ! {incrementar, 5}."
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Many small gray circles separated by white space, each with one tiny red dot inside. Thin arrows pass between circles without overlap. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin c?digo, sin n?meros. Alta resoluci?n.",
+        "local_asset": "slides/assets/F-22-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-23",
+      "type": "concepto-abstracto",
+      "title": "Concurrencia a nivel de sentencias: FORALL y HPF",
+      "subtitle": "El compilador puede paralelizar iteraciones independientes sin gestion explicita",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Statement-level concurrency"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "En algunos dominios (computo cientifico, matrices) todas las iteraciones son independientes",
+              "level": 0
+            },
+            {
+              "content": "El lenguaje puede declarar esta independencia y dejar que el compilador/runtime explote el paralelismo",
+              "level": 0
+            },
+            {
+              "content": "Sin necesidad de crear threads ni gestionar sincronizacion manualmente",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "FORALL en High Performance Fortran (HPF)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Equivalente moderno: parallelStream en Java"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Cuando aplica"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Si**: operaciones sobre arreglos sin dependencias entre iteraciones",
+              "level": 0
+            },
+            {
+              "content": "**No**: si una iteracion depende del resultado de la anterior (reduce)",
+              "level": 0
+            },
+            {
+              "content": "La responsabilidad de declarar la independencia es del programador",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "fortran",
+          "content": "! Suma vectorial: cada iteracion es independiente -> paralelo automatico\nFORALL (I = 1:N)\n  A(I) = B(I) + C(I)\nEND FORALL\n\n! Distribucion de datos entre procesadores\n!HPF$ DISTRIBUTE A(BLOCK)\n!HPF$ DISTRIBUTE B(BLOCK)"
+        },
+        {
+          "lang": "java",
+          "content": "// El runtime elige cuantos threads usar automaticamente\nint suma = IntStream.range(0, 1_000_000)\n    .parallel()              // declarar independencia\n    .filter(n -> n % 2 == 0)\n    .sum();"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "Four pale gray square tiles arranged in a grid. A bold red arrow points diagonally across the grid, with small gray dots evenly spaced on each tile. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin c?digo, sin n?meros. Alta resoluci?n.",
+        "local_asset": "slides/assets/F-23-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-24",
+      "type": "codigo",
+      "title": "Go goroutines y channels: comunicar en lugar de compartir",
+      "subtitle": "Go encarna el principio: \"Do not communicate by sharing memory; share memory by communicating\"",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Goroutine: unidad de concurrencia ultra liviana"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Caracteristicas clave"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Las goroutines cuestan ~2 KB de stack (vs ~1 MB de un thread del OS)",
+              "level": 0
+            },
+            {
+              "content": "El scheduler de Go multiplexa goroutines sobre threads del OS automaticamente",
+              "level": 0
+            },
+            {
+              "content": "Los channels son **tipados**: el compilador detecta errores de tipo en la comunicacion",
+              "level": 0
+            },
+            {
+              "content": "`select` elige el primer canal listo (igual que `select` de Unix o `select` de Go, pero sin callbacks)",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "go",
+          "content": "package main\n\nimport (\n  \"fmt\"\n  \"sync\"\n)\n\nfunc generarNumeros(out chan<- int, wg *sync.WaitGroup) {\n  defer wg.Done()\n  for i := 0; i < 5; i++ {\n    out <- i          // enviar por el canal\n  }\n  close(out)          // señal: no envio mas\n}\n\nfunc imprimirNumeros(in <-chan int, wg *sync.WaitGroup) {\n  defer wg.Done()\n  for n := range in { // recibir hasta que el canal se cierre\n    fmt.Println(n)\n  }\n}\n\nfunc main() {\n  canal := make(chan int)    // canal sin buffer: sincronico\n  var wg sync.WaitGroup\n  wg.Add(2)\n\n  go generarNumeros(canal, &wg)\n  go imprimirNumeros(canal, &wg)\n\n  wg.Wait()\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-25",
+      "type": "codigo",
+      "title": "Go select y sync.Mutex: cuando si se comparte memoria",
+      "subtitle": "Go tiene channels Y mutex; usar el adecuado segun el caso",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "select: esperar el primer canal disponible"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "sync.Mutex: para contadores y estructuras compartidas"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Regla de Go para elegir"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Channels** para coordinar trabajo, transferir propiedad de datos, señalizar eventos",
+              "level": 0
+            },
+            {
+              "content": "**Mutex** para proteger datos cuando multiples goroutines necesitan acceso compartido",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "go",
+          "content": "func despachador(urgentes, normales <-chan string, timeout <-chan time.Time) {\n  for {\n    select {\n    case pedido := <-urgentes:          // si llego un urgente, atenderlo\n      procesarUrgente(pedido)\n    case pedido := <-normales:          // si llego un normal, atenderlo\n      procesarNormal(pedido)\n    case <-timeout:                     // si ninguno llego en X segundos\n      fmt.Println(\"Sin actividad\")\n      return\n    }\n  }\n}"
+        },
+        {
+          "lang": "go",
+          "content": "import \"sync\"\n\ntype ContadorSeguro struct {\n  mu    sync.Mutex\n  valor int\n}\n\nfunc (c *ContadorSeguro) Incrementar() {\n  c.mu.Lock()           // adquirir mutex\n  defer c.mu.Unlock()   // liberar al salir (defer garantiza esto)\n  c.valor++\n}\n\nfunc (c *ContadorSeguro) Leer() int {\n  c.mu.Lock()\n  defer c.mu.Unlock()\n  return c.valor\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-26",
+      "type": "codigo",
+      "title": "Kotlin corrutinas y concurrencia estructurada",
+      "subtitle": "Kotlin hace visible el ciclo de vida, la cancelacion y los errores como ciudadanos del lenguaje",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Structured Concurrency: todas las corrutinas tienen un scope padre"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Dispatchers: elegir donde corre la corrutina"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Por que es pedagogicamente valioso"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Kotlin hace explicitos los tres problemas del async moderno: ciclo de vida, cancelacion y errores",
+              "level": 0
+            },
+            {
+              "content": "`coroutineScope` garantiza que ninguna corrutina hijo escapa del scope padre",
+              "level": 0
+            },
+            {
+              "content": "Los dispatchers separan \"que hacer\" de \"donde hacerlo\"",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "kotlin",
+          "content": "import kotlinx.coroutines.*\n\nsuspend fun cargarDashboard(): Dashboard = coroutineScope {\n  // launch lanza corrutinas hijas; coroutineScope espera a todas\n  val usuariosDeferred = async { api.obtenerUsuarios() }\n  val pedidosDeferred  = async { api.obtenerPedidos() }\n  val alertasDeferred  = async { api.obtenerAlertas() }\n\n  // await() suspende sin bloquear el thread\n  Dashboard(\n    usuarios = usuariosDeferred.await(),\n    pedidos  = pedidosDeferred.await(),\n    alertas  = alertasDeferred.await()\n  )\n}\n// Si cualquier async falla, el scope cancela las demas automaticamente\n// Si el scope se cancela, todas las hijas se cancelan en cascada"
+        },
+        {
+          "lang": "kotlin",
+          "content": "withContext(Dispatchers.IO)      { leerArchivo() }   // pool de I/O\nwithContext(Dispatchers.Default) { calcularHash() }  // pool CPU-bound\nwithContext(Dispatchers.Main)    { actualizarUI() }  // hilo principal (Android)"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-27",
+      "type": "diagrama",
+      "title": "TypeScript y el event loop de JavaScript",
+      "subtitle": "JavaScript corre en un unico hilo con un event loop cooperativo",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "El modelo de ejecucion (MDN)"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "JavaScript tiene **un solo hilo** de ejecucion por defecto",
+              "level": 0
+            },
+            {
+              "content": "El **event loop** toma tareas de la cola y las ejecuta hasta completion",
+              "level": 0
+            },
+            {
+              "content": "`await` suspende el handler actual y devuelve el control al event loop",
+              "level": 0
+            },
+            {
+              "content": "Otros handlers pueden correr mientras se espera la I/O",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Implicaciones para la concurrencia"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Que es y que no es la asincronia de JS"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Es**: concurrencia de espera sobre I/O — multiples operaciones pendientes a la vez",
+              "level": 0
+            },
+            {
+              "content": "**No es**: computo paralelo en CPU — el codigo JavaScript es secuencial",
+              "level": 0
+            },
+            {
+              "content": "**No es**: multiprocesamiento — un solo heap, un solo GC, un solo thread (por defecto)",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "// Dos fetches pendientes al mismo tiempo, pero solo un handler activo\nasync function main() {\n  const promA = fetch(\"/api/datos-a\"); // inicia sin esperar\n  const promB = fetch(\"/api/datos-b\"); // inicia sin esperar\n\n  const [resA, resB] = await Promise.all([promA, promB]); // espera ambas\n  // solo un handler a la vez, pero dos requests pendientes simultáneamente\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "left-middle",
+        "image": "right-half",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "content",
+        "prompt": "One dark red loop arrow encircling three pale gray rectangles. A thin gray queue of small circles enters from the left and exits at the bottom. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin c?digo, sin n?meros. Alta resoluci?n.",
+        "local_asset": "slides/assets/F-27-content.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-28",
+      "type": "codigo",
+      "title": "async/await, Promise.all y Promise.allSettled",
+      "subtitle": "La composicion de Promises permite concurrencia de espera sin callbacks anidados",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Promise.all: todas o nada — falla si cualquiera falla"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Promise.allSettled: colectar todos los resultados, incluso los fallidos"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Promise.race: el primero que responda gana (patron timeout)"
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "async function cargarDashboard(): Promise<Dashboard> {\n  const [usuarios, ventas, alertas] = await Promise.all([\n    api.get<Usuario[]>(\"/usuarios\"),\n    api.get<Venta[]>(\"/ventas\"),\n    api.get<Alerta[]>(\"/alertas\")\n  ]);\n  return { usuarios, ventas, alertas };\n}"
+        },
+        {
+          "lang": "ts",
+          "content": "async function verificarServicios(urls: string[]): Promise<EstadoServicio[]> {\n  const resultados = await Promise.allSettled(\n    urls.map(url => fetch(url).then(r => r.json()))\n  );\n\n  return resultados.map((r, i) => ({\n    url: urls[i],\n    estado: r.status === \"fulfilled\" ? \"ok\" : \"error\",\n    detalle: r.status === \"rejected\" ? r.reason : null\n  }));\n}"
+        },
+        {
+          "lang": "ts",
+          "content": "async function conTimeout<T>(promesa: Promise<T>, ms: number): Promise<T> {\n  const timeout = new Promise<never>((_, reject) =>\n    setTimeout(() => reject(new Error(\"timeout\")), ms)\n  );\n  return Promise.race([promesa, timeout]);\n}"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-29",
+      "type": "codigo",
+      "title": "worker_threads: paralelismo real en Node.js",
+      "subtitle": "Para computo CPU-intensivo, un worker es una unidad de ejecucion independiente con su propio V8",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Crear y comunicar con un worker"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "SharedArrayBuffer: memoria compartida entre workers"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Cuando usar workers"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Si**: computo CPU-bound que bloquearia el event loop (hashing, compresion, ML inference)",
+              "level": 0
+            },
+            {
+              "content": "**No**: operaciones I/O — async/await es mas eficiente y mas simple",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [
+        {
+          "lang": "ts",
+          "content": "// main.ts — hilo principal\nimport { Worker, isMainThread, parentPort, workerData } from \"node:worker_threads\";\nimport { cpus } from \"node:os\";\n\nconst NUCLEOS = cpus().length;\n\nasync function procesarEnParalelo(datos: number[]): Promise<number[]> {\n  const chunk = Math.ceil(datos.length / NUCLEOS);\n  const workers = Array.from({ length: NUCLEOS }, (_, i) =>\n    new Promise<number[]>((resolve, reject) => {\n      const worker = new Worker(__filename, {\n        workerData: { fragmento: datos.slice(i * chunk, (i + 1) * chunk) }\n      });\n      worker.on(\"message\", resolve);\n      worker.on(\"error\", reject);\n    })\n  );\n  return (await Promise.all(workers)).flat();\n}\n\n// Codigo que corre DENTRO del worker (mismo archivo)\nif (!isMainThread) {\n  const resultado = (workerData.fragmento as number[]).map(n => n * n);\n  parentPort!.postMessage(resultado);\n}"
+        },
+        {
+          "lang": "ts",
+          "content": "const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 4);\nconst arr = new Int32Array(sab);\n\n// Operacion atomica para evitar carreras\nAtomics.add(arr, 0, 1);   // equivalente a arr[0]++ pero atomico\nAtomics.wait(arr, 0, 0);  // esperar hasta que arr[0] != 0\nAtomics.notify(arr, 0);   // despertar workers esperando en arr[0]"
+        }
+      ],
+      "tables": [],
+      "layout": {
+        "title": "full-title",
+        "body": "subtitle-only",
+        "image": "none",
+        "code": "full-bottom",
+        "table": "none"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": []
+    },
+    {
+      "id": "F-30",
+      "type": "tabla",
+      "title": "Mapa de decisiones: elegir el mecanismo correcto",
+      "subtitle": "La pregunta no es \"que lenguaje esta de moda\" sino \"que problema tengo\"",
+      "body_blocks": [],
+      "code_blocks": [],
+      "tables": [
+        "| Situacion | Mecanismo apropiado | Lenguaje tipico | Riesgo a cuidar |\n|-----------|---------------------|-----------------|-----------------|\n| Esperar N operaciones I/O simultaneas | `Promise.all` / `async/await` | TypeScript, C# | Propagacion de errores y timeouts |\n| Cancelar operaciones con ciclo de vida | `AbortController` + signal | TypeScript | Propagar signal a todas las operaciones hijas |\n| Computo CPU-bound aislable | Workers / `ExecutorService` | TS, Java | Costo de serializar datos al worker |\n| Contadores y acumuladores compartidos | `Atomics` / `synchronized` / `lock` | TS, Java, C# | Seccion critica bien delimitada |\n| Productores y consumidores desacoplados | `BlockingQueue` / channels | Java, Go | Esperas infinitas si el productor falla |\n| Ciclo de vida con cancelacion estructurada | Corrutinas + scope | Kotlin, Swift | Propagacion de cancelacion en cascada |\n| Pasaje de mensajes punto a punto | `MessageChannel` / channels | TS, Go | Transferencia de ownership del puerto |\n| Modelo de actores sin estado compartido | Mensajes / Erlang | Erlang, Akka, Go | Mailbox sin limite puede crecer |\n| Hardware paralelo / computo cientifico | FORALL / `parallelStream` | Fortran HPF, Java | Dependencias ocultas entre iteraciones |\n| Garantia de no-data-race en compilacion | Ownership + `Arc<Mutex<T>>` | Rust | Verbose, curva de aprendizaje alta |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Situacion | Mecanismo apropiado | Lenguaje tipico | Riesgo a cuidar |\n|-----------|---------------------|-----------------|-----------------|\n| Esperar N operaciones I/O simultaneas | `Promise.all` / `async/await` | TypeScript, C# | Propagacion de errores y timeouts |\n| Cancelar operaciones con ciclo de vida | `AbortController` + signal | TypeScript | Propagar signal a todas las operaciones hijas |\n| Computo CPU-bound aislable | Workers / `ExecutorService` | TS, Java | Costo de serializar datos al worker |\n| Contadores y acumuladores compartidos | `Atomics` / `synchronized` / `lock` | TS, Java, C# | Seccion critica bien delimitada |\n| Productores y consumidores desacoplados | `BlockingQueue` / channels | Java, Go | Esperas infinitas si el productor falla |\n| Ciclo de vida con cancelacion estructurada | Corrutinas + scope | Kotlin, Swift | Propagacion de cancelacion en cascada |\n| Pasaje de mensajes punto a punto | `MessageChannel` / channels | TS, Go | Transferencia de ownership del puerto |\n| Modelo de actores sin estado compartido | Mensajes / Erlang | Erlang, Akka, Go | Mailbox sin limite puede crecer |\n| Hardware paralelo / computo cientifico | FORALL / `parallelStream` | Fortran HPF, Java | Dependencias ocultas entre iteraciones |\n| Garantia de no-data-race en compilacion | Ownership + `Arc<Mutex<T>>` | Rust | Verbose, curva de aprendizaje alta |",
+          "local_asset": "slides/assets/F-30-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-31",
+      "type": "tabla-comparativa",
+      "title": "Comparativa de lenguajes: el arco completo",
+      "subtitle": "Cada lenguaje expone una vision distinta de la concurrencia",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lectura pedagogica del arco"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "**Java/C#**: monitores clasicos + abstracciones modernas coexisten en el mismo lenguaje",
+              "level": 0
+            },
+            {
+              "content": "**Go**: canales como primitiva preferida; mutex cuando realmente se necesita",
+              "level": 0
+            },
+            {
+              "content": "**Kotlin**: structured concurrency resuelve los tres grandes problemas (lifecycle, cancel, errores)",
+              "level": 0
+            },
+            {
+              "content": "**TypeScript**: excelente para I/O asincronico; workers + Atomics + MessageChannel para lo demas",
+              "level": 0
+            },
+            {
+              "content": "**Erlang**: el modelo funcional puro — sin estado compartido, sin carreras posibles",
+              "level": 0
+            },
+            {
+              "content": "**Rust**: la seguridad de concurrencia como propiedad del compilador; zero-cost pero verbose",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [
+        "| Lenguaje | Unidad principal | Sincronizacion | Comunicacion | Garantia del lenguaje |\n|----------|-----------------|----------------|--------------|----------------------|\n| Java | Thread | synchronized / Lock | wait/notify / BlockingQueue | Runtime exclusion mutua |\n| C# | Thread / Task | lock / Monitor | async/await | Compila concurrencia asincrona |\n| Go | Goroutine | sync.Mutex | Channels tipados | Race detector en runtime |\n| Kotlin | Coroutine | Mutex / Atomic | Flow, Channel | Scope garantiza no leak |\n| TypeScript | Promise / Worker | Atomics + MessageChannel | postMessage / BroadcastChannel | AbortController para ciclo de vida |\n| Erlang | Process | No hay: sin memoria compartida | send / receive | VM garantiza aislamiento |\n| Rust | Thread + Arc<T> | Mutex<T> / Atomic | mpsc channels | Compilador: no data races posibles |"
+      ],
+      "layout": {
+        "title": "full-title",
+        "body": "table-intro",
+        "image": "none",
+        "code": "none",
+        "table": "table-main"
+      },
+      "image": {
+        "layer": "none",
+        "prompt": "",
+        "local_asset": "",
+        "drive_id": null
+      },
+      "table_assets": [
+        {
+          "index": 0,
+          "table_markdown": "| Lenguaje | Unidad principal | Sincronizacion | Comunicacion | Garantia del lenguaje |\n|----------|-----------------|----------------|--------------|----------------------|\n| Java | Thread | synchronized / Lock | wait/notify / BlockingQueue | Runtime exclusion mutua |\n| C# | Thread / Task | lock / Monitor | async/await | Compila concurrencia asincrona |\n| Go | Goroutine | sync.Mutex | Channels tipados | Race detector en runtime |\n| Kotlin | Coroutine | Mutex / Atomic | Flow, Channel | Scope garantiza no leak |\n| TypeScript | Promise / Worker | Atomics + MessageChannel | postMessage / BroadcastChannel | AbortController para ciclo de vida |\n| Erlang | Process | No hay: sin memoria compartida | send / receive | VM garantiza aislamiento |\n| Rust | Thread + Arc<T> | Mutex<T> / Atomic | mpsc channels | Compilador: no data races posibles |",
+          "local_asset": "slides/assets/F-31-table-1.png",
+          "drive_id": null
+        }
+      ]
+    },
+    {
+      "id": "F-32",
+      "type": "cierre",
+      "title": "Cierre: lo que la clase deja",
+      "subtitle": "Concurrir es organizar avance, coordinacion y comunicacion entre unidades independientes",
+      "body_blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tres capas que estructuran el tema"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": "**Vocabulario**: concurrencia / paralelismo / asincronia / thread — cuatro preguntas distintas",
+              "level": 0
+            },
+            {
+              "content": "**Mecanismos**: semaforos → monitores → pasaje de mensajes — creciente nivel de abstraccion",
+              "level": 0
+            },
+            {
+              "content": "**Lenguajes**: Java → C# → Go → Kotlin → TypeScript → Erlang → Rust — espectro de decisiones de diseno",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Preguntas que el programador debe responder ante un problema concurrente"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "¿Hay estado compartido mutable? → decidir mecanismo de exclusion mutua",
+              "level": 0
+            },
+            {
+              "content": "¿Hay dependencias de orden? → decidir mecanismo de cooperacion",
+              "level": 0
+            },
+            {
+              "content": "¿El costo dominante es I/O o CPU? → elegir entre async o workers",
+              "level": 0
+            },
+            {
+              "content": "¿El ciclo de vida debe ser controlable? → considerar structured concurrency",
+              "level": 0
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Para la proxima clase"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "content": "Práctica: implementar productor/consumidor en TypeScript (Atomics + SharedArrayBuffer)",
+              "level": 0
+            },
+            {
+              "content": "Opcional: comparar el mismo problema en Go (channels) y Java (BlockingQueue)",
+              "level": 0
+            }
+          ]
+        }
+      ],
+      "code_blocks": [],
+      "tables": [],
+      "layout": {
+        "title": "center-middle",
+        "body": "center-bottom",
+        "image": "background",
+        "code": "none",
+        "table": "none"
+      },
+      "image": {
+        "layer": "background",
+        "prompt": "Three large dark gray columns with a red circle above each one. Thin curved arrows connect the columns from left to right. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin c?digo, sin n?meros. Alta resoluci?n.",
+        "local_asset": "slides/assets/F-32-bg.png",
+        "drive_id": null
+      },
+      "table_assets": []
+    }
+  ]
+}
