@@ -3,7 +3,7 @@
 > **Agente:** Lic. Marcos 🗂️ — Topic Designer  
 > **Fecha:** 2026-05-14  
 > **Origen:** Extraído de `09-variables-binding/diseno.md` — Clase 1 de 2  
-> **Estado:** 🔲 Borrador — pendiente de aprobación docente  
+> **Estado:** 🟡 EN PRODUCCION — clase dada 2026-06-28; filminas/minuta corregidas contra `clase_dada.txt`  
 > **Duración:** **120 min (1 clase)**  
 > **Lenguaje principal:** TypeScript  
 > **Lenguajes de contraste:** Python (binding dinámico, tipado duck), Kotlin (val/var, null safety), Go (zero values, punteros seguros), Rust (ownership como binding explícito), Haskell (bindings inmutables)  
@@ -47,16 +47,15 @@ Al finalizar la clase el alumno debe poder:
 
 | # | Tópico | Tiempo | Fuente |
 |---|--------|--------|--------|
-| 3.1 | Variable como abstracción. La 5-tupla | 10 min | Sebesta §5.3, filminas |
-| 3.2 | Atributos: nombre, dirección, tipo, valor-i, valor-d | 12 min | Sebesta §5.3.1–5.3.4, filminas |
-| 3.3 | Binding: definición y 6 tiempos de vinculación | 15 min | Sebesta §5.4, filminas |
-| 3.4 | Binding de tipos: estático vs. dinámico + inferencia + fuerte vs. débil | 12 min | Sebesta §5.4.1–5.4.2, Gabbrielli §8 |
-| 3.5 | Binding de almacenamiento: 4 categorías de variables + activation records | 18 min | Sebesta §5.4.3, §9.3, filminas |
-| 3.6 | Ámbito estático vs. dinámico + scope holes | 15 min | Sebesta §5.5, Gabbrielli §4.3 |
-| 3.7 | Entorno de referencia. Constantes. Inicialización | 8 min | Sebesta §5.6–5.8, filminas |
-| — | **Bloque IA:** globales silenciosas, `var` hoisting, prompts seguros | 12 min | — |
-| — | Buffer / preguntas | 8 min | — |
-| **Total** | | **110 min + 10 buffer** | |
+| 3.1 | Variable como abstracción. Von Neumann. La 5-tupla. L-value/R-value | 20 min | Sebesta §5.3–5.3.2, `clase_dada.txt` F-00–F-07 |
+| 3.2 | Binding: definición y 6 tiempos de vinculación | 12 min | Sebesta §5.4, Louden §7.5, `clase_dada.txt` F-08–F-10 |
+| 3.3 | Binding de tipos: estático vs. dinámico + inferencia + fuerte vs. débil + coerciones | 16 min | Sebesta §5.4.1–5.4.2, Gabbrielli §8.3/§8.8, `clase_dada.txt` F-11–F-17 |
+| 3.4 | Binding de almacenamiento: 4 categorías de variables (estáticas, stack-dynamic, heap explícita/implícita) | 26 min | Sebesta §5.4.3, Gabbrielli §5/§14, `clase_dada.txt` F-18–F-27 |
+| 3.5 | Ámbito estático vs. dinámico + scope holes + `this` en JavaScript | 18 min | Sebesta §5.5, Gabbrielli §4.3, `clase_dada.txt` F-28–F-33 |
+| 3.6 | Entorno de referencia. Constantes. Inicialización comparativa | 10 min | Sebesta §5.6–5.8, `clase_dada.txt` F-34–F-38 |
+| 3.7 | **Bloque IA:** globales silenciosas, `var` hoisting, shadowing inesperado | 12 min | `clase_dada.txt` F-39–F-44 |
+| — | Actividad + prompt seguro + cierre | 6 min | `clase_dada.txt` F-45–F-47 |
+| **Total** | | **120 min** | |
 
 ---
 
@@ -619,4 +618,4 @@ R: Sí. Algunos dialectos de Lisp, Emacs Lisp, y Perl (`local`). El `this` de Ja
 *Generado por Lic. Marcos 🗂️ — Topic Designer (EDU)*  
 *1 clase × 120 min | Extraído de: 09-variables-binding/diseno.md (Clase 1 de 2)*  
 *Fuentes: Sebesta Cap.5/9 + Gabbrielli Cap.4/8 + Louden Cap.7 + Filminas UNTDF 2024*  
-*Estado: Borrador — requiere aprobación del docente*
+*Estado: EN PRODUCCION — corregido contra `clase_dada.txt` por Dr. Roberto ✍️ (2026-06-28)*

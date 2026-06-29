@@ -3,7 +3,7 @@
 > **Agente:** Lic. Marcos 🗂️ — Topic Designer  
 > **Fecha:** 2026-05-14  
 > **Origen:** Extraído de `09-variables-binding/diseno.md` — Clase 2 de 2  
-> **Estado:** 🔲 Borrador — pendiente de aprobación docente  
+> **Estado:** 🟡 EN PRODUCCION — filminas.md y minuta.md corregidos contra `clase_dada.txt` + ChromaDB el 2026-06-28  
 > **Duración:** **120 min (1 clase)**  
 > **Lenguaje principal:** TypeScript  
 > **Lenguajes de contraste:** Python (closures, reference counting), Kotlin (lambdas, val/var), Go (closures, escape analysis), Rust (ownership, drop), Haskell (bindings inmutables, sin mutabilidad), Scala (var vs. val), C (solo referencia histórica)  

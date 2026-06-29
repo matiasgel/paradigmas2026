@@ -1,0 +1,409 @@
+Concurrencia y Paralelismo
+Recorrido: fundamentos, sincronización, modelos de comunicación.
+
+Un resultado que cambia solo con el orden — Pseudo-Código
+TOTAL := 3
+
+Tarea A:
+x := TOTAL
+x := x + 1
+TOTAL := x
+
+Tarea B:
+x := TOTAL
+x := x * 2
+TOTAL := x
+
+
+Un resultado que cambia solo con el orden
+¿Si dos unidades modifican el mismo dato, quien decide el valor final?
+
+El caso TOTAL
+
+Si A completa antes que B: resultado = 6.
+Si B completa antes que A: resultado = 4.
+Si se intercalan (interleaving): puede ser 4, 6, 7 u 8.
+Leer–calcular–escribir no es una operación atómica.
+El problema no es el lenguaje: es estado compartido sin coordinación.
+
+Concurrencia, paralelismo, asincronía y threads: cuatro preguntas distintas — Conceptos
+No son sinónimos; cada término responde una pregunta diferente.
+
+Lo que importa para este curso
+
+Un programa puede ser concurrente sin ser paralelo (un núcleo, multitarea)
+Un programa puede ser asíncrono sin ser concurrente (single event loop, un handler a la vez).
+Paralelismo necesita hardware múltiple; concurrencia no.
+El foco de esta clase es la concurrencia a nivel de subprogramas.
+
+Termino
+Pregunta que responde
+Ejemplo concreto
+Concurrencia
+¿Varias actividades progresan solapadas?
+Dos tareas alternando en un núcleo
+Paralelismo
+¿Ejecutan simultáneamente en hardware?
+Dos núcleos corriendo al mismo tiempo
+Asincronía
+¿Puedo continuar mientras espero?
+await fetch(url) sin bloquear
+Thread
+¿Quien ejecuta instrucciones?
+Unidad de ejecución del OS
+Concurrencia, paralelismo, asincronía y threads: cuatro preguntas distintas.
+
+Concurrencia física vs concurrencia logica 
+El hardware y el lenguaje ofrecen dos niveles de concurrencia
+
+Concurrencia física
+
+Requiere multiprocesadores o multinúcleo.
+Ejecución simultánea efectiva.
+El runtime mapea tareas lógicas a núcleos disponibles.
+
+Concurrencia lógica (multiprogramación)
+Un solo núcleo intercala tareas rápidamente.
+El programador ve avance simultáneo.
+El scheduler decide el orden real.
+Es la abstracción central para razonar sobre concurrencia en lenguajes.
+
+Por qué importa la distinción
+Un programa correcto en lógica debe ser independiente del hardware.
+Las condiciones de carrera aparecen en ambos niveles.
+
+
+Tarea, thread, proceso y corrutina como unidades concurrentes 
+La unidad concurrente puede llamarse tarea, thread, proceso liviano o corrutina.
+Para esta clase usamos el término general: unidad concurrente.
+Lo importante es que avanza independientemente.
+El lenguaje o runtime decide cómo ejecutarla.
+
+Condición de carrera.
+El error nace en la pensar en atomicidad en leer-calcular-escribir
+
+En TypeScript con workers compartidos
+
+En Java con threads
+
+Tres condiciones para que haya carrera
+
+Existe estado compartido mutable.
+Al menos dos unidades lo acceden concurrentemente.
+Al menos una lo modifica.
+
+Condicion de carrera: anatomia del problema — Código
+
+let total = 3
+
+// Tarea A
+const x = total
+total = x + 1
+
+// Tarea B
+const y = total
+total = y * 2
+
+
+
+Sincronización en concurrencia: la sección crítica
+La sección crítica es la región donde el interleaving importa
+
+Definición
+
+Sección crítica: segmento de código que accede a un recurso compartido y no debe ejecutarse concurrentemente por más de una tarea.
+Exclusión mutua: sólo una tarea puede estar dentro de la sección crítica a la vez.
+
+Cuatro propiedades que debe garantizar cualquier solución
+
+Exclusión mutua: como máximo una unidad dentro.
+Progreso: si nadie está adentro y alguien quiere entrar, debe poder.
+Espera acotada: nadie espera indefinidamente si el recurso está libre periódicamente.
+Sin suposición de velocidad: la solución funciona independientemente del planificador.
+
+Por que no alcanza con un flag booleano simple
+Leer el flag y asignarlo no es atómico → se puede generar carrera sobre el propio mecanismo.
+
+Semáforos: el mecanismo clásico de Dijkstra 
+Un semáforo coordina acceso con un contador entero y una cola de espera
+
+Operaciones fundamentales
+
+Dos usos canónicos
+
+Semáforo binario (contador=1): exclusión mutua → actúa como mutex.
+Semáforo contador (contador=N): limita N accesos simultáneos a un recurso.
+
+Propiedad clave
+
+wait y release son operaciones atómicas — el hardware garantiza que no hay interleaving dentro de ellas.
+El programador es responsable de usar el protocolo correctamente.
+
+
+
+Semaforos en código: exclusión mutua y cooperación.
+El semáforo resuelve competencia y cooperación con el mismo mecanismo
+
+Exclusión mutua con Atomics en TypeScript (workers)
+
+Sincronización de cooperación: productor/consumidor
+
+Un semáforo resuelve competencia (mutex) y cooperación (lleno/vacio) por separado
+Combinar mal los Wait puede causar deadlock
+
+Semáforos en código: exclusión mutua y cooperación — Código
+// SharedArrayBuffer compartido entre workers.
+// Un entero alcanza para representar el estado del mutex.
+const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT)
+const mutex = new Int32Array(sab)
+
+// Convención:
+// 0 = libre
+// 1 = tomado
+
+function adquirir(): void {
+  while (Atomics.compareExchange(mutex, 0, 0, 1) !== 0) {
+    // Si sigue tomado, el worker se bloquea
+    // hasta que alguien notifique un cambio.
+    Atomics.wait(mutex, 0, 1)
+  }
+}
+
+function liberar(): void {
+  Atomics.store(mutex, 0, 0)
+  Atomics.notify(mutex, 0, 1)
+}
+
+// Uso: sección crítica protegida
+adquirir()
+try {
+  total = total + 1
+} finally {
+  liberar()
+}
+
+
+Error de protocolo
+Causa
+Efecto observable
+Olvidar release tras wait
+El programador omite la llamada
+Deadlock permanente
+release sin wait previo
+Lógica incorrecta
+Otro thread entra en sección crítica — dato corrupto
+wait y release en orden invertido
+Error de diseño
+Deadlock o corrupción según timing
+Sección crítica demasiado pequeña
+Protege solo parte del acceso
+Carrera sobre el resto del código
+Sección crítica demasiado grande
+Protege más de lo necesario
+Serializa trabajo que podría ser paralelo
+Errores típicos con semáforos y su consecuencia — Tabla
+
+Monitores: encapsulamiento y exclusión automática — Conceptos 
+Un monitor protege estado compartido con exclusion garantizada por el lenguaje
+
+Idea general de monitor
+
+Un monitor es una abstracción con tres partes:.
+1. Estado privado: solo accesible desde dentro del monitor.
+2. Procedimientos sincronizados: la entrada al monitor garantiza exclusión mutua automatica.
+3. Variables de condición: permiten que una tarea espere dentro del monitor sin bloquear a otras.
+Monitor en Java (keyword synchronized)
+
+synchronized es la palabra que convierte el método en procedimiento de monitor.
+wait() suspende dentro del monitor y libera el lock temporalmente.
+notifyAll() despierta a todos los que esperan para que re-evaluen la condición.
+
+Monitores
+class BufferMonitor<T> {
+  private final Queue<T> cola = new ArrayDeque<>();
+  private final int capacidad;
+
+  BufferMonitor(int cap) { this.capacidad = cap; }
+
+  synchronized void insertar(T item) throws InterruptedException {
+    while (cola.size() == capacidad) wait();  // espera si lleno
+    cola.add(item);
+    notifyAll();                               // avisa que hay dato
+  }
+
+  synchronized T extraer() throws InterruptedException {
+    while (cola.isEmpty()) wait();            // espera si vacio
+    T item = cola.poll();
+    notifyAll();                              // avisa que hay lugar
+    return item;
+  }
+}
+
+Pasaje de mensajes: comunicar en lugar de compartir.
+Cada unidad concurrente tiene estado local.
+La coordinación ocurre enviando y recibiendo mensajes.
+No hay memoria compartida visible.
+El protocolo se vuelve explícito.
+No compartir memoria mutable, reduce la necesidad de locks.
+
+
+Pasaje de mensajes
+send(destino, mensaje)   -- enviar un mensaje a una unidad
+receive(origen, mensaje) -- recibir un mensaje desde una unidad
+Puede ser síncrono o asíncrono según el lenguaje/modelo.
+
+
+Mensajes sincrónicos, asincrónicos y canales 
+El modelo de mensaje define quien espera y cuanto
+
+Consecuencias de diseño
+
+Síncrona = Sincronización implícita → más predecible, menos concurrencia real.
+Asincrona = Mayor concurrencia, pero puede haber acumulacion de mensajes.
+Canal = Medio explícito por donde circulan mensajes.
+
+
+Java Thread y Runnable: creación de hilos — Conceptos
+Java tiene dos formas de crear un hilo: subclase o interfaz Runnable
+
+Forma 1: extender Thread
+
+Forma 2: implementar Runnable 
+
+Por que Runnable 
+
+Un objeto puede implementar Runnable y extender otra clase a la vez
+Se separa la tarea (lógica) del mecanismo (Thread)
+
+
+Java Thread y Runnable: creación de hilos — Código
+class MiTarea extends Thread {
+  private final String nombre;
+
+  MiTarea(String nombre) { this.nombre = nombre; }
+
+  @Override
+  public void run() {
+    for (int i = 0; i < 3; i++) {
+      System.out.println(nombre + ": paso " + i);
+    }
+  }
+}
+
+// Uso
+Thread t1 = new MiTarea("A");
+Thread t2 = new MiTarea("B");
+t1.start();    // crea el hilo del OS y llama run() en el
+t2.start();
+t1.join();     // esperar que t1 termine antes de continuar
+t2.join();
+
+Runnable tarea = () -> {
+  for (int i = 0; i < 3; i++) System.out.println("Lambda: " + i);
+};
+
+Thread t = new Thread(tarea);
+t.start();
+t.join();
+
+Go goroutines y channels
+Go encarna el principio: "Do not communicate by sharing memory; share memory by communicating"
+
+Goroutine: unidad de concurrencia ultra liviana
+
+Caracteristicas clave
+
+Las goroutines cuestan ~2 KB de stack (vs ~1 MB de un thread del OS)
+El scheduler de Go multiplexa goroutines sobre threads del OS automáticamente
+Los channels son tipados: el compilador detecta errores de tipo en la comunicación
+
+Go goroutines y channels-
+package main
+
+import (
+  "fmt"
+  "sync"
+)
+
+func generarNumeros(out chan<- int, wg *sync.WaitGroup) {
+  defer wg.Done()
+  for i := 0; i < 5; i++ {
+    out <- i          // enviar por el canal
+  }
+  close(out)          // señal: no envio mas
+}
+
+func imprimirNumeros(in <-chan int, wg *sync.WaitGroup) {
+  defer wg.Done()
+  for n := range in { // recibir hasta que el canal se cierre
+    fmt.Println(n)
+  }
+}
+
+func main() {
+  canal := make(chan int)    // canal sin buffer: sincronico
+  var wg sync.WaitGroup
+  wg.Add(2)
+
+  go generarNumeros(canal, &wg)
+  go imprimirNumeros(canal, &wg)
+
+  wg.Wait()
+}
+
+TypeScript y el event loop de JavaScript
+JavaScript corre en un único hilo con un event loop cooperativo
+
+JavaScript tiene un solo hilo de ejecucion por defecto
+El event loop toma tareas de la cola y las ejecuta hasta completion
+await suspende el handler actual y devuelve el control al event loop
+Otros handlers pueden correr mientras se espera la I/O
+Concurrencia de espera sobre I/O — múltiples operaciones pendientes a la vez.
+No es: cómputo paralelo en CPU — el código JavaScript es secuencial.
+No es: multiprocesamiento — un solo heap, un solo GC, un solo thread (por defecto)
+
+
+
+TypeScript y el event loop de JavaScript — Código
+// Dos fetches pendientes al mismo tiempo, pero solo un handler activo
+async function main() {
+  const promA = fetch("/api/datos-a"); // inicia sin esperar
+  const promB = fetch("/api/datos-b"); // inicia sin esperar
+
+  const [resA, resB] = await Promise.all([promA, promB]); // espera ambas
+  // solo un handler a la vez, pero dos requests pendientes simultáneamente
+}
+
+Workers: paralelismo real
+Un worker ejecuta código en una unidad separada.
+Sirve para cómputo intensivo.
+Se comunica con mensajes.
+Puede compartir memoria mediante SharedArrayBuffer, pero eso reintroduce problemas de sincronización.
+
+Cuando usar workers
+
+Situación
+Mecanismo
+Esperar I/O
+async/await
+Cómputo CPU-bound
+Worker
+Estado compartido
+Sincronización / Atomics
+
+Atomics: exclusión mutua de bajo nivel
+const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT)
+const mutex = new Int32Array(sab)
+
+// 0 = libre, 1 = tomado
+function adquirir(): void {
+  while (Atomics.compareExchange(mutex, 0, 0, 1) !== 0) {
+    Atomics.wait(mutex, 0, 1)
+  }
+}
+
+function liberar(): void {
+  Atomics.store(mutex, 0, 0)
+  Atomics.notify(mutex, 0, 1)
+}
+

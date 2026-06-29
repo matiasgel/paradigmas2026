@@ -1,0 +1,859 @@
+Expresiones y Estructuras de Control
+
+UNTDF IDEI 2026
+
+¿Dos expresiones equivalentes siempre se comportan igual?
+Pueden diferir por precedencia.
+Pueden diferir por asociatividad.
+Pueden diferir por orden de evaluación.
+Pueden diferir por efectos colaterales.
+Pueden diferir por coerciones del lenguaje.
+Ejemplo TypeScript:
+let x = 1
+const r = x++ + x
+¿el problema está en la matemática o en la semántica del lenguaje? 
+
+
+
+Objetivos
+Al finalizar este tema el estudiante podrá
+Distinguir expresión, sentencia y efecto colateral;
+Explicar precedencia y asociatividad;
+Analizar orden de evaluación;
+Reconocer conversiones, coerciones y sobrecarga de operadores;
+Justificar short-circuit;
+Comparar estructuras de selección e iteración;
+Evaluar decisiones de diseño de lenguajes modernos.
+
+
+Mapa conceptual del tema
+Expresiones
+  ↓
+Evaluación
+  ↓
+Asignación y efectos
+  ↓
+Booleanos y short-circuit
+  ↓
+Selección
+  ↓
+Iteración
+  ↓
+Saltos restringidos y mecanismos modernos
+
+
+Expresión y sentencia
+Expresión produce valor; sentencia controla ejecución o provoca efecto. 
+Contenido:
+Expresión: construcción sintáctica que se evalúa.
+Sentencia: unidad ejecutable del programa.
+En lenguajes imperativos, muchas sentencias modifican estado.
+En TypeScript, una asignación también es una expresión
+let x = 0
+let y = (x = 5)
+
+
+Por qué esta distinción importa 
+Contenido:
+Si una expresión solo calcula, es más fácil razonar.
+Si una expresión además muta estado, aparece riesgo semántico.
+La misma sintaxis puede mezclar cálculo y efecto.
+Ejemplo TypeScript:
+let total = 0
+function sumar(x: number): number {
+ total += x
+ return total
+}
+
+
+
+Precedencia, asociatividad y parseo 
+AST y parseo 
+
+El árbol sintáctico abstracto fija la semántica de la expresión. 
+
+Cómo el AST determina semántica 
+
+La precedencia de operadores determina la estructura del árbol de parseo.
+La asociatividad resuelve empates entre operadores de igual precedencia.
+El AST captura estructura, no evaluación: es una representación intermedia.
+Parseo y evaluación son fases distintas: el árbol no garantiza orden de evaluación temporal.
+Sebesta: el operador con mayor precedencia queda más profundo en el árbol → se evalúa primero.
+
+const r = a + b * c //a + (b * c)
+
+
+Expresiones puras vs expresiones con efecto 
+Contenido:
+Expresión pura: mismo resultado para mismos argumentos.
+Expresión con efecto: cambia algo fuera de sí misma.
+Los efectos colaterales rompen transparencia referencial.
+const doble = (x: number) => x * 2
+
+let contador = 0
+const siguiente = () => ++contador
+
+Haskell favorece expresiones puras.
+TypeScript permite ambos estilos.
+Rust controla más estrictamente la mutabilidad.
+
+
+
+
+
+
+Precedencia de operadores
+La precedencia determina la agrupación.
+Multiplicación precede a suma.
+Los paréntesis expresan intención.
+La tabla de precedencia es decisión de diseño.
+
+
+Ejemplo
+
+const r = a + b << c
+
+¿se suma antes o se desplaza antes?
+
+
+Precedencia no es una ley universal
+Las reglas aritméticas suelen coincidir.
+Las reglas lógicas, bit a bit y de asignación varían.
+Leer una expresión requiere conocer el lenguaje.
+
+
+Ejemplo
+
+const a = 2 + 3 * 4      // 14
+const b = (2 + 3) * 4    // 20
+
+TypeScript, Java, Kotlin: reglas similares.
+Python agrega ** como operador de exponenciación.
+Scheme evita el problema usando notación prefija.
+
+
+Asociatividad 
+Mismo nivel de precedencia: ¿izquierda o derecha?
+
+Resolución de empates 
+
+Asociatividad izquierda: mayoría de los operadores aritméticos (+, -, *, /).
+Asociatividad derecha: exponenciación, asignación en C/Java, operador condicional ternario.
+La asociatividad izquierda es la esperada intuitivamente para operaciones aritméticas.
+Caso crítico: a = b = c = 5 en C evalúa de derecha a izquierda.(- (- 10 3) 2)
+
+Ejemplo Typescript
+const r = 10 - 3 - 2  // (10 - 3) - 2 = 5
+Scheme
+(- (- 10 3) 2)
+En Scheme no se depende de asociatividad infija.
+
+
+
+
+Exponenciación y asociatividad
+Mismo nivel de precedencia: ¿izquierda o derecha?
+
+Resolución de empates 
+
+Asociatividad izquierda: mayoría de los operadores aritméticos (+, -, *, /).
+Asociatividad derecha: exponenciación, asignación en C/Java, operador condicional ternario.
+La asociatividad izquierda es la esperada intuitivamente para operaciones aritméticas.
+Caso crítico: a = b = c = 5 en C evalúa de derecha a izquierda.
+
+Ejemplo
+const r = 10 - 3 - 2  // (10 - 3) - 2 = 5
+
+
+Paréntesis como decisión semántica
+Parentizar no es redundante si mejora la lectura
+si una expresión exige recordar demasiadas reglas, se usan paréntesis.
+
+Ejemplo
+const habilitado =  (usuario.activo && usuario.emailVerificado) || usuario.esAdmin
+
+
+
+Orden de evaluación de operandos
+Parseo ≠ orden de evaluación temporal de los operandos
+
+Semántica operacional 
+
+El AST indica estructura.
+El lenguaje define, o deja sin definir, el orden temporal.
+Con funciones puras, puede no importar.
+Con efectos colaterales, importa mucho.
+
+
+Efectos colaterales — TypeScript
+TypeScript define más orden que C, pero no elimina el problema de diseño
+
+Ejemplo:
+let i = 1
+const r = i++ + ++i
+
+Regla de diseño. 
+
+En C/C++, algunos casos son indefinidos o no especificados según el caso.
+En TypeScript, puede estar definido pero seguir siendo ilegible.
+
+
+
+Efectos colaterales — Código
+TypeScript — permitido, pero poco legible:
+let i = 0
+const x = i++ + ++i
+C contraste histórico problemático:
+i = i++ + ++i;
+Rust — decisión de diseño distinta:
+i += 1;
+// no existe i++
+
+Asignación como expresión — Conceptos
+Asignación: sentencia y expresión a la vez
+
+Decisiones de lenguaje
+
+Riesgo
+
+Lenguajes que admiten assignment expressions en condiciones habilitan el bug clásico if (x = 0).
+C lo permite; compiladores modernos emiten warning con -Wall.
+Rust, Swift, Kotlin restringen el patrón en condiciones por diseño.
+
+Asignación como expresión — Código
+C puede llevar a error por efectos colaterales
+while ((c = getchar()) != EOF) {
+    procesar(c);
+    // Idiomático en C: getchar() asigna y su valor se compara con EOF
+}
+
+Typescript
+let x = 0
+let y = (x = 5) + 3
+
+//Kotlin No se usa asignación como expresión de valor
+x = 5
+
+
+Prevención de bugs de asignación
+if (x = 0): el bug clásico de asignación en condición
+
+Estrategias de prevención 
+
+Yoda conditions → una asignación accidental falla al compilar.
+Activar warnings del compilador (-Wparentheses, -Wall en GCC/Clang).
+Lenguajes modernos (Rust, Swift, Kotlin) eliminan el problema por diseño del lenguaje.
+Linters como ESLint/TSLint detectan automáticamente este patrón.
+
+
+Conversión y coerción — Conceptos
+Conversión explícita vs. coerción implícita
+
+
+Principio de Sebesta
+
+La coerción implícita puede enmascarar errores de tipo que el sistema de tipos debería detectar.
+Lenguajes con tipado estático fuerte (Haskell, Rust) minimizan las coerciones implícitas.
+
+Mecanismo
+Control
+Riesgo
+Ejemplo
+Conversión explícita (cast)
+Programador
+Bajo
+int(3.7) → 3
+Coerción implícita widening
+Lenguaje
+Medio
+int → float automático
+Coerción implícita narrowing
+Lenguaje
+Alto
+float → int (pérdida de datos)
+Sobrecarga de operadores
+Lenguaje/Prog.
+Variable
++ en strings y enteros
+Operadores de conversión y coerción
+
+Control conceptual
+Consolidando fundamentos de expresiones
+
+¿Cuál es la diferencia entre precedencia de operadores y orden de evaluación de operandos?
+¿Cuándo una assignment expression en un if se convierte en bug?
+Dar un ejemplo donde la coerción implícita produce un resultado diferente al esperado.
+
+Álgebra booleana aplicada
+Operadores lógicos como control del flujo de evaluación
+
+Más que tablas de verdad 
+
+En código real, && y || controlan qué sub-expresiones se evalúan.
+La conjunción y disyunción permiten codificar precondiciones de forma declarativa.
+Sebesta distingue: operadores lógicos con y sin short-circuit tienen semánticas distintas.
+Formalizan el short-circuit como semántica perezosa de operadores lógicos.
+
+Evaluación implícita de verdad en condiciones — Conceptos
+Verdad no booleana: qué cuenta como true según el lenguaje
+
+Variación semántica (Sebesta §7.6, Louden §8)
+
+Regla de diseño
+
+No migrar intuiciones de valores de verdad de un lenguaje a otro sin validar la semántica local.
+if ("") { ... }        // TypeScript: válido, falsy
+
+if ("") { ... }        // Kotlin: error
+
+
+Lenguaje
+0 es falsy
+"" es false
+null/None false
+Bool estricto
+C
+Sí
+N/A
+—
+No (usa int)
+Python
+Sí
+Sí
+Sí
+Sí, flexible
+TypeScript
+Sí
+Sí
+Sí
+Sí, flexible
+Java
+No
+No
+Sí
+Sí, estricto
+Kotlin
+No
+No
+Error de compilación
+Sí, estricto
+Valor de verdad entre lenguajes
+
+Evaluación estricta
+Evaluación estricta: todos los operandos se evalúan siempre
+La evaluación estricta favorece la verificabilidad
+
+Semántica estricta 
+
+Evalúa todos los operandos antes de aplicar el operador lógico.
+Predecible y conveniente para análisis formal y optimizaciones del compilador.
+Puede ejecutar sub-expresiones inválidas innecesariamente (división por cero, acceso null).
+Pascal original usaba and/or sin garantía de short-circuit.
+Sebesta: la evaluación estricta favorece la verificabilidad; el short-circuit favorece la corrección operativa.
+
+Evaluación por cortocircuito
+Short-circuit: evaluación que se detiene cuando el resultado ya es conocido
+
+Semántica de corto circuito.
+
+p && q: si p es false, q no se evalúa — el resultado ya es false.
+p || q: si p es true, q no se evalúa — el resultado ya es true.
+Es una herramienta de corrección semántica, no solo de rendimiento.
+Permite usar la primera condición como guarda de seguridad de la segunda.
+El short-circuit es semántica perezosa de operadores lógicos.
+
+Patrón defensivo con short-circuit
+Short-circuit como guarda de corrección
+
+Evitar división por cero y acceso null.
+
+Por qué funciona
+
+Si la primera condición falla, la segunda nunca se evalúa.
+Es una forma práctica de guarda operacional.
+Invertir el orden destruye la guarda y puede causar runtime error.
+
+Patrón defensivo con short-circuit — Código
+Typescript
+// Guarda contra división por cero
+if (x !== 0 && y / x > 2) {
+    aprobar()
+}
+// Guarda contra acceso null
+if (user !== null && user.isActive()) {
+    procesar(user)
+
+C
+if (p != NULL && p->value > 0) { ... }
+
+}
+
+
+
+Side effects en booleanos: anti-patrón — Conceptos
+Mezclar predicados con efectos en operadores lógicos
+
+Anti-patrón con side effects (Sebesta §7.3 + §7.6)
+
+Principio
+
+Separar predicados (sin efectos) de funciones con efectos colaterales.
+Short-circuit convierte un efecto secundario en un efecto condicional → comportamiento inesperado.
+
+Lenguaje
+AND lógico
+OR lógico
+AND bit
+OR bit
+NOT logico
+C/C++
+&&
+||
+&
+|
+!
+Java
+&&
+||
+&
+|
+!
+TypeScript
+&&
+||
+&
+|
+!
+Python
+and
+or
+&
+|
+not
+Kotlin
+&&
+||
+and
+or
+!
+Operadores lógicos: comparativa por lenguaje
+Operadores lógicos y bit a bit por lenguaje
+
+Comparativa 
+
+Null safety con operadores lógicos — Conceptos
+?. y ??: short-circuit especializado para null
+
+TypeScript 
+
+Semántica
+
+?. implementa short-circuit ante null o undefined.
+?? es más estricto que ||: no cortocircuita ante 0 o "".
+
+Side effects en booleanos: anti-patrón — Código
+// ANTI-PATRÓN: logAndMutate() puede no ejecutarse si isReady() es true
+if (isReady() || logAndMutate()) {
+    ejecutar()
+}
+
+// CORRECTO: el efecto ocurre siempre, independiente del predicado
+const logged = logAndMutate()
+if (isReady() || logged) {
+    ejecutar()
+}
+
+Null safety con operadores lógicos — Código
+Typescript
+// Optional chaining: corta en null/undefined
+const ciudad = usuario?.direccion?.ciudad
+
+// Nullish coalescing: default solo para null/undefined (no para 0 ni "")
+const nombre = entrada ?? "sin nombre"
+
+// Combinados: guarda completa de acceso y fallback
+const zip = usuario?.direccion?.codigoPostal ?? "0000"
+
+kotlin
+val ciudad = usuario?.direccion?.ciudad
+val nombre = entrada ?: "sin nombre"
+
+Rust
+let ciudad = usuario
+    .and_then(|u| u.direccion)
+    .map(|d| d.ciudad);
+Si existe usuario, tomar su direccion; si existe la dirección, tomar su ciudad.
+
+
+
+
+Guard clauses
+Reducir anidamiento con cláusulas de guarda
+// SIN guard clauses: anidamiento profundo
+function procesar(x?: number) {
+    if (x != null) {
+        if (x >= 0) { return ok:${x} }
+    }
+    return "inválido"
+}
+
+// CON guard clauses: flujo plano y legible
+function procesar(x?: number) {
+    if (x == null) return "faltante"
+    if (x < 0)    return "inválido"
+    return ok:${x}
+}
+
+Programación estructurada y el debate sobre goto
+Goto y la emergencia de las estructuras de control
+
+Contexto histórico 
+
+goto permite saltos arbitrarios a cualquier punto del programa.
+Aumenta el poder de expresión local; reduce la trazabilidad y verificabilidad global.
+Dijkstra (1968): "Go To Statement Considered Harmful" — fundamento del movimiento estructurado.
+Las estructuras de control buscan control explícito: entrada única, salida única, verificable.
+Sebesta: el goto moderno restringido (C, C++) sobrevive para manejo de errores y salida de bucles anidados — uso justificado y acotado.
+Go: tiene goto, pero restringido.
+
+Programación estructurada y el debate sobre goto
+package main
+
+import "fmt"
+
+func main() {
+	i := 0
+
+inicio:
+	fmt.Println(i)
+	i++
+
+	if i < 3 {
+		goto inicio
+	}
+}
+goto está permitido en Go, pero de forma restringida: permite saltar a una etiqueta dentro de la misma función, sin entrar ilegalmente en un bloque ni saltarse inicializaciones de variables.
+
+
+
+If y else if: árbol de decisiones
+Selección simple y encadenada
+
+Semántica del if-else
+
+Propiedades
+
+Ramas mutuamente excluyentes;
+Evaluación en orden;
+else como caso no capturado;
+Orden de condiciones importa.
+
+
+If y else if: árbol de decisiones — Código
+Typescript
+if (score >= 9) grado = "A"
+else if (score >= 7) grado = "B"
+else if (score >= 4) grado = "C"
+else grado = "D"
+
+Kotlin
+val grado =
+    if (score >= 9) "A"
+    else if (score >= 7) "B"
+    else if (score >= 4) "C"
+    else "D"
+
+
+Switch: selección múltiple — Conceptos
+Switch como alternativa estructurada a cadenas de if-else
+
+Semántica del switch 
+
+Decisiones de diseño por lenguaje
+
+switch clásico discrimina por valor.
+C/JavaScript/TypeScript heredan la necesidad de break.
+Kotlin reemplaza switch por when.
+Rust usa match exhaustivo.
+La decisión de diseño afecta confiabilidad.
+
+switch de lenguajes basados en C como el caso representativo de selección múltiple y destaca que el problema de confiabilidad aparece cuando hay continuación implícita de una rama a otra.
+
+Switch: selección múltiple — Código
+Typescript
+switch (token) {
+  case "INT": parseIntToken(); break
+  case "ID": parseIdToken(); break
+  case "STR": parseStringToken(); break
+  default: reportError()
+}
+Kotlin
+when (token) {
+  "INT" -> parseIntToken()
+  "ID" -> parseIdToken()
+  "STR" -> parseStringToken()
+  else -> reportError()
+}
+
+
+
+Pattern matching: evolución del control múltiple
+Pattern matching como selección estructural sobre datos
+
+Evolución del switch 
+
+switch clásico: discrimina por valor (escalar, enum).
+Pattern matching: discrimina por estructura del dato — forma, tipo y desestructuración.
+Disponible en Haskell, Scala, Rust, Python 3.10+, Java 21+.
+Tabla de despacho: extensibilidad en dominios abiertos (polimorfismo por datos).
+En lenguajes con tipos algebraicos, pattern matching reemplaza la selección como estructura primaria.
+
+Complejidad cognitiva del anidamiento
+Cada nivel de anidamiento incrementa la carga cognitiva
+
+Impacto en mantenibilidad 
+
+Cada nivel de anidamiento extra multiplica los paths de ejecución posibles.
+Las ramas profundas elevan el riesgo de paths no testeados en revisión manual.
+La complejidad ciclomática, mide el número de paths linealmente independientes.
+Guard clauses y early return reducen complejidad accidental sin cambiar la semántica.
+
+Regla práctica
+
+Máximo 3 niveles de anidamiento antes de extraer una función o reestructurar el flujo.
+
+Criterio
+if-else
+switch
+Tabla de despacho
+Pocas ramas (2–3)
+óptimo
+Posible
+Sobreingeniería
+Muchas ramas (>5)
+Verboso
+legible
+extensible
+Condiciones complejas
+natural
+Limitado
+—
+Cambio frecuente de casos
+Costoso
+Costoso
+Open/Closed
+Exhaustividad verificable
+Manual
+Sí (con default)
+Manual
+Criterios para elegir estructura de selección
+Elegir entre if-else, switch y tabla de despacho
+
+Matriz de decisión
+
+Despacho por tabla — Conceptos
+Tabla de despacho: separar lógica de control de los datos
+
+Patrón ( extensión OOP)
+
+Ventajas
+
+Agregar un caso = agregar una entrada. No se modifica lógica de control.
+Principio Open/Closed aplicado a estructuras de selección.
+Cada rama es testeable independientemente sin afectar al bloque completo.
+
+Despacho por tabla — Código
+const handlers: Record<string, () => void> = {
+    INT: parseIntToken,
+    ID:  parseIdToken,
+    STR: parseStringToken,
+};
+
+(handlers[token] ?? reportError)();
+“Buscar en la tabla handlers la función asociada al valor de token; si no existe, usar reportError; luego ejecutar la función elegida.”
+
+
+Code smells de selección
+Señales de fragilidad en estructuras de selección
+
+Detectar y refactorizar 
+
+Condiciones duplicadas en múltiples ramas → violan DRY y ocultan semántica.
+Default que esconde errores → enmascarar casos no manejados reduce trazabilidad.
+Predicados opacos con side effects → mezclan responsabilidades de evaluación y acción.
+Cascadas largas sin dominio explícito → señal de que falta una abstracción de datos.
+
+Estructuras iterativas clásicas — Conceptos
+While, do-while y for: tres formas de iteración
+
+Semántica de bucles 
+
+while: evalúa condición al inicio → puede no ejecutarse si la condición es falsa de entrada.
+do-while: evalúa condición al final → garantiza al menos una ejecución.
+for: contador, condición y actualización en una línea → para iteración acotada.
+Sebesta: en la mayoría de lenguajes modernos, for es azúcar sintáctico sobre while.
+
+
+
+Estructuras iterativas clásicas — Código
+Typescript
+
+while (hayDatos()) leer()
+do { leer() } while (hayDatos())
+for (let i = 0; i < n; i++) procesar(i)
+
+Python
+while (hayDatos()) leer()
+do { leer() } while (hayDatos())
+
+Kotlin
+while (hayDatos()) leer()
+for (i in 0 until n) procesar(i)
+
+
+Invariantes de bucle
+El invariante garantiza la corrección del bucle
+
+Razonamiento formal sobre iteración 
+
+Qué se mantiene verdadero.
+Cómo se establece.
+Cómo se preserva.
+Qué permite concluir al terminar.
+
+
+Terminación del bucle
+El bucle termina si hay progreso medible hacia la condición de parada
+
+Condición de terminación 
+
+Definir una función de ranking (loop variant): entero acotado inferiormente que decrece en cada iteración.
+El bucle termina si el variant es estrictamente decreciente y acotado.
+Verificar casos borde: n = 0, colecciones vacías, centinela inalcanzable.
+Bucles con centinela: la terminación depende de que el centinela sea alcanzable en la entrada.
+
+Break y continue — Conceptos
+Escapar del flujo normal de iteración
+
+Semántica del escape estructurado 
+
+Diseño de lenguaje
+
+break y continue son transferencias estructuradas: afectan solo el bucle más cercano.
+Java permite break label para salir de bucles anidados — transferencia estructurada restringida, similar al goto limitado.
+
+Break y continue — Código
+for (const x of xs) {
+    if (!esValido(x)) continue       // salta al próximo elemento
+    if (x === objetivo) {
+        encontrado = true
+        break                         // sale del bucle
+    }
+    procesar(x)
+}
+
+Contador y centinela
+Dos patrones clásicos de control de iteración
+
+Contador vs. centinela 
+
+Contador: control por límites explícitos; adecuado cuando la cota es conocida de antemano.
+Centinela “while”: control por valor especial en el stream; evita evaluar longitud en cada iteración.
+El centinela es útil en lectura incremental de streams o archivos.while ((c = getchar()) != EOF) en C.
+Riesgo: si el valor centinela nunca aparece en la entrada, el bucle no termina.
+
+Iteradores: separar estructura de recorrido
+El iterador desacopla la colección del recorrido
+
+Patrón iterador 
+
+La colección almacena los datos.
+El iterador encapsula el estado de recorrido y define el traversal.
+Habilita recorridos alternativos sobre la misma estructura sin duplicar su estado interno.
+El protocolo Iterable/Iterator (TypeScript, Java, Python) estandariza el contrato.
+Sebesta: los iteradores son la forma moderna de iterar sobre estructuras sin exponer su representación interna.
+
+Generadores: secuencias perezosas — Conceptos
+Generadores: producir valores bajo demanda con yield
+
+Semántica de yield 
+
+Propiedades
+
+El generador suspende la ejecución en cada yield y la reanuda al siguiente next().
+Permite trabajar con secuencias infinitas sin consumir memoria proporcional al tamaño.
+Cada next() reanuda la función exactamente donde se suspendió.
+
+Generadores: secuencias perezosas — Código
+Typescript
+function* rango(inicio: number, fin: number) {
+    for (let i = inicio; i < fin; i++) yield i
+}
+
+Python
+def rango(inicio, fin):
+    for i in range(inicio, fin):
+        yield i
+
+
+for...of vs for...in — Conceptos
+Diferencia crítica en iteración sobre colecciones
+
+TypeScript 
+
+const arr = [10, 20, 30]
+for (const k in arr)  console.log(k)   // "0", "1", "2"  → claves
+for (const v of arr)  console.log(v)   // 10, 20, 30     → valores correctos
+
+Recursión e iteración: misma potencia, costos distintos
+Recursión vs. iteración: equivalencia expresiva, costos operacionales distintos
+
+Análisis comparativo
+
+Recursión: estilo declarativo; el estado está implícito en la pila de llamadas.
+Iteración: control operativo explícito; el estado está en variables locales.
+Toda recursión primitiva puede transformarse en iteración con una pila explícita.
+Equivalencia expresiva con costos operacionales distintos (stack vs. heap).
+Tail call optimization (TCO): Haskell, Scheme, Scala optimizan recursión en cola como iteración — elimina costo de stack.
+
+Control asíncrono con async/await — Conceptos
+async/await: secuencialidad aparente sobre operaciones asíncronas
+
+Flujo asíncrono como control 
+
+Modelo de control
+
+await suspende la función actual sin bloquear el hilo de ejecución.
+Permite escribir flujo de control lineal sobre operaciones inherentemente concurrentes.
+El runtime convierte el código en una máquina de estados implícita.
+
+Control asíncrono con async/await — Código
+async function obtenerDatos(): Promise<string[]> {
+return ["A", "B", "C"];
+}
+
+async function pipeline() {
+    const datos     = await obtenerDatos()       // se suspende hasta resolución
+    const validado  = await validar(datos)
+    const resultado = await transformar(validado)
+    return resultado
+}
+
+
+
+Cierre: criterios de diseño semántico
+Expresiones y estructuras de control: criterios para diseñar bien
+
+Ideas fuerza del tema
+
+Parseo ≠ evaluación: la precedencia fija la forma; el orden de evaluación lo fija el lenguaje.
+Short-circuit por corrección: la semántica de corto circuito evita estados inválidos, no solo optimiza.
+Estructuras por mantenibilidad: if-else, switch o dispatch según el dominio y el cambio esperado.
+Iteración correcta: un bucle sin invariante y sin función de ranking no es correcto por accidente.
+Legibilidad semántica: nombrar bien predicados y estructurar el flujo previene defectos futuros.
+
+Referencias
+
+Sebesta (fuente principal): caps. 7 y 8 — expresiones, evaluación, asignación y estructuras de control.
+Gabbrielli-Martini (auxiliar): semántica operacional, coerciones, invariantes de bucle y recursión.
+Louden (auxiliar): implementación del control de flujo, legibilidad y decisiones de diseño de lenguajes.

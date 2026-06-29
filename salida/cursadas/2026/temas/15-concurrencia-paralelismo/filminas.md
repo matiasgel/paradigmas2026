@@ -1,4 +1,10 @@
-﻿# Filminas - Tema 15: Concurrencia y Paralelismo
+# Filminas — Tema 15: Concurrencia y Paralelismo
+
+> **Curso:** Laboratorio de Programación y Lenguajes 2026 (IF009) | **Módulo XI** | **Semana 15**
+> **Duración:** 120 minutos | **Lenguaje principal:** TypeScript | **Contrastes:** Java, Go
+> **Baseline:** `concurrencia.txt` (filminas reales dadas en clase) — reconstruidas fielmente.
+
+---
 
 ## PORTADA
 
@@ -7,16 +13,14 @@
 ### [F-00] Concurrencia y Paralelismo
 
 @tipo: portada
-@imagen: none
+@imagen: background
+@prompt-imagen: Two parallel horizontal sequences of flat geometric shapes on white background. Top sequence: three bordo rectangles connected by thin rightward arrows. Bottom sequence: three dark gray circles connected by thin rightward arrows. Between both sequences, a vertical dashed line in the center. Flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
 # Concurrencia y Paralelismo
 
-## Tema 15 — Modulo XI
+Recorrido: fundamentos, sincronización, modelos de comunicación.
 
-- Lenguaje principal: TypeScript
-- Contrastes: Java, C#, Go, Kotlin, Erlang, Rust
-- Pregunta guia: que puede avanzar a la vez y que debe coordinarse?
-- Recorrido: fundamentos, sincronizacion, modelos de comunicacion y lenguajes modernos
+Módulo XI — Semana 15
 
 ---
 
@@ -27,327 +31,294 @@
 ### [F-01] Un resultado que cambia solo con el orden
 
 @tipo: socratica
-@imagen: none
+@imagen: background
+@prompt-imagen: One large central oval shape in bordo color on white background. Inside the oval, a small dark gray diamond. Three thin curved lines radiate outward from the oval toward three small flat icons arranged in a triangle: a checkmark, a magnifying glass, and a gear. Flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
-# Si dos unidades modifican el mismo dato, quien decide el valor final?
+# ¿Si dos unidades modifican el mismo dato, quién decide el valor final?
 
 ## El caso TOTAL
 
-```
-TOTAL := 3                       -- valor inicial compartido
+```text
+TOTAL := 3
 
--- Tarea A                       -- Tarea B
-x := TOTAL  -- lee 3             x := TOTAL  -- lee 3
-x := x + 1  -- calcula 4         x := x * 2  -- calcula 6
-TOTAL := x  -- escribe 4         TOTAL := x  -- escribe 6
+Tarea A:
+  x := TOTAL
+  x := x + 1
+  TOTAL := x
+
+Tarea B:
+  x := TOTAL
+  x := x * 2
+  TOTAL := x
 ```
 
-- Si A completa antes que B: resultado = 6
-- Si B completa antes que A: resultado = 4
-- Si se intercalan (interleaving): puede ser 4, 6, 7 u 8
-- Leer–calcular–escribir **no es una operacion atomica**
-- El problema no es el lenguaje: es estado compartido sin coordinacion
+- Si A completa antes que B: resultado = **6**
+- Si B completa antes que A: resultado = **4**
+- Si se intercalan (interleaving): puede ser **4, 6, 7 u 8**
+
+Leer–calcular–escribir **no es** una operación atómica.
+El problema no es el lenguaje: es **estado compartido sin coordinación**.
 
 ---
 
-### [F-02] Concurrencia, paralelismo, asincronia y threads: cuatro preguntas distintas
+### [F-02] Cuatro palabras que no son sinónimos
 
 @tipo: tabla-comparativa
-@imagen: none
 
-# No son sinonimos; cada termino responde una pregunta diferente
+# Concurrencia, paralelismo, asincronía y threads: cuatro preguntas distintas
 
-| Termino | Pregunta que responde | Ejemplo concreto |
+## No son sinónimos; cada término responde una pregunta diferente
+
+| Término | Pregunta que responde | Ejemplo concreto |
 |---------|----------------------|------------------|
-| Concurrencia | ¿Varias actividades progresan solapadas? | Dos tareas alternando en un nucleo |
-| Paralelismo | ¿Ejecutan simultaneamente en hardware? | Dos nucleos corriendo al mismo tiempo |
-| Asincronia | ¿Puedo continuar mientras espero? | `await fetch(url)` sin bloquear |
-| Thread | ¿Quien ejecuta instrucciones? | Unidad de ejecucion del OS |
+| Concurrencia | ¿Varias actividades progresan solapadas? | Dos tareas alternando en un núcleo |
+| Paralelismo | ¿Ejecutan simultáneamente en hardware? | Dos núcleos corriendo al mismo tiempo |
+| Asincronía | ¿Puedo continuar mientras espero? | `await fetch(url)` sin bloquear |
+| Thread | ¿Quién ejecuta instrucciones? | Unidad de ejecución del OS |
 
 ## Lo que importa para este curso
 
-- Un programa puede ser **concurrente sin ser paralelo** (un nucleo, multitarea)
-- Un programa puede ser **asincrono sin ser concurrente** (single event loop, un handler a la vez)
-- **Paralelismo necesita hardware multiple**; concurrencia no
-- El foco de esta clase es la *concurrencia a nivel de subprogramas*
+- Un programa puede ser **concurrente sin ser paralelo** (un núcleo, multitarea).
+- Un programa puede ser **asíncrono sin ser concurrente** (single event loop, un handler a la vez).
+- Paralelismo necesita hardware múltiple; concurrencia no.
+- El foco de esta clase es la **concurrencia a nivel de subprogramas**.
 
 ---
 
-### [F-03] Concurrencia fisica vs concurrencia logica
+### [F-03] Concurrencia física vs concurrencia lógica
 
 @tipo: concepto-abstracto
-@imagen: none
+@imagen: content
+@prompt-imagen: Two horizontal layers on white background. Top layer: a single wide dark gray rectangle. Bottom layer: four small bordo squares arranged in a horizontal row connected by thin curved lines to the top rectangle. A thin vertical dashed line connects the two layers in the center. Flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
 # El hardware y el lenguaje ofrecen dos niveles de concurrencia
 
-## Concurrencia fisica
+## Concurrencia física
 
-- Requiere multiprocesadores o multinucleo
-- Ejecucion simultanea efectiva
-- El runtime mapea tareas logicas a nucleos disponibles
+- Requiere multiprocesadores o multinúcleo.
+- Ejecución simultánea efectiva.
+- El runtime mapea tareas lógicas a núcleos disponibles.
 
-## Concurrencia logica (multiprogramacion)
+## Concurrencia lógica (multiprogramación)
 
-- Un solo nucleo intercala tareas rapidamente
-- El programador ve avance simultane
-- El scheduler decide el orden real
-- Es **la abstraccion central para razonar sobre concurrencia en lenguajes**
+- Un solo núcleo intercala tareas rápidamente.
+- El programador ve avance simultáneo.
+- El scheduler decide el orden real.
+- Es la **abstracción central** para razonar sobre concurrencia en lenguajes.
 
-## Por que importa la distincion
+## Por qué importa la distinción
 
-- Un programa correcto en logica debe serlo independientemente del hardware
-- Las condiciones de carrera aparecen **en ambos niveles**
+- Un programa correcto en lógica debe ser **independiente del hardware**.
+- Las condiciones de carrera aparecen en **ambos niveles**.
 
 ---
 
-### [F-04] Concurrencia a nivel de subprogramas
+### [F-04] Tarea, thread, proceso y corrutina como unidades concurrentes
 
 @tipo: concepto-abstracto
-@imagen: none
+@imagen: content
+@prompt-imagen: Four small flat shapes arranged in a horizontal row on white background: a bordo square, a dark gray circle, a bordo hexagon, and a dark gray triangle. A thin horizontal line connects all four shapes. Above the line, a single wide rectangle in light gray. Flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
-# Un programa se divide en unidades que avanzan independientemente
+# La unidad concurrente puede llamarse tarea, thread, proceso liviano o corrutina
 
-## La idea central
+## Para esta clase
 
-- La unidad concurrente puede ser una **tarea, un thread, un proceso liviano o una corrutina**
-- El nombre no importa; lo que importa es el **avance independiente**
-- El lenguaje define que operaciones se permiten y como se coordinan
-- El runtime decide cuanto de eso se ejecuta en paralelo real
-
-## Dos preguntas que el lenguaje debe responder
-
-1. **¿Como se crean las unidades concurrentes?** (palabras reservadas, librerias, corrutinas)
-2. **¿Como se sincronizan y comunican?** (semaforos, monitores, mensajes, canales)
-
-## Consecuencias de diseno
-
-- Lenguajes con soporte nativo (Go, Rust) hacen visible la concurrencia en la sintaxis
-- Lenguajes con librerias (Java, C#) la delegan a clases y frameworks
-- Lenguajes funcionales (Erlang) eliminan el estado compartido y usan mensajes
+- Usamos el término general: **unidad concurrente**.
+- Lo importante es que **avanza independientemente**.
+- El lenguaje o runtime decide **cómo ejecutarla**.
 
 ---
 
-### [F-05] Tarea, thread, proceso y corrutina como unidades concurrentes
-
-@tipo: tabla-comparativa
-@imagen: none
-
-# Separar concepto, mecanismo y costo de creacion evita confusiones
-
-| Unidad | Nivel | Memoria | Costo creacion | Lenguajes tipicos |
-|--------|-------|---------|----------------|-------------------|
-| Tarea (task) | Logico/concurrente | Comparte con proceso | Bajo-medio | Modelo conceptual del tema |
-| Thread | OS o runtime | Comparte heap del proceso | Medio | Java, C#, C++, TypeScript workers |
-| Proceso | OS | Espacio propio | Alto | C, Unix fork, microservicios |
-| Goroutine | Runtime (Go) | Stack dinamico propio | Muy bajo (~2 KB) | Go |
-| Corrutina | Lenguaje | Stack suspendible | Muy bajo | Kotlin, Python, Dart, TypeScript |
-
-## Que comparten los threads pero no los procesos
-
-- Heap, variables globales y descriptores de archivo
-- Por eso la condicion de carrera existe: comparten estado mutable
+## BLOQUE B — Race conditions y sincronización
 
 ---
 
-### [F-06] Condicion de carrera: anatomia del problema
+### [F-05] Condición de carrera: anatomía del problema
 
-@tipo: demo
-@imagen: none
+@tipo: codigo
 
-# El error nace en la ilusoria atomicidad de leer-calcular-escribir
-
-## En TypeScript con workers compartidos
-
-```ts
-// SharedArrayBuffer compartido entre workers
-const sab = new SharedArrayBuffer(4);
-const arr = new Int32Array(sab);
-arr[0] = 3;
-
-// Worker A                    // Worker B
-const x = arr[0];  // lee 3   const x = arr[0];  // lee 3
-arr[0] = x + 1;    // = 4     arr[0] = x * 2;    // = 6
-// resultado final: 4 o 6, dependiendo del interleaving
-```
-
-## En Java con threads
-
-```java
-class Contador {
-  int total = 3;
-
-  void incrementar() { total = total + 1; } // no atomico
-  void duplicar()    { total = total * 2; } // no atomico
-}
-```
+# El error nace al pensar en atomicidad de leer-calcular-escribir
 
 ## Tres condiciones para que haya carrera
 
-1. Existe estado compartido mutable
-2. Al menos dos unidades lo acceden concurrentemente
-3. Al menos una lo modifica
+1. Existe **estado compartido mutable**.
+2. Al menos **dos unidades** lo acceden concurrentemente.
+3. Al menos **una lo modifica**.
+
+## Código TypeScript (workers compartidos)
+
+```ts
+let total = 3
+
+// Tarea A
+const x = total
+total = x + 1
+
+// Tarea B
+const y = total
+total = y * 2
+```
+
+- En TypeScript con workers compartidos; en Java con threads: **el problema es el mismo**.
 
 ---
 
-## BLOQUE B — Mecanismos de sincronizacion clasicos
-
----
-
-### [F-07] Sincronizacion de competencia: la seccion critica
-
-@tipo: concepto-abstracto
-@imagen: none
-
-# La seccion critica es la region donde el interleaving importa
-
-## Definicion
-
-- **Seccion critica**: segmento de codigo que accede a un recurso compartido y **no debe ejecutarse concurrentemente** por mas de una tarea
-- **Exclusion mutua**: solo una tarea puede estar dentro de la seccion critica a la vez
-
-## Cuatro propiedades que debe garantizar cualquier solucion
-
-1. **Exclusion mutua**: como maximo una unidad dentro
-2. **Progreso**: si nadie esta adentro y alguien quiere entrar, debe poder
-3. **Espera acotada**: nadie espera indefinidamente si el recurso esta libre periodicamente
-4. **Sin suposicion de velocidad**: la solucion funciona independientemente del scheduling
-
-## Por que no alcanza con un flag booleano simple
-
-- Leer el flag y setearlo no es atomico → se puede generar carrera sobre el propio mecanismo
-
----
-
-### [F-08] Semaforos: el mecanismo clasico de Dijkstra
+### [F-06] Sincronización: la sección crítica
 
 @tipo: concepto-mixto
-@imagen: none
 
-# Un semaforo coordina acceso con un contador entero y una cola de espera
+# La sección crítica es la región donde el interleaving importa
+
+## Definición
+
+- **Sección crítica:** segmento de código que accede a un recurso compartido y **no debe ejecutarse concurrentemente** por más de una tarea.
+- **Exclusión mutua:** sólo una tarea puede estar dentro de la sección crítica a la vez.
+
+## Cuatro propiedades que debe garantizar cualquier solución
+
+1. **Exclusión mutua:** como máximo una unidad dentro.
+2. **Progreso:** si nadie está adentro y alguien quiere entrar, debe poder.
+3. **Espera acotada:** nadie espera indefinidamente si el recurso está libre periódicamente.
+4. **Sin suposición de velocidad:** la solución funciona independientemente del planificador.
+
+## Por qué no alcanza con un flag booleano simple
+
+- Leer el flag y asignarlo **no es atómico** → se puede generar carrera sobre el propio mecanismo.
+
+---
+
+### [F-07] Semáforos: el mecanismo clásico de Dijkstra
+
+@tipo: concepto-abstracto
+@imagen: content
+@prompt-imagen: One central vertical pole in dark gray on white background. At the top of the pole, a bordo circle. Below it, a thin horizontal bar. At the bottom, a small dark gray rectangle. To the right of the pole, a vertical column of three small flat squares stacked. Flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
+
+# Un semáforo coordina acceso con un contador entero y una cola de espera
 
 ## Operaciones fundamentales
 
-```
-wait(s):
-  si contador(s) > 0 entonces
-    contador(s) := contador(s) - 1
-  si no
-    suspender tarea actual en cola(s)
-  fin
+```text
+wait(s)
+  si contador(s) > 0: decrementar
+  si no: suspender tarea en cola(s)
 
-release(s):
-  si cola(s) no esta vacia entonces
-    despertar primera tarea de cola(s)
-  si no
-    contador(s) := contador(s) + 1
-  fin
+release(s)
+  si cola(s) no vacía: despertar una tarea
+  si no: incrementar contador(s)
 ```
 
-## Dos usos canonicos
+## Dos usos canónicos
 
-- **Semaforo binario (contador=1)**: exclusion mutua → actua como mutex
-- **Semaforo contador (contador=N)**: limita N accesos simultaneos a un recurso
+- **Semáforo binario** (contador=1): exclusión mutua → actúa como mutex.
+- **Semáforo contador** (contador=N): limita N accesos simultáneos a un recurso.
 
 ## Propiedad clave
 
-- `wait` y `release` son operaciones **atomicas** — el hardware garantiza que no hay interleaving dentro de ellas
-- El programador es responsable de usar el protocolo correctamente
+- `wait` y `release` son **operaciones atómicas** — el hardware garantiza que no hay interleaving dentro de ellas.
+- El programador es responsable de usar el protocolo correctamente.
 
 ---
 
-### [F-09] Semaforos en codigo: exclusion mutua y cooperacion
+### [F-08] Semáforos en código: exclusión mutua con Atomics
 
 @tipo: codigo
-@imagen: none
 
-# El semaforo resuelve competencia y cooperacion con el mismo mecanismo
+# El semáforo resuelve competencia con el mismo mecanismo
 
-## Exclusion mutua con Atomics en TypeScript (workers)
+## Exclusión mutua con Atomics en TypeScript (workers)
 
 ```ts
-// SharedArrayBuffer compartido entre workers
-const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT);
-const mutex = new Int32Array(sab); // 0 = libre, 1 = tomado
+// SharedArrayBuffer compartido entre workers.
+// Un entero alcanza para representar el estado del mutex.
+const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT)
+const mutex = new Int32Array(sab)
+
+// Convención:
+// 0 = libre
+// 1 = tomado
 
 function adquirir(): void {
-  // compareExchange atomico: si es 0, setear a 1 y continuar
   while (Atomics.compareExchange(mutex, 0, 0, 1) !== 0) {
-    Atomics.wait(mutex, 0, 1); // suspender hasta que alguien libere
+    // Si sigue tomado, el worker se bloquea
+    // hasta que alguien notifique un cambio.
+    Atomics.wait(mutex, 0, 1)
   }
 }
 
 function liberar(): void {
-  Atomics.store(mutex, 0, 0); // liberar
-  Atomics.notify(mutex, 0, 1); // despertar un waiter
+  Atomics.store(mutex, 0, 0)
+  Atomics.notify(mutex, 0, 1)
 }
 
-// Uso: seccion critica protegida
-adquirir();
-total = total + 1;
-liberar();
+// Uso: sección crítica protegida
+adquirir()
+try {
+  total = total + 1
+} finally {
+  liberar()
+}
 ```
-
-## Sincronizacion de cooperacion: productor/consumidor
-
-```
--- Semaforos: lleno y vacio
-vacio : Semaphore := N;   -- cuantos lugares quedan libres
-lleno : Semaphore := 0;   -- cuantos elementos hay disponibles
-
-Productor:                 Consumidor:
-  loop                       loop
-    producir(item)             Wait(lleno)
-    Wait(vacio)                Wait(mutex)
-    Wait(mutex)                item := extraer()
-    insertar(item)             Release(mutex)
-    Release(mutex)             Release(vacio)
-    Release(lleno)             consumir(item)
-  end loop                   end loop
-```
-
-- Un semaforo resuelve **competencia** (mutex) y **cooperacion** (lleno/vacio) por separado
-- Combinar mal los Wait puede causar **deadlock**
 
 ---
 
-### [F-10] Errores tipicos con semaforos y su consecuencia
+### [F-09] Semáforos en cooperación: productor/consumidor
+
+@tipo: concepto-mixto
+
+# El semáforo resuelve competencia y cooperación por separado
+
+## Sincronización de cooperación: productor/consumidor
+
+- Un semáforo resuelve **competencia** (mutex) y **cooperación** (lleno/vacío) por separado.
+- Combinar mal los `wait` puede causar **deadlock**.
+
+## Por qué importa el orden de los wait
+
+- Si el productor hace `wait(mutex)` antes que `wait(vacio)` y el buffer está lleno, se bloquea dentro de la sección crítica.
+- El consumidor nunca puede entrar → **deadlock**.
+
+---
+
+### [F-10] Errores típicos con semáforos
 
 @tipo: tabla
-@imagen: none
 
-# El poder del semaforo es proporcional al riesgo de usarlo mal
+# Errores típicos con semáforos y su consecuencia
 
 | Error de protocolo | Causa | Efecto observable |
 |--------------------|-------|-------------------|
 | Olvidar `release` tras `wait` | El programador omite la llamada | Deadlock permanente |
-| `release` sin `wait` previo | Logica incorrecta | Otro thread entra en seccion critica — dato corrupto |
-| `wait` y `release` en orden invertido | Error de diseno | Deadlock o corrupcion segun timing |
-| Seccion critica demasiado pequeña | Protege solo parte del acceso | Carrera sobre el resto del codigo |
-| Seccion critica demasiado grande | Protege mas de lo necesario | Serializa trabajo que podria ser paralelo |
-| Semaforo compartido entre modulos distintos | Acoplamiento implicito | Bloqueo inesperado desde codigo remoto |
+| `release` sin `wait` previo | Lógica incorrecta | Otro thread entra en sección crítica — dato corrupto |
+| `wait` y `release` en orden invertido | Error de diseño | Deadlock o corrupción según timing |
+| Sección crítica demasiado pequeña | Protege solo parte del acceso | Carrera sobre el resto del código |
+| Sección crítica demasiado grande | Protege más de lo necesario | Serializa trabajo que podría ser paralelo |
 
-## Por que los monitores existen
+## Por qué los semáforos son frágiles
 
-- Los errores de semaforos **no son detectables por el compilador**
-- Los monitores encapsulan el estado y hacen el protocolo **estructural**, no opcional
+- El compilador **no detecta** omisiones ni mal orden de `wait`/`release`.
+- El mismo mecanismo resuelve competencia y cooperación, pero combinarlos mal puede causar **deadlock**.
 
 ---
 
-### [F-11] Monitores: encapsulamiento y exclusion automatica
+### [F-11] Monitores: encapsulamiento y exclusión automática
 
 @tipo: concepto-mixto
-@imagen: none
 
-# Un monitor protege estado compartido con exclusion garantizada por el lenguaje
+# Un monitor protege estado compartido con exclusión garantizada por el lenguaje
 
-## Modelo de Hoare
+## Idea general de monitor
 
-Un monitor es una abstraccion con tres partes:
-1. **Estado privado**: solo accesible desde dentro del monitor
-2. **Procedimientos sincronizados**: la entrada al monitor garantiza exclusion mutua automatica
-3. **Variables de condicion**: permiten que una tarea espere dentro del monitor sin bloquear a otras
+Un monitor es una abstracción con tres partes:
 
-## Monitor en Java (keyword `synchronized`)
+1. **Estado privado:** solo accesible desde dentro del monitor.
+2. **Procedimientos sincronizados:** la entrada al monitor garantiza exclusión mutua automática.
+3. **Variables de condición:** permiten que una tarea espere dentro del monitor sin bloquear a otras.
+
+## Monitor en Java (`synchronized`)
+
+- `synchronized` es la palabra que convierte el método en procedimiento de monitor.
+- `wait()` suspende dentro del monitor y libera el lock temporalmente.
+- `notifyAll()` despierta a todos los que esperan para que re-evalúen la condición.
 
 ```java
 class BufferMonitor<T> {
@@ -363,7 +334,7 @@ class BufferMonitor<T> {
   }
 
   synchronized T extraer() throws InterruptedException {
-    while (cola.isEmpty()) wait();            // espera si vacio
+    while (cola.isEmpty()) wait();            // espera si vacío
     T item = cola.poll();
     notifyAll();                              // avisa que hay lugar
     return item;
@@ -371,286 +342,65 @@ class BufferMonitor<T> {
 }
 ```
 
-- `synchronized` es la palabra que convierte el metodo en procedimiento de monitor
-- `wait()` suspende dentro del monitor **y libera el lock temporalmente**
-- `notifyAll()` despierta a todos los que esperan para que re-evaluen la condicion
+---
+
+## BLOQUE C — Modelos de comunicación
 
 ---
 
-### [F-12] Monitores con variables de condicion: cooperacion explicita
-
-@tipo: concepto-mixto
-@imagen: none
-
-# Las variables de condicion permiten coordinar el orden de ejecucion dentro del monitor
-
-## Variables de condicion
-
-- Permiten a una tarea **esperar** dentro del monitor hasta que se cumpla una condicion
-- Dos operaciones: `wait(c)` — suspender en cola de c; `signal(c)` — despertar una tarea de c
-- `wait(c)` **libera el lock del monitor** mientras espera (diferencia clave con semaforo)
-
-## Productor/consumidor con `java.util.concurrent`
-
-```java
-import java.util.concurrent.locks.*;
-
-class BufferCondicion<T> {
-  private final Queue<T> cola = new ArrayDeque<>();
-  private final Lock lock = new ReentrantLock();
-  private final Condition noVacio = lock.newCondition();
-  private final Condition noLleno = lock.newCondition();
-  private final int cap;
-
-  void insertar(T item) throws InterruptedException {
-    lock.lock();
-    try {
-      while (cola.size() == cap) noLleno.await(); // esperar lugar
-      cola.add(item);
-      noVacio.signal();                            // avisar al consumidor
-    } finally { lock.unlock(); }
-  }
-
-  T extraer() throws InterruptedException {
-    lock.lock();
-    try {
-      while (cola.isEmpty()) noVacio.await();      // esperar dato
-      T item = cola.poll();
-      noLleno.signal();                            // avisar al productor
-      return item;
-    } finally { lock.unlock(); }
-  }
-}
-```
-
-- Usar condiciones separadas (`noVacio`, `noLleno`) es mas eficiente que `notifyAll`
-- El patron `while (condicion) await()` — nunca `if` — protege contra spurious wakeups
-
----
-
-### [F-13] Pasaje de mensajes: comunicar en lugar de compartir
+### [F-12] Pasaje de mensajes: comunicar en lugar de compartir
 
 @tipo: diagrama
-@imagen: none
+@imagen: content
+@prompt-imagen: Two flat rectangles on white background, left and right, separated by a horizontal gap. Left rectangle bordo, right rectangle dark gray. A thin horizontal arrow pointing from the left rectangle to the right rectangle. A small circle in the middle of the arrow. Flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
-# El estado queda local; la coordinacion ocurre mediante mensajes
+# Cada unidad concurrente tiene estado local
 
-## Modelo
+## El protocolo se vuelve explícito
 
-- Cada unidad concurrente tiene **estado local privado**
-- Las unidades se coordinan enviando y recibiendo **mensajes**
-- No hay memoria compartida visible → no hay seccion critica por defecto
+- Cada unidad concurrente tiene **estado local**.
+- La coordinación ocurre **enviando y recibiendo mensajes**.
+- No hay memoria compartida visible.
+- No compartir memoria mutable **reduce la necesidad de locks**.
 
-## Dos operaciones basicas
+## Operaciones
 
-```
+```text
 send(destino, mensaje)   -- enviar un mensaje a una unidad
 receive(origen, mensaje) -- recibir un mensaje desde una unidad
 ```
 
-## Ventaja fundamental
-
-- Elimina la necesidad de locks y semaforos para la mayoria de los casos
-- El protocolo se hace **explicito** en el codigo: quien le habla a quien
-- Erlang y Go hacen de esto su principio de diseno central
-
-## Desventaja potencial
-
-- Copiar datos tiene costo; para volumenes grandes hay que diseñar el protocolo
+Puede ser **síncrono o asíncrono** según el lenguaje/modelo.
 
 ---
 
-### [F-14] Mensajes sincronicos, asincronicos y canales
+### [F-13] Mensajes sincrónicos, asincrónicos y canales
 
 @tipo: tabla-comparativa
-@imagen: none
 
-# El modelo de mensaje define quien espera y cuanto
+# El modelo de mensaje define quién espera y cuánto
 
-| Variante | Comportamiento del emisor | Comportamiento del receptor | Lenguaje tipico |
-|----------|---------------------------|-----------------------------|-----------------|
-| Sincrona / canal sin buffer | Espera hasta que el receptor acepta | Espera hasta que hay mensaje | Go `make(chan T)`, TS MessageChannel |
-| Asincrona bufferizada | Continua si hay lugar en el buffer | Espera si buffer vacio | Go `make(chan T, N)`, BroadcastChannel |
-| Asincrona pura | Continua siempre sin esperar | El mensaje llega a la cola del receptor | Erlang `!`, TS `postMessage` |
+## Consecuencias de diseño
 
-## Consecuencias de diseno
-
-- **Sincrona** = sincronizacion implicita → mas predecible, menos concurrencia real
-- **Asincrona** = mayor concurrencia, pero puede haber acumulacion de mensajes
-- La eleccion del modelo **cambia la semantica del programa**
+| Modelo | Quién espera | Consecuencia de diseño |
+|--------|-------------|------------------------|
+| Síncrono | Emisor y receptor se encuentran | Sincronización implícita → más predecible, menos concurrencia real |
+| Asincrónico | Emisor no bloquea | Mayor concurrencia, pero puede haber acumulación de mensajes |
+| Canal | Medio explícito por donde circulan mensajes | Tipado y sincronización explícitos |
 
 ---
 
-## BLOQUE C — TypeScript avanzado: cancelacion, canales y Rust
+## BLOQUE D — Lenguajes: Java y Go
 
 ---
 
-### [F-15] TypeScript: cancelacion estructurada con AbortController
+### [F-14] Java Thread y Runnable: creación de hilos
 
 @tipo: codigo
-@imagen: none
-
-# AbortController conecta el ciclo de vida de una operacion asincrona con su cancelacion
-
-## Patron de timeout y cancelacion manual
-
-```ts
-// Cancelacion con timeout automatico
-async function fetchConTimeout<T>(url: string, ms: number): Promise<T> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(new Error("timeout")), ms);
-
-  try {
-    const resp = await fetch(url, { signal: controller.signal });
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    return await resp.json();
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-// Cancelacion desde fuera: el usuario hace click en "Cancelar"
-const controller = new AbortController();
-botonCancelar.addEventListener("click", () => controller.abort());
-
-// Propagar signal a operaciones encadenadas
-async function procesarPaginas(signal: AbortSignal): Promise<void> {
-  for (let pag = 1; !signal.aborted; pag++) {
-    const datos = await fetch(`/api?p=${pag}`, { signal }).then(r => r.json());
-    if (datos.fin) break;
-    await procesarLote(datos.items, signal); // propagar la misma signal
-  }
-}
-```
-
-## Por que esto importa para concurrencia
-
-- `signal.aborted` es el flag de cancelacion compartido entre operaciones encadenadas
-- Es la version TypeScript de "structured concurrency": el padre controla el ciclo de vida de sus hijos
-- Conecta conceptualmente con `coroutineScope` de Kotlin y los scopes de Go
-
----
-
-### [F-16] TypeScript: MessageChannel y BroadcastChannel — pasaje de mensajes real
-
-@tipo: codigo
-@imagen: none
-
-# TypeScript tiene canales de mensajes reales; no solo async/await sobre el event loop
-
-## MessageChannel: canal privado punto a punto entre contextos
-
-```ts
-// Crear el canal y los dos extremos del tubo
-const { port1, port2 } = new MessageChannel();
-
-// Lado receptor (puede estar en un Worker)
-port1.onmessage = ({ data }: MessageEvent) => {
-  console.log("Recibido en port1:", data);
-  port1.postMessage({ respuesta: "ok", eco: data }); // responder
-};
-
-// Lado emisor: enviar y esperar respuesta
-port2.postMessage({ tipo: "ping", valor: 42 });
-port2.onmessage = ({ data }) => console.log("Respuesta:", data);
-
-// Transferir port2 a un Worker para comunicacion privada
-const worker = new Worker("./worker.js");
-worker.postMessage({ canal: port2 }, [port2]); // transferencia de ownership
-```
-
-## BroadcastChannel: fan-out a todos los contextos del mismo origen
-
-```ts
-// Cualquier tab, worker o iframe que tenga el mismo nombre recibe el mensaje
-const receptor = new BroadcastChannel("cache-invalidation");
-receptor.onmessage = ({ data }) => {
-  if (data.tipo === "invalidar") limpiarCache(data.clave);
-};
-
-// Desde cualquier otro contexto:
-new BroadcastChannel("cache-invalidation").postMessage({
-  tipo: "invalidar",
-  clave: "usuarios"
-});
-```
-
-## Conexion con los modelos de comunicacion
-
-- `MessageChannel` implementa pasaje de mensajes punto a punto
-- `BroadcastChannel` implementa el modelo de publicacion/suscripcion
-- La transferencia de ownership con `[port2]` conecta con el concepto de Rust: mover el recurso
-
----
-
-### [F-17] Rust: el compilador como garante de la concurrencia
-
-@tipo: concepto-mixto
-@imagen: none
-
-# Rust hace imposible compilar codigo con data races — sin GC, sin runtime de seguridad
-
-## Threads con Arc<Mutex<T>> — compartir memoria de forma segura
-
-```rust
-use std::sync::{Arc, Mutex};
-use std::thread;
-
-fn main() {
-    // Arc = puntero con conteo de referencias thread-safe
-    // Mutex<i32> = el i32 solo es accesible con el lock tomado
-    let contador = Arc::new(Mutex::new(0));
-
-    let handles: Vec<_> = (0..4).map(|_| {
-        let c = Arc::clone(&contador); // clonar la referencia, no el dato
-        thread::spawn(move || {
-            let mut lock = c.lock().unwrap(); // tomar el mutex
-            *lock += 1;                       // seccion critica
-            // lock se libera AUTOMATICAMENTE al salir del scope (RAII)
-        })
-    }).collect();
-
-    for h in handles { h.join().unwrap(); }
-    println!("Total: {}", *contador.lock().unwrap()); // siempre 4
-}
-```
-
-## Lo que el compilador rechaza en Rust
-
-```rust
-let datos = vec![1, 2, 3];
-
-thread::spawn(|| {
-    println!("{:?}", datos); // ERROR: datos no cumple Send — no puede cruzar threads
-});
-
-// Para cruzar threads, el tipo debe implementar Send (seguro para threads)
-// y Sync (seguro para compartirse). El compilador lo verifica estaticamente.
-```
-
-## Contraste pedagogico con TypeScript
-
-| Aspecto | TypeScript | Rust |
-|---------|-----------|------|
-| Quien detecta la carrera | El programador / runtime | El compilador |
-| Costo de la seguridad | Disciplina + tests | Verbose, pero garantizado |
-| Modelo de memoria | GC, heap dinamico | Ownership, sin GC |
-| Cuando usar | Web, servidores, tooling | Sistemas, drivers, Wasm critico |
-
----
-
-## BLOQUE D — Java: threads clasicos y java.util.concurrent
-
----
-
-### [F-18] Java Thread y Runnable: creacion de hilos
-
-@tipo: codigo
-@imagen: none
 
 # Java tiene dos formas de crear un hilo: subclase o interfaz Runnable
 
-## Forma 1: extender Thread
+## Forma 1: extender Thread — Forma 2: implementar Runnable
 
 ```java
 class MiTarea extends Thread {
@@ -669,15 +419,11 @@ class MiTarea extends Thread {
 // Uso
 Thread t1 = new MiTarea("A");
 Thread t2 = new MiTarea("B");
-t1.start();    // crea el hilo del OS y llama run() en el
+t1.start();    // crea el hilo del OS y llama run() en él
 t2.start();
 t1.join();     // esperar que t1 termine antes de continuar
 t2.join();
-```
 
-## Forma 2: implementar Runnable (preferida)
-
-```java
 Runnable tarea = () -> {
   for (int i = 0; i < 3; i++) System.out.println("Lambda: " + i);
 };
@@ -687,277 +433,24 @@ t.start();
 t.join();
 ```
 
-## Por que Runnable es preferida
+## Por qué Runnable
 
-- Un objeto puede implementar `Runnable` y extender otra clase a la vez
-- Se separa la **tarea** (logica) del **mecanismo** (Thread)
-- Compatible con `ExecutorService` sin cambios
+- Un objeto puede implementar `Runnable` y extender otra clase a la vez.
+- Se separa la **tarea** (lógica) del **mecanismo** (Thread).
 
 ---
 
-### [F-19] Java synchronized, wait y notify
+### [F-15] Go goroutines y channels
 
 @tipo: codigo
-@imagen: none
 
-# `synchronized` implementa monitores; `wait`/`notify` implementan cooperacion
-
-## Exclusion mutua con synchronized
-
-```java
-class Banco {
-  private double saldo = 1000.0;
-
-  // Monitor: solo un thread ejecuta este metodo a la vez
-  public synchronized void depositar(double monto) {
-    saldo += monto;                        // seccion critica protegida
-  }
-
-  public synchronized void retirar(double monto) {
-    if (saldo >= monto) saldo -= monto;
-  }
-
-  // Bloque synchronized: proteger parte del metodo
-  public void transferir(Banco destino, double monto) {
-    synchronized (this) {
-      saldo -= monto;
-    }
-    synchronized (destino) {
-      destino.saldo += monto;
-    }
-  }
-}
-```
-
-## Cooperacion con wait/notify en el monitor
-
-```java
-class BufferCircular {
-  private int[] datos = new int[10];
-  private int entrada = 0, salida = 0, cantidad = 0;
-
-  public synchronized void poner(int valor) throws InterruptedException {
-    while (cantidad == datos.length) wait();    // buffer lleno: libera lock y espera
-    datos[entrada] = valor;
-    entrada = (entrada + 1) % datos.length;
-    cantidad++;
-    notifyAll();                               // avisar a consumidores que hay dato
-  }
-
-  public synchronized int sacar() throws InterruptedException {
-    while (cantidad == 0) wait();             // buffer vacio: libera lock y espera
-    int val = datos[salida];
-    salida = (salida + 1) % datos.length;
-    cantidad--;
-    notifyAll();                              // avisar a productores que hay lugar
-    return val;
-  }
-}
-```
-
-- `wait()` **libera el lock** y suspende — luego re-adquiere el lock al despertar
-- Siempre `while` con `wait()`, nunca `if` — protege contra spurious wakeups
-
----
-
-### [F-20] Java java.util.concurrent: herramientas modernas
-
-@tipo: tabla-comparativa
-@imagen: none
-
-# Java 5+ ofrece abstracciones de alto nivel sobre threads
-
-| Clase / Interfaz | Para que sirve | Ejemplo de uso |
-|-----------------|----------------|----------------|
-| `ExecutorService` | Pool de threads reutilizable | `Executors.newFixedThreadPool(4)` |
-| `Future<T>` | Resultado asincrono de una tarea | `future.get()` espera y retorna valor |
-| `ReentrantLock` | Lock explicito con tryLock y timeout | Alternativa a `synchronized` mas flexible |
-| `Semaphore` | Semaforo contable | `sem.acquire()` / `sem.release()` |
-| `CountDownLatch` | Esperar que N tareas terminen | `latch.await()` despues de `latch.countDown()` |
-| `BlockingQueue<T>` | Cola thread-safe con bloqueo | `queue.put()` / `queue.take()` |
-| `AtomicInteger` | Operacion atomica sin lock | `counter.incrementAndGet()` |
-| `CompletableFuture<T>` | Concurrencia funcional encadenada | `.thenApply()`, `.thenCombine()` |
-
-## Pool de threads — patron tipico de produccion
-
-```java
-ExecutorService pool = Executors.newFixedThreadPool(4);
-List<Future<Integer>> futuros = new ArrayList<>();
-
-for (int i = 0; i < 20; i++) {
-  final int id = i;
-  futuros.add(pool.submit(() -> procesarElemento(id)));  // tarea asincrona
-}
-
-for (Future<Integer> f : futuros) {
-  System.out.println("Resultado: " + f.get());           // esperar cada resultado
-}
-pool.shutdown();
-```
-
----
-
-## BLOQUE E — C# y concurrencia funcional
-
----
-
-### [F-21] C# threads, lock y Task
-
-@tipo: concepto-mixto
-@imagen: none
-
-# C# evoluciono de Thread/lock hacia Task y async/await como abstraccion preferida
-
-## Thread y lock (API clasica)
-
-```csharp
-class Contador {
-  private int valor = 0;
-  private readonly object candado = new object();
-
-  public void Incrementar() {
-    lock (candado) {       // equivalente a synchronized de Java
-      valor++;
-    }
-  }
-}
-```
-
-## Task y async/await (API moderna)
-
-```csharp
-async Task<string[]> CargarDatosAsync() {
-  Task<string> t1 = ObtenerUsuariosAsync();
-  Task<string> t2 = ObtenerPedidosAsync();
-
-  await Task.WhenAll(t1, t2);           // esperar ambas sin bloquear el hilo
-  return new[] { t1.Result, t2.Result };
-}
-```
-
-## Monitor.Wait / Monitor.Pulse
-
-```csharp
-lock (cola) {
-  while (cola.Count == 0)
-    Monitor.Wait(cola);       // equivalente a wait() de Java
-  var item = cola.Dequeue();
-  Monitor.Pulse(cola);        // equivalente a notify()
-}
-```
-
-## Diferencia de diseno con Java
-
-- C# `async`/`await` esta integrado en el lenguaje desde C# 5 (2012)
-- `Task` es equivalente a `Future` de Java pero con mejor ergonomia
-- No hay `synchronized` keyword; se usa `lock(objeto) { }` explicito
-
----
-
-### [F-22] Erlang y actores: concurrencia sin estado compartido
-
-@tipo: concepto-abstracto
-@imagen: none
-
-# Erlang elimina el estado compartido: cada proceso tiene su estado, comunica por mensajes
-
-## Modelo de actores de Erlang
-
-- Cada proceso Erlang tiene **estado completamente aislado**
-- La comunicacion es **exclusivamente por mensajes asincrónicos**
-- No existen locks, semaforos ni monitores — no hacen falta
-- Si un proceso falla, los otros **no se ven afectados** (fault isolation)
-
-## Sintaxis Erlang
-
-```erlang
-% Crear un proceso
-Pid = spawn(fun contador/0).
-
-% Funcion que corre en el proceso
-contador() ->
-  receive
-    {incrementar, N} ->
-      % el estado es local: no hay nada compartido
-      contador_con_valor(N + 1);
-    {obtener, Remitente} ->
-      Remitente ! {valor, 0},
-      contador()
-  end.
-
-% Enviar mensaje (asincrono, no bloquea)
-Pid ! {incrementar, 5}.
-```
-
-## Por que esto escala
-
-- Millones de procesos livianisimos en la misma VM
-- Sin memoria compartida = sin carreras de datos
-- La supervision de procesos (`supervisor`) implementa tolerancia a fallas
-- Influencia directa en Go, Akka (Scala/Java), Elixir
-
----
-
-## BLOQUE F — Concurrencia a nivel de sentencias
-
----
-
-### [F-23] Concurrencia a nivel de sentencias: FORALL y HPF
-
-@tipo: concepto-abstracto
-@imagen: none
-
-# El compilador puede paralelizar iteraciones independientes sin gestion explicita
-
-## Statement-level concurrency
-
-- En algunos dominios (computo cientifico, matrices) todas las iteraciones son independientes
-- El lenguaje puede declarar esta independencia y dejar que el compilador/runtime explote el paralelismo
-- Sin necesidad de crear threads ni gestionar sincronizacion manualmente
-
-## FORALL en High Performance Fortran (HPF)
-
-```fortran
-! Suma vectorial: cada iteracion es independiente -> paralelo automatico
-FORALL (I = 1:N)
-  A(I) = B(I) + C(I)
-END FORALL
-
-! Distribucion de datos entre procesadores
-!HPF$ DISTRIBUTE A(BLOCK)
-!HPF$ DISTRIBUTE B(BLOCK)
-```
-
-## Equivalente moderno: parallelStream en Java
-
-```java
-// El runtime elige cuantos threads usar automaticamente
-int suma = IntStream.range(0, 1_000_000)
-    .parallel()              // declarar independencia
-    .filter(n -> n % 2 == 0)
-    .sum();
-```
-
-## Cuando aplica
-
-- **Si**: operaciones sobre arreglos sin dependencias entre iteraciones
-- **No**: si una iteracion depende del resultado de la anterior (reduce)
-- La responsabilidad de declarar la independencia es del programador
-
----
-
-## BLOQUE G — Go y Kotlin: modelos modernos
-
----
-
-### [F-24] Go goroutines y channels: comunicar en lugar de compartir
-
-@tipo: codigo
-@imagen: none
-
-# Go encarna el principio: "Do not communicate by sharing memory; share memory by communicating"
+# "Do not communicate by sharing memory; share memory by communicating"
 
 ## Goroutine: unidad de concurrencia ultra liviana
+
+- Las goroutines cuestan **~2 KB de stack** (vs ~1 MB de un thread del OS).
+- El scheduler de Go multiplexa goroutines sobre threads del OS automáticamente.
+- Los channels son **tipados**: el compilador detecta errores de tipo en la comunicación.
 
 ```go
 package main
@@ -972,7 +465,7 @@ func generarNumeros(out chan<- int, wg *sync.WaitGroup) {
   for i := 0; i < 5; i++ {
     out <- i          // enviar por el canal
   }
-  close(out)          // señal: no envio mas
+  close(out)          // señal: no envío más
 }
 
 func imprimirNumeros(in <-chan int, wg *sync.WaitGroup) {
@@ -983,7 +476,7 @@ func imprimirNumeros(in <-chan int, wg *sync.WaitGroup) {
 }
 
 func main() {
-  canal := make(chan int)    // canal sin buffer: sincronico
+  canal := make(chan int)    // canal sin buffer: sincrónico
   var wg sync.WaitGroup
   wg.Add(2)
 
@@ -994,134 +487,32 @@ func main() {
 }
 ```
 
-## Caracteristicas clave
+---
 
-- Las goroutines cuestan ~2 KB de stack (vs ~1 MB de un thread del OS)
-- El scheduler de Go multiplexa goroutines sobre threads del OS automaticamente
-- Los channels son **tipados**: el compilador detecta errores de tipo en la comunicacion
-- `select` elige el primer canal listo (igual que `select` de Unix o `select` de Go, pero sin callbacks)
+## BLOQUE E — TypeScript: event loop, workers y Atomics
 
 ---
 
-### [F-25] Go select y sync.Mutex: cuando si se comparte memoria
+### [F-16] TypeScript y el event loop de JavaScript
 
 @tipo: codigo
-@imagen: none
 
-# Go tiene channels Y mutex; usar el adecuado segun el caso
+# JavaScript corre en un único hilo con un event loop cooperativo
 
-## select: esperar el primer canal disponible
+## El modelo de ejecución
 
-```go
-func despachador(urgentes, normales <-chan string, timeout <-chan time.Time) {
-  for {
-    select {
-    case pedido := <-urgentes:          // si llego un urgente, atenderlo
-      procesarUrgente(pedido)
-    case pedido := <-normales:          // si llego un normal, atenderlo
-      procesarNormal(pedido)
-    case <-timeout:                     // si ninguno llego en X segundos
-      fmt.Println("Sin actividad")
-      return
-    }
-  }
-}
-```
+- JavaScript tiene **un solo hilo** de ejecución por defecto.
+- El event loop toma tareas de la cola y las ejecuta **hasta completion**.
+- `await` suspende el handler actual y devuelve el control al event loop.
+- Otros handlers pueden correr mientras se espera la I/O.
 
-## sync.Mutex: para contadores y estructuras compartidas
+## Qué es y qué no es
 
-```go
-import "sync"
+- **Es:** concurrencia de espera sobre I/O — múltiples operaciones pendientes a la vez.
+- **No es:** cómputo paralelo en CPU — el código JavaScript es secuencial.
+- **No es:** multiprocesamiento — un solo heap, un solo GC, un solo thread (por defecto).
 
-type ContadorSeguro struct {
-  mu    sync.Mutex
-  valor int
-}
-
-func (c *ContadorSeguro) Incrementar() {
-  c.mu.Lock()           // adquirir mutex
-  defer c.mu.Unlock()   // liberar al salir (defer garantiza esto)
-  c.valor++
-}
-
-func (c *ContadorSeguro) Leer() int {
-  c.mu.Lock()
-  defer c.mu.Unlock()
-  return c.valor
-}
-```
-
-## Regla de Go para elegir
-
-- **Channels** para coordinar trabajo, transferir propiedad de datos, señalizar eventos
-- **Mutex** para proteger datos cuando multiples goroutines necesitan acceso compartido
-
----
-
-### [F-26] Kotlin corrutinas y concurrencia estructurada
-
-@tipo: codigo
-@imagen: none
-
-# Kotlin hace visible el ciclo de vida, la cancelacion y los errores como ciudadanos del lenguaje
-
-## Structured Concurrency: todas las corrutinas tienen un scope padre
-
-```kotlin
-import kotlinx.coroutines.*
-
-suspend fun cargarDashboard(): Dashboard = coroutineScope {
-  // launch lanza corrutinas hijas; coroutineScope espera a todas
-  val usuariosDeferred = async { api.obtenerUsuarios() }
-  val pedidosDeferred  = async { api.obtenerPedidos() }
-  val alertasDeferred  = async { api.obtenerAlertas() }
-
-  // await() suspende sin bloquear el thread
-  Dashboard(
-    usuarios = usuariosDeferred.await(),
-    pedidos  = pedidosDeferred.await(),
-    alertas  = alertasDeferred.await()
-  )
-}
-// Si cualquier async falla, el scope cancela las demas automaticamente
-// Si el scope se cancela, todas las hijas se cancelan en cascada
-```
-
-## Dispatchers: elegir donde corre la corrutina
-
-```kotlin
-withContext(Dispatchers.IO)      { leerArchivo() }   // pool de I/O
-withContext(Dispatchers.Default) { calcularHash() }  // pool CPU-bound
-withContext(Dispatchers.Main)    { actualizarUI() }  // hilo principal (Android)
-```
-
-## Por que es pedagogicamente valioso
-
-- Kotlin hace explicitos los tres problemas del async moderno: ciclo de vida, cancelacion y errores
-- `coroutineScope` garantiza que ninguna corrutina hijo escapa del scope padre
-- Los dispatchers separan "que hacer" de "donde hacerlo"
-
----
-
-## BLOQUE H — TypeScript: asincronia y paralelismo real
-
----
-
-### [F-27] TypeScript y el event loop de JavaScript
-
-@tipo: diagrama
-@imagen: none
-
-# JavaScript corre en un unico hilo con un event loop cooperativo
-
-## El modelo de ejecucion (MDN)
-
-- JavaScript tiene **un solo hilo** de ejecucion por defecto
-- El **event loop** toma tareas de la cola y las ejecuta hasta completion
-- `await` suspende el handler actual y devuelve el control al event loop
-- Otros handlers pueden correr mientras se espera la I/O
-
-## Implicaciones para la concurrencia
+## Código: dos fetches pendientes al mismo tiempo
 
 ```ts
 // Dos fetches pendientes al mismo tiempo, pero solo un handler activo
@@ -1134,194 +525,58 @@ async function main() {
 }
 ```
 
-## Que es y que no es la asincronia de JS
+---
 
-- **Es**: concurrencia de espera sobre I/O — multiples operaciones pendientes a la vez
-- **No es**: computo paralelo en CPU — el codigo JavaScript es secuencial
-- **No es**: multiprocesamiento — un solo heap, un solo GC, un solo thread (por defecto)
+### [F-17] Workers: paralelismo real
+
+@tipo: tabla-mixta
+
+# Un worker ejecuta código en una unidad separada
+
+## Qué es un worker
+
+- Un worker ejecuta código en una **unidad separada**.
+- Sirve para **cómputo intensivo** (CPU-bound).
+- Se comunica con **mensajes**.
+- Puede compartir memoria mediante `SharedArrayBuffer`, pero eso **reintroduce problemas de sincronización**.
+
+## Cuándo usar workers
+
+| Situación | Mecanismo |
+|-----------|-----------|
+| Esperar I/O | `async`/`await` |
+| Cómputo CPU-bound | Worker |
+| Estado compartido | Sincronización / Atomics |
 
 ---
 
-### [F-28] async/await, Promise.all y Promise.allSettled
-
-@tipo: codigo
-@imagen: none
-
-# La composicion de Promises permite concurrencia de espera sin callbacks anidados
-
-## Promise.all: todas o nada — falla si cualquiera falla
-
-```ts
-async function cargarDashboard(): Promise<Dashboard> {
-  const [usuarios, ventas, alertas] = await Promise.all([
-    api.get<Usuario[]>("/usuarios"),
-    api.get<Venta[]>("/ventas"),
-    api.get<Alerta[]>("/alertas")
-  ]);
-  return { usuarios, ventas, alertas };
-}
-```
-
-## Promise.allSettled: colectar todos los resultados, incluso los fallidos
-
-```ts
-async function verificarServicios(urls: string[]): Promise<EstadoServicio[]> {
-  const resultados = await Promise.allSettled(
-    urls.map(url => fetch(url).then(r => r.json()))
-  );
-
-  return resultados.map((r, i) => ({
-    url: urls[i],
-    estado: r.status === "fulfilled" ? "ok" : "error",
-    detalle: r.status === "rejected" ? r.reason : null
-  }));
-}
-```
-
-## Promise.race: el primero que responda gana (patron timeout)
-
-```ts
-async function conTimeout<T>(promesa: Promise<T>, ms: number): Promise<T> {
-  const timeout = new Promise<never>((_, reject) =>
-    setTimeout(() => reject(new Error("timeout")), ms)
-  );
-  return Promise.race([promesa, timeout]);
-}
-```
-
----
-
-### [F-29] worker_threads: paralelismo real en Node.js
-
-@tipo: codigo
-@imagen: none
-
-# Para computo CPU-intensivo, un worker es una unidad de ejecucion independiente con su propio V8
-
-## Crear y comunicar con un worker
-
-```ts
-// main.ts — hilo principal
-import { Worker, isMainThread, parentPort, workerData } from "node:worker_threads";
-import { cpus } from "node:os";
-
-const NUCLEOS = cpus().length;
-
-async function procesarEnParalelo(datos: number[]): Promise<number[]> {
-  const chunk = Math.ceil(datos.length / NUCLEOS);
-  const workers = Array.from({ length: NUCLEOS }, (_, i) =>
-    new Promise<number[]>((resolve, reject) => {
-      const worker = new Worker(__filename, {
-        workerData: { fragmento: datos.slice(i * chunk, (i + 1) * chunk) }
-      });
-      worker.on("message", resolve);
-      worker.on("error", reject);
-    })
-  );
-  return (await Promise.all(workers)).flat();
-}
-
-// Codigo que corre DENTRO del worker (mismo archivo)
-if (!isMainThread) {
-  const resultado = (workerData.fragmento as number[]).map(n => n * n);
-  parentPort!.postMessage(resultado);
-}
-```
-
-## SharedArrayBuffer: memoria compartida entre workers
-
-```ts
-const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 4);
-const arr = new Int32Array(sab);
-
-// Operacion atomica para evitar carreras
-Atomics.add(arr, 0, 1);   // equivalente a arr[0]++ pero atomico
-Atomics.wait(arr, 0, 0);  // esperar hasta que arr[0] != 0
-Atomics.notify(arr, 0);   // despertar workers esperando en arr[0]
-```
-
-## Cuando usar workers
-
-- **Si**: computo CPU-bound que bloquearia el event loop (hashing, compresion, ML inference)
-- **No**: operaciones I/O — async/await es mas eficiente y mas simple
-
----
-
-## BLOQUE I — Decision de diseno y cierre
-
----
-
-### [F-30] Mapa de decisiones: elegir el mecanismo correcto
-
-@tipo: tabla
-@imagen: none
-
-# La pregunta no es "que lenguaje esta de moda" sino "que problema tengo"
-
-| Situacion | Mecanismo apropiado | Lenguaje tipico | Riesgo a cuidar |
-|-----------|---------------------|-----------------|-----------------|
-| Esperar N operaciones I/O simultaneas | `Promise.all` / `async/await` | TypeScript, C# | Propagacion de errores y timeouts |
-| Cancelar operaciones con ciclo de vida | `AbortController` + signal | TypeScript | Propagar signal a todas las operaciones hijas |
-| Computo CPU-bound aislable | Workers / `ExecutorService` | TS, Java | Costo de serializar datos al worker |
-| Contadores y acumuladores compartidos | `Atomics` / `synchronized` / `lock` | TS, Java, C# | Seccion critica bien delimitada |
-| Productores y consumidores desacoplados | `BlockingQueue` / channels | Java, Go | Esperas infinitas si el productor falla |
-| Ciclo de vida con cancelacion estructurada | Corrutinas + scope | Kotlin, Swift | Propagacion de cancelacion en cascada |
-| Pasaje de mensajes punto a punto | `MessageChannel` / channels | TS, Go | Transferencia de ownership del puerto |
-| Modelo de actores sin estado compartido | Mensajes / Erlang | Erlang, Akka, Go | Mailbox sin limite puede crecer |
-| Hardware paralelo / computo cientifico | FORALL / `parallelStream` | Fortran HPF, Java | Dependencias ocultas entre iteraciones |
-| Garantia de no-data-race en compilacion | Ownership + `Arc<Mutex<T>>` | Rust | Verbose, curva de aprendizaje alta |
-
----
-
-### [F-31] Comparativa de lenguajes: el arco completo
-
-@tipo: tabla-comparativa
-@imagen: none
-
-# Cada lenguaje expone una vision distinta de la concurrencia
-
-| Lenguaje | Unidad principal | Sincronizacion | Comunicacion | Garantia del lenguaje |
-|----------|-----------------|----------------|--------------|----------------------|
-| Java | Thread | synchronized / Lock | wait/notify / BlockingQueue | Runtime exclusion mutua |
-| C# | Thread / Task | lock / Monitor | async/await | Compila concurrencia asincrona |
-| Go | Goroutine | sync.Mutex | Channels tipados | Race detector en runtime |
-| Kotlin | Coroutine | Mutex / Atomic | Flow, Channel | Scope garantiza no leak |
-| TypeScript | Promise / Worker | Atomics + MessageChannel | postMessage / BroadcastChannel | AbortController para ciclo de vida |
-| Erlang | Process | No hay: sin memoria compartida | send / receive | VM garantiza aislamiento |
-| Rust | Thread + Arc<T> | Mutex<T> / Atomic | mpsc channels | Compilador: no data races posibles |
-
-## Lectura pedagogica del arco
-
-- **Java/C#**: monitores clasicos + abstracciones modernas coexisten en el mismo lenguaje
-- **Go**: canales como primitiva preferida; mutex cuando realmente se necesita
-- **Kotlin**: structured concurrency resuelve los tres grandes problemas (lifecycle, cancel, errores)
-- **TypeScript**: excelente para I/O asincronico; workers + Atomics + MessageChannel para lo demas
-- **Erlang**: el modelo funcional puro — sin estado compartido, sin carreras posibles
-- **Rust**: la seguridad de concurrencia como propiedad del compilador; zero-cost pero verbose
-
----
-
-### [F-32] Cierre: lo que la clase deja
+### [F-18] Atomics: exclusión mutua de bajo nivel
 
 @tipo: cierre
-@imagen: none
+@imagen: background
+@prompt-imagen: One large bordo filled circle in the center of white background. Six thin straight lines radiate outward to six small flat icons arranged in a circle: a gear, a horizontal tube, a branching tree, a checkmark, a magnifying glass, and a cube. Flat minimal design. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
-# Concurrir es organizar avance, coordinacion y comunicacion entre unidades independientes
+# Atomics: exclusión mutua de bajo nivel
 
-## Tres capas que estructuran el tema
+## Cierre del recorrido
 
-1. **Vocabulario**: concurrencia / paralelismo / asincronia / thread — cuatro preguntas distintas
-2. **Mecanismos**: semaforos → monitores → pasaje de mensajes — creciente nivel de abstraccion
-3. **Lenguajes**: Java → C# → Go → Kotlin → TypeScript → Erlang → Rust — espectro de decisiones de diseno
+```ts
+const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT)
+const mutex = new Int32Array(sab)
 
-## Preguntas que el programador debe responder ante un problema concurrente
+// 0 = libre, 1 = tomado
+function adquirir(): void {
+  while (Atomics.compareExchange(mutex, 0, 0, 1) !== 0) {
+    Atomics.wait(mutex, 0, 1)
+  }
+}
 
-- ¿Hay estado compartido mutable? → decidir mecanismo de exclusion mutua
-- ¿Hay dependencias de orden? → decidir mecanismo de cooperacion
-- ¿El costo dominante es I/O o CPU? → elegir entre async o workers
-- ¿El ciclo de vida debe ser controlable? → considerar structured concurrency
+function liberar(): void {
+  Atomics.store(mutex, 0, 0)
+  Atomics.notify(mutex, 0, 1)
+}
+```
 
-## Para la proxima clase
+## Idea final
 
-- Práctica: implementar productor/consumidor en TypeScript (Atomics + SharedArrayBuffer)
-- Opcional: comparar el mismo problema en Go (channels) y Java (BlockingQueue)
+> El problema no es el lenguaje: es **estado compartido sin coordinación**.

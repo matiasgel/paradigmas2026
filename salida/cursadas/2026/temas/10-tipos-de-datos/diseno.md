@@ -1,8 +1,8 @@
 # Diseño de Clase — Tema 10
 ## Tipos de Datos y Sistemas de Tipos
 
-> **Estado:** APROBADO — filminas.md y minuta.md generados 2026-05-25
-> **Revisión:** 2026-05-26 — Ajuste de autocontenido post-publicación (ver sección al final)
+> **Estado:** 🟡 EN PRODUCCION — filminas.md y minuta.md corregidos contra `clase_dada.txt` (1122 líneas) + ChromaDB el 2026-06-28 (360 min, 54 filminas F-00 a F-53)
+> **Revisión previa:** 2026-05-26 — Ajuste de autocontenido post-publicación (ver sección al final)
 > **Creado:** 2026-05-25
 > **Agente:** Lic. Marcos 🗂️ (Topic Designer)
 > **Fuente principal:** Sebesta, *Concepts of Programming Languages* 12ª ed., Cap. 6 "Data Types" (pp. 259–324)

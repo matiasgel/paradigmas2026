@@ -2,13 +2,13 @@
 
 > **Agente:** Dr. Roberto ✍️ — Class Writer
 > **Fecha:** 2026-05-14
-> **Revisado:** 2026-05-14 — enriquecido con bibliografía oficial vía ChromaDB (Sebesta, Gabbrielli-Martini, Louden-Lambert) — 8 filminas nuevas
+> **Corregido:** 2026-06-28 — reconstruido fielmente de clase_dada.txt (1102 líneas) + ChromaDB
 > **Tema:** 09.2 — Aliases, Closures, GC y Tipos
 > **Duración:** 120 min (1 clase)
 > **Lenguaje principal:** TypeScript
-> **Fuente:** diseno.md + ChromaDB (Sebesta §5.3.3, §6.11, §9.5, §10.6, §15; Gabbrielli §7.4, §8.11, §11, §16.9; Louden §7.7, §9.1, §10.3, §10.5)
+> **Fuente:** clase_dada.txt + ChromaDB (Sebesta §5.3.3, §6.11, §7.4, §9.5, Cap.10; Gabbrielli §7.4, §8.11, §11, §16.9; Louden §7.7, §9.1, §10.3, §10.5)
 > **Prerequisito:** Tema 09.1 — Variables, Binding y Ámbito (5-tupla, categorías, ámbito estático)
-> **Estado:** ✅ Enriquecido con bibliografía oficial — pendiente de revisión docente
+> **Estado:** ✅ Corregido contra clase_dada.txt — 56 filminas, 120 min — pendiente de revisión docente
 
 ---
 
@@ -1189,7 +1189,7 @@ El artículo "Tipado gradual para lenguajes funcionales" (Siek & Taha, Scheme Wo
 
 ## Corrección formal del sistema de tipos y TypeScript — Gabbrielli §16.9
 
-Gabbrielli distingue el tipado gradual **formalmente correcto** (las garantías de tipos se preservan completamente en tiempo de ejecución) del enfoque de TypeScript, que es **deliberadamente incompleto**: acepta ciertos programas con potenciales errores de tipo por razones de usabilidad y compatibilidad con JavaScript. Esta decisión de diseño está documentada en la especificación oficial: TypeScript no garantiza la corrección completa del sistema de tipos. El tipo `unknown` (F-30b) es la herramienta más cercana al tipado gradual formalmente correcto que TypeScript ofrece.
+Gabbrielli distingue el tipado gradual **formalmente correcto** (las garantías de tipos se preservan completamente en tiempo de ejecución) del enfoque de TypeScript, que es **deliberadamente incompleto**: acepta ciertos programas con potenciales errores de tipo por razones de usabilidad y compatibilidad con JavaScript. Esta decisión de diseño está documentada en la especificación oficial: TypeScript no garantiza la corrección completa del sistema de tipos.
 
 ---
 
@@ -1241,109 +1241,7 @@ sumar({}, []);       // "[object Object]" — TypeScript no objeta
 
 ---
 
-### [F-30] TypeScript — nivel 1 y nivel 2: tipos parciales y strict mode
-
-@tipo: codigo
-
-# De cobertura parcial a cobertura total — la migración incremental en acción
-
-```typescript
-// ────────────────────────────────────────────
-// Nivel 1: tipos en la interfaz pública
-// ────────────────────────────────────────────
-function sumarSeguro(a: number, b: number): number {
-    return a + b;   // el compilador garantiza que a y b son numbers en compilación
-}
-
-sumarSeguro(1, 2);      // ✅ 3
-// sumarSeguro("1", 2); // ❌ Error: Argument of type 'string' is not assignable to type 'number'
-
-// ────────────────────────────────────────────
-// Nivel 2: strict mode — cobertura total
-// tsconfig.json: { "compilerOptions": { "strict": true } }
-// ────────────────────────────────────────────
-// Activa: noImplicitAny, strictNullChecks, strictFunctionTypes,
-//         strictBindCallApply, strictPropertyInitialization, noImplicitThis
-
-function buscarUsuario(id: number): string | null {
-    if (id === 1) return "Ana";
-    return null;    // el return type incluye null — obligatorio declararlo
-}
-
-const nombre = buscarUsuario(2);
-// Sin strictNullChecks: nombre.toUpperCase() — compila, crash en runtime
-// Con strictNullChecks: nombre.toUpperCase() — ❌ Error: 'nombre' is possibly 'null'
-console.log(nombre?.toUpperCase() ?? "no encontrado");  // ✅ manejo explícito de null
-```
-
----
-
-### [F-30b] `unknown` vs `any` — el tipo gradual seguro en TypeScript
-
-@tipo: codigo
-
-# `any` desactiva el sistema de tipos; `unknown` lo preserva — dos escape hatches con semánticas opuestas
-
-## La diferencia conceptual
-
-- **`any`**: TypeScript suspende completamente la verificación de tipos. El programador puede hacer cualquier cosa con el valor sin que el compilador objete. Corresponde al tipo dinámico `?` de Siek & Taha pero sin garantías de runtime.
-- **`unknown`**: TypeScript sabe que el valor existe pero no conoce su tipo. **Obliga al programador a hacer narrowing antes de cualquier operación** — si no, el compilador rechaza el código.
-
-```typescript
-// ─────────────────────────────────────────────────────────────────
-// `any` — el compilador no objeta nada — crash en runtime posible
-// ─────────────────────────────────────────────────────────────────
-function procesarAny(valor: any): string {
-    return valor.toUpperCase();    // ✅ para TypeScript — TypeError en runtime si valor es number
-    // `any` anula TODAS las garantías del sistema de tipos
-}
-
-// ─────────────────────────────────────────────────────────────────
-// `unknown` — requiere narrowing antes de cualquier operación
-// ─────────────────────────────────────────────────────────────────
-function procesarUnknown(valor: unknown): string {
-    // return valor.toUpperCase(); // ❌ Error: Object is of type 'unknown'
-    if (typeof valor === "string") {
-        return valor.toUpperCase();  // ✅ — narrowed a string
-    }
-    if (typeof valor === "number") {
-        return valor.toFixed(2);     // ✅ — narrowed a number
-    }
-    return String(valor);            // ✅ — String() funciona con cualquier tipo
-}
-
-// ─────────────────────────────────────────────────────────────────
-// Uso canónico de `unknown`: datos externos y catch blocks
-// ─────────────────────────────────────────────────────────────────
-async function fetchJSON(url: string): Promise<unknown> {
-    const r = await fetch(url);
-    return r.json();   // unknown: no sabemos qué estructura retorna el servidor
-    // El caller DEBE hacer narrowing — correcto por diseño del sistema de tipos
-}
-
-// Desde TypeScript 4.0: el bloque catch usa `unknown` por defecto (opción de compilador: useUnknownInCatchVariables)
-try {
-    JSON.parse("datos-invalidos");
-} catch (e: unknown) {
-    // e.message;          // ❌ Error: Object is of type 'unknown'
-    if (e instanceof Error) {
-        console.log(e.message);  // ✅ — narrowed a Error
-    }
-}
-```
-
-## La regla práctica en proyectos con `strict: true`
-
-| Situación | Tipo recomendado | Motivo |
-|---|---|---|
-| Migración gradual desde JS | `any` (transitorio) | Compatibilidad — marcar con TODO |
-| Datos de red / JSON.parse / catch | `unknown` | Fuerza verificación antes de uso |
-| Interop con librerías sin types | `any` con cast documentado | No hay alternativa |
-| Cualquier otro caso | Tipo concreto o union type | Sin escape hatch |
-
----
-
-### [F-31] Type Narrowing — ¿qué es y por qué existe?
+### [F-30] Type Narrowing — ¿qué es y por qué existe?
 
 @tipo: concepto-abstracto
 
@@ -1375,7 +1273,7 @@ Type narrowing es el mecanismo que permite usar union types de forma segura — 
 
 ---
 
-### [F-32] Type Narrowing con `typeof` e `instanceof`
+### [F-31] Type Narrowing con `typeof` e `instanceof`
 
 @tipo: codigo
 
@@ -1410,7 +1308,7 @@ function hacerSonido(animal: Perro | Gato): string {
 
 ---
 
-### [F-33] Type Narrowing exhaustivo con `switch` y el patrón `never`
+### [F-32] Type Narrowing exhaustivo con `switch` y el patrón `never`
 
 @tipo: codigo
 
@@ -1443,7 +1341,7 @@ function área(f: Forma, lado: number): number {
 
 ---
 
-### [F-34] Gradual typing en proyectos grandes — impacto real
+### [F-33] Gradual typing en proyectos grandes — impacto real
 
 @tipo: tabla-comparativa
 
@@ -1464,7 +1362,7 @@ function área(f: Forma, lado: number): number {
 
 ---
 
-### [F-35] Variables en FP puro — sin mutabilidad
+### [F-34] Variables en FP puro — sin mutabilidad
 
 @tipo: concepto-abstracto
 
@@ -1495,7 +1393,7 @@ En FP puro, computar no significa "modificar el estado de celdas de memoria". Si
 
 ---
 
-### [F-35b] Transparencia referencial — la definición formal y sus consecuencias
+### [F-34b] Transparencia referencial — la definición formal y sus consecuencias
 
 @tipo: concepto-abstracto
 
@@ -1538,7 +1436,7 @@ La inmutabilidad (Bloque 5) elimina esta categoría de problemas **por diseño**
 
 ---
 
-### [F-36] Haskell — el binding es definitivo
+### [F-35] Haskell — el binding es definitivo
 
 @tipo: codigo
 
@@ -1566,7 +1464,7 @@ let y = x + 1  -- y está vinculado a 6 — x sigue siendo 5
 
 ---
 
-### [F-37] `val` vs. `var` — Scala y Kotlin
+### [F-36] `val` vs. `var` — Scala y Kotlin
 
 @tipo: codigo
 
@@ -1604,7 +1502,7 @@ val listaMut  = mutableListOf(1, 2, 3) // lista mutable — permite push, remove
 
 ---
 
-### [F-38] TypeScript funcional — `reduce` vs. loop imperativo
+### [F-37] TypeScript funcional — `reduce` vs. loop imperativo
 
 @tipo: codigo
 
@@ -1641,7 +1539,7 @@ const resultado = [1, 2, 3, 4, 5]
 
 ---
 
-### [F-39] `Readonly<T>` y objetos inmutables en TypeScript
+### [F-38] `Readonly<T>` y objetos inmutables en TypeScript
 
 @tipo: codigo
 
@@ -1677,7 +1575,7 @@ const frozen = Object.freeze({ retries: 3 });
 
 ---
 
-### [F-40] ¿Por qué la inmutabilidad reduce bugs?
+### [F-39] ¿Por qué la inmutabilidad reduce bugs?
 
 @tipo: concepto-abstracto
 
@@ -1714,7 +1612,7 @@ TypeScript no es un LP puramente funcional. Pero permite adoptar un estilo funci
 
 ---
 
-### [F-41] Cuatro lenguajes, cuatro estrategias de memoria
+### [F-40] Cuatro lenguajes, cuatro estrategias de memoria
 
 @tipo: tabla-comparativa
 
@@ -1731,7 +1629,7 @@ TypeScript no es un LP puramente funcional. Pero permite adoptar un estilo funci
 
 ---
 
-### [F-42] Rust: ownership — la idea central
+### [F-41] Rust: ownership — la idea central
 
 @tipo: concepto-abstracto
 
@@ -1762,7 +1660,7 @@ Sin GC en runtime → sin pausas → rendimiento predecible. Sin dangling pointe
 
 ---
 
-### [F-43] Rust — el borrow checker en acción
+### [F-42] Rust — el borrow checker en acción
 
 @tipo: codigo
 
@@ -1801,7 +1699,7 @@ println!("{:?}", v2);     // ✅ v2 es el único dueño
 
 ---
 
-### [F-44] IA Pattern 1 — el LLM genera un alias donde debería ir una copia
+### [F-43] IA Pattern 1 — el LLM genera un alias donde debería ir una copia
 
 @tipo: codigo
 
@@ -1824,7 +1722,7 @@ console.log(config.debug);      // true — el "original" fue modificado
 
 ---
 
-### [F-45] IA Pattern 1 — cómo detectar y corregir el alias invisible
+### [F-44] IA Pattern 1 — cómo detectar y corregir el alias invisible
 
 @tipo: codigo
 
@@ -1858,7 +1756,7 @@ console.log(config.nested === configBackup2.nested);     // false ✅ — deep c
 
 ---
 
-### [F-46] IA Pattern 2 — el LLM usa `var` en loops con closures
+### [F-45] IA Pattern 2 — el LLM usa `var` en loops con closures
 
 @tipo: codigo
 
@@ -1887,7 +1785,7 @@ console.log(funcs[4]());  // 5 — esperábamos 4
 
 ---
 
-### [F-47] IA Pattern 2 — corrección con `let` y con estilo funcional
+### [F-46] IA Pattern 2 — corrección con `let` y con estilo funcional
 
 @tipo: codigo
 
@@ -1922,7 +1820,7 @@ console.log(funcs4[0]());  // 0 ✅
 
 ---
 
-### [F-48] IA Pattern 3 — código sin narrowing que puede crashear en runtime
+### [F-47] IA Pattern 3 — código sin narrowing que puede crashear en runtime
 
 @tipo: codigo
 
@@ -1951,81 +1849,13 @@ function formatear(valor: string | number): string {
 
 ---
 
-### [F-49] IA Pattern 3 — narrowing correcto y exhaustivo
+---
 
-@tipo: codigo
-
-# TypeScript verifica en compilación que todos los tipos del union están cubiertos correctamente
-
-```typescript
-// ✅ Con narrowing — el compilador verifica cada rama:
-function formatear(valor: string | number): string {
-    if (typeof valor === "string") {
-        return valor.toUpperCase();  // aquí: valor es string ✅ — .toUpperCase() existe
-    }
-    return valor.toFixed(2);         // aquí: valor es number ✅ — .toFixed() existe
-    // TypeScript verifica que todos los tipos del union están cubiertos
-}
-
-// ─────────────────────────────────────────────────────────────────
-// Switch exhaustivo con never — atrapa tipos agregados al union que se olvidan en el switch:
-// ─────────────────────────────────────────────────────────────────
-type Color = "rojo" | "verde" | "azul";
-
-function codigoHex(c: Color): string {
-    switch (c) {
-        case "rojo":  return "#FF0000";
-        case "verde": return "#00FF00";
-        case "azul":  return "#0000FF";
-        default:
-            // Si se agrega "amarillo" al tipo Color y se olvida en el switch:
-            // TypeScript llega aquí con c: "amarillo" — no es never
-            // → Error: Type '"amarillo"' is not assignable to type 'never'
-            // → El IDE lo marca en rojo de inmediato, antes de correr cualquier test
-            const _never: never = c;
-            throw new Error(`Color no manejado: ${String(_never)}`);
-    }
-}
-```
+## CIERRE
 
 ---
 
-## PREGUNTAS Y CIERRE
-
----
-
-### [F-50] Pregunta socrática — ¿closure útil o fuga de memoria?
-
-@tipo: socratica
-
-# ¿Esta closure es un diseño correcto o una fuga de memoria encubierta?
-
-```typescript
-function registrarEventos(nombre: string) {
-    const historial: string[] = [];   // crece sin límite con cada llamada
-
-    return (evento: string) => {
-        historial.push(evento);
-        console.log(`[${nombre}] ${historial.length} eventos registrados`);
-    };
-}
-
-const logApp = registrarEventos("App");
-// logApp se mantiene viva durante toda la sesión
-// historial crece con cada llamada a logApp(...)
-```
-
-## Para discutir en clase
-
-- ¿En qué condiciones este diseño es correcto y útil?
-- El GC puede liberar `historial`... ¿en qué condición exacta?
-- Si `logApp = null`, ¿qué pasa con `historial` y con el string `nombre`?
-- ¿Cómo refactorizar para limitar el crecimiento del historial (ej: solo últimos 100 eventos)?
-- ¿Es esto un bug o es intencional? ¿Cómo saberlo sin ver el código que crea `logApp`?
-
----
-
-### [F-51] Cierre — síntesis de la clase
+### [F-48] Cierre — síntesis de la clase
 
 @tipo: cierre
 
@@ -2036,7 +1866,7 @@ const logApp = registrarEventos("App");
 - **Aliases:** dos nombres, una celda de memoria. Fuentes: asignación de referencia, parámetros por referencia (tres escenarios de Sebesta §9.5), union types. Consecuencias en verificación formal y concurrencia. `readonly` como guardrail. Shallow copy con spread, deep copy con `structuredClone`.
 - **Closures:** función + entorno léxico capturado (Gabbrielli §7.4: “pair code/environment”). Solución al dangling reference: migración al heap garantizada por el runtime. Deep binding: el entorno se congela al crear la closure. Ejemplo canónico de Sebesta: `makeAdder` (Sebesta §10.6.4). `let` crea celda nueva por iteración — `var` comparte una sola.
 - **GC:** Reference Counting (incremental, determinístico; falla con ciclos — Louden §10.5). Mark-and-Sweep (resuelve ciclos; tres defectos de Gabbrielli §8.11: fragmentación, stop-the-world, actualización de punteros). Compactación como solución. V8 generacional: Scavenger + Mark-Compact. Rust: ownership sin GC.
-- **Gradual Typing:** motivación histórica (Gabbrielli §16.9). Base formal: Siek & Taha 2006. `any` vs `unknown`: el tipo gradual seguro. Type narrowing: TypeScript estrecha el tipo en cada rama del control de flujo. TypeScript: intencionalmente unsound.
+- **Gradual Typing:** motivación histórica (Gabbrielli §16.9). Base formal: Siek & Taha 2006. Type narrowing: TypeScript estrecha el tipo en cada rama del control de flujo. TypeScript: intencionalmente unsound.
 - **FP:** bindings inmutables. Transparencia referencial: definición formal Sebesta §7.4 + Louden §9.1. La inmutabilidad elimina los aliases peligrosos por diseño.
 
 ## Conexiones hacia adelante

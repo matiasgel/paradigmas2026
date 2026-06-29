@@ -1,0 +1,324 @@
+Modularidad 2
+Módulos, interfaces y genericos en TypeScript
+
+
+
+Bloque
+Pregunta
+Concepto formal
+TAD / ADT
+¿Qué significa usar un tipo sin ver su representación?
+Abstracción de datos
+Interfaz
+¿Qué operaciones puede asumir el cliente?
+Especificación pública
+Módulo
+¿Dónde se declara una frontera de visibilidad?
+Encapsulamiento modular
+Compilación separada
+¿Contra qué compila el cliente?
+Interfaz de compilación
+Genéricos
+¿Cómo reutilizar sin mezclar tipos?
+Polimorfismo paramétrico
+Ruta de la clase 
+
+El problema: acoplamiento a la representación
+Si el cliente conoce la representación interna, cambiar deja de ser libre.
+// Cliente acoplado a un detalle interno:
+// "la pila es un array"
+// El cliente ya no usa una pila
+// Usa un array disfrazado:
+pila.datos[0] = 99
+pila.datos.reverse()
+Consecuencia:
+Cualquier cambio interno rompe código externo.
+La abstracción aparece cuando el cliente solo puede usar operaciones permitidas.
+
+TAD / ADT: Tipo Abstracto de Datos 
+Un TAD no se define por cómo guarda los datos, sino por:
+Nombre + Operaciones + Semántica observable + Invariantes
+
+Parte del TAD
+Qué ve el cliente
+Qué queda oculto
+Nombre del tipo
+Stack<T>
+Si usa array, lista o buffer
+Operaciones
+push, pop, peek
+Algoritmos auxiliares
+Semántica
+LIFO
+Cómo se mantiene el orden
+Errores definidos
+pop() puede no devolver elemento
+Caso interno de pila vacía
+
+La pila como ejemplo mínimo 
+La pila es buena explicación de un ADT porque tiene una regla simple:
+LIFO: Last In, First Out: es una invariante observable; el array no.
+
+Operación
+Promesa observable
+Detalle irrelevante
+push(x)
+Agrega x como próximo candidato a salir
+Dónde se almacena
+pop()
+Devuelve y remueve el último agregado disponible
+Cómo se mueve el índice interno
+peek()
+Observa sin remover
+Si usa cache o cálculo directo
+isEmpty()
+Informa si hay elementos disponibles
+Si guarda size o lo calcula
+
+Operaciones de un TAD 
+Una interfaz no debería ser una lista arbitraria de métodos.
+Una operación pública pertenece al TAD si respeta su semántica.
+push/pop/peek → sí son operaciones de pila.
+at(index) → rompe la abstracción de pila .
+
+Tipo de operación
+Qué hace
+Ejemplo en Stack<T>
+Constructora
+Crea valores del TAD
+new Stack<T>(), emptyStack()
+Transformadora
+Cambia el estado abstracto
+push, pop, clear
+Observadora
+Consulta sin romper la abstracción
+peek, isEmpty, size
+
+Encapsulamiento ≠ ocultamiento de información 
+Concepto
+Pregunta que responde
+Error común
+Encapsulamiento
+¿Qué datos y operaciones forman una unidad?
+Poner todo en una clase enorme
+Ocultamiento de información
+¿Qué decisiones internas pueden cambiar?
+Exponer campos, arrays o conexiones
+Interfaz pública
+¿Qué promesas recibe el cliente?
+Publicar helpers por comodidad
+Invariante
+¿Qué debe ser siempre cierto?
+Permitir estados imposibles
+Encapsular agrupa.
+Ocultar información protege cambios futuros.
+
+Implementación de Stack en TypeScript 
+TypeScript permite expresar el TAD con una clase genérica.
+El cliente usa operaciones; no toca la estructura interna
+class Stack<T> {
+#items: T[] = []
+//# propiedad privada
+push(item: T): void {
+this.#items.push(item)
+}
+
+pop(): T | undefined {
+return this.#items.pop()
+}
+
+peek(): T | undefined {
+return this.#items.at(-1)
+}
+
+isEmpty(): boolean {
+return this.#items.length === 0
+}
+} 
+
+¿Qué debe exponer una interfaz? 
+
+export interface Stack<T> {
+push(item: T): void
+pop(): T | undefined
+peek(): T | undefined
+isEmpty(): boolean
+clear(): void
+toArray(): readonly T[]
+} 
+La interfaz debe respetar la semántica del TAD.
+Operación
+¿Conviene?
+Motivo
+clear()
+Sí
+Puede ser operación válida de pila
+toArray()
+Depende
+Debe devolver copia o vista de solo lectura
+at(index)
+No
+Convierte la pila en acceso aleatorio
+Si una operación revela la representación, deja de ser abstracción.
+
+Copia defensiva 
+class Stack<T> {
+ #items: T[] = []
+
+ toArray(): T[] {
+   return this.#items // expone representación interna
+ }
+}
+
+Mal diseño:
+Mejor diseño:
+class Stack<T> {
+ #items: T[] = []
+ toArray(): readonly T[] {
+  return [...this.#items] // copia   superficial
+ }
+} 
+
+La copia defensiva protege la representación privada.
+
+Independencia de representación 
+Dos implementaciones pueden tener el mismo contrato.
+
+Implementación
+Representación interna
+Cliente que usa Stack<T>
+ArrayStack<T>
+Array T[]
+No cambia
+LinkedStack<T>
+Nodos enlazados
+No cambia
+BoundedStack<T>
+Array con capacidad máxima
+Cambia solo si cambia el contrato
+PersistentStack<T>
+Estructura inmutable compartida
+No cambia si conserva LIFO
+El cliente no debe saber si la pila usa array, nodos o buffer.
+
+Separación entre especificación e implementación 
+export interface Stack<T> {
+ push(item: T): void
+ pop(): T | undefined
+ peek(): T | undefined
+ readonly size: number
+}
+
+export class ArrayStack<T> implements Stack<T> {
+ #items: T[] = []
+
+push(item: T): void {
+ this.#items.push(item)
+}
+
+pop(): T | undefined {
+ return this.#items.pop()
+}
+
+peek(): T | undefined {
+ return this.#items.at(-1)
+}
+
+get size(): number {
+ return this.#items.length
+ }
+} 
+La interfaz dice que promete.
+La implementación decide cómo se cumple. 
+
+Módulo como frontera de visibilidad 
+Un módulo decide qué nombres salen al exterior.
+
+// stack.ts
+export type { Stack }
+export { ArrayStack }
+
+class NodeStack<T> implements Stack<T> {
+  // Implementación alternativa interna.
+}
+
+function validarCapacidad(max: number): void {
+  // Helper privado del módulo.
+}
+
+
+TypeScript separa contrato y cuerpo con `interface` y `class`
+export interface IStack<T> {
+  push(item: T): void;
+  pop(): T | undefined;
+  peek(): T | undefined;
+  readonly size: number;
+}
+
+export class ArrayStack<T> implements IStack<T> {
+  private readonly datos: T[] = [];
+  push(item: T): void { this.datos.push(item); }
+  pop(): T | undefined { return this.datos.pop(); }
+  peek(): T | undefined { return this.datos.at(-1); }
+  get size(): number { return this.datos.length; }
+}
+exportado → parte de la frontera pública.
+no exportado → detalle interno del módulo .
+
+Imports, dependencias y compilación separada 
+Import
+Tipo de dependencia
+Pregunta 
+import type { Stack }
+Dependencia estática de tipos
+¿Alcanza con el contrato?
+import { ArrayStack }
+Dependencia de implementación
+¿Es correcto acoplarme a ella?
+import { compare } from "./order.js"
+Dependencia funcional
+¿Pertenece a este módulo?
+import "./polyfill"
+Dependencia por efecto lateral
+¿Está documentada?
+import type { Stack } from "./stack.js"
+export function mover<T>(origen: Stack<T>, destino: Stack<T>): void {
+ while (origen.size > 0) {
+  const item = origen.pop()
+  if (item !== undefined) destino.push(item)
+  }
+ } 
+Compilación separada no significa compilar a ciegas.
+El compilador necesita contratos.
+
+Genéricos 
+//Sin genéricos:
+NumberStack, StringStack, UserStack
+
+//Con genéricos:
+Stack<T> 
+
+const numeros = new ArrayStack<number>()
+numeros.push(10)
+numeros.push("hola") // error: string no es number
+const n = numeros.pop() // number | undefined
+
+//Interfaces como restricciones
+interface Comparable<T> {
+ compareTo(other: T): number
+}
+
+class SortedSet<T extends Comparable<T>> {
+ #items: T[] = []
+ add(item: T): void {
+ this.#items.push(item)
+ this.#items.sort((a, b) => a.compareTo(b))
+}
+}  
+
+Repaso
+Un TAD protege una representación.
+Una interfaz transforma decisiones en promesas.
+Un módulo controla qué nombres son públicos.
+Un genérico reutiliza la abstracción sin mezclar tipos.
+
