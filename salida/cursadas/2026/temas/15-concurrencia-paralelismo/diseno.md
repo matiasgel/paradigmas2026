@@ -1,6 +1,6 @@
 # Diseno de Clase - Tema 15: Concurrencia y Paralelismo
 
-> **Estado:** PENDIENTE DE APROBACION  
+> **Estado:** EN PRODUCCION (minuta.md + filminas.md generadas el 2026-06-28)  
 > **Disenador:** Marcos v3 (topic-designer-v3)  
 > **Fecha:** 2026-06-15  
 > **Modulo:** XI | **Semana:** 15 | **Clase:** 1 de 1  

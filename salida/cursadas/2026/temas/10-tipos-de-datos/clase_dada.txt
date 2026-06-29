@@ -1,0 +1,1122 @@
+Tipos de Datos y Sistemas de Tipos
+Paradigmas y Lenguajes de Programación · UNTDF IDEI 2026
+
+
+¿Qué diferencia hay entre `1` en tres lenguajes?
+1 en C, Python y Haskell — ¿son lo mismo?
+
+¿Qué distingue a cada 1?
+¿El tamaño en memoria?
+¿Las operaciones disponibles?
+¿Cuándo se verifica el tipo?
+¿Quién libera la memoria?
+
+¿Qué vimos? ¿Qué veremos hoy?
+Ya sabemos: ¿Cuándo se vincula un tipo a una variable?
+
+Binding estático vs. dinámico
+Tipado gradual
+Ámbito y aliases
+
+¿Que vemos hoy?: ¿Qué son los tipos como estructuras formales
+
+Taxonomías de tipos
+Tipos compuestos e implementaciones
+Sistemas de tipos: monomórfico vs. polimórfico
+
+¿Qué es un tipo de dato?
+Definición formal
+
+Sebesta
+“Un tipo de dato define una colección de valores de datos y un conjunto de operaciones predefinidas sobre esos valores.”
+Los tipos sirven para…
+
+Legibilidad: el código expresa la intención
+Detectar  errores: el compilador/runtime verifica uso incorrecto
+Reuso: abstraer comportamiento por tipo
+
+
+TypeScript como lenguaje principal · contrastes en C, Kotlin, Haskell, Python
+
+Clasificación
+• Primitivos:
+  int, float, bool, char
+
+• Definidos por el usuario:
+  enum, subrange, type alias, branded types
+
+• Compuestos:
+  arrays, records, structs, tuples, maps, unions
+
+• Referenciales:
+  pointers, references
+
+• Algebraicos:
+  productos, sumas, ADTs
+
+• Paramétricos:
+  generics, templates
+
+Tipos primitivos
+Tipos primitivos
+
+Son tipos básicos provistos por el lenguaje o la plataforma.
+
+Preguntas centrales:
+• ¿Qué valores representan?
+• ¿Qué operaciones permiten?
+• ¿Cómo se almacenan?
+• ¿Qué errores puede detectar el compilador?
+• ¿Qué queda delegado al runtime?
+
+Familias:
+• Numéricos: enteros, floating point, decimal, complex
+• Lógicos: boolean
+• Texto elemental: char / string
+
+Tipos numéricos — Enteros
+Enteros en distintos lenguajes
+
+Atención TypeScript
+
+Number es siempre double (IEEE 754 de 64 bits).
+Para enteros grandes: bigint con literales n.   
+ const x = 2n ** 53n.
+Number.MAXSAFEINTEGER = 2⁵³ − 1.
+
+console.log(9007199254740992 === 9007199254740993);
+
+Representación binaria — complemento a 2
+
+Los enteros se almacenan como patrones de bits. Ejemplo con 32 bits:
+
+El bit más significativo (bit 31) es el signo: 0 = positivo, 1 = negativo.
+Por esto el rango no es simétrico: de −2.147.483.648 a +2.147.483.647 (2³¹ negativos, 2³¹−1 positivos).
+En C: desbordamiento de int es undefined behavior — el compilador puede hacer cualquier cosa.
+
+Lenguaje
+Tipo
+Tamaño
+Nota
+C
+int / long
+32/64 bits
+No hay GC; overflow silencioso
+Java/Kotlin
+Int / Long
+32/64 bits
+JVM; checked exceptions
+TypeScript
+number
+64-bit IEEE 754
+No distingue entero/float
+TypeScript
+bigint
+Ilimitado
+9007199254740991n
+Python
+int
+Ilimitado
+Objeto; GC
+Tipos numéricos — Enteros
+
+Tipos numéricos — Floating Point
+IEEE 754 y sus consecuencias
+
+El estándar IEEE 754
+
+Representación de punto flotante: signo + exponente + mantisa
+TypeScript number = IEEE 754 de 64 bits (double) siempre
+Kotlin: Float (32 bits) vs Double (64 bits)
+Java: idem Kotlin · Python: float = double de 64 bits
+
+La "trampa" clásica
+
+Decimal nativo: ¿cuándo importa?
+
+TypeScript: no tiene decimal nativo → usar decimal.js para finanzas
+Contraste: BigDecimal en Java/Kotlin; decimal en C#
+Python: from decimal import Decimal — disponible pero no default
+
+
+
+Tipos numéricos — Floating Point
+Estructura de bits de double (IEEE 754, 64 bits)
+
+Un double no guarda números decimales exactos, sino aproximaciones binarias.
+
+Distribución:
+• 1 bit para el signo: 0 positivo, 1 negativo.
+• 11 bits para el exponente: indica la escala como potencia de 2.
+• 52 bits para la mantisa: guarda los bits significativos del número.
+
+Forma general:
+valor = (-1)^signo × 1.fracción × 2^(exponente - 1023)
+
+Ejemplo:
+0.1 en decimal no tiene representación finita en base 2.
+En binario es periódico:
+
+0.1₁₀ = 0.000110011001100110011...₂
+
+
+Como la mantisa tiene tamaño limitado, el valor se redondea.
+Por eso se guarda una aproximación:
+
+0.10000000000000000555...
+
+Consecuencia:
+0.1 + 0.2 produce aproximadamente:
+0.30000000000000004
+Por eso, en lenguajes que usan IEEE 754:
+0.1 + 0.2 ≠ 0.3 
+
+Tipos numéricos especiales — Complejo y Decimal
+Pregunta de diseño:
+¿Deben ser tipos primitivos del lenguaje o abstracciones de biblioteca?
+
+Complejo:
+• Representa números de la forma a + bi.
+• Python y Fortran lo incorporan como tipo nativo.
+• Java y TypeScript suelen resolverlo con clases o bibliotecas.
+• Es importante en cómputo científico, señales, física e ingeniería.
+
+Decimal:
+• Representa números decimales con precisión controlada.
+• Evita errores típicos de floating point binario: 0.1 + 0.2 → 0.30000000000000004
+• Python: decimal.Decimal.
+• Java/Kotlin: BigDecimal.
+• TypeScript: bibliotecas como decimal.js.
+
+Idea central:
+Un lenguaje decide qué tipos incluye en su núcleo según sus prioridades:
+eficiencia, simplicidad, seguridad, precisión o dominio de aplicación.
+
+
+
+
+
+Tipos ordinales y dominios finitos
+Boolean y Char — tipos discretos básicos
+
+Boolean:
+• Dominio mínimo de verdad: true / false.
+• En lenguajes modernos suele ser un tipo propio.
+• En C clásico se representaba con enteros: 0 = false, no-cero = true.
+
+Char:
+• Representa unidades de texto, pero no tiene equivalente universal.
+• En C puede verse como entero pequeño.
+• En Java/Kotlin es un tipo propio.
+• En TypeScript no existe char: se usa string.
+
+Idea central:
+Incluso los tipos “simples” dependen de decisiones de diseño del lenguaje.
+
+
+
+
+
+Tipos ordinales y dominios finitos
+Tipos ordinales y dominios finitos
+
+Un tipo ordinal tiene valores discretos que pueden enumerarse
+y, en muchos lenguajes, ordenarse.
+
+Ejemplos:
+• boolean: false, true.
+• char: 'a', 'b', 'c'.
+• integer: ..., -1, 0, 1, 2.
+• enum: Up, Down, Left, Right.
+• subrange: 1..10.
+
+Propiedades:
+• valores discretos.
+• sucesor / predecesor.
+• comparación por orden.
+• posibilidad de definir rangos válidos.
+
+Idea central:
+Los tipos ordinales permiten que el sistema de tipos modele dominios finitos o restringidos.
+
+
+
+
+
+
+Enum TypeScript
+TypeScript — `enum` como tipo real - Una enumeración crea un dominio simbólico cerrado.
+enum Direction { Up, Down, Left, Right }
+// Up = 0, Down = 1, Left = 2, Right = 3
+
+const move = (dir: Direction) => {
+  if (dir === Direction.Up) console.log("subiendo")
+}
+move(Direction.Up)
+
+enum Status { Active = 'active', Inactive = 'inactive' }
+const s: Status = Status.Active    // valor en runtime: 'active'
+
+const enum Color { Red = 0, Green = 1, Blue = 2 }
+// El compilador reemplaza Color.Red por 0 directamente → sin objeto en runtime
+
+Aspecto
+C enum
+TypeScript enum
+Kotlin enum class
+Haskell data
+Tipo propio
+❌
+✅
+✅
+✅
+Type-safe
+❌ (es un int)
+✅
+✅
+✅
+Propiedades
+❌
+Limitado
+✅
+❌ (ADT)
+Métodos
+❌
+❌
+✅
+❌ (funciones)
+Exhaustividad
+No
+Con never
+when garantiza
+Pattern matching
+Ejemplo
+enum Dir { UP }
+enum Dir { Up }
+enum class Dir { UP }
+data Dir = Up
+Enumeraciones — Comparación multilenguaje
+Enumeraciones — C vs. TypeScript vs. Kotlin vs. Haskell
+
+El problema con enum en C es que no son type-safe — pueden ser mezclados con enteros sin advertencia del compilador.
+
+Rangos y subrangos
+
+Rangos y subrangos
+
+Un rango es una porción contigua de valores dentro de un tipo ordinal.
+
+Ejemplos:
+1..10       → 1, 2, 3, ..., 10
+0..100      → 0, 1, 2, ..., 100
+'a'..'z'    → 'a', 'b', 'c', ..., 'z'
+
+Un subrango es un tipo cuyo dominio queda restringido a un rango
+de otro tipo ordinal.
+
+
+Rangos y subrangos
+
+
+Ejemplos:
+Nota = 0..10
+Mes = 1..12
+DiaDelMes = 1..31
+
+Diferencia:
+Rango     → selecciona valores.
+Subrango  → usa esa selección como restricción de tipo.
+
+Idea central:
+Un subrango no crea valores nuevos; restringe los valores válidos
+de un tipo ordinal existente.
+
+Rango y subrango python
+
+#Python tiene range, pero no subrangos nativos.
+
+range(0, 11) #representa los valores: 0, 1, 2, ..., 10
+
+#Ejemplo:
+
+notas = range(0, 11)
+
+8 in notas   #  → True
+15 in notas  #  → False
+
+#Pero esto no crea un tipo Nota.
+
+nota = 15     # → válido para Python
+
+#Para modelar un subrango, usamos validación:
+
+class Nota:
+    def __init__(self, valor: int):
+        if valor < 0 or valor > 10:
+            raise ValueError("Nota inválida")
+        self.valor = valor
+
+Idea central:
+Python permite representar rangos,
+pero la restricción del dominio debe programarse explícitamente.
+
+
+Tipos compuestos
+
+Tipos compuestos
+
+Un tipo compuesto construye valores más grandes a partir de otros tipos.
+
+Formas principales:
+• Producto: varios campos simultáneos.
+  Ejemplo: record, struct, tuple, object.
+
+• Secuencia: colección ordenada de elementos.
+  Ejemplo: array, list, string.
+
+• Mapeo: asociación clave → valor.
+  Ejemplo: map, dictionary, record dinámico.
+
+• Suma / unión: una alternativa entre varias formas.
+  Ejemplo: union, discriminated union, sealed class, ADT.
+
+
+Lenguaje
+Naturaleza
+Mutabilidad
+Comparación
+TypeScript
+Primitivo (con métodos via boxing)
+Inmutable
+=== por valor ✓
+Kotlin
+Objeto (String)
+Inmutable
+== por valor (llama equals)
+Java
+Objeto (String)
+Inmutable
+== por referencia ← ERROR clásico
+C
+Puntero a char[] terminado en \0
+Mutable
+strcmp() (no ==)
+Python
+Objeto str
+Inmutable
+== por valor ✓
+Strings — secuencias de texto
+
+Strings: ¿primitivo, objeto o array de chars?
+
+Operaciones comunes
+
+Las operaciones más comunes sobre cadenas son: asignación, concatenación, referencia a subcadenas, comparación y coincidencia de patrones.
+
+Categoría
+Forma
+Rango
+Almacenamiento
+Ejemplo
+Estático
+Estático
+Compila
+Estático
+int a[10] en C (global)
+Semi-dinámico (stack)
+Fija en runtime
+Post-elaboración
+Stack (se libera al salir)
+int a[n] en C99 (local)
+Heap fijo
+Dinámica (heap)
+Fija 
+Heap 
+new Array<number>(n) en TS
+Heap flexible
+Totalmente dinámica
+Cambia
+Heap 
+number[] en TS / list Python
+Arrays — Taxonomía por binding time
+Arrays — Clasificación 
+
+
+La categorización es por binding time de forma y binding time de rango.
+
+Arrays — Función de acceso multidimensional
+Arrays multidimensionales — cómo se accede en memoria
+
+Row-major (C, Java, Kotlin, Python)
+
+Los elementos de una fila se almacenan contiguos.
+
+Column-major (Fortran, MATLAB, R)
+
+Los elementos de una columna se almacenan contiguos.
+
+¿Por qué importa?
+
+Cache: acceder en el orden incorrecto → cache misses → lentitud.
+Multiplicación de matrices en C: iterar en row-major order = hasta 10× más rápido.
+a[i][j] → base + (i × cols + j) × size
+
+a[i][j] → base + (i + j × rows) × size
+
+// Row-major access — eficiente
+for (let i = 0; i < n; i++)
+  for (let j = 0; j < m; j++)
+    suma += matrix[i][j]   // accede 
+
+Arrays — Rectangulares vs. Jagged 
+Rectangular vs. Jagged vs. Slices
+
+Rectangular (Fortran, C#)
+
+Todos los sub-arrays tienen la misma longitud.
+int[,] en C#: acceso más rápido y lineal en memoria.
+
+Jagged (C, Java, Kotlin)
+
+Array de punteros a arrays — cada fila puede tener distinto tamaño.
+Java: todos los arrays multidimensionales son jagged por diseño.
+Mayor flexibilidad; mayor overhead por indirección.
+
+
+
+Lenguaje
+Sintaxis
+Comportamiento
+Python
+lista[1:4]
+Produce nueva lista (copia)
+Kotlin
+lista.subList(1, 4)
+Comparte memoria
+Go
+a[1:4]
+Ciudadano de primera clase (length + capacity)
+Ada
+A(2..4)
+Slice de array nativo
+Arrays — Slices — referencia sin copia
+
+
+Arrays asociativos — Maps
+Arrays asociativos — Mapeos finitos
+// Map tipado
+const scores = new Map<string, number>([["Ana", 9], ["Luis", 7]])
+scores.set("Marta", 8)
+console.log(scores.get("Ana"))   // 9
+scores.has("Luis")                // true
+scores.delete("Luis")
+
+// Record — objeto como mapa de clave string
+const config: Record<string, boolean> = { dark: true, sound: false }
+config["alerts"] = true
+
+val scores = mutableMapOf("Ana" to 9, "Luis" to 7)
+scores["Marta"] = 8
+println(scores["Ana"])    // 9
+
+Arrays en TypeScript
+// 1. Array dinámico: heap flexible
+const lista: number[] = [1, 2, 3];
+lista.push(4);
+
+// 2. Array con tamaño inicial, pero sigue siendo dinámico
+const fijo: number[] = new Array(5).fill(0).map((_, i) => i * 2);
+fijo.push(10); // permitido
+
+// 3. TypedArray: tamaño fijo y memoria binaria
+const binario: Int32Array = new Int32Array([10, 20, 30]);
+// binario.push(40); // error: no existe push
+
+// 4. ReadonlyArray: solo lectura a nivel de TypeScript
+const constante: ReadonlyArray<number> = [1, 2, 3];
+// constante.push(4); // error de compilación
+
+
+Arrays en TypeScript
+Arrays en TypeScript — cuatro formas
+
+
+
+TypedArrays — almacenamiento binario directo
+
+¿Por qué Int32Array no es lo mismo que number[]?
+
+El problema con number[]
+
+En JavaScript/TypeScript, cada number es siempre un double IEEE 754 de 64 bits,
+envuelto en un objeto del motor V8.
+
+TypedArray: memoria binaria contigua
+
+Familia de TypedArrays
+
+¿Cuándo usar TypedArrays?
+
+Procesamiento de imagen (Uint8ClampedArray para píxeles en Canvas)
+WebGL / shaders — datos de GPU requieren tipos binarios exactos
+Comunicación binaria: WebSocket, FileReader, protocolos de red
+Algoritmos numéricos de alto rendimiento (memoria contigua = menos cache misses)
+
+Tipos producto, registros, interfaces y tuplas
+Registros — `interface` y `type` en TypeScript
+// interface — preferida para objetos extensibles
+interface Usuario {
+  nombre: string
+  email:  string
+  edad:   number
+}
+
+// type — equivalente funcional
+type Punto = { x: number; y: number }
+
+// Inmutabilidad con readonly
+type PuntoFijo = { readonly x: number; readonly y: number }
+
+// Tipo con campo opcional
+interface Config { debug: boolean; nivel?: number }
+
+data class Usuario(val nombre: String, val email: String, val edad: Int)
+// Genera: equals, hashCode, toString, copy() automáticos
+// TypeScript no tiene equivalente nativo — se implementa manualmente
+
+Tuplas en TypeScript
+Tuplas — producto cartesiano formal
+const par: [string, number] = ["hola", 42]
+
+// Desestructuración
+const [nombre, edad] = par
+console.log(nombre)   // "hola"
+
+// Tipo nombrado
+type RGB = [number, number, number]
+const rojo: RGB = [255, 0, 0]
+
+// Tupla con elemento opcional (TypeScript 3+)
+type HttpResponse = [number, string, string?]
+
+Tipos algebraicos de datos en Haskell
+Un ADT permite definir un nuevo tipo a partir de un conjunto cerrado de variantes posibles.
+-- Comentario de una sola línea en Haskell
+data Resultado
+  = Exito String
+  | Error String
+  | Cargando
+mostrar :: Resultado --> String
+mostrar resultado =
+  case resultado of
+    Exito valor   —-> "Valor recibido: " ++ valor
+    Error mensaje —-> "Error: " ++ mensaje
+    Cargando      --> "Cargando..."
+
+
+Listas funcionales 
+Array:
+secuencia indexada, acceso rápido por posición.
+
+Lista funcional:
+secuencia recursiva, acceso por head/tail. 
+List Types — Tipo secuencia con acceso funcional.
+
+Origen: LISP (1958)
+
+Propiedades fundamentales
+
+head: primer elemento
+tail: resto de la lista
+cons: construcción añadiendo al frente
+Recursividad inherente: lista = head + tail (otra lista)
+
+Diferencia clave con arrays
+Haskell — listas homogéneas
+
+Lenguaje
+Tipo
+Estructura real
+Inmutable
+TypeScript
+T[] / Array<T>
+Array dinámico
+❌
+TypeScript
+ReadonlyArray<T>
+Array dinámico
+✅
+Kotlin
+List<T>
+ArrayList
+✅
+Kotlin
+MutableList<T>
+ArrayList
+❌
+Python
+list
+Array dinámico (¡no lista enlazada!)
+❌
+Haskell
+[a]
+Lista enlazada real
+✅ siempre
+Listas funcionales — TypeScript y Kotlin
+Listas — Implementaciones multilenguaje
+
+Sebesta
+
+“Las listas son colecciones de datos que pueden tener una cantidad variable de elementos y a las que se les pueden agregar o quitar elementos fácilmente desde cualquiera de los extremos.”
+
+
+Tipos suma / uniones / ADTs 
+Tipos algebraicos: producto vs. suma
+
+//Tipo producto:
+//Un valor contiene A y B.
+
+type Punto = { x: number; y: number }
+Punto = number × number
+
+//Tipo suma:
+Un valor puede ser A o B.
+
+type Resultado =
+| { kind: "ok"; value: number }
+| { kind: "error"; message: string }
+
+Resultado = Ok + Error
+
+//Idea central:
+Producto = combinación.
+Suma = alternativa. 
+
+Uniones libres (unsafe) — C `union`
+Uniones en C — el problema clásico
+union Data {
+  int   i;
+  float f;
+  char  c;
+};
+
+union Data d;
+d.i = 42;
+printf("%f\n", d.f);  // ← Lee basura — interpretación incorrecta del bit pattern
+
+42 como int32 (complemento a 2):
+┌────────┬────────┬────────┬────────┐
+│00000000│00000000│00000000│00101010│   ← d.i = 42
+└────────┴────────┴────────┴────────┘
+
+Uniones discriminadas (safe) — TypeScript
+TypeScript — Discriminated Unions
+type Result<T> =
+  | { kind: 'success'; value: T }
+  | { kind: 'error';   message: string }
+
+function handle(r: Result<number>) {
+  switch (r.kind) {
+    case 'success':
+      console.log(r.value)    // TypeScript sabe: r es { kind: 'success'; value: number }
+      break
+    case 'error':
+      console.log(r.message)  // TypeScript sabe: r es { kind: 'error'; message: string }
+      break
+  }
+}
+
+Aspecto
+TypeScript
+Kotlin
+Haskell
+Mecanismo
+kind explícito
+sealed class
+ADT Algebraic Data Type (data)
+Exhaustividad
+Con never trick
+Compilador garantiza
+Pattern matching
+Runtime tag
+Campo de objeto
+is check
+Constructor tag
+Uniones discriminadas — TypeScript vs. Kotlin vs. Haskell
+Tagged Unions — tres implementaciones
+
+Kotlin sealed class
+
+Haskell ADT
+
+Tipo puntero — Definición y semántica
+Tipo puntero
+
+Sebesta 
+“Una variable de tipo puntero tiene un rango de valores que consiste en direcciones de memoria y un valor especial: nil.”
+Operaciones básicas (C)
+
+Usos legítimos de punteros
+
+Manejo indirecto de datos en el heap
+Paso de estructuras grandes por referencia (eficiencia)
+Construcción de estructuras dinámicas (listas enlazadas, árboles)
+
+Problema
+Qué pasa
+Dangling pointer
+Puntero apunta a memoria ya liberada
+Memory leak
+Memoria asignada sin referencia, sin liberar
+Double free
+Liberar el mismo bloque dos veces → UB
+Null dereference
+*null → crash
+Buffer overflow
+Aritmética fuera de rango → sobreescritura
+Punteros — Problemas clásicos
+Punteros inseguros — Catálogo de problemas
+
+Soluciones históricas 
+
+Marcador de objeto liberado : cada objeto heap object tiene un marcador — al liberar, el tombstone se marca; los punteros apuntan al marcador, no al objeto.
+Locks and keys: cada puntero lleva una clave; al acceder, se verifica contra el lock del bloque.
+
+Aspecto
+Puntero (C)
+Referencia (C++)
+Referencias JS/TS/Kotlin
+Aritmética
+✅ ptr++
+❌ No permitida
+❌ No existe
+Reasignable
+✅
+❌ Siempre apunta al mismo objeto
+✅ Variables reasignables
+Puede ser null
+✅ NULL
+❌ Debe inicializarse
+✅ (con nullable)
+Derreferencia explícita
+✅ *ptr
+❌ Implícita
+❌ Implícita
+Gestión de memoria
+Manual
+Manual (o RAII)
+GC automático
+Referencias vs. Punteros
+Referencias ≠ Punteros 
+
+"A reference variable is a constant pointer that is always implicitly dereferenced"
+
+TypeScript / JavaScript
+
+Sin punteros explícitos — todo objeto vive en heap, gestionado por V8
+Las variables almacenan referencias implícitas (igual que Java/Kotlin)
+El GC se encarga de todo — sin free(), sin delete
+
+Tipos recursivos — Definición
+Tipos recursivos
+
+Definición
+
+Un tipo que se define en términos de sí mismo
+
+Lista enlazada en C
+
+Lista en Haskell
+
+Clave: la recursión es posible porque el "campo recursivo" es una referencia/puntero (tamaño fijo), no el objeto completo (que sería infinito).
+
+Tipos recursivos — Árbol binario en TypeScript
+Árbol binario como tipo recursivo en TypeScript
+type BinaryTree<T> =
+  | { kind: 'leaf' }
+  | { kind: 'node'; value: T; left: BinaryTree<T>; right: BinaryTree<T> }
+
+// Función que explota el tipo recursivo
+function depth<T>(t: BinaryTree<T>): number {
+  if (t.kind === 'leaf') return 0
+  return 1 + Math.max(depth(t.left), depth(t.right))
+}
+
+const arbol: BinaryTree<number> = {
+  kind: 'node', value: 1,
+  left:  { kind: 'node', value: 2, left: { kind: 'leaf' }, right: { kind: 'leaf' } },
+  right: { kind: 'leaf' }
+}
+
+sealed class Tree<T> {
+  object Empty : Tree<Nothing>()
+  data class Node<T>(val value: T, val left: Tree<T>, val right: Tree<T>) : Tree<T>()
+}
+
+Sistemas monomórficos
+Sistemas monomórficos
+
+Definición
+
+Cada expresión tiene exactamente un tipo
+
+Ejemplo: C sin templates
+
+Ventajas
+
+Simple y predecible
+Herramientas de análisis directas
+Sin overhead de polimorfismo
+
+Limitación
+
+Código duplicado: max(int, int) y max(float, float) requieren funciones separadas
+No escala a bibliotecas grandes
+Motivación histórica para introducir el polimorfismo
+
+Polimorfismo — Taxonomía 
+Polimorfismo — Taxonomía 
+
+Polimorfismo Ad-hoc
+
+Sobrecarga (overloading): mismo nombre, múltiples implementaciones por tipo.
+Coerción: conversión implícita que permite que un tipo sea tratado como otro.
+
+Polimorfismo Universal
+
+Paramétrico (generics): una implementación para todos los tipos — el tipo es un parámetro.
+Subtipo / Inclusión: S puede usarse donde se espera T si S es subtipo de T.
+
+Diferencia clave: ad-hoc = apariencia de uniformidad; paramétrico = uniformidad real
+
+Polimorfismo ad-hoc — Sobrecarga en TypeScript
+Sobrecarga de funciones en TypeScript
+// Firmas declaradas (interfaz visible al consumidor)
+function area(radio: number): number
+function area(base: number, altura: number): number
+
+// Implementación única (no visible desde afuera)
+function area(a: number, b?: number): number {
+  return b !== undefined
+    ? (a * b) / 2          // triángulo
+    : Math.PI * a * a      // círculo
+}
+
+area(5)       // → círculo (r=5)
+area(3, 4)    // → triángulo (base=3, altura=4)
+
+fun area(radio: Double): Double = Math.PI * radio * radio
+fun area(base: Double, altura: Double): Double = base * altura / 2
+
+Polimorfismo paramétrico — Generics en TypeScript
+Generics — una implementación para todos los tipos
+// Función genérica — T es el parámetro de tipo
+function primero<T>(lista: T[]): T { return lista[0] }
+
+primero([1, 2, 3])          // → 1  (T inferred como number)
+primero(["a", "b", "c"])    // → "a" (T inferred como string)
+
+// Con upper bound — T debe tener valueOf()
+function max<T extends { valueOf(): number }>(a: T, b: T): T {
+  return a.valueOf() > b.valueOf() ? a : b
+}
+
+// Clase genérica
+class Caja<T> {
+  constructor(private contenido: T) {}
+  abrir(): T { return this.contenido }
+}
+
+// Tipo genérico
+type ReadonlyBox<T> = { readonly value: T }
+
+Polimorfismo por subtipo
+Subtipo / Inclusión — Herencia e interfaces
+interface Forma { area(): number }
+
+class Circulo implements Forma {
+  constructor(private r: number) {}
+  area() { return Math.PI * this.r ** 2 }
+}
+class Rectangulo implements Forma {
+  constructor(private b: number, private h: number) {}
+  area() { return this.b * this.h }
+}
+
+function areaTotal(formas: Forma[]) {
+  return formas.reduce((sum, f) => sum + f.area(), 0)
+}
+
+areaTotal([new Circulo(3), new Rectangulo(4, 5)])   // polimorfismo en acción
+
+Aspecto
+Ad-hoc (sobrecarga)
+Paramétrico (generics)
+Por subtipo (herencia)
+Mecanismo
+Nombre compartido
+Parámetro de tipo <T>
+Herencia / interface
+Binding
+Compilación (static dispatch)
+Compilación
+Runtime (dynamic dispatch)
+Overhead
+Ninguno
+Ninguno (erasure en JVM)
+Virtual dispatch
+Restricción
+Firmas distintas
+Upper bounds (extends)
+Is-a relationship
+Ejemplo TS
+Function overloads
+function f<T>(...)
+class C implements I
+Expresividad
+Baja
+Alta
+Media-Alta
+Comparación de los tres tipos de polimorfismo
+Tres polimorfismos — Comparación
+
+El problema del null — "Mi error de un billón de dólares"
+Tony Hoare
+El problema del null
+
+
+El problema
+
+En Java (y C, Python sin disciplina): cualquier referencia puede ser null
+No hay distinción de tipos entre "una string válida" y null
+El error ocurre en runtime — el compilador no puede ayudar
+
+La solución: hacer null parte del sistema de tipos
+
+Si null es un valor posible → el tipo debe decirlo explícitamente
+Si el tipo no incluye null → el compilador garantiza que nunca es null
+
+Operador
+Nombre
+Comportamiento
+`T \
+null`
+Tipo nulable
+`T \
+undefined`
+Tipo indefinido
+x?.prop
+Optional chaining
+Si x es null/undefined → retorna undefined
+x ?? valor
+Nullish coalescing
+Si x es null/undefined → usa valor
+x!
+Non-null assertion
+Fuerza acceso — puede fallar en runtime
+if (x !== null)
+Type narrowing
+El compilador infiere tipo más estrecho
+function f(x?: T)
+Parámetro opcional
+x es `T \
+TypeScript Null Safety — Operadores
+TypeScript — Operadores de null safety
+
+Con "strictNullChecks": true en tsconfig.json
+
+TypeScript Null Safety — Código completo
+Null Safety en acción
+interface User { name: string; email: string | null }
+
+function sendEmail(user: User) {
+  // Nullish coalescing: usa "sin email" si email es null/undefined
+  const dest = user.email ?? 'sin email'
+
+  // Optional chaining: retorna undefined si email es null (no lanza error)
+  const upper = user.email?.toUpperCase()
+
+  // Type narrowing: en este bloque, TypeScript sabe que email es string
+  if (user.email !== null) {
+    console.log(`Enviando a ${user.email.toUpperCase()}`)
+  }
+
+  // Non-null assertion: NO usar salvo que estés seguro
+  // const forced = user.email!.toUpperCase()  ← peligroso
+}
+
+Type Checking — Definición y coerción
+Type Checking — Chequeo de tipos
+
+Sebesta 
+
+"El proceso de verificar que los operandos de un operador tengan tipos compatibles."
+
+Tipo compatible
+
+El tipo exacto esperado, o
+Un tipo convertible implícitamente (→ coerción)
+
+Coerción implícita vs. conversión explícita
+
+Widening vs. Narrowing
+
+Type error
+
+Aplicación de un operador a un operando de tipo inapropiado
+
+Equivalencia nominal vs. estructural
+¿Cuándo son iguales dos tipos?
+
+Equivalencia nominal
+
+Dos tipos son iguales si tienen el mismo nombre
+
+Equivalencia estructural
+
+Dos tipos son iguales si tienen la misma estructura
+
+TypeScript es estructural — ventajas y riesgos
+
+Ventaja: flexibilidad — menos boilerplate, duck typing seguro
+Riesgo: Celsius = number y Fahrenheit = number serían equivalentes → usar branded types
+
+Equivalencia nominal vs. estructural
+data class Celsius(val v: Double)
+data class Fahrenheit(val v: Double)
+// No son intercambiables — aunque ambas wrappean Double
+fun calenta(c: Celsius) { ... }
+// calenta(Fahrenheit(100.0)) ← ERROR de compilación ✓
+
+type Punto = { x: number; y: number }
+// Cualquier objeto con campos x: number, y: number es compatible
+function distancia(p: Punto) { ... }
+distancia({ x: 3, y: 4 })   // ✓ — tipado estructural
+
+Lenguaje
+Sistema
+Observación
+C (struct)
+Nominal (con typedef)
+Dos struct distintos → tipos distintos
+Java
+Nominal
+class A {} y class B {} nunca son iguales
+Kotlin
+Nominal
+Herencia/interfaces para compatibilidad
+TypeScript
+Estructural
+Si la forma coincide, el tipo es compatible
+Go
+Estructural
+Interfaces satisfechas implícitamente
+Haskell
+Nominal + paramétrico
+data define tipos nominales
+Equivalencia — Tabla comparativa de lenguajes
+Nominal vs. Estructural por lenguaje
+
+Consecuencia de diseño
+
+La equivalencia de tipos define cuándo el compilador acepta que un valor de un tipo sea usado donde se esperaba otro.

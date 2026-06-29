@@ -1,12 +1,12 @@
 # Filminas — Tema 09.1: Variables, Binding y Ámbito
 
 > **Agente:** Dr. Roberto ✍️ — Class Writer
-> **Fecha:** 2026-05-14
-> **Revisión:** 2026-05-14 (v3 — enriquecimiento bibliográfico: Sebesta §5.3–5.5, Gabbrielli §4.3/§8, Louden §7)
+> **Fecha:** 2026-06-28
+> **Revisión:** v2 — corrección contra `clase_dada.txt` (baseline de clase dada)
 > **Tema:** 09.1 — Variables, Binding y Ámbito
 > **Duración:** 120 min (1 clase)
 > **Lenguaje principal:** TypeScript
-> **Fuente:** diseno.md — Lic. Marcos 🗂️
+> **Fuente:** `clase_dada.txt` (filminas reales dadas en clase) + `diseno.md`
 > **Estado:** 🔲 Borrador — pendiente de revisión docente
 
 ---
@@ -17,7 +17,7 @@
 
 ### [F-00] Portada
 
-@tipo: demo
+@tipo: portada
 @imagen: none
 
 # Variables, Binding y Ámbito
@@ -68,13 +68,13 @@ Universidad Nacional de Tierra del Fuego — Instituto IDEI · 2026
 
 # Los lenguajes ocultan la celda de memoria detrás de la variable
 
-## Correspondencia entre el hardware y el lenguaje
-
 ## Lo que el compilador/runtime hace por nosotros
 
 - Asignar y liberar celdas de memoria (gestión del binding de almacenamiento)
 - Traducir el nombre simbólico a la dirección real en cada acceso
 - Verificar que el uso del nombre sea consistente con el tipo declarado
+
+## Correspondencia entre el hardware y el lenguaje
 
 | Elemento concreto (hardware) | Abstracción en el lenguaje |
 |---|---|
@@ -95,13 +95,12 @@ Universidad Nacional de Tierra del Fuego — Instituto IDEI · 2026
 
 ## Sebesta §5.3 — formalización en 5-tupla extendida
 
-## Definición precisa del tiempo de vida (Sebesta §5.4.3)
+## Definición precisa del tiempo de vida
 
 > "The lifetime of a variable is the time during which the variable is bound to a specific memory location. The lifetime of a variable begins when it is bound to a specific cell and ends when it is unbound from that cell."
 
-## La 5-tupla canónica (condensada)
+## La 5-tupla
 
-Algunos textos agrupan tiempo de vida con ámbito y lo expresan como:
 `Variable = <nombre, dirección, tipo, L-valor, R-valor>`
 
 Cada atributo se **vincula** en un momento distinto — eso es el **binding**.
@@ -109,7 +108,7 @@ Cada atributo se **vincula** en un momento distinto — eso es el **binding**.
 | Atributo | Notación | Descripción |
 |---|---|---|
 | **Nombre** | — | Identificador simbólico; puede no existir (variable anónima como `_` en Python) |
-| **Dirección** | L-value | Celda(s) de memoria asociada(s); puede cambiar en recursión (múltiples frames) |
+| **Dirección** | L-value | Celda(s) de memoria asociada(s) |
 | **Tipo** | — | Rango de valores + operaciones legales + representación binaria en memoria |
 | **Valor** | R-value | Contenido codificado almacenado según el tipo; puede ser indefinido |
 | **Tiempo de vida** | lifetime | Período durante el que la variable está vinculada a una dirección de memoria |
@@ -124,44 +123,21 @@ Cada atributo se **vincula** en un momento distinto — eso es el **binding**.
 
 # Una variable puede aparecer como destino o como fuente de datos
 
-## Definición formal (Gabbrielli & Martini §4.2)
+## Definición formal
 
-> "L-values are those values that indicate locations, and therefore are the values of expressions that can be on the left of an assignment command. On the other hand, r-values are the values that can be stored in locations, and therefore are the values of expressions that can appear on the right of an assignment command."
+> "Los l-values (left values) son aquellos valores que representan ubicaciones de memoria y, por lo tanto, son los valores de las expresiones que pueden aparecer a la izquierda de una sentencia de asignación. Por otro lado, los r-values (right values) son los valores que pueden almacenarse en esas ubicaciones de memoria y, por lo tanto, son los valores de las expresiones que pueden aparecer a la derecha de una sentencia de asignación."
 
 ## Los dos roles en una sentencia de asignación
 
 - **L-value** (Left value): la variable aparece como **destino** de la asignación
   - Representa la **dirección de memoria** donde se almacenará el resultado
   - El compilador necesita saber *dónde* escribir
-
   - Ejemplo: `x` en `x = y + 1` — necesitamos la dirección de x
 
 - **R-value** (Right value): la variable aparece como **fuente** de datos
   - Representa el **contenido** almacenado en la celda
   - El compilador necesita saber *qué valor* leer
-
   - Ejemplo: `y` en `x = y + 1` — necesitamos el valor de y
-
-## Complemento de Sebesta §5.3.2
-
-> "A variable's value is sometimes called its r-value because it is what is required when the name appears on the right side of an assignment statement. To access the r-value, the l-value must be determined first."
-
-## Regla general
-
-- En el **lado izquierdo** de `=`: la variable actúa como L-value (dirección)
-- En el **lado derecho** de `=`: la variable actúa como R-value (contenido)
-- Una variable **siempre tiene L-value** mientras exista en memoria
-
-- Una variable **tiene R-value válido** solo si fue inicializada
-
----
-
-### [F-05] L-value y R-value — el doble rol de una variable
-
-@tipo: demo
-@imagen: none
-
-# Una variable puede aparecer como destino o como fuente de datos
 
 ## ¿Qué pasa con las constantes?
 
@@ -171,36 +147,7 @@ Cada atributo se **vincula** en un momento distinto — eso es el **binding**.
 
 ---
 
-### [F-06] L-value y R-value — código TypeScript
-
-@tipo: codigo
-@imagen: none
-
-# En `x = y`: x denota dirección (L-value), y denota contenido (R-value)
-
-```typescript
-let contador: number = 42;
-//  ↑ nombre   ↑ tipo    ↑ R-value inicial (contenido: 42)
-//  dirección (L-value) asignada por el runtime — invisible al programador
-//  ámbito: el bloque donde está declarado
-
-let resultado: number;
-```
-
-```typescript
-resultado = contador + 1;
-//  ↑ L-value: dirección de resultado (destino de escritura)
-//              ↑ R-value: contenido de contador (fuente de lectura)
-
-// Lo que hace el runtime paso a paso:
-//   1. Leer contenido de la celda contador  → 42
-//   2. Sumarle 1                              → 43
-//   3. Escribir 43 en la celda resultado
-```
-
----
-
-### [F-07] L-value y R-value — código Python
+### [F-05] L-value y R-value — código Python
 
 @tipo: codigo
 @imagen: none
@@ -214,16 +161,12 @@ contador = 42
 print(id(contador))     # ej: 140234567890  ← L-value (dirección)
 print(type(contador))   # <class 'int'>      ← tipo vinculado en runtime
 print(contador)         # 42                 ← R-value (contenido)
-```
 
-```python
 # Reasignación: Python crea un NUEVO objeto, no modifica el existente
 contador = 43
 print(id(contador))     # ← DIFERENTE al anterior: nueva celda, nueva dirección
 # El objeto 42 sigue existiendo hasta que el GC lo recolecte
-```
 
-```python
 # Comparar con un objeto mutable:
 lista = [1, 2, 3]
 id_original = id(lista)
@@ -233,7 +176,7 @@ print(id(lista) == id_original)  # True — misma dirección, contenido modifica
 
 ---
 
-### [F-08] La 5-tupla — TypeScript y Kotlin
+### [F-06] La 5-tupla — TypeScript y Kotlin
 
 @tipo: codigo
 @imagen: none
@@ -248,9 +191,7 @@ let x: number = 42;
 //  valor:  42 (R-value inicial)
 //  dirección: asignada por V8 en tiempo de carga (no visible)
 //  ámbito: bloque donde está declarado
-```
 
-```typescript
 const limite: number = 100;
 //  binding de VALOR inmutable: el lenguaje prohíbe re-asignar limite
 //  pero la celda de memoria sigue existiendo (tiene L-value)
@@ -268,7 +209,7 @@ val limite: Int = 100
 
 ---
 
-### [F-09] La 5-tupla — Rust y Go
+### [F-07] La 5-tupla — Rust y Go
 
 @tipo: codigo
 @imagen: none
@@ -284,9 +225,7 @@ let x = 42i32;
 let addr = &x as *const i32;
 //  addr contiene la dirección física de x en el stack
 //  esto es el L-value de x expuesto como dato del programa
-```
 
-```rust
 // La inmutabilidad en Rust es la regla por defecto:
 // let x = 42;      ← inmutable (por defecto)
 // let mut y = 42;  ← mutable (requiere declaración explícita)
@@ -308,22 +247,18 @@ var p *int      // p = nil
 ## BLOQUE 2 — Binding: el momento de la vinculación
 ---
 
-### [F-10] ¿Qué es el Binding?
+### [F-08] ¿Qué es el Binding?
 
 @tipo: demo
 @imagen: none
 
 # Binding: la asociación entre una entidad y uno de sus atributos
 
-## Sebesta §5.4 — definición formal
+## Definición
 
 Un **binding** es la asociación entre una entidad del programa (variable, operador, identificador, etc.) y uno de sus atributos (tipo, valor, dirección, significado), establecida en un **momento determinado**.
 
-## Louden & Lambert §7 — perspectiva complementaria
-
-> "The process of associating an attribute with a name is called binding. An attribute can be classified according to the time during the translation/execution process when it is computed and bound to a name. This is called the **binding time** of the attribute. Binding times can be classified into two general categories: static binding and dynamic binding. Static binding occurs prior to execution, while dynamic binding occurs during execution."
-
-## Contraste con lenguajes funcionales (Louden §7)
+## Contraste con lenguajes funcionales
 
 En lenguajes puramente funcionales como Haskell, un valor se vincula a un nombre **una sola vez** — no existe re-asignación. Por eso no se necesita un binding de ubicación (L-value) separado: la variable simplemente **es** su valor, sin celda modificable. Esta es una diferencia fundamental con el modelo imperativo, donde la variable *contiene* un valor que puede cambiar.
 
@@ -345,14 +280,12 @@ En lenguajes puramente funcionales como Haskell, un valor se vincula a un nombre
 
 ---
 
-### [F-11] Los 6 tiempos de binding
+### [F-09] Los 6 tiempos de binding
 
 @tipo: tabla
 @imagen: none
 
 # El binding puede ocurrir en 6 momentos distintos del ciclo de vida del programa
-
-## Sebesta §5.4 — tabla de tiempos de vinculación
 
 ## Lo que importa recordar
 
@@ -360,39 +293,22 @@ En lenguajes puramente funcionales como Haskell, un valor se vincula a un nombre
 - Linkeo y carga son **preparación del entorno de ejecución**
 - Solo el último momento ocurre **dentro del programa en marcha**
 
-## Refinamiento de Louden & Lambert §7 — subcategorías del binding estático
+## Refinamiento de Louden & Lambert — subcategorías del binding estático
 
-Louden distingue tres subcategorías dentro del binding estático, según cuán temprano ocurre:
-
-Del mismo modo, el binding dinámico se subdivide: puede ocurrir en la **entrada a un procedimiento** (variables locales), en la **salida** (liberación), o en cualquier instrucción de asignación durante la ejecución.
+Louden distingue tres subcategorías dentro del binding estático, según cuán temprano ocurre. Del mismo modo, el binding dinámico se subdivide: puede ocurrir en la **entrada a un procedimiento** (variables locales), en la **salida** (liberación), o en cualquier instrucción de asignación durante la ejecución.
 
 | Momento | ¿Qué se vincula? | Ejemplo concreto |
 |---|---|---|
 | **Diseño del lenguaje** | Significados posibles para símbolos y estructuras | `*` = multiplicación (no concatenación) |
 | **Implementación del compilador** | Rango de valores de tipos primitivos | `number` en TS = IEEE 754 float64, 64 bits |
-| **Compilación** | Variable → tipo; operador → semántica concreta | `let n: number` → n es float64 |
+| **Compilación** (estático) | Variable → tipo; operador → semántica concreta | `let n: number` → n es float64 |
 | **Linkeo** | Llamada a subprograma externo → código real | `console.log` → función de V8 runtime |
 | **Carga del módulo** | Variables globales/estáticas → celdas de memoria | Variables de módulo al importar |
-| **Ejecución** | Variable → valor concreto | `n = n + 5` (el valor cambia en runtime) |
+| **Ejecución** (dinámico) | Variable → valor concreto | `n = n + 5` (el valor cambia en runtime) |
 
 ---
 
-### [F-12] Los 6 tiempos de binding
-
-@tipo: tabla
-@imagen: none
-
-# El binding puede ocurrir en 6 momentos distintos del ciclo de vida del programa
-
-| Subcategoría | Momento | Ejemplo concreto |
-|---|---|---|
-| **Translation time** | Análisis semántico / parseo | Tipo de `let n: number` vinculado al compilar |
-| **Link time** | Enlace con librerías externas | Cuerpo de `console.log` vinculado al enlazar con V8 |
-| **Load time** | Carga del módulo para ejecución | Dirección de variables de módulo asignada al importar |
-
----
-
-### [F-13] Los 6 tiempos — análisis de un fragmento TypeScript
+### [F-10] Los 6 tiempos — análisis de un fragmento TypeScript
 
 @tipo: codigo
 @imagen: none
@@ -404,59 +320,39 @@ let count: number;   // declaración — binding de tipo en compilación
 count = count + 5;   // asignación — binding de valor en ejecución
 ```
 
-```
-Análisis de bindings en el fragmento:
+## Análisis de bindings en el fragmento
 
-Tipos posibles para variables     → DISEÑO DEL LENGUAJE (TypeScript spec)
-  El lenguaje define qué tipos existen y qué operaciones son válidas.
+- **Tipos posibles para variables** → DISEÑO DEL LENGUAJE (TypeScript spec)
+  - El lenguaje define qué tipos existen y qué operaciones son válidas
 
-Tipo de count (number)            → COMPILACIÓN
-  El compilador vincula el identificador count con el tipo number.
-```
+- **Tipo de count (number)** → COMPILACIÓN
+  - El compilador vincula el identificador `count` con el tipo `number`
 
-```
-Rango de valores de number        → IMPLEMENTACIÓN DEL COMPILADOR
-  IEEE 754 float64: ±5×10⁻³²⁴ a ±1.8×10³⁰⁸ (64 bits).
+- **Rango de valores de number** → IMPLEMENTACIÓN DEL COMPILADOR
+  - IEEE 754 float64: ±5×10⁻³²⁴ a ±1.8×10³⁰⁸ (64 bits)
 
-Significado del operador +        → COMPILACIÓN
-  Se resuelve la sobrecarga: number + number = suma numérica.
+- **Significado del operador +** → COMPILACIÓN
+  - Se resuelve la sobrecarga: `number + number` = suma numérica
 
-Representación del literal 5      → IMPLEMENTACIÓN DEL COMPILADOR
-  El compilador decide cómo representar el literal 5 en bytecode.
-```
+- **Representación del literal 5** → IMPLEMENTACIÓN DEL COMPILADOR
+  - El compilador decide cómo representar el literal `5` en bytecode
 
-```
-Valor de count                    → EJECUCIÓN (runtime)
-  Solo cuando la línea se ejecuta, count toma el valor calculado.
-```
+- **Valor de count** → EJECUCIÓN (runtime)
+  - Solo cuando la línea se ejecuta, `count` toma el valor calculado
 
 ---
 
 ## BLOQUE 3 — Binding de Tipos
 ---
 
-### [F-14] Binding de tipos — estático vs. dinámico
+### [F-11] Binding de tipos — estático vs. dinámico
 
-@tipo: tabla
+@tipo: tabla-comparativa
 @imagen: none
 
 # ¿Cuándo se vincula el tipo de una variable?
 
 ## Dimensión 1: el momento del binding de tipo
-
-## Nota sobre TypeScript
-
-TypeScript tiene binding estático (tipo fijo en compilación), pero compila a JavaScript (binding dinámico). El tipado de TS **desaparece en runtime** — solo existe en el código fuente y en el compilador.
-
-## Definición precisa (Gabbrielli & Martini §8)
-
-> "A language has static typing if its checking of type constraints can be conducted on the program text at compile time. Otherwise, it has dynamic typing — checking happens at runtime."
-
-## Ventaja del binding dinámico (Sebesta §5.4.2)
-
-> "The primary advantage of dynamic binding of variables to types is that it provides more programming flexibility. A program to process numeric data can be written as a generic program, capable of dealing with data of any numeric type. Whatever type data is input will be acceptable, because the variables can be bound to the correct type when the data is assigned."
-
-La contracara es que los errores de tipo no son detectables antes de ejecutar — aparecen en runtime, posiblemente cuando el programa ya está en producción.
 
 | Característica | **Binding estático** | **Binding dinámico** |
 |---|---|---|
@@ -469,20 +365,20 @@ La contracara es que los errores de tipo no son detectables antes de ejecutar �
 
 ---
 
-### [F-15] Binding de tipos — fuerte vs. débil
+### [F-12] Binding de tipos — fuerte vs. débil
 
-@tipo: tabla
+@tipo: tabla-comparativa
 @imagen: none
 
 # ¿Qué tan estricto es el sistema al mezclar tipos incompatibles?
 
 ## Dimensión 2: la fuerza del tipado (ortogonal al momento)
 
-## Las dos dimensiones son ortogonales — se combinan en cuatro formas
+Las dos dimensiones son **ortogonales** — se combinan en cuatro formas.
 
-## Coerciones y fuerza del tipado (Gabbrielli & Martini §8.3)
+## Coerciones y fuerza del tipado
 
-> "Languages with strong type checking tend to have few coercions. On the other hand, in a language like C, the type system is **designed to be by-passed** and so permits numerous coercions (from characters to integers, from long reals to short, etc.)."
+> "Los lenguajes con verificación de tipos fuerte tienden a tener pocas coerciones. Por otro lado, en un lenguaje como C, el sistema de tipos está diseñado para poder ser eludido y, por lo tanto, permite numerosas coerciones (de caracteres a enteros, de números reales de precisión larga a números reales de precisión corta, etc.)."
 
 Una **coerción** es una conversión de tipo insertada automáticamente por el compilador o runtime cuando detecta compatibilidad entre tipos. En el tipado débil, estas coerciones ocurren silenciosamente en cualquier operación, produciendo resultados incorrectos sin ningún aviso de error.
 
@@ -495,21 +391,7 @@ Una **coerción** es una conversión de tipo insertada automáticamente por el c
 
 ---
 
-### [F-16] Binding de tipos — fuerte vs. débil
-
-@tipo: tabla
-@imagen: none
-
-# ¿Qué tan estricto es el sistema al mezclar tipos incompatibles?
-
-| | Fuerte | Débil |
-|---|---|---|
-| **Estático** | TypeScript, Java, Kotlin, Rust | C (tipos fijos, muchas coerciones silenciosas) |
-| **Dinámico** | Python (tipo cambia, sin coerciones silenciosas) | JavaScript (tipo cambia Y hay coerciones) |
-
----
-
-### [F-17] Inferencia de tipos — concepto
+### [F-13] Inferencia de tipos — concepto
 
 @tipo: demo
 @imagen: none
@@ -527,7 +409,6 @@ Una **coerción** es una conversión de tipo insertada automáticamente por el c
 - **Unidireccional (flujo hacia adelante):** el tipo se deduce del valor asignado
   - `const items = [1, 2, 3]` → el compilador infiere `number[]`
 - **Bidireccional (contextual):** el tipo se deduce del contexto donde se usa el valor
-
   - `items.forEach(x => x.toFixed(2))` → `x` se infiere como `number` por el tipo de `items`
 
 ## Ventajas e implicaciones
@@ -544,7 +425,7 @@ Una **coerción** es una conversión de tipo insertada automáticamente por el c
 
 ---
 
-### [F-18] Inferencia de tipos — TypeScript
+### [F-14] Inferencia de tipos — TypeScript
 
 @tipo: codigo
 @imagen: none
@@ -558,9 +439,7 @@ const items = [1, 2, 3];
 
 const first = items[0];
 //    ↑ inferido: number  (acceso indexado a number[] devuelve number)
-```
 
-```typescript
 const total = items.reduce((acc, x) => acc + x, 0);
 //    ↑ inferido: number  (el acumulador inicial 0 determina el tipo)
 
@@ -569,16 +448,14 @@ items.forEach(x => {
 //            ↑ x: number — inferido por el tipo de items (number[])
     console.log(x.toFixed(2));   // ✅ toFixed existe en number
     // console.log(x.length);    // ❌ Error: number no tiene .length
-```
 
-```typescript
     //   el compilador detecta el error sin anotación explícita
 });
 ```
 
 ---
 
-### [F-19] Binding dinámico de tipo — Python
+### [F-15] Binding dinámico de tipo — Python
 
 @tipo: codigo
 @imagen: none
@@ -591,9 +468,7 @@ items.forEach(x => {
 x = [2, 3, 4]
 print(type(x))          # <class 'list'>
 print(id(x))            # ej: 140234567890
-```
 
-```python
 # Reasignación: x pasa a ser str — el tipo cambió completamente
 x = "uno, dos, tres"
 print(type(x))          # <class 'str'>
@@ -602,9 +477,7 @@ print(id(x))            # ← DIFERENTE: nuevo objeto en heap
 # Python ES fuertemente tipado: no permite operaciones incompatibles sin conversión
 x + 42          # TypeError: can only concatenate str (not "int") to str
                 # el error aparece en runtime, no en compilación
-```
 
-```python
 # Para mezclar, se requiere conversión explícita:
 x + str(42)     # ✅  → "uno, dos, tres42"
 int("5") + 42   # ✅  → 47
@@ -612,7 +485,7 @@ int("5") + 42   # ✅  → 47
 
 ---
 
-### [F-20] Coerciones — JavaScript (tipado débil)
+### [F-16] Coerciones — JavaScript (tipado débil)
 
 @tipo: codigo
 @imagen: none
@@ -625,9 +498,7 @@ int("5") + 42   # ✅  → 47
 // + con string: el número se convierte a string (concatenación)
 "5" + 3      // → "53"   (number 3 → string "3" → concatenación)
 "5" + true   // → "5true"
-```
 
-```javascript
 // - siempre es aritmético: el string se convierte a number
 "5" - 3      // → 2      (string "5" → number 5 → resta)
 "5" * 2      // → 10
@@ -636,9 +507,7 @@ int("5") + 42   # ✅  → 47
 0 == false   // → true   (false se convierte a 0)
 0 === false  // → false  (sin coerción, tipos diferentes)
 "" == false  // → true
-```
 
-```javascript
 null == undefined   // → true   (caso especial del estándar)
 null === undefined  // → false
 
@@ -650,7 +519,7 @@ null === undefined  // → false
 
 ---
 
-### [F-21] Coerciones — TypeScript strict y Python
+### [F-17] Coerciones — TypeScript strict y Python
 
 @tipo: codigo
 @imagen: none
@@ -665,9 +534,7 @@ const b: number = 3;
 a + b;
 // Error TS2365: Operator '+' cannot be applied to types 'string' and 'number'
 // El error aparece en el editor, antes de ejecutar cualquier código
-```
 
-```typescript
 // Si queremos concatenar, la conversión debe ser explícita:
 a + b.toString();   // ✅  → "53"  (conversión explícita, intención clara)
 String(b) + a;      // ✅  → "35"
@@ -689,18 +556,16 @@ int("5") + 3    # ✅  → 8
 ## BLOQUE 4 — Binding de Almacenamiento
 ---
 
-### [F-22] Las 4 categorías de variables
+### [F-18] Las 4 categorías de variables
 
 @tipo: tabla
 @imagen: none
 
 # El tiempo de vida y el mecanismo de almacenamiento definen cuatro categorías
 
-## Sebesta §5.4.3 — definición base
+## Definiciones base
 
-> "The memory cell to which a variable is bound must be taken from a pool of available memory. This process is called **allocation**. **Deallocation** is the process of placing a memory cell that has been unbound from a variable back into the pool of available memory."
-
-## Cuatro categorías según binding de almacenamiento
+> "La celda de memoria a la que se vincula una variable debe tomarse de un conjunto de memoria disponible. Este proceso se denomina **asignación de memoria** (allocation). La **liberación de memoria** (deallocation) es el proceso de devolver al conjunto de memoria disponible una celda de memoria que ha dejado de estar vinculada a una variable."
 
 ## ¿Por qué las estáticas no permiten recursión efectiva?
 
@@ -711,13 +576,13 @@ int("5") + 3    # ✅  → 8
 | Categoría | ¿Cuándo se vincula la dirección? | ¿Cuándo se libera? | Zona de memoria | ¿Permite recursión? |
 |---|---|---|---|---|
 | **1 — Estáticas** | Antes de ejecutar el programa | Al terminar el programa | Segmento estático | ❌ |
-| **2 — Stack-dynamic** | Al *elaborar* la declaración (en llamada) | Al retornar del subprograma | Pila de llamadas | ✅ |
+| **2 — Stack-dynamic** | Al elaborar la declaración (en llamada) | Al retornar del subprograma | Pila de llamadas | ✅ |
 | **3 — Heap explícitas** | Al ejecutar `new` / `Box::new` | Al ejecutar GC / `drop` | Heap | ✅ |
 | **4 — Heap implícitas** | En cualquier sentencia de asignación | Al ejecutar GC | Heap | ✅ |
 
 ---
 
-### [F-23] Categoría 1 — Variables estáticas — concepto
+### [F-19] Variables estáticas — concepto
 
 @tipo: demo
 @imagen: none
@@ -744,16 +609,16 @@ int("5") + 3    # ✅  → 8
 
 ## En lenguajes modernos
 
-- TypeScript, Python, Java, Go y Kotlin usan Cat. 2 (stack-dynamic) para las variables locales
+- TypeScript, Python, Java, Go y Kotlin usan stack-dynamic para las variables locales
 - La estática existe para variables de módulo, constantes globales y `companion object` en Kotlin
 
-## Nota histórica — FORTRAN 77 (Sebesta §5.4.3.1)
+## Nota histórica — FORTRAN 77
 
-FORTRAN 77 usa asignación estática para las variables locales de sus subprogramas. Esto es precisamente por qué **FORTRAN 77 prohíbe la recursión directa**: sin frames independientes en la pila, no existe mecanismo para que dos activaciones de la misma función coexistan con sus propias variables. Cada subprograma tiene una única área de datos, fija en memoria, que se reutiliza en cada invocación.
+FORTRAN 77 usa asignación estática para las variables locales de sus subprogramas. Esto es precisamente por qué FORTRAN 77 prohíbe la recursión directa: sin frames independientes en la pila, no existe mecanismo para que dos activaciones de la misma función coexistan con sus propias variables. Cada subprograma tiene una única área de datos, fija en memoria, que se reutiliza en cada invocación.
 
 ---
 
-### [F-24] Categoría 1 — Variables estáticas — TypeScript
+### [F-20] Variables estáticas — TypeScript
 
 @tipo: codigo
 @imagen: none
@@ -767,29 +632,22 @@ let sesionesActivas = 0;       // variable estática mutable — existe todo el 
 
 // Patrón de inicialización lazy (una sola vez en toda la vida del módulo):
 let _cache: Map<string, string> | null = null;
-```
 
-```typescript
 export function getCache(): Map<string, string> {
     // _cache se inicializa la primera vez que se llama a getCache()
     // Las llamadas siguientes reutilizan la misma instancia (misma celda)
     _cache ??= new Map();
     return _cache;
 }
-```
 
-```typescript
 // Traza de ejecución:
 //   1ra llamada: _cache === null → se crea el Map → _cache apunta al Map
 //   2da+ llamada: _cache !== null → se devuelve el mismo Map
-//
-// Si getCache() fuera recursiva, _cache podría verse en estado parcial
-// desde las invocaciones intermedias — ese es el problema de Cat. 1 + recursión
 ```
 
 ---
 
-### [F-25] Categoría 1 — Kotlin companion object
+### [F-21] Kotlin companion object
 
 @tipo: codigo
 @imagen: none
@@ -804,9 +662,7 @@ class Sesion private constructor(val id: Int) {
         // Sus propiedades y funciones existen desde que la clase se carga
 
         private var contadorGlobal = 0   // estática — un binding por toda la JVM
-```
 
-```kotlin
         fun nueva(): Sesion {
             contadorGlobal++             // modifica la celda compartida por todos
             return Sesion(contadorGlobal)
@@ -815,9 +671,7 @@ class Sesion private constructor(val id: Int) {
         fun totalSesiones(): Int = contadorGlobal
     }
 }
-```
 
-```kotlin
 // Uso:
 val s1 = Sesion.nueva()           // id = 1, contadorGlobal = 1
 val s2 = Sesion.nueva()           // id = 2, contadorGlobal = 2
@@ -826,7 +680,7 @@ println(Sesion.totalSesiones())   // 2 — contadorGlobal es la misma celda para
 
 ---
 
-### [F-26] Categoría 2 — Stack-dynamic — concepto
+### [F-22] Stack-dynamic — concepto
 
 @tipo: demo
 @imagen: none
@@ -839,9 +693,9 @@ println(Sesion.totalSesiones())   // 2 — contadorGlobal es la misma celda para
 - Una nueva celda de memoria se reserva en la **pila de llamadas** (call stack)
 - Al retornar del subprograma, la celda se **libera automáticamente**
 
-## El concepto de "elaboración" (Sebesta §5.4.3.2)
+## El concepto de "elaboración" (Sebesta)
 
-> "Stack-dynamic variables are those whose storage bindings are created when their declaration statements are **elaborated**. Elaboration refers to the storage allocation and binding process indicated by the declaration, which takes place when execution reaches the code to which the declaration is attached — during run time."
+> "Las variables dinámicas de pila (stack-dynamic variables) son aquellas cuyos vínculos de almacenamiento se crean cuando se elaboran sus sentencias de declaración. El término **elaboración** (elaboration) se refiere al proceso de asignación de memoria y vinculación indicado por la declaración. Este proceso tiene lugar cuando la ejecución alcanza el código al que está asociada la declaración, es decir, durante el tiempo de ejecución (run time)."
 
 En otras palabras: la declaración `let resultado = 0` no reserva memoria en compilación. La reserva se produce cuando la **ejecución llega** a esa declaración. Para una variable local dentro de una función, la elaboración ocurre en cada llamada a esa función, creando un binding fresco en el frame correspondiente.
 
@@ -865,7 +719,7 @@ En otras palabras: la declaración `let resultado = 0` no reserva memoria en com
 
 ---
 
-### [F-27] Categoría 2 — Stack-dynamic — código TypeScript
+### [F-23] Stack-dynamic — código TypeScript
 
 @tipo: codigo
 @imagen: none
@@ -877,17 +731,13 @@ function calcular(n: number): number {
     // Al entrar a calcular(): se reservan dos celdas en la pila
     let resultado = 0;   // celda propia de ESTA llamada
     let temp = n * 2;    // celda propia de ESTA llamada
-```
 
-```typescript
     console.log(`temp = ${temp}`);
     return resultado + temp;
     // Al retornar: las celdas de resultado y temp son DESTRUIDAS
     // Si se llama calcular() otra vez, se crean nuevas celdas (nuevas direcciones)
 }
-```
 
-```typescript
 // Estas dos llamadas son completamente independientes:
 calcular(5);   // crea sus propias celdas: resultado=0, temp=10
 calcular(7);   // crea sus propias celdas: resultado=0, temp=14
@@ -898,50 +748,7 @@ calcular(7);   // crea sus propias celdas: resultado=0, temp=14
 
 ---
 
-### [F-28] Categoría 2 — por qué la recursión es posible
-
-@tipo: codigo
-@imagen: none
-
-# La pila de llamadas apila frames independientes — esa es la clave
-
-## Lo que ocurre en factorial(3)
-
-Cuando el programa llama `factorial(3)`, la pila crece así:
-
-## El proceso paso a paso
-
-1. `factorial(3)` se llama → **push** del frame con `n = 3`
-2. Llama a `factorial(2)` → **push** del frame con `n = 2`
-3. Llama a `factorial(1)` → **push** del frame con `n = 1`
-
-4. `factorial(1)` retorna 1 → **pop** del frame de `factorial(1)`
-5. `factorial(2)` recibe 1, calcula `2 * 1 = 2`, retorna 2 → **pop**
-6. `factorial(3)` recibe 2, calcula `3 * 2 = 6`, retorna 6 → **pop**
-
-## Para Tema 13
-
-Los detalles internos del frame — static link, dynamic link, dirección de retorno — se estudian en Abstracción Procedural.
-
-```
-PILA DE LLAMADAS:
-  ┌─────────────────────┐  ← tope (más reciente)
-  │ factorial(1)        │    n = 1  (su propia celda)
-  ├─────────────────────┤
-  │ factorial(2)        │    n = 2  (su propia celda)
-  ├─────────────────────┤
-  │ factorial(3)        │    n = 3  (su propia celda)
-  ├─────────────────────┤
-```
-
-```
-  │ main / llamador     │
-  └─────────────────────┘  ← base
-```
-
----
-
-### [F-29] Categoría 2 — factorial recursivo — código
+### [F-24] Factorial recursivo — código
 
 @tipo: codigo
 @imagen: none
@@ -954,18 +761,14 @@ function factorial(n: number): number {
     // La n de factorial(3) y la n de factorial(2) son celdas distintas
 
     if (n <= 1) return 1;   // caso base: retorna, libera el frame
-```
 
-```typescript
     return n * factorial(n - 1);
     //     ↑ usa la n de ESTE frame
     //         ↑ crea un NUEVO frame para n-1
 }
 
 console.log(factorial(3));  // 6
-```
 
-```typescript
 // Traza de ejecución:
 //   factorial(3): espera a factorial(2)
 //     factorial(2): espera a factorial(1)
@@ -976,7 +779,7 @@ console.log(factorial(3));  // 6
 
 ---
 
-### [F-30] Categorías 3 y 4 — Heap — concepto
+### [F-25] Categorías 3 y 4 — Heap — concepto
 
 @tipo: tabla
 @imagen: none
@@ -994,32 +797,21 @@ console.log(factorial(3));  // 6
 - El programador solicita la memoria explícitamente (`new`, `Box::new`, `malloc`)
 - La liberación puede ser:
   - **Automática (GC):** Java, TypeScript, Python, Go → el runtime detecta cuando no hay referencias
-
   - **Manual:** C → `free()` explícito — riesgo de memory leaks y use-after-free
   - **Ownership:** Rust → el compilador determina cuándo liberar, sin GC y sin errores
 
-### Sebesta §5.4.3.3 — caracterización precisa
+> "Las variables dinámicas explícitas del heap (explicit heap-dynamic variables) son celdas de memoria sin nombre (abstractas) que se asignan y liberan mediante instrucciones explícitas en tiempo de ejecución escritas por el programador. Estas variables, que se reservan y se liberan en el heap (montículo), solo pueden ser referenciadas a través de variables puntero o variables de referencia."
 
-> "Explicit heap-dynamic variables are **nameless (abstract) memory cells** that are allocated and deallocated by explicit run-time instructions written by the programmer. These variables, which are allocated from and deallocated to the heap, can only be referenced through **pointer or reference variables**."
+## Rust: ownership como alternativa al GC
 
-La característica distintiva es que no tienen nombre propio — se acceden siempre a través de un puntero o referencia. En TypeScript se accede a objetos del heap con variables que almacenan referencias; el objeto en sí es anónimo.
-
-### Rust: ownership como alternativa al GC (Gabbrielli §14)
-
-> "Each value in Rust is attached to a variable, which is its exclusive 'owner'. Owners can transfer the ownership of a value to other variables, e.g., via assignments, and other variables can borrow values from their owners."
-
-El compilador de Rust verifica en compilación que cada valor tenga exactamente un dueño y que los préstamos temporales (`&T`) no superen la vida del valor original. Esto elimina los memory leaks y el use-after-free sin necesidad de un GC en runtime.
+> "En Rust, cada valor está asociado a una variable, que actúa como su único y exclusivo propietario (owner). Los propietarios pueden transferir la propiedad de un valor a otras variables, por ejemplo, mediante asignaciones. Además, otras variables pueden tomar prestado (borrow) ese valor de su propietario sin convertirse en dueñas del mismo."
 
 ## Categoría 4 — Heap implícita
 
 - **Toda** asignación puede cambiar el tipo, el valor Y la dirección del objeto
 - El binding de almacenamiento ocurre en cada asignación, sin que el programador lo solicite
 
-### Sebesta §5.4.3.4 — todos los atributos se rebindean
-
-> "Implicit heap-dynamic variables are bound to heap storage only when they are assigned values. In fact, **all their attributes are bound every time they are assigned**."
-
-Ejemplo canónico: Python — cualquier reasignación crea un nuevo objeto en el heap con un nuevo tipo, nueva dirección y nuevo valor. El objeto anterior queda disponible para el GC si ya no tiene referencias.
+> "Las variables dinámicas implícitas del heap se vinculan al almacenamiento del heap únicamente cuando se les asigna un valor. De hecho, todos sus atributos se vinculan cada vez que se les asigna un valor."
 
 ## Trade-offs
 
@@ -1031,7 +823,7 @@ Ejemplo canónico: Python — cualquier reasignación crea un nuevo objeto en el
 
 ---
 
-### [F-31] Categoría 3 — Heap explícita — TypeScript y Rust
+### [F-26] Categoría 3 — Heap explícita — TypeScript y Rust
 
 @tipo: codigo
 @imagen: none
@@ -1046,9 +838,7 @@ class Nodo {
         public siguiente: Nodo | null = null
     ) {}
 }
-```
 
-```typescript
 let cabeza = new Nodo(42);
 // cabeza → Nodo(42) en el heap  (nueva dirección)
 
@@ -1065,16 +855,14 @@ fn main() {
     // elemento → valor 42 en el heap (Box gestiona la dirección)
 
     println!("{}", elemento);  // 42
-```
 
-```rust
 }  // fin del scope → destructor de Box se llama automáticamente
    // la memoria se libera AQUÍ, sin GC, sin memory leak posible
 ```
 
 ---
 
-### [F-32] Categoría 4 — Heap implícita — Python
+### [F-27] Categoría 4 — Heap implícita — Python
 
 @tipo: codigo
 @imagen: none
@@ -1086,9 +874,7 @@ fn main() {
 
 x = [1, 2, 3]
 print(type(x), id(x))     # <class 'list'>  140234567890
-```
 
-```python
 x = "uno, dos, tres"
 print(type(x), id(x))     # <class 'str'>   140234567999  ← todo cambió
 #  ↑ tipo cambió:   list → str
@@ -1097,9 +883,7 @@ print(type(x), id(x))     # <class 'str'>   140234567999  ← todo cambió
 
 x = 42
 print(type(x), id(x))     # <class 'int'>   140234568100
-```
 
-```python
 # El objeto [1,2,3] anterior quedó sin referencias
 # El GC de Python lo recolecta eventualmente
 
@@ -1112,9 +896,9 @@ print(type(x), id(x))     # <class 'int'>   140234568100
 ## BLOQUE 5 — Ámbito
 ---
 
-### [F-33] Ámbito estático — concepto y algoritmo
+### [F-28] Ámbito estático — concepto y algoritmo
 
-@tipo: codigo
+@tipo: demo
 @imagen: none
 
 # El ámbito estático se resuelve en compilación usando la estructura léxica del código
@@ -1132,31 +916,20 @@ El **ámbito** de una variable es el rango de instrucciones del programa donde e
 1. Buscar el nombre en el **ámbito local** (el bloque `{}` actual)
 2. Si no se encuentra → subir al **bloque padre estático** (el bloque que lo contiene en el código)
 3. Continuar hacia afuera, nivel por nivel, hasta el **ámbito global del módulo**
-
 4. Si no se encuentra en ningún nivel → **error de compilación** (nombre no declarado)
 
-## Origen histórico
-
-Introducido por **ALGOL 60** en 1960 — fue una revolución: por primera vez el significado de un nombre podía determinarse sin ejecutar el programa.
-
-## ¿Por qué "estático"?
-
-Porque la resolución ocurre en **tiempo de compilación** — el analizador semántico puede determinar a qué declaración corresponde cada uso de un nombre, sin correr el código.
-
-## El ámbito comienza en la declaración (C, Java, TypeScript)
-
-En C, Java y TypeScript el ámbito de una declaración **comienza en el punto donde está escrita** y termina al final del bloque que la contiene. Esta regla, destacada por Gabbrielli & Martini §4.3, significa que no se puede usar una variable antes de declararla dentro del mismo bloque:
-
-Esta política es una de las razones por las que TypeScript recomienda declarar variables cerca de donde se usan, en lugar de agruparlas todas al inicio de la función.
+## El ámbito comienza en la declaración
 
 ```typescript
 console.log(x);  // ❌ Error: 'x' used before its declaration
 let x = 10;      // ← el ámbito de x comienza aquí, no al principio del bloque
 ```
 
+Esta política es una de las razones por las que TypeScript recomienda declarar variables cerca de donde se usan, en lugar de agruparlas todas al inicio de la función.
+
 ---
 
-### [F-34] Ámbito estático — TypeScript
+### [F-29] Ámbito estático — TypeScript
 
 @tipo: codigo
 @imagen: none
@@ -1171,9 +944,7 @@ function externa() {
 
     function interna() {
         let z = 30;          // ámbito: función interna (nivel 2)
-```
 
-```typescript
         // Resolución de cada nombre (algoritmo de búsqueda hacia afuera):
         console.log(x);  // 1. ¿x en nivel 2?  No
                          // 2. ¿x en nivel 1?  No
@@ -1181,25 +952,21 @@ function externa() {
 
         console.log(y);  // 1. ¿y en nivel 2?  No
                          // 2. ¿y en nivel 1?  Sí → y = 20 ✅
-```
 
-```typescript
         console.log(z);  // 1. ¿z en nivel 2?  Sí → z = 30 ✅
     }
 
     // console.log(z); // ❌ z no existe en nivel 1 ni arriba — error de compilación
 }
-```
 
-```typescript
 // console.log(y);     // ❌ y no existe en nivel 0 — error de compilación
 ```
 
 ---
 
-### [F-35] Ámbito dinámico — comparativa
+### [F-30] Ámbito dinámico — comparativa
 
-@tipo: tabla
+@tipo: tabla-comparativa
 @imagen: none
 
 # En el ámbito dinámico, la cadena de llamadas activas define la visibilidad
@@ -1212,17 +979,17 @@ function externa() {
 - Útil para "inyectar" variables en funciones sin cambiar su firma (contexto implícito)
 - Hoy es considerado una práctica problemática por dificultar el razonamiento sobre el código
 
-## Definición formal del ámbito dinámico (Gabbrielli & Martini §4.3)
+## Definición formal del ámbito dinámico
 
-> "According to the rule of dynamic scope, the valid association for a name X, at any point P of a program, is the **most recent (in the temporal sense) association created for X which is still active** when the control flow arrives at P."
+> "Según la regla del ámbito dinámico (dynamic scope), la asociación válida para un nombre X, en cualquier punto P de un programa, es la asociación más reciente (en el sentido temporal) creada para X que todavía se encuentra activa cuando el flujo de control llega a P."
 
 La implementación es conceptualmente sencilla: para resolver una referencia no local al nombre `x`, basta con recorrer la pila de activación hacia atrás, desde el frame más reciente, hasta encontrar un frame que declare `x`. El primer binding activo encontrado es el que se usa.
 
-## Problemas del ámbito dinámico (Sebesta §5.5.4)
+## Problemas del ámbito dinámico
 
-1. **Imposibilidad de verificación estática de tipos**: las referencias a variables no locales no pueden verificarse en compilación, porque qué variable "corresponde" depende del flujo de ejecución.
-2. **Código difícil de leer**: para entender qué valor tiene una variable en un punto dado hay que reconstruir mentalmente la cadena de llamadas activas en ese momento — información que no está en el texto del programa.
-3. **Accesos más costosos**: resolver una referencia no local requiere recorrer la pila en runtime; el acceso a no-locales en ámbito estático se compila a una sola indirección por nivel estático.
+1. **Imposibilidad de verificación estática de tipos**: las referencias a variables no locales no pueden verificarse en compilación, porque qué variable "corresponde" depende del flujo de ejecución
+2. **Código difícil de leer**: para entender qué valor tiene una variable en un punto dado hay que reconstruir mentalmente la cadena de llamadas activas en ese momento — información que no está en el texto del programa
+3. **Accesos más costosos**: resolver una referencia no local requiere recorrer la pila en runtime; el acceso a no-locales en ámbito estático se compila a una sola indirección por nivel estático
 
 ## JavaScript: `this` tiene semántica dinámica en funciones regulares
 
@@ -1238,7 +1005,7 @@ El valor de `this` en una función regular depende de **cómo** se llama la func
 
 ---
 
-### [F-36] Ámbito dinámico — `this` en JavaScript
+### [F-31] Ámbito dinámico — `this` en JavaScript
 
 @tipo: codigo
 @imagen: none
@@ -1254,9 +1021,7 @@ class Timer {
         setTimeout(function() {
             // this NO es la instancia Timer — lo perdió setTimeout
             // En strict mode: this === undefined
-```
 
-```typescript
             console.log(this?.delay);   // undefined
         }, this.delay);
     }
@@ -1265,17 +1030,13 @@ class Timer {
     startConArrow() {
         setTimeout(() => {
             // this ES la instancia Timer — garantizado por el ámbito léxico
-```
 
-```typescript
             // El compilador sabe en compilación qué es this dentro de la arrow
             console.log(this.delay);    // 1000
         }, this.delay);
     }
 }
-```
 
-```typescript
 const t = new Timer();
 t.startConFunctionRegular();  // → undefined  (this dinámico, perdido en setTimeout)
 t.startConArrow();            // → 1000       (this léxico, capturado en startConArrow)
@@ -1283,7 +1044,7 @@ t.startConArrow();            // → 1000       (this léxico, capturado en star
 
 ---
 
-### [F-37] Scope holes — shadowing — concepto
+### [F-32] Scope holes — shadowing — concepto
 
 @tipo: demo
 @imagen: none
@@ -1316,7 +1077,7 @@ t.startConArrow();            // → 1000       (this léxico, capturado en star
 
 ---
 
-### [F-38] Scope holes — shadowing — código
+### [F-33] Shadowing — código
 
 @tipo: codigo
 @imagen: none
@@ -1332,9 +1093,7 @@ function procesarLista(items: number[]): void {
         const x = item * 2;
         //    ↑ x LOCAL al bloque del for (nivel 2)
         //    ← SHADOW: oculta al x del módulo dentro de este bloque
-```
 
-```typescript
         // "scope hole" de x exterior: comienza aquí ↑
         console.log(x);   // usa x LOCAL: 20, 40, 60, ...
     }
@@ -1342,37 +1101,33 @@ function procesarLista(items: number[]): void {
 
     console.log(x);   // x del módulo nuevamente visible: 10
 }
-```
 
-```typescript
 procesarLista([10, 20, 30]);
 // Salida:
 //   20
 //   40
 //   60
 //   10   ← x del módulo, nunca fue modificado
-```
 
-```typescript
 // ESLint con @typescript-eslint/no-shadow reportaría:
 //   warning: 'x' is already declared in the upper scope (no-shadow)
 ```
 
 ---
 
-## BLOQUE 6 — Entorno de Referencia e Inicialización
+## BLOQUE 6 — Entorno de Referencia, Constantes e Inicialización
 ---
 
-### [F-39] Entorno de referencia
+### [F-34] Entorno de referencia
 
 @tipo: demo
 @imagen: none
 
 # El entorno de referencia es la "foto" de todos los nombres visibles en un punto del programa
 
-## Definición (Sebesta §5.7)
+## Definición
 
-> "The referencing environment of a statement is the collection of all variables that are **visible** in the statement. The referencing environment of a statement in a static-scoped language is the variables declared in its local scope plus the collection of all variables of its ancestor scopes that are visible."
+> "El entorno de referencia de una sentencia es la colección de todas las variables que son **visibles** en la sentencia. El entorno de referencia de una sentencia en un lenguaje con ámbito estático está formado por las variables declaradas en su ámbito local más la colección de todas las variables de sus ámbitos ancestros que son visibles."
 
 En un lenguaje con ámbito estático, el entorno de referencia de una sentencia es necesario mientras esa sentencia está siendo compilada — el compilador construye las estructuras de código y datos que permiten las referencias a variables de otros scopes durante la ejecución. No se necesita calcular nada en runtime para saber qué nombres son visibles.
 
@@ -1381,7 +1136,6 @@ En un lenguaje con ámbito estático, el entorno de referencia de una sentencia 
 - El entorno de referencia **no es fijo** — cambia cada vez que se entra o sale de un bloque
 - Al entrar a una función: se agrega su scope local al entorno
 - Al salir de la función: ese scope se elimina del entorno
-
 - Al entrar a un bloque `if`, `for`, etc.: se agrega el scope del bloque
 
 ## Componentes del entorno en TypeScript
@@ -1389,7 +1143,6 @@ En un lenguaje con ámbito estático, el entorno de referencia de una sentencia 
 - **Variables locales** del bloque actual
 - **Parámetros** de la función actual
 - **Variables de funciones externas** (capturadas por closure)
-
 - **Variables del módulo** (top-level)
 - **Identificadores globales** del runtime (`console`, `Math`, `undefined`, etc.)
 
@@ -1401,7 +1154,7 @@ En un lenguaje con ámbito estático, el entorno de referencia de una sentencia 
 
 ---
 
-### [F-40] Constantes — concepto
+### [F-35] Constantes — concepto
 
 @tipo: demo
 @imagen: none
@@ -1432,7 +1185,7 @@ Una **constante** es un identificador cuyo valor se fija en un momento determina
 
 ---
 
-### [F-41] Constantes — código TypeScript
+### [F-36] Constantes — código TypeScript
 
 @tipo: codigo
 @imagen: none
@@ -1448,9 +1201,7 @@ const PI = 3.14159;
 const CONFIG = { debug: false, maxRetries: 3 };
 CONFIG.debug = true;    // ✅ válido: el objeto es mutable, solo la referencia es const
 CONFIG.maxRetries = 5;  // ✅ válido
-```
 
-```typescript
 // CONFIG = { debug: true };  // ❌ Error: Cannot assign to 'CONFIG'
 
 // Caso 3: inmutabilidad profunda con Object.freeze
@@ -1458,9 +1209,7 @@ const FROZEN = Object.freeze({ debug: false });
 FROZEN.debug = true;
 // En JavaScript: silencioso (el cambio se ignora sin error)
 // En TypeScript strict: Error de tipo — readonly property
-```
 
-```typescript
 // Patrón recomendado para objetos de configuración inmutables:
 const SETTINGS = Object.freeze({
     timeout: 5000,
@@ -1471,99 +1220,33 @@ const SETTINGS = Object.freeze({
 
 ---
 
-### [F-42] Inicialización — comparativa de lenguajes
+### [F-37] Inicialización — comparativa de lenguajes
 
-@tipo: demo
+@tipo: tabla-comparativa
 @imagen: none
 
 # ¿Qué pasa si se usa una variable antes de inicializarla?
 
-## Sebesta §5.4.3 — comportamientos por lenguaje
-
----
-
-### [F-43] Inicialización — comparativa de lenguajes
-
-@tipo: tabla
-@imagen: none
-
-# ¿Qué pasa si se usa una variable antes de inicializarla?
+## Sebesta — comportamientos por lenguaje
 
 | Lenguaje | Variable no inicializada | Momento de detección |
 |---|---|---|
 | **C** | Estáticas → 0 automático; locales → **basura** (contenido previo de la celda) | Ejecución (undefined behavior) |
 | **C++** | Igual que C para primitivos; constructores para objetos | Ejecución |
 | **Java** | Campos → valores por defecto (0, false, null); locales → error de compilación | Variables locales: compilación |
-
----
-
-### [F-44] Inicialización — comparativa de lenguajes
-
-@tipo: demo
-@imagen: none
-
-# ¿Qué pasa si se usa una variable antes de inicializarla?
-
-## Sebesta §5.4.3 — comportamientos por lenguaje
-
----
-
-### [F-45] Inicialización — comparativa de lenguajes
-
-@tipo: tabla
-@imagen: none
-
-# ¿Qué pasa si se usa una variable antes de inicializarla?
-
-| Lenguaje | Variable no inicializada | Momento de detección |
-|---|---|---|
 | **TypeScript strict** | **Error de compilación** — análisis de flujo detecta el camino sin inicialización | Compilación |
 | **Python** | `NameError` — el intérprete lanza excepción al acceder | Runtime |
 | **Go** | **Zero values automáticos**: 0, false, `""`, nil — nunca hay basura | Siempre seguro |
-
----
-
-### [F-46] Inicialización — comparativa de lenguajes
-
-@tipo: demo
-@imagen: none
-
-# ¿Qué pasa si se usa una variable antes de inicializarla?
-
-## Sebesta §5.4.3 — comportamientos por lenguaje
-
----
-
-### [F-47] Inicialización — comparativa de lenguajes
-
-@tipo: tabla
-@imagen: none
-
-# ¿Qué pasa si se usa una variable antes de inicializarla?
-
-| Lenguaje | Variable no inicializada | Momento de detección |
-|---|---|---|
 | **Rust** | Error de compilación — el compilador exige inicialización antes del primer uso | Compilación |
 
 ---
 
-### [F-48] Inicialización — comparativa de lenguajes
-
-@tipo: demo
-@imagen: none
-
-# ¿Qué pasa si se usa una variable antes de inicializarla?
-
-## TypeScript strict mode — análisis de flujo de tipos
-
----
-
-### [F-49] Inicialización — comparativa de lenguajes
+### [F-38] Inicialización — TypeScript strict code
 
 @tipo: codigo
 @imagen: none
 
-# ¿Qué pasa si se usa una variable antes de inicializarla?
+# TypeScript strict mode — análisis de flujo de tipos
 
 ```typescript
 let n: number;
@@ -1576,7 +1259,7 @@ console.log(n);  // Error TS2454: Variable 'n' used before being assigned
 ## BLOQUE 7 — IA y Variables
 ---
 
-### [F-50] La IA comete errores de scope
+### [F-39] La IA comete errores de scope
 
 @tipo: demo
 @imagen: none
@@ -1588,38 +1271,28 @@ console.log(n);  // Error TS2454: Variable 'n' used before being assigned
 - Los modelos de lenguaje aprenden de corpus de código extraído de la web
 - El corpus incluye **millones de archivos pre-ES6** con `var`, variables globales y shadowing silencioso
 - En JavaScript no-strict, muchos de estos errores **no generan excepciones** — el código "funciona" aunque sea incorrecto
-
 - El modelo aprende que estos patrones son válidos porque el corpus los usa sin marcarlos como error
 
 ## Tres patrones concretos a reconocer
 
-1. **`var` hoisting:** `var` se "iza" al inicio de la función — da `undefined` en lugar de `ReferenceError`
+1. **`var` hoisting:** variable se "eleva" al inicio de la función — da `undefined` en lugar de `ReferenceError`
 2. **Variable global silenciosa:** dependencias ocultas no declaradas como parámetro
 3. **Shadowing inesperado:** ¿a qué variable se refiere realmente el código generado?
 
-## Lo que veremos en las próximas filminas
-
-Cada patrón tiene:
-- Una explicación del **mecanismo** (por qué ocurre)
-- Un ejemplo de **código incorrecto** que la IA suele generar
-- La **versión correcta** y cómo pedirle a la IA que la genere
-
 ---
 
-### [F-51] Patrón 1 — `var` hoisting — concepto
+### [F-40] Patrón 1 — `var` hoisting — concepto
 
 @tipo: tabla
 @imagen: none
 
-# `var` tiene ámbito de función, no de bloque — y se "iza" al inicio
+# `var` tiene ámbito de función, no de bloque — y se "eleva" al inicio
 
 ## ¿Qué es el hoisting?
 
-- En JavaScript/TypeScript, las declaraciones `var` son **izadas** (*hoisted*) al inicio de la función
+- En JavaScript/TypeScript, las declaraciones `var` son **elevadas** (*hoisted*) al inicio de la función
 - El compilador mueve la declaración (no la inicialización) al principio del scope de función
 - Esto significa que la variable **existe** desde el inicio de la función, aunque su valor sea `undefined`
-
-## La diferencia entre `var`, `let` y `const`
 
 ## Temporal Dead Zone (TDZ)
 
@@ -1636,7 +1309,7 @@ Cada patrón tiene:
 
 ---
 
-### [F-52] Patrón 1 — `var` hoisting — código
+### [F-41] Patrón 1 — `var` hoisting — código
 
 @tipo: codigo
 @imagen: none
@@ -1649,20 +1322,16 @@ function procesar(activo: boolean) {
     if (activo) {
         var resultado = "ok";   // ← var: scope de FUNCIÓN, no de bloque
     }
-    // "var resultado" fue izada al inicio de procesar():
+    // "var resultado" fue elevada al inicio de procesar():
     // equivale a:
     //   var resultado;             // undefined
-```
 
-```typescript
     //   if (activo) { resultado = "ok"; }
 
     console.log(resultado);   // undefined si activo = false — NO lanza error
     // El error silencioso puede ocurrir lejos de la causa real
 }
-```
 
-```typescript
 // ✅ Con let: error explícito y localizable
 function procesar2(activo: boolean) {
     if (activo) {
@@ -1675,7 +1344,7 @@ function procesar2(activo: boolean) {
 
 ---
 
-### [F-53] Patrón 2 — Variable global silenciosa — concepto
+### [F-42] Patrón 2 — Variable global silenciosa — concepto
 
 @tipo: demo
 @imagen: none
@@ -1693,7 +1362,6 @@ function procesar2(activo: boolean) {
 - La **firma de la función** no refleja todas sus dependencias — el lector no puede entender qué hace sin leer el cuerpo
 - El resultado de la función puede cambiar según el **orden de las llamadas anteriores** — no es predecible desde sus parámetros
 - Las **pruebas unitarias** se complican: hay que inicializar el estado global antes de cada test
-
 - Los **efectos secundarios** son invisibles para el compilador — no hay error de compilación
 
 ## Señales de alerta en código generado por IA
@@ -1709,7 +1377,7 @@ function procesar2(activo: boolean) {
 
 ---
 
-### [F-54] Patrón 2 — Variable global silenciosa — código
+### [F-43] Patrón 2 — Variable global silenciosa — código
 
 @tipo: codigo
 @imagen: none
@@ -1724,22 +1392,16 @@ function acumular(n: number) {
     total += n;   // ← modifica estado externo sin declararlo en la firma
     return total; // ← el resultado depende de todas las llamadas anteriores
 }
-```
 
-```typescript
 acumular(5);   // total = 5
 acumular(3);   // total = 8
 acumular(5);   // total = 13  (mismo argumento, resultado diferente)
-```
 
-```typescript
 // ✅ Correcto — todas las dependencias son parámetros explícitos:
 function acumularPuro(total: number, n: number): number {
     return total + n;   // mismos argumentos → siempre el mismo resultado
 }
-```
 
-```typescript
 const r1 = acumularPuro(0, 5);    // → 5
 const r2 = acumularPuro(r1, 3);   // → 8
 const r3 = acumularPuro(r2, 5);   // → 13
@@ -1748,7 +1410,7 @@ const r3 = acumularPuro(r2, 5);   // → 13
 
 ---
 
-### [F-55] Patrón 3 — Shadowing inesperado — código
+### [F-44] Patrón 3 — Shadowing inesperado — código
 
 @tipo: codigo
 @imagen: none
@@ -1762,18 +1424,14 @@ const limite = 100;  // limite del módulo (nivel 0)
 function validar(items: number[]) {
     const limite = items.length;   // ← SHADOW: nueva variable con el mismo nombre
     //                               oculta al limite = 100 del módulo
-```
 
-```typescript
     return items.filter(x => x < limite);
     //                           ↑ ¿qué limite? → el LOCAL (items.length), NO el 100
     // Si items = [50, 120, 80] y items.length = 3:
     //   items.filter(x => x < 3)  → []  ← vacío (ningún elemento < 3)
     //   El comportamiento correcto sería filtrar los que son < 100
 }
-```
 
-```typescript
 // ✅ Correcto — sin shadowing, intención explícita:
 function validarSinShadow(items: number[], valorLimite: number): number[] {
     const cantidadItems = items.length;    // nombre diferente — sin shadow
@@ -1783,7 +1441,10 @@ function validarSinShadow(items: number[], valorLimite: number): number[] {
 
 ---
 
-### [F-56] Actividad — tres patrones mezclados
+## BLOQUE 8 — Actividad y Cierre
+---
+
+### [F-45] Actividad — tres patrones mezclados
 
 @tipo: codigo
 @imagen: none
@@ -1807,9 +1468,7 @@ function procesar(items: number[]) {
         var resultado = items[0] * 2;
     }
     for (const item of items) {
-```
 
-```typescript
         const limite = item;
         total += limite;
     }
@@ -1820,7 +1479,7 @@ function procesar(items: number[]) {
 
 ---
 
-### [F-57] Prompt seguro para variables en TypeScript
+### [F-46] Prompt seguro para variables en TypeScript
 
 @tipo: codigo
 @imagen: none
@@ -1828,20 +1487,6 @@ function procesar(items: number[]) {
 # Instrucciones explícitas al modelo producen código con buenas prácticas de scope
 
 ## El prompt
-
-## Por qué funciona cada restricción
-
-- **`strict mode`**: activa detección de variables usadas antes de asignación (análisis de flujo de tipos)
-- **`let/const` (nunca `var`)**: elimina el hoisting problemático — cualquier uso fuera de scope da `ReferenceError`
-- **Parámetros explícitos**: el modelo entiende que no puede usar variables de fuera de la función
-
-- **Tipos en firma**: el compilador puede verificar la corrección antes de ejecutar
-
-## Por qué es necesario ser explícito
-
-- Sin estas instrucciones, el modelo aplica el patrón estadísticamente más frecuente en su corpus
-- Con estas restricciones, el modelo ve el contexto de uso y produce código más preciso
-- Las restricciones también actúan como **documentación técnica del proyecto** para cualquier colaborador
 
 ```
 "TypeScript strict mode.
@@ -1851,14 +1496,18 @@ son parámetros explícitos con sus tipos declarados.
 Declara el tipo de cada parámetro y el tipo de retorno."
 ```
 
+## Por qué funciona cada restricción
+
+- **`strict mode`**: activa detección de variables usadas antes de asignación (análisis de flujo de tipos)
+- **`let/const` (nunca `var`)**: elimina el hoisting problemático — cualquier uso fuera de scope da `ReferenceError`
+- **Parámetros explícitos**: el modelo entiende que no puede usar variables de fuera de la función
+- **Tipos en firma**: el compilador puede verificar la corrección antes de ejecutar
+
 ---
 
-## CIERRE
----
+### [F-47] Cierre — tres ideas para llevarse
 
-### [F-58] Cierre — tres ideas para llevarse
-
-@tipo: demo
+@tipo: cierre
 @imagen: none
 
 # Variables, Binding y Ámbito

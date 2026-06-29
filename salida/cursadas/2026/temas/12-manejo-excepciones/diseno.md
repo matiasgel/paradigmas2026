@@ -1,9 +1,9 @@
 # Diseño de Clase — Tema 12: Manejo de Excepciones
 
-> **Estado:** APROBADO
+> **Estado:** APROBADO · Corregido 2026-06-28
 > **Diseñador:** Marcos v3 (topic-designer-v3) · Pipeline v3
 > **Aprobado por:** Docente (implícito — avance solicitado)
-> **Fecha:** 2026-06-04
+> **Fecha:** 2026-06-04 · **Corrección:** 2026-06-28 (Dr. Roberto — class-writer)
 > **Módulo:** IX | **Semana:** 12 | **Clase Nº 1 de 1**
 
 ---
@@ -44,30 +44,30 @@ Al finalizar esta clase el estudiante podrá:
 
 ---
 
-## Plan de Filminas (16 slides + portada)
+## Plan de Filminas (17 slides + portada)
 
 | F-# | Título | Tipo | Duración |
 |-----|--------|------|----------|
-| F-00 | Portada | portada | — |
+| F-00 | Portada | portada | 2 min |
 | F-01 | Pregunta de apertura | socratica | 3 min |
 | F-02 | Objetivos de la clase | concepto-abstracto | 2 min |
-| F-03 | ¿Qué es una excepción? (Sebesta §14.1) | concepto-abstracto | 7 min |
+| F-03 | ¿Qué es una excepción? (Sebesta §14.1) | concepto-abstracto | 8 min |
 | F-04 | El problema antes de las excepciones | codigo | 6 min |
 | F-05 | Historia: de PL/I a los lenguajes modernos | timeline | 5 min |
 | F-06 | Terminación vs. reanudación | tabla-comparativa | 7 min |
 | F-07 | Preguntas de diseño de lenguaje (Sebesta) | concepto-abstracto | 5 min |
-| F-08 | try / catch / finally en TypeScript | codigo | 10 min |
+| F-08 | try / catch / finally en TypeScript | codigo | 11 min |
 | F-09 | Propagación por el call stack | diagrama | 7 min |
 | F-10 | Excepciones user-defined en TypeScript | codigo | 8 min |
-| F-11 | El enfoque funcional: Result\<T,E\> en TypeScript | codigo | 10 min |
+| F-11 | El enfoque funcional: Result\<T,E\> en TypeScript | codigo | 11 min |
 | F-12 | Go: errors as values | codigo | 7 min |
 | F-13 | Kotlin: sealed classes y try-expression | codigo | 7 min |
 | F-14 | Rust: Result\<T,E\> y el operador `?` | codigo | 7 min |
 | F-15 | Tabla comparativa: imperativo vs funcional, 4 lenguajes | tabla-comparativa | 8 min |
-| F-16 | Excepciones en programación agéntica | concepto-mixto | 8 min |
+| F-16 | Excepciones en programación agéntica | concepto-mixto | 11 min |
 | F-17 | Cierre y puntos clave | cierre | 5 min |
 
-**Total estimado:** 116 min (dentro del límite de 120 min)
+**Total:** 120 min (constraint absoluto)
 
 ---
 
@@ -75,10 +75,10 @@ Al finalizar esta clase el estudiante podrá:
 
 | Bloque | Filminas | Tema | Tiempo |
 |--------|----------|------|--------|
-| A | F-00 a F-07 | Fundamentos y conceptos (Sebesta-first) | 35 min |
-| B | F-08 a F-11 | TypeScript: imperativo y funcional | 35 min |
+| A | F-00 a F-07 | Fundamentos y conceptos (Sebesta-first) | 38 min |
+| B | F-08 a F-11 | TypeScript: imperativo y funcional | 37 min |
 | C | F-12 a F-15 | Contraste multi-lenguaje | 29 min |
-| D | F-16 a F-17 | Agéntica + cierre | 13 min |
+| D | F-16 a F-17 | Agéntica + cierre | 16 min |
 
 ---
 

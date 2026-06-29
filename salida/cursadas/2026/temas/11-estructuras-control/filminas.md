@@ -1,18 +1,25 @@
 # Filminas - Tema 11: Expresiones y Estructuras de Control
 
-> Curso: Paradigmas y Lenguajes de Programación · UNTDF IDEI 2026
-> Cobertura: F-00 a F-44
-> Referencia principal: Sebesta, *Concepts of Programming Languages*, caps. 7–8
-> Referencias auxiliares: Gabbrielli-Martini caps. 4–5, Louden cap. 8
+> Curso: Laboratorio de Programación y Lenguajes · UNTDF IDEI 2026
+> Cobertura: F-00 a F-44 (45 filminas)
+> Duración: 180 minutos (constraint absoluto)
+> Lenguaje principal: TypeScript
+> Referencia principal: Sebesta, Concepts of Programming Languages, caps. 7–8
+> Referencias auxiliares: Gabbrielli-Martini caps. 4–6, Louden cap. 8
+> Baseline de corrección: clase_dada.txt (859 líneas)
 
 ---
 
 ## PORTADA
 
+---
+
 ### [F-00] Portada
 
-@tipo: concepto-mixto
-@imagen: none
+@tipo: portada
+@layout: portada
+@imagen: background
+@prompt-imagen: composición abstracta minimalista con un árbol sintáctico (nodos y ramas) que se transforma gradualmente en flechas de flujo de control; paleta azul profundo y acentos ámbar; sin texto, estilo diagrama técnico limpio
 
 # Expresiones y Estructuras de Control
 
@@ -23,116 +30,196 @@ UNTDF IDEI 2026
 
 ### [F-01] Pregunta de apertura
 
-@tipo: concepto-mixto
+@tipo: socratica
+@layout: socratica
 @imagen: none
 
 # ¿Dos expresiones equivalentes siempre se comportan igual?
 
-- ¿Dónde puede cambiar el resultado: en el parseo, la evaluación, o los side effects?
-- ¿Puede una expresión producir resultados distintos según el lenguaje que la ejecute?
-- ¿Qué garantiza realmente una tabla de precedencia de operadores?
+## Pueden diferir por
+
+- Precedencia
+- Asociatividad
+- Orden de evaluación
+- Efectos colaterales
+- Coerciones del lenguaje
+
+## Ejemplo TypeScript
+
+```ts
+let x = 1
+const r = x++ + x
+```
+
+¿El problema está en la matemática o en la semántica del lenguaje?
 
 ---
 
 ## BLOQUE A — Fundamentos de expresiones y semántica
 
+---
+
 ### [F-02] Objetivos
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
+@imagen: none
 
-# Objetivos de la secuencia
+# Al finalizar este tema el estudiante podrá
 
-## Al finalizar este tema el estudiante podrá
-
-- Definir formalmente expresión, sentencia y contexto de evaluación (Sebesta §7.1).
-- Aplicar precedencia, asociatividad y orden de evaluación con y sin side effects.
-- Distinguir short-circuit de evaluación estricta y justificar su uso por corrección semántica.
-- Elegir estructuras de control por criterio semántico y de mantenibilidad.
-- Modelar iteración con invariantes y condición de terminación verificable.
+- Distinguir expresión, sentencia y efecto colateral
+- Explicar precedencia y asociatividad
+- Analizar orden de evaluación
+- Reconocer conversiones, coerciones y sobrecarga de operadores
+- Justificar short-circuit
+- Comparar estructuras de selección e iteración
+- Evaluar decisiones de diseño de lenguajes modernos
 
 ---
 
 ### [F-03] Mapa conceptual del tema
 
-@tipo: concepto-mixto
-@imagen: none
+@tipo: diagrama
+@layout: diagrama
+@imagen: content
+@prompt-imagen: diagrama de flujo vertical con cajas conectadas por flechas descendentes: Expresiones → Evaluación → Asignación y efectos → Booleanos y short-circuit → Selección → Iteración → Saltos restringidos y mecanismos modernos; estilo blueprint técnico, paleta azul/gris, sin texto legible solo formas
 
 # Expresiones → Evaluación → Control
 
 ## Ejes del tema
 
-- **Expresiones**: forma sintáctica que produce un valor o efecto colateral.
-- **Evaluación**: orden, precedencia y semántica operacional.
-- **Selección**: decisión estructurada y criterios de mantenibilidad.
-- **Iteración**: invariante, terminación y costo cognitivo.
-- **Abstracciones de flujo**: iteradores, generadores y asincronía.
+- **Expresiones** → **Evaluación** → **Asignación y efectos**
+- **Booleanos y short-circuit** → **Selección**
+- **Iteración** → **Saltos restringidos y mecanismos modernos**
 
 ---
 
 ### [F-04] Expresión y sentencia
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
 @imagen: none
 
 # Expresión produce valor · Sentencia causa efecto
 
-## Distinción fundamental (Sebesta §7.1)
+## Distinción fundamental
 
-- **Expresión**: construcción sintáctica que se evalúa y retorna un valor.
-- **Sentencia**: unidad de ejecución que controla el flujo o provoca efectos colaterales.
-- Un lenguaje que permite *assignment expressions* mezcla ambos roles: mayor poder, mayor riesgo.
-- Sebesta: en C, `x = 5` es simultáneamente expresión (valor: 5) y sentencia (efecto: asignación).
-- La distinción impacta el diseño: Haskell elimina sentencias; C las maximiza.
+- **Expresión**: construcción sintáctica que se evalúa.
+- **Sentencia**: unidad ejecutable del programa.
+- En lenguajes imperativos, muchas sentencias modifican estado.
+- En TypeScript, una asignación también es una expresión.
+
+```ts
+let x = 0
+let y = (x = 5)
+```
 
 ---
 
-### [F-05] AST y parseo
+### [F-05] Por qué esta distinción importa
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
 @imagen: none
 
-# El árbol sintáctico abstracto fija la forma de la expresión
+# Si una expresión solo calcula, es más fácil razonar
 
-## Cómo el AST determina semántica (Sebesta §7.2)
+## Riesgo semántico
+
+- Si una expresión solo calcula, es más fácil razonar.
+- Si una expresión además muta estado, aparece riesgo semántico.
+- La misma sintaxis puede mezclar cálculo y efecto.
+
+```ts
+let total = 0
+function sumar(x: number): number {
+    total += x
+    return total
+}
+```
+
+---
+
+### [F-06] AST y parseo
+
+@tipo: diagrama
+@layout: diagrama
+@imagen: content
+@prompt-imagen: árbol sintáctico abstracto binario con raíz "+", hijo izquierdo "a" y hijo derecho "*" que tiene hijos "b" y "c"; nodos circulares azul oscuro, aristas grises, estilo diagrama técnico limpio sobre fondo claro
+
+# El árbol sintáctico abstracto fija la semántica de la expresión
+
+## Cómo el AST determina semántica
 
 - La **precedencia** de operadores determina la estructura del árbol de parseo.
 - La **asociatividad** resuelve empates entre operadores de igual precedencia.
 - El AST captura estructura, no evaluación: es una representación intermedia.
 - Parseo y evaluación son **fases distintas**: el árbol no garantiza orden de evaluación temporal.
-- Sebesta: el operador con mayor precedencia queda más profundo en el árbol → se evalúa primero.
+- El operador con mayor precedencia queda más profundo en el árbol → se evalúa primero.
+
+```ts
+const r = a + b * c   // a + (b * c)
+```
 
 ---
 
-### [F-06] Precedencia
+### [F-07] Precedencia de operadores
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
+@imagen: none
 
-# La precedencia determina la agrupación sintáctica
+# La precedencia determina la agrupación
 
-## Reglas de prioridad (Sebesta §7.2)
+## Reglas de prioridad
 
-- Multiplicación y división se agrupan antes que suma y resta (convención matemática).
-- **Lenguajes difieren** en precedencia de operadores relacionales, lógicos y de bits.
-- Parentizar explícitamente mejora legibilidad y elimina dependencia de reglas implícitas.
-- Sebesta: la tabla de precedencias es una decisión de diseño del lenguaje, no un estándar universal.
+- Multiplicación precede a suma.
+- Los paréntesis expresan intención.
+- La tabla de precedencia es decisión de diseño.
 
 ## Ejemplo
 
+```ts
+const r = a + b << c
 ```
-a + b * c     →   a + (b * c)      # precedencia mayor de *
-(a + b) * c   →   suma antes        # paréntesis explicitan intención
-a ** b ** c   →   a ** (b ** c)    # asociatividad derecha en Python
-```
+
+¿Se suma antes o se desplaza antes?
 
 ---
 
-### [F-07] Asociatividad
+### [F-08] Precedencia no es una ley universal
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
+@imagen: none
+
+# Leer una expresión requiere conocer el lenguaje
+
+## Variación entre lenguajes
+
+- Las reglas aritméticas suelen coincidir.
+- Las reglas lógicas, bit a bit y de asignación varían.
+
+```ts
+const a = 2 + 3 * 4      // 14
+const b = (2 + 3) * 4    // 20
+```
+
+- TypeScript, Java, Kotlin: reglas similares.
+- Python agrega `**` como operador de exponenciación.
+- Scheme evita el problema usando notación prefija.
+
+---
+
+### [F-09] Asociatividad
+
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
+@imagen: none
 
 # Mismo nivel de precedencia: ¿izquierda o derecha?
 
-## Resolución de empates (Sebesta §7.2)
+## Resolución de empates
 
 - **Asociatividad izquierda**: mayoría de los operadores aritméticos (`+`, `-`, `*`, `/`).
 - **Asociatividad derecha**: exponenciación, asignación en C/Java, operador condicional ternario.
@@ -141,107 +228,150 @@ a ** b ** c   →   a ** (b ** c)    # asociatividad derecha en Python
 
 ## Ejemplo
 
+```ts
+const r = 10 - 3 - 2   // (10 - 3) - 2 = 5
 ```
-a - b - c   →   (a - b) - c    # asociatividad izquierda
-a = b = c   →   a = (b = c)    # asociatividad derecha (C, Java)
-2 ** 3 ** 2 →   2 ** (3 ** 2)  # derecha → 512, no 64 (Python)
+
+```scheme
+(- (- 10 3) 2)
+```
+
+En Scheme no se depende de asociatividad infija.
+
+---
+
+### [F-10] Paréntesis como decisión semántica
+
+@tipo: codigo
+@layout: codigo
+@imagen: none
+
+# Parentizar no es redundante si mejora la lectura
+
+## Cuándo usar paréntesis
+
+- Si una expresión exige recordar demasiadas reglas, se usan paréntesis.
+
+```ts
+const habilitado =
+    (usuario.activo && usuario.emailVerificado) || usuario.esAdmin
 ```
 
 ---
 
-### [F-08] Orden de evaluación de operandos
+### [F-11] Orden de evaluación de operandos
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
 @imagen: none
 
 # Parseo ≠ orden de evaluación temporal de los operandos
 
-## Semántica operacional (Sebesta §7.3)
+## Semántica operacional
 
-- El AST fija la **forma** de la expresión (qué se calcula).
-- El **orden en que se evalúan los operandos** lo define —o no define— el lenguaje.
-- Java garantiza evaluación de izquierda a derecha en todos los contextos.
-- C/C++ deja el orden **sin especificar**: cada compilador puede optimizarlo libremente.
-- Con **side effects**, el orden de evaluación altera el resultado observable del programa.
-- Sebesta: esta ambigüedad en C fue fuente histórica de bugs de portabilidad entre compiladores.
+- El AST indica estructura.
+- El lenguaje define, o deja sin definir, el orden temporal.
+- Con funciones puras, puede no importar.
+- Con efectos colaterales, importa mucho.
 
 ---
 
-### [F-09] Efectos colaterales
+### [F-12] Efectos colaterales en expresiones
 
 @tipo: codigo
+@layout: codigo
+@imagen: none
 
-# Side effects ocultos en expresiones
+# TypeScript define más orden que C, pero no elimina el problema
 
-## Ejemplo con post-incremento (Sebesta §7.3)
+## Ejemplo TypeScript
 
 ```ts
 let i = 1
-const a = [10, 20, 30]
-const x = a[i] + i++
-// ¿x = a[1] + 1 = 21?  → si i se lee antes de incrementar
-// ¿x = a[2] + 1 = 31?  → si a[i] se evalúa después del incremento
-// El resultado depende del orden garantizado por el lenguaje
+const r = i++ + ++i
 ```
 
-## Regla de diseño (Sebesta §7.3)
+## Contraste histórico
 
-- Evitar expresiones que **mezclen cálculo y mutación** en la misma sentencia.
-- Preferir separación explícita: primero mutar, luego calcular.
-- C deja este comportamiento **undefined** → el compilador puede producir cualquier resultado.
+```c
+// C/C++: algunos casos son indefinidos o no especificados
+i = i++ + ++i;
+```
+
+```rust
+// Rust: no existe i++
+i += 1;
+```
+
+## Regla de diseño
+
+- En TypeScript, puede estar definido pero seguir siendo ilegible.
+- Evitar expresiones que mezclen cálculo y mutación en la misma sentencia.
 
 ---
 
-### [F-10] Asignación como expresión
+### [F-13] Asignación como expresión
 
 @tipo: codigo
+@layout: codigo
+@imagen: none
 
 # Asignación: sentencia y expresión a la vez
 
-## Decisiones de lenguaje (Sebesta §7.7)
+## Decisiones de lenguaje
 
 ```c
+// C: idiomático — getchar() asigna y su valor se compara con EOF
 while ((c = getchar()) != EOF) {
     procesar(c);
-    // Idiomático en C: getchar() asigna y su valor se compara con EOF
 }
 ```
 
 ```ts
-let y = (x = 5) + 3   // x queda 5, y queda 8
+// TypeScript
+let x = 0
+let y = (x = 5) + 3
+```
+
+```kotlin
+// Kotlin: no se usa asignación como expresión de valor
+x = 5
 ```
 
 ## Riesgo
 
 - Lenguajes que admiten *assignment expressions* en condiciones habilitan el bug clásico `if (x = 0)`.
 - C lo permite; compiladores modernos emiten warning con `-Wall`.
-- Rust, Swift, Kotlin **prohíben** assignment expressions en condiciones por diseño.
+- Rust, Swift, Kotlin restringen el patrón en condiciones por diseño.
 
 ---
 
-### [F-11] Prevención de bugs de asignación
+### [F-14] Prevención de bugs de asignación
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
+@imagen: none
 
 # `if (x = 0)`: el bug clásico de asignación en condición
 
-## Estrategias de prevención (Sebesta §7.7, Louden §8)
+## Estrategias de prevención
 
 - **Yoda conditions**: `if (0 == x)` → una asignación accidental falla al compilar.
 - Activar warnings del compilador (`-Wparentheses`, `-Wall` en GCC/Clang).
 - Lenguajes modernos (Rust, Swift, Kotlin) eliminan el problema por diseño del lenguaje.
 - Linters como ESLint/TSLint detectan automáticamente este patrón.
-- Sebesta: uno de los ejemplos canónicos de cómo decisiones de diseño impactan en confiabilidad del código.
 
 ---
 
-### [F-12] Conversión y coerción
+### [F-15] Conversión y coerción
 
 @tipo: tabla-comparativa
+@layout: tabla-comparativa
+@imagen: none
 
 # Conversión explícita vs. coerción implícita
 
-## Taxonomía (Sebesta §7.4, Gabbrielli-Martini §4.3)
+## Taxonomía
 
 | Mecanismo | Control | Riesgo | Ejemplo |
 |-----------|---------|--------|---------|
@@ -250,19 +380,22 @@ let y = (x = 5) + 3   // x queda 5, y queda 8
 | Coerción implícita narrowing | Lenguaje | Alto | `float` → `int` (pérdida de datos) |
 | Sobrecarga de operadores | Lenguaje/Prog. | Variable | `+` en strings y enteros |
 
-## Principio de Sebesta
+## Principio
 
-- La coerción implícita puede **enmascarar errores de tipo** que el sistema de tipos debería detectar.
+- La coerción implícita puede enmascarar errores de tipo que el sistema de tipos debería detectar.
 - Lenguajes con tipado estático fuerte (Haskell, Rust) minimizan las coerciones implícitas.
 
 ---
 
-### [F-13] Control conceptual — Bloque A
+### [F-16] Control conceptual — Bloque A
 
-@tipo: concepto-mixto
+@tipo: socratica
+@layout: socratica
 @imagen: none
 
 # Consolidando fundamentos de expresiones
+
+## Preguntas
 
 - ¿Cuál es la diferencia entre precedencia de operadores y orden de evaluación de operandos?
 - ¿Cuándo una *assignment expression* en un `if` se convierte en bug?
@@ -272,32 +405,36 @@ let y = (x = 5) + 3   // x queda 5, y queda 8
 
 ## BLOQUE B — Booleanos, short-circuit y seguridad semántica
 
-### [F-14] Álgebra booleana aplicada
+---
 
-@tipo: concepto-mixto
+### [F-17] Álgebra booleana aplicada
+
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
 @imagen: none
 
 # Operadores lógicos como control del flujo de evaluación
 
-## Más que tablas de verdad (Sebesta §7.6)
+## Más que tablas de verdad
 
-- En código real, `&&` y `||` **controlan qué sub-expresiones se evalúan**.
+- En código real, `&&` y `||` controlan qué sub-expresiones se evalúan.
 - La conjunción y disyunción permiten codificar precondiciones de forma declarativa.
-- Sebesta distingue: operadores lógicos con y sin short-circuit tienen **semánticas distintas**.
-- La forma normal DNF/CNF permite simplificar condiciones complejas antes de codificarlas.
-- Gabbrielli-Martini: formalizan el short-circuit como semántica perezosa de operadores lógicos.
+- Operadores lógicos con y sin short-circuit tienen semánticas distintas.
+- El short-circuit es semántica perezosa de operadores lógicos.
 
 ---
 
-### [F-15] Truthiness entre lenguajes
+### [F-18] Truthiness entre lenguajes
 
 @tipo: tabla-comparativa
+@layout: tabla-comparativa
+@imagen: none
 
 # Verdad no booleana: qué cuenta como `true` según el lenguaje
 
-## Variación semántica (Sebesta §7.6, Louden §8)
+## Variación semántica
 
-| Lenguaje | `0` es falsy | `""` es falsy | `null`/`None` falsy | Bool estricto |
+| Lenguaje | `0` es falsy | `""` es false | `null`/`None` false | Bool estricto |
 |----------|------------|-------------|--------------------|--------------------|
 | C | Sí | N/A | — | No (usa `int`) |
 | Python | Sí | Sí | Sí | Sí, flexible |
@@ -307,51 +444,63 @@ let y = (x = 5) + 3   // x queda 5, y queda 8
 
 ## Regla de diseño
 
-- No migrar intuiciones de truthiness de un lenguaje a otro sin validar la semántica local.
+- No migrar intuiciones de valores de verdad de un lenguaje a otro sin validar la semántica local.
+
+```ts
+if ("") { ... }   // TypeScript: válido, falsy
+```
+
+```kotlin
+if ("") { ... }   // Kotlin: error
+```
 
 ---
 
-### [F-16] Evaluación estricta
+### [F-19] Evaluación estricta
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
 @imagen: none
 
 # Evaluación estricta: todos los operandos se evalúan siempre
 
-## Semántica estricta (Sebesta §7.6)
+## Semántica estricta
 
-- Evalúa **todos** los operandos antes de aplicar el operador lógico.
+- Evalúa todos los operandos antes de aplicar el operador lógico.
 - Predecible y conveniente para análisis formal y optimizaciones del compilador.
-- Puede ejecutar **sub-expresiones inválidas** innecesariamente (división por cero, acceso null).
+- Puede ejecutar sub-expresiones inválidas innecesariamente (división por cero, acceso null).
 - Pascal original usaba `and`/`or` sin garantía de short-circuit.
-- Sebesta: la evaluación estricta favorece la verificabilidad; el short-circuit favorece la corrección operativa.
+- La evaluación estricta favorece la verificabilidad; el short-circuit favorece la corrección operativa.
 
 ---
 
-### [F-17] Short-circuit
+### [F-20] Short-circuit
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
 @imagen: none
 
 # Short-circuit: evaluación que se detiene cuando el resultado ya es conocido
 
-## Semántica de corto circuito (Sebesta §7.6)
+## Semántica de corto circuito
 
-- `p && q`: si `p` es **false**, `q` **no se evalúa** — el resultado ya es `false`.
-- `p || q`: si `p` es **true**, `q` **no se evalúa** — el resultado ya es `true`.
+- `p && q`: si `p` es **false**, `q` no se evalúa — el resultado ya es false.
+- `p || q`: si `p` es **true**, `q` no se evalúa — el resultado ya es true.
 - Es una herramienta de **corrección semántica**, no solo de rendimiento.
 - Permite usar la primera condición como **guarda** de seguridad de la segunda.
-- Gabbrielli-Martini: el short-circuit es semántica perezosa de operadores lógicos.
+- El short-circuit es semántica perezosa de operadores lógicos.
 
 ---
 
-### [F-18] Patrón defensivo con short-circuit
+### [F-21] Patrón defensivo con short-circuit
 
 @tipo: codigo
+@layout: codigo
+@imagen: none
 
 # Short-circuit como guarda de corrección
 
-## Evitar división por cero y acceso null (Sebesta §7.6)
+## Evitar división por cero y acceso null
 
 ```ts
 // Guarda contra división por cero
@@ -365,21 +514,28 @@ if (user !== null && user.isActive()) {
 }
 ```
 
+```c
+// C
+if (p != NULL && p->value > 0) { ... }
+```
+
 ## Por qué funciona
 
-- Si la primera condición **falla**, la segunda nunca se evalúa.
-- Sebesta: este patrón es la base del *guarded command* en programación defensiva.
+- Si la primera condición falla, la segunda nunca se evalúa.
+- Es una forma práctica de guarda operacional.
 - Invertir el orden destruye la guarda y puede causar runtime error.
 
 ---
 
-### [F-19] Side effects en booleanos: anti-patrón
+### [F-22] Side effects en booleanos: anti-patrón
 
 @tipo: codigo
+@layout: codigo
+@imagen: none
 
 # Mezclar predicados con efectos en operadores lógicos
 
-## Anti-patrón con side effects (Sebesta §7.3 + §7.6)
+## Anti-patrón
 
 ```ts
 // ANTI-PATRÓN: logAndMutate() puede no ejecutarse si isReady() es true
@@ -396,36 +552,40 @@ if (isReady() || logged) {
 
 ## Principio
 
-- Separar **predicados** (sin efectos) de **funciones con efectos colaterales**.
+- Separar predicados (sin efectos) de funciones con efectos colaterales.
 - Short-circuit convierte un efecto secundario en un efecto condicional → comportamiento inesperado.
 
 ---
 
-### [F-20] Operadores lógicos: comparativa por lenguaje
+### [F-23] Operadores lógicos: comparativa por lenguaje
 
 @tipo: tabla-comparativa
+@layout: tabla-comparativa
+@imagen: none
 
 # Operadores lógicos y bit a bit por lenguaje
 
-## Comparativa (Sebesta §7.6, Louden §8)
+## Comparativa
 
-| Lenguaje | AND lógico | OR lógico | Short-circuit | AND bit | OR bit |
-|----------|-----------|-----------|---------------|---------|--------|
-| C/C++ | `&&` | `\|\|` | Sí | `&` | `\|` |
-| Java | `&&` | `\|\|` | Sí | `&` | `\|` |
-| TypeScript | `&&` | `\|\|` | Sí | `&` | `\|` |
-| Python | `and` | `or` | Sí | `&` | `\|` |
-| Kotlin | `&&` | `\|\|` | Sí | `and` | `or` |
+| Lenguaje | AND lógico | OR lógico | AND bit | OR bit | NOT lógico |
+|----------|-----------|-----------|---------|--------|------------|
+| C/C++ | `&&` | `\|\|` | `&` | `\|` | `!` |
+| Java | `&&` | `\|\|` | `&` | `\|` | `!` |
+| TypeScript | `&&` | `\|\|` | `&` | `\|` | `!` |
+| Python | `and` | `or` | `&` | `\|` | `not` |
+| Kotlin | `&&` | `\|\|` | `and` | `or` | `!` |
 
 ---
 
-### [F-21] Null safety con operadores lógicos
+### [F-24] Null safety con operadores lógicos
 
 @tipo: codigo
+@layout: codigo
+@imagen: none
 
 # `?.` y `??`: short-circuit especializado para null
 
-## TypeScript (Sebesta §7, extensión moderna)
+## TypeScript
 
 ```ts
 // Optional chaining: corta en null/undefined
@@ -438,20 +598,37 @@ const nombre = entrada ?? "sin nombre"
 const zip = usuario?.direccion?.codigoPostal ?? "0000"
 ```
 
+## Kotlin
+
+```kotlin
+val ciudad = usuario?.direccion?.ciudad
+val nombre = entrada ?: "sin nombre"
+```
+
+## Rust
+
+```rust
+let ciudad = usuario
+    .and_then(|u| u.direccion)
+    .map(|d| d.ciudad);
+```
+
 ## Semántica
 
-- `?.` implementa short-circuit ante `null` o `undefined`.
+- `?.` implementa short-circuit ante null o undefined.
 - `??` es más estricto que `||`: no cortocircuita ante `0` o `""`.
 
 ---
 
-### [F-22] Guard clauses
+### [F-25] Guard clauses
 
 @tipo: codigo
+@layout: codigo
+@imagen: none
 
 # Reducir anidamiento con cláusulas de guarda
 
-## Patrón de *early return* (Sebesta §8, Louden §8)
+## Early return
 
 ```ts
 // SIN guard clauses: anidamiento profundo
@@ -472,45 +649,65 @@ function procesar(x?: number) {
 
 ---
 
-### [F-23] Control conceptual — Bloque B
-
-@tipo: concepto-mixto
-@imagen: none
-
-# Consolidando booleanos y short-circuit
-
-- Reescribir una condición compleja a forma legible sin cambiar la semántica de short-circuit.
-- ¿Por qué `if (ptr != null && ptr->value > 0)` es correcto pero invertido puede producir segfault?
-- Nombrar dos lenguajes donde el tipo booleano es estricto y no acepta truthiness implícita.
+## BLOQUE C — Selección estructurada y decisiones de diseño
 
 ---
 
-## BLOQUE C — Selección estructurada y decisiones de diseño
+### [F-26] Programación estructurada y el debate sobre goto
 
-### [F-24] Programación estructurada y el debate sobre goto
-
-@tipo: concepto-mixto
-@imagen: none
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
+@imagen: content
+@prompt-imagen: ilustración conceptual dividida en dos mitades: izquierda muestra una maraña caótica de flechas entrecruzadas representando goto indiscriminado; derecha muestra bloques ordenados conectados secuencialmente representando programación estructurada; paleta rojo caótico vs azul ordenado, estilo minimalista técnico
 
 # Goto y la emergencia de las estructuras de control
 
-## Contexto histórico (Sebesta §8.2, Louden §8)
+## Contexto histórico
 
-- `goto` permite saltos **arbitrarios** a cualquier punto del programa.
+- `goto` permite saltos arbitrarios a cualquier punto del programa.
 - Aumenta el poder de expresión local; reduce la trazabilidad y verificabilidad global.
 - Dijkstra (1968): "Go To Statement Considered Harmful" — fundamento del movimiento estructurado.
-- Las estructuras de control buscan **control explícito**: entrada única, salida única, verificable.
-- Sebesta: el `goto` moderno restringido (C, C++) sobrevive para manejo de errores y salida de bucles anidados — uso justificado y acotado.
+- Las estructuras de control buscan control explícito: entrada única, salida única, verificable.
+- El `goto` moderno restringido (C, C++) sobrevive para manejo de errores y salida de bucles anidados — uso justificado y acotado.
+
+## Go: goto restringido
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    i := 0
+inicio:
+    fmt.Println(i)
+    i++
+    if i < 3 {
+        goto inicio
+    }
+}
+```
+
+`goto` está permitido en Go, pero restringido: permite saltar a una etiqueta dentro de la misma función, sin entrar ilegalmente en un bloque ni saltarse inicializaciones de variables.
 
 ---
 
-### [F-25] If y else if: árbol de decisiones
+### [F-27] If y else if: árbol de decisiones
 
 @tipo: codigo
+@layout: codigo
+@imagen: none
 
 # Selección simple y encadenada
 
-## Semántica del if-else (Sebesta §8.3)
+## Semántica del if-else
+
+- Ramas mutuamente excluyentes.
+- Evaluación en orden.
+- `else` como caso no capturado.
+- Orden de condiciones importa.
+
+## TypeScript
 
 ```ts
 if (score >= 9)      grado = "A"
@@ -519,22 +716,36 @@ else if (score >= 4) grado = "C"
 else                 grado = "D"
 ```
 
-## Propiedades
+## Kotlin
 
-- Las ramas son **mutuamente excluyentes** y evaluadas en orden.
-- El `else` final cubre todos los casos no capturados: actúa como caso base implícito.
-- Sebesta: la ausencia de `else` puede dejar variables sin inicializar → bug silencioso.
-- El orden de las condiciones importa: una condición más general antes de una específica puede oscurecer ramas.
+```kotlin
+val grado =
+    if (score >= 9) "A"
+    else if (score >= 7) "B"
+    else if (score >= 4) "C"
+    else "D"
+```
 
 ---
 
-### [F-26] Switch: selección múltiple
+### [F-28] Switch: selección múltiple
 
 @tipo: codigo
+@layout: codigo
+@imagen: none
 
 # Switch como alternativa estructurada a cadenas de if-else
 
-## Semántica del switch (Sebesta §8.4)
+## Semántica del switch
+
+- `switch` clásico discrimina por valor.
+- C/JavaScript/TypeScript heredan la necesidad de `break`.
+- Kotlin reemplaza `switch` por `when`.
+- Rust usa `match` exhaustivo.
+- La decisión de diseño afecta confiabilidad.
+- El problema de confiabilidad aparece cuando hay continuación implícita de una rama a otra.
+
+## TypeScript
 
 ```ts
 switch (token) {
@@ -545,43 +756,50 @@ switch (token) {
 }
 ```
 
-## Decisiones de diseño por lenguaje (Sebesta §8.4)
+## Kotlin
 
-- **C**: fallthrough implícito → `break` es necesario; fuente de bugs históricos.
-- **Java**: igual que C para primitivos; switch expressions (Java 14+) son exhaustivas.
-- **TypeScript/Kotlin**: `when` con exhaustividad verificable en tiempo de compilación.
-- Sebesta: el fallthrough es una decisión controvertida con implicancias directas de mantenibilidad.
+```kotlin
+when (token) {
+    "INT" -> parseIntToken()
+    "ID"  -> parseIdToken()
+    "STR" -> parseStringToken()
+    else  -> reportError()
+}
+```
 
 ---
 
-### [F-27] Pattern matching: evolución del control múltiple
+### [F-29] Pattern matching: evolución del control múltiple
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
 @imagen: none
 
 # Pattern matching como selección estructural sobre datos
 
-## Evolución del switch (Sebesta §8.4, Gabbrielli-Martini §5.1)
+## Evolución del switch
 
-- `switch` clásico: discrimina por **valor** (escalar, enum).
-- **Pattern matching**: discrimina por **estructura** del dato — forma, tipo y desestructuración.
+- `switch` clásico: discrimina por valor (escalar, enum).
+- **Pattern matching**: discrimina por estructura del dato — forma, tipo y desestructuración.
 - Disponible en Haskell, Scala, Rust, Python 3.10+, Java 21+.
 - Tabla de despacho: extensibilidad en dominios abiertos (polimorfismo por datos).
-- Sebesta: en lenguajes con tipos algebraicos, pattern matching reemplaza la selección como estructura primaria.
+- En lenguajes con tipos algebraicos, pattern matching reemplaza la selección como estructura primaria.
 
 ---
 
-### [F-28] Complejidad cognitiva del anidamiento
+### [F-30] Complejidad cognitiva del anidamiento
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
+@imagen: none
 
 # Cada nivel de anidamiento incrementa la carga cognitiva
 
-## Impacto en mantenibilidad (Sebesta §8, Louden §8)
+## Impacto en mantenibilidad
 
-- Cada nivel de anidamiento extra **multiplica** los paths de ejecución posibles.
-- Las ramas profundas elevan el riesgo de paths **no testeados** en revisión manual.
-- La **complejidad ciclomática** (McCabe) mide el número de paths linealmente independientes.
+- Cada nivel de anidamiento extra multiplica los paths de ejecución posibles.
+- Las ramas profundas elevan el riesgo de paths no testeados en revisión manual.
+- La complejidad ciclomática mide el número de paths linealmente independientes.
 - Guard clauses y early return reducen complejidad accidental sin cambiar la semántica.
 
 ## Regla práctica
@@ -590,13 +808,15 @@ switch (token) {
 
 ---
 
-### [F-29] Criterios para elegir estructura de selección
+### [F-31] Criterios para elegir estructura de selección
 
 @tipo: tabla-comparativa
+@layout: tabla-comparativa
+@imagen: none
 
 # Elegir entre if-else, switch y tabla de despacho
 
-## Matriz de decisión (Sebesta §8.3–8.4, Louden §8)
+## Matriz de decisión
 
 | Criterio | if-else | switch | Tabla de despacho |
 |----------|---------|--------|-------------------|
@@ -608,39 +828,45 @@ switch (token) {
 
 ---
 
-### [F-30] Despacho por tabla
+### [F-32] Despacho por tabla
 
 @tipo: codigo
+@layout: codigo
+@imagen: none
 
 # Tabla de despacho: separar lógica de control de los datos
 
-## Patrón (Sebesta §8, extensión OOP)
+## Patrón (extensión OOP)
 
 ```ts
 const handlers: Record<string, () => void> = {
     INT: parseIntToken,
     ID:  parseIdToken,
     STR: parseStringToken,
-}
+};
 
-;(handlers[token] ?? reportError)()
+(handlers[token] ?? reportError)();
 ```
+
+> Buscar en la tabla `handlers` la función asociada al valor de `token`; si no existe, usar `reportError`; luego ejecutar la función elegida.
 
 ## Ventajas
 
-- Agregar un caso = agregar una entrada. **No se modifica lógica de control**.
+- Agregar un caso = agregar una entrada. No se modifica lógica de control.
 - Principio Open/Closed aplicado a estructuras de selección.
 - Cada rama es testeable independientemente sin afectar al bloque completo.
 
 ---
 
-### [F-31] Code smells de selección
+### [F-33] Code smells de selección
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
+@imagen: none
 
 # Señales de fragilidad en estructuras de selección
 
-## Detectar y refactorizar (Sebesta §8, Louden §8)
+## Detectar y refactorizar
 
 - **Condiciones duplicadas** en múltiples ramas → violan DRY y ocultan semántica.
 - **Default que esconde errores** → enmascarar casos no manejados reduce trazabilidad.
@@ -649,36 +875,26 @@ const handlers: Record<string, () => void> = {
 
 ---
 
-### [F-32] Taller: refactorizar selección anidada
-
-@tipo: concepto-mixto
-@imagen: none
-
-# Actividad de refactorización guiada
-
-1. Identificar redundancias y paths no cubiertos en ramas anidadas.
-2. Reestructurar con guard clauses o tabla de despacho.
-3. Verificar equivalencia semántica con casos de prueba específicos.
-4. ¿El cambio mejoró la complejidad ciclomática medida con McCabe?
+## BLOQUE D — Iteración, iteradores y generadores
 
 ---
 
-## BLOQUE D — Iteración, iteradores y generadores
+### [F-34] Estructuras iterativas clásicas
 
-### [F-33] Estructuras iterativas clásicas
-
-@tipo: concepto-mixto
+@tipo: codigo
+@layout: codigo
+@imagen: none
 
 # While, do-while y for: tres formas de iteración
 
-## Semántica de bucles (Sebesta §8.5, Louden §8)
+## Semántica de bucles
 
-- **`while`**: evalúa condición al **inicio** → puede no ejecutarse si la condición es falsa de entrada.
-- **`do-while`**: evalúa condición al **final** → garantiza al menos una ejecución.
+- **`while`**: evalúa condición al inicio → puede no ejecutarse si la condición es falsa de entrada.
+- **`do-while`**: evalúa condición al final → garantiza al menos una ejecución.
 - **`for`**: contador, condición y actualización en una línea → para iteración acotada.
-- Sebesta: en la mayoría de lenguajes modernos, `for` es azúcar sintáctico sobre `while`.
+- En la mayoría de lenguajes modernos, `for` es azúcar sintáctico sobre `while`.
 
-## Ejemplo
+## TypeScript
 
 ```ts
 while (hayDatos())           leer()
@@ -686,48 +902,62 @@ do { leer() } while (hayDatos())
 for (let i = 0; i < n; i++) procesar(i)
 ```
 
+## Kotlin
+
+```kotlin
+while (hayDatos())           leer()
+for (i in 0 until n)        procesar(i)
+```
+
 ---
 
-### [F-34] Invariantes de bucle
+### [F-35] Invariantes de bucle
 
-@tipo: concepto-mixto
-@imagen: none
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
+@imagen: content
+@prompt-imagen: diagrama de tres estados temporales de un bucle: "antes" (caja vacía con check verde), "durante" (caja con flecha circular representando preservación del invariante), "después" (caja con check verde y resultado); estilo diagrama técnico, paleta azul/verde, sin texto legible
 
 # El invariante garantiza la corrección del bucle
 
-## Razonamiento formal sobre iteración (Sebesta §8.5, Gabbrielli-Martini §5.2)
+## Razonamiento formal sobre iteración
 
-- **Invariante de bucle**: propiedad verdadera antes de cada iteración.
-- Al inicio: el invariante debe ser **establecido** antes del bucle.
-- En cada iteración: el cuerpo del bucle debe **preservar** el invariante.
-- Al terminar: invariante + negación de la condición implica el resultado correcto.
-- Gabbrielli-Martini: los invariantes son la base de la verificación formal (Hoare Logic).
+- **Qué se mantiene verdadero**: la propiedad que define el invariante.
+- **Cómo se establece**: el invariante debe ser verdadero antes de entrar al bucle.
+- **Cómo se preserva**: el cuerpo del bucle debe mantener el invariante en cada iteración.
+- **Qué permite concluir al terminar**: invariante + negación de la condición → resultado correcto.
 
 ---
 
-### [F-35] Terminación del bucle
+### [F-36] Terminación del bucle
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
 @imagen: none
 
 # El bucle termina si hay progreso medible hacia la condición de parada
 
-## Condición de terminación (Sebesta §8.5, Gabbrielli-Martini §5.2)
+## Condición de terminación
 
 - Definir una **función de ranking** (*loop variant*): entero acotado inferiormente que decrece en cada iteración.
 - El bucle termina si el variant es estrictamente decreciente y acotado.
 - Verificar **casos borde**: `n = 0`, colecciones vacías, centinela inalcanzable.
-- Bucles con centinela: la terminación depende de que el centinela sea **alcanzable** en la entrada.
+- Bucles con centinela: la terminación depende de que el centinela sea alcanzable en la entrada.
 
 ---
 
-### [F-36] Break y continue
+### [F-37] Break y continue
 
 @tipo: codigo
+@layout: codigo
+@imagen: none
 
 # Escapar del flujo normal de iteración
 
-## Semántica del escape estructurado (Sebesta §8.5, Louden §8)
+## Semántica del escape estructurado
+
+- `break` y `continue` son transferencias estructuradas: afectan solo el bucle más cercano.
+- Java permite `break label` para salir de bucles anidados — transferencia estructurada restringida, similar al `goto` limitado.
 
 ```ts
 for (const x of xs) {
@@ -740,87 +970,89 @@ for (const x of xs) {
 }
 ```
 
-## Diseño de lenguaje
-
-- `break` y `continue` son transferencias **estructuradas**: afectan solo el bucle más cercano.
-- Sebesta: Java permite `break label` para salir de bucles anidados — transferencia estructurada restringida, similar al goto limitado.
-
 ---
 
-### [F-37] Contador y centinela
+### [F-38] Contador y centinela
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
 @imagen: none
 
 # Dos patrones clásicos de control de iteración
 
-## Contador vs. centinela (Sebesta §8.5, Louden §8)
+## Contador vs. centinela
 
 - **Contador**: control por límites explícitos; adecuado cuando la cota es conocida de antemano.
-- **Centinela**: control por valor especial en el stream; evita evaluar longitud en cada iteración.
-- El centinela es útil en lectura incremental de streams o archivos.
+- **Centinela** (`while`): control por valor especial en el stream; evita evaluar longitud en cada iteración.
+- El centinela es útil en lectura incremental de streams o archivos: `while ((c = getchar()) != EOF)` en C.
 - Riesgo: si el valor centinela nunca aparece en la entrada, el bucle no termina.
 
 ---
 
-### [F-38] Iteradores: separar estructura de recorrido
+### [F-39] Iteradores: separar estructura de recorrido
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
 @imagen: none
 
 # El iterador desacopla la colección del recorrido
 
-## Patrón iterador (Sebesta §8.5, Gabbrielli-Martini §5.3)
+## Patrón iterador
 
 - La **colección** almacena los datos.
 - El **iterador** encapsula el estado de recorrido y define el *traversal*.
 - Habilita recorridos alternativos sobre la misma estructura sin duplicar su estado interno.
 - El protocolo `Iterable/Iterator` (TypeScript, Java, Python) estandariza el contrato.
-- Sebesta: los iteradores son la forma moderna de iterar sobre estructuras sin exponer su representación interna.
+- Los iteradores son la forma moderna de iterar sobre estructuras sin exponer su representación interna.
 
 ---
 
-### [F-39] Generadores: secuencias perezosas
+### [F-40] Generadores: secuencias perezosas
 
 @tipo: codigo
+@layout: codigo
+@imagen: none
 
 # Generadores: producir valores bajo demanda con `yield`
 
-## Semántica de yield (Sebesta §8, extensión moderna)
+## Semántica de yield
+
+- El generador suspende la ejecución en cada `yield` y la reanuda al siguiente `next()`.
+- Permite trabajar con secuencias infinitas sin consumir memoria proporcional al tamaño.
+- Cada `next()` reanuda la función exactamente donde se suspendió.
+
+## TypeScript
 
 ```ts
 function* rango(inicio: number, fin: number) {
     for (let i = inicio; i < fin; i++) yield i
 }
-
-function* fibonacci() {
-    let [a, b] = [0, 1]
-    while (true) { yield a; [a, b] = [b, a + b] }
-}
 ```
 
-## Propiedades
+## Python
 
-- El generador **suspende** la ejecución en cada `yield` y la **reanuda** al siguiente `next()`.
-- Permite trabajar con secuencias **infinitas** sin consumir memoria proporcional al tamaño.
-- Cada `next()` reanuda la función exactamente donde se suspendió.
+```python
+def rango(inicio, fin):
+    for i in range(inicio, fin):
+        yield i
+```
 
 ---
 
-### [F-40] for...of vs for...in
+### [F-41] for...of vs for...in
 
 @tipo: tabla-comparativa
+@layout: tabla-comparativa
+@imagen: none
 
 # Diferencia crítica en iteración sobre colecciones
 
-## TypeScript (Sebesta §8.5, extensión modern JS)
+## TypeScript
 
-| Forma | Itera sobre | Garantías de orden | Uso correcto |
-|-------|-------------|-------------------|--------------|
-| `for...of` | Valores del iterable | Garantizado | Arrays, Sets, Maps, generadores |
-| `for...in` | Claves del objeto (strings) | Sin garantía | Enumerar propiedades de objetos |
-
-## Advertencia
+| Forma | Itera sobre | Resultado |
+|-------|-------------|-----------|
+| `for...of` | Valores del iterable | `10, 20, 30` |
+| `for...in` | Claves del objeto (strings) | `"0", "1", "2"` |
 
 ```ts
 const arr = [10, 20, 30]
@@ -830,32 +1062,47 @@ for (const v of arr)  console.log(v)   // 10, 20, 30     → valores correctos
 
 ---
 
-### [F-41] Recursión e iteración: misma potencia, costos distintos
+### [F-42] Recursión e iteración: misma potencia, costos distintos
 
-@tipo: concepto-mixto
+@tipo: concepto-abstracto
+@layout: concepto-abstracto
 @imagen: none
 
 # Recursión vs. iteración: equivalencia expresiva, costos operacionales distintos
 
-## Análisis comparativo (Sebesta §8.6, Gabbrielli-Martini §5.2)
+## Análisis comparativo
 
 - **Recursión**: estilo declarativo; el estado está implícito en la pila de llamadas.
 - **Iteración**: control operativo explícito; el estado está en variables locales.
 - Toda recursión primitiva puede transformarse en iteración con una pila explícita.
-- Gabbrielli-Martini: equivalencia expresiva con costos operacionales distintos (stack vs. heap).
+- Equivalencia expresiva con costos operacionales distintos (stack vs. heap).
 - **Tail call optimization (TCO)**: Haskell, Scheme, Scala optimizan recursión en cola como iteración — elimina costo de stack.
 
 ---
 
-### [F-42] Control asíncrono con async/await
+## BLOQUE E — Integración y cierre
+
+---
+
+### [F-43] Control asíncrono con async/await
 
 @tipo: codigo
+@layout: codigo
+@imagen: none
 
 # async/await: secuencialidad aparente sobre operaciones asíncronas
 
-## Flujo asíncrono como control (Sebesta §8, extensión moderna)
+## Flujo asíncrono como control
+
+- `await` suspende la función actual sin bloquear el hilo de ejecución.
+- Permite escribir flujo de control lineal sobre operaciones inherentemente concurrentes.
+- El runtime convierte el código en una máquina de estados implícita.
 
 ```ts
+async function obtenerDatos(): Promise<string[]> {
+    return ["A", "B", "C"];
+}
+
 async function pipeline() {
     const datos     = await obtenerDatos()       // se suspende hasta resolución
     const validado  = await validar(datos)
@@ -864,37 +1111,14 @@ async function pipeline() {
 }
 ```
 
-## Modelo de control
-
-- `await` **suspende** la función actual sin bloquear el hilo de ejecución.
-- Permite escribir flujo de control **lineal** sobre operaciones inherentemente concurrentes.
-- El runtime convierte el código en una máquina de estados implícita.
-
----
-
-## BLOQUE E — Integración y cierre
-
-### [F-43] Caso integrador: lectura crítica de código
-
-@tipo: concepto-mixto
-@imagen: none
-
-# Checklist de lectura crítica de código
-
-Al revisar código real, verificar:
-
-1. ¿Hay expresiones con coerción peligrosa o precedencia ambigua que debería parentizar?
-2. ¿Las ramas están bien estructuradas? ¿Existen redundancias o casos no cubiertos?
-3. ¿Cada bucle tiene un invariante implícito y una condición de terminación verificable?
-4. ¿Los predicados en condiciones tienen side effects ocultos?
-5. ¿Se aprovecha el short-circuit donde corresponde — o se evita donde puede causar bugs?
-
 ---
 
 ### [F-44] Cierre: criterios de diseño semántico
 
-@tipo: concepto-mixto
-@imagen: none
+@tipo: cierre
+@layout: cierre
+@imagen: background
+@prompt-imagen: composición minimalista de cierre: cinco pilares de luz alineados sobre un horizonte, cada uno representando una idea fuerza del tema; paleta azul nocturno con acentos dorados; sin texto, estilo conceptual limpio
 
 # Expresiones y estructuras de control: criterios para diseñar bien
 

@@ -5,7 +5,8 @@
 > Referencia principal: Sebesta, *Concepts of Programming Languages*, Cap. 14, pp. 611–646
 > Referencias auxiliares: Gabbrielli-Martini §7.3.1, Louden §9.5
 > Lenguaje principal: TypeScript | Contraste: Go, Kotlin, Rust
-> Pipeline: v3 · Nivel densidad: 2 · Generado: 2026-06-04
+> Pipeline: v3 · Nivel densidad: 2 · Corregido: 2026-06-28
+> Baseline: clase_dada.txt · ChromaDB: ✅ verificado
 
 ---
 
@@ -16,7 +17,8 @@
 ### [F-00] Portada
 
 @tipo: portada
-@imagen: none
+@imagen: background
+@prompt-imagen: Escudo geométrico bordo en el centro, fragmentos grises dispersos cayendo desde la parte superior, líneas de conexión bordo que redirigen los fragmentos hacia un área segura en la parte inferior. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
 # Manejo de Excepciones
 
@@ -32,7 +34,8 @@ UNTDF IDEI 2026
 ### [F-01] Pregunta de apertura
 
 @tipo: socratica
-@imagen: none
+@imagen: background
+@prompt-imagen: Forma de interrogante abstracta bordo en el centro, tres caminos divergentes grises que se separan hacia la parte inferior desde un punto de bifurcación. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
 # ¿Qué hace tu programa cuando algo falla?
 
@@ -53,7 +56,8 @@ UNTDF IDEI 2026
 ### [F-02] Objetivos
 
 @tipo: concepto-abstracto
-@imagen: none
+@imagen: content
+@prompt-imagen: Seis rectángulos pequeños bordo alineados verticalmente en el lado derecho, cada uno con un círculo gris a la izquierda como marcador. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
 # Al finalizar esta clase vas a poder
 
@@ -70,9 +74,10 @@ UNTDF IDEI 2026
 ### [F-03] ¿Qué es una excepción?
 
 @tipo: concepto-abstracto
-@imagen: none
+@imagen: content
+@prompt-imagen: Cuadrícula regular de cuadrados grises en el lado derecho, un cuadrado bordo disruptivo rompe el patrón en el centro de la cuadrícula, ondas concéntricas bordo irradiando desde el cuadrado disruptivo. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
-# Evento anómalo que el código normal no puede manejar
+# Evento anómolo que el código normal no puede manejar
 
 ## Definición (Sebesta §14.1, p. 611)
 
@@ -91,8 +96,6 @@ UNTDF IDEI 2026
 - Error de lógica en el código → bug (se resuelve con debugging)
 - Condición inesperada en runtime → excepción (se maneja con handlers)
 - Archivo no encontrado, red caída, input inválido → candidatos naturales
-
-`[Sebesta, Cap. 14 §14.1, p. 611]`
 
 ---
 
@@ -133,8 +136,6 @@ void processFile(const char *path, ErrorHandler onError) {
 - `errno` es global — no thread-safe, se sobreescribe
 - Callback solo cubre **un** tipo de error por función
 
-`[Louden & Lambert, Cap. 9 §9.5, p. 406]`
-
 ---
 
 ### [F-05] Historia: de PL/I a TypeScript
@@ -173,7 +174,7 @@ void processFile(const char *path, ErrorHandler onError) {
 | ¿Qué pasa al lanzar? | El scope que generó la excepción **termina** | El scope que generó la excepción **se pausa** |
 | ¿Dónde sigue? | En el handler — nunca vuelve al raise | El handler ejecuta → **vuelve** al punto del raise |
 | Lenguajes | Java, C++, C#, TypeScript, Kotlin, Go¹, Rust¹, Python | PL/I (legacy), algunos LISP |
-| Ventaja | Simple, predecible, stack unwinding claro | Permite “corrección” y retry in-place |
+| Ventaja | Simple, predecible, stack unwinding claro | Permite "corrección" y retry in-place |
 | Desventaja | No se puede continuar donde se cortó | El handler debe conocer el contexto interno del caller |
 
 > ¹ Go y Rust no tienen excepciones en el sentido clásico: usan valores de retorno (`error`, `Result<T,E>`). Incluidos aquí porque su modelo de propagación (`?`, retorno explícito) sigue la semántica de **terminación** — no hay vuelta al punto de falla.
@@ -193,7 +194,8 @@ void processFile(const char *path, ErrorHandler onError) {
 ### [F-07] Las 8 preguntas de diseño (Sebesta §14.1)
 
 @tipo: concepto-abstracto
-@imagen: none
+@imagen: content
+@prompt-imagen: Ocho círculos pequeños bordo dispuestos en círculo en el lado derecho, conectados por líneas grises formando una red octogonal, un círculo central gris más grande como nodo hub. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
 # Todo lenguaje debe responder estas preguntas
 
@@ -260,14 +262,13 @@ async function loadUserData(userId: string): Promise<UserProfile> {
 - Si hay excepción capturada: `try` (hasta el throw) → `catch` → `finally`
 - Si hay excepción no capturada: `try` → `finally` → propagación al llamador
 
-`[Sebesta §14.1, preguntas 5 y 6, p. 613]`
-
 ---
 
 ### [F-09] Propagación por el call stack
 
 @tipo: diagrama
-@imagen: none
+@imagen: content
+@prompt-imagen: Tres rectángulos grises apilados verticalmente en el lado derecho, una flecha bordo ascendente que atraviesa los tres rectángulos de abajo hacia arriba, el rectángulo inferior resaltado en bordo. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
 # La excepción sube el stack hasta encontrar un handler
 
@@ -308,8 +309,6 @@ catch (error) {
   }
 }
 ```
-
-`[Sebesta, p. 614: "la información sobre la excepción se pone a disposición del handler" (traducción)]`
 
 ---
 
@@ -456,8 +455,6 @@ const user = await fetchUser("42")
 
 // O con librería como neverthrow / fp-ts
 ```
-
-`[Conexión curricular: Tema 5 — Mónadas. Result<T,E> es la mónada Either]`
 
 ---
 
@@ -768,14 +765,13 @@ async function withRetry<T>(
 - `publish_loop.py` de EDU usa exactamente este patrón: reintento hasta 3 veces, registra errores en `error-registry.jsonl`
 - `edu-mcp-server` retorna `isError: true` cuando ChromaDB falla — el agente sabe cómo reaccionar
 
-`[Anthropic, "Building effective agents", dic. 2024]`
-
 ---
 
 ### [F-17] Cierre y puntos clave
 
 @tipo: cierre
-@imagen: none
+@imagen: background
+@prompt-imagen: Cinco formas geométricas bordo de tamaños decrecientes dispuestas en arco en el centro, la más grande a la izquierda y la más pequeña a la derecha, conectadas por una línea gris punteada. Flat design, bordo y gris oscuro, fondo blanco. Sin texto, sin letras, sin etiquetas, sin código, sin números. Alta resolución.
 
 # Manejo de Excepciones — Lo que se lleva hoy
 

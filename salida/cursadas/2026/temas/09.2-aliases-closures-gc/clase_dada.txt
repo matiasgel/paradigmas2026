@@ -1,0 +1,1102 @@
+Aliases, Closures, GC y Tipos
+Paradigmas y Lenguajes de Programación — Clase 09.2
+Universidad Nacional de Tierra del Fuego — Instituto IDEI · 2026
+
+Un alias: dos nombres vinculados a la misma celda de memoria
+Definición
+
+Un alias ocurre cuando dos o más nombres distintos están vinculados a la misma celda de memoria en el mismo momento de la ejecución.
+
+La diferencia con una copia
+
+Una copia crea una celda nueva con el mismo contenido — dos L-values distintos
+Un alias no crea nada nuevo — solo agrega un segundo nombre que apunta al mismo L-value
+Cambiar el objeto a través de cualquiera de los nombres afecta a todos los demás
+
+Fuentes principales de aliases
+
+Asignación de referencias (obj2 = obj1 en TypeScript, Python, Kotlin)
+Parámetros pasados por referencia (punteros en Go, referencias en C++)
+Variables de un mismo union type que comparten representación interna
+
+La asignación de objetos no copia — crea un segundo nombre para el mismo objeto
+// Asignación de un objeto: obj2 es un ALIAS de obj1 — mismo L-value, mismo heap-object
+const obj1 = { valor: 42, nombre: "config" };
+const obj2 = obj1;          // NO se crea una copia — obj2 apunta a la misma celda
+
+// Modificar a través del alias modifica el original:
+obj2.valor = 99;
+console.log(obj1.valor);    // 99 — obj1 fue modificado sin tocarlo directamente
+
+// Comprobación: son la misma referencia (mismo L-value)
+console.log(obj1 === obj2); // true — misma identidad de objeto
+
+// Con primitivos, la asignación sí copia el valor:
+let x = 42;
+let y = x;    // y es una COPIA — x y y son L-values independientes
+y = 99;
+console.log(x);  // 42 — x no cambió
+// Los primitivos no tienen alias por asignación — los objetos sí
+
+Cuando pasamos un objeto a una función, el parámetro es un alias del argumento original
+// Kotlin — el parámetro 'p' recibe la misma referencia que 'origen'
+data class Punto(var x: Int, var y: Int)
+
+fun desplazar(p: Punto, dx: Int) {
+    p.x += dx   // modifica el objeto ORIGINAL a través del alias p
+}
+
+val origen = Punto(0, 0)
+desplazar(origen, 5)
+println(origen.x)  // 5 — origen fue modificado dentro de desplazar
+
+// Go — punteros explícitos: el alias es visible en la firma
+func duplicar(p *int) {
+    *p *= 2  // desreferencia y modifica la variable original del caller
+}
+
+x := 10
+duplicar(&x)     // &x: se pasa la dirección — p es alias de x
+fmt.Println(x)   // 20 — x fue modificado a través del puntero
+
+Los aliases introducen dependencias invisibles entre partes del programa
+El problema de razonabilidad local
+
+Si dos parámetros de una función son aliases del mismo objeto, el supuesto de independencia falla silenciosamente. Ejemplo: f(a, b) donde a y b son aliases — modificar b modifica a, produciendo resultados inesperados.
+
+Impacto en verificación formal
+
+Las precondiciones de la lógica de Hoare no se pueden establecer correctamente con aliases,
+El análisis estático no puede probar ausencia de efectos laterales.
+El compilador pierde oportunidades de optimización.
+
+Impacto en concurrencia
+
+Dos threads con aliases al mismo objeto necesitan sincronización explícita.
+Sin ella: race condition — resultado no determinístico.
+
+Regla de diseño defensivo
+
+Las funciones puras no deberían modificar sus parámetros. Usar readonly en TypeScript / val en Kotlin para comunicar esa intención.
+
+Tres categorías de alias involuntarios por paso por referencia
+Escenario 1 — Colisión entre parámetros actuales
+
+Si dos posiciones de parámetro recibidas por referencia se invocan con el mismo argumento, ambos nombres internos son aliases del mismo objeto. Resultado: comportamiento indefinido en C++.
+
+Escenario 2 — Parámetro y variable global
+
+El argumento pasado por referencia coincide con una variable global accesible dentro de la función — dos caminos al mismo dato.
+
+Escenario 3 — Elemento de array y array completo
+
+fun1(list[i], list) — el primer parámetro es un alias de list[i], el segundo da acceso completo al array incluyendo list[i].
+
+Diagnóstico de Sebesta 
+
+‘Los problemas con estos tipos de aliasing son los mismos que en otras situaciones de aliasing: hacen que los programas sean difíciles de leer y mantener.' Sebesta  propone pass-by-value-result como alternativa que elimina los tres escenarios.
+// Escenario 1: fun(a, a) — x e y apuntan al mismo int //en memoria
+void fun(int& x, int& y) {
+    x = 10;
+    y = 20;    // si x e y son el mismo objeto: leer x //devuelve 20, no 10
+}
+int a = 5;
+fun(a, a);   // comportamiento dependiente de //implementación — no definido en C++
+
+// Escenario 2: parámetro + variable global
+int i = 3;              // variable global
+void fun2(int& a) {
+    i = 99;             // modifica i a través del nombre global — a también cambió
+}
+fun2(i);                // a es alias de i
+
+TypeScript detecta en compilación mutaciones involuntarias a través de aliases
+// Sin readonly — el parámetro es un alias del argumento y puede mutarlo
+function procesarMal(data: number[]): number[] {
+    data.push(99);   // muta el array ORIGINAL del caller — efecto lateral invisible
+    return data;
+}
+
+// Con readonly — el compilador impide cualquier mutación del objeto recibido
+function procesarBien(data: readonly number[]): number[] {
+    // data.push(99);
+    // ❌ Error: Property 'push' does not exist on type 'readonly number[]'
+    return [...data, 99];   // crea un nuevo array — el original queda intacto
+}
+
+// Readonly<T> para objetos — protege todas las propiedades de primer nivel
+type Config = Readonly<{ host: string; port: number }>;
+
+function conectar(cfg: Config): void {
+    // cfg.host = "otro";
+    // ❌ Error: Cannot assign to 'host' because it is a read-only property
+    console.log(`Conectando a ${cfg.host}:${cfg.port}`);
+}
+// readonly no impide la existencia del alias — impide la mutación a través de él
+
+El spread operator {…obj} copia solo el primer nivel — los anidados siguen siendo aliases
+const original = {
+    nombre: "Ana",
+    config: { debug: true, retries: 3 },  // objeto anidado
+    tags: ["admin", "user"]               // array anidado
+};
+
+// Shallow copy con spread: copia los valores del primer nivel
+const copia = { ...original };
+
+// Nivel 0: independiente ✅
+copia.nombre = "Carlos";
+console.log(original.nombre);          // "Ana" — sin cambios ✅
+
+// Nivel 1 (objetos anidados): ALIAS ⚠️
+copia.config.debug = false;
+console.log(original.config.debug);   // false — original modificado ⚠️
+
+// Nivel 1 (arrays anidados): ALIAS ⚠️
+copia.tags.push("guest");
+console.log(original.tags);           // ["admin", "user", "guest"] ⚠️
+
+// Comprobación: el config anidado es el mismo objeto
+console.log(original.config === copia.config);  // true — mismo L-value ⚠️
+
+structuredClone() es la única forma estándar de obtener una copia completa en ES2022
+const original = {
+    nombre: "Ana",
+    config: { debug: true, retries: 3 },
+    tags: ["admin", "user"]
+};
+
+// Deep copy — ES2022 — copia completa en todos los niveles
+const copia = structuredClone(original);
+
+// Nivel 0: independiente ✅
+copia.nombre = "Carlos";
+console.log(original.nombre);          // "Ana" ✅
+
+// Nivel 1 (objetos): independiente ✅
+copia.config.debug = false;
+console.log(original.config.debug);   // true ✅ — sin alias
+
+// Nivel 1 (arrays): independiente ✅
+copia.tags.push("guest");
+console.log(original.tags);           // ["admin", "user"] ✅
+
+// Comprobación: objetos distintos en todos los niveles
+console.log(original.config === copia.config);  // false ✅ — L-values distintos
+console.log(original.tags === copia.tags);      // false ✅
+
+// Nota: structuredClone no copia funciones, símbolos ni prototipos
+
+Closure = función + entorno léxico capturado en el momento de su creación
+Definición 
+
+Una closure es la combinación de: (1) una función (su código ejecutable) y (2) el entorno léxico en el que fue definida — el conjunto de nombres y sus valores visibles en ese punto del código fuente.
+
+El ciclo de vida extendido
+
+Variables locales ordinarias viven en el stack — se destruyen cuando la función retorna.
+Variables capturadas por una closure no pueden vivir en el stack: deben migrar al heap.
+Viven mientras al menos una closure mantenga una referencia a ellas.
+El GC las libera cuando ninguna closure las alcanza.
+
+
+
+Las closures aplican deep binding: el entorno se captura al crear la closure, no al llamarla. Las variables capturadas son exactamente las variables heap-dynamic implícitas .
+
+El activation record de crearContador se destruye, pero cuenta sigue viva en el heap
+function crearContador(inicio: number) {
+    let cuenta = inicio;  // candidata a migrar al heap — capturada por funciones anidadas
+
+    return {
+        incrementar: () => ++cuenta,  // closure 1: captura `cuenta` — lectura y escritura
+        decrementar: () => --cuenta,  // closure 2: captura la MISMA `cuenta`
+        valor:       () => cuenta     // closure 3: captura `cuenta` — solo lectura
+    };
+}
+
+const c = crearContador(10);
+// crearContador() ya retornó — su activation record fue destruido del stack
+// pero `cuenta` sigue viva en el heap porque `c` la referencia
+
+console.log(c.incrementar());  // 11
+console.log(c.incrementar());  // 12
+console.log(c.decrementar());  // 11
+console.log(c.valor());        // 11
+
+// Las tres closures COMPARTEN la misma celda heap de `cuenta`
+// Son aliases de la misma variable — pero aliases controlados y encapsulados
+
+La variable capturada migra del stack al heap y vive mientras exista la closure
+Variables locales ordinarias — tiempo de vida de stack
+
+Se crean cuando se llama a la función (activation record apilado).
+Se destruyen automáticamente cuando la función retorna (frame desapilado).
+Sin costo de GC — la liberación es inmediata e implícita.
+
+Variables capturadas por closure — tiempo de vida de heap
+
+El compilador o runtime detecta que la variable 'escapa' al scope de la función.
+La variable migra al heap para sobrevivir más allá del activation record.
+Vive mientras al menos una closure activa tenga una referencia a ella.
+El GC la libera cuando ninguna closure la referencia.
+
+¿Qué significa 'escapar' al heap?
+
+Una variable escapa cuando su lifetime debe ser mayor que el del activation record que la contiene: cuando una función anidada la captura, cuando se retorna una referencia a ella, o cuando se almacena en una estructura con mayor lifetime.
+
+La closure como solución al problema del dangling reference.
+La pregunta de Gabbrielli 
+Cuando una función F retorna una función interna gg que captura la variable local x, surge un conflicto con el ciclo de vida del stack: el entorno de F será destruido al terminar su ejecución. ¿Cómo invocar gg sin producir una referencia colgante a x?.
+
+La solución: migración al heap garantizada por el runtime
+
+El compilador detecta que x escapa del scope de F (es capturada por gg).
+x se aloja en el heap desde el inicio — no en el stack frame de F.
+El closure object gg contiene una referencia directa a esa celda heap.
+Cuando F retorna y su stack frame se destruye, x en heap sigue viva.
+El GC libera x solo cuando ninguna closure la referencia.
+
+La definición formal de Gabbrielli 
+
+'Clausuras: estructuras de datos compuestas por un fragmento de código y un entorno de evaluación. El modelo canónico para implementar la llamada por nombre y todas las situaciones en que una función debe pasarse como parámetro o retornar como resultado.'
+
+Python requiere declarar nonlocal explícitamente para escribir en la variable capturada
+def crear_acumulador(inicio: int):
+    total = inicio   # variable del scope externo — candidata a ser capturada
+
+    def agregar(n: int) -> int:
+        nonlocal total    # REQUERIDO para ESCRIBIR en total
+                          # sin nonlocal: Python crea una variable LOCAL `total` nueva
+                          # y al leerla antes de asignarle → UnboundLocalError
+        total += n
+        return total
+
+    def obtener() -> int:
+        return total      # LECTURA: no necesita nonlocal
+
+    return agregar, obtener
+
+agregar, obtener = crear_acumulador(0)
+print(agregar(5))   # 5  — total: 0 + 5
+print(agregar(3))   # 8  — total: 5 + 3
+print(agregar(2))   # 10 — total: 8 + 2
+print(obtener())    # 10 — el estado persiste entre llamadas
+
+Go y Kotlin soportan closures de primera clase — misma semántica de captura que TypeScript
+// Go — closure que captura una variable del scope de crearContador
+func crearContador(inicio int) func() int {
+    cuenta := inicio   // variable local — migra al heap por la closure
+
+    return func() int {
+        cuenta++       // captura y modifica cuenta — closure de lectura/escritura
+        return cuenta
+    }
+}
+
+c := crearContador(10)
+fmt.Println(c())  // 11
+fmt.Println(c())  // 12
+
+// Kotlin — lambda que captura una variable del scope externo
+fun crearContador(inicio: Int): () -> Int {
+    var cuenta = inicio  // var (mutable) porque la lambda necesita modificarla
+
+    return { ++cuenta }  // closure: captura y modifica cuenta en cada llamada
+}
+
+val contar = crearContador(10)
+println(contar())  // 11
+println(contar())  // 12
+
+En C los function pointers no capturan entorno — toda variable no-local debe ser global
+La limitación de C
+
+C permite pasar punteros a funciones, pero esos punteros solo contienen la dirección de inicio del código. No existe ninguna estructura de datos para guardar el entorno en el que se definió la función.
+
+Consecuencias de no tener closures
+
+Si una función necesita acceder a estado entre llamadas → debe usar variable global o estructura pasada manualmente como parámetro extra (void* genérico).
+El programador debe gestionar manualmente el ciclo de vida de ese estado.
+La composición funcional es posible solo por convención — no hay soporte del lenguaje.
+
+Lo que hace el runtime de lenguajes modernos
+
+En TypeScript, Python, Go y Kotlin, el runtime detecta automáticamente: (1) qué variables escapan, (2) las mueve al heap, (3) les aplica GC cuando ya no son alcanzables. En C, todo ese trabajo recae en el programador.
+
+El momento en que se captura el entorno define completamente el comportamiento de la closure
+Deep binding — la norma en todos los lenguajes modernos
+
+El entorno se captura en el momento de crear la closure.
+Los nombres y sus valores 'se congelan' en ese instante.
+Comportamiento: predecible e intuitivo — la closure siempre ve el entorno de su creación.
+Todos los lenguajes modernos usan deep binding: TypeScript, Python, Go, Kotlin, Haskell, Rust.
+
+Shallow binding — ámbito dinámico 
+
+El entorno se resuelve en el momento de llamar a la función, no al crearla.
+Los nombres se buscan en la pila de llamadas activa en ese momento.
+LISP clásico (pre-Scheme) usaba shallow binding — prácticamente abandonado.
+
+La implicación práctica
+
+Con deep binding, el comportamiento de una closure es local y cerrado: depende solo de dónde fue definida en el código fuente, no de cómo llegó la ejecución hasta ella.
+
+makeAdder
+crearContador
+Fuente del valor capturado
+Parámetro de la función
+Variable local de la función
+¿Compartido entre closures?
+No — celda nueva por llamada
+Sí — las tres closures comparten cuenta
+Mutabilidad del capturado
+Inmutable (solo lectura)
+Mutable (lectura y escritura)
+Uso típico
+Currificación, partial application
+Estado encapsulado, módulo con estado
+makeAdder — el ejemplo canónico de Sebesta 
+Contraste con crearContador (F-10)
+
+Cada llamada a makeAdder crea su propio activation record con su propio x. Las dos closures son completamente independientes — no son aliases entre sí.
+const makeAdder = (x: number) => (n: number): number => x + n;
+// La función retornada captura `x` del scope de makeAdder
+// makeAdder se llama dos veces → dos ejecuciones → dos celdas heap para //`x`
+
+const add10 = makeAdder(10);   // closure 1: x = 10 en heap — celda A
+const add5  = makeAdder(5);    // closure 2: x = 5  en heap — celda B //(independiente)
+
+console.log(add10(1));    // 11 — celda A: x=10, n=1
+console.log(add5(7));     // 12 — celda B: x=5,  n=7
+console.log(add10(10));   // 20 — celda A sigue siendo x=10
+
+var es función-scope: existe UNA SOLA variable para todo el loop — todas las closures la comparten
+// var declara una variable en el scope de la FUNCIÓN CONTENEDORA, no del bloque
+// Hay exactamente UNA variable `i` para todo el loop
+const funcs: (() => number)[] = [];
+
+for (var i = 0; i < 3; i++) {
+    funcs.push(() => i);   // TODAS las closures apuntan a la MISMA `i` (deep binding)
+                           // pero `i` es una sola celda de memoria — son aliases de ella
+}
+
+// En este punto: i === 3 (el loop terminó — i llegó a 3)
+// Todas las closures leen la misma celda que ahora contiene 3:
+console.log(funcs[0]());   // 3 — esperábamos 0
+console.log(funcs[1]());   // 3 — esperábamos 1
+console.log(funcs[2]());   // 3 — esperábamos 2
+
+// El deep binding no es el bug — la captura es correcta
+// El bug es que var comparte la MISMA celda entre todas las iteraciones
+
+let es block-scope: cada iteración del bloque crea una variable nueva e independiente
+// let crea una nueva variable `j` en CADA iteración del bloque for
+const funcs2: (() => number)[] = [];
+
+for (let j = 0; j < 3; j++) {
+    funcs2.push(() => j);   // cada closure captura su PROPIA `j` — celda distinta en heap
+}
+
+// Tres variables `j` distintas en el heap — tres closures, tres celdas independientes:
+console.log(funcs2[0]());   // 0 ✅ — la j de la iteración 0
+console.log(funcs2[1]());   // 1 ✅ — la j de la iteración 1
+console.log(funcs2[2]());   // 2 ✅ — la j de la iteración 2
+
+// Alternativa funcional — evita el problema por diseño:
+const funcs3 = Array.from({ length: 3 }, (_, k) => () => k);
+console.log(funcs3[0]());   // 0 ✅
+console.log(funcs3[1]());   // 1 ✅
+console.log(funcs3[2]());   // 2 ✅
+
+// Regla práctica: en TypeScript moderno, nunca usar var.
+// let y const tienen semántica de scope predecible.
+
+El heap no tiene un mecanismo automático de liberación como el stack
+Revisión: categorías de variables y liberación.
+
+Static: el compilador calcula el espacio en compilación, nunca se libera.
+Stack-dynamic: el runtime libera automáticamente al desapilar el activation record.
+Heap-dynamic: alguien debe decidir explícitamente cuándo liberar.
+
+El dilema fundamental
+
+Liberar demasiado pronto → dangling pointer: referencia a memoria ya liberada — crash o corrupción silenciosa.
+Liberar demasiado tarde → memory leak: la memoria nunca se recupera, el proceso crece.
+No liberar manualmente → necesitamos un mecanismo automático: el Garbage Collector.
+
+La pregunta que todo GC debe responder
+
+¿Cuándo se puede liberar una celda del heap de forma segura? Respuesta: cuando no existe ninguna referencia viva a ella — es inaccesible desde el programa. El desafío es detectar esa condición de forma eficiente y correcta.
+
+Estrategia
+Quién libera
+Cuándo libera
+Ejemplos
+Problema principal
+Manual
+El programador (free, delete)
+Cuando el programador lo decide
+C, C++
+Dangling pointers, double-free, memory leaks
+Reference Counting
+El runtime (contador por celda)
+Cuando el contador cae a 0
+Python, Swift, PHP
+No resuelve ciclos de referencia
+Mark-and-Sweep
+El GC
+Cuando el allocator necesita espacio
+Java, JavaScript/V8, Go
+Pausa el programa (stop-the-world)
+Ownership + Drop
+El compilador (análisis estático)
+Al salir del scope — garantía en compilación
+Rust
+Modelo de programación más restrictivo
+Estrategias de gestión de memoria — comparación de enfoques
+Cuatro estrategias principales para gestionar la memoria heap, cada una con distintos trade-offs entre determinismo, seguridad y rendimiento.
+
+Cada celda del heap lleva un contador de cuántas referencias activas la apuntan
+El invariante del algoritmo
+
+refcount(celda) = cantidad de variables/campos que apuntan a esa celda en este momento. Cuando refcount == 0 → la celda es inaccesible → liberar inmediatamente.
+
+Ventajas del Reference Counting
+
+Determinístico: la liberación ocurre en el instante exacto en que el contador llega a 0.
+Sin stop-the-world: no hay que pausar el programa para recoger basura.
+Predecible: en Python, del x libera la celda de forma inmediata si no hay otras referencias.
+Localizado: el costo de GC se distribuye a lo largo del tiempo.
+
+La limitación fundamental
+
+Si dos objetos se apuntan mutuamente, sus contadores nunca llegan a 0 aunque el programa no pueda alcanzarlos — son inaccesibles pero el RC no los libera. Es una fuga de memoria estructural del algoritmo.
+
+Algoritmo
+Fortaleza
+Debilidad
+Reference Counting
+Incremental, determinístico, sin stop-the-world
+No resuelve ciclos; overhead por operación
+Mark-and-Sweep
+Resuelve ciclos; sin overhead por operación
+Stop-the-world; no incremental (clásico)
+RC y mark-sweep son procesos opuestos 
+Sebesta y Louden coinciden en el diagnóstico: RC y mark-sweep son procesos opuestos, cada uno resuelve lo que el otro no puede. Los GC modernos (Python, Swift, V8) combinan ambos o técnicas híbridas.
+
+Python usa RC internamente — sys.getrefcount permite observar el contador en tiempo real
+import sys
+
+# Crear el objeto: ref_count = 1 (la variable `lista` lo referencia)
+lista = [1, 2, 3]
+print(sys.getrefcount(lista))   # 2 — getrefcount mismo crea una referencia temporal
+
+# Agregar segunda referencia: ref_count = 2
+alias = lista
+print(sys.getrefcount(lista))   # 3
+
+# Agregar referencia en una estructura:
+contenedor = [lista]
+print(sys.getrefcount(lista))   # 4
+
+# Eliminar referencias una a una:
+del contenedor           # ref_count → 3
+del alias                # ref_count → 2
+# Solo `lista` referencia el objeto → ref_count = 1
+
+del lista
+# ref_count → 0 → el runtime libera [1, 2, 3] INMEDIATAMENTE
+# No hay que esperar ningún ciclo de GC
+
+Cuando dos objetos se apuntan mutuamente, ningún contador llega a 0 aunque sean inaccesibles
+El escenario del ciclo
+
+Al eliminar las variables externas del ciclo A→B→A: refcount(A) = 1 (B apunta a A) y refcount(B) = 1 (A apunta a B). Ambos son inaccesibles desde el programa, pero sus contadores nunca llegan a cero. Con RC puro: NUNCA se liberan → MEMORY LEAK permanente.
+
+Por qué es un problema real y frecuente
+
+Listas doblemente enlazadas (siguiente y previo)
+Árboles con punteros al nodo padre
+Grafos generales con ciclos
+Objetos de UI con referencias bidireccionales (parent/child)
+
+Soluciones en los lenguajes reales
+
+Python: RC + cycle detector separado en el módulo gc
+Swift: ARC + el programador declara referencias weak para romper ciclos manualmente
+Rust: el borrow checker prohíbe los ciclos mutables en compilación
+JavaScript/V8: usa Mark-and-Sweep que detecta ciclos correctamente por diseño
+
+Dos nodos que se apuntan mutuamente — ciclo que RC puro no podría liberar
+class Nodo {
+    nombre: string;
+    siguiente: Nodo | null = null;
+    previo:    Nodo | null = null;
+
+    constructor(nombre: string) { this.nombre = nombre; }
+}
+
+// Crear dos nodos con referencias mutuas — ciclo de referencia:
+const a = new Nodo("A");
+const b = new Nodo("B");
+
+a.siguiente = b;   // A → B   (si usáramos RC: ref_count(B) sube a 2)
+b.previo    = a;   // B → A   (si usáramos RC: ref_count(A) sube a 2)
+
+// Si TypeScript/V8 usara RC puro y elimináramos las referencias externas:
+//   a = null → ref_count(A) = 1 (B.previo lo apunta)  → no se libera
+//   b = null → ref_count(B) = 1 (A.siguiente lo apunta) → no se libera
+//   Ambos son inaccesibles pero el RC nunca los liberaría — MEMORY LEAK
+
+// V8 usa Mark-and-Sweep — los detecta como inaccesibles y los libera correctamente ✅
+
+Marcar todo lo alcanzable desde el programa, liberar todo lo que no se marcó
+Las raíces del grafo de objetos
+
+Variables activas en todos los activation records del stack
+Variables globales del programa
+Registros de la CPU con referencias
+
+Fase 1 — Mark (Marcar)
+
+A partir de cada raíz, el GC realiza un traversal transitivo del grafo de referencias. Si puede llegar a un objeto directa o transitivamente desde una raíz → lo marca como alcanzable. Si no → queda sin marcar.
+
+Fase 2 — Sweep (Barrer)
+
+Recorre TODO el heap. Celda marcada → sigue viva → desmarcarla para el próximo ciclo. Celda no marcada → es inaccesible → liberar.
+
+La ventaja clave sobre RC y el costo
+
+Ventaja: un ciclo entre A y B que no sea alcanzable queda sin marcar → ambos se liberan en el sweep
+Costo: durante mark y sweep, el programa se pausa (stop-the-world). Los GC modernos minimizan esta pausa con técnicas incrementales y concurrentes.
+
+Tres defectos del mark-and-sweep y la compactación como solución
+Defecto 1 — Fragmentación externa
+
+Los objetos vivos y los inaccesibles quedan entremezclados en memoria. La suma de huecos puede ser suficiente para una nueva alocación, pero no hay ningún bloque contiguo disponible.
+
+Defecto 2 — Stop-the-world
+
+A diferencia del RC (incremental), el mark-and-sweep acumula trabajo y lo ejecuta todo junto. En heaps grandes: pausas de cientos de milisegundos inaceptables para aplicaciones interactivas.
+
+Defecto 3 — Actualización de punteros tras compactación
+
+Si se añade compactación, todos los punteros a objetos movidos deben actualizarse. El costo es proporcional al número de referencias en el grafo.
+
+La solución: compactación y V8 semi-space copying
+
+V8 usa semi-space copying en el New Space: los objetos vivos se copian al semi-space vacío ('to'), y al terminar los roles se intercambian. El semi-space 'from' queda completamente libre en un solo paso.
+
+La mayoría de los objetos mueren jóvenes — el GC puede explotar ese patrón
+La hipótesis generacional
+
+Evidencia empírica en lenguajes con GC: la gran mayoría de los objetos tienen un ciclo de vida muy corto — resultados de map/filter, objetos temporales de request, closures de un solo uso. Pocos objetos sobreviven mucho tiempo.
+
+La estrategia: dividir el heap en generaciones
+
+Generación joven (Young Gen / Nursery): objetos recién creados → GC muy frecuente, espacio pequeño → muy rápido.
+Generación vieja (Old Gen / Tenured): objetos que sobrevivieron varios ciclos → GC infrecuente → más costoso pero ocurre raramente.
+
+Promoción y resultado práctico
+
+Un objeto que sobrevive un número configurable de ciclos se promueve a la generación vieja.
+El 90% de los ciclos de GC solo barren la generación joven (unos pocos megabytes) y duran menos de 1 ms.
+Los ciclos sobre la generación vieja son raros y se pueden ejecutar de forma incremental o concurrente.
+
+Layout interno del heap de V8 (Node.js / Chrome / TypeScript compilado a JS)
+Heap de V8:
+┌────────────────────────────────────────────────────────────────┐
+│  New Space (Generación joven)                                  │
+│  ┌─────────────────────┬─────────────────────┐                 │
+│  │  Semi-space "from"  │  Semi-space "to"    │  Scavenger GC   │
+│  │  (objetos activos)  │  (espacio libre)    │  frecuente,     │
+│  │                     │                     │  muy rápido     │
+│  └─────────────────────┴─────────────────────┘                 │
+│  Capacidad: ~1-8 MB según configuración                        │
+├────────────────────────────────────────────────────────────────┤
+│  Old Space (Generación vieja)                                  │
+│  ┌───────────────────────────────────────────────────────┐     │
+│  │  objetos promovidos — sobrevivieron en New Space      │     │
+│  │  Mark-Compact incremental + concurrent               │     │
+│  │  Capacidad: cientos de MB — GC infrecuente           │     │
+│  └───────────────────────────────────────────────────────┘     │
+├────────────────────────────────────────────────────────────────┤
+│  Code Space (código JIT compilado)                             │
+│  Large Object Space (objetos > 512KB — no se compactan)        │
+│  Map Space (descriptores de forma de objetos)                  │
+└────────────────────────────────────────────────────────────────┘
+
+Minor GC (Scavenger): evacúa New Space — semi-space copying, muy rápido
+Major GC (Mark-Compact): mark + sweep + compact en Old Space — concurrent
+
+El tipado no es una dicotomía binaria — existe un espectro continuo entre estático y dinámico
+Tipado estático puro
+
+Los tipos se verifican en compilación. Si hay un error de tipos → el programa no compila. El programador debe anotar los tipos explícitamente (o el compilador los infiere). Ejemplos: Java, C, Haskell, Rust.
+
+Tipado dinámico puro
+
+Los tipos se verifican en ejecución. El programa compila siempre — los errores de tipos son excepciones en runtime. Ejemplos: Python (sin mypy), Ruby, Scheme, JavaScript puro.
+
+Tipado gradual — la tercera vía
+
+Permite mezclar: algunas partes tienen tipos estáticos, otras usan any (tipo dinámico)
+El programador elige la cobertura según la criticidad de cada módulo o función
+Formalizado por Jeremy Siek y Walid Taha en 2006
+TypeScript lo implementó de forma práctica y a escala industrial
+
+El gradual typing no es solo una característica de TypeScript — tiene base teórica rigurosa
+La motivación histórica — Gabbrielli
+
+'A medida que el número de proyectos de software de gran escala desarrollados con lenguajes de tipado dinámico creció con el tiempo, los usuarios advirtieron que sacrificar las verificaciones estáticas en favor de la rapidez de prototipado era un trato desfavorable.' — Gabbrielli 
+
+La base formal — Siek & Taha (2006)
+
+Tipo especial ? (tipo dinámico) — compatible con cualquier tipo en compilación.
+Relación de consistencia de tipos (~): T ~ ? para cualquier T — más débil que igualdad.
+Cast implícito automático: el compilador inserta verificaciones en los límites entre código tipado y no tipado.
+
+TypeScript y la corrección formal — Gabbrielli.
+
+Gabbrielli distingue el tipado gradual formalmente correcto del enfoque de TypeScript, deliberadamente incompleto: acepta ciertos programas con potenciales errores de tipo por razones de usabilidad y compatibilidad con JavaScript. Esta decisión está documentada en la especificación oficial.
+
+Característica
+Estático puro
+Dinámico puro
+Gradual (TypeScript)
+Verificación de tipos
+Compilación
+Ejecución
+Compilación donde hay tipos
+Error de tipos
+No compila
+Excepción en runtime
+Error de compilación (si hay tipo)
+Anotaciones
+Obligatorias (o inferidas)
+No existen
+Opcionales — elección del programador
+Escape hatch (trampa de escape)
+No existe
+Todo es dinámico
+any — explícito y auditable
+Detección de null
+En compilación
+Runtime crash
+Con strictNullChecks activado
+Migración desde JS
+No aplica
+No aplica
+Incremental, archivo por archivo ✅
+Los tres enfoques de tipado — características clave
+Comparación de tipado estático, dinámico y gradual (TypeScript) según características clave de diseño y uso práctico.
+
+Sin tipos explícitos: TypeScript es compatible con JavaScript puro — sin ninguna garantía
+// Sin strict mode: TypeScript infiere `any` para parámetros sin anotación
+function sumar(a, b) {
+    // TypeScript informa: Parameter 'a' implicitly has an 'any' type.
+    // (solo con noImplicitAny o strict: true — de lo contrario, silencioso)
+    return a + b;
+}
+
+sumar(1, 2);         // 3   — comportamiento esperado
+sumar("1", 2);       // "12" — concatenación de strings — sin error en compilación
+sumar({}, []);       // "[object Object]" — TypeScript no objeta
+
+// Con strict: true en tsconfig.json →
+// Error: Parameter 'a' implicitly has an 'any' type.
+// Ese error es la señal de que el código necesita anotaciones
+
+// Nivel 0 es el punto de entrada de toda migración JS → TS:
+// Renombrar .js → .ts ya es válido en nivel 0, sin cambiar ninguna línea
+
+TypeScript refina el tipo de una variable en cada rama del control de flujo
+El problema que resuelve
+
+Un union type como string | number | null permite que una variable sea cualquiera de esos tipos. Para usar toUpperCase() necesitamos saber que es string. Sin verificar, el compilador (con strict) rechaza el código.
+
+¿Qué es el type narrowing?
+
+El proceso por el cual TypeScript estrecha (narrows) el tipo de una variable dentro de cada rama de control de flujo, basándose en las condiciones verificadas en las ramas anteriores.
+
+Los guardas de tipo más comunes
+
+typeof x === 'string' → en esa rama, TypeScript sabe que x es string
+x === null → en esa rama, TypeScript sabe que x es null
+x instanceof Clase → en esa rama, TypeScript sabe que x es Clase
+Narrowing exhaustivo con switch + default: never → el compilador detecta casos faltantes
+
+La garantía formal
+
+Dentro de cada rama del narrowing, TypeScript garantiza estáticamente que el tipo es el esperado. Si se agrega un nuevo caso al union type y no se actualiza el código, el compilador lo detecta.
+
+TypeScript restringe el tipo en cada rama — los métodos disponibles cambian según la rama
+type Resultado = string | number | null;
+
+function formatear(r: Resultado): string {
+    if (r === null) {
+        return "—";             // aquí TypeScript sabe: r es null — ✅
+    }
+    if (typeof r === "number") {
+        return r.toFixed(2);    // aquí TypeScript sabe: r es number — ✅
+    }
+    return r.toUpperCase();     // aquí TypeScript sabe: r es string — ✅
+}
+
+// instanceof — para clases con herencia
+class Perro { ladrar()  { return "Guau"; } }
+class Gato  { maullar() { return "Miau"; } }
+
+function hacerSonido(animal: Perro | Gato): string {
+    if (animal instanceof Perro) {
+        return animal.ladrar();  // Perro en esta rama ✅
+    }
+    return animal.maullar();     // Gato: único tipo restante ✅
+}
+
+El compilador detecta en compilación si falta un caso al agregar un nuevo tipo al union
+type Forma = "círculo" | "cuadrado" | "triángulo";
+
+function área(f: Forma, lado: number): number {
+    switch (f) {
+        case "círculo":
+            return Math.PI * lado ** 2;
+        case "cuadrado":
+            return lado ** 2;
+        case "triángulo":
+            return (Math.sqrt(3) / 4) * lado ** 2;
+        default:
+            // Si el tipo Forma creciera: "círculo" | "cuadrado" | "triángulo" | "rectángulo"
+            // y olvidáramos agregar el case "rectángulo":
+            // TypeScript llega aquí con f: "rectángulo" — NO es never
+            // El cast a never fuerza el error de compilación:
+            const _exhaustive: never = f;
+            //    ^^^^^^^^^^^^^^^^^^^^^^^^^
+            // Error: Type '"rectángulo"' is not assignable to type 'never'
+            throw new Error(`Forma no manejada: ${String(_exhaustive)}`);
+    }
+}
+
+Aspecto
+JavaScript puro
+TypeScript gradual
+TypeScript strict
+Detección de errores de tipo
+Solo en runtime
+En compilación (partes tipadas)
+En compilación (todo)
+Refactoring seguro
+Muy difícil — puede romper silencioso
+Parcialmente seguro
+Seguro — el compilador verifica
+Migración desde JS
+No aplica
+Incremental — archivo por archivo ✅
+Requiere cobertura total previa
+Null crashes
+Muy frecuentes
+Reducidos donde hay tipos
+Eliminados con strictNullChecks
+Tiempo de detección
+Runtime en producción
+Build en CI
+IDE en tiempo real
+TypeScript en producción — qué cambia en cada nivel de cobertura
+Comparación del impacto real del sistema de tipos en proyectos de distintas escalas y niveles de cobertura de tipos.
+
+En el paradigma funcional puro no existen variables mutables — solo bindings definitivos
+El contraste fundamental
+
+En LP imperativos: las variables son celdas de memoria mutables — la asignación x = 5 es una operación destructiva que sobreescribe el R-value.
+En LP funcionales puros: no existen variables mutables — existen bindings. Un binding es una asociación nombre → valor, definitiva dentro de su scope.
+En FP: x = 5 no asigna a una celda, declara que x ES 5 en ese scope.
+
+La computación como reescritura de expresiones
+
+En FP puro, computar no significa modificar el estado de celdas de memoria. Significa reescribir expresiones hasta obtener un valor. El resultado es idéntico sin importar cuántas veces se evalúe — transparencia referencial.
+
+Por qué esto importa
+
+Sin estado mutable → sin efectos laterales → sin aliases peligrosos por definición
+El razonamiento ecuacional funciona: si f(x) = 10, entonces cualquier f(x) puede reemplazarse por 10
+Las funciones son predecibles: su resultado depende solo de sus argumentos
+
+Transparencia referencial 
+Definición de Sebesta
+
+'Un programa tiene la propiedad de transparencia referencial si dos expresiones cualesquiera con el mismo valor pueden sustituirse mutuamente en cualquier punto del programa sin afectar su comportamiento.' — Sebesta §7.4
+
+Las consecuencias formales
+
+Razonamiento ecuacional: si f(x) = 10, entonces f(x) puede sustituirse por 10 en cualquier parte.
+Memoización válida: el compilador puede cachear f(5) = 25 y no recalcularlo.
+Reordenamiento seguro: el compilador puede evaluar f(a) y g(b) en cualquier orden si ambas son puras.
+Pruebas aisladas: una función pura se prueba completamente con sus argumentos — sin setup de estado global.
+
+La conexión con aliases (Bloque 1)
+
+Los aliases sobre objetos mutables rompen la transparencia referencial. La inmutabilidad (Bloque 5) elimina esta categoría de problemas por diseño: si los objetos no se pueden mutar, los aliases son inofensivos.
+
+En Haskell no existe reasignar — la computación es declaración de relaciones
+-- En Haskell, `let x = 5` declara que x ES 5 en este scope — no que x TIENE el valor 5
+let x = 5       -- x está vinculado a 5 para siempre en este scope
+-- x = 6        -- ILEGAL: no existe el concepto de reasignación
+
+-- La "iteración" en FP no usa un contador mutable — usa recursión con binding fresh:
+sumaLista :: [Int] -> Int
+sumaLista []     = 0                     -- caso base: lista vacía → 0
+sumaLista (x:xs) = x + sumaLista xs     -- x es un binding nuevo en cada llamada recursiva
+                                         -- no es la misma celda modificada — es un binding diferente
+
+-- Versión con fold — sin ninguna variable mutable explícita:
+suma = foldl (+) 0 [1, 2, 3, 4, 5]     -- suma = 15
+
+-- Para "cambiar" el valor de x se necesita un binding nuevo:
+let y = x + 1  -- y está vinculado a 6 — x sigue siendo 5
+
+Scala y Kotlin distinguen explícitamente entre binding inmutable y variable mutable
+// Scala — dos palabras clave, dos semánticas completamente distintas
+val y = 5    // val: binding inmutable — como const en TypeScript
+var x = 5    // var: variable mutable — como let en TypeScript
+
+x = 10       // ✅ válido — x es var
+// y = 10   // ❌ Error: reassignment to val — el compilador rechaza esto
+
+// En estilo funcional en Scala: siempre val, salvo que la mutación sea necesaria
+
+// Kotlin — misma distinción, misma semántica
+val inmutable = 42    // binding definitivo — no puede reasignarse
+var mutable   = 42    // variable mutable — puede reasignarse
+
+mutable = 100         // ✅
+// inmutable = 100    // ❌ Val cannot be reassigned
+
+// Para colecciones: la inmutabilidad también existe en el tipo
+val lista     = listOf(1, 2, 3)        // lista inmutable — no se puede agregar ni quitar
+val listaMut  = mutableListOf(1, 2, 3) // lista mutable
+
+El estilo funcional evita la mutación explícita usando transformaciones de datos en cadena
+const numeros = [1, 2, 3, 4, 5];
+
+// Estilo imperativo — muta el acumulador en cada iteración
+let suma = 0;
+for (const x of numeros) {
+    suma += x;   // suma cambia su valor (R-value) en cada iteración
+}
+console.log(suma);   // 15
+
+// Estilo funcional — solo bindings nuevos, sin mutación visible
+const sumaFuncional = numeros.reduce((acc, x) => acc + x, 0);
+// En cada llamada al callback: acc y x son parámetros nuevos (bindings fresh)
+console.log(sumaFuncional);   // 15
+
+// Transformación completa en cadena — sin estado mutable en ningún paso:
+const resultado = [1, 2, 3, 4, 5]
+    .filter(x => x % 2 === 0)    // [2, 4] — nuevo array, el original no cambia
+    .map(x => x * 10)             // [20, 40] — nuevo array
+    .reduce((a, b) => a + b, 0);  // 60 — binding final
+
+TypeScript provee herramientas de compilación para garantizar inmutabilidad en objetos
+// Readonly<T> — el compilador impide cualquier mutación de las propiedades
+type ConfigApp = Readonly<{ host: string; port: number; debug: boolean; }>;
+
+const cfg: ConfigApp = { host: "localhost", port: 3000, debug: false };
+// cfg.debug = true;
+// ❌ Error: Cannot assign to 'debug' because it is a read-only property
+
+// ReadonlyArray<T> — array inmutable
+const COLORES: ReadonlyArray<string> = ["rojo", "verde", "azul"];
+// COLORES.push("amarillo");  // ❌ Property 'push' does not exist on type 'readonly string[]'
+// COLORES[0] = "naranja";    // ❌ Index signature only permits reading
+
+// as const — convierte literales en tipos inmutables ultra-estrictos
+const LIMITES = { min: 0, max: 100 } as const;
+// LIMITES.min = -1;
+// ❌ Cannot assign to 'min' because it is a read-only property
+// Tipo inferido: { readonly min: 0; readonly max: 100 }
+
+// Object.freeze() — inmutabilidad en runtime
+const frozen = Object.freeze({ retries: 3 });
+// frozen.retries = 5;  // TypeError en runtime en modo strict del motor JS
+
+La inmutabilidad elimina la categoría más común de bugs de estado en programas grandes
+El origen del problema con el estado mutable compartido
+
+Una función puede modificar un objeto que otras partes del código asumen estable.
+El bug puede aparecer lejos del lugar donde ocurrió la modificación — difícil de rastrear.
+En pruebas: las pruebas que pasan en aislamiento pueden fallar cuando se ejecutan en conjunto.
+En concurrencia: dos threads que mutan el mismo objeto sin sincronización producen resultados no determinísticos.
+
+La garantía que aporta la inmutabilidad
+
+Si un objeto es inmutable, no puede haber aliases peligrosos: cualquier referencia siempre ve el mismo valor.
+No es necesario sincronizar accesos concurrentes — los datos nunca cambian.
+Las funciones puras son aisladas: su resultado depende solo de sus argumentos.
+
+FP en TypeScript — el espectro práctico
+
+TypeScript no es un LP puramente funcional. Pero permite adoptar un estilo funcional donde tiene sentido: const + Readonly<T> + ReadonlyArray + reduce/map/filter en lugar de loops con mutación..
+
+Aspecto
+TypeScript / V8
+Python
+Go
+Rust
+Estrategia de GC
+GC generacional (Scavenger + Mark-Compact concurrent)
+RC + cycle detector
+GC concurrent tricolor incremental
+Ownership + Drop — sin GC en runtime
+Dangling pointer
+Imposible (GC gestiona todo)
+Imposible (GC gestiona todo)
+Imposible (GC gestiona todo)
+Imposible — borrow checker en compilación
+Variable no inicializada
+Error en compilación (strict)
+NameError en runtime
+Zero value automático
+Error en compilación
+Alias de objeto
+Referencia implícita — invisible
+Referencia implícita — invisible
+Puntero explícito con * y &
+Borrow controlado por el compilador
+Ciclos de referencia
+V8 Mark-Sweep los resuelve
+Módulo gc cycle detector
+GC concurrente los resuelve
+Imposibles (mutables) — borrow checker
+Pausa del programa
+Minor GC <1ms / Major GC incremental
+RC incremental — impacto bajo
+GC concurrent <1ms objetivo
+Sin GC → sin pausa
+Estado del arte en gestión de memoria — comparación 2026
+Comparación de estrategias de memoria, aliasing y comportamiento del GC en TypeScript/V8, Python, Go y Rust.
+
+Rust garantiza seguridad de memoria sin GC en runtime mediante análisis estático en compilación
+El sistema de ownership
+
+Cada valor tiene un único dueño (owner) en cada momento de la ejecución.
+Cuando el dueño sale del scope, el valor se destruye automáticamente (Drop trait — destructores determinísticos).
+La propiedad puede transferirse (move): el dueño anterior ya no puede usar el valor.
+La propiedad puede prestarse (borrow): referencias temporales verificadas por el compilador.
+
+Las reglas del borrow checker — garantías en compilación
+
+Puede haber cualquier cantidad de referencias inmutables (&T) al mismo tiempo.
+O puede haber exactamente una referencia mutable (&mut T) — pero no simultáneamente con referencias inmutables.
+Las referencias no pueden vivir más tiempo que el valor al que apuntan (no hay dangling references).
+
+El resultado
+
+Sin GC en runtime → sin pausas → rendimiento predecible. Sin dangling pointers → verificado por el compilador, no por pruebas en runtime.
+
+El compilador detecta errores de memoria que en C serían bugs silenciosos o crashes
+// Drop automático — el compilador inserta la destrucción al salir del scope
+fn nueva_sesion(id: u32) -> Vec<String> {
+    let datos: Vec<String> = Vec::new();
+    datos   // move: ownership transferido al caller — datos NO se destruye aquí
+}
+
+// Dangling reference — error de compilación (en C sería un crash):
+fn referencia_invalida() {
+    let referencia: &String;
+    {
+        let s = String::from("hola");
+        referencia = &s;      // borrow de s — referencia vive mientras viva s
+    }                         // s sale de scope → Drop → s destruida
+    // println!("{}", referencia);
+    // ❌ Error: `s` does not live long enough
+}
+
+// Move semantics — el compilador rastrea dónde está cada valor:
+let v1 = vec![1, 2, 3];
+let v2 = v1;              // ownership de v1 transferido a v2 (move)
+// println!("{:?}", v1);  // ❌ Error: value borrowed here after move
+println!("{:?}", v2);     // ✅ v2 es el único dueño
+
+Prompt: 'guardá una copia de config antes de modificarla' — la IA usa asignación simple
+// ❌ Código generado por IA — INCORRECTO:
+// La IA asigna directamente: el "backup" es un alias, no una copia
+
+const configBackup = config;    // NO es copia — es alias del mismo objeto heap
+configBackup.debug = true;      // modifica config también — el backup es inútil
+
+console.log(config.debug);      // true — el "original" fue modificado
+
+// Por qué la IA comete este error:
+// El LLM fue entrenado con mucho código JavaScript donde
+// la asignación de objetos es común y la distinción copia/alias
+// no siempre está explícita en el nombre de la variable
+
+Tres señales de alerta en código IA y las dos correcciones según la profundidad del objeto
+// Señales de que el código IA podría generar un alias no deseado:
+// 1. const backup = objeto                   → alias (sin duda)
+// 2. const copia = { ...objeto }             → alias en sub-objetos anidados
+// 3. const arr = Array.from(originalArr)     → alias en cada elemento objeto
+
+// Corrección 1 — Shallow copy: cuando no hay propiedades de tipo objeto anidadas
+const configBackup1 = { ...config };   // nivel 0 independiente — nivel 1+ alias ⚠️
+
+// Corrección 2 — Deep copy: cuando hay objetos o arrays anidados (ES2022)
+const configBackup2 = structuredClone(config);  // todos los niveles son independientes ✅
+
+// Verificación rápida de independencia:
+console.log(config === configBackup1);                   // false ✅ — nivel 0 distinto
+console.log(config.nested === configBackup1.nested);     // true ⚠️  — nivel 1 sigue siendo alias
+console.log(config === configBackup2);                   // false ✅
+console.log(config.nested === configBackup2.nested);     // false ✅ — deep copy real
+
+Prompt: 'generá 5 funciones que retornen su índice' — la IA usa var y el resultado es siempre 5
+// ❌ Código generado por IA — INCORRECTO:
+// Patrón frecuente en código LLM entrenado con JavaScript pre-ES6 o código legacy
+
+const funcs = [];
+for (var i = 0; i < 5; i++) {
+    funcs.push(() => i);   // TODAS las closures capturan la MISMA celda de memoria
+                           // var es función-scope: i vive en el scope de la función contenedora
+                           // no se crea una `i` nueva en cada iteración — hay una sola
+}
+
+// En este punto i === 5 (el loop terminó)
+// Todas las closures leen la misma celda que ahora contiene 5:
+console.log(funcs[0]());  // 5 — esperábamos 0
+console.log(funcs[1]());  // 5 — esperábamos 1
+console.log(funcs[4]());  // 5 — esperábamos 4
+
+let block-scope y Array.from funcional son las dos soluciones correctas
+// Corrección 1: let — crea una variable j nueva en cada bloque de iteración
+const funcs2: (() => number)[] = [];
+for (let j = 0; j < 5; j++) {
+    funcs2.push(() => j);   // cada closure captura su propia j — celda distinta en heap
+}
+console.log(funcs2[0]());  // 0 ✅
+console.log(funcs2[4]());  // 4 ✅
+
+// Corrección 2: estilo funcional — el problema nunca existe con parámetros
+// Array.from llama al callback con un parámetro `k` nuevo en cada invocación
+const funcs3 = Array.from({ length: 5 }, (_, k) => () => k);
+console.log(funcs3[0]());  // 0 ✅
+console.log(funcs3[4]());  // 4 ✅
+
+// Alternativa con map sobre un array de índices:
+const funcs4 = [0, 1, 2, 3, 4].map(k => () => k);
+console.log(funcs4[0]());  // 0 ✅
+
+Prompt: 'función que formatee un string o number' — la IA aplica métodos sin verificar el tipo
+// ❌ Código generado por IA — INCORRECTO:
+// El LLM asume que el argumento siempre será string aunque el tipo diga string | number
+
+function formatear(valor: string | number): string {
+    return valor.toUpperCase();
+    //           ^^^^^^^^^^^^
+    // ❌ TypeScript strict: Property 'toUpperCase' does not exist on type 'string | number'.
+    //                       Property 'toUpperCase' does not exist on type 'number'.
+}
+
+// Por qué es peligroso en producción:
+// - Sin strict mode: el código compila sin advertencia
+// - En runtime: TypeError: valor.toUpperCase is not a function
+//   cuando se pasa un número — crash en producción
